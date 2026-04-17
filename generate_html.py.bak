@@ -203,7 +203,7 @@ BASE_TEMPLATE = Template("""<!DOCTYPE html>
     <div class="date">{{ subtitle }}</div>
   </div>
   <div class="nav">
-    <a href="/" class="{% if page == 'home' %}active{% endif %}">SMB Opportunities</a>
+    <a href="/" class="{% if page == 'home' %}active{% endif %}">Pain Points</a>
     <a href="/news.html" class="{% if page == 'news' %}active{% endif %}">Industry News</a>
     <a href="/archive.html" class="{% if page == 'archive' %}active{% endif %}">Archive</a>
   </div>
@@ -224,7 +224,7 @@ PAIN_POINT_BODY = Template("""
   <div class="hero">
     <span class="badge">Top Story · {{ top.category }} · {{ top.importance }}/10</span>
     <h2>{{ top.headline }}</h2>
-    <div class="meta">{{ top.opportunity_type }} opportunity · {{ top.industry | default('General') }}</div>
+    <div class="meta">{{ top.opportunity_type }} opportunity</div>
     <div class="section"><strong>Problem</strong><p>{{ top.problem }}</p></div>
     <div class="section"><strong>Solution</strong><p>{{ top.solution }}</p></div>
     <div class="section"><strong>Monetisation</strong><p>{{ top.monetisation }}</p></div>
@@ -234,7 +234,7 @@ PAIN_POINT_BODY = Template("""
   <div class="grid">
     {% for a in issue.articles[1:] %}
     <div class="card">
-      <div class="category">{{ a.category }} · {{ a.importance }}/10 · {{ a.industry | default('General') }}</div>
+      <div class="category">{{ a.category }} · {{ a.importance }}/10</div>
       <h3>{{ a.headline }}</h3>
       <div class="section"><strong>Problem</strong><p>{{ a.problem }}</p></div>
       <div class="section"><strong>Opportunity</strong><p>{{ a.monetisation }}</p></div>
@@ -275,7 +275,7 @@ NEWS_BODY = Template("""
 
 
 ARCHIVE_BODY = Template("""
-<h2 style="margin-bottom: 20px; font-size: 24px;">SMB Opportunity Issues</h2>
+<h2 style="margin-bottom: 20px; font-size: 24px;">Pain Point Issues</h2>
 {% if not issues %}
   <div class="empty"><p>No issues yet</p></div>
 {% else %}
@@ -321,11 +321,11 @@ def render_page(page_key, page_title, subtitle, body_html):
 
 
 def generate_home(issues):
-    """The / (SMB opportunities front page)."""
+    """The / (pain points front page)."""
     latest = issues[0] if issues else None
-    subtitle = format_date(latest["issue_date"]) + " · SMB Opportunities" if latest else "No issues yet"
+    subtitle = format_date(latest["issue_date"]) + " · Pain Points" if latest else "No issues yet"
     body = PAIN_POINT_BODY.render(issue=latest)
-    return render_page("home", "SMB Opportunities", subtitle, body)
+    return render_page("home", "Pain Points", subtitle, body)
 
 
 def generate_news(news_issues):
@@ -340,12 +340,12 @@ def generate_archive(issues, news_issues):
     """The /archive page."""
     body = ARCHIVE_BODY.render(issues=issues, news=news_issues, format_date=format_date)
     return render_page("archive", "Archive",
-                       f"{len(issues)} SMB issues · {len(news_issues)} news issues", body)
+                       f"{len(issues)} pain-point issues · {len(news_issues)} news issues", body)
 
 
 def generate_issue_page(issue):
     """Individual past issue page."""
-    subtitle = format_date(issue["issue_date"]) + " · SMB Opportunities"
+    subtitle = format_date(issue["issue_date"]) + " · Pain Points"
     body = PAIN_POINT_BODY.render(issue=issue)
     return render_page("home", issue["issue_date"], subtitle, body)
 
@@ -375,7 +375,7 @@ def build():
     issues = load_all(ISSUES_DIR)
     news_issues = load_all(NEWS_DIR)
 
-    print(f"  Loaded {len(issues)} SMB opportunity issues")
+    print(f"  Loaded {len(issues)} pain-point issues")
     print(f"  Loaded {len(news_issues)} news issues")
 
     # Homepage
@@ -394,7 +394,7 @@ def build():
     for issue in issues:
         filepath = SITE_DIR / "issues" / f"{issue['issue_date']}.html"
         filepath.write_text(generate_issue_page(issue), encoding="utf-8")
-    print(f"  ✓ {len(issues)} SMB issue pages")
+    print(f"  ✓ {len(issues)} pain-point issue pages")
 
     # Individual news pages
     for issue in news_issues:

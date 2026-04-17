@@ -5,20 +5,11 @@ from datetime import datetime
 from pathlib import Path
 from groq import Groq
 
-# SMB subreddits — non-technical business owners with real operational pain
-SUBREDDITS = ["smallbusiness", "Entrepreneur", "sweatystartup", "ecommerce"]
-
-# Pain keywords — business operations frustrations
+SUBREDDITS = ["AI_Agents", "LocalLLaMA", "ClaudeAI", "OpenAI"]
 PAIN_KEYWORDS = [
     "struggle", "problem", "issue", "wish", "frustrat",
     "help", "how do i", "cant", "can't", "doesn't work",
-    "difficult", "stuck", "broken", "annoying", "hate when",
-    "waste time", "manual", "spreadsheet", "overwhelm", "behind",
-    "no-show", "churn", "losing", "burnout", "hiring",
-    "invoice", "scheduling", "bookkeeping", "payroll", "inventory",
-    "customer service", "reviews", "leads", "follow up", "follow-up",
-    "onboarding", "quoting", "estimat", "too long", "hours spent",
-    "automate", "automation", "repetitive", "tedious", "bottleneck"
+    "difficult", "stuck", "broken", "annoying", "hate when"
 ]
 
 llm = Groq(api_key=os.environ["GROQ_API_KEY"])
@@ -51,23 +42,14 @@ def fetch_reddit_posts():
             print(f"⚠️  Skipped r/{sub}: {e}")
 
     posts.sort(key=lambda p: p["score"] + p["comments"], reverse=True)
-    return posts[:15]
+    return posts[:12]
 
 
 def classify_and_write(post):
-    """Ask LLM: is this a real SMB pain point that AI/automation could solve?"""
-    prompt = f"""You are a journalist for "The Agent Builder Daily", a newspaper that finds real business problems that AI and automation could solve for small business owners.
+    """Ask LLM: is this a real pain point? If yes, write an article."""
+    prompt = f"""You are a journalist for "The Agent Builder Daily", a newspaper about AI agent opportunities.
 
-Analyse this Reddit post from a small business / entrepreneur forum. Decide: does it describe a CONCRETE, ACTIONABLE operational pain point that an AI agent, automation tool, or AI-powered service could solve?
-
-You are looking for NON-TECHNICAL business owners who are struggling with day-to-day operations — scheduling, invoicing, customer service, hiring, marketing, inventory, quoting, bookkeeping, lead management, etc.
-
-IGNORE posts that are:
-- Asking for general business advice with no specific pain
-- Promotional or self-promotional
-- About AI/tech industry news (that's not what this page covers)
-- Vague venting with no concrete problem
-- About investment, crypto, or stock trading
+Analyse this Reddit post and decide: does it describe a CONCRETE, ACTIONABLE pain point someone could build an AI agent to solve?
 
 Return ONLY valid JSON. No markdown, no prose.
 
@@ -75,33 +57,32 @@ IF the post IS a strong pain point, return:
 {{
   "is_article": true,
   "headline": "Newspaper-style headline (max 12 words)",
-  "category": "Pick the SINGLE best match from the list below",
+  "category": "Pick the SINGLE best match",
   "importance": integer 1-10,
-  "problem": "2-3 sentences describing the pain concretely — what is the business owner struggling with?",
-  "solution": "2-3 sentences describing what an AI agent or automation could do to solve this",
-  "monetisation": "One sentence on the business model (SaaS subscription, done-for-you service, etc.)",
+  "problem": "2-3 sentences describing the pain concretely",
+  "solution": "2-3 sentences describing what an AI agent could do",
+  "monetisation": "One sentence on the business model",
   "trend_signal": "One sentence on whether this is growing, stable, or niche",
-  "opportunity_type": "SAAS | FREELANCE | OPEN_SOURCE | CONSULTANCY | PRODUCT",
-  "industry": "The specific industry or business type affected (e.g. Restaurants, Cleaning, Retail, Professional Services, etc.)"
+  "opportunity_type": "SAAS | FREELANCE | OPEN_SOURCE | CONSULTANCY | PRODUCT"
 }}
 
 CATEGORY DEFINITIONS — pick the most specific match:
-- SCHEDULING → appointment booking, no-shows, calendar management, shift planning
-- INVOICING → billing, payments, quoting, estimates, chasing invoices
-- CUSTOMER_SERVICE → reviews, complaints, response time, support tickets, chatbots
-- MARKETING → lead gen, SEO, social media, email campaigns, ad spend
-- HIRING → recruitment, onboarding, training, staff retention, HR admin
-- OPERATIONS → inventory, supply chain, logistics, order management, workflow
-- BOOKKEEPING → accounting, tax prep, expense tracking, payroll, cashflow
-- SALES → CRM, follow-ups, proposals, pipeline management, closing
-- ADMIN → data entry, document handling, compliance, forms, reporting
+- INFRASTRUCTURE → hosting, deployment, scaling, latency, cold starts, rate limits
+- MEMORY → context loss, session persistence, long context handling, RAG
+- TOOLING → debugging, observability, testing, dev experience, SDKs
+- UX → end-user interface, conversation flow, voice, output quality
+- INTEGRATION → connecting services, APIs, auth, interop between tools (USE SPARINGLY — only when it's primarily about connecting things)
+- SECURITY → auth, permissions, data privacy, prompt injection, safety
+- OBSERVABILITY → logging, monitoring, tracing, analytics, cost tracking
+- DATA → ingestion, ETL, quality, labelling, embeddings, vector stores
+- ORCHESTRATION → multi-agent coordination, workflows, task delegation
 
 IMPORTANCE RUBRIC — use the full 1-10 scale:
-- 10 → affects most small businesses across industries, no good AI solution exists yet, clear willingness to pay
-- 8-9 → affects many businesses, current solutions are manual or expensive
-- 6-7 → real pain for a specific industry segment, some workarounds exist
+- 10 → affects most agent builders, no good solution exists, clear business model
+- 8-9 → affects many builders, solutions are poor/expensive
+- 6-7 → real pain for a specific segment, some workarounds exist
 - 4-5 → niche but real, narrow audience
-- 1-3 → minor gripe, edge case, or already well-solved by existing tools
+- 1-3 → minor gripe, edge case, or already well-solved
 DO NOT default to 8. Score honestly. Most posts should land 4-7.
 
 IF the post is NOT a clear pain point (vague, unrelated, promotional, question-only, news/announcement), return:
@@ -158,7 +139,6 @@ def print_issue(issue):
         print(f"  PROBLEM:       {a['problem']}")
         print(f"  SOLUTION:      {a['solution']}")
         print(f"  MONETISATION:  {a['monetisation']} ({a['opportunity_type']})")
-        print(f"  INDUSTRY:      {a.get('industry', 'General')}")
         print(f"  TREND:         {a['trend_signal']}")
         print(f"  SOURCE:        {a['source_url']}")
         print("\n" + "-" * 70 + "\n")
@@ -178,7 +158,7 @@ def save_issue(issue):
 
 
 if __name__ == "__main__":
-    print("🔍 Scouting for SMB pain points AI could solve...\n")
+    print("🔍 Scouting for AI agent opportunities...\n")
     posts = fetch_reddit_posts()
     print(f"Found {len(posts)} pain-signal posts\n")
 
