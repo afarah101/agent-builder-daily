@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import feedparser
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from groq import Groq
@@ -24,6 +25,59 @@ HN_KEYWORDS = [
 
 llm = Groq(api_key=os.environ["GROQ_API_KEY"])
 MODEL = "llama-3.3-70b-versatile"
+CACHE_FILE = Path("seen_posts.json")
+
+# Retry config
+MAX_RETRIES = 3
+INITIAL_BACKOFF = 5  # seconds
+BACKOFF_MULTIPLIER = 2
+
+
+def load_seen_posts():
+    """Load the set of URLs we've already processed."""
+    if CACHE_FILE.exists():
+        with open(CACHE_FILE, "r") as f:
+            return set(json.load(f).get("seen_urls", []))
+    return set()
+
+
+def save_seen_posts(seen_urls):
+    """Save the set of seen URLs to cache."""
+    with open(CACHE_FILE, "w") as f:
+        json.dump({"seen_urls": list(seen_urls)}, f, indent=2)
+
+
+def call_groq_with_retry(messages, temperature=0.3, max_retries=MAX_RETRIES):
+    """Call Groq API with exponential backoff retry on 429."""
+    backoff = INITIAL_BACKOFF
+    last_error = None
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            resp = llm.chat.completions.create(
+                model=MODEL,
+                messages=messages,
+                temperature=temperature,
+                response_format={"type": "json_object"}
+            )
+            return resp.choices[0].message.content
+        except Exception as e:
+            error_str = str(e)
+            last_error = e
+            
+            # Check if it's a rate-limit error
+            if "429" in error_str or "rate_limit" in error_str.lower():
+                if attempt < max_retries:
+                    wait_time = backoff * (BACKOFF_MULTIPLIER ** (attempt - 1))
+                    print(f"\n    ⏳ Rate limited. Waiting {wait_time}s before retry {attempt}/{max_retries}...")
+                    time.sleep(wait_time)
+                    continue
+            
+            # Non-rate-limit error or final retry exhausted
+            raise e
+    
+    # All retries exhausted
+    raise last_error
 
 
 def fetch_blog_posts():
@@ -96,8 +150,13 @@ def fetch_hackernews_posts():
     return posts[:10]
 
 
-def classify_news(post):
+def classify_news(post, seen_urls):
     """Ask LLM: is this a real AI news story? If yes, write an article."""
+    
+    # Skip if we've seen this URL before
+    if post["url"] in seen_urls:
+        return None
+    
     source_info = f"[{post['source']} · {post['source_type']}]"
     if post.get("points"):
         source_info += f" {post['points']} points · {post['comments']} comments"
@@ -143,21 +202,21 @@ ITEM:
 Title: {post['title']}
 Summary: {post['summary']}"""
 
-    resp = llm.chat.completions.create(
-        model=MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.3,
-        response_format={"type": "json_object"}
-    )
-
-    result = json.loads(resp.choices[0].message.content)
-    if result.get("is_news"):
-        result["source"] = post["source"]
-        result["source_url"] = post["url"]
-        if post.get("hn_discussion"):
-            result["discussion_url"] = post["hn_discussion"]
-        return result
-    return None
+    try:
+        content = call_groq_with_retry([{"role": "user", "content": prompt}], temperature=0.3)
+        result = json.loads(content)
+        
+        if result.get("is_news"):
+            result["source"] = post["source"]
+            result["source_url"] = post["url"]
+            if post.get("hn_discussion"):
+                result["discussion_url"] = post["hn_discussion"]
+            # Mark as seen
+            seen_urls.add(post["url"])
+            return result
+        return None
+    except Exception as e:
+        raise e
 
 
 def build_news_issue(articles):
@@ -210,6 +269,10 @@ def save_news(issue):
 if __name__ == "__main__":
     print("📡 Scanning AI news sources...\n")
 
+    # Load seen URLs
+    seen_urls = load_seen_posts()
+    print(f"Loaded {len(seen_urls)} previously seen articles\n")
+
     print("  Fetching official blogs...")
     blog_posts = fetch_blog_posts()
     print(f"  Found {len(blog_posts)} recent blog posts")
@@ -230,19 +293,24 @@ if __name__ == "__main__":
         label = f"[{post['source']}] {post['title'][:50]}"
         print(f"  [{i}/{len(all_posts)}] {label}...", end=" ")
         try:
-            article = classify_news(post)
+            article = classify_news(post, seen_urls)
             if article:
                 print(f"✓ news ({article['category']} · {article['importance']}/10)")
                 articles.append(article)
             else:
                 print("✗ skipped")
         except Exception as e:
-            print(f"⚠️  {e}")
+            print(f"⚠️  Error code: {e}")
 
     if not articles:
         print("\nNo news articles generated.")
+        # Still save the seen URLs even if no new articles
+        save_seen_posts(seen_urls)
         exit()
 
     issue = build_news_issue(articles)
     print_news(issue)
     save_news(issue)
+    
+    # Save updated seen URLs
+    save_seen_posts(seen_urls)

@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import time
 from datetime import datetime
 from pathlib import Path
 from groq import Groq
@@ -23,6 +24,59 @@ PAIN_KEYWORDS = [
 
 llm = Groq(api_key=os.environ["GROQ_API_KEY"])
 MODEL = "llama-3.3-70b-versatile"
+CACHE_FILE = Path("seen_posts.json")
+
+# Retry config
+MAX_RETRIES = 3
+INITIAL_BACKOFF = 5  # seconds
+BACKOFF_MULTIPLIER = 2
+
+
+def load_seen_posts():
+    """Load the set of URLs we've already processed."""
+    if CACHE_FILE.exists():
+        with open(CACHE_FILE, "r") as f:
+            return set(json.load(f).get("seen_urls", []))
+    return set()
+
+
+def save_seen_posts(seen_urls):
+    """Save the set of seen URLs to cache."""
+    with open(CACHE_FILE, "w") as f:
+        json.dump({"seen_urls": list(seen_urls)}, f, indent=2)
+
+
+def call_groq_with_retry(messages, temperature=0.4, max_retries=MAX_RETRIES):
+    """Call Groq API with exponential backoff retry on 429."""
+    backoff = INITIAL_BACKOFF
+    last_error = None
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            resp = llm.chat.completions.create(
+                model=MODEL,
+                messages=messages,
+                temperature=temperature,
+                response_format={"type": "json_object"}
+            )
+            return resp.choices[0].message.content
+        except Exception as e:
+            error_str = str(e)
+            last_error = e
+            
+            # Check if it's a rate-limit error
+            if "429" in error_str or "rate_limit" in error_str.lower():
+                if attempt < max_retries:
+                    wait_time = backoff * (BACKOFF_MULTIPLIER ** (attempt - 1))
+                    print(f"\n    ⏳ Rate limited. Waiting {wait_time}s before retry {attempt}/{max_retries}...")
+                    time.sleep(wait_time)
+                    continue
+            
+            # Non-rate-limit error or final retry exhausted
+            raise e
+    
+    # All retries exhausted
+    raise last_error
 
 
 def fetch_reddit_posts():
@@ -54,8 +108,13 @@ def fetch_reddit_posts():
     return posts[:15]
 
 
-def classify_and_write(post):
+def classify_and_write(post, seen_urls):
     """Ask LLM: is this a real SMB pain point that AI/automation could solve?"""
+    
+    # Skip if we've seen this URL before
+    if post["url"] in seen_urls:
+        return None
+    
     prompt = f"""You are a journalist for "The Agent Builder Daily", a newspaper that finds real business problems that AI and automation could solve for small business owners.
 
 Analyse this Reddit post from a small business / entrepreneur forum. Decide: does it describe a CONCRETE, ACTIONABLE operational pain point that an AI agent, automation tool, or AI-powered service could solve?
@@ -112,19 +171,19 @@ POST:
 Title: {post['title']}
 Body: {post['body']}"""
 
-    resp = llm.chat.completions.create(
-        model=MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.4,
-        response_format={"type": "json_object"}
-    )
-
-    result = json.loads(resp.choices[0].message.content)
-    if result.get("is_article"):
-        result["source_url"] = post["url"]
-        result["source_sub"] = post["sub"]
-        return result
-    return None
+    try:
+        content = call_groq_with_retry([{"role": "user", "content": prompt}], temperature=0.4)
+        result = json.loads(content)
+        
+        if result.get("is_article"):
+            result["source_url"] = post["url"]
+            result["source_sub"] = post["sub"]
+            # Mark as seen
+            seen_urls.add(post["url"])
+            return result
+        return None
+    except Exception as e:
+        raise e
 
 
 def build_issue(articles):
@@ -179,6 +238,11 @@ def save_issue(issue):
 
 if __name__ == "__main__":
     print("🔍 Scouting for SMB pain points AI could solve...\n")
+    
+    # Load seen URLs
+    seen_urls = load_seen_posts()
+    print(f"Loaded {len(seen_urls)} previously seen articles\n")
+    
     posts = fetch_reddit_posts()
     print(f"Found {len(posts)} pain-signal posts\n")
 
@@ -191,19 +255,24 @@ if __name__ == "__main__":
     for i, post in enumerate(posts, 1):
         print(f"  [{i}/{len(posts)}] {post['title'][:60]}...", end=" ")
         try:
-            article = classify_and_write(post)
+            article = classify_and_write(post, seen_urls)
             if article:
                 print(f"✓ article ({article['category']} · {article['importance']}/10)")
                 articles.append(article)
             else:
                 print("✗ skipped")
         except Exception as e:
-            print(f"⚠️  {e}")
+            print(f"⚠️  Error code: {e}")
 
     if not articles:
         print("\nNo articles generated. Try again later.")
+        # Still save the seen URLs even if no new articles
+        save_seen_posts(seen_urls)
         exit()
 
     issue = build_issue(articles)
     print_issue(issue)
     save_issue(issue)
+    
+    # Save updated seen URLs
+    save_seen_posts(seen_urls)
