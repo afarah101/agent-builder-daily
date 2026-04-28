@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
 from bs4 import BeautifulSoup
 from typing import TypedDict, Annotated
+from collections import defaultdict
 import operator
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
@@ -14,10 +15,10 @@ load_dotenv()
 OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
 MAX_ITEMS = 25
+MAX_PER_SOURCE = 3
 EIGHT_WEEKS_AGO = datetime.now() - timedelta(weeks=8)
 FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
 
-# Verified working RSS feeds
 RSS_SOURCES = [
     {"url": "https://openai.com/news/rss.xml", "name": "OpenAI", "tier": "ai_labs", "window": "4w"},
     {"url": "https://blogs.microsoft.com/feed/", "name": "Microsoft", "tier": "ai_labs", "window": "4w"},
@@ -36,29 +37,9 @@ RSS_SOURCES = [
     {"url": "https://feeds.arstechnica.com/arstechnica/technology-lab", "name": "Ars Technica", "tier": "news", "window": "4w"},
 ]
 
-# Sites to scrape directly (no working RSS)
 SCRAPE_SOURCES = [
-    {
-        "url": "https://www.anthropic.com/news",
-        "name": "Anthropic",
-        "tier": "ai_labs",
-        "article_selector": "a[href*='/news/']",
-        "base_url": "https://www.anthropic.com",
-    },
-    {
-        "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights",
-        "name": "McKinsey",
-        "tier": "consulting",
-        "article_selector": "a[href*='/our-insights/']",
-        "base_url": "https://www.mckinsey.com",
-    },
-    {
-        "url": "https://www.deloitte.com/us/en/insights.html",
-        "name": "Deloitte",
-        "tier": "consulting",
-        "article_selector": "a[href*='/insights/']",
-        "base_url": "https://www.deloitte.com",
-    },
+    {"url": "https://www.anthropic.com/news", "name": "Anthropic", "tier": "ai_labs", "article_selector": "a[href*='/news/']", "base_url": "https://www.anthropic.com"},
+    {"url": "https://www.deloitte.com/us/en/insights.html", "name": "Deloitte", "tier": "consulting", "article_selector": "a[href*='/insights/']", "base_url": "https://www.deloitte.com"},
 ]
 
 def groq_complete(messages, max_tokens=300):
@@ -147,7 +128,7 @@ def scrape_articles(source, seen):
                 "url": href,
             })
             count += 1
-            if count >= 5:
+            if count >= MAX_PER_SOURCE:
                 break
         print("[DEBUG] " + source["name"] + " (scraped): " + str(count) + " items")
     except Exception as e:
@@ -159,7 +140,6 @@ def fetch_news(state):
     raw_articles = []
     seen = set()
 
-    # RSS feeds
     for source in RSS_SOURCES:
         try:
             feed = feedparser.parse(source["url"])
@@ -189,15 +169,24 @@ def fetch_news(state):
         except Exception as e:
             print("[DEBUG] RSS error " + source["name"] + ": " + str(e))
 
-    # Scraped sources
     for source in SCRAPE_SOURCES:
         scraped = scrape_articles(source, seen)
         raw_articles.extend(scraped)
 
-    print("[DEBUG] Total: " + str(len(raw_articles)))
+    print("[DEBUG] Total before diversity filter: " + str(len(raw_articles)))
+
+    # Apply diversity filter: max MAX_PER_SOURCE per source
+    source_counts = defaultdict(int)
+    diverse = []
+    for article in raw_articles:
+        if source_counts[article["source"]] < MAX_PER_SOURCE:
+            diverse.append(article)
+            source_counts[article["source"]] += 1
+
+    print("[DEBUG] Total after diversity filter: " + str(len(diverse)))
     today = datetime.now().strftime("%Y-%m-%d")
     return {
-        "raw_articles": raw_articles,
+        "raw_articles": diverse,
         "classified_news": [],
         "output_file": state.get("output_file", OUTPUT_DIR + "/news_" + today + ".json"),
     }
