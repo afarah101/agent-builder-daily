@@ -1,9 +1,10 @@
 import os
 
 news_code = """#!/usr/bin/env python3
-import os, json, re, feedparser
+import os, json, re, feedparser, requests
 from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
+from bs4 import BeautifulSoup
 from typing import TypedDict, Annotated
 import operator
 from langgraph.graph import StateGraph, START, END
@@ -18,20 +19,16 @@ MAX_ITEMS = 25
 EIGHT_WEEKS_AGO = datetime.now() - timedelta(weeks=8)
 FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
 
-# All verified working RSS feeds as of April 2026
+# Verified working RSS feeds
 RSS_SOURCES = [
-    # AI Labs - verified working
     {"url": "https://openai.com/news/rss.xml", "name": "OpenAI", "tier": "ai_labs", "window": "4w"},
-    {"url": "https://raw.githubusercontent.com/conoro/anthropic-engineering-rss-feed/main/anthropic_engineering_rss.xml", "name": "Anthropic", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://blogs.microsoft.com/feed/", "name": "Microsoft", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://www.microsoft.com/en-us/research/feed/", "name": "Microsoft Research", "tier": "ai_labs", "window": "4w"},
     {"url": "https://research.google/blog/rss/", "name": "Google AI", "tier": "ai_labs", "window": "4w"},
     {"url": "https://deepmind.com/blog/feed/basic/", "name": "Google DeepMind", "tier": "ai_labs", "window": "4w"},
     {"url": "https://huggingface.co/blog/feed.xml", "name": "Hugging Face", "tier": "ai_labs", "window": "4w"},
-    {"url": "https://blogs.microsoft.com/ai/feed/", "name": "Microsoft AI", "tier": "ai_labs", "window": "4w"},
-    # Consulting - MIT Sloan and HBR have working RSS; McKinsey/Deloitte do not
     {"url": "https://sloanreview.mit.edu/feed/", "name": "MIT Sloan", "tier": "consulting", "window": "8w"},
     {"url": "https://hbr.org/rss/topic/ai", "name": "Harvard Business Review", "tier": "consulting", "window": "8w"},
-    {"url": "https://www.bcg.com/rss/perspectives.xml", "name": "BCG", "tier": "consulting", "window": "8w"},
-    # High quality tech news - all verified working
     {"url": "https://techcrunch.com/category/artificial-intelligence/feed/", "name": "TechCrunch", "tier": "news", "window": "4w"},
     {"url": "https://feeds.feedburner.com/venturebeat/SZYF", "name": "VentureBeat", "tier": "news", "window": "4w"},
     {"url": "https://www.technologyreview.com/feed/", "name": "MIT Tech Review", "tier": "news", "window": "4w"},
@@ -39,6 +36,31 @@ RSS_SOURCES = [
     {"url": "https://www.wired.com/feed/tag/ai/latest/rss", "name": "Wired AI", "tier": "news", "window": "4w"},
     {"url": "https://hnrss.org/frontpage?points=100", "name": "Hacker News", "tier": "news", "window": "4w"},
     {"url": "https://feeds.arstechnica.com/arstechnica/technology-lab", "name": "Ars Technica", "tier": "news", "window": "4w"},
+]
+
+# Sites to scrape directly (no working RSS)
+SCRAPE_SOURCES = [
+    {
+        "url": "https://www.anthropic.com/news",
+        "name": "Anthropic",
+        "tier": "ai_labs",
+        "article_selector": "a[href*='/news/']",
+        "base_url": "https://www.anthropic.com",
+    },
+    {
+        "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights",
+        "name": "McKinsey",
+        "tier": "consulting",
+        "article_selector": "a[href*='/our-insights/']",
+        "base_url": "https://www.mckinsey.com",
+    },
+    {
+        "url": "https://www.deloitte.com/us/en/insights.html",
+        "name": "Deloitte",
+        "tier": "consulting",
+        "article_selector": "a[href*='/insights/']",
+        "base_url": "https://www.deloitte.com",
+    },
 ]
 
 def groq_complete(messages, max_tokens=300):
@@ -58,7 +80,7 @@ def groq_complete(messages, max_tokens=300):
             return resp.choices[0].message.content.strip()
         except Exception as e:
             if "429" in str(e) or "rate" in str(e).lower():
-                print("[DEBUG] Key " + str(i+1) + " rate limited, trying Key " + str(i+2) + "...")
+                print("[DEBUG] Key " + str(i+1) + " rate limited, trying next...")
                 last_error = e
                 continue
             raise e
@@ -94,10 +116,52 @@ def format_date(s):
         return dt.strftime("%d %b %Y")
     return s[:10] if s else ""
 
+def scrape_articles(source, seen):
+    articles = []
+    try:
+        headers = {"User-Agent": "Mozilla/5.0 (compatible; ScoutBot/1.0)"}
+        resp = requests.get(source["url"], headers=headers, timeout=15)
+        if resp.status_code != 200:
+            print("[DEBUG] Scrape error " + source["name"] + ": HTTP " + str(resp.status_code))
+            return articles
+        soup = BeautifulSoup(resp.text, "html.parser")
+        links = soup.select(source["article_selector"])
+        count = 0
+        seen_hrefs = set()
+        for link in links[:30]:
+            href = link.get("href", "")
+            if not href or href in seen_hrefs:
+                continue
+            seen_hrefs.add(href)
+            if not href.startswith("http"):
+                href = source["base_url"] + href
+            title = link.get_text(strip=True)
+            if not title or len(title) < 10 or href in seen:
+                continue
+            seen.add(href)
+            articles.append({
+                "id": href,
+                "title": title,
+                "summary_raw": "",
+                "source": source["name"],
+                "tier": source["tier"],
+                "pub_date": datetime.now().strftime("%d %b %Y"),
+                "url": href,
+            })
+            count += 1
+            if count >= 5:
+                break
+        print("[DEBUG] " + source["name"] + " (scraped): " + str(count) + " items")
+    except Exception as e:
+        print("[DEBUG] Scrape error " + source["name"] + ": " + str(e))
+    return articles
+
 def fetch_news(state):
     print("[DEBUG] Fetching industry news...")
     raw_articles = []
     seen = set()
+
+    # RSS feeds
     for source in RSS_SOURCES:
         try:
             feed = feedparser.parse(source["url"])
@@ -126,6 +190,12 @@ def fetch_news(state):
             print("[DEBUG] " + source["name"] + ": " + str(count) + " items")
         except Exception as e:
             print("[DEBUG] RSS error " + source["name"] + ": " + str(e))
+
+    # Scraped sources
+    for source in SCRAPE_SOURCES:
+        scraped = scrape_articles(source, seen)
+        raw_articles.extend(scraped)
+
     print("[DEBUG] Total: " + str(len(raw_articles)))
     today = datetime.now().strftime("%Y-%m-%d")
     return {
@@ -147,8 +217,7 @@ def classify_news(state):
             "Title: " + article["title"] + "\\n"
             "Source: " + article["source"] + "\\n"
             "Content: " + article["summary_raw"][:300] + "\\n\\n"
-            "Return JSON only:\\n"
-            '{"summary": "2 sentences max", "enterprise_use": "2 sentences max", "relevance_score": 8, "relevance_signal": "high", "category": "Product Launch"}'
+            'Return JSON only: {"summary": "2 sentences", "enterprise_use": "2 sentences", "relevance_score": 8, "relevance_signal": "high", "category": "Product Launch"}'
         )
         try:
             text = groq_complete([{"role": "user", "content": prompt}], max_tokens=250)
@@ -156,13 +225,11 @@ def classify_news(state):
                 text = text.split("```")[1]
                 if text.startswith("json"):
                     text = text[4:]
-            text = text.strip()
-            # Find JSON object in response
             start = text.find("{")
             end = text.rfind("}") + 1
             if start >= 0 and end > start:
                 text = text[start:end]
-            g = json.loads(text)
+            g = json.loads(text.strip())
             classified.append({
                 **article,
                 "summary": g.get("summary", ""),
@@ -173,8 +240,7 @@ def classify_news(state):
             })
             print("[DEBUG] Relevance: " + str(g.get("relevance_score")) + "/10")
         except Exception as e:
-            print("[DEBUG] Error on '" + article["title"][:40] + "': " + str(e))
-            # Save article with raw summary even if classification fails
+            print("[DEBUG] Error: " + str(e))
             classified.append({
                 **article,
                 "summary": article["summary_raw"][:200],
