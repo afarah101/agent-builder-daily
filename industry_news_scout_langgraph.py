@@ -18,20 +18,21 @@ FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
 
 RSS_SOURCES = [
     {"url": "https://openai.com/news/rss.xml", "name": "OpenAI", "tier": "ai_labs", "window": "4w"},
-    {"url": "https://www.anthropic.com/rss.xml", "name": "Anthropic", "tier": "ai_labs", "window": "4w"},
-    {"url": "https://blog.google/technology/ai/rss/", "name": "Google AI", "tier": "ai_labs", "window": "4w"},
-    {"url": "https://deepmind.google/blog/rss/", "name": "Google DeepMind", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://raw.githubusercontent.com/conoro/anthropic-engineering-rss-feed/main/anthropic_engineering_rss.xml", "name": "Anthropic", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://research.google/blog/rss/", "name": "Google AI", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://deepmind.com/blog/feed/basic/", "name": "Google DeepMind", "tier": "ai_labs", "window": "4w"},
     {"url": "https://huggingface.co/blog/feed.xml", "name": "Hugging Face", "tier": "ai_labs", "window": "4w"},
     {"url": "https://blogs.microsoft.com/ai/feed/", "name": "Microsoft AI", "tier": "ai_labs", "window": "4w"},
     {"url": "https://sloanreview.mit.edu/feed/", "name": "MIT Sloan", "tier": "consulting", "window": "8w"},
     {"url": "https://hbr.org/rss/topic/ai", "name": "Harvard Business Review", "tier": "consulting", "window": "8w"},
-    {"url": "https://www.mckinsey.com/capabilities/quantumblack/rss", "name": "McKinsey", "tier": "consulting", "window": "8w"},
+    {"url": "https://www.mckinsey.com/insights/rss", "name": "McKinsey", "tier": "consulting", "window": "8w"},
     {"url": "https://www2.deloitte.com/us/en/rss/home.html", "name": "Deloitte", "tier": "consulting", "window": "8w"},
     {"url": "https://techcrunch.com/category/artificial-intelligence/feed/", "name": "TechCrunch", "tier": "news", "window": "4w"},
     {"url": "https://feeds.feedburner.com/venturebeat/SZYF", "name": "VentureBeat", "tier": "news", "window": "4w"},
     {"url": "https://www.technologyreview.com/feed/", "name": "MIT Tech Review", "tier": "news", "window": "4w"},
     {"url": "https://www.theverge.com/ai-artificial-intelligence/rss/index.xml", "name": "The Verge AI", "tier": "news", "window": "4w"},
     {"url": "https://www.wired.com/feed/tag/ai/latest/rss", "name": "Wired AI", "tier": "news", "window": "4w"},
+    {"url": "https://hnrss.org/frontpage?points=100", "name": "Hacker News", "tier": "news", "window": "4w"},
 ]
 
 def groq_complete(messages, max_tokens=400):
@@ -42,7 +43,7 @@ def groq_complete(messages, max_tokens=400):
         try:
             client = Groq(api_key=key)
             resp = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="llama3-8b-8192",
                 messages=messages,
                 max_tokens=max_tokens,
             )
