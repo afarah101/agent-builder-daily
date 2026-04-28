@@ -7,24 +7,55 @@ import operator
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
+from dotenv import load_dotenv
+load_dotenv()
 
-GROQ_MODEL = "llama-3.3-70b-versatile"
 OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
-MAX_ITEMS = 20
+MAX_ITEMS = 25
+EIGHT_WEEKS_AGO = datetime.now() - timedelta(weeks=8)
 FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
 
 RSS_SOURCES = [
-    {"url": "https://openai.com/news/rss.xml", "name": "OpenAI", "tier": "ai_labs"},
-    {"url": "https://deepmind.google/blog/rss/", "name": "Google DeepMind", "tier": "ai_labs"},
-    {"url": "https://huggingface.co/blog/feed.xml", "name": "Hugging Face", "tier": "ai_labs"},
-    {"url": "https://blogs.microsoft.com/ai/feed/", "name": "Microsoft AI", "tier": "ai_labs"},
-    {"url": "https://sloanreview.mit.edu/feed/", "name": "MIT Sloan", "tier": "consulting"},
-    {"url": "https://hbr.org/rss/topic/ai", "name": "Harvard Business Review", "tier": "consulting"},
-    {"url": "https://techcrunch.com/category/artificial-intelligence/feed/", "name": "TechCrunch", "tier": "news"},
-    {"url": "https://feeds.feedburner.com/venturebeat/SZYF", "name": "VentureBeat", "tier": "news"},
-    {"url": "https://www.technologyreview.com/feed/", "name": "MIT Tech Review", "tier": "news"},
+    {"url": "https://openai.com/news/rss.xml", "name": "OpenAI", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://www.anthropic.com/rss.xml", "name": "Anthropic", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://blog.google/technology/ai/rss/", "name": "Google AI", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://deepmind.google/blog/rss/", "name": "Google DeepMind", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://huggingface.co/blog/feed.xml", "name": "Hugging Face", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://blogs.microsoft.com/ai/feed/", "name": "Microsoft AI", "tier": "ai_labs", "window": "4w"},
+    {"url": "https://sloanreview.mit.edu/feed/", "name": "MIT Sloan", "tier": "consulting", "window": "8w"},
+    {"url": "https://hbr.org/rss/topic/ai", "name": "Harvard Business Review", "tier": "consulting", "window": "8w"},
+    {"url": "https://www.mckinsey.com/capabilities/quantumblack/rss", "name": "McKinsey", "tier": "consulting", "window": "8w"},
+    {"url": "https://www2.deloitte.com/us/en/rss/home.html", "name": "Deloitte", "tier": "consulting", "window": "8w"},
+    {"url": "https://techcrunch.com/category/artificial-intelligence/feed/", "name": "TechCrunch", "tier": "news", "window": "4w"},
+    {"url": "https://feeds.feedburner.com/venturebeat/SZYF", "name": "VentureBeat", "tier": "news", "window": "4w"},
+    {"url": "https://www.technologyreview.com/feed/", "name": "MIT Tech Review", "tier": "news", "window": "4w"},
+    {"url": "https://www.theverge.com/ai-artificial-intelligence/rss/index.xml", "name": "The Verge AI", "tier": "news", "window": "4w"},
+    {"url": "https://www.wired.com/feed/tag/ai/latest/rss", "name": "Wired AI", "tier": "news", "window": "4w"},
 ]
+
+def groq_complete(messages, max_tokens=400):
+    keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
+    keys = [k for k in keys if k]
+    last_error = None
+    for i, key in enumerate(keys):
+        try:
+            client = Groq(api_key=key)
+            resp = client.chat.completions.create(
+                model="llama3-8b-8192",
+                messages=messages,
+                max_tokens=max_tokens,
+            )
+            if i > 0:
+                print("[DEBUG] Using Key 2")
+            return resp.choices[0].message.content.strip()
+        except Exception as e:
+            if "429" in str(e):
+                print("[DEBUG] Key " + str(i+1) + " rate limited, trying Key " + str(i+2) + "...")
+                last_error = e
+                continue
+            raise e
+    raise Exception("All keys exhausted: " + str(last_error))
 
 class NewsScoutState(TypedDict):
     raw_articles: Annotated[list, operator.add]
@@ -43,9 +74,12 @@ def parse_date(s):
     except:
         return None
 
-def is_recent(s):
+def is_recent(s, window):
     dt = parse_date(s)
-    return dt >= FOUR_WEEKS_AGO if dt else False
+    if not dt:
+        return False
+    cutoff = EIGHT_WEEKS_AGO if window == "8w" else FOUR_WEEKS_AGO
+    return dt >= cutoff
 
 def fetch_news(state):
     print("[DEBUG] Fetching industry news...")
@@ -55,9 +89,9 @@ def fetch_news(state):
         try:
             feed = feedparser.parse(source["url"])
             count = 0
-            for entry in feed.entries[:15]:
+            for entry in feed.entries[:20]:
                 pub = entry.get("published") or entry.get("updated") or ""
-                if not is_recent(pub):
+                if not is_recent(pub, source["window"]):
                     continue
                 title = entry.get("title", "")
                 url = entry.get("link", "")
@@ -65,15 +99,11 @@ def fetch_news(state):
                 if uid in seen:
                     continue
                 seen.add(uid)
-                summary = re.sub(r"<[^>]+>", "", entry.get("summary", "") or entry.get("description", ""))[:500]
+                summary = re.sub(r"<[^>]+>", "", entry.get("summary", "") or entry.get("description", ""))[:600]
                 raw_articles.append({
-                    "id": uid,
-                    "title": title,
-                    "summary_raw": summary,
-                    "source": source["name"],
-                    "tier": source["tier"],
-                    "pub_date": pub[:10] if pub else "",
-                    "url": url,
+                    "id": uid, "title": title, "summary_raw": summary,
+                    "source": source["name"], "tier": source["tier"],
+                    "pub_date": pub[:10] if pub else "", "url": url,
                 })
                 count += 1
             print("[DEBUG] " + source["name"] + ": " + str(count) + " items")
@@ -81,42 +111,32 @@ def fetch_news(state):
             print("[DEBUG] RSS error " + source["name"] + ": " + str(e))
     print("[DEBUG] Total: " + str(len(raw_articles)))
     today = datetime.now().strftime("%Y-%m-%d")
-    return {
-        "raw_articles": raw_articles,
-        "classified_news": [],
-        "output_file": state.get("output_file", OUTPUT_DIR + "/news_" + today + ".json"),
-    }
+    return {"raw_articles": raw_articles, "classified_news": [], "output_file": state.get("output_file", OUTPUT_DIR + "/news_" + today + ".json")}
 
 def classify_news(state):
     articles = state["raw_articles"]
     print("[DEBUG] Classifying " + str(len(articles)) + " articles...")
-    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     classified = []
     limit = min(len(articles), MAX_ITEMS)
     for i in range(limit):
         article = articles[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + article["title"][:60])
         prompt = (
-            "Classify this AI industry news item for a professional intelligence feed.\n"
+            "Classify this AI industry news item.\n"
             "Title: " + article["title"] + "\n"
             "Source: " + article["source"] + "\n"
             "Published: " + article["pub_date"] + "\n"
             "Content: " + article["summary_raw"] + "\n\n"
             "Write:\n"
-            "- summary: 2 clear sentences. What happened and why it matters\n"
-            "- enterprise_use: 2 concrete sentences. How an enterprise or AI consultant can act on this right now\n"
-            "- relevance_score: 1-10. 10=must read for AI practitioners\n"
+            "- summary: 2 sentences. What happened and why it matters\n"
+            "- enterprise_use: 2 sentences. How an enterprise or AI consultant can act on this now\n"
+            "- relevance_score: 1-10\n"
             "- relevance_signal: high if >=7, medium if 4-6, low if <=3\n"
             "- category: Product Launch, Research, Partnership, Market Move, Tool, Policy, or Other\n\n"
             'JSON only: {"summary": "", "enterprise_use": "", "relevance_score": 0, "relevance_signal": "", "category": ""}'
         )
         try:
-            resp = client.chat.completions.create(
-                model=GROQ_MODEL,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=400,
-            )
-            text = resp.choices[0].message.content.strip()
+            text = groq_complete([{"role": "user", "content": prompt}], max_tokens=300)
             if "```" in text:
                 text = text.split("```")[1]
                 if text.startswith("json"):
@@ -142,7 +162,7 @@ def save_and_archive(state):
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
-        "filter": "last_4_weeks",
+        "filter": "last_4_to_8_weeks",
         "total_fetched": len(state["raw_articles"]),
         "total_classified": len(state["classified_news"]),
         "news": state["classified_news"],

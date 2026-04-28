@@ -1,28 +1,20 @@
 #!/usr/bin/env python3
-import os, json, requests, time, re
+import os, json, requests, time
 from datetime import datetime, timedelta
 from typing import TypedDict, Annotated
 import operator
+import xml.etree.ElementTree as ET
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
-import xml.etree.ElementTree as ET
+from dotenv import load_dotenv
+load_dotenv()
 
-GROQ_MODEL = "llama-3.3-70b-versatile"
 OUTPUT_DIR = "case_studies"
 ARCHIVE_FILE = "case_studies/archive.json"
 MAX_PAPERS = 20
 FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
-
-UNIVERSITIES = [
-    "Stanford", "Berkeley", "MIT", "Carnegie Mellon", "Toronto",
-    "Oxford", "Cambridge", "ETH Zurich", "Singapore", "Tsinghua",
-    "Peking", "Imperial", "UCL", "Washington", "Princeton",
-    "NYU", "Harvard", "KAIST", "Nanyang", "Zhejiang",
-]
-
 ARXIV_NS = "http://www.w3.org/2005/Atom"
-ARXIV_EXT = "http://arxiv.org/schemas/atom"
 
 QUERIES = [
     "ti:case+study+AND+cat:cs.AI",
@@ -32,6 +24,36 @@ QUERIES = [
     "abs:production+system+AND+abs:AI+AND+cat:cs.CL",
     "ti:real+world+AND+abs:machine+learning+AND+cat:cs.AI",
 ]
+
+UNIVERSITIES = [
+    "Stanford", "Berkeley", "MIT", "Carnegie Mellon", "Toronto",
+    "Oxford", "Cambridge", "ETH", "Singapore", "Tsinghua",
+    "Peking", "Imperial", "UCL", "Washington", "Princeton",
+    "NYU", "Harvard", "KAIST", "Nanyang", "Zhejiang",
+]
+
+def groq_complete(messages, max_tokens=500):
+    keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
+    keys = [k for k in keys if k]
+    last_error = None
+    for i, key in enumerate(keys):
+        try:
+            client = Groq(api_key=key)
+            resp = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=messages,
+                max_tokens=max_tokens,
+            )
+            if i > 0:
+                print("[DEBUG] Using Key 2")
+            return resp.choices[0].message.content.strip()
+        except Exception as e:
+            if "429" in str(e):
+                print("[DEBUG] Key " + str(i+1) + " rate limited, trying Key " + str(i+2) + "...")
+                last_error = e
+                continue
+            raise e
+    raise Exception("All keys exhausted: " + str(last_error))
 
 class CaseStudyState(TypedDict):
     raw_papers: Annotated[list, operator.add]
@@ -49,7 +71,7 @@ def fetch_papers(state):
         try:
             date_filter = "+AND+submittedDate:[" + cutoff_str + "+TO+99991231]"
             url = "http://export.arxiv.org/api/query?search_query=" + query + date_filter + "&start=0&max_results=15&sortBy=submittedDate&sortOrder=descending"
-            resp = requests.get(url, timeout=20)
+            resp = requests.get(url, timeout=30)
             if resp.status_code != 200:
                 print("[DEBUG] arXiv status: " + str(resp.status_code))
                 time.sleep(3)
@@ -64,50 +86,37 @@ def fetch_papers(state):
                 title_el = entry.find("{" + ARXIV_NS + "}title")
                 summary_el = entry.find("{" + ARXIV_NS + "}summary")
                 published_el = entry.find("{" + ARXIV_NS + "}published")
-
                 if pid_el is None or title_el is None or summary_el is None:
                     continue
-
                 pid = pid_el.text.strip()
                 if pid in seen:
                     continue
                 seen.add(pid)
-
-                title_text = (title_el.text or "").strip().replace("\n", " ")
-                abstract_text = (summary_el.text or "").strip().replace("\n", " ")[:600]
+                title_text = " ".join((title_el.text or "").split())
+                abstract_text = " ".join((summary_el.text or "").split())[:600]
                 pub_date = (published_el.text or "")[:10] if published_el is not None else ""
-
                 if len(abstract_text) < 80:
                     continue
-
                 if pub_date and pub_date < cutoff_date:
                     continue
-
                 authors = []
                 for author in entry.findall("{" + ARXIV_NS + "}author")[:4]:
                     name_el = author.find("{" + ARXIV_NS + "}name")
                     if name_el is not None:
                         authors.append(name_el.text or "")
-
-                aff_el = entry.find("{" + ARXIV_EXT + "}affiliation")
-                affiliation = aff_el.text if aff_el is not None else ""
-
-                institution = affiliation or ""
-                if not institution:
-                    author_str = " ".join(authors).lower()
-                    for uni in UNIVERSITIES:
-                        if uni.lower() in author_str:
-                            institution = uni
-                            break
+                institution = ""
+                author_str = " ".join(authors).lower()
+                for uni in UNIVERSITIES:
+                    if uni.lower() in author_str:
+                        institution = uni
+                        break
                 if not institution:
                     institution = "Academic Institution"
-
                 link_url = pid
                 for link_el in entry.findall("{" + ARXIV_NS + "}link"):
                     if link_el.get("type") == "text/html":
                         link_url = link_el.get("href", pid)
                         break
-
                 try:
                     days = (datetime.now() - datetime.strptime(pub_date, "%Y-%m-%d")).days
                     if days <= 7: recency = 25
@@ -117,44 +126,29 @@ def fetch_papers(state):
                     else: recency = 5
                 except:
                     recency = 5
-
                 raw_papers.append({
-                    "id": pid,
-                    "title": title_text,
-                    "abstract": abstract_text,
-                    "authors": authors,
-                    "institution": institution,
-                    "pub_date": pub_date,
-                    "url": link_url,
-                    "recency_score": recency,
-                    "source_type": "arxiv",
+                    "id": pid, "title": title_text, "abstract": abstract_text,
+                    "authors": authors, "institution": institution, "pub_date": pub_date,
+                    "url": link_url, "recency_score": recency, "source_type": "arxiv",
                 })
-
             time.sleep(3)
-
         except Exception as e:
             print("[DEBUG] Error: " + str(e))
 
     print("[DEBUG] Total fetched: " + str(len(raw_papers)))
     today = datetime.now().strftime("%Y-%m-%d")
-    return {
-        "raw_papers": raw_papers,
-        "scored_papers": [],
-        "output_file": state.get("output_file", OUTPUT_DIR + "/" + today + ".json"),
-    }
+    return {"raw_papers": raw_papers, "scored_papers": [], "output_file": state.get("output_file", OUTPUT_DIR + "/" + today + ".json")}
 
 def score_papers(state):
     papers = state["raw_papers"]
     print("[DEBUG] Scoring " + str(len(papers)) + " papers...")
-    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     scored = []
     limit = min(len(papers), MAX_PAPERS)
-
     for i in range(limit):
         paper = papers[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + paper["title"][:60])
         prompt = (
-            "Evaluate this academic AI case study for a professional intelligence feed.\n"
+            "Evaluate this academic AI case study.\n"
             "Title: " + paper["title"] + "\n"
             "Authors: " + ", ".join(paper["authors"]) + "\n"
             "Institution: " + paper["institution"] + "\n"
@@ -162,34 +156,24 @@ def score_papers(state):
             "Abstract: " + paper["abstract"] + "\n\n"
             "Score each 0-25:\n"
             "1. real_world_impact: measurable outcomes. 25=clear metrics at scale, 15=some metrics, 5=theoretical\n"
-            "2. ai_maturity: 25=live in production, 15=pilot tested, 5=concept only\n"
-            "3. monetisation_potential: how easily turned into product or workflow. 25=clear product, 15=adaptable, 5=purely academic\n\n"
+            "2. ai_maturity: 25=live in production, 15=pilot, 5=concept\n"
+            "3. monetisation_potential: 25=clear product opportunity, 15=adaptable, 5=purely academic\n\n"
             "Write:\n"
             "- summary: 3 sentences. Problem, AI approach, outcome\n"
-            "- how_to_apply: 2 sentences. Practical lesson for AI practitioners building workflows\n"
-            "- monetisation: 2 sentences. Concrete business opportunity this unlocks\n"
+            "- how_to_apply: 2 sentences. Practical lesson for AI practitioners\n"
+            "- monetisation: 2 sentences. Concrete business opportunity\n"
             "- relevance_tag: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, or Other\n"
-            "- author_built_product: true if authors founded a company or shipped a real product, false otherwise\n\n"
-            'Respond with JSON only: {"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "how_to_apply": "", "monetisation": "", "relevance_tag": "", "author_built_product": false}'
+            "- author_built_product: true if authors founded a company or shipped a product, false otherwise\n\n"
+            'JSON only: {"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "how_to_apply": "", "monetisation": "", "relevance_tag": "", "author_built_product": false}'
         )
         try:
-            resp = client.chat.completions.create(
-                model=GROQ_MODEL,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=500,
-            )
-            text = resp.choices[0].message.content.strip()
+            text = groq_complete([{"role": "user", "content": prompt}], max_tokens=500)
             if "```" in text:
                 text = text.split("```")[1]
                 if text.startswith("json"):
                     text = text[4:]
             g = json.loads(text.strip())
-            total = (
-                paper["recency_score"]
-                + g.get("real_world_impact", 0)
-                + g.get("ai_maturity", 0)
-                + g.get("monetisation_potential", 0)
-            )
+            total = paper["recency_score"] + g.get("real_world_impact", 0) + g.get("ai_maturity", 0) + g.get("monetisation_potential", 0)
             scored.append({
                 **paper,
                 "real_world_impact": g.get("real_world_impact", 0),
@@ -204,8 +188,7 @@ def score_papers(state):
             })
             print("[DEBUG] Score: " + str(total) + "/100")
         except Exception as e:
-            print("[DEBUG] Groq error: " + str(e))
-
+            print("[DEBUG] Error: " + str(e))
     scored.sort(key=lambda x: x["total_score"], reverse=True)
     print("[DEBUG] Scored " + str(len(scored)) + " papers")
     return {"raw_papers": state["raw_papers"], "scored_papers": scored, "output_file": state["output_file"]}
