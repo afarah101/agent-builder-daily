@@ -1,246 +1,249 @@
 #!/usr/bin/env python3
-"""
-Case Study Scout — LangGraph Workflow
-Pulls RECENT (last 4 weeks) AI case studies from RSS feeds + Semantic Scholar.
-Scores and ranks by prestige, recency, impact, maturity.
-"""
-
-import os
-import json
-import re
-import requests
-import feedparser
+import os, json, requests, time, re
 from datetime import datetime, timedelta
-from email.utils import parsedate_to_datetime
 from typing import TypedDict, Annotated
 import operator
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
+import xml.etree.ElementTree as ET
 
 GROQ_MODEL = "llama-3.3-70b-versatile"
 OUTPUT_DIR = "case_studies"
+ARCHIVE_FILE = "case_studies/archive.json"
 MAX_PAPERS = 20
-FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
+FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
 
-RSS_SOURCES = [
-    {"url": "https://openai.com/news/rss.xml", "name": "OpenAI", "tier": "ai_labs", "prestige": 25},
-    {"url": "https://deepmind.google/blog/rss/", "name": "Google DeepMind", "tier": "ai_labs", "prestige": 25},
-    {"url": "https://huggingface.co/blog/feed.xml", "name": "Hugging Face", "tier": "ai_labs", "prestige": 20},
-    {"url": "https://blogs.microsoft.com/ai/feed/", "name": "Microsoft AI", "tier": "ai_labs", "prestige": 20},
-    {"url": "https://sloanreview.mit.edu/feed/", "name": "MIT Sloan", "tier": "consulting", "prestige": 20},
-    {"url": "https://hbr.org/rss/topic/ai", "name": "Harvard Business Review", "tier": "consulting", "prestige": 20},
-    {"url": "https://techcrunch.com/category/artificial-intelligence/feed/", "name": "TechCrunch", "tier": "news", "prestige": 15},
-    {"url": "https://feeds.feedburner.com/venturebeat/SZYF", "name": "VentureBeat", "tier": "news", "prestige": 15},
-    {"url": "https://www.technologyreview.com/feed/", "name": "MIT Tech Review", "tier": "news", "prestige": 18},
+UNIVERSITIES = [
+    "Stanford", "Berkeley", "MIT", "Carnegie Mellon", "Toronto",
+    "Oxford", "Cambridge", "ETH Zurich", "Singapore", "Tsinghua",
+    "Peking", "Imperial", "UCL", "Washington", "Princeton",
+    "NYU", "Harvard", "KAIST", "Nanyang", "Zhejiang",
+]
+
+ARXIV_NS = "http://www.w3.org/2005/Atom"
+ARXIV_EXT = "http://arxiv.org/schemas/atom"
+
+QUERIES = [
+    "ti:case+study+AND+cat:cs.AI",
+    "ti:deployment+AND+abs:real+world+AND+cat:cs.AI",
+    "abs:enterprise+AND+abs:implementation+AND+cat:cs.AI",
+    "ti:case+study+AND+cat:cs.LG",
+    "abs:production+system+AND+abs:AI+AND+cat:cs.CL",
+    "ti:real+world+AND+abs:machine+learning+AND+cat:cs.AI",
 ]
 
 class CaseStudyState(TypedDict):
-    raw_items: Annotated[list, operator.add]
-    scored_items: Annotated[list, operator.add]
+    raw_papers: Annotated[list, operator.add]
+    scored_papers: Annotated[list, operator.add]
     output_file: str
 
-def parse_date(pub_date_str):
-    if not pub_date_str:
-        return None
-    try:
-        return parsedate_to_datetime(pub_date_str).replace(tzinfo=None)
-    except:
-        pass
-    try:
-        return datetime.strptime(pub_date_str[:10], "%Y-%m-%d")
-    except:
-        pass
-    return None
-
-def is_within_4_weeks(pub_date_str):
-    dt = parse_date(pub_date_str)
-    if not dt:
-        return False
-    return dt >= FOUR_WEEKS_AGO
-
-def calc_recency_score(pub_date_str):
-    dt = parse_date(pub_date_str)
-    if not dt:
-        return 5
-    days = (datetime.now() - dt).days
-    if days <= 3: return 25
-    if days <= 7: return 22
-    if days <= 14: return 18
-    if days <= 21: return 14
-    if days <= 28: return 10
-    return 0
-
-def fetch_items(state: CaseStudyState) -> CaseStudyState:
-    print("[DEBUG] Fetching from RSS sources...")
-    raw_items = []
+def fetch_papers(state):
+    print("[DEBUG] Fetching from arXiv...")
+    raw_papers = []
     seen = set()
+    cutoff_str = FOUR_MONTHS_AGO.strftime("%Y%m%d")
+    cutoff_date = FOUR_MONTHS_AGO.strftime("%Y-%m-%d")
 
-    for source in RSS_SOURCES:
+    for query in QUERIES:
         try:
-            feed = feedparser.parse(source["url"])
-            count = 0
-            for entry in feed.entries[:15]:
-                pub = entry.get("published") or entry.get("updated") or ""
-                if not is_within_4_weeks(pub):
-                    continue
-                title = entry.get("title", "")
-                url = entry.get("link", "")
-                uid = url or title
-                if uid in seen:
-                    continue
-                seen.add(uid)
-                summary = entry.get("summary", "") or entry.get("description", "")
-                summary = re.sub(r'<[^>]+>', '', summary)[:400]
-                raw_items.append({
-                    "id": uid,
-                    "title": title,
-                    "abstract": summary,
-                    "venue": source["name"],
-                    "tier": source["tier"],
-                    "prestige_score": source["prestige"],
-                    "recency_score": calc_recency_score(pub),
-                    "pub_date": pub[:10] if pub else "",
-                    "url": url,
-                    "authors": [],
-                    "source_type": "rss",
-                })
-                count += 1
-            print(f"[DEBUG] {source['name']}: {count} recent items")
-        except Exception as e:
-            print(f"[DEBUG] RSS error {source['name']}: {e}")
-
-    print("[DEBUG] Fetching from Semantic Scholar (last 4 weeks)...")
-    cutoff = FOUR_WEEKS_AGO.strftime("%Y-%m-%d")
-    queries = [
-        "artificial intelligence enterprise deployment results 2025",
-        "large language model business implementation case study 2025",
-        "generative AI production outcomes measured 2025",
-    ]
-    for query in queries:
-        try:
-            params = {
-                "query": query,
-                "fields": "title,abstract,authors,publicationDate,url,publicationVenue",
-                "limit": 10,
-                "sort": "publicationDate:desc",
-            }
-            resp = requests.get("https://api.semanticscholar.org/graph/v1/paper/search", params=params, timeout=15)
+            date_filter = "+AND+submittedDate:[" + cutoff_str + "+TO+99991231]"
+            url = "http://export.arxiv.org/api/query?search_query=" + query + date_filter + "&start=0&max_results=15&sortBy=submittedDate&sortOrder=descending"
+            resp = requests.get(url, timeout=20)
             if resp.status_code != 200:
+                print("[DEBUG] arXiv status: " + str(resp.status_code))
+                time.sleep(3)
                 continue
-            for paper in resp.json().get("data", []):
-                pid = paper.get("paperId", "")
-                pub_date = paper.get("publicationDate") or ""
-                if not pub_date or pub_date < cutoff:
+
+            root = ET.fromstring(resp.text)
+            entries = root.findall("{" + ARXIV_NS + "}entry")
+            print("[DEBUG] Query got " + str(len(entries)) + " entries")
+
+            for entry in entries:
+                pid_el = entry.find("{" + ARXIV_NS + "}id")
+                title_el = entry.find("{" + ARXIV_NS + "}title")
+                summary_el = entry.find("{" + ARXIV_NS + "}summary")
+                published_el = entry.find("{" + ARXIV_NS + "}published")
+
+                if pid_el is None or title_el is None or summary_el is None:
                     continue
-                if pid in seen or not pid:
+
+                pid = pid_el.text.strip()
+                if pid in seen:
                     continue
                 seen.add(pid)
-                abstract = paper.get("abstract") or ""
-                if len(abstract) < 50:
-                    continue
-                venue = (paper.get("publicationVenue") or {}).get("name", "Academic")
-                raw_items.append({
-                    "id": pid,
-                    "title": paper.get("title", ""),
-                    "abstract": abstract[:400],
-                    "venue": venue,
-                    "tier": "universities",
-                    "prestige_score": 20,
-                    "recency_score": calc_recency_score(pub_date),
-                    "pub_date": pub_date[:10],
-                    "url": paper.get("url", ""),
-                    "authors": [a.get("name", "") for a in (paper.get("authors") or [])[:3]],
-                    "source_type": "academic",
-                })
-        except Exception as e:
-            print(f"[DEBUG] Semantic Scholar error: {e}")
 
-    print(f"[DEBUG] Total recent items: {len(raw_items)}")
+                title_text = (title_el.text or "").strip().replace("\n", " ")
+                abstract_text = (summary_el.text or "").strip().replace("\n", " ")[:600]
+                pub_date = (published_el.text or "")[:10] if published_el is not None else ""
+
+                if len(abstract_text) < 80:
+                    continue
+
+                if pub_date and pub_date < cutoff_date:
+                    continue
+
+                authors = []
+                for author in entry.findall("{" + ARXIV_NS + "}author")[:4]:
+                    name_el = author.find("{" + ARXIV_NS + "}name")
+                    if name_el is not None:
+                        authors.append(name_el.text or "")
+
+                aff_el = entry.find("{" + ARXIV_EXT + "}affiliation")
+                affiliation = aff_el.text if aff_el is not None else ""
+
+                institution = affiliation or ""
+                if not institution:
+                    author_str = " ".join(authors).lower()
+                    for uni in UNIVERSITIES:
+                        if uni.lower() in author_str:
+                            institution = uni
+                            break
+                if not institution:
+                    institution = "Academic Institution"
+
+                link_url = pid
+                for link_el in entry.findall("{" + ARXIV_NS + "}link"):
+                    if link_el.get("type") == "text/html":
+                        link_url = link_el.get("href", pid)
+                        break
+
+                try:
+                    days = (datetime.now() - datetime.strptime(pub_date, "%Y-%m-%d")).days
+                    if days <= 7: recency = 25
+                    elif days <= 30: recency = 20
+                    elif days <= 60: recency = 15
+                    elif days <= 90: recency = 10
+                    else: recency = 5
+                except:
+                    recency = 5
+
+                raw_papers.append({
+                    "id": pid,
+                    "title": title_text,
+                    "abstract": abstract_text,
+                    "authors": authors,
+                    "institution": institution,
+                    "pub_date": pub_date,
+                    "url": link_url,
+                    "recency_score": recency,
+                    "source_type": "arxiv",
+                })
+
+            time.sleep(3)
+
+        except Exception as e:
+            print("[DEBUG] Error: " + str(e))
+
+    print("[DEBUG] Total fetched: " + str(len(raw_papers)))
+    today = datetime.now().strftime("%Y-%m-%d")
     return {
-        "raw_items": raw_items,
-        "scored_items": [],
-        "output_file": state.get("output_file", f"{OUTPUT_DIR}/{datetime.now().strftime('%Y-%m-%d')}.json"),
+        "raw_papers": raw_papers,
+        "scored_papers": [],
+        "output_file": state.get("output_file", OUTPUT_DIR + "/" + today + ".json"),
     }
 
-def score_and_classify(state: CaseStudyState) -> CaseStudyState:
-    print(f"[DEBUG] Scoring {len(state['raw_items'])} items...")
+def score_papers(state):
+    papers = state["raw_papers"]
+    print("[DEBUG] Scoring " + str(len(papers)) + " papers...")
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     scored = []
+    limit = min(len(papers), MAX_PAPERS)
 
-    for i, item in enumerate(state["raw_items"][:MAX_PAPERS]):
-        print(f"[DEBUG] {i+1}/{min(len(state['raw_items']), MAX_PAPERS)}: {item['title'][:60]}...")
-        prompt = f"""Evaluate this AI case study for a professional intelligence feed.
-
-Title: {item['title']}
-Source: {item['venue']}
-Published: {item['pub_date']}
-Content: {item['abstract']}
-
-Score (0-25 each):
-1. real_world_impact: measurable outcomes (%, $, time saved, scale)
-   25=clear metrics at scale, 15=some metrics, 5=theoretical only
-2. ai_maturity: 25=live in production, 15=pilot tested, 5=concept only
-
-Write:
-- summary: 2 sentences, what was done and what happened
-- how_to_use: 1 sentence for an AI consultant
-- monetisation: 1 sentence business opportunity
-
-JSON only, no markdown:
-{{"real_world_impact": 0, "ai_maturity": 0, "summary": "", "how_to_use": "", "monetisation": ""}}"""
-
+    for i in range(limit):
+        paper = papers[i]
+        print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + paper["title"][:60])
+        prompt = (
+            "Evaluate this academic AI case study for a professional intelligence feed.\n"
+            "Title: " + paper["title"] + "\n"
+            "Authors: " + ", ".join(paper["authors"]) + "\n"
+            "Institution: " + paper["institution"] + "\n"
+            "Published: " + paper["pub_date"] + "\n"
+            "Abstract: " + paper["abstract"] + "\n\n"
+            "Score each 0-25:\n"
+            "1. real_world_impact: measurable outcomes. 25=clear metrics at scale, 15=some metrics, 5=theoretical\n"
+            "2. ai_maturity: 25=live in production, 15=pilot tested, 5=concept only\n"
+            "3. monetisation_potential: how easily turned into product or workflow. 25=clear product, 15=adaptable, 5=purely academic\n\n"
+            "Write:\n"
+            "- summary: 3 sentences. Problem, AI approach, outcome\n"
+            "- how_to_apply: 2 sentences. Practical lesson for AI practitioners building workflows\n"
+            "- monetisation: 2 sentences. Concrete business opportunity this unlocks\n"
+            "- relevance_tag: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, or Other\n"
+            "- author_built_product: true if authors founded a company or shipped a real product, false otherwise\n\n"
+            'Respond with JSON only: {"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "how_to_apply": "", "monetisation": "", "relevance_tag": "", "author_built_product": false}'
+        )
         try:
             resp = client.chat.completions.create(
                 model=GROQ_MODEL,
                 messages=[{"role": "user", "content": prompt}],
-                max_tokens=300,
+                max_tokens=500,
             )
             text = resp.choices[0].message.content.strip()
             if "```" in text:
                 text = text.split("```")[1]
                 if text.startswith("json"):
                     text = text[4:]
-            text = text.strip()
-            g = json.loads(text)
-            total = item["prestige_score"] + item["recency_score"] + g.get("real_world_impact", 0) + g.get("ai_maturity", 0)
+            g = json.loads(text.strip())
+            total = (
+                paper["recency_score"]
+                + g.get("real_world_impact", 0)
+                + g.get("ai_maturity", 0)
+                + g.get("monetisation_potential", 0)
+            )
             scored.append({
-                **item,
+                **paper,
                 "real_world_impact": g.get("real_world_impact", 0),
                 "ai_maturity": g.get("ai_maturity", 0),
+                "monetisation_potential": g.get("monetisation_potential", 0),
                 "total_score": total,
                 "summary": g.get("summary", ""),
-                "how_to_use": g.get("how_to_use", ""),
+                "how_to_apply": g.get("how_to_apply", ""),
                 "monetisation": g.get("monetisation", ""),
+                "relevance_tag": g.get("relevance_tag", "Other"),
+                "author_built_product": g.get("author_built_product", False),
             })
-            print(f"[DEBUG] Score: {total}/100")
+            print("[DEBUG] Score: " + str(total) + "/100")
         except Exception as e:
-            print(f"[DEBUG] Groq error: {e}")
+            print("[DEBUG] Groq error: " + str(e))
 
     scored.sort(key=lambda x: x["total_score"], reverse=True)
-    print(f"[DEBUG] Scored {len(scored)} items")
-    return {"raw_items": state["raw_items"], "scored_items": scored, "output_file": state["output_file"]}
+    print("[DEBUG] Scored " + str(len(scored)) + " papers")
+    return {"raw_papers": state["raw_papers"], "scored_papers": scored, "output_file": state["output_file"]}
 
-def save_json(state: CaseStudyState) -> CaseStudyState:
+def save_and_archive(state):
     print("[DEBUG] Saving...")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
-        "filter": "last_4_weeks",
-        "total_fetched": len(state["raw_items"]),
-        "total_scored": len(state["scored_items"]),
-        "case_studies": state["scored_items"],
+        "filter": "last_4_months",
+        "source": "arxiv",
+        "total_fetched": len(state["raw_papers"]),
+        "total_scored": len(state["scored_papers"]),
+        "case_studies": state["scored_papers"],
     }
     with open(state["output_file"], "w") as f:
         json.dump(output, f, indent=2)
-    print(f"Saved {len(state['scored_items'])} items to {state['output_file']}")
+    archive = []
+    if os.path.exists(ARCHIVE_FILE):
+        try:
+            with open(ARCHIVE_FILE) as f:
+                archive = json.load(f)
+        except:
+            pass
+    today = datetime.now().strftime("%Y-%m-%d")
+    archive = [e for e in archive if e.get("date") != today]
+    archive.insert(0, {"date": today, "total": len(state["scored_papers"]), "case_studies": state["scored_papers"]})
+    archive = archive[:90]
+    with open(ARCHIVE_FILE, "w") as f:
+        json.dump(archive, f, indent=2)
+    print("Saved " + str(len(state["scored_papers"])) + " case studies.")
     return state
 
 def build_graph():
     g = StateGraph(CaseStudyState)
-    g.add_node("fetch", fetch_items)
-    g.add_node("score", score_and_classify)
-    g.add_node("save", save_json)
+    g.add_node("fetch", fetch_papers)
+    g.add_node("score", score_papers)
+    g.add_node("save", save_and_archive)
     g.add_edge(START, "fetch")
     g.add_edge("fetch", "score")
     g.add_edge("score", "save")
@@ -248,14 +251,13 @@ def build_graph():
     return g.compile(checkpointer=InMemorySaver())
 
 def run_case_study_scout():
-    print("[DEBUG] Starting Case Study Scout...")
+    print("[DEBUG] Starting Case Study Scout (arXiv)...")
     graph = build_graph()
-    initial_state = {
-        "raw_items": [],
-        "scored_items": [],
-        "output_file": f"{OUTPUT_DIR}/{datetime.now().strftime('%Y-%m-%d')}.json",
-    }
-    result = graph.invoke(initial_state, config={"configurable": {"thread_id": f"cs-{datetime.now().isoformat()}"}})
+    today = datetime.now().strftime("%Y-%m-%d")
+    result = graph.invoke(
+        {"raw_papers": [], "scored_papers": [], "output_file": OUTPUT_DIR + "/" + today + ".json"},
+        config={"configurable": {"thread_id": "cs-" + today}},
+    )
     print("[DEBUG] Complete")
     return result
 
