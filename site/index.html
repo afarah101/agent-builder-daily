@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Intelligence Feed</title>
+  <title>AI Scout — Intelligence Feed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
@@ -16,398 +16,91 @@
       --accent2: #0ea5e9;
       --text: #e2e8f0;
       --muted: #64748b;
-      --danger: #ff4444;
     }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; min-height:100vh; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(0,255,136,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.03) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
+    .container { max-width:1280px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    header { padding:48px 0 0; border-bottom:1px solid var(--border); }
+    .header-inner { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:24px; }
+    .logo-tag { font-family:'Space Mono',monospace; font-size:11px; color:var(--accent); letter-spacing:3px; text-transform:uppercase; margin-bottom:8px; }
+    h1 { font-size:clamp(36px,5vw,64px); font-weight:800; line-height:1; background:linear-gradient(135deg,#fff 0%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .header-stats { display:flex; gap:32px; }
+    .stat-value { font-family:'Space Mono',monospace; font-size:32px; font-weight:700; color:var(--accent); }
+    .stat-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+    .updated { font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:24px; }
+    .updated span { color:var(--accent); }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0; } }
+    .cursor { display:inline-block; width:8px; height:20px; background:var(--accent); animation:pulse 1s infinite; vertical-align:middle; margin-left:4px; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    .tabs { display:flex; gap:0; border-bottom:1px solid var(--border); }
+    .tab { padding:12px 24px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; background:none; border-top:none; border-left:none; border-right:none; }
+    .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+    .tab:hover:not(.active) { color:var(--text); }
 
-    /* Grid background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Header */
-    header {
-      padding: 48px 0 32px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .header-inner {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .logo-area {}
-
-    .logo-tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    h1 {
-      font-size: clamp(32px, 5vw, 56px);
-      font-weight: 800;
-      line-height: 1;
-      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .header-stats {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .stat {
-      text-align: right;
-    }
-
-    .stat-value {
-      font-family: 'Space Mono', monospace;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .updated {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 12px;
-    }
-
-    .updated span {
-      color: var(--accent);
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 0;
-      margin: 32px 0 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tab {
-      padding: 12px 24px;
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-    }
-
-    .tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    .tab:hover:not(.active) {
-      color: var(--text);
-    }
-
-    /* Panels */
-    .panel { display: none; padding: 32px 0; }
-    .panel.active { display: block; }
+    .panel { display:none; padding:32px 0; }
+    .panel.active { display:block; }
 
     /* Case Study Cards */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .card-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pub-date {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .score-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-      max-width: 160px;
-    }
-
-    .score-fill {
-      height: 4px;
-      border-radius: 2px;
-      flex: 1;
-      transition: width 0.5s ease;
-    }
-
-    .score-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 1.4;
-      margin-bottom: 6px;
-      color: #fff;
-    }
-
-    .card-authors {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 12px;
-      font-family: 'Space Mono', monospace;
-    }
-
-    .card-summary {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #94a3b8;
-      margin-bottom: 16px;
-    }
-
-    .card-insights {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
-      padding: 12px;
-      background: var(--surface2);
-      border-radius: 8px;
-      border-left: 2px solid var(--accent);
-    }
-
-    .insight {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .insight-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      color: var(--accent);
-      letter-spacing: 2px;
-    }
-
-    .insight-text {
-      font-size: 13px;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .score-breakdown {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .score-breakdown span {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      background: var(--surface2);
-      padding: 3px 8px;
-      border-radius: 4px;
-    }
+    .cs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(500px,1fr)); gap:20px; }
+    .cs-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; cursor:pointer; transition:border-color 0.2s,transform 0.2s; }
+    .cs-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+    .cs-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:12px; flex-wrap:wrap; }
+    .cs-meta { display:flex; align-items:center; gap:8px; }
+    .pub-date { font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); }
+    .score-bar { display:flex; align-items:center; gap:8px; flex:1; max-width:160px; }
+    .score-fill { height:4px; border-radius:2px; flex:1; }
+    .score-label { font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); white-space:nowrap; }
+    .cs-title { font-size:16px; font-weight:600; line-height:1.4; margin-bottom:6px; color:#fff; }
+    .cs-authors { font-family:'Space Mono',monospace; font-size:11px; color:var(--accent2); margin-bottom:4px; }
+    .cs-institution { font-size:12px; color:var(--muted); margin-bottom:14px; }
+    .cs-divider { height:1px; background:var(--border); margin-bottom:14px; }
+    .cs-section { margin-bottom:12px; }
+    .cs-section.highlight { background:var(--surface2); border-left:2px solid var(--accent); border-radius:0 8px 8px 0; padding:12px; }
+    .section-label { font-family:'Space Mono',monospace; font-size:9px; color:var(--accent); letter-spacing:2px; display:block; margin-bottom:4px; }
+    .section-text { font-size:13px; line-height:1.6; color:#94a3b8; }
+    .cs-section.highlight .section-text { color:var(--text); }
+    .score-breakdown { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+    .score-breakdown span { font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); background:var(--surface2); padding:3px 8px; border-radius:4px; }
+    .tag-badge { font-family:'Space Mono',monospace; font-size:9px; padding:3px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:1px; }
 
     /* News Cards */
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 12px;
-    }
+    .news-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(420px,1fr)); gap:16px; }
+    .news-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; cursor:pointer; transition:border-color 0.2s,transform 0.2s; }
+    .news-card:hover { border-color:var(--accent2); transform:translateY(-2px); }
+    .news-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+    .news-source { font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; }
+    .news-score { font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); margin-left:auto; }
+    .news-category { font-family:'Space Mono',monospace; font-size:9px; color:var(--muted); padding:2px 6px; border:1px solid var(--border); border-radius:3px; }
+    .rel-badge { font-family:'Space Mono',monospace; font-size:9px; padding:3px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:1px; }
+    .news-title { font-size:15px; font-weight:600; line-height:1.4; margin-bottom:10px; color:#fff; }
+    .news-summary { font-size:13px; line-height:1.6; color:#94a3b8; margin-bottom:12px; }
+    .news-section { background:var(--surface2); border-left:2px solid var(--accent2); border-radius:0 8px 8px 0; padding:12px; margin-bottom:12px; }
+    .news-section .section-label { color:var(--accent2); }
+    .news-footer { display:flex; justify-content:space-between; align-items:center; }
+    .news-date { font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); }
+    .news-link { font-family:'Space Mono',monospace; font-size:11px; color:var(--accent2); }
 
-    .news-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      transition: border-color 0.2s;
-    }
+    /* Archive */
+    .archive-grid { display:flex; flex-direction:column; gap:8px; }
+    .archive-row { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px; display:grid; grid-template-columns:120px 80px 1fr; gap:16px; align-items:center; }
+    .archive-date { font-family:'Space Mono',monospace; font-size:12px; color:var(--accent); }
+    .archive-count { font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); }
+    .archive-preview { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    .news-card:hover { border-color: var(--accent2); }
-
-    .news-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .news-source {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--accent2);
-      text-transform: uppercase;
-    }
-
-    .relevance-score {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      margin-left: auto;
-    }
-
-    .news-title {
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.4;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-
-    .news-category {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Badges */
-    .badge {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      padding: 3px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      white-space: nowrap;
-    }
-
-    .empty {
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-      font-size: 13px;
-      padding: 48px;
-      text-align: center;
-    }
-
-    /* Terminal pulse */
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 16px;
-      background: var(--accent);
-      animation: pulse 1s infinite;
-      vertical-align: middle;
-      margin-left: 4px;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 24px 0;
-      margin-top: 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    footer span {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    footer .accent { color: var(--accent); }
-
-    @media (max-width: 600px) {
-      .cards-grid, .news-grid { grid-template-columns: 1fr; }
-      .header-inner { flex-direction: column; align-items: flex-start; }
-      .header-stats { flex-direction: row; }
-    }
+    .empty { color:var(--muted); font-family:'Space Mono',monospace; font-size:13px; padding:48px; text-align:center; }
+    footer { border-top:1px solid var(--border); padding:24px 0; margin-top:48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    footer span { font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); }
+    footer .accent { color:var(--accent); }
+    @media(max-width:600px) { .cs-grid,.news-grid { grid-template-columns:1fr; } .header-inner { flex-direction:column; align-items:flex-start; } .archive-row { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <div class="header-inner">
-        <div class="logo-area">
+        <div>
           <p class="logo-tag">// AI Intelligence Feed</p>
           <h1>Scout<span class="cursor"></span></h1>
         </div>
@@ -422,590 +115,552 @@
           </div>
         </div>
       </div>
-      <p class="updated">Last updated: <span>28 Apr 2026, 17:07</span></p>
+      <p class="updated">Last updated: <span>28 Apr 2026, 18:34</span></p>
       <div class="tabs">
-        <button class="tab active" onclick="showTab('case-studies', this)">Case Studies</button>
-        <button class="tab" onclick="showTab('news', this)">Industry News</button>
+        <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
+        <button class="tab" onclick="showTab('industry-news',this)">Industry News</button>
+        <button class="tab" onclick="showTab('archive-cs',this)">Case Study Archive</button>
+        <button class="tab" onclick="showTab('archive-news',this)">News Archive</button>
       </div>
     </header>
 
     <div id="case-studies" class="panel active">
-      <div class="cards-grid">
+      <div class="cs-grid">
         
-        <article class="card" onclick="window.open('https://openai.com/index/openai-available-at-fedramp-moderate','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
+        <article class="cs-card" onclick="window.open('https://openai.com/index/openai-available-at-fedramp-moderate','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
               <span class="pub-date">Mon, 27 Ap</span>
             </div>
-            <div class="score-bar"><div class="score-fill" style="width:90%;background:#00ff88"></div><span class="score-label">90/100</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:120%;background:#00ff88"></div><span class="score-label">90/75</span></div>
           </div>
-          <h3 class="card-title">OpenAI available at FedRAMP Moderate</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">OpenAI has achieved FedRAMP Moderate authorization for ChatGPT Enterprise and the OpenAI API, enabling secure AI adoption for U.S. federal agencies. This authorization allows federal agencies to leverage OpenAI's technology while ensuring the security and integrity of sensitive government data.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">As an AI consultant, you can help federal agencies integrate OpenAI's ChatGPT Enterprise and API into their operations, providing secure and scalable AI solutions that meet the high security standards of the US government.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The FedRAMP Moderate authorization presents a significant business opportunity for OpenAI, as it can now offer its AI solutions to a wide range of federal agencies, potentially generating substantial revenue from government contracts.</span>
-            </div>
+          <h3 class="cs-title">OpenAI available at FedRAMP Moderate</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">OpenAI has achieved FedRAMP Moderate authorization for ChatGPT Enterprise and the OpenAI API, enabling U.S. federal agencies to securely adopt AI solutions. This authorization allows federal agencies to leverage OpenAI's technology, potentially leading to increased efficiency and improved decision-making.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
           </div>
           <div class="score-breakdown">
-            <span>Prestige 25</span>
             <span>Recency 25</span>
             <span>Impact 15</span>
             <span>Maturity 25</span>
           </div>
         </article>
 
-        <article class="card" onclick="window.open('https://openai.com/index/choco','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
+        <article class="cs-card" onclick="window.open('https://openai.com/index/choco','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
               <span class="pub-date">Mon, 27 Ap</span>
             </div>
-            <div class="score-bar"><div class="score-fill" style="width:90%;background:#00ff88"></div><span class="score-label">90/100</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:120%;background:#00ff88"></div><span class="score-label">90/75</span></div>
           </div>
-          <h3 class="card-title">Choco automates food distribution with AI agents</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">Choco utilized OpenAI APIs to automate food distribution, resulting in streamlined operations and increased productivity. By leveraging AI agents, Choco was able to boost efficiency and unlock growth opportunities in the food distribution industry.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">To replicate this success, AI consultants can explore integrating OpenAI APIs into their clients' supply chain management systems to optimize logistics and distribution processes.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The successful implementation of AI-powered food distribution automation presents a significant business opportunity for companies to enhance their operational efficiency and reduce costs, leading to increased profitability and competitiveness in the market.</span>
-            </div>
+          <h3 class="cs-title">Choco automates food distribution with AI agents</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">Choco leveraged OpenAI APIs to automate food distribution, resulting in streamlined processes and increased productivity. By implementing AI agents, Choco was able to unlock growth and improve its overall operations.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
           </div>
           <div class="score-breakdown">
-            <span>Prestige 25</span>
             <span>Recency 25</span>
             <span>Impact 15</span>
             <span>Maturity 25</span>
           </div>
         </article>
 
-        <article class="card" onclick="window.open('https://openai.com/index/next-phase-of-microsoft-partnership','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Mon, 27 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:80%;background:#00ff88"></div><span class="score-label">80/100</span></div>
-          </div>
-          <h3 class="card-title">The next phase of the Microsoft OpenAI partnership</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">OpenAI and Microsoft announced an amended agreement to simplify their partnership and support continued AI innovation at scale, with the goal of driving further advancements in the field. This agreement is expected to have a significant impact on the development and deployment of AI technologies, although specific metrics are not provided.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">As an AI consultant, you can leverage this partnership to explore opportunities for integrating Microsoft and OpenAI technologies into your clients' AI strategies and solutions.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The amended agreement between OpenAI and Microsoft presents a business opportunity to develop and market AI-powered products and services that utilize the combined strengths of these two industry leaders.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 25</span>
-            <span>Impact 5</span>
-            <span>Maturity 25</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/academy/what-is-codex','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:67%;background:#ffaa00"></div><span class="score-label">67/100</span></div>
-          </div>
-          <h3 class="card-title">What is Codex?</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The case study introduces Codex, a tool developed by OpenAI that enables users to automate tasks, connect tools, and produce real outputs like documents and dashboards, thereby helping users go beyond chat. By leveraging Codex, users can potentially streamline their workflows and increase productivity, although specific metrics on its impact are not provided in the study.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">As an AI consultant, you can utilize Codex to automate repetitive tasks and create customized workflows for clients, thereby enhancing the efficiency of their operations.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The business opportunity for Codex lies in its potential to be integrated into various industries, such as customer service, software development, and data analysis, where it can be used to automate tasks and generate revenue through increased productivity and efficiency.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 15</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/index/gpt-5-5-bio-bug-bounty','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:67%;background:#ffaa00"></div><span class="score-label">67/100</span></div>
-          </div>
-          <h3 class="card-title">GPT-5.5 Bio Bug Bounty</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The GPT-5.5 Bio Bug Bounty is a red-teaming challenge aimed at identifying universal jailbreaks for bio safety risks, with rewards of up to $25,000 for successful discoveries. The challenge is designed to test the limits of the GPT-5.5 model and improve its safety and security features.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">AI consultants can participate in the GPT-5.5 Bio Bug Bounty by submitting potential jailbreaks and vulnerabilities to help improve the model's safety and security features.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The GPT-5.5 Bio Bug Bounty presents a business opportunity for companies to invest in AI safety and security research, potentially leading to the development of more secure and reliable AI models.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 15</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/index/open-source-codex-orchestration-symphony','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Mon, 27 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:60%;background:#ffaa00"></div><span class="score-label">60/100</span></div>
-          </div>
-          <h3 class="card-title">An open-source spec for orchestration: Symphony</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The Symphony spec, an open-source specification for Codex orchestration, aims to turn issue trackers into always-on agent systems to boost engineering output and reduce context switching. Although the concept is promising, there are no clear metrics on its real-world impact or scale of adoption yet.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">To utilize the Symphony spec, an AI consultant can help clients integrate it into their existing issue tracking systems to automate tasks and streamline workflows.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">A potential business opportunity lies in offering implementation and customization services for the Symphony spec, particularly for large-scale engineering teams and organizations looking to optimize their workflows.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 25</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/index/our-principles','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Sun, 26 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:60%;background:#ffaa00"></div><span class="score-label">60/100</span></div>
-          </div>
-          <h3 class="card-title">Our principles</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">OpenAI shared five principles guiding their work towards ensuring that Artificial General Intelligence benefits all of humanity, as stated by Sam Altman. However, no specific outcomes or metrics were provided to measure the impact of these principles.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can use these principles as a starting point for developing their own guidelines for responsible AI development and deployment.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">Businesses can leverage these principles to develop and market AI solutions that prioritize human well-being and safety, creating a unique selling point and potential revenue stream.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 25</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/index/gpt-5-5-system-card','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">GPT-5.5 System Card</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The GPT-5.5 System Card, developed by OpenAI, is a concept that showcases the potential of AI in various applications, but lacks concrete metrics and real-world implementation, resulting in limited measurable outcomes. The system's theoretical capabilities and potential uses are presented, but its actual impact and effectiveness are yet to be determined through practical deployment and testing. </p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can utilize the GPT-5.5 System Card as a starting point to explore and develop more advanced AI models and applications, building upon its conceptual framework and potential capabilities.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The GPT-5.5 System Card presents a business opportunity for companies to invest in the development and refinement of AI technologies, potentially leading to innovative products and services that can be marketed and sold to customers.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/index/introducing-gpt-5-5','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">Introducing GPT-5.5</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">OpenAI introduced GPT-5.5, a model designed to be faster and more capable, with potential applications in coding, research, and data analysis across various tools. The introduction of GPT-5.5 is expected to enhance the performance of complex tasks, although specific outcomes and metrics are not provided in the announcement.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can leverage GPT-5.5 by integrating it into existing workflows and tools to automate tasks, generate insights, and improve overall efficiency.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">Businesses can capitalize on GPT-5.5 by developing and offering AI-powered services and solutions that utilize its advanced capabilities, such as automated coding, research assistance, and data analysis tools.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/academy/working-with-codex','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">Working with Codex</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">This case study provides step-by-step guidance on setting up a Codex workspace, creating threads and projects, managing files, and completing tasks, but it lacks specific metrics or outcomes. The study appears to be introductory in nature, aiming to educate users on how to work with Codex rather than showcasing a specific application or success story.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can use this guidance to help clients set up and utilize the Codex platform for their specific needs, such as automating tasks or improving workflow efficiency.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">A business opportunity exists in offering services to help organizations integrate and optimize Codex for their operations, potentially leading to increased productivity and cost savings.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/academy/codex-how-to-start','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">How to get started with Codex</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The case study provides step-by-step guidance on getting started with Codex, a tool for setting up projects and completing tasks, but lacks specific details on outcomes or metrics. By following the guide, users can learn how to create threads and complete their first tasks with Codex, but the real-world impact and AI maturity remain unclear.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">To utilize Codex, AI consultants can follow the step-by-step guidance provided in the case study to set up projects and create threads for their clients or internal teams.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The Codex tool presents a business opportunity for companies to offer project management and task automation services, potentially generating revenue through subscription-based models or customized solutions.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/academy/codex-settings','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">Codex settings</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The case study provides guidance on configuring Codex settings to optimize task workflow, but it lacks specific metrics or outcomes to demonstrate its effectiveness. By following the provided instructions, users can potentially customize their workflow and run tasks smoothly, but the impact is largely theoretical and not quantified.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">As an AI consultant, you can use this guide to help clients configure Codex settings and optimize their workflow by providing personalized support and customization options.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">A business opportunity exists to offer premium Codex configuration and customization services to clients, potentially generating revenue through consulting fees or workflow optimization packages.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/academy/codex-automations','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">Automations</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The case study discusses the use of Codex to automate tasks, such as creating reports and summaries, using schedules and triggers, but does not provide specific metrics or outcomes. The automation of tasks in Codex is expected to reduce manual effort, but the actual impact is unclear due to lack of data.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can use this information to advise clients on how to implement automation in their workflows using Codex, but would need to gather more information on the specific use cases and requirements.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">A business opportunity exists to develop and sell customized automation solutions using Codex, targeting companies looking to streamline their workflows and reduce manual effort, potentially generating revenue through subscription-based models or consulting services.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/academy/top-10-use-cases-codex-for-work','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">Top 10 uses for Codex at work</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The case study explores 10 practical use cases for Codex to automate tasks and create deliverables across various tools and workflows, but does not provide specific metrics or outcomes. The study aims to showcase the potential of Codex in a work setting, but its impact and effectiveness are not quantitatively evaluated.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">To leverage Codex, AI consultants can start by identifying repetitive tasks and workflows that can be automated, and then use Codex to generate code and integrate it with existing tools and systems.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The Codex technology presents a business opportunity for companies to develop and market automated task solutions, potentially reducing labour costs and increasing productivity for clients across various industries.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://openai.com/academy/codex-plugins-and-skills','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Thu, 23 Ap</span>
-            </div>
-            <div class="score-bar"><div class="score-fill" style="width:56%;background:#ffaa00"></div><span class="score-label">57/100</span></div>
-          </div>
-          <h3 class="card-title">Plugins and skills</h3>
-          <p class="card-authors">Unknown authors · OpenAI</p>
-          <p class="card-summary">The case study introduces the concept of using Codex plugins and skills to automate tasks and improve results by connecting tools and accessing data, but it does not provide specific details on its implementation or outcomes. The study suggests that by leveraging these plugins and skills, users can potentially streamline workflows and enhance productivity, although the extent of its impact is not quantified.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can utilize Codex plugins and skills by integrating them into existing workflows and tools to automate repetitive tasks and provide more efficient solutions for clients.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">A business opportunity exists in developing and marketing customized Codex plugins and skills that cater to specific industry needs, allowing companies to increase efficiency and reduce costs.</span>
-            </div>
-          </div>
-          <div class="score-breakdown">
-            <span>Prestige 25</span>
-            <span>Recency 22</span>
-            <span>Impact 5</span>
-            <span>Maturity 5</span>
-          </div>
-        </article>
-
-        <article class="card" onclick="window.open('https://huggingface.co/blog/nvidia/nemotron-3-nano-omni-multimodal-intelligence','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
+        <article class="cs-card" onclick="window.open('https://openai.com/index/openai-on-aws','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
               <span class="pub-date">Tue, 28 Ap</span>
             </div>
-            <div class="score-bar"><div class="score-fill" style="width:55%;background:#ffaa00"></div><span class="score-label">55/100</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:106%;background:#00ff88"></div><span class="score-label">80/75</span></div>
           </div>
-          <h3 class="card-title">Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents</h3>
-          <p class="card-authors">Unknown authors · Hugging Face</p>
-          <p class="card-summary">NVIDIA Nemotron 3 Nano Omni is introduced as a long-context multimodal intelligence model for processing documents, audio, and video, potentially enabling more advanced AI agents. The model's capabilities and applications are presented, but specific outcomes and metrics are not provided</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can utilize NVIDIA Nemotron 3 Nano Omni by integrating it into existing document, audio, and video processing pipelines to enhance multimodal analysis and understanding</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">Businesses can leverage NVIDIA Nemotron 3 Nano Omni to develop and offer more sophisticated AI-powered services, such as advanced content analysis and generation, to their customers, creating new revenue streams</span>
-            </div>
+          <h3 class="cs-title">OpenAI models, Codex, and Managed Agents come to AWS</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">OpenAI has made its GPT models, Codex, and Managed Agents available on AWS, allowing enterprises to integrate these AI solutions into their existing AWS environments and build secure AI applications. This integration enables businesses to leverage OpenAI's advanced AI capabilities to enhance their operations and decision-making processes.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
           </div>
           <div class="score-breakdown">
-            <span>Prestige 20</span>
             <span>Recency 25</span>
             <span>Impact 5</span>
-            <span>Maturity 5</span>
+            <span>Maturity 25</span>
           </div>
         </article>
 
-        <article class="card" onclick="window.open('https://huggingface.co/blog/openai-privacy-filter-web-apps','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
+        <article class="cs-card" onclick="window.open('https://openai.com/index/next-phase-of-microsoft-partnership','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
               <span class="pub-date">Mon, 27 Ap</span>
             </div>
-            <div class="score-bar"><div class="score-fill" style="width:55%;background:#ffaa00"></div><span class="score-label">55/100</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:106%;background:#00ff88"></div><span class="score-label">80/75</span></div>
           </div>
-          <h3 class="card-title">How to build scalable web apps with OpenAI's Privacy Filter</h3>
-          <p class="card-authors">Unknown authors · Hugging Face</p>
-          <p class="card-summary">The case study explores the use of OpenAI's Privacy Filter to build scalable web apps, highlighting the potential benefits of this approach, however, it lacks specific details on implementation and results. The study suggests that the Privacy Filter can help developers create more secure and private web applications, but it does not provide concrete evidence of its effectiveness in real-world scenarios.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">To apply this concept, an AI consultant can utilize OpenAI's Privacy Filter as a starting point to develop custom privacy-preserving solutions for clients' web applications.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The business opportunity lies in offering customized privacy-enhanced web app development services to clients, leveraging OpenAI's Privacy Filter as a key differentiator and value-added proposition.</span>
-            </div>
+          <h3 class="cs-title">The next phase of the Microsoft OpenAI partnership</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">OpenAI and Microsoft announced an amended agreement to simplify their partnership and support continued AI innovation at scale, which is expected to drive further advancements in the field of artificial intelligence. The partnership aims to provide long-term clarity and facilitate the development of new AI technologies, although specific metrics and outcomes are not yet quantified.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
           </div>
           <div class="score-breakdown">
-            <span>Prestige 20</span>
+            <span>Recency 25</span>
+            <span>Impact 5</span>
+            <span>Maturity 25</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/academy/codex-automations','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:89%;background:#00ff88"></div><span class="score-label">67/75</span></div>
+          </div>
+          <h3 class="cs-title">Automations</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The AI case study presents a method for automating tasks in Codex using schedules and triggers, enabling the creation of reports, summaries, and recurring workflows without manual effort. By implementing this automation, users can potentially save time and increase productivity, although specific metrics on the impact are not provided.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/academy/top-10-use-cases-codex-for-work','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:89%;background:#00ff88"></div><span class="score-label">67/75</span></div>
+          </div>
+          <h3 class="cs-title">Top 10 uses for Codex at work</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The case study explores 10 practical use cases for Codex, a tool that can automate tasks and create deliverables, to demonstrate its potential in various workflows. By implementing Codex, users can potentially automate tasks, save time, and increase productivity, although specific metrics are not provided.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/academy/codex-settings','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:89%;background:#00ff88"></div><span class="score-label">67/75</span></div>
+          </div>
+          <h3 class="cs-title">Codex settings</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">This case study provides guidance on configuring Codex settings to optimize task execution and workflow customization, but it lacks specific metrics on its impact. The study offers insights into personalization, detail level, and permissions, which can be applied to various AI applications, although concrete outcomes are not reported.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/index/open-source-codex-orchestration-symphony','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Mon, 27 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:80%;background:#00ff88"></div><span class="score-label">60/75</span></div>
+          </div>
+          <h3 class="cs-title">An open-source spec for orchestration: Symphony</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The Symphony open-source spec was developed to turn issue trackers into always-on agent systems using Codex orchestration, aiming to boost engineering output and reduce context switching. By leveraging this technology, engineering teams can potentially streamline their workflows and improve productivity.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
             <span>Recency 25</span>
             <span>Impact 5</span>
             <span>Maturity 5</span>
           </div>
         </article>
 
-        <article class="card" onclick="window.open('https://huggingface.co/blog/deepseekv4','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Fri, 24 Ap</span>
+        <article class="cs-card" onclick="window.open('https://openai.com/index/our-principles','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Sun, 26 Ap</span>
             </div>
-            <div class="score-bar"><div class="score-fill" style="width:52%;background:#ffaa00"></div><span class="score-label">52/100</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:80%;background:#00ff88"></div><span class="score-label">60/75</span></div>
           </div>
-          <h3 class="card-title">DeepSeek-V4: a million-token context that agents can actually use</h3>
-          <p class="card-authors">Unknown authors · Hugging Face</p>
-          <p class="card-summary">The DeepSeek-V4 model, developed by Hugging Face, was introduced with a million-token context, allowing agents to process and utilize extensive information, and its potential applications are being explored. The model's capabilities and potential impact are still being discovered and evaluated, with no concrete metrics or outcomes reported yet.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">AI consultants can utilize the DeepSeek-V4 model by integrating it into their existing architectures to enhance context understanding and improve agent performance in various applications.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">Businesses can leverage the DeepSeek-V4 model to develop more sophisticated and effective chatbots, virtual assistants, and other AI-powered tools, creating new revenue streams and opportunities for growth.</span>
-            </div>
+          <h3 class="cs-title">Our principles</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">OpenAI published a set of principles guiding their work towards ensuring AGI benefits all of humanity, with Sam Altman sharing five key principles. The publication outlines the company's mission and values, but does not provide specific, measurable outcomes or results.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
           </div>
           <div class="score-breakdown">
-            <span>Prestige 20</span>
-            <span>Recency 22</span>
+            <span>Recency 25</span>
             <span>Impact 5</span>
             <span>Maturity 5</span>
           </div>
         </article>
 
-        <article class="card" onclick="window.open('https://huggingface.co/blog/transformersjs-chrome-extension','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
+        <article class="cs-card" onclick="window.open('https://openai.com/index/introducing-gpt-5-5','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
               <span class="pub-date">Thu, 23 Ap</span>
             </div>
-            <div class="score-bar"><div class="score-fill" style="width:52%;background:#ffaa00"></div><span class="score-label">52/100</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:76%;background:#00ff88"></div><span class="score-label">57/75</span></div>
           </div>
-          <h3 class="card-title">How to Use Transformers.js in a Chrome Extension</h3>
-          <p class="card-authors">Unknown authors · Hugging Face</p>
-          <p class="card-summary">The case study explores the use of Transformers.js in a Chrome extension, providing a potential solution for integrating AI models into web browsers. The study demonstrates a conceptual approach to leveraging Transformers.js, but lacks concrete metrics or outcomes.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">An AI consultant can use this study as a starting point to explore the potential of integrating Transformers.js into Chrome extensions for clients, but would need to conduct further testing and development.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">A business opportunity exists in developing and selling Chrome extensions that utilize Transformers.js, potentially offering AI-powered tools and services to a wide range of users.</span>
-            </div>
+          <h3 class="cs-title">Introducing GPT-5.5</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">OpenAI introduced GPT-5.5, a more advanced model capable of handling complex tasks like coding, research, and data analysis across various tools, showcasing its potential for improved performance and efficiency. The introduction of GPT-5.5 demonstrates the continuous development and improvement of AI models, but its actual impact and effectiveness have yet to be measured and evaluated.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
           </div>
           <div class="score-breakdown">
-            <span>Prestige 20</span>
             <span>Recency 22</span>
             <span>Impact 5</span>
             <span>Maturity 5</span>
           </div>
         </article>
 
-        <article class="card" onclick="window.open('https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard','_blank')">
-          <div class="card-header">
-            <div class="card-meta">
-              <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">AI Lab</span>
-              <span class="pub-date">Tue, 21 Ap</span>
+        <article class="cs-card" onclick="window.open('https://openai.com/index/gpt-5-5-system-card','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
             </div>
-            <div class="score-bar"><div class="score-fill" style="width:52%;background:#ffaa00"></div><span class="score-label">52/100</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:76%;background:#00ff88"></div><span class="score-label">57/75</span></div>
           </div>
-          <h3 class="card-title">QIMMA قِمّة ⛰: A Quality-First Arabic LLM Leaderboard</h3>
-          <p class="card-authors">Unknown authors · Hugging Face</p>
-          <p class="card-summary">The QIMMA leaderboard was introduced as a quality-first Arabic large language model (LLM) leaderboard, aiming to evaluate and improve Arabic LLMs, however, the case study lacks specific metrics and outcomes. The introduction of this leaderboard may lead to improved Arabic language understanding and generation capabilities in AI models, but its impact is still theoretical and requires further development and testing.</p>
-          <div class="card-insights">
-            <div class="insight">
-              <span class="insight-label">HOW TO USE</span>
-              <span class="insight-text">To leverage the QIMMA leaderboard, an AI consultant can utilize it as a benchmark to evaluate and fine-tune their Arabic language models, potentially leading to more accurate and effective language understanding and generation capabilities.</span>
-            </div>
-            <div class="insight">
-              <span class="insight-label">OPPORTUNITY</span>
-              <span class="insight-text">The QIMMA leaderboard presents a business opportunity for companies to develop and offer high-quality Arabic language models, potentially generating revenue through licensing or subscription-based services for industries requiring advanced Arabic language processing capabilities.</span>
-            </div>
+          <h3 class="cs-title">GPT-5.5 System Card</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The GPT-5.5 system, developed by OpenAI, is a language model that has been conceptualized to potentially generate human-like text, but there is no information on its implementation or outcomes. The system's capabilities and limitations are not clearly defined, and its impact is still speculative, as there are no measurable metrics or data available to assess its effectiveness.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
           </div>
           <div class="score-breakdown">
-            <span>Prestige 20</span>
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/academy/codex-how-to-start','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:76%;background:#00ff88"></div><span class="score-label">57/75</span></div>
+          </div>
+          <h3 class="cs-title">How to get started with Codex</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">OpenAI introduced a step-by-step guide to help users get started with Codex, a powerful AI tool, by setting up projects and completing tasks. The guide provides a foundation for users to explore the capabilities of Codex and potentially integrate it into their workflows.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/academy/what-is-codex','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:76%;background:#00ff88"></div><span class="score-label">57/75</span></div>
+          </div>
+          <h3 class="cs-title">What is Codex?</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The case study introduces Codex, a tool by OpenAI that automates tasks and produces real outputs, but does not provide specific details on its implementation or results. Codex is presented as a solution to go beyond chat by connecting tools and generating documents and dashboards, but its effectiveness and outcomes are not clearly measured or reported.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/academy/codex-plugins-and-skills','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:76%;background:#00ff88"></div><span class="score-label">57/75</span></div>
+          </div>
+          <h3 class="cs-title">Plugins and skills</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">This case study introduces the concept of using Codex plugins and skills to automate tasks and improve results by connecting tools and accessing data, but it lacks specific details on implementation and outcomes. The study suggests that by leveraging these plugins and skills, users can create repeatable workflows to enhance productivity and efficiency, but concrete metrics or results are not provided.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://openai.com/academy/working-with-codex','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:76%;background:#00ff88"></div><span class="score-label">57/75</span></div>
+          </div>
+          <h3 class="cs-title">Working with Codex</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">This case study provides guidance on setting up a Codex workspace, creating threads and projects, and managing files, but lacks specific measurable outcomes. The study focuses on introductory steps for using Codex, without detailing the results or impacts of its implementation.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://huggingface.co/blog/nvidia/nemotron-3-nano-omni-multimodal-intelligence','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Tue, 28 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:73%;background:#00ff88"></div><span class="score-label">55/75</span></div>
+          </div>
+          <h3 class="cs-title">Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The NVIDIA Nemotron 3 Nano Omni is a long-context multimodal intelligence model that can process documents, audio, and video, potentially revolutionizing the way agents interact with various data types. The introduction of this technology suggests a significant advancement in AI capabilities, but concrete outcomes and applications are not yet specified.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 25</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://huggingface.co/blog/openai-privacy-filter-web-apps','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Mon, 27 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:73%;background:#00ff88"></div><span class="score-label">55/75</span></div>
+          </div>
+          <h3 class="cs-title">How to build scalable web apps with OpenAI's Privacy Filter</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The case study explores the use of OpenAI's Privacy Filter to build scalable web applications, discussing the potential benefits and implementation strategies. By utilizing this technology, developers can create more secure and efficient web apps, although the study lacks specific metrics or outcomes to demonstrate its effectiveness.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 25</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://huggingface.co/blog/deepseekv4','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Fri, 24 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:69%;background:#ffaa00"></div><span class="score-label">52/75</span></div>
+          </div>
+          <h3 class="cs-title">DeepSeek-V4: a million-token context that agents can actually use</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The Hugging Face team introduced DeepSeek-V4, a model that enables agents to utilize a million-token context, and this development has the potential to significantly enhance natural language processing capabilities. The DeepSeek-V4 model can handle large amounts of data, allowing for more accurate and informed decision-making in various applications.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://huggingface.co/blog/transformersjs-chrome-extension','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Thu, 23 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:69%;background:#ffaa00"></div><span class="score-label">52/75</span></div>
+          </div>
+          <h3 class="cs-title">How to Use Transformers.js in a Chrome Extension</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">This case study from Hugging Face explores the use of Transformers.js in a Chrome extension, providing a guide on how to implement the technology. The outcome of this implementation is not clearly stated, with no specific metrics or results mentioned.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
+            <span>Recency 22</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="cs-card" onclick="window.open('https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard','_blank')">
+          <div class="cs-header">
+            <div class="cs-meta">
+              <span class="tag-badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">Tue, 21 Ap</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:69%;background:#ffaa00"></div><span class="score-label">52/75</span></div>
+          </div>
+          <h3 class="cs-title">QIMMA قِمّة ⛰: A Quality-First Arabic LLM Leaderboard</h3>
+          <p class="cs-authors">Unknown authors</p>
+          <p class="cs-institution">📍 </p>
+          <div class="cs-divider"></div>
+          <div class="cs-section">
+            <span class="section-label">SUMMARY</span>
+            <p class="section-text">The QIMMA leaderboard is a quality-first Arabic large language model leaderboard developed by Hugging Face, aimed at evaluating and comparing the performance of different Arabic language models. The leaderboard provides a platform for researchers and developers to test and improve their models, but the actual impact and outcomes of the leaderboard are not clearly stated in the provided information.</p>
+          </div>
+          <div class="cs-section highlight">
+            <span class="section-label">HOW TO APPLY THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="score-breakdown">
             <span>Recency 22</span>
             <span>Impact 5</span>
             <span>Maturity 5</span>
@@ -1014,171 +669,317 @@
       </div>
     </div>
 
-    <div id="news" class="panel">
+    <div id="industry-news" class="panel">
       <div class="news-grid">
         
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">OpenAI News</span>
-            <span class="badge" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">LOW</span>
-            <span class="relevance-score">Score: 2/10</span>
+            <span class="news-source" style="color:#f59e0b">OpenAI News</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">8/10</span>
+            <span class="news-category">Tool</span>
           </div>
-          <h4 class="news-title">OpenAI available at FedRAMP Moderate</h4>
-          <span class="news-category">Product</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">OpenAI News</span>
-            <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">HIGH</span>
-            <span class="relevance-score">Score: 8/10</span>
+            <span class="news-source" style="color:#f59e0b">OpenAI News</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">2/10</span>
+            <span class="news-category">Product</span>
           </div>
-          <h4 class="news-title">The next phase of the Microsoft OpenAI partnership</h4>
-          <span class="news-category">Product</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">OpenAI News</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">OpenAI News</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">8/10</span>
+            <span class="news-category">Product</span>
           </div>
-          <h4 class="news-title">An open-source spec for orchestration: Symphony</h4>
-          <span class="news-category">Research</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">OpenAI News</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">OpenAI News</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">8/10</span>
+            <span class="news-category">Research</span>
           </div>
-          <h4 class="news-title">Choco automates food distribution with AI agents</h4>
-          <span class="news-category">Product</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">OpenAI News</span>
-            <span class="badge" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">LOW</span>
-            <span class="relevance-score">Score: 2/10</span>
+            <span class="news-source" style="color:#f59e0b">OpenAI News</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">6/10</span>
+            <span class="news-category">Product</span>
           </div>
-          <h4 class="news-title">Our principles</h4>
-          <span class="news-category">Research</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">2/10</span>
+            <span class="news-category">Product</span>
           </div>
-          <h4 class="news-title">YouTube is testing an AI-powered search feature that shows guided answers</h4>
-          <span class="news-category">Product</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">6/10</span>
+            <span class="news-category">Product</span>
           </div>
-          <h4 class="news-title">BCI startup Neurable looks to license its ‘mind-reading’ tech for consumer wearables</h4>
-          <span class="news-category">Research</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
-            <span class="badge" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">LOW</span>
-            <span class="relevance-score">Score: 2/10</span>
+            <span class="news-source" style="color:#f59e0b">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">6/10</span>
+            <span class="news-category">Research</span>
           </div>
-          <h4 class="news-title">Red Hat’s OpenClaw maintainer just made enterprise Claw deployments a lot safer</h4>
-          <span class="news-category">Research</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">6/10</span>
+            <span class="news-category">Tool</span>
           </div>
-          <h4 class="news-title">Otter’s new feature lets users search across their enterprise tools</h4>
-          <span class="news-category">Product</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">6/10</span>
+            <span class="news-category">Tool</span>
           </div>
-          <h4 class="news-title">OpenAI ends Microsoft legal peril over its $50B Amazon deal</h4>
-          <span class="news-category">Market</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">VentureBeat</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">VentureBeat</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">6/10</span>
+            <span class="news-category">Product</span>
           </div>
-          <h4 class="news-title">Mistral AI launches Workflows, a Temporal-powered orchestration engine already running millions of daily executions</h4>
-          <span class="news-category">Tool</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">VentureBeat</span>
-            <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">HIGH</span>
-            <span class="relevance-score">Score: 8/10</span>
+            <span class="news-source" style="color:#f59e0b">VentureBeat</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">8/10</span>
+            <span class="news-category">Market</span>
           </div>
-          <h4 class="news-title">Microsoft and OpenAI gut their exclusive deal, freeing OpenAI to sell on AWS and Google Cloud</h4>
-          <span class="news-category">Market</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">VentureBeat</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 6/10</span>
+            <span class="news-source" style="color:#f59e0b">VentureBeat</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">6/10</span>
+            <span class="news-category">Research</span>
           </div>
-          <h4 class="news-title">Open source Xiaomi MiMo-V2.5 and V2.5-Pro are among the most efficient (and affordable) at agentic 'claw' tasks</h4>
-          <span class="news-category">Research</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">VentureBeat</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 8/10</span>
+            <span class="news-source" style="color:#f59e0b">VentureBeat</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">8/10</span>
+            <span class="news-category">Research</span>
           </div>
-          <h4 class="news-title">New AI framework autonomously optimizes training data, architectures and algorithms — outperforming human baselines</h4>
-          <span class="news-category">Research</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
 
-        <article class="news-card">
+        <article class="news-card" onclick="window.open('#','_blank')">
           <div class="news-header">
-            <span class="news-source">VentureBeat</span>
-            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
-            <span class="relevance-score">Score: 8/10</span>
+            <span class="news-source" style="color:#f59e0b">VentureBeat</span>
+            <span class="rel-badge" style="background:#ffaa0022;color:#ffaa00;border:1px solid #ffaa0044">MEDIUM</span>
+            <span class="news-score">8/10</span>
+            <span class="news-category">Research</span>
           </div>
-          <h4 class="news-title">Why supply chains are the proving ground for automation‑led iPaaS</h4>
-          <span class="news-category">Research</span>
+          <h4 class="news-title"></h4>
+          <p class="news-summary"></p>
+          <div class="news-section highlight">
+            <span class="section-label">HOW TO USE THIS</span>
+            <p class="section-text"></p>
+          </div>
+          <div class="news-footer">
+            <span class="news-date"></span>
+            <span class="news-link">Read article →</span>
+          </div>
         </article>
+      </div>
+    </div>
+
+    <div id="archive-cs" class="panel">
+      <div class="archive-grid">
+        <p class='empty'>No archive yet.</p>
+      </div>
+    </div>
+
+    <div id="archive-news" class="panel">
+      <div class="archive-grid">
+        <p class='empty'>No archive yet.</p>
       </div>
     </div>
 
     <footer>
       <span>Scout Agent · LangGraph + Groq</span>
-      <span class="accent">// Ranked by prestige · recency · impact · maturity</span>
+      <span class="accent">// Case Studies: last 4 months · News: last 4 weeks</span>
     </footer>
   </div>
-
   <script>
-    function showTab(id, btn) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    function showTab(id,btn) {
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       btn.classList.add('active');
     }
