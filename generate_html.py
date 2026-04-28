@@ -1,410 +1,594 @@
-import json
-import shutil
-from pathlib import Path
-from datetime import datetime
-from jinja2 import Template
-
-ISSUES_DIR = Path("issues")
-NEWS_DIR = Path("news")
-SITE_DIR = Path("site")
-
-
-# ============================================================
-# HELPERS
-# ============================================================
-
-def format_date(date_str):
-    dt = datetime.strptime(date_str, "%Y-%m-%d")
-    return dt.strftime("%A, %d %B %Y")
-
-
-def load_all(folder):
-    """Load all JSON issues from a folder, newest first."""
-    if not folder.exists():
-        return []
-    items = []
-    for file in folder.glob("*.json"):
-        with open(file, "r", encoding="utf-8") as f:
-            items.append(json.load(f))
-    items.sort(key=lambda i: i["issue_date"], reverse=True)
-    return items
-
-
-# ============================================================
-# CSS (shared across all pages)
-# ============================================================
-
-CSS = """
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: Georgia, 'Times New Roman', serif;
-  background: #f8f5ef;
-  color: #1a1a1a;
-  line-height: 1.6;
-  padding: 40px 20px;
-}
-.container { max-width: 960px; margin: 0 auto; }
-.masthead {
-  text-align: center;
-  border-bottom: 3px double #1a1a1a;
-  padding-bottom: 20px;
-  margin-bottom: 30px;
-}
-.masthead h1 {
-  font-size: 48px;
-  font-weight: 900;
-  letter-spacing: -1px;
-}
-.masthead .date {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #666;
-  margin-top: 8px;
-}
-.nav {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  margin-bottom: 40px;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.nav a { color: #444; text-decoration: none; }
-.nav a:hover { color: #000; text-decoration: underline; }
-.nav a.active { color: #c0392b; font-weight: bold; }
-
-.hero {
-  background: #fff;
-  padding: 30px;
-  border: 1px solid #ddd;
-  margin-bottom: 30px;
-}
-.hero .badge {
-  display: inline-block;
-  background: #c0392b;
-  color: white;
-  font-size: 11px;
-  padding: 4px 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-}
-.hero h2 {
-  font-size: 36px;
-  line-height: 1.2;
-  font-weight: 900;
-  margin-bottom: 12px;
-}
-.hero .meta {
-  font-size: 12px;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
-}
-.hero .section { margin-bottom: 16px; }
-.hero .section strong {
-  display: block;
-  font-size: 11px;
-  color: #c0392b;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-.hero .section p { font-size: 16px; }
-.hero a { color: #c0392b; font-size: 13px; }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-.card {
-  background: #fff;
-  padding: 20px;
-  border: 1px solid #ddd;
-}
-.card .category {
-  font-size: 11px;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.card h3 {
-  font-size: 20px;
-  line-height: 1.25;
-  margin-bottom: 12px;
-}
-.card .section { margin-bottom: 10px; font-size: 14px; }
-.card .section strong { color: #444; font-size: 11px; text-transform: uppercase; }
-.card .meta {
-  font-size: 11px;
-  color: #888;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #eee;
-}
-.card a { color: #c0392b; font-size: 12px; }
-
-.archive-list { list-style: none; }
-.archive-list li {
-  padding: 16px 0;
-  border-bottom: 1px solid #ddd;
-}
-.archive-list a {
-  color: #1a1a1a;
-  text-decoration: none;
-  font-size: 18px;
-}
-.archive-list a:hover { text-decoration: underline; }
-.archive-list .count {
-  font-size: 13px;
-  color: #888;
-  margin-left: 12px;
-}
-
-.empty {
-  text-align: center;
-  padding: 60px 20px;
-  color: #888;
-}
-
-.footer {
-  text-align: center;
-  margin-top: 60px;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
-  font-size: 12px;
-  color: #888;
-}
+#!/usr/bin/env python3
+"""
+Generate HTML dashboard from case studies + industry news JSON files.
+Dark tech/AI aesthetic. Sorted by score descending.
 """
 
+import os
+import json
+from datetime import datetime
+from pathlib import Path
 
-# ============================================================
-# TEMPLATES
-# ============================================================
+CASE_STUDIES_DIR = "case_studies"
+NEWS_DIR = "logs"
+OUTPUT_FILE = "site/index.html"
 
-BASE_TEMPLATE = Template("""<!DOCTYPE html>
+
+def load_latest_json(directory):
+    path = Path(directory)
+    files = sorted(path.glob("*.json"), reverse=True)
+    if not files:
+        return None
+    with open(files[0]) as f:
+        return json.load(f)
+
+
+def score_bar(score, max_score=100):
+    pct = int((score / max_score) * 100)
+    color = "#00ff88" if pct >= 70 else "#ffaa00" if pct >= 40 else "#ff4444"
+    return f'<div class="score-bar"><div class="score-fill" style="width:{pct}%;background:{color}"></div><span class="score-label">{score}/{max_score}</span></div>'
+
+
+def tier_badge(tier):
+    colors = {
+        "universities": "#7c3aed",
+        "consulting": "#0ea5e9",
+        "ai_labs": "#10b981",
+        "other": "#6b7280",
+    }
+    labels = {
+        "universities": "University",
+        "consulting": "Consulting",
+        "ai_labs": "AI Lab",
+        "other": "Other",
+    }
+    color = colors.get(tier, "#6b7280")
+    label = labels.get(tier, tier.title())
+    return f'<span class="badge" style="background:{color}22;color:{color};border:1px solid {color}44">{label}</span>'
+
+
+def suitability_badge(suit):
+    colors = {"high": "#10b981", "medium": "#f59e0b", "low": "#ef4444"}
+    color = colors.get(suit, "#6b7280")
+    return f'<span class="badge" style="background:{color}22;color:{color};border:1px solid {color}44">{suit.upper()}</span>'
+
+
+def render_case_studies(data):
+    if not data or not data.get("case_studies"):
+        return "<p class='empty'>No case studies available yet.</p>"
+
+    cards = []
+    for cs in data["case_studies"]:
+        authors = ", ".join(cs.get("authors", [])) or "Unknown authors"
+        pub = cs.get("pub_date", "")[:10] or "Unknown date"
+        url = cs.get("url", "#")
+        cards.append(f"""
+        <article class="card" onclick="window.open('{url}','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              {tier_badge(cs.get('tier','other'))}
+              <span class="pub-date">{pub}</span>
+            </div>
+            {score_bar(cs.get('total_score', 0))}
+          </div>
+          <h3 class="card-title">{cs.get('title','Untitled')}</h3>
+          <p class="card-authors">{authors} · {cs.get('venue','')}</p>
+          <p class="card-summary">{cs.get('summary','')}</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">{cs.get('how_to_use','')}</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">{cs.get('monetisation','')}</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige {cs.get('prestige_score',0)}</span>
+            <span>Recency {cs.get('recency_score',0)}</span>
+            <span>Impact {cs.get('real_world_impact',0)}</span>
+            <span>Maturity {cs.get('ai_maturity',0)}</span>
+          </div>
+        </article>""")
+
+    return "\n".join(cards)
+
+
+def render_news(data):
+    if not data or not data.get("news"):
+        return "<p class='empty'>No news available yet.</p>"
+
+    cards = []
+    for item in data["news"]:
+        suit = item.get("suitability", "medium")
+        cards.append(f"""
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">{item.get('source','')}</span>
+            {suitability_badge(suit)}
+            <span class="relevance-score">Score: {item.get('relevance_score',0)}/10</span>
+          </div>
+          <h4 class="news-title">{item.get('article_title','')}</h4>
+          <span class="news-category">{item.get('category','')}</span>
+        </article>""")
+
+    return "\n".join(cards)
+
+
+def generate_html():
+    cs_data = load_latest_json(CASE_STUDIES_DIR)
+    news_data = load_latest_json(NEWS_DIR)
+
+    cs_count = len(cs_data.get("case_studies", [])) if cs_data else 0
+    news_count = len(news_data.get("news", [])) if news_data else 0
+    generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
+
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ page_title }} · The Agent Builder Daily</title>
-<style>{{ css }}</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Intelligence Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {{
+      --bg: #080b12;
+      --surface: #0d1117;
+      --surface2: #161b25;
+      --border: #1e2837;
+      --accent: #00ff88;
+      --accent2: #0ea5e9;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --danger: #ff4444;
+    }}
+
+    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+
+    body {{
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }}
+
+    /* Grid background */
+    body::before {{
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }}
+
+    .container {{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }}
+
+    /* Header */
+    header {{
+      padding: 48px 0 32px;
+      border-bottom: 1px solid var(--border);
+    }}
+
+    .header-inner {{
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }}
+
+    .logo-area {{}}
+
+    .logo-tag {{
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }}
+
+    h1 {{
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }}
+
+    .header-stats {{
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }}
+
+    .stat {{
+      text-align: right;
+    }}
+
+    .stat-value {{
+      font-family: 'Space Mono', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }}
+
+    .stat-label {{
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }}
+
+    .updated {{
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+    }}
+
+    .updated span {{
+      color: var(--accent);
+    }}
+
+    /* Tabs */
+    .tabs {{
+      display: flex;
+      gap: 0;
+      margin: 32px 0 0;
+      border-bottom: 1px solid var(--border);
+    }}
+
+    .tab {{
+      padding: 12px 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }}
+
+    .tab.active {{
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }}
+
+    .tab:hover:not(.active) {{
+      color: var(--text);
+    }}
+
+    /* Panels */
+    .panel {{ display: none; padding: 32px 0; }}
+    .panel.active {{ display: block; }}
+
+    /* Case Study Cards */
+    .cards-grid {{
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+      gap: 16px;
+    }}
+
+    .card {{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }}
+
+    .card:hover {{
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }}
+
+    .card-header {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }}
+
+    .card-meta {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }}
+
+    .pub-date {{
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }}
+
+    .score-bar {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      max-width: 160px;
+    }}
+
+    .score-fill {{
+      height: 4px;
+      border-radius: 2px;
+      flex: 1;
+      transition: width 0.5s ease;
+    }}
+
+    .score-label {{
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+    }}
+
+    .card-title {{
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      color: #fff;
+    }}
+
+    .card-authors {{
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-family: 'Space Mono', monospace;
+    }}
+
+    .card-summary {{
+      font-size: 14px;
+      line-height: 1.6;
+      color: #94a3b8;
+      margin-bottom: 16px;
+    }}
+
+    .card-insights {{
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--surface2);
+      border-radius: 8px;
+      border-left: 2px solid var(--accent);
+    }}
+
+    .insight {{
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }}
+
+    .insight-label {{
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }}
+
+    .insight-text {{
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }}
+
+    .score-breakdown {{
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }}
+
+    .score-breakdown span {{
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      background: var(--surface2);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }}
+
+    /* News Cards */
+    .news-grid {{
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 12px;
+    }}
+
+    .news-card {{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      transition: border-color 0.2s;
+    }}
+
+    .news-card:hover {{ border-color: var(--accent2); }}
+
+    .news-header {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }}
+
+    .news-source {{
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--accent2);
+      text-transform: uppercase;
+    }}
+
+    .relevance-score {{
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-left: auto;
+    }}
+
+    .news-title {{
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: #fff;
+    }}
+
+    .news-category {{
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }}
+
+    /* Badges */
+    .badge {{
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }}
+
+    .empty {{
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      padding: 48px;
+      text-align: center;
+    }}
+
+    /* Terminal pulse */
+    @keyframes pulse {{
+      0%, 100% {{ opacity: 1; }}
+      50% {{ opacity: 0; }}
+    }}
+
+    .cursor {{
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--accent);
+      animation: pulse 1s infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }}
+
+    footer {{
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      margin-top: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }}
+
+    footer span {{
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }}
+
+    footer .accent {{ color: var(--accent); }}
+
+    @media (max-width: 600px) {{
+      .cards-grid, .news-grid {{ grid-template-columns: 1fr; }}
+      .header-inner {{ flex-direction: column; align-items: flex-start; }}
+      .header-stats {{ flex-direction: row; }}
+    }}
+  </style>
 </head>
 <body>
-<div class="container">
-  <div class="masthead">
-    <h1>The Agent Builder Daily</h1>
-    <div class="date">{{ subtitle }}</div>
+  <div class="container">
+    <header>
+      <div class="header-inner">
+        <div class="logo-area">
+          <p class="logo-tag">// AI Intelligence Feed</p>
+          <h1>Scout<span class="cursor"></span></h1>
+        </div>
+        <div class="header-stats">
+          <div class="stat">
+            <div class="stat-value">{cs_count}</div>
+            <div class="stat-label">Case Studies</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{news_count}</div>
+            <div class="stat-label">News Items</div>
+          </div>
+        </div>
+      </div>
+      <p class="updated">Last updated: <span>{generated_at}</span></p>
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('case-studies', this)">Case Studies</button>
+        <button class="tab" onclick="showTab('news', this)">Industry News</button>
+      </div>
+    </header>
+
+    <div id="case-studies" class="panel active">
+      <div class="cards-grid">
+        {render_case_studies(cs_data)}
+      </div>
+    </div>
+
+    <div id="news" class="panel">
+      <div class="news-grid">
+        {render_news(news_data)}
+      </div>
+    </div>
+
+    <footer>
+      <span>Scout Agent · LangGraph + Groq</span>
+      <span class="accent">// Ranked by prestige · recency · impact · maturity</span>
+    </footer>
   </div>
-  <div class="nav">
-    <a href="/" class="{% if page == 'home' %}active{% endif %}">SMB Opportunities</a>
-    <a href="/news.html" class="{% if page == 'news' %}active{% endif %}">Industry News</a>
-    <a href="/archive.html" class="{% if page == 'archive' %}active{% endif %}">Archive</a>
-  </div>
-  {{ body }}
-  <div class="footer">
-    Generated {{ generated_at }} · Data from Reddit, HackerNews, and official AI blogs
-  </div>
-</div>
+
+  <script>
+    function showTab(id, btn) {{
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }}
+  </script>
 </body>
-</html>""")
+</html>"""
 
-
-PAIN_POINT_BODY = Template("""
-{% if not issue %}
-  <div class="empty"><h2>No issues yet</h2></div>
-{% else %}
-  {% set top = issue.articles[0] %}
-  <div class="hero">
-    <span class="badge">Top Story · {{ top.category }} · {{ top.importance }}/10</span>
-    <h2>{{ top.headline }}</h2>
-    <div class="meta">{{ top.opportunity_type }} opportunity · {{ top.industry | default('General') }}</div>
-    <div class="section"><strong>Problem</strong><p>{{ top.problem }}</p></div>
-    <div class="section"><strong>Solution</strong><p>{{ top.solution }}</p></div>
-    <div class="section"><strong>Monetisation</strong><p>{{ top.monetisation }}</p></div>
-    <div class="section"><strong>Trend</strong><p>{{ top.trend_signal }}</p></div>
-    <a href="{{ top.source_url }}" target="_blank">Read source →</a>
-  </div>
-  <div class="grid">
-    {% for a in issue.articles[1:] %}
-    <div class="card">
-      <div class="category">{{ a.category }} · {{ a.importance }}/10 · {{ a.industry | default('General') }}</div>
-      <h3>{{ a.headline }}</h3>
-      <div class="section"><strong>Problem</strong><p>{{ a.problem }}</p></div>
-      <div class="section"><strong>Opportunity</strong><p>{{ a.monetisation }}</p></div>
-      <div class="meta">{{ a.opportunity_type }} · <a href="{{ a.source_url }}" target="_blank">Source →</a></div>
-    </div>
-    {% endfor %}
-  </div>
-{% endif %}
-""")
-
-
-NEWS_BODY = Template("""
-{% if not issue %}
-  <div class="empty"><h2>No news yet</h2></div>
-{% else %}
-  {% set top = issue.articles[0] %}
-  <div class="hero">
-    <span class="badge">Top News · {{ top.category }} · {{ top.importance }}/10</span>
-    <h2>{{ top.headline }}</h2>
-    <div class="meta">{{ top.news_type }} · {{ top.source }}</div>
-    <div class="section"><strong>Summary</strong><p>{{ top.summary }}</p></div>
-    <div class="section"><strong>Impact on agent builders</strong><p>{{ top.impact }}</p></div>
-    <a href="{{ top.source_url }}" target="_blank">Read source →</a>
-  </div>
-  <div class="grid">
-    {% for a in issue.articles[1:] %}
-    <div class="card">
-      <div class="category">{{ a.category }} · {{ a.news_type }} · {{ a.importance }}/10</div>
-      <h3>{{ a.headline }}</h3>
-      <div class="section"><strong>Summary</strong><p>{{ a.summary }}</p></div>
-      <div class="section"><strong>Impact</strong><p>{{ a.impact }}</p></div>
-      <div class="meta">{{ a.source }} · <a href="{{ a.source_url }}" target="_blank">Source →</a></div>
-    </div>
-    {% endfor %}
-  </div>
-{% endif %}
-""")
-
-
-ARCHIVE_BODY = Template("""
-<h2 style="margin-bottom: 20px; font-size: 24px;">SMB Opportunity Issues</h2>
-{% if not issues %}
-  <div class="empty"><p>No issues yet</p></div>
-{% else %}
-  <ul class="archive-list">
-    {% for i in issues %}
-    <li>
-      <a href="/issues/{{ i.issue_date }}.html">{{ format_date(i.issue_date) }}</a>
-      <span class="count">{{ i.article_count }} articles</span>
-    </li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-<h2 style="margin: 40px 0 20px; font-size: 24px;">Industry News Issues</h2>
-{% if not news %}
-  <div class="empty"><p>No news yet</p></div>
-{% else %}
-  <ul class="archive-list">
-    {% for i in news %}
-    <li>
-      <a href="/news/{{ i.issue_date }}.html">{{ format_date(i.issue_date) }}</a>
-      <span class="count">{{ i.article_count }} stories</span>
-    </li>
-    {% endfor %}
-  </ul>
-{% endif %}
-""")
-
-
-# ============================================================
-# PAGE GENERATORS
-# ============================================================
-
-def render_page(page_key, page_title, subtitle, body_html):
-    return BASE_TEMPLATE.render(
-        page_title=page_title,
-        page=page_key,
-        subtitle=subtitle,
-        body=body_html,
-        css=CSS,
-        generated_at=datetime.now().strftime("%d %b %Y at %H:%M")
-    )
-
-
-def generate_home(issues):
-    """The / (SMB opportunities front page)."""
-    latest = issues[0] if issues else None
-    subtitle = format_date(latest["issue_date"]) + " · SMB Opportunities" if latest else "No issues yet"
-    body = PAIN_POINT_BODY.render(issue=latest)
-    return render_page("home", "SMB Opportunities", subtitle, body)
-
-
-def generate_news(news_issues):
-    """The /news page."""
-    latest = news_issues[0] if news_issues else None
-    subtitle = format_date(latest["issue_date"]) + " · Industry News" if latest else "No news yet"
-    body = NEWS_BODY.render(issue=latest)
-    return render_page("news", "Industry News", subtitle, body)
-
-
-def generate_archive(issues, news_issues):
-    """The /archive page."""
-    body = ARCHIVE_BODY.render(issues=issues, news=news_issues, format_date=format_date)
-    return render_page("archive", "Archive",
-                       f"{len(issues)} SMB issues · {len(news_issues)} news issues", body)
-
-
-def generate_issue_page(issue):
-    """Individual past issue page."""
-    subtitle = format_date(issue["issue_date"]) + " · SMB Opportunities"
-    body = PAIN_POINT_BODY.render(issue=issue)
-    return render_page("home", issue["issue_date"], subtitle, body)
-
-
-def generate_news_page(issue):
-    """Individual past news page."""
-    subtitle = format_date(issue["issue_date"]) + " · Industry News"
-    body = NEWS_BODY.render(issue=issue)
-    return render_page("news", issue["issue_date"], subtitle, body)
-
-
-# ============================================================
-# MAIN BUILD
-# ============================================================
-
-def build():
-    print("🏗️  Building static site...")
-
-    # Clean and recreate site folder
-    if SITE_DIR.exists():
-        shutil.rmtree(SITE_DIR)
-    SITE_DIR.mkdir()
-    (SITE_DIR / "issues").mkdir()
-    (SITE_DIR / "news").mkdir()
-
-    # Load all data
-    issues = load_all(ISSUES_DIR)
-    news_issues = load_all(NEWS_DIR)
-
-    print(f"  Loaded {len(issues)} SMB opportunity issues")
-    print(f"  Loaded {len(news_issues)} news issues")
-
-    # Homepage
-    (SITE_DIR / "index.html").write_text(generate_home(issues), encoding="utf-8")
-    print("  ✓ index.html")
-
-    # News page
-    (SITE_DIR / "news.html").write_text(generate_news(news_issues), encoding="utf-8")
-    print("  ✓ news.html")
-
-    # Archive
-    (SITE_DIR / "archive.html").write_text(generate_archive(issues, news_issues), encoding="utf-8")
-    print("  ✓ archive.html")
-
-    # Individual issue pages
-    for issue in issues:
-        filepath = SITE_DIR / "issues" / f"{issue['issue_date']}.html"
-        filepath.write_text(generate_issue_page(issue), encoding="utf-8")
-    print(f"  ✓ {len(issues)} SMB issue pages")
-
-    # Individual news pages
-    for issue in news_issues:
-        filepath = SITE_DIR / "news" / f"{issue['issue_date']}.html"
-        filepath.write_text(generate_news_page(issue), encoding="utf-8")
-    print(f"  ✓ {len(news_issues)} news pages")
-
-    print(f"\n✅ Site built to {SITE_DIR}/")
-    print(f"   Open: file://{SITE_DIR.resolve()}/index.html")
+    os.makedirs("site", exist_ok=True)
+    with open(OUTPUT_FILE, "w") as f:
+        f.write(html)
+    print(f"✓ HTML generated → {OUTPUT_FILE}")
 
 
 if __name__ == "__main__":
-    build()
+    generate_html()

@@ -1,189 +1,1129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMB Opportunities · The Agent Builder Daily</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: Georgia, 'Times New Roman', serif;
-  background: #f8f5ef;
-  color: #1a1a1a;
-  line-height: 1.6;
-  padding: 40px 20px;
-}
-.container { max-width: 960px; margin: 0 auto; }
-.masthead {
-  text-align: center;
-  border-bottom: 3px double #1a1a1a;
-  padding-bottom: 20px;
-  margin-bottom: 30px;
-}
-.masthead h1 {
-  font-size: 48px;
-  font-weight: 900;
-  letter-spacing: -1px;
-}
-.masthead .date {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #666;
-  margin-top: 8px;
-}
-.nav {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  margin-bottom: 40px;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.nav a { color: #444; text-decoration: none; }
-.nav a:hover { color: #000; text-decoration: underline; }
-.nav a.active { color: #c0392b; font-weight: bold; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Intelligence Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080b12;
+      --surface: #0d1117;
+      --surface2: #161b25;
+      --border: #1e2837;
+      --accent: #00ff88;
+      --accent2: #0ea5e9;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --danger: #ff4444;
+    }
 
-.hero {
-  background: #fff;
-  padding: 30px;
-  border: 1px solid #ddd;
-  margin-bottom: 30px;
-}
-.hero .badge {
-  display: inline-block;
-  background: #c0392b;
-  color: white;
-  font-size: 11px;
-  padding: 4px 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-}
-.hero h2 {
-  font-size: 36px;
-  line-height: 1.2;
-  font-weight: 900;
-  margin-bottom: 12px;
-}
-.hero .meta {
-  font-size: 12px;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
-}
-.hero .section { margin-bottom: 16px; }
-.hero .section strong {
-  display: block;
-  font-size: 11px;
-  color: #c0392b;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-.hero .section p { font-size: 16px; }
-.hero a { color: #c0392b; font-size: 13px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-.card {
-  background: #fff;
-  padding: 20px;
-  border: 1px solid #ddd;
-}
-.card .category {
-  font-size: 11px;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.card h3 {
-  font-size: 20px;
-  line-height: 1.25;
-  margin-bottom: 12px;
-}
-.card .section { margin-bottom: 10px; font-size: 14px; }
-.card .section strong { color: #444; font-size: 11px; text-transform: uppercase; }
-.card .meta {
-  font-size: 11px;
-  color: #888;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #eee;
-}
-.card a { color: #c0392b; font-size: 12px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-.archive-list { list-style: none; }
-.archive-list li {
-  padding: 16px 0;
-  border-bottom: 1px solid #ddd;
-}
-.archive-list a {
-  color: #1a1a1a;
-  text-decoration: none;
-  font-size: 18px;
-}
-.archive-list a:hover { text-decoration: underline; }
-.archive-list .count {
-  font-size: 13px;
-  color: #888;
-  margin-left: 12px;
-}
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.empty {
-  text-align: center;
-  padding: 60px 20px;
-  color: #888;
-}
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
 
-.footer {
-  text-align: center;
-  margin-top: 60px;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
-  font-size: 12px;
-  color: #888;
-}
-</style>
+    /* Header */
+    header {
+      padding: 48px 0 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .logo-area {}
+
+    .logo-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .stat {
+      text-align: right;
+    }
+
+    .stat-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .updated {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .updated span {
+      color: var(--accent);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin: 32px 0 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      padding: 12px 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+
+    .tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab:hover:not(.active) {
+      color: var(--text);
+    }
+
+    /* Panels */
+    .panel { display: none; padding: 32px 0; }
+    .panel.active { display: block; }
+
+    /* Case Study Cards */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pub-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .score-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      max-width: 160px;
+    }
+
+    .score-fill {
+      height: 4px;
+      border-radius: 2px;
+      flex: 1;
+      transition: width 0.5s ease;
+    }
+
+    .score-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .card-authors {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .card-summary {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #94a3b8;
+      margin-bottom: 16px;
+    }
+
+    .card-insights {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--surface2);
+      border-radius: 8px;
+      border-left: 2px solid var(--accent);
+    }
+
+    .insight {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .insight-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }
+
+    .insight-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .score-breakdown {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .score-breakdown span {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      background: var(--surface2);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* News Cards */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 12px;
+    }
+
+    .news-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      transition: border-color 0.2s;
+    }
+
+    .news-card:hover { border-color: var(--accent2); }
+
+    .news-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .news-source {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--accent2);
+      text-transform: uppercase;
+    }
+
+    .relevance-score {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    .news-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .news-category {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Badges */
+    .badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    /* Terminal pulse */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--accent);
+      animation: pulse 1s infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      margin-top: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer span {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    footer .accent { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .cards-grid, .news-grid { grid-template-columns: 1fr; }
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .header-stats { flex-direction: row; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <div class="masthead">
-    <h1>The Agent Builder Daily</h1>
-    <div class="date">Monday, 27 April 2026 · SMB Opportunities</div>
-  </div>
-  <div class="nav">
-    <a href="/" class="active">SMB Opportunities</a>
-    <a href="/news.html" class="">Industry News</a>
-    <a href="/archive.html" class="">Archive</a>
-  </div>
-  
+  <div class="container">
+    <header>
+      <div class="header-inner">
+        <div class="logo-area">
+          <p class="logo-tag">// AI Intelligence Feed</p>
+          <h1>Scout<span class="cursor"></span></h1>
+        </div>
+        <div class="header-stats">
+          <div class="stat">
+            <div class="stat-value">18</div>
+            <div class="stat-label">Case Studies</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">15</div>
+            <div class="stat-label">News Items</div>
+          </div>
+        </div>
+      </div>
+      <p class="updated">Last updated: <span>28 Apr 2026, 16:50</span></p>
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('case-studies', this)">Case Studies</button>
+        <button class="tab" onclick="showTab('news', this)">Industry News</button>
+      </div>
+    </header>
 
-  
-  <div class="hero">
-    <span class="badge">Top Story · INVOICING · 8/10</span>
-    <h2>Lawn Care Owners Struggle with Non-Paying Clients</h2>
-    <div class="meta">SAAS opportunity · Lawn Care and Landscaping</div>
-    <div class="section"><strong>Problem</strong><p>The business owner is struggling with customers who don't pay for lawn care services, leading to wasted time and resources on chasing payments. They are considering taking legal action for theft of services. The owner is looking for a solution to streamline payment collection and reduce non-payment issues.</p></div>
-    <div class="section"><strong>Solution</strong><p>An AI-powered invoicing and payment tracking system could help automate payment reminders, send notifications, and predict potential non-payment risks. It could also provide a platform for secure and easy online payments, reducing the need for manual follow-ups and legal action.</p></div>
-    <div class="section"><strong>Monetisation</strong><p>A SaaS subscription model could be used to offer this solution to lawn care businesses, with tiered pricing based on the number of clients and invoices managed.</p></div>
-    <div class="section"><strong>Trend</strong><p>The lawn care industry is growing, and with more businesses emerging, the need for efficient payment collection and management solutions is increasing.</p></div>
-    <a href="https://reddit.com/r/sweatystartup/comments/1swfbeg/issues_with_customers_not_paying_solution/" target="_blank">Read source →</a>
-  </div>
-  <div class="grid">
-    
+    <div id="case-studies" class="panel active">
+      <div class="cards-grid">
+        
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/5dbb7fb94380d605fb2531b7c2981d7b1a5577e8','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2021-02-05</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:55%;background:#ffaa00"></div><span class="score-label">55/100</span></div>
+          </div>
+          <h3 class="card-title">Understanding the implications of artificial intelligence on field service operations: a case study of BT</h3>
+          <p class="card-authors">Yingli Wang, Jean-Paul Skeete, G. Owusu · Unknown</p>
+          <p class="card-summary">This case study explores the impact of AI on field service operations at BT telecommunications over 20 years, examining its effects on operational efficiency and critical success factors. The study provides insights into the deployment of AI in operations management, highlighting its potential to improve efficiency and decision-making.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">AI consultants can use this case study to inform their own deployments of AI in field service operations, leveraging the lessons learned from BT's experiences to optimize their own implementations.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The findings of this case study can be used to develop and market AI-powered field service management solutions, offering businesses a way to improve operational efficiency and reduce costs.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 20</span>
+            <span>Maturity 20</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/ad4a72bbb08b9f5e8050b8d31cb6003277fb298e','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-12-01</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:55%;background:#ffaa00"></div><span class="score-label">55/100</span></div>
+          </div>
+          <h3 class="card-title">From gut feel to smart prioritisation: Building an artificial intelligence opportunity scoring model that sales teams actually use</h3>
+          <p class="card-authors">Laura Murphy, Georgi Bachvarov, Xenia Cotlearova · Applied marketing analytics</p>
+          <p class="card-summary">This study presents a hybrid AI approach to predictive opportunity scoring, aiming to improve sales teams' efficiency and reduce revenue leakage in B2B environments. The model addresses common challenges faced by B2B firms, such as low conversion rates and misalignment, by providing a data-driven solution</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">To apply this model, an AI consultant should integrate it with existing sales systems and provide training to sales teams to ensure seamless adoption and maximize its potential</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The AI opportunity scoring model can be monetised by offering it as a SaaS solution to B2B companies, providing them with a competitive edge in sales forecasting and resource allocation</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 20</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/915e98661ee2cd9ddcbbc69e34cc8e939f14260b','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-11-10</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:55%;background:#ffaa00"></div><span class="score-label">55/100</span></div>
+          </div>
+          <h3 class="card-title">Educational Integration of ESP32 Project-Based Learning with Generative AI: Design, Implementation, and Evaluation in Two Engineering Cohorts</h3>
+          <p class="card-authors">Jose Manuel Medina Pozos, José Manuel Nieto Jalil · Mexican International Conference on Computer Science</p>
+          <p class="card-summary">This study integrated ESP32 project-based learning with generative AI in two engineering cohorts, aiming to shift microcontroller education from syntax-focused programming to engineering reasoning under real constraints. The five-week module used cooperative learning, guided scaffolding, and mandatory traceability to assess its effectiveness.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can use the findings of this study to inform the design of project-based learning modules that effectively integrate generative AI and ESP32 technology in engineering education.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The development of AI-powered educational tools and platforms for ESP32 project-based learning can provide a significant business opportunity for companies and educators looking to enhance engineering education.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 20</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/32a14b90d6680ad7795a419f949e314b8e4cf811','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2024-12-01</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:40%;background:#ffaa00"></div><span class="score-label">40/100</span></div>
+          </div>
+          <h3 class="card-title">Safe and Trustworthy AI Framework (STAIF): Addressing Uncertainty in AI-Based Models for Real-World Deployment</h3>
+          <p class="card-authors">Soja Salim, J. S., S. B. · IEEE Region 10 Conference</p>
+          <p class="card-summary">The Safe and Trustworthy AI Framework (STAIF) aims to address uncertainty in AI-based models for real-world deployment, focusing on sustainability factors such as trustworthiness and reliability. This framework is crucial for the widespread adoption of AI, considering its potential impact on various aspects of life and the need for careful consideration of ethical and long-term use.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can utilize the STAIF framework to develop and deploy AI models that prioritize trustworthiness, reliability, and sustainability, ensuring compliance with emerging AI regulations.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The development and implementation of STAIF can create a business opportunity for companies to offer certified trustworthy AI solutions, capitalizing on the growing demand for responsible AI practices.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 10</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/813726ba1fb88feee31d9fd580adeca0a2a28df3','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2022-09-01</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:40%;background:#ffaa00"></div><span class="score-label">40/100</span></div>
+          </div>
+          <h3 class="card-title">Network Delay Measurement with Machine Learning: From Lab to Real-World Deployment</h3>
+          <p class="card-authors">S. Mohammed, S. Shirmohammadi, Alaa Eddin Alchalabi · IEEE Instrumentation & Measurement Magazine</p>
+          <p class="card-summary">This case study explores the deployment of machine learning for network delay measurement, transitioning from a lab environment to real-world applications. It discusses the challenges and potential outcomes of using AI in instrumentation and measurement systems.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">To utilize this technology, AI consultants can develop and implement machine learning models for network delay measurement in various industries, such as telecommunications and finance.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The business opportunity lies in offering machine learning-based network delay measurement solutions as a service, providing companies with actionable insights to optimize their network performance and reduce latency.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 10</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/9ef74b65cdc66238f715d08b68886b141f253176','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-03-01</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:40%;background:#ffaa00"></div><span class="score-label">40/100</span></div>
+          </div>
+          <h3 class="card-title">THE ROLE OF ARTIFICIAL INTELLIGENCE IN PERSONALISED MEDICINE: ADVANCEMENTS, CHALLENGES, AND FUTURE PERSPECTIVES</h3>
+          <p class="card-authors">Ioana-Marcela Păcuraru, C. Chirvase, Ștefan Tiriteu · Business Excellence and Management</p>
+          <p class="card-summary">Artificial intelligence is being used to improve personalised medicine by analysing large amounts of data to detect diseases earlier and tailor treatments to individual patients. Despite its potential, the integration of AI in healthcare faces challenges such as data privacy concerns and regulatory frameworks.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can use this study to inform healthcare clients about the potential benefits and challenges of implementing AI in their organisations</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The development of AI-powered personalised medicine platforms can create new business opportunities for healthcare technology companies</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 10</span>
+            <span>Maturity 15</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/727b5a568fe513ba08ebf798a14806d6f63a89f2','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-05-20</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:35%;background:#ff4444"></div><span class="score-label">35/100</span></div>
+          </div>
+          <h3 class="card-title">Explainable Artificial Intelligence (XAI) for Material Design and Engineering Applications: A Quantitative Computational Framework</h3>
+          <p class="card-authors">Bokai Liu, Pengju Liu, Weizhuo Lu · International Journal of Mechanical System Dynamics</p>
+          <p class="card-summary">This study proposes a framework that combines machine learning models with explainable artificial intelligence techniques to improve the predictive accuracy and interpretability of material properties. The goal is to enhance the practical adoption of artificial intelligence in material design and engineering applications.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">To apply this framework, AI consultants can integrate XAI techniques into existing ML models for material informatics to provide more transparent and trustworthy predictions.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The proposed framework can be monetised by offering licensing fees or subscription-based services to material design and engineering companies looking to improve their predictive modeling capabilities.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 10</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/fcb9f653758e0c5dbdc2b0df4036c3e6fc946a85','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-11-18</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:35%;background:#ff4444"></div><span class="score-label">35/100</span></div>
+          </div>
+          <h3 class="card-title">Artificial intelligence powered intelligent energy management framework for hydrogen storage and dispatch in smart microgrids</h3>
+          <p class="card-authors">Marwa Hassan · Scientific Reports</p>
+          <p class="card-summary">This study presents a novel AI-powered framework for managing hydrogen storage and dispatch in smart microgrids, aiming to improve flexibility and reliability. The framework uses Long Short-Term Memory neural networks for short-term forecasting and addresses challenges such as real-time dispatch complexity and forecasting uncertainty.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can utilize this framework by integrating it with existing microgrid systems and tuning the LSTM neural networks for optimal performance.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The developed AI-powered framework can be licensed to microgrid operators and energy companies, providing a business opportunity for revenue generation through subscription-based models or customized implementation services.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 10</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/567626c387bf096691ba353b0012c2963ff8966e','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-06-03</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:35%;background:#ff4444"></div><span class="score-label">35/100</span></div>
+          </div>
+          <h3 class="card-title">AUBIQ: A Generative AI-Powered Framework for Automating Business Intelligence Requirements in Resource-Constrained Enterprises</h3>
+          <p class="card-authors">Ruolin Qi · Unknown</p>
+          <p class="card-summary">The AUBIQ framework uses generative AI to automate business intelligence requirements, helping small and medium-sized enterprises overcome resource constraints. By reducing the need for manual specification processes, AUBIQ aims to increase efficiency and reduce costs for these enterprises.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">To implement AUBIQ, an AI consultant can leverage the framework's semantic search and large language model capabilities to generate codeless business intelligence solutions for resource-constrained clients.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The AUBIQ framework presents a business opportunity to offer automated business intelligence solutions to small and medium-sized enterprises, potentially generating revenue through subscription-based models or consulting services.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 10</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/77a769281faaafbc326cc299b8bec100551accc5','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-02-28</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:30%;background:#ff4444"></div><span class="score-label">30/100</span></div>
+          </div>
+          <h3 class="card-title">Multi-modal Language models in bioacoustics with zero-shot transfer: a case study</h3>
+          <p class="card-authors">Zhongqi Miao, Benjamin Elizalde, Soham Deshmukh · Scientific Reports</p>
+          <p class="card-summary">This case study explores the use of multi-modal language models in bioacoustics to automatically detect sound events, which can aid in wildlife monitoring and conservation. The approach utilizes zero-shot transfer, eliminating the need for large amounts of manually annotated bioacoustic data.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">To apply this technology, an AI consultant can use pre-trained language models and fine-tune them on bioacoustic datasets to develop accurate sound event detection systems.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The technology can be monetized by offering automated sound event detection services to conservation organizations and research institutions, potentially reducing their manual annotation costs and increasing monitoring efficiency.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 10</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/2481ce08062c71a0e8464877a14f41bc349a5520','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-09-13</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:30%;background:#ff4444"></div><span class="score-label">30/100</span></div>
+          </div>
+          <h3 class="card-title">Evaluation of Generative AI Chatbot Models for Handling Critical Situations in Business Information Systems Implementation: A Case Study</h3>
+          <p class="card-authors">Radoslav Kostev · Unknown</p>
+          <p class="card-summary">This case study evaluates the use of generative AI chatbot models in implementing Business Information Systems, comparing their responses to those of students in similar disciplines. The study found that generative AI can be a good assistant in handling critical situations in BIS implementation.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">AI consultants can use generative AI chatbot models as a tool to assist in handling complex situations in Business Information Systems implementation.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">Businesses can leverage generative AI chatbot models to reduce implementation costs and improve efficiency in Business Information Systems, creating a potential revenue stream.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/66f7f6be7841cf86e428aeaefaf0a11be2006b77','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-03-21</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:25%;background:#ff4444"></div><span class="score-label">25/100</span></div>
+          </div>
+          <h3 class="card-title">Application and Challenges of Artificial Intelligence in Human Resource Management</h3>
+          <p class="card-authors">Qingrui Li · Frontiers in Business, Economics and Management</p>
+          <p class="card-summary">This research explores the application of artificial intelligence in human resource management, highlighting its potential to improve efficiency and decision-making, while also addressing ethical concerns. The study develops a framework for responsible AI deployment in HRM, considering issues like bias, privacy, and job displacement.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can use this research to inform the development of tailored AI solutions for HRM clients, prioritizing ethical considerations and responsible implementation.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">Businesses can capitalize on the growing demand for AI-powered HRM solutions by developing and marketing ethical AI tools that address the challenges and concerns identified in this research.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/8f9061dec649ff404aa9ce6f8c7a0b157ef8b92b','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2024-07-31</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:25%;background:#ff4444"></div><span class="score-label">25/100</span></div>
+          </div>
+          <h3 class="card-title">Exploring the Role of Social Support When Integrating Generative AI in Small Business Workflows</h3>
+          <p class="card-authors">Quentin Romero Lauro, Jeffrey P. Bigham, Yasmine Kotturi · Unknown</p>
+          <p class="card-summary">This study explores how small business owners integrate generative AI into their workflows, highlighting the importance of social support in navigating legal and ethical risks. The research findings are based on interviews with 11 entrepreneurs and support personnel, shedding light on existing practices and challenges.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">AI consultants can use the insights from this study to develop targeted support services for small business owners looking to adopt generative AI technologies.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The findings of this study can be monetised by developing and marketing tailored AI solutions and support packages for small businesses, addressing their specific needs and pain points.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/e84602b621fb658deea43dbd6152409aacb9bdbe','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2023-03-22</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:25%;background:#ff4444"></div><span class="score-label">25/100</span></div>
+          </div>
+          <h3 class="card-title">Leveraging Generative AI Tools Like ChatGPT for Startups and Small Business Growth</h3>
+          <p class="card-authors">David M. Townsend · Entrepreneur & Innovation Exchange</p>
+          <p class="card-summary">This case study explores the potential of generative AI tools like ChatGPT to drive growth for startups and small businesses by optimizing processes and enhancing customer engagement. It highlights the opportunities and risks of adopting these technologies and provides practical steps for entrepreneurs to leverage them</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">AI consultants can use this study to advise clients on implementing generative AI tools to streamline operations and improve customer interactions</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">Businesses can monetise generative AI by offering tailored solutions and services that utilise ChatGPT and similar tools to enhance customer experience and drive revenue</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 5</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/5127eec37ba3d627307403d7629433b2bbec250d','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-04-30</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:25%;background:#ff4444"></div><span class="score-label">25/100</span></div>
+          </div>
+          <h3 class="card-title">Generative AI in Business: Visual Illustrations of Applications and Insights from Q1 2025</h3>
+          <p class="card-authors">Satyadhar Joshi · International Journal of Advanced Research</p>
+          <p class="card-summary">This paper explores the applications and challenges of generative AI in business, including content creation and decision support, and discusses its potential benefits and future directions. The study provides insights into the current state of generative AI adoption in various business domains, but does not provide specific measurable outcomes</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can use this paper as a starting point to identify potential use cases for generative AI in their clients' businesses and develop strategies for implementation</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">Businesses can leverage the insights from this paper to develop and market generative AI-based solutions and services, such as automated content creation and decision support tools, to other companies</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 0</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/79ff83eeed69d3aa4e16fbc9c79a1bdf642e5399','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-02-01</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:20%;background:#ff4444"></div><span class="score-label">20/100</span></div>
+          </div>
+          <h3 class="card-title">A Framework for Implementing Generative AI in Business Processes</h3>
+          <p class="card-authors">Sergei Veniaminovich Kobelev · Финансы и управление</p>
+          <p class="card-summary">This research aims to develop a framework for implementing generative artificial intelligence in business processes, addressing the limitations of existing approaches. The framework is designed to be applicable to organizations of various sizes and industries, but its practical impact and implementation status are unclear.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can use this research as a starting point to develop tailored implementation strategies for generative AI in their clients' business processes.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">Businesses can capitalize on the potential of generative AI by developing and marketing implementation frameworks and consulting services based on this research.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 0</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/4d3315e4047803d60032ccb1f3b6ed1bcd0764b1','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-02-22</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:20%;background:#ff4444"></div><span class="score-label">20/100</span></div>
+          </div>
+          <h3 class="card-title">Advancing Financial Inclusion for Small and Medium Enterprises through Generative AI Frameworks in the United States</h3>
+          <p class="card-authors">Lauret Kambili Maduka · Asian Journal of Economics Business and Accounting</p>
+          <p class="card-summary">This study explores the potential of generative AI in improving financial inclusion for Small and Medium Enterprises in the United States by streamlining financial processes and enhancing credit accessibility. The research aims to identify the impact of AI-driven frameworks on mitigating financial constraints for SMEs.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">An AI consultant can use the findings of this study to develop AI-driven solutions for SMEs, such as credit scoring models and financial process automation tools, to improve their financial inclusion.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">The research findings can be monetised by developing and licensing AI-powered financial platforms for SMEs, offering a new revenue stream for financial institutions and fintech companies.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 5</span>
+            <span>Impact 0</span>
+            <span>Maturity 5</span>
+          </div>
+        </article>
+
+        <article class="card" onclick="window.open('https://www.semanticscholar.org/paper/5f5b7ea1c9080a30cd9eb4718d388562fa27a51a','_blank')">
+          <div class="card-header">
+            <div class="card-meta">
+              <span class="badge" style="background:#6b728022;color:#6b7280;border:1px solid #6b728044">Other</span>
+              <span class="pub-date">2025-10-30</span>
+            </div>
+            <div class="score-bar"><div class="score-fill" style="width:20%;background:#ff4444"></div><span class="score-label">20/100</span></div>
+          </div>
+          <h3 class="card-title">Ethical Implications of Generative AI in Business Decision-Making: A Governance Perspective</h3>
+          <p class="card-authors">Aljwhrh Almtrf · International Journal of Business and Applied Social Science</p>
+          <p class="card-summary">This study explores the ethical challenges of using generative AI in business decision-making and identifies key risks such as bias and transparency deficits. The research aims to inform the development of more effective governance frameworks for AI adoption in corporate contexts.</p>
+          <div class="card-insights">
+            <div class="insight">
+              <span class="insight-label">HOW TO USE</span>
+              <span class="insight-text">AI consultants can use the findings of this study to advise clients on the ethical implications of generative AI and develop strategies to mitigate associated risks.</span>
+            </div>
+            <div class="insight">
+              <span class="insight-label">OPPORTUNITY</span>
+              <span class="insight-text">Businesses can capitalize on the growing demand for AI ethics consulting services by developing and marketing tailored solutions to address the ethical challenges of generative AI in corporate decision-making.</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <span>Prestige 10</span>
+            <span>Recency 10</span>
+            <span>Impact 0</span>
+            <span>Maturity 0</span>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div id="news" class="panel">
+      <div class="news-grid">
+        
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">OpenAI News</span>
+            <span class="badge" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">LOW</span>
+            <span class="relevance-score">Score: 2/10</span>
+          </div>
+          <h4 class="news-title">OpenAI available at FedRAMP Moderate</h4>
+          <span class="news-category">Product</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">OpenAI News</span>
+            <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">HIGH</span>
+            <span class="relevance-score">Score: 8/10</span>
+          </div>
+          <h4 class="news-title">The next phase of the Microsoft OpenAI partnership</h4>
+          <span class="news-category">Product</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">OpenAI News</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 8/10</span>
+          </div>
+          <h4 class="news-title">An open-source spec for orchestration: Symphony</h4>
+          <span class="news-category">Research</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">OpenAI News</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">Choco automates food distribution with AI agents</h4>
+          <span class="news-category">Product</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">OpenAI News</span>
+            <span class="badge" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">LOW</span>
+            <span class="relevance-score">Score: 2/10</span>
+          </div>
+          <h4 class="news-title">Our principles</h4>
+          <span class="news-category">Research</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">YouTube is testing an AI-powered search feature that shows guided answers</h4>
+          <span class="news-category">Product</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">BCI startup Neurable looks to license its ‘mind-reading’ tech for consumer wearables</h4>
+          <span class="news-category">Research</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">Red Hat’s OpenClaw maintainer just made enterprise Claw deployments a lot safer</h4>
+          <span class="news-category">Research</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">Otter’s new feature lets users search across their enterprise tools</h4>
+          <span class="news-category">Tool</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">AI News & Artificial Intelligence | TechCrunch</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">OpenAI ends Microsoft legal peril over its $50B Amazon deal</h4>
+          <span class="news-category">Market</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">VentureBeat</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">Mistral AI launches Workflows, a Temporal-powered orchestration engine already running millions of daily executions</h4>
+          <span class="news-category">Tool</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">VentureBeat</span>
+            <span class="badge" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">HIGH</span>
+            <span class="relevance-score">Score: 8/10</span>
+          </div>
+          <h4 class="news-title">Microsoft and OpenAI gut their exclusive deal, freeing OpenAI to sell on AWS and Google Cloud</h4>
+          <span class="news-category">Market</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">VentureBeat</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 6/10</span>
+          </div>
+          <h4 class="news-title">Open source Xiaomi MiMo-V2.5 and V2.5-Pro are among the most efficient (and affordable) at agentic 'claw' tasks</h4>
+          <span class="news-category">Research</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">VentureBeat</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 8/10</span>
+          </div>
+          <h4 class="news-title">New AI framework autonomously optimizes training data, architectures and algorithms — outperforming human baselines</h4>
+          <span class="news-category">Research</span>
+        </article>
+
+        <article class="news-card">
+          <div class="news-header">
+            <span class="news-source">VentureBeat</span>
+            <span class="badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">MEDIUM</span>
+            <span class="relevance-score">Score: 8/10</span>
+          </div>
+          <h4 class="news-title">Why supply chains are the proving ground for automation‑led iPaaS</h4>
+          <span class="news-category">Research</span>
+        </article>
+      </div>
+    </div>
+
+    <footer>
+      <span>Scout Agent · LangGraph + Groq</span>
+      <span class="accent">// Ranked by prestige · recency · impact · maturity</span>
+    </footer>
   </div>
 
-  <div class="footer">
-    Generated 27 Apr 2026 at 17:01 · Data from Reddit, HackerNews, and official AI blogs
-  </div>
-</div>
+  <script>
+    function showTab(id, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
 </body>
 </html>
