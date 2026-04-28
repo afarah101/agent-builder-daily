@@ -169,7 +169,7 @@ def generate_html():
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scout — AI Intelligence Feed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -220,13 +220,28 @@ def generate_html():
       gap: 16px;
     }
 
-    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 0; }
 
     .brand-name {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.5px;
+      font-family: 'Syne', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+      background: linear-gradient(135deg, #ffffff 0%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-cursor {
+      display: inline-block;
+      width: 10px;
+      height: 40px;
+      background: #00ff88;
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s infinite;
+      border-radius: 2px;
     }
 
     .brand-dot {
@@ -564,8 +579,7 @@ def generate_html():
   <div class="header-inner">
     <div class="header-top">
       <div class="brand">
-        <div class="brand-dot"></div>
-        <span class="brand-name">Scout</span>
+        <span class="brand-name">Scout Daily</span><span class="brand-cursor"></span>
       </div>
       <div class="header-stats">
         <div class="stat">

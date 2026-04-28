@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scout — AI Intelligence Feed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -56,13 +56,28 @@
       gap: 16px;
     }
 
-    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 0; }
 
     .brand-name {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.5px;
+      font-family: 'Syne', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+      background: linear-gradient(135deg, #ffffff 0%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-cursor {
+      display: inline-block;
+      width: 10px;
+      height: 40px;
+      background: #00ff88;
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s infinite;
+      border-radius: 2px;
     }
 
     .brand-dot {
@@ -400,8 +415,7 @@
   <div class="header-inner">
     <div class="header-top">
       <div class="brand">
-        <div class="brand-dot"></div>
-        <span class="brand-name">Scout</span>
+        <span class="brand-name">Scout Daily</span><span class="brand-cursor"></span>
       </div>
       <div class="header-stats">
         <div class="stat">
@@ -409,12 +423,12 @@
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">1</div>
+          <div class="stat-num">0</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <div class="updated">Updated 28 Apr 2026, 23:24</div>
+    <div class="updated">Updated 28 Apr 2026, 23:30</div>
     <div class="tabs">
       <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
       <button class="tab" onclick="showTab('industry-news',this)">Industry News</button>
@@ -430,29 +444,7 @@
   </div>
 
   <div id="industry-news" class="panel">
-    <div class="cards-grid"><article class="card news-card" onclick="window.open('https://openai.com/index/openai-on-aws','_blank')">
-  <div class="card-top">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#0596691a;color:#059669;border:1px solid #05966933">Partnership</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">8/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">OpenAI models, Codex, and Managed Agents come to AWS</h3>
-  <p class="card-summary">OpenAI has made its models, including GPT, Codex, and Managed Agents, available on Amazon Web Services (AWS), allowing enterprises to build and deploy secure AI solutions within their existing AWS environments. This integration enables companies to leverage OpenAI's advanced AI capabilities while maintaining control and security over their data and applications.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Enterprises can immediately start using OpenAI models on AWS to develop and deploy customized AI solutions, such as chatbots, language translators, and content generators, to enhance their customer experiences and improve operational efficiency. AI consultants can also utilize this integration to provide their clients with more comprehensive and secure AI solutions, leveraging the combined strengths of OpenAI and AWS.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">Tue, 28 Ap</span>
-    <span class="read-link">Read article →</span>
-  </div>
-</article></div>
+    <div class="cards-grid"><div class='empty-state'><p>No news available yet.</p></div></div>
   </div>
 
   <div id="archive-cs" class="panel">
@@ -466,8 +458,8 @@
   <div id="archive-news" class="panel">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-04-28</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><span class='archive-title'>OpenAI models, Codex, and Managed Agents come to AWS</span></div>
+  <div class="archive-count">0 items</div>
+  <div class="archive-previews"></div>
 </div></div>
   </div>
 </div>
