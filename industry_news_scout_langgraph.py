@@ -42,7 +42,7 @@ def groq_complete(messages, max_tokens=400):
         try:
             client = Groq(api_key=key)
             resp = client.chat.completions.create(
-                model="llama3-8b-8192",
+                model="llama-3.1-8b-instant",
                 messages=messages,
                 max_tokens=max_tokens,
             )
