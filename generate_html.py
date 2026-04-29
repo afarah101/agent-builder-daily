@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, json
+import os, json, html as html_lib
 from datetime import datetime
 from pathlib import Path
 
@@ -30,6 +30,14 @@ def load_slug_map():
         with open(SLUG_MAP_FILE) as f:
             return json.load(f)
     return {"case_studies": {}, "news": {}}
+
+def esc(val):
+    return html_lib.escape(str(val)) if val else ""
+
+def safe_url(url):
+    if not url or not str(url).startswith(("https://", "http://")):
+        return "#"
+    return url
 
 def relevance_dot(signal):
     colors = {"high": "#22c55e", "medium": "#f59e0b", "low": "#ef4444"}
@@ -67,19 +75,19 @@ def render_case_studies(data, slug_map):
     cs_slugs = slug_map.get("case_studies", {})
     cards = []
     for cs in data["case_studies"]:
-        authors = ", ".join(cs.get("authors", [])) or "Unknown authors"
+        authors = esc(", ".join(cs.get("authors", [])) or "Unknown authors")
         pub_raw = cs.get("pub_date", "")[:10]
         try:
             from datetime import datetime as dt
             pub = dt.strptime(pub_raw, "%Y-%m-%d").strftime("%d %b %Y")
         except:
             pub = pub_raw
-        url = cs.get("url", "#")
+        url = safe_url(cs.get("url", "#"))
         tag = cs.get("relevance_tag", "Other")
-        institution = cs.get("institution", "Academic Institution")
+        institution = esc(cs.get("institution", "Academic Institution"))
         built = cs.get("author_built_product", False)
         built_badge = '<span class="built-badge">🚀 Author shipped product</span>' if built else ""
-        title = cs.get("title", "Untitled")
+        title = esc(cs.get("title", "Untitled"))
 
         # Breakdown link
         slug = cs_slugs.get(title)
@@ -102,14 +110,14 @@ def render_case_studies(data, slug_map):
     <span class="sep">·</span>
     <span class="pub-date">{pub}</span>
   </div>
-  <p class="card-summary">{cs.get('summary','')}</p>
+  <p class="card-summary">{esc(cs.get('summary',''))}</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">{cs.get('how_to_apply','')}</p>
+    <p class="insight-text">{esc(cs.get('how_to_apply',''))}</p>
   </div>
   <div class="insight-block monetisation">
     <div class="insight-label">BUSINESS OPPORTUNITY</div>
-    <p class="insight-text">{cs.get('monetisation','')}</p>
+    <p class="insight-text">{esc(cs.get('monetisation',''))}</p>
   </div>
   <div class="card-footer">
     <div class="score-pills">
@@ -119,7 +127,7 @@ def render_case_studies(data, slug_map):
       <span>Monetisation {cs.get('monetisation_potential',0)}</span>
     </div>
     <div class="footer-links">
-      <a href="{url}" target="_blank" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       {breakdown_link}
     </div>
   </div>
@@ -133,10 +141,10 @@ def render_news(data, slug_map):
     cards = []
     for item in data["news"]:
         signal = item.get("relevance_signal", "medium")
-        url = item.get("url", "#")
+        url = safe_url(item.get("url", "#"))
         tier = item.get("tier", "news")
         category = item.get("category", "Other")
-        title = item.get("title", "")
+        title = esc(item.get("title", ""))
 
         slug = news_slugs.get(title)
         breakdown_link = (
@@ -160,15 +168,15 @@ def render_news(data, slug_map):
     </div>
   </div>
   <h3 class="card-title">{title}</h3>
-  <p class="card-summary">{item.get('summary','')}</p>
+  <p class="card-summary">{esc(item.get('summary',''))}</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">{item.get('enterprise_use','')}</p>
+    <p class="insight-text">{esc(item.get('enterprise_use',''))}</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">{pub}</span>
     <div class="footer-links">
-      <a href="{url}" target="_blank" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       {breakdown_link}
     </div>
   </div>
