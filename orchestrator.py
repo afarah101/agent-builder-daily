@@ -1,45 +1,33 @@
-#!/usr/bin/env python3
-"""
-Orchestrator — runs both scouts sequentially, generates HTML, pushes to git.
-Run via cron: 0 6,18 * * * cd /Users/ahmed.farah/scout-agent && python3 orchestrator.py
-"""
-import sys
-import io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-
-import os
 import subprocess
-from datetime import datetime
+import sys
+import os
 
-def run(label, cmd):
-    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Running: {label}")
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, encoding='utf-8')
-    if result.stdout:
-        print(result.stdout)
-    if result.stderr:
-        print(f"STDERR: {result.stderr}")
+# 1. Force UTF-8 encoding for GitHub Actions environment
+if sys.stdout.encoding != 'utf-8':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+def run_script(script_name):
+    """Utility to run a script and catch errors."""
+    print(f"--- Starting: {script_name} ---")
+    # We use 'python3' for the Ubuntu runner in GitHub Actions
+    result = subprocess.run(["python3", script_name], capture_output=True, text=True, encoding='utf-8')
+    
     if result.returncode != 0:
-        print(f"✗ {label} failed with exit code {result.returncode}")
-        return False
-    print(f"✓ {label} complete")
-    return True
-
-def main():
-    print(f"=== Scout Agent Orchestrator === {datetime.now().isoformat()}")
-    = [
-        ("Case Study Scout", "python3 case_study_scout_langgraph.py"),
-        ("Industry News Scout", "python3 industry_news_scout_langgraph.py"),
-        ("Generate HTML", "python3 generate_html.py"),
-        ("Git Add", "git add -A"),
-        ("Git Commit", f'git commit -m "Auto-update: {datetime.now().strftime("%Y-%m-%d %H:%M")}"'),
-        ("Git Push", "git push origin main"),
-    ]
-    for label, cmd in steps:
-        if not run(label, cmd):
-            print(f"\n✗ Orchestrator stopped at: {label}")
-            sys.exit(1)
-    print(f"\n✓ All steps complete — {datetime.now().isoformat()}")
+        print(f"CRITICAL ERROR in {script_name}:")
+        print(result.stderr)
+        sys.exit(1) # Stop the whole automation if a script fails
+    
+    print(result.stdout)
+    print(f"--- Finished: {script_name} ---\n")
 
 if __name__ == "__main__":
-    main()
+    # Ensure we are in the project root (GitHub Actions does this by default)
+    # No hardcoded Mac paths here!
+    
+    # 2. Execute the Pipeline in order
+    run_script("case_study_scout_langgraph.py")
+    run_script("industry_news_scout_langgraph.py")
+    run_script("generate_html.py")
+    
+    print("Scout Daily Update: Success!")
