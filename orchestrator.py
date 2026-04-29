@@ -25,7 +25,6 @@ def run(label, cmd):
 
 
 def main():
-    os.chdir("/Users/ahmed.farah/scout-agent")
     print(f"=== Scout Agent Orchestrator === {datetime.now().isoformat()}")
 
     steps = [
