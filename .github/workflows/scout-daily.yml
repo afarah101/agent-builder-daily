@@ -2,9 +2,9 @@ name: Scout Daily Automation
 
 on:
   schedule:
-    # 6am and 5pm BST (Runs at 5am and 4pm UTC)
+    # 6am and 5pm BST (5am and 4pm UTC)
     - cron: '0 5,16 * * *'
-  workflow_dispatch: # Allows manual run via the "Actions" tab
+  workflow_dispatch: 
 
 jobs:
   scout:
@@ -20,11 +20,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+          cache: 'pip' # This now works because requirements.txt exists!
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install langgraph langfuse groq feedparser requests beautifulsoup4 python-dotenv
+          pip install -r requirements.txt
 
       - name: Run Scout
         env:
