@@ -24,12 +24,16 @@ jobs:
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          PYTHONIOENCODING: utf-8
         run: python3 orchestrator.py
+      
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
       
       - name: Commit and push
         run: |
-          git config user.email "github-actions@github.com"
-          git config user.name "GitHub Actions"
           git add -A
           git commit -m "Scout Daily update - $(date -u +'%Y-%m-%d %H:%M:%S')" || true
           git push
