@@ -8,6 +8,7 @@ NEWS_DIR = "logs"
 OUTPUT_FILE = "site/index.html"
 ARCHIVE_CS_FILE = "case_studies/archive.json"
 ARCHIVE_NEWS_FILE = "logs/archive.json"
+SLUG_MAP_FILE = "site/breakdowns/slug_map.json"
 
 def load_latest_json(directory, prefix=""):
     path = Path(directory)
@@ -23,6 +24,12 @@ def load_json(filepath):
         with open(filepath) as f:
             return json.load(f)
     return []
+
+def load_slug_map():
+    if os.path.exists(SLUG_MAP_FILE):
+        with open(SLUG_MAP_FILE) as f:
+            return json.load(f)
+    return {"case_studies": {}, "news": {}}
 
 def relevance_dot(signal):
     colors = {"high": "#22c55e", "medium": "#f59e0b", "low": "#ef4444"}
@@ -54,9 +61,10 @@ def tier_label(tier):
     color = colors.get(tier, "#64748b")
     return f'<span class="tier-label" style="color:{color}">{label}</span>'
 
-def render_case_studies(data):
+def render_case_studies(data, slug_map):
     if not data or not data.get("case_studies"):
         return "<div class='empty-state'><p>No case studies available yet.</p></div>"
+    cs_slugs = slug_map.get("case_studies", {})
     cards = []
     for cs in data["case_studies"]:
         authors = ", ".join(cs.get("authors", [])) or "Unknown authors"
@@ -66,12 +74,22 @@ def render_case_studies(data):
         institution = cs.get("institution", "Academic Institution")
         built = cs.get("author_built_product", False)
         built_badge = '<span class="built-badge">🚀 Author shipped product</span>' if built else ""
+        title = cs.get("title", "Untitled")
+
+        # Breakdown link
+        slug = cs_slugs.get(title)
+        breakdown_link = (
+            f'<a href="breakdowns/{slug}.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>'
+            if slug else
+            '<span class="breakdown-pending">Breakdown pending</span>'
+        )
+
         cards.append(f"""<article class="card cs-card" onclick="window.open('{url}','_blank')">
   <div class="card-top">
     <div class="card-tags">{tag_pill(tag)}{built_badge}</div>
     {score_ring(cs.get('total_score', 0))}
   </div>
-  <h3 class="card-title">{cs.get('title','Untitled')}</h3>
+  <h3 class="card-title">{title}</h3>
   <div class="card-meta">
     <span class="authors">{authors}</span>
     <span class="sep">·</span>
@@ -95,20 +113,33 @@ def render_case_studies(data):
       <span>Maturity {cs.get('ai_maturity',0)}</span>
       <span>Monetisation {cs.get('monetisation_potential',0)}</span>
     </div>
-    <span class="read-link">Read paper →</span>
+    <div class="footer-links">
+      <a href="{url}" target="_blank" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      {breakdown_link}
+    </div>
   </div>
 </article>""")
     return "\n".join(cards)
 
-def render_news(data):
+def render_news(data, slug_map):
     if not data or not data.get("news"):
         return "<div class='empty-state'><p>No news available yet.</p></div>"
+    news_slugs = slug_map.get("news", {})
     cards = []
     for item in data["news"]:
         signal = item.get("relevance_signal", "medium")
         url = item.get("url", "#")
         tier = item.get("tier", "news")
         category = item.get("category", "Other")
+        title = item.get("title", "")
+
+        slug = news_slugs.get(title)
+        breakdown_link = (
+            f'<a href="breakdowns/{slug}.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>'
+            if slug else
+            '<span class="breakdown-pending">Breakdown pending</span>'
+        )
+
         cards.append(f"""<article class="card news-card" onclick="window.open('{url}','_blank')">
   <div class="card-top">
     <div class="card-tags">
@@ -121,15 +152,18 @@ def render_news(data):
       <span class="score-num">{item.get('relevance_score',0)}/10</span>
     </div>
   </div>
-  <h3 class="card-title">{item.get('title','')}</h3>
+  <h3 class="card-title">{title}</h3>
   <p class="card-summary">{item.get('summary','')}</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
     <p class="insight-text">{item.get('enterprise_use','')}</p>
   </div>
   <div class="card-footer">
-    <span class="pub-date">{item.get('pub_date','')}</span>
-    <span class="read-link">Read article →</span>
+    <span class="pub-date">{item.get('pub_date','')[:10]}</span>
+    <div class="footer-links">
+      <a href="{url}" target="_blank" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      {breakdown_link}
+    </div>
   </div>
 </article>""")
     return "\n".join(cards)
@@ -157,6 +191,7 @@ def generate_html():
     news_data = load_latest_json(NEWS_DIR, prefix="news_")
     cs_archive = load_json(ARCHIVE_CS_FILE)
     news_archive = load_json(ARCHIVE_NEWS_FILE)
+    slug_map = load_slug_map()
 
     cs_count = len(cs_data.get("case_studies", [])) if cs_data else 0
     news_count = len(news_data.get("news", [])) if news_data else 0
@@ -474,6 +509,7 @@ def generate_html():
       color: var(--text);
     }
 
+    /* Card footer */
     .card-footer {
       display: flex;
       align-items: center;
@@ -481,6 +517,8 @@ def generate_html():
       margin-top: 16px;
       padding-top: 14px;
       border-top: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .score-pills { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -495,11 +533,47 @@ def generate_html():
       border: 1px solid var(--border);
     }
 
+    /* Footer links — two distinct CTAs */
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
     .read-link {
       font-size: 13px;
       font-weight: 500;
-      color: var(--accent);
+      color: var(--text-muted);
+      text-decoration: none;
       white-space: nowrap;
+      transition: color 0.15s;
+    }
+
+    .read-link:hover { color: var(--text-secondary); }
+
+    .breakdown-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-green);
+      text-decoration: none;
+      white-space: nowrap;
+      background: #22c55e1a;
+      border: 1px solid #22c55e33;
+      padding: 4px 12px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .breakdown-link:hover {
+      background: #22c55e2a;
+      border-color: #22c55e55;
+    }
+
+    .breakdown-pending {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
     }
 
     /* Archive */
@@ -570,6 +644,7 @@ def generate_html():
       .archive-row { grid-template-columns: 1fr; gap: 6px; }
       .header-top { flex-direction: column; align-items: flex-start; }
       .header-stats { flex-direction: row; }
+      .card-footer { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -604,11 +679,11 @@ def generate_html():
 
 <div class="content">
   <div id="case-studies" class="panel active">
-    <div class="cards-grid">""" + render_case_studies(cs_data) + """</div>
+    <div class="cards-grid">""" + render_case_studies(cs_data, slug_map) + """</div>
   </div>
 
   <div id="industry-news" class="panel">
-    <div class="cards-grid">""" + render_news(news_data) + """</div>
+    <div class="cards-grid">""" + render_news(news_data, slug_map) + """</div>
   </div>
 
   <div id="archive-cs" class="panel">
