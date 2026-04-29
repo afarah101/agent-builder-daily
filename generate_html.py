@@ -68,7 +68,12 @@ def render_case_studies(data, slug_map):
     cards = []
     for cs in data["case_studies"]:
         authors = ", ".join(cs.get("authors", [])) or "Unknown authors"
-        pub = cs.get("pub_date", "")[:10]
+        pub_raw = cs.get("pub_date", "")[:10]
+        try:
+            from datetime import datetime as dt
+            pub = dt.strptime(pub_raw, "%Y-%m-%d").strftime("%d %b %Y")
+        except:
+            pub = pub_raw
         url = cs.get("url", "#")
         tag = cs.get("relevance_tag", "Other")
         institution = cs.get("institution", "Academic Institution")
@@ -140,6 +145,12 @@ def render_news(data, slug_map):
             '<span class="breakdown-pending">Breakdown pending</span>'
         )
 
+        pub_raw = item.get('pub_date', '')[:10]
+        try:
+            pub = datetime.strptime(pub_raw, "%Y-%m-%d").strftime("%d %b %Y")
+        except:
+            pub = pub_raw
+
         cards.append(f"""<article class="card news-card" onclick="window.open('{url}','_blank')">
   <div class="card-top">
     <div class="card-tags">
@@ -159,7 +170,7 @@ def render_news(data, slug_map):
     <p class="insight-text">{item.get('enterprise_use','')}</p>
   </div>
   <div class="card-footer">
-    <span class="pub-date">{item.get('pub_date','')[:10]}</span>
+    <span class="pub-date">{pub}</span>
     <div class="footer-links">
       <a href="{url}" target="_blank" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       {breakdown_link}
@@ -472,7 +483,7 @@ def generate_html():
 
     .authors { font-size: 13px; color: var(--accent); font-weight: 500; }
     .institution { font-size: 13px; color: var(--text-secondary); }
-    .pub-date { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); }
+    .pub-date { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
     .sep { color: var(--border); }
 
     .card-summary {
