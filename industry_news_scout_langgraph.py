@@ -250,12 +250,12 @@ def save_and_archive(state):
         "total_classified": len(state["classified_news"]),
         "news": state["classified_news"],
     }
-    with open(state["output_file"], "w") as f:
-        json.dump(output, f, indent=2)
+    with open(state["output_file"], "w", encoding="utf-8") as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
     archive = []
     if os.path.exists(ARCHIVE_FILE):
         try:
-            with open(ARCHIVE_FILE) as f:
+            with open(ARCHIVE_FILE, encoding="utf-8") as f:
                 archive = json.load(f)
         except:
             pass
@@ -263,8 +263,8 @@ def save_and_archive(state):
     archive = [e for e in archive if e.get("date") != today]
     archive.insert(0, {"date": today, "total": len(state["classified_news"]), "news": state["classified_news"]})
     archive = archive[:60]
-    with open(ARCHIVE_FILE, "w") as f:
-        json.dump(archive, f, indent=2)
+    with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
+        json.dump(archive, f, indent=2, ensure_ascii=False)
     print("Saved " + str(len(state["classified_news"])) + " news items.")
     return state
 

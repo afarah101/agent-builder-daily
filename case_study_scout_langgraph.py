@@ -204,12 +204,12 @@ def save_and_archive(state):
         "total_scored": len(state["scored_papers"]),
         "case_studies": state["scored_papers"],
     }
-    with open(state["output_file"], "w") as f:
-        json.dump(output, f, indent=2)
+    with open(state["output_file"], "w", encoding="utf-8") as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
     archive = []
     if os.path.exists(ARCHIVE_FILE):
         try:
-            with open(ARCHIVE_FILE) as f:
+            with open(ARCHIVE_FILE, encoding="utf-8") as f:
                 archive = json.load(f)
         except:
             pass
@@ -217,8 +217,8 @@ def save_and_archive(state):
     archive = [e for e in archive if e.get("date") != today]
     archive.insert(0, {"date": today, "total": len(state["scored_papers"]), "case_studies": state["scored_papers"]})
     archive = archive[:90]
-    with open(ARCHIVE_FILE, "w") as f:
-        json.dump(archive, f, indent=2)
+    with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
+        json.dump(archive, f, indent=2, ensure_ascii=False)
     print("Saved " + str(len(state["scored_papers"])) + " case studies.")
     return state
 
