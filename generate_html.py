@@ -145,11 +145,7 @@ def render_news(data, slug_map):
             '<span class="breakdown-pending">Breakdown pending</span>'
         )
 
-        pub_raw = item.get('pub_date', '')[:10]
-        try:
-            pub = datetime.strptime(pub_raw, "%Y-%m-%d").strftime("%d %b %Y")
-        except:
-            pub = pub_raw
+        pub = item.get('pub_date', '')
 
         cards.append(f"""<article class="card news-card" onclick="window.open('{url}','_blank')">
   <div class="card-top">
