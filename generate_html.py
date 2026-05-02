@@ -119,6 +119,17 @@ def render_case_studies(data, slug_map):
     <div class="insight-label">BUSINESS OPPORTUNITY</div>
     <p class="insight-text">{esc(cs.get('monetisation',''))}</p>
   </div>
+  <div class="agent-trace">
+    <button class="trace-toggle" onclick="event.stopPropagation();this.parentElement.classList.toggle('open')">
+      ▶ Agent Trace
+    </button>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">{cs.get('real_world_impact',0)}/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">{cs.get('ai_maturity',0)}/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">{cs.get('monetisation_potential',0)}/25</span></div>
+      <p class="trace-reasoning">{esc(cs.get('score_reasoning',''))}</p>
+    </div>
+  </div>
   <div class="card-footer">
     <div class="score-pills">
       <span>Recency {cs.get('recency_score',0)}</span>
@@ -650,6 +661,59 @@ def generate_html():
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--text-muted);
+    }
+
+    .agent-trace { margin-bottom: 10px; }
+
+    .trace-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+      text-align: left;
+    }
+
+    .trace-toggle:hover { color: var(--text); border-color: var(--accent); }
+
+    .trace-body { display: none; padding: 12px 0 4px; }
+
+    .agent-trace.open .trace-toggle { color: var(--accent); border-color: var(--accent); }
+    .agent-trace.open .trace-body { display: block; }
+
+    .trace-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+    }
+
+    .trace-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .trace-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .trace-reasoning {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-top: 10px;
+      font-style: italic;
     }
 
     @media (max-width: 700px) {

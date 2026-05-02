@@ -223,8 +223,9 @@ def score_papers(state):
             "- monetisation: Exactly 2 sentences. Concrete business opportunity based strictly on what the paper demonstrates.\n"
             "- relevance_tag: Choose exactly one: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, Other\n"
             "- author_built_product: true only if abstract explicitly states authors deployed a real product. Otherwise false.\n\n"
+            "- score_reasoning: Exactly 3 sentences. Sentence 1: why real_world_impact scored as it did. Sentence 2: why ai_maturity scored as it did. Sentence 3: why monetisation_potential scored as it did. Base only on what is explicitly in the abstract.\n\n"
             "Return JSON only. No explanation. No markdown. No preamble.\n"
-            '{"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "it_breakdown": "", "monetisation": "", "relevance_tag": "", "author_built_product": false}'
+            '{"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "it_breakdown": "", "monetisation": "", "relevance_tag": "", "author_built_product": false, "score_reasoning": ""}'
         )
         try:
             text = groq_complete([{"role": "user", "content": prompt}], max_tokens=600)
@@ -255,6 +256,7 @@ def score_papers(state):
                 "monetisation": g.get("monetisation", ""),
                 "relevance_tag": g.get("relevance_tag", "Other"),
                 "author_built_product": g.get("author_built_product", False),
+                "score_reasoning": g.get("score_reasoning", ""),
                 "eval_verdict": eval_verdict,
                 "eval_flagged": eval_flagged,
             })
