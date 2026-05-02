@@ -30,4 +30,5 @@ if __name__ == "__main__":
     run_script("industry_news_scout_langgraph.py")
     run_script("generate_breakdowns.py", allow_failure=True)
     run_script("generate_html.py")
+    run_script("langfuse_proxy.py", allow_failure=True)
     print("Scout Daily Update: Success!")
