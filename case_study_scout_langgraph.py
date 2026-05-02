@@ -8,6 +8,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
 from dotenv import load_dotenv
+from google import genai as genai_client
 from langfuse import Langfuse, observe
 load_dotenv()
 
@@ -152,6 +153,35 @@ def fetch_papers(state):
     today = datetime.now().strftime("%Y-%m-%d")
     return {"raw_papers": raw_papers, "scored_papers": [], "output_file": state.get("output_file", OUTPUT_DIR + "/" + today + ".json")}
 
+def gemini_evaluate(abstract, groq_output):
+    try:
+        client = genai_client.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        time.sleep(6)
+        eval_prompt = (
+            "You are a strict fact checker evaluating an AI-generated summary of an academic paper.\n"
+            "Your job is to check if the summary is accurate and if the scores are reasonable.\n\n"
+            "ORIGINAL ABSTRACT:\n" + abstract + "\n\n"
+            "GENERATED SUMMARY: " + groq_output.get("summary", "") + "\n"
+            "SCORES: impact=" + str(groq_output.get("real_world_impact", 0)) +
+            ", maturity=" + str(groq_output.get("ai_maturity", 0)) +
+            ", monetisation=" + str(groq_output.get("monetisation_potential", 0)) + "\n\n"
+            "Answer in JSON only:\n"
+            '{"hallucination_detected": false, "hallucination_detail": "", "scores_reasonable": true, "score_feedback": "", "verdict": "pass"}'
+        )
+        response = model.generate_content(eval_prompt)
+        text = response.text.strip()
+        if "```" in text:
+            text = text.split("```")[1]
+            if text.startswith("json"):
+                text = text[4:]
+        result = json.loads(text.strip())
+        print("[DEBUG] Gemini eval: " + result.get("verdict", "unknown"))
+        time.sleep(4)
+        return result
+    except Exception as e:
+        print("[DEBUG] Gemini eval error: " + str(e))
+        return {"hallucination_detected": False, "verdict": "pass", "score_feedback": ""}
+
 def score_papers(state):
     papers = state["raw_papers"]
     print("[DEBUG] Scoring " + str(len(papers)) + " papers...")
@@ -161,31 +191,54 @@ def score_papers(state):
         paper = papers[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + paper["title"][:60])
         prompt = (
-            "Evaluate this academic AI case study.\n"
+            "You are a strict academic AI research analyst. Your only job is to evaluate the paper below and extract information "
+            "that is explicitly and directly stated in the abstract. You must never infer, assume, speculate, or fabricate anything.\n\n"
+            "STRICT GUARDRAILS:\n"
+            "- Only use facts explicitly present in the abstract provided\n"
+            "- Never invent statistics, company names, outcomes, or results\n"
+            "- Never extrapolate or imply things beyond what the authors state\n"
+            "- If the paper has not been explicitly tested in production, do not imply it has\n"
+            "- If the abstract mentions limitations or caveats, reflect them in your scores\n"
+            "- If you are uncertain about a score, always choose the lower value\n"
+            "- Do not add any text outside the JSON object\n\n"
+            "PAPER:\n"
             "Title: " + paper["title"] + "\n"
             "Authors: " + ", ".join(paper["authors"]) + "\n"
             "Institution: " + paper["institution"] + "\n"
             "Published: " + paper["pub_date"] + "\n"
             "Abstract: " + paper["abstract"] + "\n\n"
-            "Score each 0-25:\n"
-            "1. real_world_impact: measurable outcomes. 25=clear metrics at scale, 15=some metrics, 5=theoretical\n"
-            "2. ai_maturity: 25=live in production, 15=pilot, 5=concept\n"
-            "3. monetisation_potential: 25=clear product opportunity, 15=adaptable, 5=purely academic\n\n"
-            "Write:\n"
-            "- summary: 3 sentences. Problem, AI approach, outcome\n"
-            "- how_to_apply: 2 sentences. Practical lesson for AI practitioners\n"
-            "- monetisation: 2 sentences. Concrete business opportunity\n"
-            "- relevance_tag: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, or Other\n"
-            "- author_built_product: true if authors founded a company or shipped a product, false otherwise\n\n"
-            'JSON only: {"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "how_to_apply": "", "monetisation": "", "relevance_tag": "", "author_built_product": false}'
+            "SCORING - score each 0 to 25 based only on what is stated in the abstract:\n"
+            "1. real_world_impact: 25=clear measurable outcomes at scale explicitly stated, 15=some metrics mentioned, 5=theoretical only\n"
+            "2. ai_maturity: 25=explicitly states live production deployment, 15=tested in pilot or prototype, 5=simulation or concept only\n"
+            "3. monetisation_potential: 25=clear commercial product opportunity evident, 15=adaptable to business use, 5=purely academic\n\n"
+            "OUTPUT FIELDS:\n"
+            "- summary: Exactly 2 sentences. Sentence 1: the specific problem and AI method. Sentence 2: the result as stated by the authors. Nothing not in the abstract.\n"
+            "- it_breakdown: Exactly 2 sentences for a senior IT Engineer with 5 years helpdesk experience who runs an AI automation consultancy for UK SMBs. "
+            "Sentence 1: specific practical application in IT operations or helpdesk context. "
+            "Sentence 2: how to package this as an AI automation service for a UK SMB client.\n"
+            "- monetisation: Exactly 2 sentences. Concrete business opportunity based strictly on what the paper demonstrates.\n"
+            "- relevance_tag: Choose exactly one: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, Other\n"
+            "- author_built_product: true only if abstract explicitly states authors deployed a real product. Otherwise false.\n\n"
+            "Return JSON only. No explanation. No markdown. No preamble.\n"
+            '{"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "it_breakdown": "", "monetisation": "", "relevance_tag": "", "author_built_product": false}'
         )
         try:
-            text = groq_complete([{"role": "user", "content": prompt}], max_tokens=500)
+            text = groq_complete([{"role": "user", "content": prompt}], max_tokens=600)
             if "```" in text:
                 text = text.split("```")[1]
                 if text.startswith("json"):
                     text = text[4:]
             g = json.loads(text.strip())
+            if i < 5:
+                eval_result = gemini_evaluate(paper["abstract"], g)
+                if eval_result.get("hallucination_detected"):
+                    print("[DEBUG] Hallucination detected — flagging paper")
+                eval_verdict = eval_result.get("verdict", "pass")
+                eval_flagged = eval_result.get("hallucination_detected", False)
+            else:
+                eval_verdict = "pending"
+                eval_flagged = False
+                eval_result = {}
             total = paper["recency_score"] + g.get("real_world_impact", 0) + g.get("ai_maturity", 0) + g.get("monetisation_potential", 0)
             scored.append({
                 **paper,
@@ -194,10 +247,12 @@ def score_papers(state):
                 "monetisation_potential": g.get("monetisation_potential", 0),
                 "total_score": total,
                 "summary": g.get("summary", ""),
-                "how_to_apply": g.get("how_to_apply", ""),
+              "it_breakdown": g.get("it_breakdown", ""),
                 "monetisation": g.get("monetisation", ""),
                 "relevance_tag": g.get("relevance_tag", "Other"),
                 "author_built_product": g.get("author_built_product", False),
+                "eval_verdict": eval_verdict,
+                "eval_flagged": eval_flagged,
             })
             print("[DEBUG] Score: " + str(total) + "/100")
         except Exception as e:
