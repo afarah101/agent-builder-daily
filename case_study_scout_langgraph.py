@@ -227,14 +227,28 @@ def score_papers(state):
             "Return JSON only. No explanation. No markdown. No preamble.\n"
             '{"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "it_breakdown": "", "monetisation": "", "relevance_tag": "", "author_built_product": false, "score_reasoning": ""}'
         )
-        try:
-            text = groq_complete([{"role": "user", "content": prompt}], max_tokens=600)
-            if "```" in text:
-                text = text.split("```")[1]
-                if text.startswith("json"):
-                    text = text[4:]
-            g = json.loads(text.strip())
-            if i < 5:
+        max_retries = 3
+        g = None
+        last_text = ""
+        for attempt in range(max_retries):
+            try:
+                text = groq_complete([{"role": "user", "content": prompt}], max_tokens=600)
+                last_text = text
+                if "```" in text:
+                    text = text.split("```")[1]
+                    if text.startswith("json"):
+                        text = text[4:]
+                g = json.loads(text.strip())
+                break
+            except json.JSONDecodeError:
+                print(f"[DEBUG] JSON parse error on attempt {attempt+1}/3 — retrying...")
+                time.sleep(2)
+                continue
+        if g is None:
+            print(f"[DEBUG] All retries failed for: {paper['title'][:60]}")
+            print(f"[DEBUG] Raw output: {last_text[:200]}")
+            continue
+        if i < 5:
                 eval_result = gemini_evaluate(paper["abstract"], g)
                 if eval_result.get("hallucination_detected"):
                     print("[DEBUG] Hallucination detected — flagging paper")

@@ -140,6 +140,16 @@ def render_case_studies(data, slug_map):
     <div class="footer-links">
       <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       {breakdown_link}
+      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
+        data-title="{title}"
+        data-summary="{esc(cs.get('summary',''))}"
+        data-it="{esc(cs.get('it_breakdown',''))}"
+        data-monetisation="{esc(cs.get('monetisation',''))}"
+        data-reasoning="{esc(cs.get('score_reasoning',''))}"
+        data-score="{cs.get('total_score',0)}"
+        data-url="{url}">
+        ⬇ MD
+      </button>
     </div>
   </div>
 </article>""")
@@ -273,6 +283,23 @@ def generate_rss(cs_data, news_data):
     with open("site/feed.xml", "w", encoding="utf-8") as f:
         f.write(rss)
     print("RSS feed generated -> site/feed.xml")
+
+
+def generate_email_capture():
+    return """
+  <div class="email-banner">
+    <div class="email-inner">
+      <div class="email-text">
+        <span class="email-title">Get Scout Daily in your inbox</span>
+        <span class="email-sub">Daily AI case studies and IT breakdowns. No noise.</span>
+      </div>
+      <form class="email-form" onsubmit="submitEmail(event)">
+        <input type="email" class="email-input" placeholder="your@email.com" required />
+        <button type="submit" class="email-btn">Subscribe</button>
+      </form>
+      <span class="email-confirm" id="email-confirm"></span>
+    </div>
+  </div>"""
 
 
 def generate_html():
@@ -779,6 +806,103 @@ def generate_html():
       font-style: italic;
     }
 
+    .md-export-btn {
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .md-export-btn:hover { color: var(--text); border-color: var(--accent); }
+    .md-export-btn.copied { color: var(--accent-green); border-color: var(--accent-green); }
+
+    .email-banner {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+    }
+
+    .email-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .email-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .email-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .email-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .email-form {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .email-input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text);
+      width: 220px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .email-input:focus { border-color: var(--accent); }
+
+    .email-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .email-btn:hover { opacity: 0.85; }
+
+    .email-confirm {
+      font-size: 12px;
+      color: var(--accent-green);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    @media (max-width: 700px) {
+      .email-banner { padding: 16px; }
+      .email-form { width: 100%; }
+      .email-input { flex: 1; width: auto; }
+    }
+
     @media (max-width: 700px) {
       .cards-grid { grid-template-columns: 1fr; }
       .header-inner { padding: 0 16px; }
@@ -819,6 +943,8 @@ def generate_html():
   </div>
 </div>
 
+""" + generate_email_capture() + """
+
 <div class="content">
   <div id="case-studies" class="panel active">
     <div class="cards-grid">""" + render_case_studies(cs_data, slug_map) + """</div>
@@ -848,6 +974,55 @@ def generate_html():
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     btn.classList.add('active');
+  }
+
+  function copyMarkdown(btn) {
+    const title = btn.dataset.title;
+    const summary = btn.dataset.summary;
+    const it = btn.dataset.it;
+    const monetisation = btn.dataset.monetisation;
+    const reasoning = btn.dataset.reasoning;
+    const score = btn.dataset.score;
+    const url = btn.dataset.url;
+    const md = [
+      "# " + title,
+      "",
+      "**Score:** " + score + "/100",
+      "",
+      "## Summary",
+      summary,
+      "",
+      "## IT Engineer Breakdown",
+      it,
+      "",
+      "## Business Opportunity",
+      monetisation,
+      "",
+      "## Agent Reasoning",
+      reasoning,
+      "",
+      "**Source:** " + url,
+    ].join("\\n");
+    navigator.clipboard.writeText(md).then(() => {
+      btn.classList.add("copied");
+      btn.textContent = "✓ Copied";
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        btn.textContent = "⬇ MD";
+      }, 2000);
+    });
+  }
+
+  function submitEmail(e) {
+    e.preventDefault();
+    const input = e.target.querySelector('.email-input');
+    const confirm = document.getElementById('email-confirm');
+    const email = input.value.trim();
+    if (!email) return;
+    confirm.textContent = '✓ You are on the list — first issue coming soon.';
+    input.value = '';
+    input.disabled = true;
+    e.target.querySelector('.email-btn').disabled = true;
   }
 </script>
 </body>
