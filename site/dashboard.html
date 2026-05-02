@@ -425,6 +425,38 @@
     /* ── Empty state ── */
     .empty { color: var(--text-muted); font-size: 13px; padding: 16px 0; }
 
+    /* ── Stat grid (Langfuse) ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stat-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 700px) {
       .header { padding: 16px; }
@@ -492,16 +524,24 @@
     </div>
   </section>
 
-  <!-- LANGFUSE (static placeholder) -->
+  <!-- LANGFUSE (live snapshot) -->
   <section>
     <div class="section-title">Langfuse Observability</div>
-    <div class="langfuse-placeholder">
-      <div class="lf-icon">◈</div>
-      <div>Langfuse API credentials are not exposed in this frontend.</div>
-      <div style="margin-top:6px">View traces and generations at
-        <a class="langfuse-link" href="https://cloud.langfuse.com" target="_blank" rel="noopener">cloud.langfuse.com</a>
+    <div id="langfuse-section">
+      <div class="stat-grid" id="langfuse-grid">
+        <div class="stat-card"><div class="stat-label">TOTAL TRACES (7 DAYS)</div><div class="stat-num" id="lf-traces">—</div></div>
+        <div class="stat-card"><div class="stat-label">AVG LATENCY P50</div><div class="stat-num" id="lf-p50">—</div></div>
+        <div class="stat-card"><div class="stat-label">AVG LATENCY P95</div><div class="stat-num" id="lf-p95">—</div></div>
+        <div class="stat-card"><div class="stat-label">INPUT TOKENS (7 DAYS)</div><div class="stat-num" id="lf-input-tokens">—</div></div>
+        <div class="stat-card"><div class="stat-label">OUTPUT TOKENS (7 DAYS)</div><div class="stat-num" id="lf-output-tokens">—</div></div>
+        <div class="stat-card"><div class="stat-label">AVG QUALITY SCORE</div><div class="stat-num" id="lf-avg-score">—</div></div>
+        <div class="stat-card"><div class="stat-label">SCORES ANNOTATED</div><div class="stat-num" id="lf-score-count">—</div></div>
+        <div class="stat-card"><div class="stat-label">SNAPSHOT AGE</div><div class="stat-num" id="lf-snapshot-age">—</div></div>
       </div>
-      <!-- LANGFUSE: skipped in frontend — use backend proxy for production -->
+      <div id="langfuse-placeholder-msg" style="display:none;color:var(--text-muted);font-size:13px;font-family:'JetBrains Mono',monospace;padding:8px 0;">
+        Langfuse snapshot not yet generated — will appear after next pipeline run.
+        <a href="https://cloud.langfuse.com" target="_blank" style="color:var(--accent);margin-left:8px;">Open Langfuse →</a>
+      </div>
     </div>
   </section>
 
@@ -553,7 +593,7 @@
           </div>
           <div class="progress-labels">
             <span class="progress-pct" style="color:${kColor}">${kPct}%</span>
-            <span class="progress-limit">of 500k limit</span>
+            <span class="progress-limit">of 100k limit</span>
           </div>
         </div>
         <div class="card-sub" style="margin-top:8px">~${Math.round(tokens/TOKENS_PER_CALL)} calls estimated</div>
@@ -798,7 +838,48 @@
     setTimeout(loadAll, 5 * 60 * 1000);
   }
 
+  async function loadLangfuse() {
+    try {
+      const res = await fetch('/langfuse_snapshot.json');
+      if (!res.ok) throw new Error('No snapshot');
+      const d = await res.json();
+
+      // Traces
+      const traceTotal = (d.trace_counts || []).reduce((sum, r) => sum + (parseInt(r.count_count) || 0), 0);
+      document.getElementById('lf-traces').textContent = traceTotal || '—';
+
+      // Latency
+      const latRow = (d.latency || [])[0] || {};
+      const p50 = latRow.latency_p50;
+      const p95 = latRow.latency_p95;
+      document.getElementById('lf-p50').textContent = p50 ? (p50 / 1000).toFixed(2) + 's' : '—';
+      document.getElementById('lf-p95').textContent = p95 ? (p95 / 1000).toFixed(2) + 's' : '—';
+
+      // Tokens
+      const tokRow = (d.token_usage || [])[0] || {};
+      document.getElementById('lf-input-tokens').textContent = tokRow.inputTokens_sum ? parseInt(tokRow.inputTokens_sum).toLocaleString() : '—';
+      document.getElementById('lf-output-tokens').textContent = tokRow.outputTokens_sum ? parseInt(tokRow.outputTokens_sum).toLocaleString() : '—';
+
+      // Scores
+      const scoreRows = d.scores || [];
+      const qualityRow = scoreRows.find(r => r.name === 'output_quality') || scoreRows[0] || {};
+      document.getElementById('lf-avg-score').textContent = qualityRow.value_avg ? parseFloat(qualityRow.value_avg).toFixed(1) + '/10' : '—';
+      document.getElementById('lf-score-count').textContent = qualityRow.value_count || '—';
+
+      // Snapshot age
+      if (d.generated_at) {
+        const age = Math.round((Date.now() - new Date(d.generated_at)) / 60000);
+        document.getElementById('lf-snapshot-age').textContent = age < 60 ? age + 'm ago' : Math.round(age / 60) + 'h ago';
+      }
+
+    } catch(e) {
+      document.getElementById('langfuse-placeholder-msg').style.display = 'block';
+      document.getElementById('langfuse-grid').style.display = 'none';
+    }
+  }
+
   loadAll();
+  loadLangfuse();
 </script>
 </body>
 </html>
