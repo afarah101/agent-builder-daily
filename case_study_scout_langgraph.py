@@ -249,34 +249,32 @@ def score_papers(state):
             print(f"[DEBUG] Raw output: {last_text[:200]}")
             continue
         if i < 5:
-                eval_result = gemini_evaluate(paper["abstract"], g)
-                if eval_result.get("hallucination_detected"):
-                    print("[DEBUG] Hallucination detected — flagging paper")
-                eval_verdict = eval_result.get("verdict", "pass")
-                eval_flagged = eval_result.get("hallucination_detected", False)
-            else:
-                eval_verdict = "pending"
-                eval_flagged = False
-                eval_result = {}
-            total = paper["recency_score"] + g.get("real_world_impact", 0) + g.get("ai_maturity", 0) + g.get("monetisation_potential", 0)
-            scored.append({
-                **paper,
-                "real_world_impact": g.get("real_world_impact", 0),
-                "ai_maturity": g.get("ai_maturity", 0),
-                "monetisation_potential": g.get("monetisation_potential", 0),
-                "total_score": total,
-                "summary": g.get("summary", ""),
-              "it_breakdown": g.get("it_breakdown", ""),
-                "monetisation": g.get("monetisation", ""),
-                "relevance_tag": g.get("relevance_tag", "Other"),
-                "author_built_product": g.get("author_built_product", False),
-                "score_reasoning": g.get("score_reasoning", ""),
-                "eval_verdict": eval_verdict,
-                "eval_flagged": eval_flagged,
-            })
-            print("[DEBUG] Score: " + str(total) + "/100")
-        except Exception as e:
-            print("[DEBUG] Error: " + str(e))
+            eval_result = gemini_evaluate(paper["abstract"], g)
+            if eval_result.get("hallucination_detected"):
+                print("[DEBUG] Hallucination detected — flagging paper")
+            eval_verdict = eval_result.get("verdict", "pass")
+            eval_flagged = eval_result.get("hallucination_detected", False)
+        else:
+            eval_verdict = "pending"
+            eval_flagged = False
+            eval_result = {}
+        total = paper["recency_score"] + g.get("real_world_impact", 0) + g.get("ai_maturity", 0) + g.get("monetisation_potential", 0)
+        scored.append({
+            **paper,
+            "real_world_impact": g.get("real_world_impact", 0),
+            "ai_maturity": g.get("ai_maturity", 0),
+            "monetisation_potential": g.get("monetisation_potential", 0),
+            "total_score": total,
+            "summary": g.get("summary", ""),
+            "it_breakdown": g.get("it_breakdown", ""),
+            "monetisation": g.get("monetisation", ""),
+            "relevance_tag": g.get("relevance_tag", "Other"),
+            "author_built_product": g.get("author_built_product", False),
+            "score_reasoning": g.get("score_reasoning", ""),
+            "eval_verdict": eval_verdict,
+            "eval_flagged": eval_flagged,
+        })
+        print("[DEBUG] Score: " + str(total) + "/100")
     scored.sort(key=lambda x: x["total_score"], reverse=True)
     print("[DEBUG] Scored " + str(len(scored)) + " papers")
     return {"raw_papers": state["raw_papers"], "scored_papers": scored, "output_file": state["output_file"]}
