@@ -8,7 +8,13 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
 from dotenv import load_dotenv
+from langfuse import Langfuse, observe
 load_dotenv()
+
+os.environ.setdefault("LANGFUSE_PUBLIC_KEY", os.getenv("LANGFUSE_PUBLIC_KEY", ""))
+os.environ.setdefault("LANGFUSE_SECRET_KEY", os.getenv("LANGFUSE_SECRET_KEY", ""))
+os.environ.setdefault("LANGFUSE_HOST", os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com"))
+langfuse = Langfuse()
 
 OUTPUT_DIR = "case_studies"
 ARCHIVE_FILE = "case_studies/archive.json"
@@ -32,7 +38,8 @@ UNIVERSITIES = [
     "NYU", "Harvard", "KAIST", "Nanyang", "Zhejiang",
 ]
 
-def groq_complete(messages, max_tokens=500):
+@observe()
+def groq_complete(messages, max_tokens=500, trace_name="groq_call"):
     keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
     keys = [k for k in keys if k]
     last_error = None
@@ -46,7 +53,13 @@ def groq_complete(messages, max_tokens=500):
             )
             if i > 0:
                 print("[DEBUG] Using Key 2")
-            return resp.choices[0].message.content.strip()
+            result = resp.choices[0].message.content.strip()
+            langfuse.update_current_generation(
+                model="llama-3.3-70b-versatile",
+                input=messages,
+                output=result,
+            )
+            return result
         except Exception as e:
             if "429" in str(e):
                 print("[DEBUG] Key " + str(i+1) + " rate limited, trying Key " + str(i+2) + "...")
