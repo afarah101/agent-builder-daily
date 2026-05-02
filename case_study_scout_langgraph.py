@@ -168,7 +168,7 @@ def gemini_evaluate(abstract, groq_output):
             "Answer in JSON only:\n"
             '{"hallucination_detected": false, "hallucination_detail": "", "scores_reasonable": true, "score_feedback": "", "verdict": "pass"}'
         )
-        response = model.generate_content(eval_prompt)
+        response = client.models.generate_content(model="gemini-2.0-flash-lite", contents=eval_prompt)
         text = response.text.strip()
         if "```" in text:
             text = text.split("```")[1]
@@ -199,7 +199,6 @@ def score_papers(state):
             "- Never extrapolate or imply things beyond what the authors state\n"
             "- If the paper has not been explicitly tested in production, do not imply it has\n"
             "- If the abstract mentions limitations or caveats, reflect them in your scores\n"
-            "- If you are uncertain about a score, always choose the lower value\n"
             "- Do not add any text outside the JSON object\n\n"
             "PAPER:\n"
             "Title: " + paper["title"] + "\n"
@@ -208,9 +207,14 @@ def score_papers(state):
             "Published: " + paper["pub_date"] + "\n"
             "Abstract: " + paper["abstract"] + "\n\n"
             "SCORING - score each 0 to 25 based only on what is stated in the abstract:\n"
-            "1. real_world_impact: 25=clear measurable outcomes at scale explicitly stated, 15=some metrics mentioned, 5=theoretical only\n"
-            "2. ai_maturity: 25=explicitly states live production deployment, 15=tested in pilot or prototype, 5=simulation or concept only\n"
-            "3. monetisation_potential: 25=clear commercial product opportunity evident, 15=adaptable to business use, 5=purely academic\n\n"
+            "1. real_world_impact: 25=clear measurable outcomes at scale explicitly stated (e.g. 40% reduction, 10k users), "
+            "15=some metrics mentioned but limited scale, 5=theoretical only with no results\n"
+            "2. ai_maturity: 25=explicitly states live production deployment with real users, "
+            "15=tested in pilot or prototype with real data, 5=simulation or concept only\n"
+            "3. monetisation_potential: 25=clear commercial product opportunity explicitly demonstrated, "
+            "15=adaptable to business use with some evidence, 5=purely academic no business application\n"
+            "IMPORTANT: Use the full range 0-25. Most papers should score between 5-20. "
+            "Only score 5 if the abstract explicitly states theoretical/simulation only.\n\n"
             "OUTPUT FIELDS:\n"
             "- summary: Exactly 2 sentences. Sentence 1: the specific problem and AI method. Sentence 2: the result as stated by the authors. Nothing not in the abstract.\n"
             "- it_breakdown: Exactly 2 sentences for a senior IT Engineer with 5 years helpdesk experience who runs an AI automation consultancy for UK SMBs. "
