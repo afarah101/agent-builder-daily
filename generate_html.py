@@ -212,6 +212,69 @@ def render_archive(archive, kind="cs"):
 </div>""")
     return "\n".join(rows)
 
+def generate_rss(cs_data, news_data):
+    base_url = "https://agent-builder-daily.vercel.app"
+    now_rfc = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
+    items = []
+
+    if cs_data:
+        for cs in cs_data.get("case_studies", [])[:10]:
+            title = esc(cs.get("title", "Untitled"))
+            url = cs.get("url", base_url)
+            summary = esc(cs.get("summary", ""))
+            it_breakdown = esc(cs.get("it_breakdown", ""))
+            pub = cs.get("pub_date", "")
+            try:
+                pub_rfc = datetime.strptime(pub, "%Y-%m-%d").strftime("%a, %d %b %Y 07:00:00 +0000")
+            except:
+                pub_rfc = now_rfc
+            items.append(f"""  <item>
+    <title>{title}</title>
+    <link>{url}</link>
+    <guid>{url}</guid>
+    <pubDate>{pub_rfc}</pubDate>
+    <description><![CDATA[<p>{summary}</p><p><strong>IT Breakdown:</strong> {it_breakdown}</p>]]></description>
+    <category>Case Study</category>
+  </item>""")
+
+    if news_data:
+        for item in news_data.get("news", [])[:5]:
+            title = esc(item.get("title", "Untitled"))
+            url = item.get("url", base_url)
+            summary = esc(item.get("summary", ""))
+            pub = item.get("pub_date", "")
+            try:
+                pub_rfc = datetime.strptime(pub, "%Y-%m-%d").strftime("%a, %d %b %Y 07:00:00 +0000")
+            except:
+                pub_rfc = now_rfc
+            items.append(f"""  <item>
+    <title>[News] {title}</title>
+    <link>{url}</link>
+    <guid>{url}</guid>
+    <pubDate>{pub_rfc}</pubDate>
+    <description><![CDATA[<p>{summary}</p>]]></description>
+    <category>Industry News</category>
+  </item>""")
+
+    rss = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Scout Daily — AI Intelligence Feed</title>
+    <link>{base_url}</link>
+    <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
+    <language>en-gb</language>
+    <lastBuildDate>{now_rfc}</lastBuildDate>
+    <atom:link href="{base_url}/feed.xml" rel="self" type="application/rss+xml"/>
+{chr(10).join(items)}
+  </channel>
+</rss>"""
+
+    os.makedirs("site", exist_ok=True)
+    with open("site/feed.xml", "w", encoding="utf-8") as f:
+        f.write(rss)
+    print("RSS feed generated -> site/feed.xml")
+
+
 def generate_html():
     cs_data = load_latest_json(CASE_STUDIES_DIR)
     news_data = load_latest_json(NEWS_DIR, prefix="news_")
@@ -793,6 +856,7 @@ def generate_html():
     os.makedirs("site", exist_ok=True)
     with open(OUTPUT_FILE, "w") as f:
         f.write(html)
+    generate_rss(cs_data, news_data)
     print("HTML generated -> " + OUTPUT_FILE)
 
 if __name__ == "__main__":
