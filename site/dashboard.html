@@ -806,8 +806,8 @@
 
     try {
       const [csArchive, newsArchive] = await Promise.all([
-        fetch('https://agent-builder-daily.vercel.app/case_studies/archive.json').then(r => r.json()).catch(() => []),
-        fetch('https://agent-builder-daily.vercel.app/logs/archive.json').then(r => r.json()).catch(() => []),
+        fetch('https://agent-builder-daily.vercel.app/case_studies_archive.json').then(r => r.json()).catch(() => []),
+        fetch('https://agent-builder-daily.vercel.app/news_archive.json').then(r => r.json()).catch(() => []),
       ]);
 
       const today = Array.isArray(csArchive) && csArchive.length ? csArchive[0] : null;

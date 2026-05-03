@@ -1032,6 +1032,14 @@ def generate_html():
     with open(OUTPUT_FILE, "w") as f:
         f.write(html)
     generate_rss(cs_data, news_data)
+    # Copy data files to site/ so Vercel can serve them for the dashboard
+    import shutil
+    if os.path.exists("case_studies/archive.json"):
+        shutil.copy("case_studies/archive.json", "site/case_studies_archive.json")
+        print("Copied -> site/case_studies_archive.json")
+    if os.path.exists("logs/archive.json"):
+        shutil.copy("logs/archive.json", "site/news_archive.json")
+        print("Copied -> site/news_archive.json")
     print("HTML generated -> " + OUTPUT_FILE)
 
 if __name__ == "__main__":
