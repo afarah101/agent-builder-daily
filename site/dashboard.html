@@ -439,7 +439,37 @@
       padding: 16px 20px;
     }
 
-    .stat-label {
+    /* ── Gemini Quality Control ── */
+    .qc-fail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .qc-fail-item {
+      background: var(--surface);
+      border: 1px solid var(--red);
+      border-left-width: 4px;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .qc-fail-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .qc-fail-detail {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    /* ── Responsive ── */
+
       font-family: 'JetBrains Mono', monospace;
       font-size: 9px;
       font-weight: 600;
@@ -479,6 +509,32 @@
 </div>
 
 <div class="content">
+
+  <!-- SECTION 0: GEMINI QUALITY CONTROL -->
+  <section>
+    <div class="section-title">Gemini Quality Control</div>
+    <div class="card-grid card-grid-3" id="qc-stats-cards">
+      <div class="card">
+        <div class="card-label">Pass</div>
+        <div class="card-value" style="color:var(--green)" id="qc-pass-count">—</div>
+        <div class="card-sub">Gemini Verified</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Fail</div>
+        <div class="card-value" style="color:var(--red)" id="qc-fail-count">—</div>
+        <div class="card-sub">Flagged / Hallucination</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Pending</div>
+        <div class="card-value" style="color:var(--amber)" id="qc-pending-count">—</div>
+        <div class="card-sub">Evaluating</div>
+      </div>
+    </div>
+    <div id="qc-fail-section" style="display:none">
+      <div class="section-title" style="margin-top:24px; margin-bottom:12px;">Failed Papers &amp; Hallucination Details</div>
+      <div class="qc-fail-list" id="qc-fail-list"></div>
+    </div>
+  </section>
 
   <!-- SECTION 1: GROQ TOKEN USAGE -->
   <section>
@@ -567,6 +623,39 @@
     if (score >= 70) return 'var(--green)';
     if (score >= 40) return 'var(--amber)';
     return 'var(--red)';
+  }
+
+  // ── Section 0: Gemini QC ────────────────────────────────────────────────
+  function renderGeminiQC(allPapers) {
+    const verdicts = { pass: 0, fail: 0, pending: 0 };
+    const failedPapers = [];
+
+    allPapers.forEach(p => {
+      const status = p.gemini_eval_status || p.eval_verdict || 'pending';
+      verdicts[status] = (verdicts[status] || 0) + 1;
+      if (status === 'fail') {
+        failedPapers.push(p);
+      }
+    });
+
+    document.getElementById('qc-pass-count').textContent = fmt(verdicts.pass);
+    document.getElementById('qc-fail-count').textContent = fmt(verdicts.fail);
+    document.getElementById('qc-pending-count').textContent = fmt(verdicts.pending);
+
+    const failSection = document.getElementById('qc-fail-section');
+    const failList = document.getElementById('qc-fail-list');
+
+    if (failedPapers.length > 0) {
+      failSection.style.display = 'block';
+      failList.innerHTML = failedPapers.map(p => `
+        <div class="qc-fail-item">
+          <div class="qc-fail-title">${p.title || 'Untitled'}</div>
+          <div class="qc-fail-detail">${p.hallucination_detail || 'No detail provided.'}</div>
+        </div>
+      `).join('');
+    } else {
+      failSection.style.display = 'none';
+    }
   }
 
   // ── Section 1: Groq ──────────────────────────────────────────────────────
@@ -812,6 +901,7 @@
 
       const today = Array.isArray(csArchive) && csArchive.length ? csArchive[0] : null;
       const papers = today ? (today.case_studies || []) : [];
+      const allPapers = csArchive.reduce((acc, entry) => acc.concat(entry.case_studies || []), []);
 
       // Try fetching the individual daily file for total_fetched
       let dailyData = null;
@@ -821,6 +911,7 @@
         } catch(_) {}
       }
 
+      renderGeminiQC(allPapers);
       renderGroq(papers);
       renderPipeline(today, dailyData);
       renderQuality(papers);

@@ -69,6 +69,21 @@ def tier_label(tier):
     color = colors.get(tier, "#64748b")
     return f'<span class="tier-label" style="color:{color}">{label}</span>'
 
+def status_badge(status):
+    if status == 'pass':
+        color = "#22c55e"
+        text = "✅ Gemini Verified"
+        bg = "#22c55e1a"
+    elif status == 'fail':
+        color = "#ef4444"
+        text = "❌ Flagged"
+        bg = "#ef44441a"
+    else:
+        color = "#f59e0b"
+        text = "⏳ Evaluating"
+        bg = "#f59e0b1a"
+    return f'<span class="status-badge" style="background:{bg};color:{color};border:1px solid {color}33">{text}</span>'
+
 def render_case_studies(data, slug_map):
     if not data or not data.get("case_studies"):
         return "<div class='empty-state'><p>No case studies available yet.</p></div>"
@@ -88,6 +103,10 @@ def render_case_studies(data, slug_map):
         built = cs.get("author_built_product", False)
         built_badge = '<span class="built-badge">🚀 Author shipped product</span>' if built else ""
         title = esc(cs.get("title", "Untitled"))
+        
+        # Status badge
+        status = cs.get("gemini_eval_status", cs.get("eval_verdict", "pending"))
+        badge_html = status_badge(status)
 
         # Breakdown link
         slug = cs_slugs.get(title)
@@ -98,6 +117,7 @@ def render_case_studies(data, slug_map):
         )
 
         cards.append(f"""<article class="card cs-card" onclick="window.open('{url}','_blank')">
+  {badge_html}
   <div class="card-top">
     <div class="card-tags">{tag_pill(tag)}{built_badge}</div>
     {score_ring(cs.get('total_score', 0))}
@@ -475,6 +495,20 @@ def generate_html():
       padding: 24px;
       cursor: pointer;
       transition: border-color 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+
+    .status-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      z-index: 10;
     }
 
     .card:hover {
