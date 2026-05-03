@@ -860,7 +860,7 @@ def generate_html():
     .email-banner {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
+      padding: 166px 32px;
     }
 
     .email-inner {
@@ -1002,6 +1002,7 @@ def generate_html():
   <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
 </footer>
 
+<script src="js/subscribe.js"></script>
 <script>
   function showTab(id, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -1044,33 +1045,6 @@ def generate_html():
         btn.classList.remove("copied");
         btn.textContent = "⬇ MD";
       }, 2000);
-    });
-  }
-
-  function submitEmail(e) {
-    e.preventDefault();
-    const input = e.target.querySelector('.email-input');
-    const btn = e.target.querySelector('.email-btn');
-    const confirm = document.getElementById('email-confirm');
-    const email = input.value.trim();
-    if (!email) return;
-
-    btn.disabled = true;
-    input.disabled = true;
-    confirm.textContent = '⏳ Joining list...';
-
-    fetch('https://script.google.com/macros/s/AKfycbxx1BxqfL6EZ0O_XqUHQ4SBYr4MF7YaPH43tw-BN14Q55vxFi6fb_Y3WXpk0A8jecf4qg/exec', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email })
-    }).then(() => {
-      confirm.textContent = '✓ You are on the list — first issue coming soon.';
-      input.value = '';
-    }).catch(() => {
-      confirm.textContent = '❌ Error. Please try again.';
-      btn.disabled = false;
-      input.disabled = false;
     });
   }
 </script>
