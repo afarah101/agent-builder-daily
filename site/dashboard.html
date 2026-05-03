@@ -941,15 +941,15 @@
 
       // Latency
       const latRow = (d.latency || [])[0] || {};
-      const p50 = latRow.latency_p50;
-      const p95 = latRow.latency_p95;
+      const p50 = latRow.p50_latency;
+      const p95 = latRow.p95_latency;
       document.getElementById('lf-p50').textContent = p50 ? (p50 / 1000).toFixed(2) + 's' : '—';
       document.getElementById('lf-p95').textContent = p95 ? (p95 / 1000).toFixed(2) + 's' : '—';
 
       // Tokens
       const tokRow = (d.token_usage || [])[0] || {};
-      document.getElementById('lf-input-tokens').textContent = tokRow.inputTokens_sum ? parseInt(tokRow.inputTokens_sum).toLocaleString() : '—';
-      document.getElementById('lf-output-tokens').textContent = tokRow.outputTokens_sum ? parseInt(tokRow.outputTokens_sum).toLocaleString() : '—';
+      document.getElementById('lf-input-tokens').textContent = tokRow.sum_inputTokens ? parseInt(tokRow.sum_inputTokens).toLocaleString() : '—';
+      document.getElementById('lf-output-tokens').textContent = tokRow.sum_outputTokens ? parseInt(tokRow.sum_outputTokens).toLocaleString() : '—';
 
       // Scores
       const scoreRows = d.scores || [];
