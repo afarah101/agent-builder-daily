@@ -857,7 +857,7 @@ def generate_html():
     .email-banner {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 8px 32px;
+      padding: 6px 32px;
     }
 
     .email-inner {
@@ -865,12 +865,13 @@ def generate_html():
       margin: 0 auto;
       display: flex;
       align-items: center;
-      gap: 16px;
+      justify-content: center;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .email-title {
-      font-size: 13px;
+      font-size: 0.9rem;
       font-weight: 600;
       color: var(--text-secondary);
       white-space: nowrap;
@@ -878,18 +879,18 @@ def generate_html():
 
     .email-form {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
     }
 
     .email-input {
       background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 12px;
-      font-size: 12px;
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 11px;
       color: var(--text);
-      width: 180px;
+      width: 160px;
       outline: none;
       transition: border-color 0.15s;
     }
@@ -900,9 +901,9 @@ def generate_html():
       background: var(--accent);
       color: white;
       border: none;
-      border-radius: 6px;
-      padding: 4px 14px;
-      font-size: 12px;
+      border-radius: 4px;
+      padding: 3px 12px;
+      font-size: 11px;
       font-weight: 600;
       cursor: pointer;
       transition: opacity 0.15s;
