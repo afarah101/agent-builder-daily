@@ -1,5 +1,4 @@
 function submitEmail(e) {
-  // If triggered by a button click, we don't necessarily have a form submit event
   if (e && e.preventDefault) e.preventDefault();
   
   const container = document.querySelector('.email-inner');
@@ -10,28 +9,23 @@ function submitEmail(e) {
   
   if (!emailValue) return;
 
-  const url = 'https://script.google.com/macros/s/AKfycbxx1BxqfL6EZ0O_XqUHQ4SBYr4MF7YaPH43tw-BN14Q55vxFi6fb_Y3WXpk0A8jecf4qg/exec';
-  console.log('Attempting fetch to:', url);
-  console.log('Email:', emailValue);
+  const url = 'https://script.google.com/macros/s/AKfycbydhgDM0-jFaYVo9g4Wjch0ABlHlTk4b5ZVgCZS1ozVryJXd5-Xggyp4EOhBOsJIh0rzw/exec';
+  console.log('Subscription sent to new ID');
 
   btn.disabled = true;
   input.disabled = true;
   confirm.textContent = '⏳...';
 
-  // Use URLSearchParams for standard form encoding
-  const params = new URLSearchParams();
-  params.append('email', emailValue);
+  // Use URLSearchParams for Google Apps Script compatibility
+  const params = new URLSearchParams({ email: emailValue });
 
   fetch(url, {
     method: 'POST',
     mode: 'no-cors',
     body: params
   }).then(() => {
-    console.log('Request sent successfully (Opaque response received)');
     confirm.textContent = 'Subscribed! ✅';
     input.value = '';
-    // Re-enable if user wants to subscribe another email, but usually one is enough.
-    // Keeping them disabled as per previous pattern.
   }).catch((err) => {
     console.error('Network-level error:', err);
     confirm.textContent = '❌ Error';
