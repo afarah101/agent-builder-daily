@@ -309,10 +309,7 @@ def generate_email_capture():
     return """
   <div class="email-banner">
     <div class="email-inner">
-      <div class="email-text">
-        <span class="email-title">Get Scout Daily in your inbox</span>
-        <span class="email-sub">Daily AI case studies and IT breakdowns. No noise.</span>
-      </div>
+      <h4 class="email-title">Get Scout Daily in your inbox</h4>
       <form class="email-form" onsubmit="submitEmail(event)">
         <input type="email" class="email-input" placeholder="your@email.com" required />
         <button type="submit" class="email-btn">Subscribe</button>
@@ -860,7 +857,7 @@ def generate_html():
     .email-banner {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 166px 32px;
+      padding: 8px 32px;
     }
 
     .email-inner {
@@ -868,42 +865,31 @@ def generate_html():
       margin: 0 auto;
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 16px;
       flex-wrap: wrap;
     }
 
-    .email-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      flex: 1;
-    }
-
     .email-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--text);
-    }
-
-    .email-sub {
-      font-size: 12px;
-      color: var(--text-muted);
+      color: var(--text-secondary);
+      white-space: nowrap;
     }
 
     .email-form {
       display: flex;
       gap: 8px;
-      flex-shrink: 0;
+      align-items: center;
     }
 
     .email-input {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 8px 14px;
-      font-size: 13px;
+      padding: 4px 12px;
+      font-size: 12px;
       color: var(--text);
-      width: 220px;
+      width: 180px;
       outline: none;
       transition: border-color 0.15s;
     }
@@ -915,8 +901,8 @@ def generate_html():
       color: white;
       border: none;
       border-radius: 6px;
-      padding: 8px 18px;
-      font-size: 13px;
+      padding: 4px 14px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: opacity 0.15s;

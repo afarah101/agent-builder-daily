@@ -8,9 +8,8 @@ function submitEmail(e) {
 
   btn.disabled = true;
   input.disabled = true;
-  confirm.textContent = '⏳ Joining list...';
+  confirm.textContent = '⏳...';
 
-  // Use URLSearchParams for Google Apps Script compatibility
   const formData = new URLSearchParams();
   formData.append('email', email);
 
@@ -20,14 +19,11 @@ function submitEmail(e) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: formData.toString()
   }).then(() => {
-    // In no-cors mode, we can't check response.ok or response.status.
-    // If the promise resolves (reaches this block), we assume success.
     confirm.textContent = 'Subscribed! ✅';
     input.value = '';
   }).catch(() => {
-    confirm.textContent = '❌ Error. Please try again.';
+    confirm.textContent = '❌ Error';
     btn.disabled = false;
     input.disabled = false;
   });
 }
-
