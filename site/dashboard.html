@@ -806,8 +806,8 @@
 
     try {
       const [csArchive, newsArchive] = await Promise.all([
-        fetch('/case_studies/archive.json').then(r => r.json()).catch(() => []),
-        fetch('/logs/archive.json').then(r => r.json()).catch(() => []),
+        fetch('https://agent-builder-daily.vercel.app/case_studies/archive.json').then(r => r.json()).catch(() => []),
+        fetch('https://agent-builder-daily.vercel.app/logs/archive.json').then(r => r.json()).catch(() => []),
       ]);
 
       const today = Array.isArray(csArchive) && csArchive.length ? csArchive[0] : null;
@@ -840,7 +840,7 @@
 
   async function loadLangfuse() {
     try {
-      const res = await fetch('/langfuse_snapshot.json');
+      const res = await fetch('https://agent-builder-daily.vercel.app/langfuse_snapshot.json');
       if (!res.ok) throw new Error('No snapshot');
       const d = await res.json();
 
