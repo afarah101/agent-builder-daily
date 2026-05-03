@@ -310,10 +310,10 @@ def generate_email_capture():
   <div class="email-banner">
     <div class="email-inner">
       <h4 class="email-title">Get Scout Daily in your inbox</h4>
-      <form class="email-form" onsubmit="submitEmail(event)">
-        <input type="email" class="email-input" placeholder="your@email.com" required />
-        <button type="submit" class="email-btn">Subscribe</button>
-      </form>
+      <div class="email-form">
+        <input type="email" class="email-input" placeholder="your@email.com" required onkeydown="if(event.key==='Enter') submitEmail(event)" />
+        <button type="button" class="email-btn" onclick="submitEmail(event)">Subscribe</button>
+      </div>
       <span class="email-confirm" id="email-confirm"></span>
     </div>
   </div>"""
