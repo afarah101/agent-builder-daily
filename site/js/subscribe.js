@@ -9,28 +9,25 @@ function submitEmail(e) {
   
   if (!emailValue) return;
 
-  const url = 'https://script.google.com/macros/s/AKfycbydhgDM0-jFaYVo9g4Wjch0ABlHlTk4b5ZVgCZS1ozVryJXd5-Xggyp4EOhBOsJIh0rzw/exec';
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbydhgDM0-jFaYVo9g4Wjch0ABlHlTk4b5ZVgCZS1ozVryJXd5-Xggyp4EOhBOsJIh0rzw/exec';
+  const finalUrl = scriptUrl + '?email=' + encodeURIComponent(emailValue);
 
   btn.disabled = true;
   input.disabled = true;
   confirm.textContent = '⏳...';
 
-  const params = new URLSearchParams({ email: emailValue });
-
-  fetch(url, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: params
+  fetch(finalUrl, {
+    method: 'GET',
+    mode: 'no-cors'
   }).then(() => {
-    // In no-cors mode, we cannot read the response body or status.
-    // If the promise resolves, we assume the server received the data.
+    // In no-cors mode, the response is opaque. 
+    // Reaching this block means the request was successfully dispatched.
     confirm.textContent = 'Subscribed! ✅';
     input.value = '';
   }).catch((err) => {
-    console.error('Subscription error:', err);
+    console.error('Subscription network error:', err);
     confirm.textContent = '❌ Error';
     btn.disabled = false;
     input.disabled = false;
   });
 }
-
