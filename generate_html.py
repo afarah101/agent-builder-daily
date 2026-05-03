@@ -867,11 +867,10 @@ def generate_html():
       align-items: center;
       justify-content: center;
       gap: 12px;
-      flex-wrap: wrap;
     }
 
     .email-title {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-secondary);
       white-space: nowrap;

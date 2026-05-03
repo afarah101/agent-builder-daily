@@ -10,13 +10,11 @@ function submitEmail(e) {
   if (!emailValue) return;
 
   const url = 'https://script.google.com/macros/s/AKfycbydhgDM0-jFaYVo9g4Wjch0ABlHlTk4b5ZVgCZS1ozVryJXd5-Xggyp4EOhBOsJIh0rzw/exec';
-  console.log('Subscription sent to new ID');
 
   btn.disabled = true;
   input.disabled = true;
   confirm.textContent = '⏳...';
 
-  // Use URLSearchParams for Google Apps Script compatibility
   const params = new URLSearchParams({ email: emailValue });
 
   fetch(url, {
@@ -24,13 +22,14 @@ function submitEmail(e) {
     mode: 'no-cors',
     body: params
   }).then(() => {
+    // In no-cors mode, we cannot read the response body or status.
+    // If the promise resolves, we assume the server received the data.
     confirm.textContent = 'Subscribed! ✅';
     input.value = '';
   }).catch((err) => {
-    console.error('Network-level error:', err);
+    console.error('Subscription error:', err);
     confirm.textContent = '❌ Error';
     btn.disabled = false;
     input.disabled = false;
   });
 }
-
