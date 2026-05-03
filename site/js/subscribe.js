@@ -20,8 +20,8 @@ function submitEmail(e) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: formData.toString()
   }).then(() => {
-    // In no-cors mode, we can't check response.ok. 
-    // If the promise resolves, we assume the script received it.
+    // In no-cors mode, we can't check response.ok or response.status.
+    // If the promise resolves (reaches this block), we assume success.
     confirm.textContent = 'Subscribed! ✅';
     input.value = '';
   }).catch(() => {
