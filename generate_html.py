@@ -125,6 +125,11 @@ def render_case_studies(data, slug_map):
             video_badge = '<span class="status-badge" style="background:#ef44441a;color:#ef4444;border:1px solid #ef444433">▶️ Video Intel</span>'
             cta_text = "Watch Source →"
 
+        # Evergreen labeling
+        evergreen_badge = ""
+        if cs.get("is_evergreen", False):
+            evergreen_badge = '<span class="status-badge" style="background:#8b5cf61a;color:#8b5cf6;border:1px solid #8b5cf633">✨ Evergreen Intelligence</span>'
+
         # Breakdown link
         slug = cs_slugs.get(title)
         breakdown_link = (
@@ -135,7 +140,7 @@ def render_case_studies(data, slug_map):
 
         cards.append(f"""<article class="card cs-card" onclick="window.open('{url}','_blank')">
   <div class="card-header">
-    <div class="card-tags">{tag_pill(tag)}{built_badge}{video_badge}{badge_html}</div>
+    <div class="card-tags">{tag_pill(tag)}{built_badge}{video_badge}{evergreen_badge}{badge_html}</div>
     {score_ring(cs.get('total_score', 0))}
   </div>
   <h3 class="card-title">{title}</h3>
@@ -345,8 +350,13 @@ def generate_html():
     active_cs = []
     
     for f in sorted(all_cs_files):
-        if f.stem < today_str:
-            data = load_json(str(f))
+        data = load_json(str(f))
+        is_evergreen = False
+        if data and "case_studies" in data:
+            # Check if any case study in the file is evergreen
+            is_evergreen = any(cs.get("is_evergreen", False) for cs in data["case_studies"])
+            
+        if f.stem < today_str and not is_evergreen:
             if data and "case_studies" in data:
                 date_str = f.stem
                 if not any(item["date"] == date_str for item in cs_archive):
@@ -358,7 +368,6 @@ def generate_html():
                 os.remove(f)
                 print(f"Archived and removed {f}")
         else:
-            data = load_json(str(f))
             if data and "case_studies" in data:
                 active_cs.extend(data["case_studies"])
                 

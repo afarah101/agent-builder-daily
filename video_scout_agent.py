@@ -9,6 +9,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from pytube import YouTube
+
+ELITE_CHANNELS = [
+    "Andrej Karpathy",
+    "DeepLearning.AI",
+    "OpenAI",
+    "Anthropic",
+    "Google DeepMind",
+    "Two Minute Papers"
+]
+
 class VideoState(TypedDict):
     url: str
     video_id: str
@@ -16,47 +27,66 @@ class VideoState(TypedDict):
     analysis: str
     output: dict
     bouncer_verdict: str
+    metadata: dict
 
 def get_video_id(url):
     pattern = r'(?:v=|\/)([0-9A-Za-z_-]{11}).*'
     match = re.search(pattern, url)
     return match.group(1) if match else None
 
-def fetch_transcript(state: VideoState):
+def fetch_metadata_and_transcript(state: VideoState):
     video_id = get_video_id(state["url"])
     if not video_id:
         raise ValueError("Invalid YouTube URL")
     
-    print(f"[DEBUG] Fetching transcript for {video_id}...")
+    print(f"[DEBUG] Fetching metadata and transcript for {video_id}...")
+    metadata = {"title": "Unknown", "author": "Unknown"}
     try:
-        # Try instantiation + fetch (newer API versions)
+        yt = YouTube(state["url"])
+        metadata["title"] = yt.title
+        metadata["author"] = yt.author
+    except Exception as e:
+        print(f"[DEBUG] Metadata error: {e}")
+
+    try:
         try:
             transcript_obj = YouTubeTranscriptApi().fetch(video_id)
             transcript = " ".join([t.text for t in transcript_obj.snippets])
         except (AttributeError, TypeError):
-            # Fallback to standard classmethod
             transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
             transcript = " ".join([t["text"] for t in transcript_list])
             
-        return {"video_id": video_id, "transcript": transcript}
+        return {"video_id": video_id, "transcript": transcript, "metadata": metadata}
     except Exception as e:
         print(f"[DEBUG] Transcript error: {e}")
-        return {"transcript": "ERROR: Could not fetch transcript"}
+        return {"transcript": "ERROR: Could not fetch transcript", "metadata": metadata}
 
 def bouncer_node(state: VideoState):
     if state["transcript"].startswith("ERROR"):
         return {"bouncer_verdict": "FAIL"}
         
+    author = state.get("metadata", {}).get("author", "")
+    is_elite = any(elite in author for elite in ELITE_CHANNELS)
+    
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    
+    if is_elite:
+        rule = "This creator is on the ELITE WATCHLIST. Focus the summary on Foundational Principles and technical innovations."
+    else:
+        rule = (
+            "This is an unknown creator. Strictly reject (FAIL) anything that is primarily marketing fluff, "
+            "engagement farming, 'how to make money' content, or low-technical overview."
+        )
+
     prompt = (
         "You are a Senior Tech Scout filtering for deep technical AI architecture. "
+        f"Rule: {rule}\n\n"
         "Analyze this transcript. Is this a high-signal technical breakdown of an AI system, model, or architecture? "
-        "Strictly reject (FAIL) anything that is primarily marketing fluff, engagement farming, 'how to make money' content, or low-technical overview. "
         "Reply ONLY with PASS or FAIL.\n\n"
         f"Transcript: {state['transcript'][:8000]}"
     )
     
-    print("[DEBUG] Running Bouncer...")
+    print(f"[DEBUG] Running Bouncer (Elite: {is_elite})...")
     resp = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
@@ -72,8 +102,15 @@ def check_verdict(state: VideoState):
 
 def analyst_node(state: VideoState):
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    author = state.get("metadata", {}).get("author", "")
+    is_elite = any(elite in author for elite in ELITE_CHANNELS)
+    
+    persona = "Senior Tech Analyst"
+    if is_elite:
+        persona = "Principal AI Researcher"
+
     prompt = (
-        "You are a Senior Tech Analyst. Extract the deep technical architecture, key innovations, "
+        f"You are a {persona}. Extract the deep technical architecture, key innovations, "
         "measurable performance results, and concrete business opportunities from this video transcript. "
         "Focus on 'how it works' rather than 'what it can do'.\n\n"
         f"Transcript: {state['transcript'][:12000]}"
@@ -89,10 +126,14 @@ def analyst_node(state: VideoState):
 
 def editor_node(state: VideoState):
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    author = state.get("metadata", {}).get("author", "")
+    is_elite = any(elite in author for elite in ELITE_CHANNELS)
+    is_karpathy = "Karpathy" in author
+
     prompt = (
         "Format the following analysis into a highly structured JSON object. "
         "Required fields: 'title', 'summary', 'it_breakdown', 'monetisation', 'total_score', 'real_world_impact', 'ai_maturity', 'monetisation_potential', 'recency_score', 'score_reasoning', 'relevance_tag', 'authors'.\n\n"
-        "Authors should be an array of strings (e.g., the speaker/channel if known).\n"
+        "Authors should be an array of strings.\n"
         "Scores should be integers (Impact/Maturity/Monetisation/Recency out of 25, total_score out of 100).\n"
         "Relevance tag should be one of: AI Agents, LLMs, Automation, Computer Vision, MLOps, or Other.\n\n"
         f"Analysis: {state['analysis']}\n\n"
@@ -109,12 +150,22 @@ def editor_node(state: VideoState):
     output["source_type"] = "youtube_agent"
     output["url"] = state["url"]
     output["pub_date"] = datetime.now().strftime("%Y-%m-%d")
+    
+    if is_elite:
+        output["is_evergreen"] = True
+        
+    if is_karpathy:
+        # Karpathy Clause: floor of 90
+        if output.get("total_score", 0) < 90:
+            output["total_score"] = 90
+            output["score_reasoning"] = "[KARPATHY CLAUSE] High-signal foundational content automatically prioritized. " + output.get("score_reasoning", "")
+
     return {"output": output}
 
 def build_graph():
     builder = StateGraph(VideoState)
     
-    builder.add_node("fetch", fetch_transcript)
+    builder.add_node("fetch", fetch_metadata_and_transcript)
     builder.add_node("bouncer", bouncer_node)
     builder.add_node("analyst", analyst_node)
     builder.add_node("editor", editor_node)
