@@ -60,7 +60,7 @@ def tag_pill(tag):
 def score_ring(score, max_score=100):
     pct = int((score / max_score) * 100)
     color = "#22c55e" if pct >= 70 else "#f59e0b" if pct >= 40 else "#ef4444"
-    legend = "AI SCOUT SCORE: A 0-100 composite metric of Technical Novelty, Business Impact, and Market Maturity."
+    legend = "AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."
     return f'<div class="score-ring" style="--pct:{pct};--color:{color}" title="{legend}"><span>{score}</span></div>'
 
 def tier_label(tier):
@@ -148,7 +148,7 @@ def render_case_studies(data, slug_map):
     <p class="insight-text">{esc(cs.get('monetisation',''))}</p>
   </div>
   <details class="agent-trace">
-    <summary class="trace-toggle">▶ Agent Trace</summary>
+    <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">{cs.get('real_world_impact',0)}/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">{cs.get('ai_maturity',0)}/25</span></div>
