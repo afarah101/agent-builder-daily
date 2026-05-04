@@ -164,16 +164,12 @@
     }
 
     .status-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
       font-size: 10px;
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      z-index: 10;
     }
 
     .card:hover {
@@ -189,13 +185,13 @@
       margin-bottom: 14px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .card-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-grow: 1; }
 
     .tag-pill {
       font-size: 11px;
       font-weight: 600;
       padding: 3px 10px;
-      border-radius: 20px;
+      border-radius: 4px;
       letter-spacing: 0.3px;
     }
 
@@ -217,27 +213,29 @@
       color: var(--accent-green);
       background: #22c55e1a;
       padding: 3px 8px;
-      border-radius: 20px;
+      border-radius: 4px;
     }
 
     /* Score ring */
     .score-ring {
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: conic-gradient(var(--color) calc(var(--pct) * 1%), var(--surface2) 0);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      position: relative;
+      position: absolute;
+      top: 24px;
+      right: 24px;
     }
 
     .score-ring::before {
       content: '';
       position: absolute;
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       background: var(--surface);
       border-radius: 50%;
     }
@@ -245,14 +243,22 @@
     .score-ring span {
       position: relative;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--text);
       z-index: 1;
     }
 
     /* News score */
-    .news-score-area { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .news-score-area {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      position: absolute;
+      top: 24px;
+      right: 24px;
+    }
 
     .rel-dot {
       width: 10px;
@@ -266,15 +272,18 @@
       font-size: 12px;
       color: var(--text-secondary);
       white-space: nowrap;
+      font-weight: 700;
     }
 
     /* Card content */
     .card-title {
-      font-size: 17px;
-      font-weight: 600;
-      line-height: 1.4;
-      color: var(--text);
-      margin-bottom: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 12px;
+      max-width: calc(100% - 60px);
     }
 
     .card-meta {
@@ -282,41 +291,44 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
 
-    .authors { font-size: 13px; color: var(--accent); font-weight: 500; }
+    .authors { font-size: 13px; color: #00ff88; font-weight: 600; }
     .institution { font-size: 13px; color: var(--text-secondary); }
     .pub-date { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
     .sep { color: var(--border); }
 
     .card-summary {
-      font-size: 14px;
-      line-height: 1.7;
+      font-size: 15px;
+      line-height: 1.6;
       color: var(--text-secondary);
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .insight-block {
       background: var(--surface2);
       border-radius: 8px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-      border-left: 3px solid var(--accent);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--accent);
     }
 
-    .insight-block.monetisation { border-left-color: var(--accent-green); }
+    .insight-block.monetisation {
+      border-left-color: #00ff88;
+      background: rgba(0, 255, 136, 0.03);
+    }
 
     .insight-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--accent);
-      letter-spacing: 1px;
-      margin-bottom: 6px;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
     }
 
-    .monetisation .insight-label { color: var(--accent-green); }
+    .monetisation .insight-label { color: #00ff88; }
 
     .insight-text {
       font-size: 13px;
@@ -621,7 +633,7 @@
         </div>
       </div>
     </div>
-    <div class="updated">Updated 04 May 2026, 22:26</div>
+    <div class="updated">Updated 04 May 2026, 22:32</div>
     <div class="tabs">
       <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
       <button class="tab" onclick="showTab('industry-news',this)">Industry News</button>
@@ -646,9 +658,8 @@
 <div class="content">
   <div id="case-studies" class="panel active">
     <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00382v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:50;--color:#f59e0b"><span>50</span></div>
   </div>
   <h3 class="card-title">Social Bias in LLM-Generated Code: Benchmark and Mitigation</h3>
@@ -703,9 +714,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00796v1','_blank')">
-  <span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#db27771a;color:#db2777;border:1px solid #db277733">Healthcare AI</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#db27771a;color:#db2777;border:1px solid #db277733">Healthcare AI</span><span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">When RAG Chatbots Expose Their Backend: An Anonymized Case Study of Privacy and Security Risks in Patient-Facing Medical AI</h3>
@@ -760,9 +770,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00788v1','_blank')">
-  <span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#d977061a;color:#d97706;border:1px solid #d9770633">Computer Vision</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#d977061a;color:#d97706;border:1px solid #d9770633">Computer Vision</span><span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Repurposing Image Diffusion Models for Adversarial Synthetic Structured Data: A Case Study of Ground Truth Drift</h3>
@@ -817,9 +826,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00776v1','_blank')">
-  <span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#0891b21a;color:#0891b2;border:1px solid #0891b233">NLP</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#0891b21a;color:#0891b2;border:1px solid #0891b233">NLP</span><span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Directed Social Regard: Surfacing Targeted Advocacy, Opposition, Aid, Harms, and Victimization in Online Media</h3>
@@ -874,9 +882,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00644v1','_blank')">
-  <span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Learning Multimodal Energy-Based Model with Multimodal Variational Auto-Encoder via MCMC Revision</h3>
@@ -931,9 +938,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00592v1','_blank')">
-  <span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e33">✅ Gemini Verified</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Fairness of Classifiers in the Presence of Constraints between Features</h3>
@@ -988,9 +994,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00582v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">AI Washing Inflates Expected Performance but Not Interaction Outcomes: An AI Placebo Study Using Fitts&#x27; Law</h3>
@@ -1045,9 +1050,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00557v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Structure Liberates: How Constrained Sensemaking Produces More Novel Research Output</h3>
@@ -1102,9 +1106,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00556v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#dc26261a;color:#dc2626;border:1px solid #dc262633">Safety</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#dc26261a;color:#dc2626;border:1px solid #dc262633">Safety</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Linking Behaviour and Perception to Evaluate Meaningful Human Control over Partially Automated Driving</h3>
@@ -1159,9 +1162,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00550v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Asymptotic profiles for the Cauchy problem of semilinear beam equation with two variable coefficients in the subcritical case</h3>
@@ -1216,9 +1218,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00440v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">On the Role of Artificial Intelligence in Human-Machine Symbiosis</h3>
@@ -1273,9 +1274,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00436v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Impact of Task Phrasing on Presumptions in Large Language Models</h3>
@@ -1330,9 +1330,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00433v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Improving LLM Code Generation via Requirement-Aware Curriculum Reinforcement Learning</h3>
@@ -1387,9 +1386,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00369v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">LLMs</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">AlphaInventory: Evolving White-Box Inventory Policies via Large Language Models with Deployment Guarantees</h3>
@@ -1444,9 +1442,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00361v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#0891b21a;color:#0891b2;border:1px solid #0891b233">NLP</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#0891b21a;color:#0891b2;border:1px solid #0891b233">NLP</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Pedagogical Promise and Peril of AI: A Text Mining Analysis of ChatGPT Research Discussions in Programming Education</h3>
@@ -1501,9 +1498,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00734v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Economic Valuation and Optimal Deployment of Static Synchronous Series Compensators for U.S. Power System Expansion</h3>
@@ -1558,9 +1554,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00681v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">MLOps</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">MLOps</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Deployment-Efficient Short-Term Load Forecasting in AI Data Centers via Sequence-to-Point Knowledge Distillation</h3>
@@ -1615,9 +1610,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2604.28044v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="built-badge">🚀 Author shipped product</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="built-badge">🚀 Author shipped product</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:80;--color:#22c55e"><span>80</span></div>
   </div>
   <h3 class="card-title">Experimental Performance of a 5G N78 Reconfigurable Intelligent Surface: From Controlled Measurements to Commercial Network Deployment</h3>
@@ -1672,9 +1666,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2605.00146v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#d977061a;color:#d97706;border:1px solid #d9770633">Computer Vision</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#d977061a;color:#d97706;border:1px solid #d9770633">Computer Vision</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Real-Time Frame- and Event-based Object Detection with Spiking Neural Networks on Edge Neuromorphic Hardware: Design, Deployment and Benchmark</h3>
@@ -1729,9 +1722,8 @@
   </div>
 </article>
 <article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2604.25685v1','_blank')">
-  <span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span>
   <div class="card-top">
-    <div class="card-tags"><span class="tag-pill" style="background:#db27771a;color:#db2777;border:1px solid #db277733">Healthcare AI</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#db27771a;color:#db2777;border:1px solid #db277733">Healthcare AI</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:40;--color:#f59e0b"><span>40</span></div>
   </div>
   <h3 class="card-title">Robustness Evaluation of a Foundation Segmentation Model Under Simulated Domain Shifts in Abdominal CT: Implications for Health Digital Twin Deployment</h3>

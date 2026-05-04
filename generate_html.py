@@ -117,9 +117,8 @@ def render_case_studies(data, slug_map):
         )
 
         cards.append(f"""<article class="card cs-card" onclick="window.open('{url}','_blank')">
-  {badge_html}
   <div class="card-top">
-    <div class="card-tags">{tag_pill(tag)}{built_badge}</div>
+    <div class="card-tags">{tag_pill(tag)}{built_badge}{badge_html}</div>
     {score_ring(cs.get('total_score', 0))}
   </div>
   <h3 class="card-title">{title}</h3>
@@ -322,7 +321,7 @@ def generate_email_capture():
 def generate_html():
     # --- Rotation Logic ---
     now = datetime.now()
-    cutoff = now - timedelta(hours=48)
+    today_str = now.strftime("%Y-%m-%d")
     
     # Process Case Studies Archive
     path_cs = Path(CASE_STUDIES_DIR)
@@ -331,8 +330,8 @@ def generate_html():
     
     for f in daily_cs_files:
         try:
-            file_date = datetime.strptime(f.stem, "%Y-%m-%d")
-            if file_date < cutoff:
+            # Archive anything older than today
+            if f.stem < today_str:
                 data = load_json(str(f))
                 if data and "case_studies" in data:
                     date_str = f.stem
@@ -344,7 +343,8 @@ def generate_html():
                         })
                     os.remove(f)
                     print(f"Archived and removed {f}")
-        except ValueError:
+        except Exception as e:
+            print(f"Error processing {f}: {e}")
             continue
             
     with open(ARCHIVE_CS_FILE, 'w') as f_out:
@@ -357,9 +357,9 @@ def generate_html():
     news_archive = load_json(ARCHIVE_NEWS_FILE)
     slug_map = load_slug_map()
 
-    # Limit cs_data to 2 most recent for home page
+    # Sort active articles by pub_date descending, NO LIMIT
     if cs_data and "case_studies" in cs_data:
-        cs_data["case_studies"] = sorted(cs_data["case_studies"], key=lambda x: x.get("pub_date", ""), reverse=True)[:2]
+        cs_data["case_studies"] = sorted(cs_data["case_studies"], key=lambda x: x.get("pub_date", ""), reverse=True)
 
     cs_count = len(cs_data.get("case_studies", [])) if cs_data else 0
     news_count = len(news_data.get("news", [])) if news_data else 0
@@ -531,16 +531,12 @@ def generate_html():
     }
 
     .status-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
       font-size: 10px;
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      z-index: 10;
     }
 
     .card:hover {
@@ -556,13 +552,13 @@ def generate_html():
       margin-bottom: 14px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .card-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-grow: 1; }
 
     .tag-pill {
       font-size: 11px;
       font-weight: 600;
       padding: 3px 10px;
-      border-radius: 20px;
+      border-radius: 4px;
       letter-spacing: 0.3px;
     }
 
@@ -584,27 +580,29 @@ def generate_html():
       color: var(--accent-green);
       background: #22c55e1a;
       padding: 3px 8px;
-      border-radius: 20px;
+      border-radius: 4px;
     }
 
     /* Score ring */
     .score-ring {
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: conic-gradient(var(--color) calc(var(--pct) * 1%), var(--surface2) 0);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      position: relative;
+      position: absolute;
+      top: 24px;
+      right: 24px;
     }
 
     .score-ring::before {
       content: '';
       position: absolute;
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       background: var(--surface);
       border-radius: 50%;
     }
@@ -612,14 +610,22 @@ def generate_html():
     .score-ring span {
       position: relative;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--text);
       z-index: 1;
     }
 
     /* News score */
-    .news-score-area { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .news-score-area {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      position: absolute;
+      top: 24px;
+      right: 24px;
+    }
 
     .rel-dot {
       width: 10px;
@@ -633,15 +639,18 @@ def generate_html():
       font-size: 12px;
       color: var(--text-secondary);
       white-space: nowrap;
+      font-weight: 700;
     }
 
     /* Card content */
     .card-title {
-      font-size: 17px;
-      font-weight: 600;
-      line-height: 1.4;
-      color: var(--text);
-      margin-bottom: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 12px;
+      max-width: calc(100% - 60px);
     }
 
     .card-meta {
@@ -649,41 +658,44 @@ def generate_html():
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
 
-    .authors { font-size: 13px; color: var(--accent); font-weight: 500; }
+    .authors { font-size: 13px; color: #00ff88; font-weight: 600; }
     .institution { font-size: 13px; color: var(--text-secondary); }
     .pub-date { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
     .sep { color: var(--border); }
 
     .card-summary {
-      font-size: 14px;
-      line-height: 1.7;
+      font-size: 15px;
+      line-height: 1.6;
       color: var(--text-secondary);
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .insight-block {
       background: var(--surface2);
       border-radius: 8px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-      border-left: 3px solid var(--accent);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--accent);
     }
 
-    .insight-block.monetisation { border-left-color: var(--accent-green); }
+    .insight-block.monetisation {
+      border-left-color: #00ff88;
+      background: rgba(0, 255, 136, 0.03);
+    }
 
     .insight-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--accent);
-      letter-spacing: 1px;
-      margin-bottom: 6px;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
     }
 
-    .monetisation .insight-label { color: var(--accent-green); }
+    .monetisation .insight-label { color: #00ff88; }
 
     .insight-text {
       font-size: 13px;
