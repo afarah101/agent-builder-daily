@@ -659,15 +659,30 @@
   }
 
   // ── Section 1: Groq ──────────────────────────────────────────────────────
-  function renderGroq(papers) {
+  function renderGroq(papers, metrics) {
     const scored   = papers.length;
-    const estimated = scored * TOKENS_PER_CALL;
-    const pct      = Math.min(100, Math.round((estimated / DAILY_TOKEN_LIMIT) * 100));
+    let actualTokens = 0;
+    let actualRequests = 0;
+
+    if (Array.isArray(metrics) && metrics.length) {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      metrics.forEach(m => {
+        if (m.timestamp && m.timestamp.startsWith(todayStr)) {
+          actualTokens += (m.tokens || 0);
+          actualRequests += (m.total_requests || 0);
+        }
+      });
+    }
+
+    const tokensToUse = actualTokens > 0 ? actualTokens : (scored * TOKENS_PER_CALL);
+    const requestsToUse = actualRequests > 0 ? actualRequests : scored;
+
+    const pct      = Math.min(100, Math.round((tokensToUse / DAILY_TOKEN_LIMIT) * 100));
     const fillColor = colorForPct(pct);
 
-    // Key 1 gets first call, Key 2 gets rate-limit spillover — show total split 50/50 if unknown
-    const k1Est = Math.round(estimated * 0.6);
-    const k2Est = estimated - k1Est;
+    // Show split based on actual if we had multi-key tracking, otherwise use estimated split
+    const k1Tokens = Math.round(tokensToUse * 0.6);
+    const k2Tokens = tokensToUse - k1Tokens;
 
     function keyCard(label, tokens) {
       const kPct = Math.min(100, Math.round((tokens / DAILY_TOKEN_LIMIT) * 100));
@@ -675,7 +690,7 @@
       return `<div class="card">
         <div class="card-label">${label}</div>
         <div class="card-value">${fmt(tokens)}</div>
-        <div class="card-sub">est. tokens today</div>
+        <div class="card-sub">${actualTokens > 0 ? 'actual' : 'est.'} tokens today</div>
         <div class="progress-wrap">
           <div class="progress-track">
             <div class="progress-fill" style="width:${kPct}%;background:${kColor}"></div>
@@ -685,20 +700,25 @@
             <span class="progress-limit">of 100k limit</span>
           </div>
         </div>
-        <div class="card-sub" style="margin-top:8px">~${Math.round(tokens/TOKENS_PER_CALL)} calls estimated</div>
+        <div class="card-sub" style="margin-top:8px">${fmt(Math.round(tokens/TOKENS_PER_CALL))} total requests logged</div>
       </div>`;
     }
 
     document.getElementById('groq-cards').innerHTML =
-      keyCard('Groq Key 1', k1Est) + keyCard('Groq Key 2', k2Est);
+      keyCard('Groq Key 1', k1Tokens) + keyCard('Groq Key 2', k2Tokens);
   }
 
   // ── Section 2: Pipeline Health ───────────────────────────────────────────
-  function renderPipeline(today, dailyData) {
+  function renderPipeline(today, dailyData, metrics) {
     const papers      = today ? today.case_studies || [] : [];
     const scored      = papers.length;
     const fetched     = dailyData ? (dailyData.total_fetched || scored) : scored;
     const jsonErrors  = Math.max(0, fetched - scored);
+    let pendingCount  = 0;
+
+    if (Array.isArray(metrics) && metrics.length) {
+      pendingCount = metrics[metrics.length - 1].pending_queue || 0;
+    }
 
     const verdicts    = { pass: 0, fail: 0, pending: 0 };
     papers.forEach(p => {
@@ -728,6 +748,11 @@
         <div class="card-label">Papers Scored</div>
         <div class="card-value">${fmt(scored)}</div>
         <div class="card-sub">successfully evaluated</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Pending / Rate-Limited</div>
+        <div class="card-value" style="color:${pendingCount > 0 ? 'var(--amber)' : 'var(--text)'}">${fmt(pendingCount)}</div>
+        <div class="card-sub">in video_queue.txt</div>
       </div>
       <div class="card">
         <div class="card-label">JSON Errors</div>
@@ -894,9 +919,10 @@
     document.getElementById('updated-label').textContent = 'Loading…';
 
     try {
-      const [csArchive, newsArchive] = await Promise.all([
+      const [csArchive, newsArchive, metrics] = await Promise.all([
         fetch('/case_studies_archive.json').then(r => r.json()).catch(() => []),
         fetch('/news_archive.json').then(r => r.json()).catch(() => []),
+        fetch('/metrics.json').then(r => r.json()).catch(() => []),
       ]);
 
       const today = Array.isArray(csArchive) && csArchive.length ? csArchive[0] : null;
@@ -912,8 +938,8 @@
       }
 
       renderGeminiQC(allPapers);
-      renderGroq(papers);
-      renderPipeline(today, dailyData);
+      renderGroq(papers, metrics);
+      renderPipeline(today, dailyData, metrics);
       renderQuality(papers);
       renderTrend(csArchive);
 
