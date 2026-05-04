@@ -60,7 +60,8 @@ def tag_pill(tag):
 def score_ring(score, max_score=100):
     pct = int((score / max_score) * 100)
     color = "#22c55e" if pct >= 70 else "#f59e0b" if pct >= 40 else "#ef4444"
-    return f'<div class="score-ring" style="--pct:{pct};--color:{color}"><span>{score}</span></div>'
+    legend = "AI SCOUT SCORE: A 0-100 composite metric of Technical Novelty, Business Impact, and Market Maturity."
+    return f'<div class="score-ring" style="--pct:{pct};--color:{color}" title="{legend}"><span>{score}</span></div>'
 
 def tier_label(tier):
     labels = {"ai_labs": "AI Lab", "consulting": "Consulting", "news": "Press", "universities": "Academic"}
@@ -68,6 +69,14 @@ def tier_label(tier):
     label = labels.get(tier, tier)
     color = colors.get(tier, "#64748b")
     return f'<span class="tier-label" style="color:{color}">{label}</span>'
+
+def score_bar(label, score, max_val=25):
+    pct = min(100, int((score / max_val) * 100))
+    return f"""<div class="score-bar-row">
+      <span class="bar-label">{label}</span>
+      <div class="bar-track"><div class="bar-fill" style="width: {pct}%"></div></div>
+      <span class="bar-val">{score}</span>
+    </div>"""
 
 def status_badge(status):
     if status == 'pass':
@@ -138,23 +147,21 @@ def render_case_studies(data, slug_map):
     <div class="insight-label">BUSINESS OPPORTUNITY</div>
     <p class="insight-text">{esc(cs.get('monetisation',''))}</p>
   </div>
-  <div class="agent-trace">
-    <button class="trace-toggle" onclick="event.stopPropagation();this.parentElement.classList.toggle('open')">
-      ▶ Agent Trace
-    </button>
+  <details class="agent-trace">
+    <summary class="trace-toggle">▶ Agent Trace</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">{cs.get('real_world_impact',0)}/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">{cs.get('ai_maturity',0)}/25</span></div>
       <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">{cs.get('monetisation_potential',0)}/25</span></div>
       <p class="trace-reasoning">{esc(cs.get('score_reasoning',''))}</p>
     </div>
-  </div>
+  </details>
   <div class="card-footer">
-    <div class="score-pills">
-      <span>Recency {cs.get('recency_score',0)}</span>
-      <span>Impact {cs.get('real_world_impact',0)}</span>
-      <span>Maturity {cs.get('ai_maturity',0)}</span>
-      <span>Monetisation {cs.get('monetisation_potential',0)}</span>
+    <div class="score-bars">
+      {score_bar('Recency', cs.get('recency_score',0), 25)}
+      {score_bar('Impact', cs.get('real_world_impact',0), 25)}
+      {score_bar('Maturity', cs.get('ai_maturity',0), 25)}
+      {score_bar('Monetisation', cs.get('monetisation_potential',0), 25)}
     </div>
     <div class="footer-links">
       <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
@@ -831,28 +838,27 @@ def generate_html():
       color: var(--text-muted);
     }
 
-    .agent-trace { margin-bottom: 10px; }
+    .agent-trace { margin-bottom: 12px; }
 
     .trace-toggle {
-      background: none;
       border: 1px solid var(--border);
       color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      padding: 5px 12px;
+      padding: 6px 12px;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.15s;
-      width: 100%;
-      text-align: left;
+      list-style: none;
     }
+
+    .trace-toggle::-webkit-details-marker { display: none; }
 
     .trace-toggle:hover { color: var(--text); border-color: var(--accent); }
 
-    .trace-body { display: none; padding: 12px 0 4px; }
+    .trace-body { padding: 12px 0 4px; }
 
-    .agent-trace.open .trace-toggle { color: var(--accent); border-color: var(--accent); }
-    .agent-trace.open .trace-body { display: block; }
+    .agent-trace[open] .trace-toggle { color: var(--accent); border-color: var(--accent); }
 
     .trace-row {
       display: flex;
@@ -882,6 +888,50 @@ def generate_html():
       color: var(--text-secondary);
       margin-top: 10px;
       font-style: italic;
+    }
+
+    /* Score bars */
+    .score-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 180px;
+    }
+
+    .score-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      width: 80px;
+      text-transform: uppercase;
+    }
+
+    .bar-track {
+      flex-grow: 1;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #00ff88;
+      border-radius: 3px;
+    }
+
+    .bar-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+      width: 20px;
+      text-align: right;
     }
 
     .md-export-btn {
