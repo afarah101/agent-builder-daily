@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os, json, html as html_lib
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 CASE_STUDIES_DIR = "case_studies"
@@ -320,11 +320,46 @@ def generate_email_capture():
 
 
 def generate_html():
+    # --- Rotation Logic ---
+    now = datetime.now()
+    cutoff = now - timedelta(hours=48)
+    
+    # Process Case Studies Archive
+    path_cs = Path(CASE_STUDIES_DIR)
+    daily_cs_files = sorted([f for f in path_cs.glob("*.json") if "archive" not in f.name])
+    cs_archive = load_json(ARCHIVE_CS_FILE)
+    
+    for f in daily_cs_files:
+        try:
+            file_date = datetime.strptime(f.stem, "%Y-%m-%d")
+            if file_date < cutoff:
+                data = load_json(str(f))
+                if data and "case_studies" in data:
+                    date_str = f.stem
+                    if not any(item["date"] == date_str for item in cs_archive):
+                        cs_archive.insert(0, {
+                            "date": date_str,
+                            "total": len(data["case_studies"]),
+                            "case_studies": data["case_studies"]
+                        })
+                    os.remove(f)
+                    print(f"Archived and removed {f}")
+        except ValueError:
+            continue
+            
+    with open(ARCHIVE_CS_FILE, 'w') as f_out:
+        json.dump(cs_archive, f_out, indent=2)
+
+    # Load data for rendering
     cs_data = load_latest_json(CASE_STUDIES_DIR)
     news_data = load_latest_json(NEWS_DIR, prefix="news_")
     cs_archive = load_json(ARCHIVE_CS_FILE)
     news_archive = load_json(ARCHIVE_NEWS_FILE)
     slug_map = load_slug_map()
+
+    # Limit cs_data to 2 most recent for home page
+    if cs_data and "case_studies" in cs_data:
+        cs_data["case_studies"] = sorted(cs_data["case_studies"], key=lambda x: x.get("pub_date", ""), reverse=True)[:2]
 
     cs_count = len(cs_data.get("case_studies", [])) if cs_data else 0
     news_count = len(news_data.get("news", [])) if news_data else 0
