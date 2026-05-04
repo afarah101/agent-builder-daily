@@ -117,6 +117,14 @@ def render_case_studies(data, slug_map):
         status = cs.get("gemini_eval_status", cs.get("eval_verdict", "pending"))
         badge_html = status_badge(status)
 
+        # Video detection
+        source_type = cs.get("source_type", "")
+        video_badge = ""
+        cta_text = "Read Source →"
+        if source_type == "youtube_agent":
+            video_badge = '<span class="status-badge" style="background:#ef44441a;color:#ef4444;border:1px solid #ef444433">▶️ Video Intel</span>'
+            cta_text = "Watch Source →"
+
         # Breakdown link
         slug = cs_slugs.get(title)
         breakdown_link = (
@@ -127,7 +135,7 @@ def render_case_studies(data, slug_map):
 
         cards.append(f"""<article class="card cs-card" onclick="window.open('{url}','_blank')">
   <div class="card-header">
-    <div class="card-tags">{tag_pill(tag)}{built_badge}{badge_html}</div>
+    <div class="card-tags">{tag_pill(tag)}{built_badge}{video_badge}{badge_html}</div>
     {score_ring(cs.get('total_score', 0))}
   </div>
   <h3 class="card-title">{title}</h3>
@@ -164,7 +172,7 @@ def render_case_studies(data, slug_map):
       {score_bar('Monetisation', cs.get('monetisation_potential',0), 25)}
     </div>
     <div class="footer-links">
-      <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">{cta_text}</a>
       {breakdown_link}
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
         data-title="{title}"
