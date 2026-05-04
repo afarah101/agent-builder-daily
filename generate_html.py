@@ -330,46 +330,71 @@ def generate_html():
     now = datetime.now()
     today_str = now.strftime("%Y-%m-%d")
     
-    # Process Case Studies Archive
+    # --- Case Studies Archiving & Loading ---
     path_cs = Path(CASE_STUDIES_DIR)
-    daily_cs_files = sorted([f for f in path_cs.glob("*.json") if "archive" not in f.name])
+    all_cs_files = [f for f in path_cs.glob("*.json") if "archive" not in f.name]
     cs_archive = load_json(ARCHIVE_CS_FILE)
+    active_cs = []
     
-    for f in daily_cs_files:
-        try:
-            # Archive anything older than today
-            if f.stem < today_str:
-                data = load_json(str(f))
-                if data and "case_studies" in data:
-                    date_str = f.stem
-                    if not any(item["date"] == date_str for item in cs_archive):
-                        cs_archive.insert(0, {
-                            "date": date_str,
-                            "total": len(data["case_studies"]),
-                            "case_studies": data["case_studies"]
-                        })
-                    os.remove(f)
-                    print(f"Archived and removed {f}")
-        except Exception as e:
-            print(f"Error processing {f}: {e}")
-            continue
-            
+    for f in sorted(all_cs_files):
+        if f.stem < today_str:
+            data = load_json(str(f))
+            if data and "case_studies" in data:
+                date_str = f.stem
+                if not any(item["date"] == date_str for item in cs_archive):
+                    cs_archive.insert(0, {
+                        "date": date_str,
+                        "total": len(data["case_studies"]),
+                        "case_studies": data["case_studies"]
+                    })
+                os.remove(f)
+                print(f"Archived and removed {f}")
+        else:
+            data = load_json(str(f))
+            if data and "case_studies" in data:
+                active_cs.extend(data["case_studies"])
+                
     with open(ARCHIVE_CS_FILE, 'w') as f_out:
         json.dump(cs_archive, f_out, indent=2)
+    
+    # Sort active articles by pub_date descending
+    active_cs.sort(key=lambda x: x.get("pub_date", ""), reverse=True)
+    cs_data = {"case_studies": active_cs}
 
-    # Load data for rendering
-    cs_data = load_latest_json(CASE_STUDIES_DIR)
-    news_data = load_latest_json(NEWS_DIR, prefix="news_")
-    cs_archive = load_json(ARCHIVE_CS_FILE)
+    # --- News Archiving & Loading ---
+    path_news = Path(NEWS_DIR)
+    all_news_files = [f for f in path_news.glob("news_*.json") if "archive" not in f.name]
     news_archive = load_json(ARCHIVE_NEWS_FILE)
+    active_news = []
+    
+    for f in sorted(all_news_files):
+        date_str = f.stem.replace("news_", "")
+        if date_str < today_str:
+            data = load_json(str(f))
+            if data and "news" in data:
+                if not any(item["date"] == date_str for item in news_archive):
+                    news_archive.insert(0, {
+                        "date": date_str,
+                        "total": len(data["news"]),
+                        "news": data["news"]
+                    })
+                os.remove(f)
+                print(f"Archived and removed {f}")
+        else:
+            data = load_json(str(f))
+            if data and "news" in data:
+                active_news.extend(data["news"])
+                
+    with open(ARCHIVE_NEWS_FILE, 'w') as f_out:
+        json.dump(news_archive, f_out, indent=2)
+
+    active_news.sort(key=lambda x: x.get("pub_date", ""), reverse=True)
+    news_data = {"news": active_news}
+
+    # --- Metadata ---
     slug_map = load_slug_map()
-
-    # Sort active articles by pub_date descending, NO LIMIT
-    if cs_data and "case_studies" in cs_data:
-        cs_data["case_studies"] = sorted(cs_data["case_studies"], key=lambda x: x.get("pub_date", ""), reverse=True)
-
-    cs_count = len(cs_data.get("case_studies", [])) if cs_data else 0
-    news_count = len(news_data.get("news", [])) if news_data else 0
+    cs_count = len(active_cs)
+    news_count = len(active_news)
     generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
 
     html = """<!DOCTYPE html>
