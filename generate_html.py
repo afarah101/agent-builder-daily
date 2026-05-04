@@ -126,7 +126,7 @@ def render_case_studies(data, slug_map):
         )
 
         cards.append(f"""<article class="card cs-card" onclick="window.open('{url}','_blank')">
-  <div class="card-top">
+  <div class="card-header">
     <div class="card-tags">{tag_pill(tag)}{built_badge}{badge_html}</div>
     {score_ring(cs.get('total_score', 0))}
   </div>
@@ -203,7 +203,7 @@ def render_news(data, slug_map):
         pub = item.get('pub_date', '')
 
         cards.append(f"""<article class="card news-card" onclick="window.open('{url}','_blank')">
-  <div class="card-top">
+  <div class="card-header">
     <div class="card-tags">
       {tier_label(tier)}
       <span class="source-name">{item.get('source','')}</span>
@@ -412,13 +412,13 @@ def generate_html():
       --bg: #0f1117;
       --surface: #1a1d27;
       --surface2: #22263a;
-      --border: #2d3148;
+      --border: #2d2d2d;
       --text: #f1f5f9;
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
       --accent: #6366f1;
-      --accent-green: #22c55e;
-      --radius: 12px;
+      --accent-green: #00ff88;
+      --radius: 8px;
     }
 
     body {
@@ -576,7 +576,7 @@ def generate_html():
       box-shadow: 0 0 0 1px var(--accent)22;
     }
 
-    .card-top {
+    .card-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
@@ -676,10 +676,10 @@ def generate_html():
 
     /* Card content */
     .card-title {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Georgia', serif;
       font-size: 1.8rem;
-      font-weight: 800;
-      line-height: 1.2;
+      font-weight: 700;
+      line-height: 1.3;
       color: #ffffff;
       margin-bottom: 12px;
       max-width: calc(100% - 60px);
@@ -715,7 +715,7 @@ def generate_html():
 
     .insight-block.monetisation {
       border-left-color: #00ff88;
-      background: rgba(0, 255, 136, 0.03);
+      background: rgba(0, 255, 136, 0.05);
     }
 
     .insight-label {
