@@ -787,16 +787,21 @@
         </div>`).join('')
       : '<div class="empty">None scored yet.</div>';
 
-    document.getElementById('dist-section').innerHTML = `
-      <div class="card">
-        <div class="card-label" style="margin-bottom:14px">Score Distribution</div>
-        ${distHtml}
-      </div>
-      <div class="card">
-        <div class="card-label" style="margin-bottom:14px">Top Scored Today</div>
-        ${topHtml}
-      </div>
-    `;
+    if (!papers.length) {
+      document.getElementById('dist-section').style.display = 'none';
+    } else {
+      document.getElementById('dist-section').style.display = '';
+      document.getElementById('dist-section').innerHTML = `
+        <div class="card">
+          <div class="card-label" style="margin-bottom:14px">Score Distribution</div>
+          ${distHtml}
+        </div>
+        <div class="card">
+          <div class="card-label" style="margin-bottom:14px">Top Scored Today</div>
+          ${topHtml}
+        </div>
+      `;
+    }
   }
 
   // ── Section 3: Quality & Evals ───────────────────────────────────────────
