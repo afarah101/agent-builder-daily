@@ -661,28 +661,22 @@
   // ── Section 1: Groq ──────────────────────────────────────────────────────
   function renderGroq(papers, metrics) {
     const scored   = papers.length;
-    let actualTokens = 0;
-    let actualRequests = 0;
+    let k1Tokens = 0;
+    let k2Tokens = 0;
+    let isLive = false;
 
     if (Array.isArray(metrics) && metrics.length) {
-      const todayStr = new Date().toISOString().slice(0, 10);
-      metrics.forEach(m => {
-        if (m.timestamp && m.timestamp.startsWith(todayStr)) {
-          actualTokens += (m.tokens || 0);
-          actualRequests += (m.total_requests || 0);
-        }
-      });
+      const latest = metrics[metrics.length - 1];
+      k1Tokens = latest.key_1_raw_tokens || 0;
+      k2Tokens = latest.key_2_raw_tokens || 0;
+      isLive = true;
     }
 
-    const tokensToUse = actualTokens > 0 ? actualTokens : (scored * TOKENS_PER_CALL);
-    const requestsToUse = actualRequests > 0 ? actualRequests : scored;
-
-    const pct      = Math.min(100, Math.round((tokensToUse / DAILY_TOKEN_LIMIT) * 100));
-    const fillColor = colorForPct(pct);
-
-    // Show split based on actual if we had multi-key tracking, otherwise use estimated split
-    const k1Tokens = Math.round(tokensToUse * 0.6);
-    const k2Tokens = tokensToUse - k1Tokens;
+    // Fallback to estimation only if no metrics found
+    if (!isLive) {
+      k1Tokens = Math.round(scored * 0.6 * 1200);
+      k2Tokens = Math.round(scored * 0.4 * 1200);
+    }
 
     function keyCard(label, tokens) {
       const kPct = Math.min(100, Math.round((tokens / DAILY_TOKEN_LIMIT) * 100));
@@ -690,7 +684,7 @@
       return `<div class="card">
         <div class="card-label">${label}</div>
         <div class="card-value">${fmt(tokens)}</div>
-        <div class="card-sub">${actualTokens > 0 ? 'actual' : 'est.'} tokens today</div>
+        <div class="card-sub">${isLive ? 'raw' : 'est.'} tokens today</div>
         <div class="progress-wrap">
           <div class="progress-track">
             <div class="progress-fill" style="width:${kPct}%;background:${kColor}"></div>
@@ -700,12 +694,17 @@
             <span class="progress-limit">of 100k limit</span>
           </div>
         </div>
-        <div class="card-sub" style="margin-top:8px">${fmt(Math.round(tokens/TOKENS_PER_CALL))} total requests logged</div>
       </div>`;
     }
 
     document.getElementById('groq-cards').innerHTML =
       keyCard('Groq Key 1', k1Tokens) + keyCard('Groq Key 2', k2Tokens);
+    
+    // Update subtext
+    const note = document.querySelector('#groq-section .note');
+    if (note) {
+      note.innerHTML = 'Live raw token usage pulled from Groq x-groq-usage headers. Actual usage: <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>';
+    }
   }
 
   // ── Section 2: Pipeline Health ───────────────────────────────────────────
@@ -759,11 +758,6 @@
         <div class="card-value" style="color:${jsonErrors > 0 ? 'var(--amber)' : 'var(--green)'}">${fmt(jsonErrors)}</div>
         <div class="card-sub">fetch − scored</div>
       </div>
-      <div class="card">
-        <div class="card-label">Eval Verdicts</div>
-        <div class="card-value" style="color:var(--green)">${fmt(verdicts.pass)}</div>
-        <div class="card-sub">${verdicts.fail} fail · ${verdicts.pending} pending</div>
-      </div>
     `;
 
     const bucketLabels = ['0–25', '26–50', '51–75', '76–100'];
@@ -783,15 +777,15 @@
           </div>
           <div class="top-paper-score" style="color:${colorForScore(p.total_score||0)}">${p.total_score||0}</div>
         </div>`).join('')
-      : '<div class="empty">No papers today.</div>';
+      : '<div class="empty">None scored yet.</div>';
 
-    document.getElementById('pipeline-lower').innerHTML = `
+    document.getElementById('dist-section').innerHTML = `
       <div class="card">
         <div class="card-label" style="margin-bottom:14px">Score Distribution</div>
         ${distHtml}
       </div>
       <div class="card">
-        <div class="card-label" style="margin-bottom:14px">Top 3 Today</div>
+        <div class="card-label" style="margin-bottom:14px">Top Scored Today</div>
         ${topHtml}
       </div>
     `;
