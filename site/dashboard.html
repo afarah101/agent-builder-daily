@@ -700,13 +700,18 @@
   }
 
   async function loadGroqStats() {
+    const DEFAULT_STATS = {
+      "key_1": {"total_tokens": 0, "calls": 0, "prompt_tokens": 0, "completion_tokens": 0},
+      "key_2": {"total_tokens": 0, "calls": 0, "prompt_tokens": 0, "completion_tokens": 0},
+      "tokens_per_call": [],
+      "header_miss_count": 0
+    };
     try {
       const res = await fetch('https://agent-builder-daily.vercel.app/groq_token_stats.json');
-      if (!res.ok) throw new Error('no stats');
-      const stats = await res.json();
+      const stats = res.ok ? await res.json() : DEFAULT_STATS;
       renderGroq(stats);
     } catch(_) {
-      renderGroq(null);
+      renderGroq(DEFAULT_STATS);
     }
   }
 
