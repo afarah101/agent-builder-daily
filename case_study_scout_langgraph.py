@@ -74,6 +74,7 @@ def groq_complete(messages, max_tokens=500, trace_name="groq_call"):
                 _groq_token_stats[key_slot]["total_tokens"]      += usage.total_tokens
                 _groq_token_stats[key_slot]["calls"]             += 1
                 _groq_token_stats["tokens_per_call"].append(usage.total_tokens)
+                print(f"[USAGE] Groq Tokens: {usage.total_tokens} (Key {i+1})")
             else:
                 _groq_token_stats["header_miss_count"] += 1
                 print("[WARN] Groq resp.usage missing — token count not captured")
