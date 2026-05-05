@@ -939,17 +939,16 @@
         } catch(_) {}
       }
 
-      renderGeminiQC(allPapers);
-      renderPipeline(today, dailyData, metrics);
-      renderQuality(papers);
-      renderTrend(csArchive);
-
-      const now = new Date().toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
-      document.getElementById('updated-label').textContent = `Updated ${now}`;
+      try { renderGeminiQC(allPapers); } catch(e) { console.error('renderGeminiQC', e); }
+      try { renderPipeline(today, dailyData, metrics); } catch(e) { console.error('renderPipeline', e); }
+      try { renderQuality(papers); } catch(e) { console.error('renderQuality', e); }
+      try { renderTrend(csArchive); } catch(e) { console.error('renderTrend', e); }
 
     } catch (e) {
-      document.getElementById('updated-label').textContent = 'Error loading data';
-      console.error(e);
+      console.error('loadAll fetch error', e);
+    } finally {
+      const now = new Date().toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      document.getElementById('updated-label').textContent = `Updated ${now}`;
     }
 
     // Auto-refresh every 5 minutes
@@ -957,10 +956,15 @@
   }
 
   async function loadLangfuse() {
+    const fillDashes = () => {
+      ['lf-traces','lf-p50','lf-p95','lf-input-tokens','lf-output-tokens',
+       'lf-avg-score','lf-score-count','lf-snapshot-age']
+        .forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '—'; });
+    };
     try {
       const res = await fetch('https://agent-builder-daily.vercel.app/langfuse_snapshot.json');
       const d = res.ok ? await res.json() : null;
-      if (!d) throw new Error('No snapshot');
+      if (!d) { fillDashes(); return; }
 
       // Traces
       const traceTotal = (d.trace_counts || []).reduce((sum, r) => sum + (parseInt(r.count_count) || 0), 0);
@@ -991,8 +995,7 @@
       }
 
     } catch(e) {
-      document.getElementById('langfuse-placeholder-msg').style.display = 'block';
-      document.getElementById('langfuse-grid').style.display = 'none';
+      fillDashes();
     }
   }
 
