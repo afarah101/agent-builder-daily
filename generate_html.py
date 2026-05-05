@@ -1188,6 +1188,8 @@ def generate_html():
     if os.path.exists("logs/archive.json"):
         shutil.copy("logs/archive.json", "site/news_archive.json")
         print("Copied -> site/news_archive.json")
+    if os.path.exists("site/groq_token_stats.json"):
+        print("groq_token_stats.json already in site/ — no copy needed")
     print("HTML generated -> " + OUTPUT_FILE)
 
 if __name__ == "__main__":

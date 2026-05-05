@@ -543,7 +543,7 @@
       <div class="card"><div class="skeleton"></div><div class="skeleton" style="width:60%"></div></div>
       <div class="card"><div class="skeleton"></div><div class="skeleton" style="width:60%"></div></div>
     </div>
-    <p class="note">Estimated from scored papers × ~1,200 tokens/call. Actual usage: <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a></p>
+    <p class="note" id="groq-note">Loading live token data… <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a></p>
   </section>
 
   <!-- SECTION 2: PIPELINE HEALTH -->
@@ -659,51 +659,54 @@
   }
 
   // ── Section 1: Groq ──────────────────────────────────────────────────────
-  function renderGroq(papers, metrics) {
-    const scored   = papers.length;
-    let k1Tokens = 0;
-    let k2Tokens = 0;
-    let isLive = false;
+  function renderGroq(stats) {
+    const limit = (stats && stats.daily_limit_per_key) || 100000;
+    const k1 = (stats && stats.key_1) || {};
+    const k2 = (stats && stats.key_2) || {};
+    const avgTpc = (stats && stats.avg_tokens_per_call) || 0;
+    const misses = (stats && stats.header_miss_count) || 0;
+    const isLive = !!(stats && stats.generated_at);
 
-    if (Array.isArray(metrics) && metrics.length) {
-      const latest = metrics[metrics.length - 1];
-      k1Tokens = latest.key_1_raw_tokens || 0;
-      k2Tokens = latest.key_2_raw_tokens || 0;
-      isLive = true;
-    }
-
-    // Fallback to estimation only if no metrics found
-    if (!isLive) {
-      k1Tokens = Math.round(scored * 0.6 * 1200);
-      k2Tokens = Math.round(scored * 0.4 * 1200);
-    }
-
-    function keyCard(label, tokens) {
-      const kPct = Math.min(100, Math.round((tokens / DAILY_TOKEN_LIMIT) * 100));
+    function keyCard(label, slot) {
+      const total = slot.total_tokens || 0;
+      const calls = slot.calls || 0;
+      const kPct  = Math.min(100, Math.round((total / limit) * 100));
       const kColor = colorForPct(kPct);
       return `<div class="card">
         <div class="card-label">${label}</div>
-        <div class="card-value">${fmt(tokens)}</div>
-        <div class="card-sub">${isLive ? 'raw' : 'est.'} tokens today</div>
+        <div class="card-value">${fmt(total)}</div>
+        <div class="card-sub">${isLive ? 'live' : 'no data yet'} · ${fmt(calls)} calls · ${fmt(slot.prompt_tokens||0)} prompt / ${fmt(slot.completion_tokens||0)} completion</div>
         <div class="progress-wrap">
           <div class="progress-track">
             <div class="progress-fill" style="width:${kPct}%;background:${kColor}"></div>
           </div>
           <div class="progress-labels">
             <span class="progress-pct" style="color:${kColor}">${kPct}%</span>
-            <span class="progress-limit">of 100k limit</span>
+            <span class="progress-limit">of ${fmt(limit)} limit</span>
           </div>
         </div>
       </div>`;
     }
 
     document.getElementById('groq-cards').innerHTML =
-      keyCard('Groq Key 1', k1Tokens) + keyCard('Groq Key 2', k2Tokens);
-    
-    // Update subtext
-    const note = document.querySelector('#groq-section .note');
+      keyCard('Groq Key 1', k1) + keyCard('Groq Key 2', k2);
+
+    const note = document.getElementById('groq-note');
     if (note) {
-      note.innerHTML = 'Live raw token usage pulled from Groq x-groq-usage headers. Actual usage: <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>';
+      note.innerHTML = isLive
+        ? `Live from <code>resp.usage</code> · avg ${fmt(avgTpc)} tokens/call${misses ? ` · ⚠ ${misses} usage-miss(es)` : ''} · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`
+        : `No token stats yet — will populate after next pipeline run · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`;
+    }
+  }
+
+  async function loadGroqStats() {
+    try {
+      const res = await fetch('https://agent-builder-daily.vercel.app/groq_token_stats.json');
+      if (!res.ok) throw new Error('no stats');
+      const stats = await res.json();
+      renderGroq(stats);
+    } catch(_) {
+      renderGroq(null);
     }
   }
 
@@ -932,7 +935,6 @@
       }
 
       renderGeminiQC(allPapers);
-      renderGroq(papers, metrics);
       renderPipeline(today, dailyData, metrics);
       renderQuality(papers);
       renderTrend(csArchive);
@@ -991,6 +993,7 @@
 
   loadAll();
   loadLangfuse();
+  loadGroqStats();
 </script>
 </body>
 </html>

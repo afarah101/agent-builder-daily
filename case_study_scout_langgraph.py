@@ -17,6 +17,16 @@ os.environ.setdefault("LANGFUSE_SECRET_KEY", os.getenv("LANGFUSE_SECRET_KEY", ""
 os.environ.setdefault("LANGFUSE_HOST", os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com"))
 langfuse = Langfuse()
 
+GROQ_TOKEN_STATS_FILE = "site/groq_token_stats.json"
+
+# Accumulates real token counts from resp.usage across this run
+_groq_token_stats = {
+    "key_1": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "calls": 0},
+    "key_2": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "calls": 0},
+    "tokens_per_call": [],
+    "header_miss_count": 0,
+}
+
 OUTPUT_DIR = "case_studies"
 ARCHIVE_FILE = "case_studies/archive.json"
 MAX_PAPERS = 20
@@ -55,6 +65,18 @@ def groq_complete(messages, max_tokens=500, trace_name="groq_call"):
             if i > 0:
                 print("[DEBUG] Using Key 2")
             result = resp.choices[0].message.content.strip()
+            # Capture real token usage from SDK response
+            usage = getattr(resp, "usage", None)
+            if usage:
+                key_slot = "key_1" if i == 0 else "key_2"
+                _groq_token_stats[key_slot]["prompt_tokens"]     += usage.prompt_tokens
+                _groq_token_stats[key_slot]["completion_tokens"] += usage.completion_tokens
+                _groq_token_stats[key_slot]["total_tokens"]      += usage.total_tokens
+                _groq_token_stats[key_slot]["calls"]             += 1
+                _groq_token_stats["tokens_per_call"].append(usage.total_tokens)
+            else:
+                _groq_token_stats["header_miss_count"] += 1
+                print("[WARN] Groq resp.usage missing — token count not captured")
             langfuse.update_current_generation(
                 model="llama-3.3-70b-versatile",
                 input=messages,
@@ -306,6 +328,21 @@ def save_and_archive(state):
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(archive, f, indent=2, ensure_ascii=False)
     print("Saved " + str(len(state["scored_papers"])) + " case studies.")
+    # Write real token stats for the dashboard
+    tpc = _groq_token_stats["tokens_per_call"]
+    snapshot = {
+        "generated_at": datetime.now().isoformat(),
+        "key_1": _groq_token_stats["key_1"],
+        "key_2": _groq_token_stats["key_2"],
+        "tokens_per_call": tpc,
+        "avg_tokens_per_call": round(sum(tpc) / len(tpc)) if tpc else 0,
+        "header_miss_count": _groq_token_stats["header_miss_count"],
+        "daily_limit_per_key": 100000,
+    }
+    os.makedirs("site", exist_ok=True)
+    with open(GROQ_TOKEN_STATS_FILE, "w", encoding="utf-8") as f:
+        json.dump(snapshot, f, indent=2)
+    print(f"[DEBUG] Groq token stats written to {GROQ_TOKEN_STATS_FILE}")
     return state
 
 def build_graph():
