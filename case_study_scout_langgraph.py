@@ -257,11 +257,10 @@ def score_papers(state):
             try:
                 text = groq_complete([{"role": "user", "content": prompt}], max_tokens=600)
                 last_text = text
-                if "```" in text:
-                    text = text.split("```")[1]
-                    if text.startswith("json"):
-                        text = text[4:]
-                g = json.loads(text.strip())
+                if text is None:
+                    continue
+                clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+                g = json.loads(clean)
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] JSON parse error on attempt {attempt+1}/3 — retrying...")
