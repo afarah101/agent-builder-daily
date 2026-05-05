@@ -922,8 +922,8 @@
 
     try {
       const [csArchive, newsArchive, metrics] = await Promise.all([
-        fetch('/case_studies_archive.json').then(r => r.json()).catch(() => []),
-        fetch('/news_archive.json').then(r => r.json()).catch(() => []),
+        fetch('https://agent-builder-daily.vercel.app/case_studies_archive.json').then(r => r.ok ? r.json() : []).catch(() => []),
+        fetch('https://agent-builder-daily.vercel.app/news_archive.json').then(r => r.ok ? r.json() : []).catch(() => []),
         fetch('/metrics.json').then(r => r.json()).catch(() => []),
       ]);
 
@@ -935,7 +935,7 @@
       let dailyData = null;
       if (today && today.date) {
         try {
-          dailyData = await fetch(`/case_studies/${today.date}.json`).then(r => r.json());
+          dailyData = await fetch(`https://agent-builder-daily.vercel.app/case_studies/${today.date}.json`).then(r => r.ok ? r.json() : null);
         } catch(_) {}
       }
 
@@ -958,9 +958,9 @@
 
   async function loadLangfuse() {
     try {
-      const res = await fetch('/langfuse_snapshot.json');
-      if (!res.ok) throw new Error('No snapshot');
-      const d = await res.json();
+      const res = await fetch('https://agent-builder-daily.vercel.app/langfuse_snapshot.json');
+      const d = res.ok ? await res.json() : null;
+      if (!d) throw new Error('No snapshot');
 
       // Traces
       const traceTotal = (d.trace_counts || []).reduce((sum, r) => sum + (parseInt(r.count_count) || 0), 0);
