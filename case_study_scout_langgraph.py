@@ -8,7 +8,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
 from dotenv import load_dotenv
-from google import genai as genai_client
+import google.genai as genai_client
 from langfuse import Langfuse, observe
 load_dotenv()
 
