@@ -101,6 +101,24 @@ def fetch_papers(state):
     print("[DEBUG] Fetching from arXiv...")
     raw_papers = []
     seen = set()
+    seen_ids = set()
+    archive_path = Path("case_studies/archive.json")
+    if archive_path.exists():
+        with open(archive_path) as f:
+            archive = json.load(f)
+        for entry in archive:
+            for cs in entry.get("case_studies", []):
+                url = cs.get("id") or cs.get("url", "")
+                if url:
+                    seen_ids.add(url.strip())
+    for f in Path("case_studies").glob("*.json"):
+        if "archive" not in f.name:
+            data = json.load(open(f))
+            for cs in data.get("case_studies", []):
+                url = cs.get("id") or cs.get("url", "")
+                if url:
+                    seen_ids.add(url.strip())
+    print(f"[DEBUG] Cross-run dedup: {len(seen_ids)} known IDs loaded")
     cutoff_str = FOUR_MONTHS_AGO.strftime("%Y%m%d")
     cutoff_date = FOUR_MONTHS_AGO.strftime("%Y-%m-%d")
 
@@ -127,6 +145,9 @@ def fetch_papers(state):
                     continue
                 pid = pid_el.text.strip()
                 if pid in seen:
+                    continue
+                if pid in seen_ids:
+                    print(f"[DEBUG] Skipping duplicate: {pid}")
                     continue
                 seen.add(pid)
                 title_text = " ".join((title_el.text or "").split())
