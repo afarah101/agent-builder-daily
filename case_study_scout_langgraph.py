@@ -81,8 +81,8 @@ UNIVERSITIES = [
     "NYU", "Harvard", "KAIST", "Nanyang", "Zhejiang",
 ]
 
-@observe()
-def groq_complete(messages, max_tokens=500, trace_name="groq_call"):
+@observe(as_type="generation", name="groq-complete")
+def groq_complete(messages, max_tokens=500):
     keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
     keys = [k for k in keys if k]
     last_error = None
@@ -107,14 +107,26 @@ def groq_complete(messages, max_tokens=500, trace_name="groq_call"):
                 _groq_token_stats[key_slot]["calls"]             += 1
                 _groq_token_stats["tokens_per_call"].append(usage.total_tokens)
                 print(f"[USAGE] Groq Tokens: {usage.total_tokens} (Key {i+1})")
+                langfuse.update_current_generation(
+                    model="llama-3.3-70b-versatile",
+                    input=messages,
+                    output=result,
+                    usage={
+                        "input": usage.prompt_tokens,
+                        "output": usage.completion_tokens,
+                        "total": usage.total_tokens,
+                        "unit": "TOKENS",
+                    },
+                    metadata={"groq_key": f"key_{i+1}"},
+                )
             else:
                 _groq_token_stats["header_miss_count"] += 1
                 print("[WARN] Groq resp.usage missing — token count not captured")
-            langfuse.update_current_generation(
-                model="llama-3.3-70b-versatile",
-                input=messages,
-                output=result,
-            )
+                langfuse.update_current_generation(
+                    model="llama-3.3-70b-versatile",
+                    input=messages,
+                    output=result,
+                )
             return result
         except Exception as e:
             if "429" in str(e):
@@ -129,6 +141,7 @@ class CaseStudyState(TypedDict):
     scored_papers: Annotated[list, operator.add]
     output_file: str
 
+@observe(name="fetch-papers")
 def fetch_papers(state):
     print("[DEBUG] Fetching from arXiv...")
     raw_papers = []
@@ -270,6 +283,7 @@ def gemini_evaluate(abstract, groq_output):
         print("[DEBUG] Gemini eval error: " + str(e))
         return {"hallucination_detected": False, "verdict": "pass", "score_feedback": ""}
 
+@observe(name="score-papers")
 def score_papers(state):
     papers = state["raw_papers"]
     print("[DEBUG] Scoring " + str(len(papers)) + " papers...")
@@ -407,6 +421,7 @@ Abstract:
     print("[DEBUG] Scored " + str(len(scored)) + " papers")
     return {"raw_papers": state["raw_papers"], "scored_papers": scored, "output_file": state["output_file"]}
 
+@observe(name="save-and-archive")
 def save_and_archive(state):
     print("[DEBUG] Saving...")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -462,15 +477,26 @@ def build_graph():
     g.add_edge("save", END)
     return g.compile(checkpointer=InMemorySaver())
 
+@observe(name="case-study-scout")
 def run_case_study_scout():
     print("[DEBUG] Starting Case Study Scout (arXiv)...")
-    graph = build_graph()
     today = datetime.now().strftime("%Y-%m-%d")
+    langfuse.update_current_trace(
+        input={"date": today, "source": "arxiv"},
+        tags=["arxiv", "case-studies", "automated"],
+        metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS},
+    )
+    graph = build_graph()
     result = graph.invoke(
         {"raw_papers": [], "scored_papers": [], "output_file": OUTPUT_DIR + "/" + today + ".json"},
         config={"configurable": {"thread_id": "cs-" + today}},
     )
+    scored = result.get("scored_papers", [])
+    langfuse.update_current_trace(
+        output={"papers_saved": len(scored), "date": today},
+    )
     print("[DEBUG] Complete")
+    langfuse.flush()
     return result
 
 if __name__ == "__main__":

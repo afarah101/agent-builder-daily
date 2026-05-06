@@ -13,6 +13,9 @@ from groq import Groq
 from dotenv import load_dotenv
 load_dotenv()
 
+from langfuse import Langfuse, observe
+langfuse = Langfuse()
+
 OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
 MAX_ITEMS = 25
@@ -43,6 +46,7 @@ SCRAPE_SOURCES = [
     {"url": "https://www.deloitte.com/us/en/insights.html", "name": "Deloitte", "tier": "consulting", "article_selector": "a[href*='/insights/']", "base_url": "https://www.deloitte.com"},
 ]
 
+@observe(as_type="generation", name="groq-complete")
 def groq_complete(messages, max_tokens=300):
     keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
     keys = [k for k in keys if k]
@@ -57,7 +61,28 @@ def groq_complete(messages, max_tokens=300):
             )
             if i > 0:
                 print("[DEBUG] Using Key 2")
-            return resp.choices[0].message.content.strip()
+            result = resp.choices[0].message.content.strip()
+            usage = getattr(resp, "usage", None)
+            if usage:
+                langfuse.update_current_generation(
+                    model="llama-3.1-8b-instant",
+                    input=messages,
+                    output=result,
+                    usage={
+                        "input": usage.prompt_tokens,
+                        "output": usage.completion_tokens,
+                        "total": usage.total_tokens,
+                        "unit": "TOKENS",
+                    },
+                    metadata={"groq_key": f"key_{i+1}"},
+                )
+            else:
+                langfuse.update_current_generation(
+                    model="llama-3.1-8b-instant",
+                    input=messages,
+                    output=result,
+                )
+            return result
         except Exception as e:
             if "429" in str(e) or "rate" in str(e).lower():
                 print("[DEBUG] Key " + str(i+1) + " rate limited, trying next...")
@@ -214,6 +239,7 @@ def fetch_news(state):
         "output_file": state.get("output_file", OUTPUT_DIR + "/news_" + today + ".json"),
     }
 
+@observe(name="classify-news")
 def classify_news(state):
     articles = state["raw_articles"]
     print("[DEBUG] Classifying " + str(len(articles)) + " articles...")
@@ -337,15 +363,26 @@ def build_graph():
     g.add_edge("save", END)
     return g.compile(checkpointer=InMemorySaver())
 
+@observe(name="industry-news-scout")
 def run_industry_news_scout():
     print("[DEBUG] Starting Industry News Scout...")
-    graph = build_graph()
     today = datetime.now().strftime("%Y-%m-%d")
+    langfuse.update_current_trace(
+        input={"date": today, "sources": len(RSS_SOURCES) + len(SCRAPE_SOURCES)},
+        tags=["news", "rss", "automated"],
+        metadata={"max_items": MAX_ITEMS, "max_per_source": MAX_PER_SOURCE},
+    )
+    graph = build_graph()
     result = graph.invoke(
         {"raw_articles": [], "classified_news": [], "output_file": OUTPUT_DIR + "/news_" + today + ".json"},
         config={"configurable": {"thread_id": "news-" + today}},
     )
+    classified = result.get("classified_news", [])
+    langfuse.update_current_trace(
+        output={"items_saved": len(classified), "date": today},
+    )
     print("[DEBUG] Complete")
+    langfuse.flush()
     return result
 
 if __name__ == "__main__":
