@@ -349,14 +349,16 @@ def generate_html():
     cs_archive = load_json(ARCHIVE_CS_FILE)
     active_cs = []
     
-    for f in sorted(all_cs_files):
+    sorted_cs = sorted(all_cs_files)
+    for i, f in enumerate(sorted_cs):
         data = load_json(str(f))
         is_evergreen = False
         if data and "case_studies" in data:
             # Check if any case study in the file is evergreen
             is_evergreen = any(cs.get("is_evergreen", False) for cs in data["case_studies"])
             
-        if f.stem < today_str and not is_evergreen:
+        is_latest = (i == len(sorted_cs) - 1)
+        if f.stem < today_str and not is_evergreen and not is_latest:
             if data and "case_studies" in data:
                 date_str = f.stem
                 if not any(item["date"] == date_str for item in cs_archive):
@@ -376,6 +378,11 @@ def generate_html():
     
     # Sort active articles by pub_date descending
     active_cs.sort(key=lambda x: x.get("pub_date", ""), reverse=True)
+
+    # Fallback: If no active items (all archived), load latest from archive
+    if not active_cs and cs_archive:
+        active_cs = cs_archive[0].get("case_studies", [])
+        print(f"Fallback: Loaded {len(active_cs)} case studies from archive.")
     cs_data = {"case_studies": active_cs}
 
     # --- News Archiving & Loading ---
@@ -384,9 +391,11 @@ def generate_html():
     news_archive = load_json(ARCHIVE_NEWS_FILE)
     active_news = []
     
-    for f in sorted(all_news_files):
+    sorted_news = sorted(all_news_files)
+    for i, f in enumerate(sorted_news):
         date_str = f.stem.replace("news_", "")
-        if date_str < today_str:
+        is_latest = (i == len(sorted_news) - 1)
+        if date_str < today_str and not is_latest:
             data = load_json(str(f))
             if data and "news" in data:
                 if not any(item["date"] == date_str for item in news_archive):
@@ -406,6 +415,11 @@ def generate_html():
         json.dump(news_archive, f_out, indent=2)
 
     active_news.sort(key=lambda x: x.get("pub_date", ""), reverse=True)
+
+    # Fallback: If no active news (all archived), load latest from archive
+    if not active_news and news_archive:
+        active_news = news_archive[0].get("news", [])
+        print(f"Fallback: Loaded {len(active_news)} news items from archive.")
     news_data = {"news": active_news}
 
     # --- Metadata ---
