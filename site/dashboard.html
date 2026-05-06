@@ -716,16 +716,12 @@
   }
 
   // ── Section 2: Pipeline Health ───────────────────────────────────────────
-  function renderPipeline(today, dailyData, metrics) {
+  function renderPipeline(today, dailyData) {
     const papers      = today ? today.case_studies || [] : [];
     const scored      = papers.length;
     const fetched     = dailyData ? (dailyData.total_fetched || scored) : scored;
     const jsonErrors  = Math.max(0, fetched - scored);
-    let pendingCount  = 0;
-
-    if (Array.isArray(metrics) && metrics.length) {
-      pendingCount = metrics[metrics.length - 1].pending_queue || 0;
-    }
+    const avgScore    = scored ? Math.round(papers.reduce((s, p) => s + (p.total_score || 0), 0) / scored) : null;
 
     const verdicts    = { pass: 0, fail: 0, pending: 0 };
     papers.forEach(p => {
@@ -757,14 +753,14 @@
         <div class="card-sub">successfully evaluated</div>
       </div>
       <div class="card">
-        <div class="card-label">Pending / Rate-Limited</div>
-        <div class="card-value" style="color:${pendingCount > 0 ? 'var(--amber)' : 'var(--text)'}">${fmt(pendingCount)}</div>
-        <div class="card-sub">in video_queue.txt</div>
-      </div>
-      <div class="card">
         <div class="card-label">JSON Errors</div>
         <div class="card-value" style="color:${jsonErrors > 0 ? 'var(--amber)' : 'var(--green)'}">${fmt(jsonErrors)}</div>
         <div class="card-sub">fetch − scored</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Avg Score Today</div>
+        <div class="card-value" style="color:${avgScore >= 50 ? 'var(--green)' : avgScore >= 30 ? 'var(--amber)' : 'var(--red)'}">${avgScore !== null ? avgScore : '—'}</div>
+        <div class="card-sub">out of 100</div>
       </div>
     `;
 
@@ -926,10 +922,9 @@
     document.getElementById('updated-label').textContent = 'Loading…';
 
     try {
-      const [csArchive, newsArchive, metrics] = await Promise.all([
+      const [csArchive, newsArchive] = await Promise.all([
         fetch('https://agent-builder-daily.vercel.app/case_studies_archive.json').then(r => r.ok ? r.json() : []).catch(() => []),
         fetch('https://agent-builder-daily.vercel.app/news_archive.json').then(r => r.ok ? r.json() : []).catch(() => []),
-        fetch('/metrics.json').then(r => r.json()).catch(() => []),
       ]);
 
       const today = Array.isArray(csArchive) && csArchive.length ? csArchive[0] : null;
@@ -945,7 +940,7 @@
       }
 
       try { renderGeminiQC(allPapers); } catch(e) { console.error('renderGeminiQC', e); }
-      try { renderPipeline(today, dailyData, metrics); } catch(e) { console.error('renderPipeline', e); }
+      try { renderPipeline(today, dailyData); } catch(e) { console.error('renderPipeline', e); }
       try { renderQuality(papers); } catch(e) { console.error('renderQuality', e); }
       try { renderTrend(csArchive); } catch(e) { console.error('renderTrend', e); }
 
