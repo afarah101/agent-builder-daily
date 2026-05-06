@@ -49,7 +49,10 @@ BLOCKED_TAGS = [
     "hospital", "diagnosis", "radiology", "pathology", "genomic",
     "biomedical", "epidemiology", "pharmaceutical",
     # Policy / ethics / social science
-    "policy", "governance", "regulation", "ethics committee",
+    "ai policy", "ai governance", "ai regulation",
+    "data governance", "content moderation",
+    "electoral", "legislative", "regulatory compliance",
+    "ethics committee",
     "social media", "misinformation", "disinformation",
     "political", "election", "democracy", "hate speech",
     # Pure mathematics
@@ -63,7 +66,8 @@ BLOCKED_TAGS = [
     # Other irrelevant domains
     "education", "pedagogy", "curriculum", "e-learning",
     "agriculture", "crop", "livestock", "farming",
-    "legal", "court", "litigation", "law enforcement"
+    "legal proceedings", "court ruling", "litigation",
+    "law enforcement"
 ]
 
 def is_blocked(paper):
