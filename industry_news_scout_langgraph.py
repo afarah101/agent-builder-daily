@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os, json, re, feedparser, requests
+from pathlib import Path
 from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
 from bs4 import BeautifulSoup
@@ -139,6 +140,28 @@ def fetch_news(state):
     print("[DEBUG] Fetching industry news...")
     raw_articles = []
     seen = set()
+
+    # Cross-run deduplication: load known IDs from archive and active files
+    archive_path = Path("logs/archive.json")
+    if archive_path.exists():
+        with open(archive_path) as f:
+            archive = json.load(f)
+        for entry in archive:
+            for item in entry.get("news", []):
+                uid = item.get("id") or item.get("url", "")
+                if uid:
+                    seen.add(uid.strip())
+    for f in Path("logs").glob("news_*.json"):
+        if "archive" not in f.name:
+            try:
+                data = json.load(open(f))
+                for item in data.get("news", []):
+                    uid = item.get("id") or item.get("url", "")
+                    if uid:
+                        seen.add(uid.strip())
+            except Exception:
+                pass
+    print(f"[DEBUG] Cross-run dedup: {len(seen)} known news IDs loaded")
 
     for source in RSS_SOURCES:
         try:
