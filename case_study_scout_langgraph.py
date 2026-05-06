@@ -158,10 +158,22 @@ def fetch_papers(state):
         try:
             date_filter = "+AND+submittedDate:[" + cutoff_str + "+TO+99991231]"
             url = "http://export.arxiv.org/api/query?search_query=" + query + date_filter + "&start=0&max_results=15&sortBy=submittedDate&sortOrder=descending"
-            resp = requests.get(url, timeout=30)
-            if resp.status_code != 200:
-                print("[DEBUG] arXiv status: " + str(resp.status_code))
-                time.sleep(3)
+            RETRY_DELAYS = [10, 30, 60]
+            resp = None
+            for attempt, delay in enumerate(RETRY_DELAYS, 1):
+                try:
+                    resp = requests.get(url, timeout=45)
+                    resp.raise_for_status()
+                    break
+                except Exception as e:
+                    print(f"[ARXIV] Attempt {attempt} failed: {e}")
+                    if attempt < len(RETRY_DELAYS):
+                        print(f"[ARXIV] Retrying in {delay}s...")
+                        time.sleep(delay)
+                    else:
+                        print(f"[ARXIV] All {len(RETRY_DELAYS)} attempts failed — skipping query")
+                        resp = None
+            if resp is None:
                 continue
 
             root = ET.fromstring(resp.text)
