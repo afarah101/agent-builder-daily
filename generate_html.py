@@ -424,6 +424,11 @@ def generate_html():
 
     # --- Metadata ---
     slug_map = load_slug_map()
+    daily_hook = ""
+    hook_path = Path("logs/daily_hook.txt")
+    if hook_path.exists():
+        with open(hook_path) as f:
+            daily_hook = f.read().strip()
     cs_count = len(active_cs)
     news_count = len(active_news)
     generated_at = datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
@@ -1124,6 +1129,26 @@ def generate_html():
   </div>
 
   <div id="industry-news" class="panel">
+    """ + (f'''
+    <div style="
+        background: linear-gradient(135deg, #1a1d27, #22263a);
+        border: 1px solid #6366f1;
+        border-left: 4px solid #00ff88;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: #f1f5f9;
+        line-height: 1.5;
+    ">
+        <span style="color:#00ff88;font-weight:700;
+        letter-spacing:1px;font-size:10px">
+        ⚡ TODAY\'S SIGNAL</span>
+        <p style="margin-top:8px;font-family:\'Inter\',sans-serif;
+        font-size:14px;font-weight:500">{daily_hook}</p>
+    </div>
+    ''' if daily_hook else "") + """
     <div class="cards-grid">""" + render_news(news_data, slug_map) + """</div>
   </div>
 
