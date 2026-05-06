@@ -34,13 +34,24 @@ FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
 ARXIV_NS = "http://www.w3.org/2005/Atom"
 
 QUERIES = [
-    "ti:case+study+AND+cat:cs.AI",
-    "ti:deployment+AND+abs:real+world+AND+cat:cs.AI",
-    "abs:enterprise+AND+abs:implementation+AND+cat:cs.AI",
-    "ti:case+study+AND+cat:cs.LG",
-    "abs:production+system+AND+abs:AI+AND+cat:cs.CL",
-    "ti:real+world+AND+abs:machine+learning+AND+cat:cs.AI",
+    "ti:case+study+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.CV+OR+cat:cs.NI+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "ti:deployment+AND+abs:real+world+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.CV+OR+cat:cs.NI+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "abs:enterprise+AND+abs:implementation+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "abs:production+system+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.NI+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "ti:real+world+AND+abs:machine+learning+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CV+OR+cat:cs.NI)",
+    "abs:automation+AND+abs:large+language+model+AND+(cat:cs.AI+OR+cat:cs.CL+OR+cat:cs.SE+OR+cat:cs.DC)",
 ]
+
+BLOCKED_TAGS = [
+    "healthcare", "medical", "clinical", "drug", "patient",
+    "policy", "governance", "regulation", "ethics committee",
+    "mathematics", "topology", "algebraic", "theorem", "proof",
+    "biology", "chemistry", "physics", "neuroscience"
+]
+
+def is_blocked(paper):
+    text = (paper.get("title", "") + " " + paper.get("abstract", "")).lower()
+    return any(tag in text for tag in BLOCKED_TAGS)
 
 UNIVERSITIES = [
     "Stanford", "Berkeley", "MIT", "Carnegie Mellon", "Toronto",
@@ -234,6 +245,9 @@ def score_papers(state):
     for i in range(limit):
         paper = papers[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + paper["title"][:60])
+        if is_blocked(paper):
+            print(f"[FILTER] Blocked irrelevant paper: {paper.get('title', '')[:60]}")
+            continue
         paper_block = (
             "Title: " + paper["title"] + "\n"
             "Authors: " + ", ".join(paper["authors"]) + "\n"
