@@ -173,6 +173,23 @@ def editor_node(state: VideoState):
     output["url"] = state["url"]
     output["pub_date"] = datetime.now().strftime("%Y-%m-%d")
 
+    # Always use real metadata, never LLM-generated
+    output["title"] = state["metadata"].get("title", output.get("title", "Untitled"))
+    output["authors"] = [state["metadata"].get("author", "Unknown")]
+    output["institution"] = state["metadata"].get("channel", "YouTube")
+
+    # Force it_breakdown to always be a string
+    if isinstance(output.get("it_breakdown"), dict):
+        output["it_breakdown"] = " ".join(str(v) for v in output["it_breakdown"].values())
+    elif not isinstance(output.get("it_breakdown"), str):
+        output["it_breakdown"] = str(output.get("it_breakdown", ""))
+
+    # Same for monetisation
+    if isinstance(output.get("monetisation"), dict):
+        output["monetisation"] = " ".join(str(v) for v in output["monetisation"].values())
+    elif not isinstance(output.get("monetisation"), str):
+        output["monetisation"] = str(output.get("monetisation", ""))
+
     if is_elite:
         output["is_evergreen"] = True
 
