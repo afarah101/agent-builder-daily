@@ -154,7 +154,7 @@ def render_case_studies(data, slug_map):
   <p class="card-summary">{esc(cs.get('summary',''))}</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">{esc(cs.get('how_to_apply',''))}</p>
+    <p class="insight-text">{esc(cs.get('it_breakdown','') or cs.get('how_to_apply',''))}</p>
   </div>
   <div class="insight-block monetisation">
     <div class="insight-label">BUSINESS OPPORTUNITY</div>
@@ -426,7 +426,7 @@ def generate_html():
     slug_map = load_slug_map()
     cs_count = len(active_cs)
     news_count = len(active_news)
-    generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
+    generated_at = datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
 
     html = """<!DOCTYPE html>
 <html lang="en">
