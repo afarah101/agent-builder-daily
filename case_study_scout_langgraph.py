@@ -234,49 +234,57 @@ def score_papers(state):
     for i in range(limit):
         paper = papers[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + paper["title"][:60])
-        prompt = (
-            "You are a strict academic AI research analyst. Your only job is to evaluate the paper below and extract information "
-            "that is explicitly and directly stated in the abstract. You must never infer, assume, speculate, or fabricate anything.\n\n"
-            "STRICT GUARDRAILS:\n"
-            "- Only use facts explicitly present in the abstract provided\n"
-            "- Never invent statistics, company names, outcomes, or results\n"
-            "- Never extrapolate or imply things beyond what the authors state\n"
-            "- If the paper has not been explicitly tested in production, do not imply it has\n"
-            "- If the abstract mentions limitations or caveats, reflect them in your scores\n"
-            "- Do not add any text outside the JSON object\n\n"
-            "PAPER:\n"
+        paper_block = (
             "Title: " + paper["title"] + "\n"
             "Authors: " + ", ".join(paper["authors"]) + "\n"
             "Institution: " + paper["institution"] + "\n"
             "Published: " + paper["pub_date"] + "\n"
-            "Abstract: " + paper["abstract"] + "\n\n"
-            "SCORING - score each 0 to 25 based only on what is stated in the abstract:\n"
-            "1. real_world_impact: 25=clear measurable outcomes at scale explicitly stated (e.g. 40% reduction, 10k users), "
-            "15=some metrics mentioned but limited scale, 5=theoretical only with no results\n"
-            "2. ai_maturity: 25=explicitly states live production deployment with real users, "
-            "15=tested in pilot or prototype with real data, 5=simulation or concept only\n"
-            "3. monetisation_potential: 25=clear commercial product opportunity explicitly demonstrated, "
-            "15=adaptable to business use with some evidence, 5=purely academic no business application\n"
-            "IMPORTANT: Use the full range 0-25. Most papers should score between 5-20. "
-            "Only score 5 if the abstract explicitly states theoretical/simulation only.\n\n"
-            "OUTPUT FIELDS:\n"
-            "- summary: Exactly 2 sentences. Sentence 1: the specific problem and AI method. Sentence 2: the result as stated by the authors. Nothing not in the abstract.\n"
-            "- it_breakdown: Exactly 2 sentences for a senior IT Engineer with 5 years helpdesk experience who runs an AI automation consultancy for UK SMBs. "
-            "Sentence 1: specific practical application in IT operations or helpdesk context. "
-            "Sentence 2: how to package this as an AI automation service for a UK SMB client.\n"
-            "- monetisation: Exactly 2 sentences. Concrete business opportunity based strictly on what the paper demonstrates.\n"
-            "- relevance_tag: Choose exactly one: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, Other\n"
-            "- author_built_product: true only if abstract explicitly states authors deployed a real product. Otherwise false.\n\n"
-            "- score_reasoning: Exactly 3 sentences. Sentence 1: why real_world_impact scored as it did. Sentence 2: why ai_maturity scored as it did. Sentence 3: why monetisation_potential scored as it did. Base only on what is explicitly in the abstract.\n\n"
-            "Return JSON only. No explanation. No markdown. No preamble.\n"
-            '{"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "summary": "", "it_breakdown": "", "monetisation": "", "relevance_tag": "", "author_built_product": false, "score_reasoning": ""}'
+            "Abstract: " + paper["abstract"]
+        )
+        score_prompt = (
+            "You are a Senior IT consultant and AI automation specialist advising UK SMBs. "
+            "Score this research paper on three dimensions based ONLY on what is explicitly stated in the abstract. "
+            "Never invent metrics, outcomes, or claims not in the abstract. If limitations are stated, lower the score.\n\n"
+            + paper_block + "\n\n"
+            "SCORING:\n"
+            "1. real_world_impact (NOVELTY, 0-33): How genuinely new is this approach? "
+            "33=clear breakthrough, explicit advance on SOTA with evidence; "
+            "20=meaningful improvement on existing methods; "
+            "5=incremental or entirely derivative work\n"
+            "2. ai_maturity (IT_RELEVANCE, 0-33): How directly applicable to IT ops, helpdesk, or SMB automation? "
+            "33=drop-in for IT workflows, explicit integration path; "
+            "20=adaptable with moderate engineering effort; "
+            "5=purely theoretical, no clear IT application\n"
+            "3. monetisation_potential (VALUE_90_DAYS, 0-34): Could a UK IT consultant bill for this within 90 days? "
+            "34=immediate billable service, clear client pitch today; "
+            "20=viable in 3-6 months with packaging effort; "
+            "5=research-only, no near-term commercial path\n\n"
+            "- relevance_tag: exactly one of: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, Other\n"
+            "- author_built_product: true only if abstract explicitly states a deployed product with real users. Otherwise false.\n"
+            "- score_reasoning: Exactly 3 sentences, one per dimension, grounded only in the abstract.\n"
+            "- gemini_eval_status: always set to \"pending\"\n\n"
+            "Return JSON only. No markdown. No preamble.\n"
+            '{"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "relevance_tag": "", "author_built_product": false, "score_reasoning": "", "gemini_eval_status": "pending"}'
+        )
+        summary_prompt = (
+            "You are writing for a UK IT consultant who runs an AI automation practice for SMBs. "
+            "Based strictly on the abstract below, generate three fields. Never invent facts not in the abstract.\n\n"
+            + paper_block + "\n\n"
+            "- summary: Exactly 2 sentences. Sentence 1: the specific problem and AI method used. Sentence 2: the key result as stated by the authors.\n"
+            "- it_breakdown: Exactly 2 sentences. Sentence 1: how this maps to a real IT ops or helpdesk problem your clients face. "
+            "Sentence 2: how you would pitch this as a billable automation service to a UK SMB.\n"
+            "- monetisation: Exactly 2 sentences. The concrete billable opportunity this creates for an AI automation consultant.\n\n"
+            "Return JSON only. No markdown. No preamble.\n"
+            '{"summary": "", "it_breakdown": "", "monetisation": ""}'
         )
         max_retries = 3
+
+        # --- Scoring prompt ---
         g = None
         last_text = ""
         for attempt in range(max_retries):
             try:
-                text = groq_complete([{"role": "user", "content": prompt}], max_tokens=600)
+                text = groq_complete([{"role": "user", "content": score_prompt}], max_tokens=400)
                 last_text = text
                 if text is None:
                     continue
@@ -284,13 +292,33 @@ def score_papers(state):
                 g = json.loads(clean)
                 break
             except json.JSONDecodeError:
-                print(f"[DEBUG] JSON parse error on attempt {attempt+1}/3 — retrying...")
+                print(f"[DEBUG] Score JSON parse error on attempt {attempt+1}/3 — retrying...")
                 time.sleep(2)
                 continue
         if g is None:
-            print(f"[DEBUG] All retries failed for: {paper['title'][:60]}")
+            print(f"[DEBUG] Score retries exhausted for: {paper['title'][:60]}")
             print(f"[DEBUG] Raw output: {last_text[:200]}")
             continue
+
+        # --- Summary prompt ---
+        s = None
+        for attempt in range(max_retries):
+            try:
+                text = groq_complete([{"role": "user", "content": summary_prompt}], max_tokens=350)
+                if text is None:
+                    continue
+                clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+                s = json.loads(clean)
+                break
+            except json.JSONDecodeError:
+                print(f"[DEBUG] Summary JSON parse error on attempt {attempt+1}/3 — retrying...")
+                time.sleep(2)
+                continue
+        if s is None:
+            print(f"[DEBUG] Summary retries exhausted — using empty fields for: {paper['title'][:60]}")
+            s = {"summary": "", "it_breakdown": "", "monetisation": ""}
+
+        g.update(s)
         if i < 5:
             eval_result = gemini_evaluate(paper["abstract"], g)
             if eval_result.get("hallucination_detected"):
@@ -314,6 +342,7 @@ def score_papers(state):
             "relevance_tag": g.get("relevance_tag", "Other"),
             "author_built_product": g.get("author_built_product", False),
             "score_reasoning": g.get("score_reasoning", ""),
+            "gemini_eval_status": g.get("gemini_eval_status", "pending"),
             "eval_verdict": eval_verdict,
             "eval_flagged": eval_flagged,
         })

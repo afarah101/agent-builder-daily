@@ -223,11 +223,23 @@ def classify_news(state):
         article = articles[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + article["title"][:60])
         prompt = (
-            "Classify this AI industry news item. Be concise.\n"
+            "You are a UK IT consultant scoring AI industry news for immediate business relevance. "
+            "Score this item on three dimensions, then compute relevance_score as their sum.\n\n"
             "Title: " + article["title"] + "\n"
             "Source: " + article["source"] + "\n"
             "Content: " + article["summary_raw"][:300] + "\n\n"
-            'Return JSON only: {"summary": "2 sentences", "enterprise_use": "2 sentences", "relevance_score": 8, "relevance_signal": "high", "category": "Product Launch"}'
+            "SCORING:\n"
+            "1. recency (0-4): 4=breaking/today, 3=this week, 2=this month, 1=older\n"
+            "2. stack_impact (0-3): 3=changes core AI stack (model release, API breaking change, new framework), "
+            "2=significant tooling update, 1=minor or informational\n"
+            "3. action_signal (0-3): 3=act this week (deploy, migrate, test), 2=schedule a review, 1=monitor only\n"
+            "relevance_score = recency + stack_impact + action_signal  (0-10)\n\n"
+            "- summary: 2 sentences. What happened and why it matters to an IT practitioner.\n"
+            "- enterprise_use: 2 sentences. Specific use case for a UK SMB IT team or MSP.\n"
+            "- relevance_signal: 'high' if score >= 7, 'medium' if 4-6, 'low' if <= 3\n"
+            "- category: one of: Model Release, API Update, Product Launch, Research, Regulation, Tools, Other\n\n"
+            "Return JSON only. No markdown.\n"
+            '{"summary": "", "enterprise_use": "", "relevance_score": 0, "relevance_signal": "medium", "category": "Other"}'
         )
         try:
             text = groq_complete([{"role": "user", "content": prompt}], max_tokens=250)
@@ -289,7 +301,30 @@ def save_and_archive(state):
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(archive, f, indent=2, ensure_ascii=False)
     print("Saved " + str(len(state["classified_news"])) + " news items.")
+    generate_daily_hook(state["classified_news"])
     return state
+
+def generate_daily_hook(classified_news):
+    """Write a one-line punchy hook from today's top 3 items to logs/daily_hook.txt."""
+    if not classified_news:
+        return
+    top = sorted(classified_news, key=lambda x: x.get("relevance_score", 0), reverse=True)[:3]
+    titles = [t["title"] for t in top]
+    prompt = (
+        "You are a UK AI newsletter writer. Based on these top AI news headlines, write one punchy hook sentence "
+        "(max 25 words) that would make a busy IT consultant stop scrolling. "
+        "No fluff. No hashtags. No quotes around the result.\n\n"
+        "Headlines:\n" + "\n".join(f"- {t}" for t in titles) + "\n\n"
+        "Return the hook sentence only."
+    )
+    try:
+        hook = groq_complete([{"role": "user", "content": prompt}], max_tokens=60)
+        os.makedirs("logs", exist_ok=True)
+        with open("logs/daily_hook.txt", "w") as f:
+            f.write(hook.strip())
+        print(f"[DEBUG] Daily hook saved: {hook.strip()}")
+    except Exception as e:
+        print(f"[DEBUG] Hook generation failed: {e}")
 
 def build_graph():
     g = StateGraph(NewsScoutState)
