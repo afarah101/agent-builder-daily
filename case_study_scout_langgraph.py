@@ -44,10 +44,26 @@ QUERIES = [
 ]
 
 BLOCKED_TAGS = [
+    # Healthcare / medical
     "healthcare", "medical", "clinical", "drug", "patient",
+    "hospital", "diagnosis", "radiology", "pathology", "genomic",
+    "biomedical", "epidemiology", "pharmaceutical",
+    # Policy / ethics / social science
     "policy", "governance", "regulation", "ethics committee",
-    "mathematics", "topology", "algebraic", "theorem", "proof",
-    "biology", "chemistry", "physics", "neuroscience"
+    "social media", "misinformation", "disinformation",
+    "political", "election", "democracy", "hate speech",
+    # Pure mathematics
+    "topology", "algebraic", "theorem", "proof", "conjecture",
+    "manifold", "homology", "sheaf", "lattice theory",
+    # Natural sciences
+    "biology", "chemistry", "physics", "neuroscience",
+    "quantum", "molecular", "protein", "genomics",
+    "climate", "meteorology", "geospatial", "reservoir",
+    "seismic", "geological", "hydrology",
+    # Other irrelevant domains
+    "education", "pedagogy", "curriculum", "e-learning",
+    "agriculture", "crop", "livestock", "farming",
+    "legal", "court", "litigation", "law enforcement"
 ]
 
 def is_blocked(paper):
@@ -256,42 +272,47 @@ def score_papers(state):
             "Published: " + paper["pub_date"] + "\n"
             "Abstract: " + paper["abstract"]
         )
-        score_prompt = (
-            "You are a Senior IT consultant and AI automation specialist advising UK SMBs. "
-            "Score this research paper on three dimensions based ONLY on what is explicitly stated in the abstract. "
-            "Never invent metrics, outcomes, or claims not in the abstract. If limitations are stated, lower the score.\n\n"
-            + paper_block + "\n\n"
-            "SCORING:\n"
-            "1. real_world_impact (NOVELTY, 0-33): How genuinely new is this approach? "
-            "33=clear breakthrough, explicit advance on SOTA with evidence; "
-            "20=meaningful improvement on existing methods; "
-            "5=incremental or entirely derivative work\n"
-            "2. ai_maturity (IT_RELEVANCE, 0-33): How directly applicable to IT ops, helpdesk, or SMB automation? "
-            "33=drop-in for IT workflows, explicit integration path; "
-            "20=adaptable with moderate engineering effort; "
-            "5=purely theoretical, no clear IT application\n"
-            "3. monetisation_potential (VALUE_90_DAYS, 0-34): Could a UK IT consultant bill for this within 90 days? "
-            "34=immediate billable service, clear client pitch today; "
-            "20=viable in 3-6 months with packaging effort; "
-            "5=research-only, no near-term commercial path\n\n"
-            "- relevance_tag: exactly one of: AI Agents, LLMs, Automation, Safety, Computer Vision, NLP, MLOps, Healthcare AI, Other\n"
-            "- author_built_product: true only if abstract explicitly states a deployed product with real users. Otherwise false.\n"
-            "- score_reasoning: Exactly 3 sentences, one per dimension, grounded only in the abstract.\n"
-            "- gemini_eval_status: always set to \"pending\"\n\n"
-            "Return JSON only. No markdown. No preamble.\n"
-            '{"real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "relevance_tag": "", "author_built_product": false, "score_reasoning": "", "gemini_eval_status": "pending"}'
-        )
-        summary_prompt = (
-            "You are writing for a UK IT consultant who runs an AI automation practice for SMBs. "
-            "Based strictly on the abstract below, generate three fields. Never invent facts not in the abstract.\n\n"
-            + paper_block + "\n\n"
-            "- summary: Exactly 2 sentences. Sentence 1: the specific problem and AI method used. Sentence 2: the key result as stated by the authors.\n"
-            "- it_breakdown: Exactly 2 sentences. Sentence 1: how this maps to a real IT ops or helpdesk problem your clients face. "
-            "Sentence 2: how you would pitch this as a billable automation service to a UK SMB.\n"
-            "- monetisation: Exactly 2 sentences. The concrete billable opportunity this creates for an AI automation consultant.\n\n"
-            "Return JSON only. No markdown. No preamble.\n"
-            '{"summary": "", "it_breakdown": "", "monetisation": ""}'
-        )
+        score_prompt = f"""You are scoring AI research papers for a daily briefing read by IT engineers and IT consultants in the UK. Your reader manages real infrastructure: Microsoft 365, Google Workspace, JumpCloud, Okta, AWS, Azure, endpoint management, SSO, security tooling.
+
+They are NOT machine learning researchers. They are NOT in healthcare, finance, or academia. If a paper is not directly relevant to IT infrastructure, software engineering, AI deployment, or automation — score it low.
+
+Score on THREE criteria:
+
+NOVELTY (0-33): Would an IT engineer forward this to a colleague saying "have you seen this?" Does it reveal something surprising about tools or systems they use?
+Pure academic novelty with no IT angle = 0-5.
+
+IT_RELEVANCE (0-33): Does this directly affect how IT engineers work? Score high for: LLM APIs, agentic systems, MLOps, DevOps automation, security vulnerabilities, cloud infrastructure, endpoint management, SaaS tooling.
+Score 0 for: medical imaging, geological modelling, social science, pure NLP benchmarks with no deployment angle.
+
+VALUE_90_DAYS (0-34): Could an IT engineer or consultant use this to build something, automate something, flag a risk, or propose a service to a client within 90 days?
+"Could theoretically" = 0. Specific and actionable = 30+.
+Be brutal — most papers score 0-10 here.
+
+IMPORTANT: If total score is below 35, set "low_signal": true in the output.
+
+Return JSON only. No markdown. No preamble.
+{{"recency_score": 25, "real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "total_score": 0, "score_reasoning": "", "relevance_tag": "", "gemini_eval_status": "pending", "low_signal": false}}
+
+Paper abstract:
+{paper_block}"""
+        summary_prompt = f"""You are writing for IT engineers and IT consultants in the UK. Plain English only. No academic language. No jargon.
+
+Write for someone who manages cloud infrastructure and wants to know if this research affects their work or creates an opportunity.
+
+SUMMARY: 2-3 sentences. What problem does it solve? What did they build? What was the result? If it's not relevant to IT work, say so in one sentence.
+
+HOW TO APPLY THIS (it_breakdown): Specific and direct.
+Either:
+- "If you manage X, here is what to do: step 1, step 2, step 3"
+- "This flags a risk: if your org uses X, check Y immediately"
+- "Not directly applicable to IT infrastructure work"
+Never vague. Never "could be used for". Max 3 sentences.
+
+Return JSON only. No markdown. No preamble.
+{{"summary": "", "it_breakdown": ""}}
+
+Abstract:
+{paper_block}"""
         max_retries = 3
 
         # --- Scoring prompt ---
@@ -334,6 +355,9 @@ def score_papers(state):
             s = {"summary": "", "it_breakdown": "", "monetisation": ""}
 
         g.update(s)
+        if g.get("low_signal") and g.get("total_score", 0) < 35:
+            print(f"[FILTER] Low signal paper dropped: {paper['title'][:60]}")
+            continue
         if i < 5:
             eval_result = gemini_evaluate(paper["abstract"], g)
             if eval_result.get("hallucination_detected"):

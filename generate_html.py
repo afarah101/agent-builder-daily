@@ -156,10 +156,6 @@ def render_case_studies(data, slug_map):
     <div class="insight-label">HOW TO APPLY THIS</div>
     <p class="insight-text">{esc(cs.get('it_breakdown','') or cs.get('how_to_apply',''))}</p>
   </div>
-  <div class="insight-block monetisation">
-    <div class="insight-label">BUSINESS OPPORTUNITY</div>
-    <p class="insight-text">{esc(cs.get('monetisation',''))}</p>
-  </div>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
