@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import os, json, re, argparse
+import os, json, re, time
+from datetime import datetime
 from typing import TypedDict, Annotated
 import operator
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -9,8 +10,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from pytube import YouTube
-
 ELITE_CHANNELS = [
     "Andrej Karpathy",
     "DeepLearning.AI",
@@ -19,6 +18,24 @@ ELITE_CHANNELS = [
     "Google DeepMind",
     "Two Minute Papers"
 ]
+
+QUEUE_FILE = "video_queue.json"
+MAX_TRANSCRIPT_CHARS = 40000  # ~15,000 tokens
+
+def groq_call(**kwargs):
+    """Try Key 1 then Key 2 on 429. Raises RuntimeError if both exhausted."""
+    keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
+    keys = [k for k in keys if k]
+    for i, key in enumerate(keys):
+        try:
+            client = Groq(api_key=key)
+            return client.chat.completions.create(**kwargs)
+        except Exception as e:
+            if "429" in str(e):
+                print(f"[VIDEO] Key {i+1} rate limited — trying next key...")
+                continue
+            raise
+    raise RuntimeError("[VIDEO] All Groq keys rate limited — deferring video")
 
 class VideoState(TypedDict):
     url: str
@@ -38,15 +55,20 @@ def fetch_metadata_and_transcript(state: VideoState):
     video_id = get_video_id(state["url"])
     if not video_id:
         raise ValueError("Invalid YouTube URL")
-    
+
     print(f"[DEBUG] Fetching metadata and transcript for {video_id}...")
-    metadata = {"title": "Unknown", "author": "Unknown"}
+
+    metadata = {"title": "Unknown", "author": "Unknown", "channel": "Unknown"}
     try:
-        yt = YouTube(state["url"])
-        metadata["title"] = yt.title
-        metadata["author"] = yt.author
+        import urllib.request
+        api_url = f"https://www.youtube.com/oembed?url={state['url']}&format=json"
+        with urllib.request.urlopen(api_url, timeout=5) as r:
+            data = json.loads(r.read())
+            metadata["title"] = data.get("title", "Unknown")
+            metadata["author"] = data.get("author_name", "Unknown")
+            metadata["channel"] = data.get("author_name", "Unknown")
     except Exception as e:
-        print(f"[DEBUG] Metadata error: {e}")
+        print(f"[DEBUG] Metadata fallback error: {e}")
 
     try:
         try:
@@ -55,7 +77,11 @@ def fetch_metadata_and_transcript(state: VideoState):
         except (AttributeError, TypeError):
             transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
             transcript = " ".join([t["text"] for t in transcript_list])
-            
+
+        if len(transcript) > MAX_TRANSCRIPT_CHARS:
+            transcript = transcript[:MAX_TRANSCRIPT_CHARS]
+            print(f"[DEBUG] Transcript truncated to {MAX_TRANSCRIPT_CHARS} chars")
+
         return {"video_id": video_id, "transcript": transcript, "metadata": metadata}
     except Exception as e:
         print(f"[DEBUG] Transcript error: {e}")
@@ -64,19 +90,17 @@ def fetch_metadata_and_transcript(state: VideoState):
 def bouncer_node(state: VideoState):
     if state["transcript"].startswith("ERROR"):
         return {"bouncer_verdict": "FAIL"}
-        
+
     author = state.get("metadata", {}).get("author", "")
     is_elite = any(elite in author for elite in ELITE_CHANNELS)
-    
-    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-    
     if is_elite:
-        rule = "This creator is on the ELITE WATCHLIST. Focus the summary on Foundational Principles and technical innovations."
-    else:
-        rule = (
-            "This is an unknown creator. Strictly reject (FAIL) anything that is primarily marketing fluff, "
-            "engagement farming, 'how to make money' content, or low-technical overview."
-        )
+        print(f"[DEBUG] Elite creator detected: {author} — auto-PASS")
+        return {"bouncer_verdict": "PASS"}
+
+    rule = (
+        "This is an unknown creator. Strictly reject (FAIL) anything that is primarily marketing fluff, "
+        "engagement farming, 'how to make money' content, or low-technical overview."
+    )
 
     prompt = (
         "You are a Senior Tech Scout filtering for deep technical AI architecture. "
@@ -85,9 +109,9 @@ def bouncer_node(state: VideoState):
         "Reply ONLY with PASS or FAIL.\n\n"
         f"Transcript: {state['transcript'][:8000]}"
     )
-    
+
     print(f"[DEBUG] Running Bouncer (Elite: {is_elite})...")
-    resp = client.chat.completions.create(
+    resp = groq_call(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=10,
@@ -101,10 +125,9 @@ def check_verdict(state: VideoState):
     return "fail"
 
 def analyst_node(state: VideoState):
-    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     author = state.get("metadata", {}).get("author", "")
     is_elite = any(elite in author for elite in ELITE_CHANNELS)
-    
+
     persona = "Senior Tech Analyst"
     if is_elite:
         persona = "Principal AI Researcher"
@@ -115,9 +138,9 @@ def analyst_node(state: VideoState):
         "Focus on 'how it works' rather than 'what it can do'.\n\n"
         f"Transcript: {state['transcript'][:12000]}"
     )
-    
+
     print("[DEBUG] Running Analyst...")
-    resp = client.chat.completions.create(
+    resp = groq_call(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=1000,
@@ -125,7 +148,6 @@ def analyst_node(state: VideoState):
     return {"analysis": resp.choices[0].message.content.strip()}
 
 def editor_node(state: VideoState):
-    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     author = state.get("metadata", {}).get("author", "")
     is_elite = any(elite in author for elite in ELITE_CHANNELS)
     is_karpathy = "Karpathy" in author
@@ -139,9 +161,9 @@ def editor_node(state: VideoState):
         f"Analysis: {state['analysis']}\n\n"
         "JSON only."
     )
-    
+
     print("[DEBUG] Running Editor...")
-    resp = client.chat.completions.create(
+    resp = groq_call(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"}
@@ -150,12 +172,11 @@ def editor_node(state: VideoState):
     output["source_type"] = "youtube_agent"
     output["url"] = state["url"]
     output["pub_date"] = datetime.now().strftime("%Y-%m-%d")
-    
+
     if is_elite:
         output["is_evergreen"] = True
-        
+
     if is_karpathy:
-        # Karpathy Clause: floor of 90
         if output.get("total_score", 0) < 90:
             output["total_score"] = 90
             output["score_reasoning"] = "[KARPATHY CLAUSE] High-signal foundational content automatically prioritized. " + output.get("score_reasoning", "")
@@ -164,15 +185,15 @@ def editor_node(state: VideoState):
 
 def build_graph():
     builder = StateGraph(VideoState)
-    
+
     builder.add_node("fetch", fetch_metadata_and_transcript)
     builder.add_node("bouncer", bouncer_node)
     builder.add_node("analyst", analyst_node)
     builder.add_node("editor", editor_node)
-    
+
     builder.add_edge(START, "fetch")
     builder.add_edge("fetch", "bouncer")
-    
+
     builder.add_conditional_edges(
         "bouncer",
         check_verdict,
@@ -181,46 +202,92 @@ def build_graph():
             "fail": END
         }
     )
-    
+
     builder.add_edge("analyst", "editor")
     builder.add_edge("editor", END)
-    
+
     return builder.compile()
 
-if __name__ == "__main__":
-    from datetime import datetime
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--url", required=True, help="YouTube video URL")
-    args = parser.parse_args()
-    
+def load_queue():
+    if os.path.exists(QUEUE_FILE):
+        with open(QUEUE_FILE) as f:
+            return json.load(f)
+    return []
+
+def save_queue(queue):
+    with open(QUEUE_FILE, "w") as f:
+        json.dump(queue, f, indent=2)
+
+def run_queue():
+    queue = load_queue()
+    if not queue:
+        print("[VIDEO] Queue is empty — nothing to process")
+        return
+
+    pending = [v for v in queue if v.get("status") == "pending"]
+    print(f"[VIDEO] {len(pending)} pending videos in queue")
+
     graph = build_graph()
-    
-    print(f"--- Starting Video Scout for: {args.url} ---")
-    initial_state = {"url": args.url, "transcript": "", "analysis": "", "output": {}, "bouncer_verdict": ""}
-    
-    # Run the graph
-    result = graph.invoke(initial_state)
-    
-    if "FAIL" in result.get("bouncer_verdict", ""):
-        print("Video rejected: Shill content detected")
-    elif result.get("output"):
-        print("\n[RESULT] High-signal content found.")
-        out_data = result["output"]
-        video_id = result["video_id"]
-        today = datetime.now().strftime("%Y%m%d")
-        filename = f"v_{today}_{video_id}.json"
-        
-        # Ensure we write as a single case study wrapped in the standard daily format
-        # or just as a single study if the generator can handle it.
-        # Actually, the user asked for individual files in case_studies/.
-        # Standard daily files look like {"case_studies": [...]}.
-        final_output = {"case_studies": [out_data]}
-        
-        os.makedirs("case_studies", exist_ok=True)
-        filepath = os.path.join("case_studies", filename)
-        with open(filepath, "w") as f:
-            json.dump(final_output, f, indent=2)
-            
-        print(f"Saved to {filepath}")
-    
-    print("\n--- Complete ---")
+    processed = 0
+    MAX_PER_RUN = 5
+
+    for video in queue:
+        if video.get("status") != "pending":
+            continue
+        if processed >= MAX_PER_RUN:
+            print(f"[VIDEO] Cap reached ({MAX_PER_RUN} videos) — stopping")
+            break
+
+        url = video["url"]
+        print(f"\n[VIDEO] Processing: {url}")
+
+        try:
+            initial_state = {
+                "url": url,
+                "transcript": "",
+                "analysis": "",
+                "output": {},
+                "bouncer_verdict": "",
+                "metadata": {}
+            }
+            result = graph.invoke(initial_state)
+
+            if "FAIL" in result.get("bouncer_verdict", ""):
+                print(f"[VIDEO] Rejected by Bouncer: {url}")
+                video["status"] = "rejected"
+            elif result.get("output"):
+                out_data = result["output"]
+                video_id = result.get("video_id", get_video_id(url))
+                today = datetime.now().strftime("%Y%m%d")
+                filename = f"v_{today}_{video_id}.json"
+                final_output = {"case_studies": [out_data]}
+                os.makedirs("case_studies", exist_ok=True)
+                filepath = os.path.join("case_studies", filename)
+                with open(filepath, "w") as f:
+                    json.dump(final_output, f, indent=2)
+                print(f"[VIDEO] Saved: {filepath}")
+                video["status"] = "processed"
+                video["processed_date"] = datetime.now().strftime("%Y-%m-%d")
+            else:
+                video["status"] = "error"
+                video["error"] = "No output produced"
+
+        except RuntimeError as e:
+            print(f"[VIDEO] Rate limited — stopping run, will retry next time")
+            save_queue(queue)
+            return
+        except Exception as e:
+            print(f"[VIDEO] Error processing {url}: {e}")
+            video["status"] = "error"
+            video["error"] = str(e)
+
+        save_queue(queue)
+        if processed < MAX_PER_RUN - 1:
+            print("[VIDEO] Waiting 45s before next video to avoid rate limits...")
+            time.sleep(45)
+        processed += 1
+
+    print(f"\n[VIDEO] Run complete. Processed: {processed} videos")
+
+if __name__ == "__main__":
+    run_queue()
