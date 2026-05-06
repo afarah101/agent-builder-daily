@@ -53,10 +53,10 @@ BLOCKED_TAGS = [
     "data governance", "content moderation",
     "electoral", "legislative", "regulatory compliance",
     "ethics committee",
-    "social media", "misinformation", "disinformation",
-    "political", "election", "democracy", "hate speech",
+    "social media manipulation", "social media toxicity", "misinformation", "disinformation",
+    "political science", "political party", "political campaign", "election", "democracy", "hate speech",
     # Pure mathematics
-    "topology", "algebraic", "theorem", "proof", "conjecture",
+    "topology", "algebraic", "theorem", "mathematical proof", "proof of theorem", "proof of lemma", "conjecture",
     "manifold", "homology", "sheaf", "lattice theory",
     # Natural sciences
     "biology", "chemistry", "physics", "neuroscience",
