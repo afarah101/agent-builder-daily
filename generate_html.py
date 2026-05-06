@@ -1121,6 +1121,29 @@ def generate_html():
   </div>
 </div>
 
+<div class="search-bar-wrap" style="
+    padding: 12px 0 0;
+    max-width: 400px;
+">
+    <input
+        type="text"
+        id="scout-search"
+        placeholder="Search case studies and news..."
+        oninput="filterCards(this.value)"
+        style="
+            width: 100%;
+            background: #1a1d27;
+            border: 1px solid #2d2d2d;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+        "
+    />
+</div>
+
 """ + generate_email_capture() + """
 
 <div class="content">
@@ -1173,6 +1196,18 @@ def generate_html():
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     btn.classList.add('active');
+    const search = document.getElementById('scout-search');
+    if (search) { search.value = ''; filterCards(''); }
+  }
+
+  function filterCards(query) {
+    const q = query.toLowerCase().trim();
+    const activePanel = document.querySelector('.panel.active');
+    if (!activePanel) return;
+    const cards = activePanel.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.style.display = (!q || card.innerText.toLowerCase().includes(q)) ? '' : 'none';
+    });
   }
 
   function copyMarkdown(btn) {
