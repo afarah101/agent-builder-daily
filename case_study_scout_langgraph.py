@@ -329,13 +329,14 @@ def score_papers(state):
             eval_verdict = "pending"
             eval_flagged = False
             eval_result = {}
-        total = paper["recency_score"] + g.get("real_world_impact", 0) + g.get("ai_maturity", 0) + g.get("monetisation_potential", 0)
+        total = g.get("real_world_impact", 0) + g.get("ai_maturity", 0) + g.get("monetisation_potential", 0)
         scored.append({
             **paper,
             "real_world_impact": g.get("real_world_impact", 0),
             "ai_maturity": g.get("ai_maturity", 0),
             "monetisation_potential": g.get("monetisation_potential", 0),
             "total_score": total,
+            "recency_score": 25,
             "summary": g.get("summary", ""),
             "it_breakdown": g.get("it_breakdown", ""),
             "monetisation": g.get("monetisation", ""),
