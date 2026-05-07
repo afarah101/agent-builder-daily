@@ -367,7 +367,7 @@ def build_graph():
 def run_industry_news_scout():
     print("[DEBUG] Starting Industry News Scout...")
     today = datetime.now().strftime("%Y-%m-%d")
-    langfuse.update_current_trace(
+    langfuse.update_current_span(
         input={"date": today, "sources": len(RSS_SOURCES) + len(SCRAPE_SOURCES)},
         tags=["news", "rss", "automated"],
         metadata={"max_items": MAX_ITEMS, "max_per_source": MAX_PER_SOURCE},
@@ -378,7 +378,7 @@ def run_industry_news_scout():
         config={"configurable": {"thread_id": "news-" + today}},
     )
     classified = result.get("classified_news", [])
-    langfuse.update_current_trace(
+    langfuse.update_current_span(
         output={"items_saved": len(classified), "date": today},
     )
     print("[DEBUG] Complete")
