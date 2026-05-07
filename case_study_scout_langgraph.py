@@ -481,7 +481,7 @@ def build_graph():
 def run_case_study_scout():
     print("[DEBUG] Starting Case Study Scout (arXiv)...")
     today = datetime.now().strftime("%Y-%m-%d")
-    langfuse.update_current_trace(
+    langfuse.update_current_span(
         input={"date": today, "source": "arxiv"},
         tags=["arxiv", "case-studies", "automated"],
         metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS},
@@ -492,7 +492,7 @@ def run_case_study_scout():
         config={"configurable": {"thread_id": "cs-" + today}},
     )
     scored = result.get("scored_papers", [])
-    langfuse.update_current_trace(
+    langfuse.update_current_span(
         output={"papers_saved": len(scored), "date": today},
     )
     print("[DEBUG] Complete")
