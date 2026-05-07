@@ -21,6 +21,10 @@ langfuse = Langfuse()
 
 GROQ_TOKEN_STATS_FILE = "site/groq_token_stats.json"
 
+# Model split: 8b for high-volume scoring (500K TPD), 70b for quality summaries (100K TPD)
+MODEL_SCORING = "llama-3.1-8b-instant"
+MODEL_SUMMARY = "llama-3.3-70b-versatile"
+
 # Accumulates real token counts from resp.usage across this run
 _groq_token_stats = {
     "key_1": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "calls": 0},
@@ -83,7 +87,7 @@ UNIVERSITIES = [
 ]
 
 @observe(as_type="generation", name="groq-complete")
-def groq_complete(messages, max_tokens=500):
+def groq_complete(messages, max_tokens=500, model=MODEL_SUMMARY):
     keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
     keys = [k for k in keys if k]
     last_error = None
@@ -91,7 +95,7 @@ def groq_complete(messages, max_tokens=500):
         try:
             client = Groq(api_key=key)
             resp = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model=model,
                 messages=messages,
                 max_tokens=max_tokens,
             )
@@ -107,9 +111,9 @@ def groq_complete(messages, max_tokens=500):
                 _groq_token_stats[key_slot]["total_tokens"]      += usage.total_tokens
                 _groq_token_stats[key_slot]["calls"]             += 1
                 _groq_token_stats["tokens_per_call"].append(usage.total_tokens)
-                print(f"[USAGE] Groq Tokens: {usage.total_tokens} (Key {i+1})")
+                print(f"[USAGE] Groq Tokens: {usage.total_tokens} (Key {i+1}, model={model})")
                 langfuse.update_current_generation(
-                    model="llama-3.3-70b-versatile",
+                    model=model,
                     input=messages,
                     output=result,
                     usage_details={
@@ -117,13 +121,13 @@ def groq_complete(messages, max_tokens=500):
                         "output": usage.completion_tokens,
                         "total": usage.total_tokens,
                     },
-                    metadata={"groq_key": f"key_{i+1}"},
+                    metadata={"groq_key": f"key_{i+1}", "model": model},
                 )
             else:
                 _groq_token_stats["header_miss_count"] += 1
                 print("[WARN] Groq resp.usage missing — token count not captured")
                 langfuse.update_current_generation(
-                    model="llama-3.3-70b-versatile",
+                    model=model,
                     input=messages,
                     output=result,
                 )
@@ -345,12 +349,16 @@ Abstract:
 {paper_block}"""
         max_retries = 3
 
-        # --- Scoring prompt ---
+        # --- Scoring prompt (uses 8b-instant — high TPD, sufficient for structured numeric output) ---
         g = None
         last_text = ""
         for attempt in range(max_retries):
             try:
-                text = groq_complete([{"role": "user", "content": score_prompt}], max_tokens=400)
+                text = groq_complete(
+                    [{"role": "user", "content": score_prompt}],
+                    max_tokens=400,
+                    model=MODEL_SCORING,
+                )
                 last_text = text
                 if text is None:
                     continue
@@ -366,11 +374,15 @@ Abstract:
             print(f"[DEBUG] Raw output: {last_text[:200]}")
             continue
 
-        # --- Summary prompt ---
+        # --- Summary prompt (uses 70b — quality matters for reader-facing output) ---
         s = None
         for attempt in range(max_retries):
             try:
-                text = groq_complete([{"role": "user", "content": summary_prompt}], max_tokens=350)
+                text = groq_complete(
+                    [{"role": "user", "content": summary_prompt}],
+                    max_tokens=350,
+                    model=MODEL_SUMMARY,
+                )
                 if text is None:
                     continue
                 clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
