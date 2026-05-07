@@ -484,8 +484,7 @@ def run_case_study_scout():
     today = datetime.now().strftime("%Y-%m-%d")
     langfuse.update_current_span(
         input={"date": today, "source": "arxiv"},
-        tags=["arxiv", "case-studies", "automated"],
-        metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS},
+        metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS, "tags": ["arxiv", "case-studies", "automated"]},
     )
     graph = build_graph()
     result = graph.invoke(

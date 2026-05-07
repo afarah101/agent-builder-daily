@@ -370,8 +370,7 @@ def run_industry_news_scout():
     today = datetime.now().strftime("%Y-%m-%d")
     langfuse.update_current_span(
         input={"date": today, "sources": len(RSS_SOURCES) + len(SCRAPE_SOURCES)},
-        tags=["news", "rss", "automated"],
-        metadata={"max_items": MAX_ITEMS, "max_per_source": MAX_PER_SOURCE},
+        metadata={"max_items": MAX_ITEMS, "max_per_source": MAX_PER_SOURCE, "tags": ["news", "rss", "automated"]},
     )
     graph = build_graph()
     result = graph.invoke(
