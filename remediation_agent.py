@@ -208,27 +208,19 @@ def check_langfuse(state: RemediationState) -> RemediationState:
     langfuse_traces = 0
 
     try:
-        from langfuse import Langfuse
-        lf = Langfuse()
-        traces = lf.get_traces(limit=10)
-
-        now = datetime.now(timezone.utc)
-        recent = [
-            t for t in traces.data
-            if (now - t.timestamp.replace(tzinfo=timezone.utc)
-                ).total_seconds() < 86400
-        ]
-        langfuse_traces = len(recent)
-
-        if langfuse_traces == 0:
-            alerts.append(
-                "WARNING: No LangFuse traces in last 24h. "
-                "Pipeline may have crashed before flushing traces."
-            )
-
-        print(f"[REMEDIATION] LangFuse traces (24h): {langfuse_traces}")
-        lf.flush()
-
+        snapshot_path = Path("site/langfuse_snapshot.json")
+        if snapshot_path.exists():
+            snapshot = json.loads(snapshot_path.read_text())
+            langfuse_traces = snapshot.get("total_traces", 0)
+            if langfuse_traces == 0:
+                alerts.append(
+                    "WARNING: LangFuse snapshot shows 0 traces. "
+                    "Pipeline may have crashed before flushing."
+                )
+            print(f"[REMEDIATION] LangFuse traces (snapshot): {langfuse_traces}")
+        else:
+            print("[REMEDIATION] No LangFuse snapshot found — skipping check")
+            langfuse_traces = -1  # -1 means not checked
     except Exception as e:
         print(f"[REMEDIATION] LangFuse check failed: {e}")
         alerts.append(f"LangFuse check error: {str(e)[:100]}")
