@@ -112,11 +112,10 @@ def groq_complete(messages, max_tokens=500):
                     model="llama-3.3-70b-versatile",
                     input=messages,
                     output=result,
-                    usage={
+                    usage_details={
                         "input": usage.prompt_tokens,
                         "output": usage.completion_tokens,
                         "total": usage.total_tokens,
-                        "unit": "TOKENS",
                     },
                     metadata={"groq_key": f"key_{i+1}"},
                 )
