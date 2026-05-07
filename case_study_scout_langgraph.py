@@ -2,7 +2,8 @@
 import os, json, requests, time
 from pathlib import Path
 from datetime import datetime, timedelta
-from typing import TypedDict, Annotated
+from typing import Annotated
+from typing_extensions import TypedDict
 import operator
 import xml.etree.ElementTree as ET
 from langgraph.graph import StateGraph, START, END

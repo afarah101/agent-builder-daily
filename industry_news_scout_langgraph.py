@@ -4,7 +4,8 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
 from bs4 import BeautifulSoup
-from typing import TypedDict, Annotated
+from typing import Annotated
+from typing_extensions import TypedDict
 from collections import defaultdict
 import operator
 from langgraph.graph import StateGraph, START, END
