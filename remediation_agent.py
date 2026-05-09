@@ -294,7 +294,7 @@ def report(state: RemediationState) -> RemediationState:
         msg = MIMEMultipart()
         msg["From"] = gmail_user
         msg["To"] = recipient
-        msg["Subject"] = f"Scout Daily: {subject_status} — {timestamp}"
+        msg["Subject"] = f"Scout Daily: {subject_status} - {timestamp}"
         msg.attach(MIMEText(body, "plain", "utf-8"))
 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
