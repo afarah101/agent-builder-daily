@@ -171,15 +171,19 @@ def fetch_papers(state):
     cutoff_str = FOUR_MONTHS_AGO.strftime("%Y%m%d")
     cutoff_date = FOUR_MONTHS_AGO.strftime("%Y-%m-%d")
 
+    ARXIV_HEADERS = {
+        "User-Agent": "ScoutDaily/1.0 (https://github.com/afarah101/agent-builder-daily; research aggregator)"
+    }
+    RETRY_DELAYS = [30, 60, 120]
+
     for query in QUERIES:
         try:
             date_filter = "+AND+submittedDate:[" + cutoff_str + "+TO+99991231]"
-            url = "http://export.arxiv.org/api/query?search_query=" + query + date_filter + "&start=0&max_results=15&sortBy=submittedDate&sortOrder=descending"
-            RETRY_DELAYS = [10, 30, 60]
+            url = "https://export.arxiv.org/api/query?search_query=" + query + date_filter + "&start=0&max_results=15&sortBy=submittedDate&sortOrder=descending"
             resp = None
             for attempt, delay in enumerate(RETRY_DELAYS, 1):
                 try:
-                    resp = requests.get(url, timeout=45)
+                    resp = requests.get(url, headers=ARXIV_HEADERS, timeout=45)
                     resp.raise_for_status()
                     break
                 except Exception as e:
@@ -250,7 +254,7 @@ def fetch_papers(state):
                     "authors": authors, "institution": institution, "pub_date": pub_date,
                     "url": link_url, "recency_score": recency, "source_type": "arxiv",
                 })
-            time.sleep(3)
+            time.sleep(12)
         except Exception as e:
             print("[DEBUG] Error: " + str(e))
 

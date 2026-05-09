@@ -290,11 +290,12 @@ def report(state: RemediationState) -> RemediationState:
             print("[REMEDIATION] Gmail credentials not set — skipping email")
             return {**state, "email_sent": False}
 
+        subject_status = "Clean Run" if is_clean else "Action Required"
         msg = MIMEMultipart()
         msg["From"] = gmail_user
         msg["To"] = recipient
-        msg["Subject"] = f"Scout Daily: {status} — {timestamp}"
-        msg.attach(MIMEText(body, "plain"))
+        msg["Subject"] = f"Scout Daily: {subject_status} — {timestamp}"
+        msg.attach(MIMEText(body, "plain", "utf-8"))
 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(gmail_user, gmail_password)
