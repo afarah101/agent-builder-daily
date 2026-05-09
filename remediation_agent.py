@@ -299,7 +299,7 @@ def report(state: RemediationState) -> RemediationState:
 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(gmail_user, gmail_password)
-            server.sendmail(gmail_user, recipient, msg.as_string())
+            server.send_message(msg)
 
         print(f"[REMEDIATION] Email sent to {recipient}")
         return {**state, "email_sent": True}
