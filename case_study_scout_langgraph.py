@@ -523,3 +523,7 @@ def run_case_study_scout():
 
 if __name__ == "__main__":
     run_case_study_scout()
+    from langsmith import Client
+    client = Client()
+    import time
+    time.sleep(5)  # allow trace buffer to flush
