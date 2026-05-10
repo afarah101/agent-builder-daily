@@ -255,27 +255,107 @@ def classify_news(state):
     for i in range(limit):
         article = articles[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + article["title"][:60])
-        prompt = (
-            "You are a UK IT consultant scoring AI industry news for immediate business relevance. "
-            "Score this item on three dimensions, then compute relevance_score as their sum.\n\n"
-            "Title: " + article["title"] + "\n"
-            "Source: " + article["source"] + "\n"
-            "Content: " + article["summary_raw"][:300] + "\n\n"
-            "SCORING:\n"
-            "1. recency (0-4): 4=breaking/today, 3=this week, 2=this month, 1=older\n"
-            "2. stack_impact (0-3): 3=changes core AI stack (model release, API breaking change, new framework), "
-            "2=significant tooling update, 1=minor or informational\n"
-            "3. action_signal (0-3): 3=act this week (deploy, migrate, test), 2=schedule a review, 1=monitor only\n"
-            "relevance_score = recency + stack_impact + action_signal  (0-10)\n\n"
-            "- summary: 2 sentences. What happened and why it matters to an IT practitioner.\n"
-            "- enterprise_use: 2 sentences. Specific use case for a UK SMB IT team or MSP.\n"
-            "- relevance_signal: 'high' if score >= 7, 'medium' if 4-6, 'low' if <= 3\n"
-            "- category: one of: Model Release, API Update, Product Launch, Research, Regulation, Tools, Other\n\n"
-            "Return JSON only. No markdown.\n"
-            '{"summary": "", "enterprise_use": "", "relevance_score": 0, "relevance_signal": "medium", "category": "Other"}'
-        )
+        title = article["title"]
+        source = article["source"]
+        content = article["summary_raw"][:500]
+        classify_prompt = f"""
+You are scoring AI industry news for an IT Engineer who manages
+Google Workspace, JumpCloud, Freshservice, SSO, MDM, endpoint
+security, and access management tools daily.
+
+He reads this to:
+1. Stay ahead of AI changes that affect his IT stack
+2. Find AI tools he can use to optimise his own IT workflows
+3. Bring high-value AI insights to his IT department
+
+Score on THREE dimensions:
+
+RECENCY (0-4):
+4 = Breaking this week -- must know now
+3 = This month -- still relevant
+2 = Last month -- fading
+1 = Older background context
+0 = Stale or undated
+
+STACK_IMPACT (0-3):
+3 = Directly affects tools he uses: Google Workspace, JumpCloud,
+    Freshservice, Microsoft 365, Okta, CrowdStrike, Cloudflare,
+    AWS, Azure, MDM platforms, SSO providers, endpoint security
+2 = Affects adjacent IT tooling or vendor ecosystem he monitors
+1 = General AI news with indirect IT relevance
+0 = No relevance to IT infrastructure
+
+ACTION_SIGNAL (0-3):
+3 = He should act THIS WEEK: check a setting, evaluate a tool,
+    flag a risk to his team, update a config, test something new
+2 = Worth reviewing in the next 30 days
+1 = Note it, revisit in 90 days
+0 = Interesting but no action needed
+
+relevance_score = RECENCY + STACK_IMPACT + ACTION_SIGNAL (max 10)
+relevance_signal = 'high' if >= 7, 'medium' if 4-6, 'low' if <= 3
+
+CALIBRATION EXAMPLES:
+- "JumpCloud adds AI-powered anomaly detection to MDM" = 4+3+3 = 10
+- "Google Workspace gets Gemini AI in Admin Console" = 4+3+3 = 10
+- "OpenAI releases GPT-5" = 3+1+1 = 5
+- "AI startup raises Series B" = 1+0+0 = 1
+- "Critical vulnerability in widely used SSO provider" = 4+3+3 = 10
+- "Voice AI product launches in India" = 2+0+0 = 2
+
+OUTPUT FIELDS:
+
+summary: 2 sentences.
+S1: What happened -- name the specific product, company, feature.
+    No vague language.
+S2: Why it matters to an IT engineer specifically.
+BAD: "An AI company released a new feature."
+GOOD: "JumpCloud has added AI-driven conditional access policies
+that flag anomalous login patterns in real time. This gives IT
+engineers an automated first line of defence against credential
+stuffing without manual rule-writing."
+
+enterprise_use: How Ahmed specifically can use or act on this.
+HIGH signal (score 7+): 3 sentences.
+  S1: The specific action -- "Go to [tool] and check [setting] this week"
+  S2: What risk or opportunity inaction creates
+  S3: Which of his tools is most affected or most useful here
+MEDIUM signal (score 4-6): 2 sentences.
+  S1: What to watch or evaluate
+  S2: Why it matters for his workflow
+LOW signal (score 1-3): 1 sentence max.
+BAD: "IT teams could consider implementing this."
+GOOD: "Check your JumpCloud admin console under Insights >
+Anomalies -- enable the new AI detection flag if available
+on your tier. Missing this means relying solely on manual
+log review for suspicious login patterns."
+
+category: pick the MOST SPECIFIC from:
+Security, API Update, Model Release, Product Launch,
+Research, Regulation, Tools, Infrastructure, Other
+Rules:
+- Any vulnerability, breach, attack surface = Security
+- New AI model announced = Model Release
+- Pricing, API, or developer platform change = API Update
+- New product or major feature shipped = Product Launch
+- Only use Other if nothing else fits
+
+Return JSON only. No markdown. No preamble.
+{{
+  "summary": "",
+  "enterprise_use": "",
+  "relevance_score": 0,
+  "relevance_signal": "",
+  "category": ""
+}}
+
+News item:
+Title: {title}
+Source: {source}
+Content: {content}
+"""
         try:
-            text = groq_complete([{"role": "user", "content": prompt}], max_tokens=250)
+            text = groq_complete([{"role": "user", "content": classify_prompt}], max_tokens=400)
             if "```" in text:
                 text = text.split("```")[1]
                 if text.startswith("json"):
