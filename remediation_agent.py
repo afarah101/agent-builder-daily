@@ -9,7 +9,9 @@ from datetime import datetime, timezone
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
+from langfuse import Langfuse, observe
 load_dotenv()
+langfuse = Langfuse()
 
 
 # ─────────────────────────────────────────────
@@ -35,6 +37,7 @@ class RemediationState(TypedDict):
 # NODE 1 — check_papers
 # ─────────────────────────────────────────────
 
+@observe()
 def check_papers(state: RemediationState) -> RemediationState:
     """Check if case studies were saved in today's pipeline run."""
     print("[REMEDIATION] Checking papers saved...")
@@ -79,6 +82,7 @@ def check_papers(state: RemediationState) -> RemediationState:
 # NODE 2 — check_site_freshness
 # ─────────────────────────────────────────────
 
+@observe()
 def check_site_freshness(state: RemediationState) -> RemediationState:
     """
     Check if site/index.html was updated today.
@@ -109,7 +113,7 @@ def check_site_freshness(state: RemediationState) -> RemediationState:
     hours_since_update = (now - mtime).total_seconds() / 3600
 
     if hours_since_update > 25:
-        print(f"[REMEDIATION] Site is stale ({hours_since_update:.1f}h old) — regenerating...")
+        print(f"[REMEDIATION] Site is stale ({hours_since_update:.1f}h old) - regenerating...")
         alerts.append(
             f"Site was stale ({hours_since_update:.1f}h since last update). "
             "Auto-remediated: regenerated HTML and pushed."
@@ -150,6 +154,7 @@ def check_site_freshness(state: RemediationState) -> RemediationState:
 # NODE 3 — check_tokens (with human-in-the-loop)
 # ─────────────────────────────────────────────
 
+@observe()
 def check_tokens(state: RemediationState) -> RemediationState:
     """
     Check Groq token budget.
@@ -175,6 +180,13 @@ def check_tokens(state: RemediationState) -> RemediationState:
 
         print(f"[REMEDIATION] Key 1: {key1_pct}% | Key 2: {key2_pct}%")
 
+        if key1_pct >= 50 and key1_pct < 80:
+            alerts.append(
+                f"TOKEN NOTICE: Key 1 at {key1_pct}%. "
+                "Approaching limit - monitor closely."
+            )
+            print(f"[REMEDIATION] Token notice: Key 1 at {key1_pct}%")
+
         if key1_pct >= 80:
             token_warning = True
             alerts.append(
@@ -184,7 +196,7 @@ def check_tokens(state: RemediationState) -> RemediationState:
             )
             print(f"[REMEDIATION] Token warning triggered at {key1_pct}%")
     else:
-        print("[REMEDIATION] groq_token_stats.json not found — skipping token check")
+        print("[REMEDIATION] groq_token_stats.json not found - skipping token check")
 
     return {
         **state,
@@ -200,6 +212,7 @@ def check_tokens(state: RemediationState) -> RemediationState:
 # NODE 4 — check_langfuse
 # ─────────────────────────────────────────────
 
+@observe()
 def check_langfuse(state: RemediationState) -> RemediationState:
     """Check if LangFuse received traces from today's run."""
     print("[REMEDIATION] Checking LangFuse traces...")
@@ -219,7 +232,7 @@ def check_langfuse(state: RemediationState) -> RemediationState:
                 )
             print(f"[REMEDIATION] LangFuse traces (snapshot): {langfuse_traces}")
         else:
-            print("[REMEDIATION] No LangFuse snapshot found — skipping check")
+            print("[REMEDIATION] No LangFuse snapshot found - skipping check")
             langfuse_traces = -1  # -1 means not checked
     except Exception as e:
         print(f"[REMEDIATION] LangFuse check failed: {e}")
@@ -236,83 +249,203 @@ def check_langfuse(state: RemediationState) -> RemediationState:
 # NODE 5 — report
 # ─────────────────────────────────────────────
 
+@observe()
 def report(state: RemediationState) -> RemediationState:
-    """Send summary email via Gmail SMTP."""
-    print("[REMEDIATION] Sending report email...")
+    """Send a clean daily pipeline digest email."""
+    print("[REMEDIATION] Sending daily digest email...")
 
     alerts = state.get("alerts", [])
     actions = state.get("actions_taken", [])
-    is_clean = len(alerts) == 0
-
-    status = "✅ Clean Run" if is_clean else "⚠️ Action Required"
     timestamp = datetime.now(timezone.utc).strftime("%d %b %Y, %H:%M UTC")
 
-    body_lines = [
-        f"Scout Daily Pipeline Report — {timestamp}",
-        f"Status: {status}",
+    # Load pipeline metrics for richer report
+    papers_saved = state.get("papers_saved", 0)
+    key1_pct = state.get("key1_pct", 0)
+    key2_pct = state.get("key2_pct", 0)
+    site_fresh = state.get("site_fresh", False)
+    site_remediated = state.get("site_remediated", False)
+    langfuse_traces = state.get("langfuse_traces", 0)
+
+    # Load groq_token_stats for detailed breakdown
+    avg_tpc = 0
+    try:
+        stats_path = Path("site/groq_token_stats.json")
+        if stats_path.exists():
+            stats = json.loads(stats_path.read_text())
+            tpc = stats.get("tokens_per_call", [])
+            avg_tpc = sum(tpc) / len(tpc) if tpc else 0
+    except Exception:
+        pass
+
+    # Load metrics.json for score and eval data
+    avg_score = "N/A"
+    score_health = "N/A"
+    papers_fetched = "N/A"
+    gemini_pass = "N/A"
+    gemini_fail = "N/A"
+    gemini_pending = "N/A"
+    try:
+        metrics_path = Path("site/metrics.json")
+        if metrics_path.exists():
+            metrics = json.loads(metrics_path.read_text())
+            if metrics and isinstance(metrics, list):
+                latest = metrics[-1]
+                avg_score = latest.get("avg_score", "N/A")
+                papers_fetched = latest.get("total_fetched", "N/A")
+                gemini_pass = latest.get("gemini_pass", "N/A")
+                gemini_fail = latest.get("gemini_fail", "N/A")
+                gemini_pending = latest.get("gemini_pending", "N/A")
+                if isinstance(avg_score, (int, float)):
+                    if avg_score >= 70:
+                        score_health = "GOOD"
+                    elif avg_score >= 50:
+                        score_health = "FAIR"
+                    else:
+                        score_health = "POOR - scoring prompts need review"
+    except Exception:
+        pass
+
+    # Bucket alerts
+    critical_alerts = [a for a in alerts if "CRITICAL" in a]
+    token_warnings = [a for a in alerts if "TOKEN" in a]
+    other_alerts = [a for a in alerts if "CRITICAL" not in a and "TOKEN" not in a]
+
+    if critical_alerts:
+        status = "ACTION REQUIRED"
+        status_icon = "URGENT"
+    elif token_warnings:
+        status = "WARNING"
+        status_icon = "WARNING"
+    else:
+        status = "All systems running"
+        status_icon = "OK"
+
+    # Build email body
+    lines = [
+        "SCOUT DAILY - Pipeline Digest",
+        timestamp,
+        f"Status: {status_icon} {status}",
         "",
-        f"Papers saved today: {state.get('papers_saved', 0)}",
-        f"Site fresh: {'Yes' if state.get('site_fresh') else 'No (auto-remediated)' if state.get('site_remediated') else 'No'}",
-        f"Key 1 usage: {state.get('key1_pct', 0)}%",
-        f"Key 2 usage: {state.get('key2_pct', 0)}%",
-        f"LangFuse traces: {state.get('langfuse_traces', 0)}",
+        "=" * 50,
+        "PIPELINE HEALTH",
+        "=" * 50,
+        f"Papers fetched today:     {papers_fetched}",
+        f"Papers saved today:       {papers_saved}",
+        f"Average score today:      {avg_score}/100",
+        f"Score health:             {score_health}",
         "",
+        "=" * 50,
+        "GEMINI QUALITY CONTROL",
+        "=" * 50,
+        f"Verified (pass):          {gemini_pass}",
+        f"Flagged (fail):           {gemini_fail}",
+        f"Pending evaluation:       {gemini_pending}",
+        "",
+        "=" * 50,
+        "GROQ TOKEN USAGE",
+        "=" * 50,
+        f"Key 1:                    {key1_pct}% of 100,000 daily limit",
+        f"Key 2:                    {key2_pct}% of 100,000 daily limit",
+        f"Avg tokens per call:      {avg_tpc:.0f}",
+        "",
+        "=" * 50,
+        "SITE STATUS",
+        "=" * 50,
+        f"Site fresh:               {'Yes' if site_fresh else 'Stale - auto-remediated' if site_remediated else 'STALE - check manually'}",
+        f"LangFuse traces:          {langfuse_traces if langfuse_traces >= 0 else 'Not checked'}",
+        f"Dashboard:                https://scout-monitor-lemon.vercel.app/dashboard.html",
+        f"Live site:                https://agent-builder-daily.vercel.app",
     ]
 
     if actions:
-        body_lines.append("ACTIONS TAKEN AUTOMATICALLY:")
+        lines += [
+            "",
+            "=" * 50,
+            "ACTIONS TAKEN AUTOMATICALLY",
+            "=" * 50,
+        ]
         for a in actions:
-            body_lines.append(f"  • {a}")
-        body_lines.append("")
+            lines.append(f"  - {a}")
 
-    if alerts:
-        body_lines.append("ALERTS:")
-        for alert in alerts:
-            body_lines.append(f"  • {alert}")
-        body_lines.append("")
+    if critical_alerts:
+        lines += [
+            "",
+            "=" * 50,
+            "CRITICAL ALERTS - ACTION REQUIRED",
+            "=" * 50,
+        ]
+        for a in critical_alerts:
+            lines.append(f"  ! {a}")
 
-    if state.get("token_warning"):
-        body_lines.append(
-            "TOKEN APPROVAL REQUIRED:\n"
-            "Key 1 is above 80%. Reply to this email with "
-            "'APPROVE' to run the video pipeline, or "
-            "'SKIP' to defer until tomorrow."
-        )
+    if token_warnings:
+        lines += [
+            "",
+            "=" * 50,
+            "TOKEN WARNINGS",
+            "=" * 50,
+        ]
+        for a in token_warnings:
+            lines.append(f"  ! {a}")
 
-    body = "\n".join(body_lines)
-    # Sanitise to ASCII — avoids smtp/MIME codec issues with em-dashes, bullets, emoji
-    body = (body
-        .replace("—", "-")   # em dash
-        .replace("•", "*")   # bullet
-        .replace("–", "-")   # en dash
-        .replace(" ", " ")   # non-breaking space
-        .encode("ascii", "replace").decode("ascii"))
+    if other_alerts:
+        lines += [
+            "",
+            "=" * 50,
+            "OTHER ALERTS",
+            "=" * 50,
+        ]
+        for a in other_alerts:
+            lines.append(f"  - {a}")
 
+    if score_health and "POOR" in str(score_health):
+        lines += [
+            "",
+            "=" * 50,
+            "SCORE QUALITY NOTICE",
+            "=" * 50,
+            "Average score is below 50/100. This means papers are scoring",
+            "too low or the scoring rubric needs tuning. Suggested actions:",
+            "  1. Check if blocklist is filtering too aggressively",
+            "  2. Review the scoring prompt in case_study_scout_langgraph.py",
+            "  3. Check if arXiv queries are returning relevant papers",
+        ]
+
+    lines += [
+        "",
+        "-" * 50,
+        "Scout Daily - Automated Pipeline Digest",
+        "-" * 50,
+    ]
+
+    body = "\n".join(lines)
+
+    # Send via Gmail
     try:
         gmail_user = os.getenv("GMAIL_USER")
         gmail_password = os.getenv("GMAIL_APP_PASSWORD")
         recipient = os.getenv("REPORT_EMAIL", gmail_user)
 
         if not gmail_user or not gmail_password:
-            print("[REMEDIATION] Gmail credentials not set — skipping email")
+            print("[REMEDIATION] Gmail credentials not set - printing report")
+            print(body)
             return {**state, "email_sent": False}
 
-        subject_status = "Clean Run" if is_clean else "Action Required"
         msg = MIMEMultipart()
         msg["From"] = gmail_user
         msg["To"] = recipient
-        msg["Subject"] = f"Scout Daily: {subject_status} - {timestamp}"
+        msg["Subject"] = f"Scout Daily: {status_icon} {status} - {timestamp}"
         msg.attach(MIMEText(body, "plain"))
 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(gmail_user, gmail_password)
-            server.send_message(msg)
+            server.sendmail(gmail_user, recipient, msg.as_string())
 
-        print(f"[REMEDIATION] Email sent to {recipient}")
+        print(f"[REMEDIATION] Digest email sent to {recipient}")
         return {**state, "email_sent": True}
 
     except Exception as e:
         print(f"[REMEDIATION] Email failed: {e}")
+        print(body)
         return {**state, "email_sent": False}
 
 
@@ -364,6 +497,7 @@ def build_remediation_graph():
 # MAIN
 # ─────────────────────────────────────────────
 
+@observe(name="remediation-agent")
 def run_remediation():
     print("\n[REMEDIATION] Starting remediation agent...")
 
@@ -394,6 +528,7 @@ def run_remediation():
     print(f"  Email sent: {result['email_sent']}")
     print(f"  Alerts: {len(result['alerts'])}")
 
+    langfuse.flush()
     return result
 
 
