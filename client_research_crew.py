@@ -6,7 +6,10 @@ from datetime import datetime
 from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai.tools import BaseTool
-from duckduckgo_search import DDGS
+try:
+    from ddgs import DDGS
+except ImportError:
+    from duckduckgo_search import DDGS
 
 load_dotenv()
 
@@ -17,6 +20,7 @@ load_dotenv()
 
 llm = LLM(
     model="groq/llama-3.3-70b-versatile",
+    max_tokens=2000,
     api_key=os.getenv("GROQ_API_KEY"),
     temperature=0.3
 )
@@ -124,21 +128,25 @@ synthesiser = Agent(
 
 research_task = Task(
     description=(
-        "Search the web for real firsthand accounts of how people landed their "
-        "first client as an AI automation or agentic AI solutions provider. "
-        "Run these specific searches:\n"
-        "1. 'how I got my first AI automation client reddit'\n"
-        "2. 'first client AI solutions business linkedin'\n"
-        "3. 'getting clients AI consulting freelance forum'\n"
-        "4. 'agentic AI freelancer first contract how'\n"
-        "5. 'AI automation agency first client uk'\n\n"
-        "For each search, extract: the channel used, the specific tactic, "
-        "the pitch or message that worked, any objections raised, and the outcome. "
-        "Return raw findings with source URLs."
+        "Search the web for real firsthand accounts of landing first AI "
+        "automation clients. Run these exact searches:\n"
+        "1. 'how I got my first AI agency client'\n"
+        "2. 'site:reddit.com AI automation first client'\n"
+        "3. 'first client AI consulting what worked'\n"
+        "4. 'AI automation agency client acquisition strategy'\n"
+        "5. 'how to get clients AI solutions UK freelance'\n\n"
+        "For EACH result you find, extract and return:\n"
+        "- Exact source URL\n"
+        "- The specific channel they used (LinkedIn/Reddit/cold outreach etc)\n"
+        "- The exact tactic or script they used — quote directly where possible\n"
+        "- The outcome (did it work, how long did it take)\n"
+        "- Any specific numbers mentioned (response rates, deal sizes, timelines)\n\n"
+        "Do NOT summarise or paraphrase. Extract real quotes and specifics. "
+        "If a source has no concrete tactic, skip it."
     ),
     expected_output=(
-        "A structured list of 10-15 real findings from web sources, each with: "
-        "source URL, channel used, tactic described, outcome mentioned."
+        "10-15 specific findings, each with: source URL, channel, "
+        "exact tactic quoted directly from source, outcome with numbers where available."
     ),
     agent=researcher
 )
@@ -161,30 +169,36 @@ analysis_task = Task(
 
 synthesis_task = Task(
     description=(
-        "Write a plain text weekly briefing email based on the analysis. "
+        "Write a plain text weekly briefing based strictly on the research findings. "
+        "Every single point MUST include a specific example from a real source. "
+        "No generalisations. No theory. Only what real people actually did.\n\n"
         "Use this exact structure:\n\n"
         "HOW TO GET YOUR FIRST AI CLIENT - Weekly Intelligence\n"
         "[date]\n\n"
         "TOP CHANNELS THAT ACTUALLY WORK\n"
-        "1. [channel] - [specific tactic in one sentence]\n"
-        "2. [channel] - [specific tactic in one sentence]\n"
-        "3. [channel] - [specific tactic in one sentence]\n\n"
-        "PITCH ANGLES THAT CONVERT\n"
-        "1. [angle] - [why it works]\n"
-        "2. [angle] - [why it works]\n"
-        "3. [angle] - [why it works]\n\n"
-        "OBJECTIONS AND HOW TO HANDLE THEM\n"
-        "1. [objection] - [response that worked]\n"
-        "2. [objection] - [response that worked]\n\n"
+        "1. [Channel] - [Exact tactic from research] (Source: [URL])\n"
+        "2. [Channel] - [Exact tactic from research] (Source: [URL])\n"
+        "3. [Channel] - [Exact tactic from research] (Source: [URL])\n\n"
+        "WHAT THEY ACTUALLY SAID\n"
+        "Direct quotes from real practitioners — minimum 3 quotes with source URLs\n\n"
+        "PITCH ANGLES THAT CONVERTED\n"
+        "1. [Specific angle with example of how it was used]\n"
+        "2. [Specific angle with example of how it was used]\n\n"
+        "OBJECTIONS AND EXACT RESPONSES THAT WORKED\n"
+        "1. [Objection] - [Word-for-word or close response that worked]\n"
+        "2. [Objection] - [Word-for-word or close response that worked]\n\n"
         "WHAT DOES NOT WORK\n"
-        "1. [tactic] - [why it fails]\n\n"
-        "THIS WEEK'S ACTION\n"
-        "One specific thing to do this week based on the research.\n\n"
-        "Keep total length under 400 words. Plain text only."
+        "1. [Specific tactic] - [Why, with evidence from research]\n\n"
+        "THIS WEEK'S ONE ACTION\n"
+        "[One hyper-specific action — not generic advice. "
+        "Example: Post in r/Entrepreneur introducing yourself and offering "
+        "a free 30-min workflow audit to the first 3 people who reply.]\n\n"
+        "Keep under 500 words. Plain text only. No markdown symbols."
     ),
     expected_output=(
         "A complete plain text email body ready to send, "
-        "following the exact structure above, under 400 words."
+        "following the exact structure above, under 500 words, "
+        "with real source URLs cited for every point."
     ),
     agent=synthesiser,
     context=[research_task, analysis_task]
