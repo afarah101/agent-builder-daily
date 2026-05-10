@@ -290,11 +290,23 @@ def report(state: RemediationState) -> RemediationState:
             metrics = json.loads(metrics_path.read_text())
             if metrics and isinstance(metrics, list):
                 latest = metrics[-1]
-                avg_score = latest.get("avg_score", "N/A")
-                papers_fetched = latest.get("total_fetched", "N/A")
-                gemini_pass = latest.get("gemini_pass", "N/A")
-                gemini_fail = latest.get("gemini_fail", "N/A")
-                gemini_pending = latest.get("gemini_pending", "N/A")
+                # Use actual field names from metrics.json
+                papers_fetched = latest.get("article_count", "N/A")
+
+        # Load real score and gemini data from today's case study file
+        from datetime import date
+        today = date.today().strftime("%Y-%m-%d")
+        cs_path = Path(f"case_studies/{today}.json")
+        if cs_path.exists():
+            cs_data = json.loads(cs_path.read_text())
+            studies = cs_data.get("case_studies", [])
+            if studies:
+                scores = [s.get("total_score", 0) for s in studies if s.get("total_score")]
+                avg_score = round(sum(scores) / len(scores)) if scores else "N/A"
+                gemini_pass = sum(1 for s in studies if s.get("gemini_eval_status") == "pass")
+                gemini_fail = sum(1 for s in studies if s.get("gemini_eval_status") == "fail")
+                gemini_pending = sum(1 for s in studies if s.get("gemini_eval_status") == "pending")
+
                 if isinstance(avg_score, (int, float)):
                     if avg_score >= 70:
                         score_health = "GOOD"
@@ -302,8 +314,8 @@ def report(state: RemediationState) -> RemediationState:
                         score_health = "FAIR"
                     else:
                         score_health = "POOR - scoring prompts need review"
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[REMEDIATION] Metrics load error: {e}")
 
     # Bucket alerts
     critical_alerts = [a for a in alerts if "CRITICAL" in a]
