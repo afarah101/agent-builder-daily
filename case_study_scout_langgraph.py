@@ -47,12 +47,12 @@ FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
 ARXIV_NS = "http://www.w3.org/2005/Atom"
 
 QUERIES = [
-    "ti:case+study+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.CV+OR+cat:cs.NI+OR+cat:cs.SE+OR+cat:cs.DC)",
-    "ti:deployment+AND+abs:real+world+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.CV+OR+cat:cs.NI+OR+cat:cs.SE+OR+cat:cs.DC)",
-    "abs:enterprise+AND+abs:implementation+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.SE+OR+cat:cs.DC)",
-    "abs:production+system+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL+OR+cat:cs.NI+OR+cat:cs.SE+OR+cat:cs.DC)",
-    "ti:real+world+AND+abs:machine+learning+AND+(cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CV+OR+cat:cs.NI)",
-    "abs:automation+AND+abs:large+language+model+AND+(cat:cs.AI+OR+cat:cs.CL+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "abs:LLM+agent+AND+abs:production+AND+(cat:cs.AI+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "abs:agentic+AND+abs:deployment+AND+(cat:cs.AI+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "ti:automation+AND+abs:enterprise+AND+(cat:cs.AI+OR+cat:cs.SE+OR+cat:cs.DC)",
+    "abs:RAG+AND+abs:production+AND+(cat:cs.AI+OR+cat:cs.CL+OR+cat:cs.SE)",
+    "abs:MLOps+AND+(cat:cs.AI+OR+cat:cs.SE+OR+cat:cs.DC+OR+cat:cs.LG)",
+    "abs:AI+agent+AND+abs:security+AND+(cat:cs.AI+OR+cat:cs.CR+OR+cat:cs.SE)",
 ]
 
 BLOCKED_TAGS = [
@@ -333,7 +333,7 @@ VALUE_90_DAYS (0-34): Could an IT engineer or consultant use this to build somet
 "Could theoretically" = 0. Specific and actionable = 30+.
 Be brutal — most papers score 0-10 here.
 
-IMPORTANT: If total score is below 35, set "low_signal": true in the output.
+IMPORTANT: If total score is below 40, set "low_signal": true in the output.
 
 Return JSON only. No markdown. No preamble.
 {{"recency_score": 25, "real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "total_score": 0, "score_reasoning": "", "relevance_tag": "", "gemini_eval_status": "pending", "low_signal": false}}
@@ -408,7 +408,7 @@ Abstract:
             s = {"summary": "", "it_breakdown": "", "monetisation": ""}
 
         g.update(s)
-        if g.get("low_signal") and g.get("total_score", 0) < 35:
+        if g.get("low_signal") and g.get("total_score", 0) < 40:
             print(f"[FILTER] Low signal paper dropped: {paper['title'][:60]}")
             continue
         if i < 5:
