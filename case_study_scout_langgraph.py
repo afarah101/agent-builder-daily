@@ -487,6 +487,20 @@ def save_and_archive(state):
     with open(GROQ_TOKEN_STATS_FILE, "w", encoding="utf-8") as f:
         json.dump(snapshot, f, indent=2)
     print(f"[DEBUG] Groq token stats written to {GROQ_TOKEN_STATS_FILE}")
+
+    # Update monitoring/metrics.json with real article counts
+    try:
+        metrics_path = Path("monitoring/metrics.json")
+        if metrics_path.exists():
+            metrics = json.loads(metrics_path.read_text())
+            if metrics and isinstance(metrics, list):
+                metrics[-1]["article_count"] = len(state["scored_papers"])
+                metrics[-1]["total_fetched"] = len(state["raw_papers"])
+                metrics_path.write_text(json.dumps(metrics, indent=2))
+                print(f"[METRICS] Updated article_count: {len(state['scored_papers'])}")
+    except Exception as e:
+        print(f"[METRICS] Update failed: {e}")
+
     return state
 
 def build_graph():
