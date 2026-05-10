@@ -285,7 +285,7 @@ def report(state: RemediationState) -> RemediationState:
     gemini_fail = "N/A"
     gemini_pending = "N/A"
     try:
-        metrics_path = Path("site/metrics.json")
+        metrics_path = Path("monitoring/metrics.json")
         if metrics_path.exists():
             metrics = json.loads(metrics_path.read_text())
             if metrics and isinstance(metrics, list):
