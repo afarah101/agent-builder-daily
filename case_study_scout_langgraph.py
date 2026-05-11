@@ -518,9 +518,10 @@ def build_graph():
 def run_case_study_scout():
     print("[DEBUG] Starting Case Study Scout (arXiv)...")
     today = datetime.now().strftime("%Y-%m-%d")
+    langfuse.update_current_trace(tags=["arxiv", "case-studies", "automated"])
     langfuse.update_current_span(
         input={"date": today, "source": "arxiv"},
-        metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS, "tags": ["arxiv", "case-studies", "automated"]},
+        metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS},
     )
     graph = build_graph()
     result = graph.invoke(
@@ -533,6 +534,32 @@ def run_case_study_scout():
     )
     print("[DEBUG] Complete")
     langfuse.flush()
+
+    # Write trace count to snapshot so remediation agent can verify observability
+    try:
+        import requests, base64
+        public_key = os.getenv("LANGFUSE_PUBLIC_KEY", "")
+        secret_key = os.getenv("LANGFUSE_SECRET_KEY", "")
+        host = os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
+        if public_key and secret_key:
+            auth = base64.b64encode(f"{public_key}:{secret_key}".encode()).decode()
+            r = requests.get(
+                f"{host}/api/public/traces",
+                headers={"Authorization": f"Basic {auth}"},
+                params={"limit": 1},
+                timeout=10,
+            )
+            if r.status_code == 200:
+                total = r.json().get("meta", {}).get("totalItems", 0)
+                snapshot = {"total_traces": total, "updated_at": datetime.now().isoformat()}
+                os.makedirs("site", exist_ok=True)
+                Path("site/langfuse_snapshot.json").write_text(
+                    json.dumps(snapshot, indent=2)
+                )
+                print(f"[DEBUG] LangFuse snapshot updated: {total} total traces")
+    except Exception as e:
+        print(f"[DEBUG] LangFuse snapshot write failed: {e}")
+
     return result
 
 if __name__ == "__main__":

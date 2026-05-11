@@ -512,6 +512,9 @@ def build_remediation_graph():
 @observe(name="remediation-agent")
 def run_remediation():
     print("\n[REMEDIATION] Starting remediation agent...")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    langfuse.update_current_trace(tags=["remediation", "monitoring", "automated"])
+    langfuse.update_current_span(input={"date": today, "run_type": "remediation"})
 
     graph = build_remediation_graph()
 
