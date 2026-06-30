@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillOpt: Agent skills as trainable parameters - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
+    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .summary-body p{margin-bottom:16px}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
+    .guide-block.green{border-left-color:var(--accent-green)}
+    .guide-block.amber{border-left-color:#f59e0b}
+    .guide-block.red{border-left-color:#ef4444}
+    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
+    .guide-block.green .guide-label{color:var(--accent-green)}
+    .guide-block.amber .guide-label{color:#f59e0b}
+    .guide-block.red .guide-label{color:#ef4444}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
+    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">SkillOpt: Agent skills as trainable parameters</h1>
+  <div class="meta-line">Microsoft Research · 30 Jun 202 · Generated 30 Jun 2026, 20:12</div>
+  <a href="https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Detailed Summary</div>
+  </div>
+  <div class="summary-body"><p>Microsoft Research has introduced SkillOpt, a new approach to editing skills for AI agents. This development allows for skill editing to become a trainable process, making the behavior of AI agents more reliable without requiring changes to the model weights. The significance of this development lies in its potential to improve the training of AI agents' skills without altering their underlying architecture. For enterprise IT teams, this means that AI models can be fine-tuned for more effective and reliable performance, potentially reducing the need for manual rule-writing and improving overall efficiency. The vendors and technologies involved in this development include Microsoft Research and potentially other AI-powered tools such as Google Workspace. The broader industry implications of SkillOpt are that it could lead to more effective and reliable AI models, which could have a significant impact on various industries that rely on AI-powered tools. As this development is still in the research phase, it is essential for enterprise IT teams to keep an eye on it and see if it leads to any applicable tools or updates in the next 90 days.</p><p>The potential benefits of SkillOpt for enterprise IT teams include improved reliability and efficiency of AI models, reduced need for manual rule-writing, and more effective training of AI agents' skills. However, it is crucial to note that this development is still in its early stages, and its practical applications for enterprise IT teams are still being explored. As the technology continues to evolve, it is likely that we will see more developments and updates that could have a significant impact on the industry. The involvement of Microsoft Research in this development suggests that it has the potential to be integrated into various Microsoft products and services, which could have a significant impact on the industry.</p></div>
+  <div class="divider"></div>
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">IT Engineer Application Guide</div>
+  </div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">Before acting on this development, it is essential to audit your current AI-powered tools and assess their performance, reliability, and efficiency. This includes evaluating the current skills and behaviors of your AI agents and identifying areas for improvement. You should also assess your current workflow and identify potential bottlenecks or areas where AI models can be improved.</div></div>
+<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">To build a business case for leadership, you can propose a pilot project to test the effectiveness of SkillOpt or similar technologies. This can include metrics such as improved efficiency, reduced manual rule-writing, and enhanced reliability. You can also benchmark your current AI models against industry standards or competitors to demonstrate the potential benefits of adopting this technology.</div></div>
+<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">Some specific vendor names or platforms relevant to this development include Microsoft Azure, Google Workspace, and other AI-powered tools. You should also consider consulting with Microsoft Research or other research institutions to stay up-to-date with the latest developments and advancements in this field.</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">Some technical risks to flag include the potential for SkillOpt to introduce new biases or errors into your AI models. You should also consider compliance risks, such as ensuring that your AI models comply with UK GDPR regulations. Operational risks include the potential for disruptions to your workflow or processes during the implementation of this technology.</div></div>
+<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">A quick win that can be achieved in under 30 days is to conduct a thorough audit of your current AI-powered tools and identify areas for improvement. This can include assessing the performance and reliability of your AI models and identifying potential bottlenecks or areas for improvement.</div></div>
+<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">The 6-12 month strategic move is to develop a comprehensive plan to integrate SkillOpt or similar technologies into your AI-powered tools and workflows. This can include proposing a pilot project, building a business case for leadership, and implementing the necessary changes to your AI models and workflows. You should also consider staying up-to-date with the latest developments and advancements in this field and consulting with research institutions or industry experts to ensure that you are taking a strategic and informed approach to adopting this technology.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 30 Jun 2026, 20:12</div>
+</div>
+</body>
+</html>
