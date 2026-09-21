@@ -112,7 +112,7 @@ def bouncer_node(state: VideoState):
 
     print(f"[DEBUG] Running Bouncer (Elite: {is_elite})...")
     resp = groq_call(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-20b",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=10,
     )
@@ -141,7 +141,7 @@ def analyst_node(state: VideoState):
 
     print("[DEBUG] Running Analyst...")
     resp = groq_call(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-20b",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=1000,
     )
@@ -164,7 +164,7 @@ def editor_node(state: VideoState):
 
     print("[DEBUG] Running Editor...")
     resp = groq_call(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-20b",
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"}
     )

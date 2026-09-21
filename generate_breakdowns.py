@@ -48,9 +48,11 @@ def call_groq(prompt, retries=3):
         try:
             client = get_client()
             response = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-20b",
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=1200,
+                reasoning_effort="low",
+                reasoning_format="hidden",
                 temperature=0.4,
             )
             return response.choices[0].message.content.strip()

@@ -29,8 +29,8 @@ langfuse = Langfuse()
 GROQ_TOKEN_STATS_FILE = "site/groq_token_stats.json"
 
 # Model split: 8b for high-volume scoring (500K TPD), 70b for quality summaries (100K TPD)
-MODEL_SCORING = "llama-3.1-8b-instant"
-MODEL_SUMMARY = "llama-3.3-70b-versatile"
+MODEL_SCORING = "openai/gpt-oss-20b"
+MODEL_SUMMARY = "openai/gpt-oss-20b"
 
 # Accumulates real token counts from resp.usage across this run
 _groq_token_stats = {
@@ -105,6 +105,8 @@ def groq_complete(messages, max_tokens=500, model=MODEL_SUMMARY):
                 model=model,
                 messages=messages,
                 max_tokens=max_tokens,
+                reasoning_effort="low",
+                reasoning_format="hidden",
             )
             if i > 0:
                 print("[DEBUG] Using Key 2")

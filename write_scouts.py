@@ -42,9 +42,11 @@ def groq_complete(messages, max_tokens=500):
         try:
             client = Groq(api_key=key)
             resp = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-20b",
                 messages=messages,
                 max_tokens=max_tokens,
+                reasoning_effort="low",
+                reasoning_format="hidden",
             )
             if i > 0:
                 print("[DEBUG] Using Key 2")
@@ -298,6 +300,8 @@ def groq_complete(messages, max_tokens=400):
                 model="llama3-8b-8192",
                 messages=messages,
                 max_tokens=max_tokens,
+                reasoning_effort="low",
+                reasoning_format="hidden",
             )
             if i > 0:
                 print("[DEBUG] Using Key 2")
