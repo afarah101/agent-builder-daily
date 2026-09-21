@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifying Rust cryptography in SymCrypt, from standards to code - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
+    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .summary-body p{margin-bottom:16px}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
+    .guide-block.green{border-left-color:var(--accent-green)}
+    .guide-block.amber{border-left-color:#f59e0b}
+    .guide-block.red{border-left-color:#ef4444}
+    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
+    .guide-block.green .guide-label{color:var(--accent-green)}
+    .guide-block.amber .guide-label{color:#f59e0b}
+    .guide-block.red .guide-label{color:#ef4444}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
+    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">Verifying Rust cryptography in SymCrypt, from standards to code</h1>
+  <div class="meta-line">Microsoft Research · 13 Jul 202 · Generated 13 Jul 2026, 19:36</div>
+  <a href="https://www.microsoft.com/en-us/research/blog/verifying-rust-cryptography-in-symcrypt-from-standards-to-code/" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Detailed Summary</div>
+  </div>
+  <div class="summary-body"><p>Microsoft Research has developed a new method to verify Rust cryptography in SymCrypt, which is a cryptographic library used by Microsoft. This development is significant for enterprise IT teams as it ensures the security of coding while maintaining speed and adaptability. The method involves verifying the Rust cryptography in SymCrypt from standards to code, which helps to identify any potential security vulnerabilities. This is important for enterprise IT teams as they need to ensure the security of their systems and data. The vendors involved in this development are Microsoft and the Rust community. The broader industry implications are that this development will help to improve the security of cryptographic libraries and ensure that they are compliant with industry standards. This will also help to build trust in the use of Rust for cryptographic applications. The development of this method is also significant as it shows the importance of verifying the security of coding and the need for continuous testing and evaluation. This will help to prevent any potential security breaches and ensure that systems and data are protected. The use of Rust for cryptographic applications is also significant as it provides a number of benefits, including memory safety and performance. The development of this method will help to improve the security of Rust-based cryptographic applications and ensure that they are compliant with industry standards.</p><p>The involvement of Microsoft in this development is also significant as it shows the company's commitment to improving the security of its products and services. The use of SymCrypt by Microsoft is also significant as it shows the importance of using secure cryptographic libraries. The development of this method will help to improve the security of Microsoft's products and services and ensure that they are compliant with industry standards. The broader industry implications of this development are that it will help to improve the security of cryptographic libraries and ensure that they are compliant with industry standards. This will also help to build trust in the use of Rust for cryptographic applications.</p></div>
+  <div class="divider"></div>
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">IT Engineer Application Guide</div>
+  </div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">Before acting on this development, IT teams should evaluate their current cryptographic libraries and assess their security. This should include a review of the libraries used, the protocols implemented, and the testing and evaluation procedures in place. IT teams should also assess their current use of Rust and SymCrypt and evaluate the potential benefits of using this method.</div></div>
+<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">To build a business case for leadership, IT teams should propose a plan to implement this method and evaluate its benefits. This should include metrics such as the number of potential security vulnerabilities identified and the improvement in the security of cryptographic libraries. IT teams should also propose a plan to implement this method and evaluate its benefits, including the potential cost savings and the improvement in the security of systems and data.</div></div>
+<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">The tools to consider in this development are SymCrypt and Rust. IT teams should also consider other cryptographic libraries and tools, such as OpenSSL and TLS.</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">The risks to flag in this development are the potential security vulnerabilities in cryptographic libraries and the potential impact on system performance. IT teams should also flag the potential risks of non-compliance with industry standards, such as UK GDPR.</div></div>
+<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">A quick win in this development is to implement a review of current cryptographic libraries and assess their security. This can be achieved in under 30 days and will help to identify any potential security vulnerabilities.</div></div>
+<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">The long-term play in this development is to implement this method and evaluate its benefits over a period of 6-12 months. This will help to improve the security of cryptographic libraries and ensure that they are compliant with industry standards. IT teams should also consider implementing a plan to continuously test and evaluate the security of cryptographic libraries and to implement any necessary updates or patches.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 13 Jul 2026, 19:36</div>
+</div>
+</body>
+</html>
