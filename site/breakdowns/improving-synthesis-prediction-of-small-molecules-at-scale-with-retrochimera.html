@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Improving synthesis prediction of small molecules at scale with RetroChimera - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
+    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .summary-body p{margin-bottom:16px}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
+    .guide-block.green{border-left-color:var(--accent-green)}
+    .guide-block.amber{border-left-color:#f59e0b}
+    .guide-block.red{border-left-color:#ef4444}
+    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
+    .guide-block.green .guide-label{color:var(--accent-green)}
+    .guide-block.amber .guide-label{color:#f59e0b}
+    .guide-block.red .guide-label{color:#ef4444}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
+    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">Improving synthesis prediction of small molecules at scale with RetroChimera</h1>
+  <div class="meta-line">Microsoft Research · 21 Sep 202 · Generated 22 Sep 2026, 18:02</div>
+  <a href="https://www.microsoft.com/en-us/research/blog/improving-synthesis-prediction-of-small-molecules-at-scale-with-retrochimera/" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Detailed Summary</div>
+  </div>
+  <div class="summary-body"><p>Microsoft Research has released RetroChimera, a new predictive model for small‑molecule synthesis planning that was published in Nature. RetroChimera leverages advanced machine‑learning techniques to generate synthetic routes that are more realistic and experimentally feasible than those produced by existing tools. The model was trained on a large, curated dataset of chemical reactions and incorporates retrosynthetic logic with forward‑reaction feasibility checks, reducing the number of infeasible or overly complex pathways. For enterprise IT teams, this development signals a shift toward higher‑confidence AI‑driven chemistry workflows that can be embedded into R&D pipelines. The tool is open‑source, with code and pretrained models available on GitHub, and is built on PyTorch, enabling integration with existing data science stacks. Vendors such as IBM Watson Discovery, SAP Leonardo, and cloud providers (Azure, AWS, GCP) can host the model or provide inference services. The broader industry implication is a potential acceleration of drug and material discovery cycles, as synthetic feasibility becomes a first‑class constraint in early design. Companies that adopt RetroChimera can expect reduced time‑to‑prototype, lower failure rates in synthesis, and a competitive edge in portfolio development. Additionally, the open‑source nature encourages community contributions, which may lead to rapid feature expansion and integration with cheminformatics platforms like RDKit and ChemAxon.</p></div>
+  <div class="divider"></div>
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">IT Engineer Application Guide</div>
+  </div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory current cheminformatics and synthetic planning tools (e.g., ASKCOS, IBM RXN, Pipeline Pilot).
+   - Assess data pipelines: reaction databases, SMILES/Graph representations, and storage (SQL vs graph DB).
+   - Verify compute resources: GPU availability, container orchestration (K8s), and CI/CD for ML models.
+   - Map existing compliance controls: data residency, encryption, and audit trails for chemical data.</div></div>
+<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Quantify current synthetic route failure rate (e.g., % of proposed routes that fail in lab).
+   - Estimate ROI: reduced synthesis iterations, faster time‑to‑market, and potential revenue uplift.
+   - Benchmark RetroChimera against internal tools: accuracy (success rate), speed (inference time), and integration effort.
+   - Present pilot scope: 3–5 molecules, 30‑day timeline, with measurable KPIs (route feasibility, synthesis cost).</div></div>
+<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- RetroChimera (open‑source, PyTorch, GitHub repo).
+   - RDKit (chemical informatics library).
+   - Azure Machine Learning or AWS SageMaker for model hosting.
+   - Docker/Kubernetes for containerized deployment.
+   - SAP Leonardo for integration with enterprise data fabric.
+   - IBM Watson Discovery for semantic search of reaction literature.</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Model drift if reaction database changes; GPU memory constraints; inference latency.
+   - Compliance: UK GDPR – ensure chemical data is anonymized, stored within EU/UK boundaries, and access is logged.
+   - Operational: Dependency on third‑party libraries (PyTorch, RDKit) with licensing implications; need for skilled data scientists.
+   - Security: Container hardening, vulnerability scanning, and secure API endpoints.</div></div>
+<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy RetroChimera locally in a Docker container on an existing GPU server.
+   - Run a 5‑molecule test set and compare route suggestions to current tool outputs.
+   - Document feasibility metrics and present findings to the R&D steering committee within 30 days.</div></div>
+<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Integrate RetroChimera into the enterprise R&D workflow as a microservice behind an API gateway.
+   - Automate data ingestion from internal reaction databases, apply continuous model retraining on new experimental data.
+   - Build a governance framework for model versioning, monitoring, and audit logging.
+   - Expand to multi‑objective optimization (yield, cost, sustainability) and align with corporate sustainability KPIs over 6–12 months.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 18:02</div>
+</div>
+</body>
+</html>
