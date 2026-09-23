@@ -667,7 +667,7 @@
       </div>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">6</div>
+          <div class="stat-num">3</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
@@ -676,7 +676,7 @@
         </div>
       </div>
     </div>
-    <div class="updated">Updated 23 Sep 2026, 11:17 UTC</div>
+    <div class="updated">Updated 23 Sep 2026, 14:05 UTC</div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
         <div class="tabs">
             <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -722,23 +722,23 @@
 
 <div class="content">
   <div id="case-studies" class="panel active">
-    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.26796v1','_blank')">
+    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.26749v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">AI-Deployment</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">code-repair-security</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
   </div>
-  <h3 class="card-title">Flash-dLLM: IO-Aware KV Caching and Parallel Decoding for Fast, Memory-Efficient Diffusion LLMs</h3>
+  <h3 class="card-title">Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical Study and a Change-Aware Screen</h3>
   <div class="card-meta">
-    <span class="authors">Quan Nguyen-Tri, Mukul Ranjan, Zhiqiang Shen</span>
+    <span class="authors">Om Nepal, Sushant Aryal, Oluseyi Olukola, Nick Rahimi</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
     <span class="pub-date">22 Sep 2026</span>
   </div>
-  <p class="card-summary">Flash-dLLM tackles slow, memory‑heavy inference of diffusion LLMs by adding intelligent KV caching and parallel decoding that avoid I/O bottlenecks. The team built an open‑source framework that automatically re‑uses cache data and decodes tokens in parallel, cutting inference time by up to 60% while halving memory usage. The result is a faster, cheaper model run that fits better into existing cloud pipelines.</p>
+  <p class="card-summary">The paper shows that using compile success as a metric for automated LLM‑generated vulnerability patches is unreliable – it barely changes even when the underlying code improves. The authors ran controlled tests on 203 C/C++ functions with three open‑source LLMs and three prompting methods and found that compile rates do not reflect true repair quality. For cloud engineers, this means you can’t trust a simple compile check to gauge the safety of LLM‑fixed code.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage cloud infrastructure that hosts diffusion LLMs, 1) add the Flash-dLLM library to your inference stack, 2) adjust your storage tier to support higher I/O throughput for cache reads, 3) monitor CPU and GPU utilisation to confirm the expected speed‑up and reduced memory footprint.</p>
+    <p class="insight-text">If you deploy LLM‑generated patches in your CI pipeline, stop relying solely on compile success. Instead, add a security‑review step or run dynamic analysis to validate vulnerability fixes. Check that your build system logs not just compilation but also functional and security tests before promotion.</p>
   </div>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
@@ -746,7 +746,7 @@
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper presents novel techniques for I/O‑aware KV caching and parallel decoding tailored to diffusion LLMs, which can directly impact the performance of inference pipelines that IT engineers deploy on cloud or on‑premise infrastructures. The methods address practical bottlenecks and are described with sufficient implementation detail to be reproduced within 90 days, enabling engineers to prototype faster, memory‑efficient models or to advise clients on deploying diffusion‑based LLMs more efficiently. The novelty is high (30/33) due to the focused combination of KV caching and parallel decoding for non‑autoregressive models. IT relevance is also high (30/33) because it pertains to LLM deployment, MLOps, and cloud infrastructure. The practical value for building or optimizing inference systems within 90 days scores 25/34. Total score is 85, well above the 40 threshold.</p>
+      <p class="trace-reasoning">The paper reveals that compile rate is an unreliable metric for LLM-generated code repairs, which could surprise IT engineers working on automated security patching. It is relevant to software engineering, DevOps, and security tooling, though it does not provide immediate, actionable steps for deployment within 90 days. The total score is 55, above the 40 threshold, so low_signal is false.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -773,173 +773,35 @@
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.26796v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2609.26749v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="Flash-dLLM: IO-Aware KV Caching and Parallel Decoding for Fast, Memory-Efficient Diffusion LLMs"
-        data-summary="Flash-dLLM tackles slow, memory‑heavy inference of diffusion LLMs by adding intelligent KV caching and parallel decoding that avoid I/O bottlenecks. The team built an open‑source framework that automatically re‑uses cache data and decodes tokens in parallel, cutting inference time by up to 60% while halving memory usage. The result is a faster, cheaper model run that fits better into existing cloud pipelines."
-        data-it="If you manage cloud infrastructure that hosts diffusion LLMs, 1) add the Flash-dLLM library to your inference stack, 2) adjust your storage tier to support higher I/O throughput for cache reads, 3) monitor CPU and GPU utilisation to confirm the expected speed‑up and reduced memory footprint."
+        data-title="Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical Study and a Change-Aware Screen"
+        data-summary="The paper shows that using compile success as a metric for automated LLM‑generated vulnerability patches is unreliable – it barely changes even when the underlying code improves. The authors ran controlled tests on 203 C/C++ functions with three open‑source LLMs and three prompting methods and found that compile rates do not reflect true repair quality. For cloud engineers, this means you can’t trust a simple compile check to gauge the safety of LLM‑fixed code."
+        data-it="If you deploy LLM‑generated patches in your CI pipeline, stop relying solely on compile success. Instead, add a security‑review step or run dynamic analysis to validate vulnerability fixes. Check that your build system logs not just compilation but also functional and security tests before promotion."
         data-monetisation=""
-        data-reasoning="The paper presents novel techniques for I/O‑aware KV caching and parallel decoding tailored to diffusion LLMs, which can directly impact the performance of inference pipelines that IT engineers deploy on cloud or on‑premise infrastructures. The methods address practical bottlenecks and are described with sufficient implementation detail to be reproduced within 90 days, enabling engineers to prototype faster, memory‑efficient models or to advise clients on deploying diffusion‑based LLMs more efficiently. The novelty is high (30/33) due to the focused combination of KV caching and parallel decoding for non‑autoregressive models. IT relevance is also high (30/33) because it pertains to LLM deployment, MLOps, and cloud infrastructure. The practical value for building or optimizing inference systems within 90 days scores 25/34. Total score is 85, well above the 40 threshold."
+        data-reasoning="The paper reveals that compile rate is an unreliable metric for LLM-generated code repairs, which could surprise IT engineers working on automated security patching. It is relevant to software engineering, DevOps, and security tooling, though it does not provide immediate, actionable steps for deployment within 90 days. The total score is 55, above the 40 threshold, so low_signal is false."
         data-score="0"
-        data-url="https://arxiv.org/abs/2609.26796v1">
+        data-url="https://arxiv.org/abs/2609.26749v1">
         ⬇ MD
       </button>
     </div>
   </div>
 </article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.26763v1','_blank')">
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.24662v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">cloud_infrastructure, llm_serving, SLO_management</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">security</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
   </div>
-  <h3 class="card-title">SARA: SLO-Aware Resource Allocation for Disaggregated Agentic LLM Services</h3>
+  <h3 class="card-title">DUMA-Bench: A Dual-Control Multi-Agent Benchmark for Evaluating LLM Agent Security</h3>
   <div class="card-meta">
-    <span class="authors">Shicong Liu, Xianghao Yu, Zhen Gao, Jun Zhang</span>
+    <span class="authors">Ivan Aleksandrov, German Kochnev, Sabrina Sadiekh, Yaroslav Rogoza</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
-    <span class="pub-date">22 Sep 2026</span>
+    <span class="pub-date">21 Sep 2026</span>
   </div>
-  <p class="card-summary">SARA tackles the problem of high inference latency and high cost in disaggregated, agent‑centric LLM services by allocating resources based on Service Level Objectives. It builds a framework that matches workloads to CPU/GPU/edge nodes using SLO‑driven analytics, reducing both response time and operational cost. The study reports lower latency and better cost utilisation compared to traditional heuristic schedulers.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage cloud infrastructure for LLM services, do the following:
-1. Define the SLOs (latency, throughput) for each workload.
-2. Integrate SARA’s allocation policy into your orchestration layer.
-3. Monitor and adjust node utilisation to keep SLOs met while trimming idle capacity.</p>
-  </div>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper presents a new resource‑allocation framework that explicitly optimises for SLOs in disaggregated LLM deployments, a topic directly relevant to cloud and edge infrastructure managers. It offers actionable insights into cost‑efficient scheduling for agentic LLM services, which can be translated into automation scripts or service‑level dashboards within a few weeks.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <div class="score-bars">
-      <div class="score-bar-row">
-      <span class="bar-label">Recency</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
-      <span class="bar-val">25</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Impact</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Maturity</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Monetisation</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-    </div>
-    <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.26763v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <span class="breakdown-pending">Breakdown pending</span>
-      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="SARA: SLO-Aware Resource Allocation for Disaggregated Agentic LLM Services"
-        data-summary="SARA tackles the problem of high inference latency and high cost in disaggregated, agent‑centric LLM services by allocating resources based on Service Level Objectives. It builds a framework that matches workloads to CPU/GPU/edge nodes using SLO‑driven analytics, reducing both response time and operational cost. The study reports lower latency and better cost utilisation compared to traditional heuristic schedulers."
-        data-it="If you manage cloud infrastructure for LLM services, do the following:
-1. Define the SLOs (latency, throughput) for each workload.
-2. Integrate SARA’s allocation policy into your orchestration layer.
-3. Monitor and adjust node utilisation to keep SLOs met while trimming idle capacity."
-        data-monetisation=""
-        data-reasoning="The paper presents a new resource‑allocation framework that explicitly optimises for SLOs in disaggregated LLM deployments, a topic directly relevant to cloud and edge infrastructure managers. It offers actionable insights into cost‑efficient scheduling for agentic LLM services, which can be translated into automation scripts or service‑level dashboards within a few weeks."
-        data-score="0"
-        data-url="https://arxiv.org/abs/2609.26763v1">
-        ⬇ MD
-      </button>
-    </div>
-  </div>
-</article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.26725v1','_blank')">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">design-automation</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
-    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
-  </div>
-  <h3 class="card-title">Does AI Save Time on Product Design? A Randomized Controlled Experiment of AI Prompt-to-Design Workflows</h3>
-  <div class="card-meta">
-    <span class="authors">Remy Stewart, Olabode Anise, Andrew Hogan, Augustus Griffin</span>
-    <span class="sep">·</span>
-    <span class="institution">Academic Institution</span>
-    <span class="sep">·</span>
-    <span class="pub-date">22 Sep 2026</span>
-  </div>
-  <p class="card-summary">The study tests AI‐driven prompt‑to‑design tools (e.g., Figma Make) to see if they cut designers’ time. Researchers ran a controlled trial with 100 participants on three design tasks and found that AI prompts reduced design time by roughly 25% compared to manual work.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage cloud‑based design tools, do the following: 1) enable or integrate an AI prompt‑to‑design feature into your workflow; 2) run a small pilot with your designers to measure time saved; 3) if the pilot shows similar time reductions, roll it out across your teams and monitor cost‑benefit.</p>
-  </div>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper offers modest novelty for IT engineers interested in integrating AI into design workflows, but the findings are specific to Figma and do not directly affect core infrastructure operations. IT relevance is moderate due to potential for automating prototype creation, yet the scope is limited. The value within 90 days is low because the application is niche and requires design expertise rather than typical IT infrastructure skills.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <div class="score-bars">
-      <div class="score-bar-row">
-      <span class="bar-label">Recency</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
-      <span class="bar-val">25</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Impact</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Maturity</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Monetisation</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-    </div>
-    <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.26725v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <span class="breakdown-pending">Breakdown pending</span>
-      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="Does AI Save Time on Product Design? A Randomized Controlled Experiment of AI Prompt-to-Design Workflows"
-        data-summary="The study tests AI‐driven prompt‑to‑design tools (e.g., Figma Make) to see if they cut designers’ time. Researchers ran a controlled trial with 100 participants on three design tasks and found that AI prompts reduced design time by roughly 25% compared to manual work."
-        data-it="If you manage cloud‑based design tools, do the following: 1) enable or integrate an AI prompt‑to‑design feature into your workflow; 2) run a small pilot with your designers to measure time saved; 3) if the pilot shows similar time reductions, roll it out across your teams and monitor cost‑benefit."
-        data-monetisation=""
-        data-reasoning="The paper offers modest novelty for IT engineers interested in integrating AI into design workflows, but the findings are specific to Figma and do not directly affect core infrastructure operations. IT relevance is moderate due to potential for automating prototype creation, yet the scope is limited. The value within 90 days is low because the application is niche and requires design expertise rather than typical IT infrastructure skills."
-        data-score="0"
-        data-url="https://arxiv.org/abs/2609.26725v1">
-        ⬇ MD
-      </button>
-    </div>
-  </div>
-</article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.26680v1','_blank')">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
-    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
-  </div>
-  <h3 class="card-title">Decoding the Legalese: A Scalable and Quantitative Framework for Analyzing Corporate Privacy Policies</h3>
-  <div class="card-meta">
-    <span class="authors">Jiaming Tang, Chenlan Wang, Mingyan Liu, Armin Sarabi</span>
-    <span class="sep">·</span>
-    <span class="institution">Academic Institution</span>
-    <span class="sep">·</span>
-    <span class="pub-date">22 Sep 2026</span>
-  </div>
-  <p class="card-summary">The paper presents an LLM‑based tool that automatically parses corporate privacy policies, assigns quantitative scores on clarity, data handling practices, and compliance, and produces a standardized report. It solves the problem of interpreting complex, verbose legal documents by providing a scalable, repeatable metric system. The result is a ready‑to‑deploy pipeline that can process thousands of policies quickly, highlighting strengths and weaknesses in their language and content.</p>
+  <p class="card-summary">DUMA-Bench is a new benchmark that tests the security of language‑model agents in scenarios where both the agent and the user can change the environment. It adds eight vulnerability classes to a previous test suite and measures how well agents resist attacks in interactive settings. For typical cloud infrastructure management, this work is not directly relevant.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
     <p class="insight-text">Not directly applicable to IT infrastructure work</p>
@@ -950,7 +812,7 @@
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">Novelty: The paper introduces a scalable, LLM-driven framework for systematically analysing corporate privacy policies, a topic not widely explored in mainstream IT tooling, earning a moderate novelty score. IT Relevance: The methodology can be leveraged by IT security and compliance teams to audit and flag policy inconsistencies, making it directly useful for infrastructure and governance, hence a strong relevance score. Value within 90 Days: The end‑to‑end system described can be repurposed into a SaaS offering or internal audit tool, offering clear, actionable deployment possibilities for IT engineers and consultants. The total score (75) is well above the 40 threshold, so low_signal is false.</p>
+      <p class="trace-reasoning">The paper introduces a new benchmark for evaluating security of LLM agents in dual-control scenarios. While the concept is novel and could raise awareness among security engineers, it offers limited direct actionable insight for immediate infrastructure or DevOps practice. The total score equals 40, so it is right at the threshold, but given the lack of immediate implementation guidance it is flagged as low signal.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -977,82 +839,16 @@
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.26680v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2609.24662v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="Decoding the Legalese: A Scalable and Quantitative Framework for Analyzing Corporate Privacy Policies"
-        data-summary="The paper presents an LLM‑based tool that automatically parses corporate privacy policies, assigns quantitative scores on clarity, data handling practices, and compliance, and produces a standardized report. It solves the problem of interpreting complex, verbose legal documents by providing a scalable, repeatable metric system. The result is a ready‑to‑deploy pipeline that can process thousands of policies quickly, highlighting strengths and weaknesses in their language and content."
+        data-title="DUMA-Bench: A Dual-Control Multi-Agent Benchmark for Evaluating LLM Agent Security"
+        data-summary="DUMA-Bench is a new benchmark that tests the security of language‑model agents in scenarios where both the agent and the user can change the environment. It adds eight vulnerability classes to a previous test suite and measures how well agents resist attacks in interactive settings. For typical cloud infrastructure management, this work is not directly relevant."
         data-it="Not directly applicable to IT infrastructure work"
         data-monetisation=""
-        data-reasoning="Novelty: The paper introduces a scalable, LLM-driven framework for systematically analysing corporate privacy policies, a topic not widely explored in mainstream IT tooling, earning a moderate novelty score. IT Relevance: The methodology can be leveraged by IT security and compliance teams to audit and flag policy inconsistencies, making it directly useful for infrastructure and governance, hence a strong relevance score. Value within 90 Days: The end‑to‑end system described can be repurposed into a SaaS offering or internal audit tool, offering clear, actionable deployment possibilities for IT engineers and consultants. The total score (75) is well above the 40 threshold, so low_signal is false."
+        data-reasoning="The paper introduces a new benchmark for evaluating security of LLM agents in dual-control scenarios. While the concept is novel and could raise awareness among security engineers, it offers limited direct actionable insight for immediate infrastructure or DevOps practice. The total score equals 40, so it is right at the threshold, but given the lack of immediate implementation guidance it is flagged as low signal."
         data-score="0"
-        data-url="https://arxiv.org/abs/2609.26680v1">
-        ⬇ MD
-      </button>
-    </div>
-  </div>
-</article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.24974v1','_blank')">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">AI_deployment</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
-    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
-  </div>
-  <h3 class="card-title">Harness-Zero: Harness Distillation via Agent-as-Harness</h3>
-  <div class="card-meta">
-    <span class="authors">Haoran Ye, Yuxing Lu, Haonan Dong, Zhaochen Su</span>
-    <span class="sep">·</span>
-    <span class="institution">Academic Institution</span>
-    <span class="sep">·</span>
-    <span class="pub-date">21 Sep 2026</span>
-  </div>
-  <p class="card-summary">The paper shows how to teach a model to behave as if it had a specialised harness (a helper system) by training it with that harness and then embedding its benefits into the model weights. This means the model can keep the harness’s performance boost even when the harness is no longer available. The research is mainly about improving agent training and does not directly affect typical cloud infrastructure management.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">Not directly applicable to IT infrastructure work.</p>
-  </div>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper proposes a novel approach—agent harness distillation—to embed specialized harness benefits directly into model weights, which could reduce reliance on multiple harnesses at runtime. This idea is surprising and potentially useful for engineers managing diverse AI workloads. However, the work is largely conceptual and lacks concrete deployment or tooling details, so its direct applicability to daily IT operations is limited. It may inform future MLOps strategies, but immediate, actionable use cases are scarce, yielding a modest value score. The combined score just exceeds the 40‑point threshold, so &#x27;low_signal&#x27; is set to false.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <div class="score-bars">
-      <div class="score-bar-row">
-      <span class="bar-label">Recency</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
-      <span class="bar-val">25</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Impact</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Maturity</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Monetisation</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-    </div>
-    <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.24974v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <span class="breakdown-pending">Breakdown pending</span>
-      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="Harness-Zero: Harness Distillation via Agent-as-Harness"
-        data-summary="The paper shows how to teach a model to behave as if it had a specialised harness (a helper system) by training it with that harness and then embedding its benefits into the model weights. This means the model can keep the harness’s performance boost even when the harness is no longer available. The research is mainly about improving agent training and does not directly affect typical cloud infrastructure management."
-        data-it="Not directly applicable to IT infrastructure work."
-        data-monetisation=""
-        data-reasoning="The paper proposes a novel approach—agent harness distillation—to embed specialized harness benefits directly into model weights, which could reduce reliance on multiple harnesses at runtime. This idea is surprising and potentially useful for engineers managing diverse AI workloads. However, the work is largely conceptual and lacks concrete deployment or tooling details, so its direct applicability to daily IT operations is limited. It may inform future MLOps strategies, but immediate, actionable use cases are scarce, yielding a modest value score. The combined score just exceeds the 40‑point threshold, so &#x27;low_signal&#x27; is set to false."
-        data-score="0"
-        data-url="https://arxiv.org/abs/2609.24974v1">
+        data-url="https://arxiv.org/abs/2609.24662v1">
         ⬇ MD
       </button>
     </div>
@@ -1144,7 +940,7 @@
         letter-spacing:1px;font-size:10px">
         ⚡ TODAY'S SIGNAL</span>
         <p style="margin-top:8px;font-family:'Inter',sans-serif;
-        font-size:14px;font-weight:500">Gemini 3.8 out now, while Chinese hackers exploit a USB backdoor, and Grab partners with OpenAI to upskill Southeast Asia’s workforce—your AI future is at stake.</p>
+        font-size:14px;font-weight:500">Stop scrolling—Gemini 3.8 Live launches, while China‑linked USB backdoors expose overlooked fixes, and AI infrastructure is now a</p>
     </div>
     
     <div class="cards-grid"><article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/gigapath-flash-and-gigatime-flash-toward-population-scale-discovery-with-efficient-pathology-foundation-models/','_blank')">
@@ -1156,11 +952,11 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="score-num">3/10</span>
     </div>
   </div>
   <h3 class="card-title">GigaPath-Flash and GigaTIME-Flash: Toward population-scale discovery with efficient pathology foundation models</h3>
-  <p class="card-summary">Microsoft Research has released GigaPath-Flash and GigaTIME-Flash, efficient pathology foundation models that reduce computational demands while preserving performance, enabling larger-scale studies and broader research applications.</p>
+  <p class="card-summary">Microsoft Research unveiled GigaPath-Flash and GigaTIME-Flash, lightweight pathology foundation models that reduce computational costs while preserving performance. These advances could enable larger-scale medical imaging studies by lowering hardware barriers.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
     <p class="insight-text"></p>
@@ -1173,23 +969,75 @@
     </div>
   </div>
 </article>
+<article class="card news-card" onclick="window.open('https://openai.com/index/openai-extends-cyber-access-to-ukraine-for-civilian-defense','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">OpenAI extends cyber access to Ukraine for civilian defense</h3>
+  <p class="card-summary">OpenAI has expanded its Daybreak cyber defense program to provide targeted support for Ukraine’s civilian infrastructure, offering advanced AI tools to detect and mitigate threats. This initiative demonstrates how large‑language models can be repurposed for nation‑state cyber defense, potentially informing broader security practices.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Keep an eye on OpenAI’s Daybreak capabilities in the next 30 days, as they could influence the threat landscape for European infrastructure. Understanding the attack patterns they detect may guide your own security monitoring and help you anticipate new vectors that could affect Google Workspace or JumpCloud users.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">23 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://openai.com/index/openai-extends-cyber-access-to-ukraine-for-civilian-defense" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/23/ema-raises-77m-as-ai-starts-eating-into-enterprise-software-and-services/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Ema raises $77M as AI starts eating into enterprise software and services</h3>
+  <p class="card-summary">Ema, an AI platform, secured an additional $77 million in funding, bringing its total to $140 million. The company now serves over 50 enterprise customers, including major cloud vendors Google and Microsoft.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Monitor Ema’s platform for potential integration with your existing Google Workspace or Microsoft 365 environments. Evaluate how its AI capabilities could enhance automated policy enforcement or data classification in your MDM or endpoint security workflows. Keep an eye on upcoming API releases that might enable tighter SSO or access‑management integrations.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">23 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://techcrunch.com/2026/09/23/ema-raises-77m-as-ai-starts-eating-into-enterprise-software-and-services/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
 <article class="card news-card" onclick="window.open('https://openai.com/index/grab-openai-ai-skills-southeast-asia','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Grab and OpenAI bring practical AI skills to Southeast Asia</h3>
-  <p class="card-summary">OpenAI and Grab have launched the GO Forward with AI program, a regional initiative designed to equip 30,000 Southeast Asian partners with practical AI skills. The program focuses on hands‑on learning and deployment of AI solutions across diverse industry sectors.</p>
+  <p class="card-summary">OpenAI and Grab have partnered to launch GO Forward with AI, a regional program aimed at building practical AI skills for 30,000 Southeast Asian partners. The initiative offers structured learning paths, hands‑on projects, and access to OpenAI’s tools to accelerate AI adoption across the region.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check the program portal to see if any of your vendors or partners in the Google Workspace or JumpCloud ecosystem are enrolled, as they may start offering AI‑powered workflow enhancements. Consider allocating a short internal briefing next week to evaluate whether the training content could be adapted for your own IT teams, especially for automating routine support tickets in Freshservice. Failing to monitor this initiative could mean missing early adoption opportunities that align with your current MDM and SSO tooling.</p>
+    <p class="insight-text">Monitor the program for potential training resources that could be adapted for your team’s AI literacy initiatives. Consider leveraging any free or subsidized access to OpenAI APIs that the program may provide to test automation or support workflows within your Google Workspace and JumpCloud environments.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">23 Sep 2026</span>
@@ -1204,24 +1052,76 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#64748b">Press</span>
       <span class="source-name">TechCrunch</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Regulation</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">‘We’re already fighting yesterday’s battle’: Greece’s prime minister gets candid about AI</h3>
-  <p class="card-summary">Greek Prime Minister Kyriakos Mitsotakis publicly acknowledged that governments worldwide are unprepared for imminent AI developments. This statement signals a broader trend of heightened scrutiny and potential regulatory pressure on AI technologies.</p>
+  <p class="card-summary">Greek Prime Minister Kyriakos Mitsotakis publicly acknowledged that governments are ill-prepared for the imminent changes AI will bring, emphasizing a need for better readiness. The comment highlights a broader concern over AI’s rapid impact on public policy and security.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Watch for upcoming European AI regulatory proposals that could impact your SaaS and cloud deployments, especially those involving data sovereignty and AI audit trails. Early preparation will help ensure compliance and avoid costly reconfiguration of your existing Google Workspace and MDM environments.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">23 Sep 2026</span>
     <div class="footer-links">
       <a href="https://techcrunch.com/2026/09/22/were-already-fighting-yesterdays-battle-greeces-prime-minister-gets-candid-about-ai/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://huggingface.co/blog/nvidia/nemotron-diarization','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">**Know Who Spoke When: Build Real-Time, Multi-Speaker AI with NVIDIA Nemotron 3 Diarization**</h3>
+  <p class="card-summary">NVIDIA has released Nemotron 3 Diarization, a real‑time multi‑speaker AI model that can identify and separate voices in streaming audio. This model expands NVIDIA’s NLP capabilities to include real‑time speaker separation, useful for advanced voice analytics.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Keep an eye on NVIDIA’s model for future voice‑based monitoring tools; it may eventually integrate with MDM or endpoint security solutions that use audio streams for anomaly detection. For now, note the release in case your team needs to evaluate voice‑AI capabilities within your existing AI stack.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">23 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://huggingface.co/blog/nvidia/nemotron-diarization" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/know-who-spoke-when-build-real-time-multi-speaker-ai-with-nvidia-nemotron-3-diar.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/23/spotify-is-giving-you-the-keys-to-its-recommendation-algorithm-with-u-s-launch-of-taste-profile/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Spotify’s is giving you the keys to its recommendation algorithm with US launch of ‘Taste Profile’</h3>
+  <p class="card-summary">Spotify launches &#x27;Taste Profile&#x27;, allowing Premium users in the U.S. to view and edit the algorithm that powers their music recommendations via natural language. The feature provides transparency into how Spotify’s AI interprets listening habits.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Check your own recommendation engines for similar explainability features; consider adding a user-facing insight layer to reduce blind spots in personalized content delivery.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">23 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://techcrunch.com/2026/09/23/spotify-is-giving-you-the-keys-to-its-recommendation-algorithm-with-u-s-launch-of-taste-profile/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/spotifys-is-giving-you-the-keys-to-its-recommendation-algorithm-with-us-launch-o.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1234,14 +1134,14 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">2/10</span>
+      <span class="score-num">1/10</span>
     </div>
   </div>
   <h3 class="card-title">Why Design Thinking Needs a Responsibility Reboot</h3>
-  <p class="card-summary">A March jury decision found Meta and Google liable for causing user harm through addictive product design, prompting calls for a responsibility reboot in design thinking. The ruling highlights legal and ethical pressures on major tech firms.</p>
+  <p class="card-summary">The article discusses how a legal verdict holding Meta and Google liable for user harm has sparked a debate about the responsibility of design thinking in tech companies.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check any internal user experience design reviews for potential liability risks; consider integrating ethical guidelines into product development cycles to mitigate future legal exposure.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">23 Sep 2026</span>
@@ -1251,54 +1151,23 @@
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/better-prompt-caching-for-gpt-6','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Better prompt caching for GPT-6</h3>
-  <p class="card-summary">OpenAI’s new GPT-6 introduces enhanced prompt caching that boosts cache hit rates, adds diagnostics, breakpoints, and latency‑cost controls. These improvements can lower the operational footprint of AI workloads, but don’t directly change existing IT tools.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor OpenAI’s GPT‑6 release notes and evaluate integrating the new caching and breakpoint features into your internal AI workflows within the next 30 days. Ignoring these could mean missing out on potential cost reductions and performance gains for your internal tooling and automation scripts. The most relevant tools for this evaluation are your custom AI‑driven automation scripts and any internal services that rely on OpenAI APIs.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">22 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://openai.com/index/better-prompt-caching-for-gpt-6" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/better-prompt-caching-for-gpt-6.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
 <article class="card news-card" onclick="window.open('https://huggingface.co/blog/transformers-llama-cpp-quants','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
     </div>
   </div>
   <h3 class="card-title">Transformers now runs llama.cpp quants</h3>
-  <p class="card-summary">Hugging Face’s Transformers library now supports running llama.cpp quants, enabling local inference of large language models without GPU requirements.
-
-The update allows IT engineers to run powerful LLMs on edge devices or legacy hardware, potentially reducing cloud inference costs and improving data residency compliance.
-</p>
+  <p class="card-summary">Hugging Face has released an update to its Transformers library that enables it to run llama.cpp quantized models directly. This allows developers to deploy LLaMA-based models locally with lower memory footprints and faster inference.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: In the coming week, explore the new llama.cpp quant support by updating your local deployment scripts in the internal AI sandbox.
-S2: Without leveraging this feature, your team may miss out on cost‑effective, low‑latency inference for user‑facing services.
-S3: This update most directly impacts your internal model hosting stack and could free up GPU resources for other critical workloads.</p>
+    <p class="insight-text">S1: Monitor the Hugging Face Transformers update in the next 30 days for compatibility with your internal ML tooling. S2: Incorporating llama.cpp quantization can reduce cloud inference costs and enable on-premise deployment, which is useful for your security and compliance requirements.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">22 Sep 2026</span>
@@ -1308,7 +1177,7 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/introducing-gpt-6-sol-and-luna','_blank')">
+<article class="card news-card" onclick="window.open('https://openai.com/index/better-prompt-caching-for-gpt-6','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
@@ -1317,20 +1186,20 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
-  <h3 class="card-title">Introducing GPT-6 Sol and Luna</h3>
-  <p class="card-summary">OpenAI has released two new models, GPT-6 Sol and GPT-6 Luna, designed to bring advanced AI capabilities to everyday work while balancing performance and cost. These models represent a significant update to the generative AI landscape, offering more options for businesses to integrate AI into their workflows.</p>
+  <h3 class="card-title">Better prompt caching for GPT-6</h3>
+  <p class="card-summary">OpenAI has released GPT‑6 with enhanced prompt caching that boosts cache hit rates, reduces latency, and lowers costs through new diagnostics and breakpoint controls. The update is a generic model improvement with no direct impact on the IT engineer’s current tool stack.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Watch OpenAI’s pricing and usage policy updates for GPT-6 Sol and Luna over the next 30 days. The new models could affect your cost structure and integration plans for AI-driven automation tools in your IT stack.</p>
+    <p class="insight-text">Note that GPT‑6’s lower latency and cost could affect future AI‑driven tooling you may build or evaluate, so keep it in mind when planning AI‑enabled services or automation scripts. In 90 days, revisit to assess if the new features align with your cost‑management or performance goals.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">22 Sep 2026</span>
     <div class="footer-links">
-      <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/introducing-gpt-6-sol-and-luna.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://openai.com/index/better-prompt-caching-for-gpt-6" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/better-prompt-caching-for-gpt-6.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1343,72 +1212,20 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">How UK AISI and EvalEval Are Making Benchmark Results Reproducible</h3>
-  <p class="card-summary">Hugging Face researchers from UK AISI and EvalEval have introduced methods to make benchmark results reproducible, enabling consistent evaluation of AI models across different environments. The initiative focuses on standardizing datasets, metrics, and evaluation protocols to reduce variance in model performance reporting.</p>
+  <p class="card-summary">Hugging Face announced that the AISI and EvalEval projects have introduced new mechanisms to make benchmark results reproducible, ensuring consistent and reliable AI model evaluations across environments. This addresses a longstanding issue where slight configuration differences can skew performance metrics.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor the release for potential impact on your AI model evaluation processes. Integrating these reproducibility standards could improve the reliability of internal testing pipelines and help justify model selection to stakeholders.</p>
+    <p class="insight-text">Keep an eye on the AISI and EvalEval repositories for updates that could standardise your internal model testing pipelines. Adopting these reproducibility tools could reduce the time spent troubleshooting inconsistent benchmark results, improving confidence in model deployments.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">22 Sep 2026</span>
     <div class="footer-links">
       <a href="https://huggingface.co/blog/evaleval-aisi" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/how-uk-aisi-and-evaleval-are-making-benchmark-results-reproducible.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/22/snorkel-ai-triples-valuation-to-3-5b-as-demand-for-ai-training-data-booms/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Snorkel AI triples valuation to $3.5B as demand for AI training data booms</h3>
-  <p class="card-summary">Snorkel AI, a startup specializing in data-as-a-service for AI training, has secured $350 million in a Series E round, bringing its valuation to $3.5 billion. The influx of capital is aimed at scaling its platform to meet growing demand for high-quality training datasets.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on Snorkel AI’s platform updates over the next 30 days; emerging tools could streamline your data pipeline for ML workloads or integrate with your existing Google Workspace or MDM setups, potentially reducing manual data labeling tasks.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">22 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://techcrunch.com/2026/09/22/snorkel-ai-triples-valuation-to-3-5b-as-demand-for-ai-training-data-booms/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/snorkel-ai-triples-valuation-to-35b-as-demand-for-ai-training-data-booms.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://huggingface.co/blog/omlx','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">2/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Jun Kim, oMLX creator and maintainer, joins Hugging Face to support the MLX community</h3>
-  <p class="card-summary">Jun Kim, the creator and maintainer of the MLX framework, has joined Hugging Face to help grow the MLX community. This move is aimed at fostering collaboration and expanding the ecosystem around MLX.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check if Hugging Face’s new partnership with MLX opens up any integration opportunities with your existing MLX projects, and stay tuned for future tooling updates that may impact your AI workflows.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">22 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://huggingface.co/blog/omlx" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/jun-kim-omlx-creator-and-maintainer-joins-hugging-face-to-support-the-mlx-commun.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1421,14 +1238,14 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
+      <span class="score-num">3/10</span>
     </div>
   </div>
   <h3 class="card-title">Five Urgent Priorities for CMOs in 2027</h3>
-  <p class="card-summary">The article outlines five urgent priorities for CMOs in 2027 as AI continues to reshape marketing strategies.</p>
+  <p class="card-summary">The MIT Sloan article outlines five urgent priorities for CMOs in 2027, emphasizing how evolving AI technologies are accelerating change in the marketing landscape. It focuses on strategic shifts needed by marketing leaders rather than technical infrastructure.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Not relevant to the IT engineer’s current toolset or responsibilities.</p>
+    <p class="insight-text">No direct relevance to an IT engineer managing Google Workspace, JumpCloud, Freshservice, or other security and access management tools.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">22 Sep 2026</span>
@@ -1438,49 +1255,23 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/22/techcrunch-founder-summits-agenda-revealed-unlock-fundraising-hiring-and-ai-insights-in-boston-on-november-4/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">0/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">TechCrunch Founder Summit’s agenda revealed: Unlock fundraising, hiring, and AI insights in Boston on November 4</h3>
-  <p class="card-summary">TechCrunch Founder Summit is scheduled for November 4 in Boston, focusing on fundraising, hiring, and AI insights for startup founders.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">No actionable steps for an IT engineer managing Google Workspace, JumpCloud, Freshservice, or related tools.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">22 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://techcrunch.com/2026/09/22/techcrunch-founder-summits-agenda-revealed-unlock-fundraising-hiring-and-ai-insights-in-boston-on-november-4/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/techcrunch-founder-summits-agenda-revealed-unlock-fundraising-hiring-and-ai-insi.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
 <article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/improving-synthesis-prediction-of-small-molecules-at-scale-with-retrochimera/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Microsoft Research</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">3/10</span>
+      <span class="score-num">2/10</span>
     </div>
   </div>
   <h3 class="card-title">Improving synthesis prediction of small molecules at scale with RetroChimera</h3>
-  <p class="card-summary">Microsoft Research has published a new predictive model, RetroChimera, that improves the accuracy and speed of chemical synthesis planning for small molecules. The model enables researchers to evaluate a broader range of compounds, potentially accelerating drug and material discovery.</p>
+  <p class="card-summary">Microsoft Research has unveiled RetroChimera, a predictive model that speeds up chemical synthesis by accurately forecasting reaction pathways for custom-made small molecules.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check the RetroChimera paper for insights that could inform your teams’ use of AI for process automation, but no immediate action is required.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">21 Sep 2026</span>
@@ -1499,14 +1290,14 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">0/10</span>
+      <span class="score-num">1/10</span>
     </div>
   </div>
   <h3 class="card-title">How Sustainability Transformations Quietly Lose Their Edge</h3>
-  <p class="card-summary">Corporate sustainability initiatives are retreating as regulatory pressure eases and shareholders demand stronger business cases, leading to a shift from growth to defense in sustainability programs.</p>
+  <p class="card-summary">Corporate sustainability efforts are losing momentum as net‑zero pledges are rolled back and regulatory pressure eases. Shareholders now demand stronger business cases, forcing leaders to defend rather than expand sustainability initiatives.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text"></p>
+    <p class="insight-text">Check that any AI‑powered sustainability reporting tools in your stack (e.g., sustainability modules in your GCP or Azure portal) still align with updated ESG metrics, and update any automated compliance dashboards to reflect the new regulatory landscape.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">21 Sep 2026</span>
@@ -1525,14 +1316,14 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">2/10</span>
+      <span class="score-num">1/10</span>
     </div>
   </div>
   <h3 class="card-title">MilleMiglia: A realistic instance generator for middle-mile logistics</h3>
-  <p class="card-summary">Google AI has published a research paper titled &quot;MilleMiglia: A realistic instance generator for middle-mile logistics,&quot; detailing a new algorithmic approach for generating realistic logistics scenarios.</p>
+  <p class="card-summary">Google AI has published a paper titled &quot;MilleMiglia,&quot; presenting a realistic instance generator designed for middle-mile logistics simulations. The work focuses on creating synthetic data to aid research in supply chain optimization.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">This research is primarily of academic interest and does not directly affect the IT engineer’s current toolset or workflow.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">18 Sep 2026</span>
@@ -1555,10 +1346,10 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
   </div>
   <h3 class="card-title">What we’ve learned from Microsoft’s own AI transformation</h3>
-  <p class="card-summary">Microsoft’s blog outlines lessons from its own AI transformation, emphasizing a shift from exploring AI capabilities to applying AI for business value. The article provides strategic insights that could inform how IT leaders integrate AI into their organizational processes.</p>
+  <p class="card-summary">Microsoft’s latest blog post outlines the lessons learned from its internal AI transformation, emphasizing the need for organizations to shift from exploring AI capabilities to integrating AI for tangible business value. The article highlights strategic principles for scaling AI initiatives and positioning companies as &#x27;Frontier Firms&#x27;.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review the blog to understand Microsoft’s AI maturity framework and how it aligns with your organization’s current AI initiatives. S2: The insights highlight operational practices that can reduce manual toil, improve policy enforcement, and enhance user experience across your SSO, MDM, and endpoint security stack. S3: Use this knowledge to benchmark your own AI adoption roadmap and prioritize projects that deliver measurable value to your IT operations.</p>
+    <p class="insight-text">Keep an eye on Microsoft’s evolving AI strategy, as it may influence future updates to Azure AI services and the integration of AI features in Microsoft 365 and other enterprise tools. Monitoring these shifts will help you anticipate changes that could impact your use of Microsoft Workspace, SSO, and cloud security solutions.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">17 Sep 2026</span>
@@ -1573,18 +1364,18 @@ S3: This update most directly impacts your internal model hosting stack and coul
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Google AI</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">The future of practice: Enabling teachers to create learning interactives with generative UI</h3>
-  <p class="card-summary">Google AI has unveiled a generative UI tool that empowers teachers to build interactive learning experiences. The feature is tailored for educational content creation rather than enterprise IT infrastructure.</p>
+  <p class="card-summary">Google AI has introduced a generative UI tool that lets teachers design interactive learning experiences. The feature allows educators to build customized lesson components without coding.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">This release is unlikely to impact Ahmed’s current IT stack or workflows.</p>
+    <p class="insight-text">Keep an eye on the release to assess if the tool could be repurposed for internal training modules or onboarding content. It may offer a low-effort way to create engaging internal docs that integrate with Google Workspace.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">17 Sep 2026</span>
@@ -1603,14 +1394,14 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Microsoft’s commitment for AI in education: Protecting students, strengthening learning</h3>
-  <p class="card-summary">Microsoft announces its renewed focus on leveraging AI to enhance educational outcomes and safeguard students. The blog outlines plans to integrate AI tools for personalized learning and stronger data protection within schools.</p>
+  <p class="card-summary">Microsoft has announced a renewed focus on integrating AI into educational environments to protect students and enhance learning outcomes. The initiative highlights new AI-driven tools and safeguards aimed at educators, families, and institutions.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Monitor Microsoft’s education AI roadmap and review any APIs or services that could be integrated into the organization’s existing SSO or MDM solutions. S2: The initiative could drive demand for AI‑enabled identity and data‑security features in the education sector, impacting future vendor selection.</p>
+    <p class="insight-text">Monitor Microsoft’s educational AI offerings for potential integration with your Google Workspace for Education and JumpCloud Identity services. Assess how these tools could streamline user provisioning, content delivery, and compliance monitoring in school settings. Evaluate the security implications for student data and ensure alignment with your endpoint security and access management policies.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">16 Sep 2026</span>
@@ -1625,7 +1416,7 @@ S3: This update most directly impacts your internal model hosting stack and coul
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
@@ -1633,10 +1424,10 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
   </div>
   <h3 class="card-title">Introducing Gemini 3.8 Live and 3.8 Live Extended Thinking</h3>
-  <p class="card-summary">Google DeepMind has unveiled Gemini 3.8 Live and a new Extended Thinking mode, adding real‑time generative capabilities and deeper contextual reasoning. These enhancements can be integrated into Google Workspace Admin Console to power smarter, AI‑driven automation across user management and support workflows.</p>
+  <p class="card-summary">Google DeepMind has launched Gemini 3.8 Live, an upgraded language model with real‑time inference and extended thinking capabilities. It offers instant, context‑aware generation, opening the door for seamless AI integration in productivity suites.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">1. Go to the Google Workspace Admin console, navigate to the AI features section, and enable Gemini 3.8 Live for real‑time chat assistance in Help Desk tickets. 2. Inaction would leave your support team without the latest contextual AI, reducing ticket resolution speed and increasing manual effort. 3. The feature is most impactful on Freshservice and Google Workspace, where automated ticket triage and user onboarding can be accelerated.</p>
+    <p class="insight-text">S1: Log into the Google Workspace Admin console and enable the new Gemini 3.8 Live API integration under the AI Settings this week. S2: Without activating it, your team will miss out on lower‑latency, higher‑accuracy responses for support bots and workflow automation, potentially increasing manual effort. S3: This directly impacts Google Workspace and any connected services like Freshservice and SSO via Okta that rely on Google APIs for internal automation.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">15 Sep 2026</span>
@@ -1655,14 +1446,14 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="score-num">2/10</span>
     </div>
   </div>
   <h3 class="card-title">Bypassing inference bottlenecks: Accelerating complex AI search with Retrieve-for-Train</h3>
-  <p class="card-summary">Google AI has published a research paper on a method called Retrieve-for-Train that reduces inference bottlenecks in complex AI search tasks. The technique focuses on pre-filtering data to speed up model training and inference cycles.</p>
+  <p class="card-summary">Google AI researchers have developed Retrieve‑for‑Train, an approach that speeds up complex AI search by bypassing inference bottlenecks. The technique promises faster model training but does not yet integrate with existing enterprise tools.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor upcoming Google Cloud AI offerings for potential integration of Retrieve-for-Train optimizations that could improve internal search or data analytics workloads.</p>
+    <p class="insight-text">Check your internal AI development pipeline for any need to accelerate model training; consider exploring Retrieve‑for‑Train as a potential future optimization if your team builds custom models. This could reduce training time and lower cloud compute costs, but it requires significant integration effort.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">15 Sep 2026</span>
@@ -1685,10 +1476,10 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
   </div>
   <h3 class="card-title">AlphaGenome Atlas: A predictive map of every possible DNA letter change in the human genome</h3>
-  <p class="card-summary">Google DeepMind has released the AlphaGenome Atlas, a comprehensive resource mapping the molecular effects of 9 billion single-letter DNA variants across the human genome. This dataset provides unprecedented insight into how every possible mutation might impact biological function, but it is a purely scientific advancement rather than a tool directly usable by IT engineers.</p>
+  <p class="card-summary">Google DeepMind has released AlphaGenome Atlas, a comprehensive database mapping the effects of 9 billion single‑letter DNA variants across the human genome. This research provides a predictive framework for genetic impact analysis.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check your organization&#x27;s bioinformatics or compliance teams to see if the Atlas could inform any genetic data handling policies, as it might influence future regulatory requirements.</p>
+    <p class="insight-text">Check your data analytics pipeline for potential integration with genomic datasets if your organization handles biomedical or genomics-related data. This tool could inform risk assessments for bioinformatics projects but does not require immediate action.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">08 Sep 2026</span>
@@ -1707,46 +1498,19 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">8/10</span>
+      <span class="score-num">10/10</span>
     </div>
   </div>
   <h3 class="card-title">China-linked hackers backdoored executives&#x27; laptops via USB, exploiting a fix companies had but weren&#x27;t using</h3>
-  <p class="card-summary">A Chinese state‑linked hacking group breached executive laptops by booting them from a USB stick in hotel rooms, exploiting a patch that many companies had not applied. CrowdStrike’s 2026 Threat Hunting Report details the operation, highlighting the risks of unmanaged USB access and the need for endpoint hardening.</p>
+  <p class="card-summary">CrowdStrike has reported a recent campaign where Chinese state-linked hackers compromised executive laptops by physically inserting malicious USB sticks in hotel rooms, exploiting a previously identified fix that many companies had not applied. The attack underscores the need for stringent physical security and USB device controls to prevent such hardware-based breaches.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Go to your CrowdStrike Falcon console and enable USB device control and image capture policies this week. Failure to enforce these controls exposes executives to boot‑kits that bypass OS security, increasing the likelihood of credential theft. The CrowdStrike endpoint security suite is the primary tool for mitigating this threat.
-</p>
+    <p class="insight-text">S1: Inspect and tighten USB device policies in your MDM and endpoint security settings this week. S2: Failure to enforce strict USB controls leaves executive devices vulnerable to physical attacks that bypass network defenses. S3: Your CrowdStrike and JumpCloud integrations can enforce device compliance and monitor for unauthorized USB usage.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">03 Sep 2026</span>
     <div class="footer-links">
       <a href="https://venturebeat.com/security/china-linked-hackers-backdoored-executives-laptops-via-usb-exploiting-a-fix-companies-had-but-werent-using" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <span class="breakdown-pending">Breakdown pending</span>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://venturebeat.com/technology/welcome-to-the-agi-era-openai-launches-gpt-6-astra','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">VentureBeat</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">&#x27;Welcome to the AGI era&#x27;: OpenAI launches GPT-6 Astra</h3>
-  <p class="card-summary">OpenAI has officially released GPT‑6 Astra, claiming it represents a step toward artificial general intelligence. The announcement came during a closed press briefing and signals a significant advancement in large language model capabilities.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Consider evaluating GPT‑6 Astra’s APIs for potential integration with your existing MDM and SSO tools over the next 30 days. Understanding its performance and cost will inform future automation decisions in your IT stack.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">03 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://venturebeat.com/technology/welcome-to-the-agi-era-openai-launches-gpt-6-astra" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
@@ -1764,10 +1528,10 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
   </div>
   <h3 class="card-title">Introducing WeatherNext 3, our most advanced and accurate global weather AI model</h3>
-  <p class="card-summary">Google DeepMind has unveiled WeatherNext 3, a next‑generation AI model that promises higher accuracy for global weather forecasting. The model is built on advanced deep learning techniques and aims to provide more reliable predictions for a variety of applications.</p>
+  <p class="card-summary">Google DeepMind has released WeatherNext 3, a new global weather AI model that promises more accurate forecasts. The model is positioned as an advancement in predictive meteorology, leveraging deep learning to improve weather prediction granularity.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Monitor if Google releases an API or SDK for WeatherNext 3 that could be integrated into internal analytics or alerting systems. S2: Accurate weather data can improve scheduling, incident response, and resource planning for the IT team, especially when anticipating weather‑related downtime.</p>
+    <p class="insight-text">Monitor the release for potential integration with existing alerting and monitoring tools; if your organization relies on weather-dependent operations, evaluate the API for future automation of risk assessments.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">03 Sep 2026</span>
@@ -1777,23 +1541,51 @@ S3: This update most directly impacts your internal model hosting stack and coul
     </div>
   </div>
 </article>
+<article class="card news-card" onclick="window.open('https://venturebeat.com/technology/welcome-to-the-agi-era-openai-launches-gpt-6-astra','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">VentureBeat</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">&#x27;Welcome to the AGI era&#x27;: OpenAI launches GPT-6 Astra</h3>
+  <p class="card-summary">OpenAI has just released GPT‑6 Astra, a model the company claims moves us into the AGI era. The announcement comes from a closed briefing with co‑founder Greg Brockman and signals a significant step forward in generative AI capabilities.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Review OpenAI’s API documentation for GPT‑6 Astra over the next 30 days to understand potential pricing, latency, and feature differences that could impact your existing integrations with Google Workspace or JumpCloud. Monitoring the release will help you anticipate any shifts in AI‑driven workflow tools your department uses.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">03 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://venturebeat.com/technology/welcome-to-the-agi-era-openai-launches-gpt-6-astra" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
 <article class="card news-card" onclick="window.open('https://blogs.microsoft.com/blog/2026/09/01/the-yield-imperative-turning-ai-infrastructure-into-useful-intelligence/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Microsoft</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Infrastructure</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">8/10</span>
     </div>
   </div>
   <h3 class="card-title">The yield imperative: Turning AI infrastructure into useful intelligence</h3>
-  <p class="card-summary">Microsoft highlights the importance of converting AI infrastructure into actionable intelligence, focusing on metrics that matter across industries such as yield in semiconductors and risk in insurance. The post underscores a shift toward measuring AI effectiveness through industry‑specific outcomes rather than generic performance metrics.</p>
+  <p class="card-summary">Microsoft’s latest blog post highlights a new focus on turning AI infrastructure into actionable intelligence, emphasizing the concept of &quot;yield&quot; as a key metric for success across industries.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor Microsoft’s AI infrastructure announcements for insights that could inform your own performance metrics in tools like Google Workspace and Azure, and consider aligning your internal KPIs with the yield‑centric approach to evaluate AI investments.</p>
+    <p class="insight-text">S1: Review Azure AI services (Azure OpenAI, Cognitive Services) and evaluate whether adding AI-driven analytics could improve operational insights this week.
+S2: Delaying this review risks missing early adoption benefits and potential cost optimizations through AI‑powered automation.
+S3: The Azure platform directly impacts your cloud infrastructure and can enhance your existing Microsoft 365 and SSO workflows.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">02 Sep 2026</span>
@@ -1808,8 +1600,8 @@ S3: This update most directly impacts your internal model hosting stack and coul
   <div id="archive-cs" class="panel">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-09-23</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><span class='archive-title'>Flash-dLLM: IO-Aware KV Caching and Parallel Decoding for Fa</span><span class='archive-title'>SARA: SLO-Aware Resource Allocation for Disaggregated Agenti</span><span class='archive-title'>Does AI Save Time on Product Design? A Randomized Controlled</span></div>
+  <div class="archive-count">2 items</div>
+  <div class="archive-previews"><span class='archive-title'>Metrics Failure in LLM-Based Code Vulnerability Repair: An E</span><span class='archive-title'>DUMA-Bench: A Dual-Control Multi-Agent Benchmark for Evaluat</span></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-09-22</div>
@@ -1932,7 +1724,7 @@ S3: This update most directly impacts your internal model hosting stack and coul
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-09-23</div>
   <div class="archive-count">25 items</div>
-  <div class="archive-previews"><span class='archive-title'>Introducing Gemini 3.8 Live and 3.8 Live Extended Thinking</span><span class='archive-title'>China-linked hackers backdoored executives' laptops via USB,</span><span class='archive-title'>Grab and OpenAI bring practical AI skills to Southeast Asia</span></div>
+  <div class="archive-previews"><span class='archive-title'>Introducing Gemini 3.8 Live and 3.8 Live Extended Thinking</span><span class='archive-title'>China-linked hackers backdoored executives' laptops via USB,</span><span class='archive-title'>The yield imperative: Turning AI infrastructure into useful </span></div>
 </div></div>
   </div>
 </div>
