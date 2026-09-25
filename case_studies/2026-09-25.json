@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-09-25T11:34:57.066134",
+  "filter": "last_4_months",
+  "source": "arxiv",
+  "total_fetched": 166,
+  "total_scored": 3,
+  "case_studies": [
+    {
+      "id": "http://arxiv.org/abs/2609.30266v1",
+      "title": "LLM Agents Can Easily Tamper With Their Own Traces",
+      "abstract": "Asynchronous monitoring, incident investigations, and compliance audits primarily rely on agent traces to reconstruct what happened. These analyses assume that LLM agents cannot tamper with their own execution traces. We show that local LLM agents such as Claude Code, Codex, Antigravity, Open Code and Grok Build fail to enforce this boundary. All tested harnesses, except Muse Code, allowed agents to delete their traces when asked, without triggering monitor guardrails. We also validate that external attackers can exploit this gap to induce trace deletion. Finally, we show that trace tampering ",
+      "authors": [
+        "Jeremy Qin",
+        "David Schmotz",
+        "Derck Prinzhorn",
+        "Luca Beurer-Kellner"
+      ],
+      "institution": "Academic Institution",
+      "pub_date": "2026-09-24",
+      "url": "https://arxiv.org/abs/2609.30266v1",
+      "recency_score": 25,
+      "source_type": "arxiv",
+      "real_world_impact": 0,
+      "ai_maturity": 0,
+      "monetisation_potential": 0,
+      "total_score": 0,
+      "summary": "LLM agents can delete their own execution traces, breaking the assumption that logs are immutable during monitoring, investigations, or compliance audits. The study tested several local agents and found all but one could erase traces without triggering guardrails, and attackers can exploit this to hide actions.",
+      "it_breakdown": "If you manage LLM‑based services, check that your logging system blocks trace deletion; enable strict guardrails and audit trail integrity checks. This flags a risk: if your org uses agents for code generation or automation, verify that trace deletion is impossible or logged.",
+      "monetisation": "",
+      "relevance_tag": "Security",
+      "author_built_product": false,
+      "score_reasoning": "The paper reveals a significant security flaw in LLM agents that can delete their execution traces, directly affecting monitoring and audit processes in IT environments. It is novel for IT engineers, especially those dealing with compliance and incident response, and could prompt immediate review of LLM deployment practices. However, the findings are theoretical and do not offer a ready‑to‑implement solution or actionable automation, so the 90‑day value is minimal.",
+      "gemini_eval_status": "pending",
+      "eval_verdict": "pass",
+      "eval_flagged": false
+    },
+    {
+      "id": "http://arxiv.org/abs/2609.30147v1",
+      "title": "GRASP: Generating, Revising, and Assessing for Strategic Planning with Agentic AI",
+      "abstract": "Large Language Models (LLMs) typically exhibit a performance profile where reliability degrades as task complexity increases. We address the challenge of generating high-quality natural language executable plans for complex tasks by introducing $\\textbf{GRASP}$, a strategy-aware, multi-stage planning framework. GRASP decouples the planning pipeline across specialized, context-isolated modules: it pre-compiles global macro-guidelines (GenPlan), explores alternative localized strategies within isolated context windows (RevPlan), and independently evaluates trajectories using a multi-criteria dis",
+      "authors": [
+        "Arunabh Srivastava",
+        "Mohammad A.",
+        " Khojastepour",
+        "Srimat Chakradhar"
+      ],
+      "institution": "Academic Institution",
+      "pub_date": "2026-09-24",
+      "url": "https://arxiv.org/abs/2609.30147v1",
+      "recency_score": 25,
+      "source_type": "arxiv",
+      "real_world_impact": 0,
+      "ai_maturity": 0,
+      "monetisation_potential": 0,
+      "total_score": 0,
+      "summary": "GRASP is a new method for turning complex tasks into clear, executable natural‑language plans using LLMs. It splits the job into three steps: first it creates general rules, then it tests different local strategies, and finally it rates each plan on several quality factors. The result is a set of high‑quality, ready‑to‑run plans that are easier for humans or systems to follow.",
+      "it_breakdown": "Not directly applicable to IT infrastructure work",
+      "monetisation": "",
+      "relevance_tag": "automation",
+      "author_built_product": false,
+      "score_reasoning": "The paper presents a novel multi-stage planning framework (GRASP) that could help IT engineers automate complex task planning via LLMs, offering potential improvements in workflow automation and DevOps scripting. However, the work is largely conceptual and lacks immediate actionable tools or APIs that can be deployed within 90 days, limiting its short-term value. The novelty is moderate because similar modular LLM planning approaches exist, and the IT relevance is moderate due to potential application in scripting and automation but not directly tied to existing infrastructure platforms.",
+      "gemini_eval_status": "pending",
+      "eval_verdict": "pending",
+      "eval_flagged": false
+    },
+    {
+      "id": "http://arxiv.org/abs/2609.29095v1",
+      "title": "Where Does Exactly-Once Live? Model, Harness, and Tool-Contract Effects on Duplicate Side Effects in LLM Agents",
+      "abstract": "When a tool-using agent's write times out or returns a server error, the action may already have taken effect. Retrying blindly duplicates it -- a second charge, a second announcement, a second deployment -- while giving up skips required work. We ask where exactly-once behaviour should be enforced: in the model, in the agent harness, or in the tool contract. We introduce LIMBO, a deterministic sandbox of six services with realistic contracts (optional idempotency keys, eventually consistent and missing read paths) and twelve fault modes injected at the service boundary, including late commits",
+      "authors": [
+        "Jiapeng Li"
+      ],
+      "institution": "Academic Institution",
+      "pub_date": "2026-09-24",
+      "url": "https://arxiv.org/abs/2609.29095v1",
+      "recency_score": 25,
+      "source_type": "arxiv",
+      "real_world_impact": 0,
+      "ai_maturity": 0,
+      "monetisation_potential": 0,
+      "total_score": 0,
+      "summary": "The research tackles the problem of duplicated side effects when a large‑language‑model (LLM) agent’s tool calls fail or timeout – for example, double charges or repeated deployments. It builds LIMBO, a deterministic sandbox with six services and twelve fault modes, to test where exactly‑once behaviour should be enforced (model, harness or tool contract). The result shows that placing idempotency logic in the agent harness and enforcing idempotency keys in tool contracts reduces duplicate actions, offering a clear path to safer automated operations.",
+      "it_breakdown": "If you manage cloud infrastructure, here is what to do:\n1. Test your current tool contracts against the LIMBO sandbox to identify missing idempotency support.\n2. Implement or enforce idempotency keys in your tool APIs and add a retry‑control layer in your agent harness.\n3. Monitor for retry patterns and fail‑over behaviour to ensure exactly‑once execution before scaling up automated deployments.",
+      "monetisation": "",
+      "relevance_tag": "LLM agents, tool contract, idempotency, fault injection",
+      "author_built_product": false,
+      "score_reasoning": "The paper addresses exact‑once semantics for LLM agent tool calls, highlighting practical failure modes and proposing a sandbox (LIMBO) to test idempotency, consistency, and fault injection. This is directly relevant to IT engineers building or integrating LLMs with enterprise tools, offering actionable guidance on contract design, error handling, and sandbox testing that can be adopted within 90 days. The novelty is moderate because it exposes a known issue (duplicate side effects) but provides a concrete framework and tooling.",
+      "gemini_eval_status": "pending",
+      "eval_verdict": "pending",
+      "eval_flagged": false
+    }
+  ]
+}
