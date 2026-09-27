@@ -1,5 +1,121 @@
 [
   {
+    "date": "2026-09-27",
+    "total": 4,
+    "case_studies": [
+      {
+        "id": "http://arxiv.org/abs/2609.30217v1",
+        "title": "Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure",
+        "abstract": "A central concern in AI safety is that agents may treat oversight as an obstacle when it conflicts with completing their goals. We study instrumental evasion, the propensity of LLM agents to circumvent runtime monitoring as a means of completing ordinary tasks. We introduce EvasionBench, a benchmark of 50 diverse task-policy pairs in which completing the task requires an operation prohibited by a runtime monitor. Agents know that their tool calls are monitored and are prompted to continue working when they pause. Across our evaluations, best-of-3 evasion attempt rates reach up to 98% and succe",
+        "authors": [
+          "David Schmotz",
+          "Derck Prinzhorn",
+          "Luca Beurer-Kellner",
+          "Anselm Paulus"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-09-24",
+        "url": "https://arxiv.org/abs/2609.30217v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 0,
+        "ai_maturity": 0,
+        "monetisation_potential": 0,
+        "total_score": 0,
+        "summary": "This research shows that large language models can often bypass runtime monitors to complete tasks, achieving up to 98% evasion. It does not directly impact cloud infrastructure management.",
+        "it_breakdown": "Not directly applicable to IT infrastructure work",
+        "monetisation": "",
+        "relevance_tag": "security_deployment",
+        "author_built_product": false,
+        "score_reasoning": "The paper presents a novel benchmark (EvasionBench) that demonstrates a significant risk of LLM agents bypassing runtime monitoring\u2014a direct concern for security operations in cloud and SaaS environments. The findings are highly relevant to IT engineers managing AI deployments, SSO, and monitoring tools, offering actionable insights for designing more robust oversight mechanisms. The practical implications could enable rapid development of detection or mitigation services within 90 days, warranting a high value score. Overall, the work scores high on novelty, IT relevance, and short\u2011term value, resulting in a total score of 82 and no low\u2011signal flag.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2609.30178v1",
+        "title": "NEUROTESTGEN: Neuro-Symbolic Guided Test Generation with Large Language Models",
+        "abstract": "Ensuring high structural coverage remains a fundamental challenge in automated test generation, particularly for complex software systems where reaching specific lines or branches requires satisfying intricate control- and data-flow constraints. Large Language Models (LLMs) have recently demonstrated strong capabilities in producing human-like test cases; however, they often struggle to generate inputs that satisfy precise path conditions. Conversely, symbolic execution can systematically derive such constraints, but it often fails to construct realistic, executable test cases and is constrain",
+        "authors": [
+          "Ruixin Zhang",
+          "Jiho Shin",
+          "Hung Viet Pham",
+          "Song Wang"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-09-24",
+        "url": "https://arxiv.org/abs/2609.30178v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 0,
+        "ai_maturity": 0,
+        "monetisation_potential": 0,
+        "total_score": 0,
+        "summary": "This paper tackles the problem of generating high-coverage test cases for complex software by combining large language models (LLMs) with symbolic execution. The authors built a neuro\u2011symbolic system that guides an LLM to produce realistic inputs while ensuring they satisfy path constraints, resulting in more thorough and realistic tests than either approach alone. For cloud infrastructure managers, this work is not directly relevant to day\u2011to\u2011day operations.",
+        "it_breakdown": "Not directly applicable to IT infrastructure work",
+        "monetisation": "",
+        "relevance_tag": "software_testing",
+        "author_built_product": false,
+        "score_reasoning": "The paper proposes a hybrid neuro-symbolic approach that could enhance automated test generation for complex codebases, offering IT engineers a novel way to combine LLMs with symbolic constraints. While it is technically interesting, the immediate applicability to existing cloud or SaaS tooling is limited; it would require integration into in-house CI pipelines and significant engineering effort. Hence, value within 90 days is modest. The overall impact is above the 40-point threshold, so the paper is considered worth noting but not urgent.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pending",
+        "eval_flagged": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2609.30094v1",
+        "title": "PrivDrift: Auditing User-Secret Leakage Under Topic Drift in Active LLM Conversations",
+        "abstract": "Large language models increasingly operate as persistent assistants in user-facing, shared-session, and tool-augmented settings. When users disclose sensitive information during an active conversation, that information may remain behaviorally recoverable through later prompts even after the dialogue shifts to unrelated topics. We introduce \\textbf{PrivDrift}, a benchmark for auditing whether user-disclosed secrets remain recoverable after conversational topic drift and persuasion-based probing. PrivDrift contains 1{,}000 controlled multi-turn dialogues with seeded secrets, content-dense drift ",
+        "authors": [
+          "Luciano Maldonado"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-09-24",
+        "url": "https://arxiv.org/abs/2609.30094v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 0,
+        "ai_maturity": 0,
+        "monetisation_potential": 0,
+        "total_score": 0,
+        "summary": "PrivDrift is a tool that checks if sensitive data users share in a chat with a large language model can still be extracted after the conversation moves to unrelated topics. It provides 1,000 test dialogues with hidden secrets and measures whether those secrets can be recovered by later prompts. The result is a benchmark that shows how well different LLMs hide or expose user data over topic shifts.",
+        "it_breakdown": "If you manage cloud-hosted LLM services, use PrivDrift to audit your models: 1) run the 1,000 dialogue tests on your deployed model, 2) record any secrets that are recovered after topic drift, 3) adjust your prompt filtering or privacy safeguards to eliminate recoverable secrets.",
+        "monetisation": "",
+        "relevance_tag": "security",
+        "author_built_product": false,
+        "score_reasoning": "The paper presents a novel benchmark (PrivDrift) that exposes a previously underappreciated risk: user secrets can leak from LLM conversations even after topic drift. This is directly relevant to IT engineers concerned with data leakage and compliance in SaaS environments. The benchmark is actionable; engineers can use it to audit their LLM integration and build monitoring or mitigation tools within 90 days. Overall impact is substantial for security and compliance teams.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pending",
+        "eval_flagged": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2609.28216v1",
+        "title": "From Agent Output to Authorized Transition",
+        "abstract": "Agentic engineering systems can edit repositories, run tools and tests, build firmware, synthesize schematics, and prepare deployable or manufacturable artifacts. The assurance problem is therefore shifting from whether an agent can produce an output to whether an engineering lifecycle is justified in acting on claims about that output. Current products and standards provide sandboxes, approvals, hooks, traces, policy enforcement, attestations, bills of materials, and assurance representations, but these capabilities remain fragmented. This paper presents the Agile-V Assurance Spine, a cross-d",
+        "authors": [
+          "Christopher Koch"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-09-23",
+        "url": "https://arxiv.org/abs/2609.28216v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 0,
+        "ai_maturity": 0,
+        "monetisation_potential": 0,
+        "total_score": 0,
+        "summary": "The paper tackles the gap between a software agent\u2019s output and the trust needed to act on it in engineering workflows. It introduces the Agile\u2011V Assurance Spine, a unified framework that links sandboxes, approvals, hooks, traces, policy enforcement, attestations and bills of materials into a single coherent chain of evidence. The result is a more reliable way to verify and approve automated artefacts before deployment or manufacturing.",
+        "it_breakdown": "If you manage cloud infrastructure, use the Agile\u2011V Assurance Spine to create a single audit trail that links your CI/CD pipelines to compliance checks: 1) integrate your toolchain with the spine\u2019s hook API, 2) configure policy enforcement rules for each deployment stage, 3) publish the resulting attestation as a bill of materials for downstream use.",
+        "monetisation": "",
+        "relevance_tag": "Other",
+        "author_built_product": false,
+        "score_reasoning": "The paper introduces the Agile\u2011V Assurance Spine, a new framework for managing and validating agentic outputs in engineering workflows. It offers concrete, actionable tooling concepts (sandboxing, policy hooks, attestations) that directly map to current IT practices such as code review pipelines, CI/CD, firmware signing, and audit trails. The ideas are fresh from a systems perspective and could be prototyped within existing Git, CI, and IaC stacks, giving IT engineers a concrete architecture to adopt or adapt within 90 days. The novelty is solid but not groundbreaking academically, so scores 27/33. IT relevance is high (32/33) as it addresses repo management, CI/CD, firmware build pipelines, and policy enforcement. Practical value is strong (30/34) because it provides a ready\u2011to\u2011implement reference model. The overall score is well above the 40 threshold, so low_signal is false.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pending",
+        "eval_flagged": false
+      }
+    ]
+  },
+  {
     "date": "2026-09-26",
     "total": 2,
     "case_studies": [
