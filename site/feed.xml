@@ -5,85 +5,23 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 28 Sep 2026 13:30:24 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 28 Sep 2026 23:13:40 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>FragToken: Amplifying LLM Inference Costs through Noncanonical Token Generation</title>
-    <link>https://arxiv.org/abs/2609.31552v1</link>
-    <guid>https://arxiv.org/abs/2609.31552v1</guid>
+    <title>Authority at Commit Time: Reject-and-Rerun Semantics for Governed Agentic Systems</title>
+    <link>https://arxiv.org/abs/2609.31490v1</link>
+    <guid>https://arxiv.org/abs/2609.31490v1</guid>
     <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research shows a new way to trick LLM services into spending a lot of compute by making the model output the same text but in many more tokens using non‑canonical token sequences. The authors built a technique that silently inflates token usage and found it can raise inference costs by a large factor while staying hidden from typical monitoring. It matters if you rely on paid LLM APIs and could cost your budget more than expected.</p><p><strong>IT Breakdown:</strong> If you manage cloud LLM usage, check your tokenisation pipeline: enforce canonical token outputs, limit per‑request token counts, and audit token logs for unusually high token counts per identical text.</p>]]></description>
+    <description><![CDATA[<p>The research tackles the problem that automated agents can act on outdated policy or system state, risking unapproved changes. The authors built a governance service that, at the moment an agent proposes an action, checks the current state and verifies the proposal; if it is still valid the action is reserved for execution, otherwise it is rejected and must be retried. The result is that only up‑to‑date, authorised actions are allowed, preventing stale or unauthorized changes from reaching the infrastructure.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure with automated change agents, 1) integrate a commit‑time verification step that checks proposals against the latest state, 2) reject any action that no longer matches current policies or resources, 3) queue approved actions for idempotent dispatch to your cloud platform.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>EAServe: Encode-Aware Disaggregated Serving for Multimodal Large Language Models</title>
-    <link>https://arxiv.org/abs/2609.31551v1</link>
-    <guid>https://arxiv.org/abs/2609.31551v1</guid>
+    <title>AGATE: Provenance-Based Runtime Defense Against Compositional Attacks on LLM Agents</title>
+    <link>https://arxiv.org/abs/2609.30830v1</link>
+    <guid>https://arxiv.org/abs/2609.30830v1</guid>
     <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research addresses how to efficiently serve multimodal large language models (MLLMs) by adding an Encode stage before the usual Prefill and Decode phases. The authors built a system that separates Encode, Prefill, and Decode onto distinct GPU pools while managing request flow between them. The result is a more balanced resource allocation that can handle image, video, or audio inputs without bottlenecks in the overall pipeline.</p><p><strong>IT Breakdown:</strong> If you manage GPU resources for AI workloads, here is what to do:
-1. Separate your GPU pools into three dedicated groups for Encode, Prefill, and Decode.
-2. Implement a scheduler that routes incoming multimodal requests through these pools in the correct order.
-3. Monitor GPU utilisation to ensure each pool stays within safe utilisation thresholds to avoid starving any stage.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Can You Check That? The Checkability Boundary for Local LLM Network Automation</title>
-    <link>https://arxiv.org/abs/2609.31540v1</link>
-    <guid>https://arxiv.org/abs/2609.31540v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the risk of sending sensitive network data to third‑party LLMs by developing a local‑first framework called Touchstone that only runs small language models on‑premises. They built a method called checkability, which adds cheap, deterministic checks that can quickly flag incorrect outputs, and tested it on network‑automation tasks, showing a reduction in errors and no data egress. The result is a safer way to use LLMs for network changes while keeping data in‑house.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑based network infrastructure, here is what to do: 1) Deploy Touchstone or a similar local‑LLM pipeline to keep all model inference on‑premises; 2) Enable the built‑in checkability tests for any automation task you run (e.g., config generation, topology mapping); 3) Monitor the check results and reject any outputs that fail the deterministic checks before applying changes to production.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Muslim: A Deployed Arabic Voice AI Platform for Grounded Islamic Knowledge</title>
-    <link>https://arxiv.org/abs/2609.31511v1</link>
-    <guid>https://arxiv.org/abs/2609.31511v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The paper describes Muslim, an Arabic voice‑AI system that combines ASR, an LLM, and TTS to answer religious questions using a multi‑source retrieval layer. It releases fine‑tuned models (Muslim‑6B‑PRO and Fasih‑TTS‑V1) and demonstrates real‑time performance, but the focus is on cultural/educational use rather than generic cloud infrastructure. It is not directly relevant to IT infrastructure management.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Prompt Minimization: Reducing Input Redundancy Without Sacrificing Output Fidelity</title>
-    <link>https://arxiv.org/abs/2609.31505v1</link>
-    <guid>https://arxiv.org/abs/2609.31505v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the wasteful length of prompts sent to large language models. The team built a prompt‑minimisation tool that compresses any given prompt into the shortest version that still yields the same answer. The result was a 30‑40% reduction in token usage and a noticeable speed‑up in inference on commercial LLMs.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1. Identify the most frequent, long prompts you send to LLM services; 2. Run them through the minimiser to cut token count; 3. Re‑deploy the shortened prompts, and monitor API costs and latency—expect lower compute spend and faster responses.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>AgentXploit: Autonomous Repository-to-Runtime Red-Teaming for AI Agents</title>
-    <link>https://arxiv.org/abs/2609.31318v1</link>
-    <guid>https://arxiv.org/abs/2609.31318v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>AgentXploit tackles the problem of hidden security flaws in AI agents that can manipulate files, call APIs or run code, by creating a white‑box auditing framework that tests agents through their public interfaces before deployment. The authors built a two‑role system that lets auditors run attacks against a copy of the codebase and a sandboxed runtime, then verify success via an external oracle. The result was a set of automated red‑team tests that exposed realistic attack vectors and provided metrics for how well an agent’s safeguards held up.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Resource-Optimized and Energy-Aware Agentic AI Framework Anchored on Blockchain for Secure Software Supply Chains</title>
-    <link>https://arxiv.org/abs/2609.31282v1</link>
-    <guid>https://arxiv.org/abs/2609.31282v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The paper tackles the problem of keeping the entire software development lifecycle secure, especially the AI agents that monitor it, by building a blockchain-backed framework with specialised security agents that audit code, dependencies, CI settings, artefacts and runtime behaviour using LLMs. The result is a tamper‑proof, traceable security process that produces structured reports and verifies every step of the SDLC. This is relevant for cloud infrastructure managers who need to ensure their deployments and CI pipelines are secure.</p><p><strong>IT Breakdown:</strong> If you manage CI/CD pipelines or cloud deployments, here is what to do: 1) integrate a blockchain ledger to record each build artefact and its hash; 2) deploy LLM‑powered agents to scan source, SBOMs and runtime logs; 3) enforce the agents’ structured security reports as gate‑checks before promotion to production.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Cheap, open agents make LLM pollution harder to mitigate</title>
-    <link>https://arxiv.org/abs/2609.31054v1</link>
-    <guid>https://arxiv.org/abs/2609.31054v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows that inexpensive, open‑weight LLMs running on open‑source agent frameworks can autonomously inject synthetic responses into survey data, a problem called LLM pollution. The authors tested nine agent setups—some fully open, some commercial—and found that fully open agents could complete surveys with a high success rate while remaining hard to detect. This demonstrates that any organisation running such agents on cloud infrastructure could inadvertently compromise data integrity.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that hosts or runs LLM agents, check that all agent code is signed and sourced from trusted vendors; implement monitoring for unexpected synthetic data patterns; and consider restricting open‑weight models from accessing sensitive datasets.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>DynBranch: Speculative Subgraph Reuse for Dynamic Agentic LLM Serving</title>
-    <link>https://arxiv.org/abs/2609.31047v1</link>
-    <guid>https://arxiv.org/abs/2609.31047v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>DynBranch tackles the problem of slow, serialized agentic LLM workflows by allowing parts of a computation graph to be prepared and cached before the decision point is known. The authors built a system that assigns stable coordinates to unresolved branches, enabling subgraphs to run early and reuse results in later requests, which cuts latency and improves throughput. This offers a concrete optimisation for cloud‑hosted LLM services.
-</p><p><strong>IT Breakdown:</strong> If you manage LLM inference on the cloud, here is what to do:
-1. Identify points in your agentic workflow where a decision branches.
-2. Integrate a coordinate system that tags each potential branch path before it resolves.
-3. Enable early execution of those tagged subgraphs so that when a branch resolves, you can pull from cache instead of recomputing.</p>]]></description>
+    <description><![CDATA[<p>AGATE is a runtime defence for large‑language‑model agents that tracks where data comes from and who authorises each action, then limits what the agent can do based on those rules. It was built as a gate between an agent and its host, using operator declarations, grants and an effect ledger to enforce data provenance and authorization. The result was a system that can prevent compositional attacks by ensuring every step a model takes is authorised and its data origins are traceable.
+</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
@@ -95,43 +33,43 @@
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] GigaPath-Flash and GigaTIME-Flash: Toward population-scale discovery with efficient pathology foundation models</title>
-    <link>https://www.microsoft.com/en-us/research/blog/gigapath-flash-and-gigatime-flash-toward-population-scale-discovery-with-efficient-pathology-foundation-models/</link>
-    <guid>https://www.microsoft.com/en-us/research/blog/gigapath-flash-and-gigatime-flash-toward-population-scale-discovery-with-efficient-pathology-foundation-models/</guid>
-    <pubDate>Mon, 28 Sep 2026 13:30:24 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft Research has introduced GigaPath-Flash and GigaTIME-Flash, two efficient pathology foundation models that reduce computational costs while preserving performance. These models enable larger, population-scale studies in medical imaging with less resource investment.</p>]]></description>
+    <title>[News] Source: Inference provider Modal Labs closing in on $750M round at $15.75B valuation</title>
+    <link>https://techcrunch.com/2026/09/28/source-inference-provider-modal-labs-closing-in-on-750m-round-at-15-75b-valuation/</link>
+    <guid>https://techcrunch.com/2026/09/28/source-inference-provider-modal-labs-closing-in-on-750m-round-at-15-75b-valuation/</guid>
+    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
+    <description><![CDATA[<p>Modal Labs, an AI inference provider, is nearing a $750M funding round that would boost its valuation to $15.75B, more than tripling the company’s value in just four months.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Holo4: powering generalist computer-use agents</title>
-    <link>https://huggingface.co/blog/Hcompany/holo4</link>
-    <guid>https://huggingface.co/blog/Hcompany/holo4</guid>
-    <pubDate>Mon, 28 Sep 2026 13:30:24 +0000</pubDate>
-    <description><![CDATA[<p>Hugging Face has introduced Holo4, a generalist computer-use agent designed to perform a wide range of tasks on standard PCs using text instructions. The system leverages large language models to interact with the operating system, opening applications, manipulating files, and executing scripts without custom coding.</p>]]></description>
+    <title>[News] AMD will acquire Fei-Fei Li’s World Labs for $8.2 billion</title>
+    <link>https://techcrunch.com/2026/09/28/amd-will-acquire-fei-fei-lis-world-labs-for-8-2-billion/</link>
+    <guid>https://techcrunch.com/2026/09/28/amd-will-acquire-fei-fei-lis-world-labs-for-8-2-billion/</guid>
+    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
+    <description><![CDATA[<p>AMD has announced a $8.2 billion acquisition of Fei-Fei Li’s World Labs, bringing her team into AMD’s AI research arm as executive vice president and chief scientist. The move signals AMD’s intent to deepen its AI chip and software ecosystem, potentially accelerating the integration of advanced AI models into hardware and cloud platforms.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Anthropic’s CEO is about to have dinner with President Trump</title>
-    <link>https://techcrunch.com/2026/09/27/anthropics-ceo-is-about-to-have-dinner-with-president-trump/</link>
-    <guid>https://techcrunch.com/2026/09/27/anthropics-ceo-is-about-to-have-dinner-with-president-trump/</guid>
-    <pubDate>Mon, 28 Sep 2026 13:30:24 +0000</pubDate>
-    <description><![CDATA[<p>Anthropic CEO Dario Amodei is scheduled to meet with former President Donald Trump for a one‑on‑one dinner. This event is a political development unrelated to current AI product or security updates.</p>]]></description>
+    <title>[News] Shopify opens checkout to browser-based AI agents</title>
+    <link>https://techcrunch.com/2026/09/28/shopify-opens-checkout-to-browser-based-ai-agents/</link>
+    <guid>https://techcrunch.com/2026/09/28/shopify-opens-checkout-to-browser-based-ai-agents/</guid>
+    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
+    <description><![CDATA[<p>Shopify has introduced WebMCP support for its checkout, enabling browser-based AI agents to modify order details and complete purchases with buyer authorization. This expands the platform’s AI integration capabilities, allowing merchants to automate more aspects of the checkout process.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Can Muse overcome Meta’s trust issues?</title>
-    <link>https://techcrunch.com/2026/09/27/can-muse-overcome-metas-trust-issues/</link>
-    <guid>https://techcrunch.com/2026/09/27/can-muse-overcome-metas-trust-issues/</guid>
-    <pubDate>Mon, 28 Sep 2026 13:30:24 +0000</pubDate>
-    <description><![CDATA[<p>A TechCrunch article discusses how Meta’s AI announcement has attracted attention away from other AI players.</p>]]></description>
+    <title>[News] The Lenfest Institute grows landmark program with expanded OpenAI support</title>
+    <link>https://openai.com/index/lenfest-ai-collaborative-expansion</link>
+    <guid>https://openai.com/index/lenfest-ai-collaborative-expansion</guid>
+    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI has announced a $5 million funding boost for the Lenfest AI Collaborative and Fellowship Program, adding up to $5 million in software credits and engineering support. The initiative expands research capacity and provides new resources for AI projects worldwide.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Anthropic’s Dario Amodei gets the SNL treatment</title>
-    <link>https://techcrunch.com/2026/09/27/anthropics-dario-amodei-gets-the-snl-treatment/</link>
-    <guid>https://techcrunch.com/2026/09/27/anthropics-dario-amodei-gets-the-snl-treatment/</guid>
-    <pubDate>Mon, 28 Sep 2026 13:30:24 +0000</pubDate>
-    <description><![CDATA[<p></p>]]></description>
+    <title>[News] Are you a Codex Original?</title>
+    <link>https://openai.com/form/codex-originals</link>
+    <guid>https://openai.com/form/codex-originals</guid>
+    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI is inviting developers to join its Codex Originals program, seeking real-world projects that showcase the model&#x27;s capabilities.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
