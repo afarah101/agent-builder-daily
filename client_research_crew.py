@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os, smtplib
+os.environ["CREWAI_TRACING_ENABLED"] = "false"
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
@@ -18,7 +19,11 @@ load_dotenv()
 # LLM SETUP — Gemini 2.0 Flash
 # ─────────────────────────────────────────────
 
-llm = LLM(
+class GroqLLM(LLM):
+    def supports_function_calling(self) -> bool:
+        return True
+
+llm = GroqLLM(
     model="groq/openai/gpt-oss-20b",
     max_tokens=2000,
     reasoning_effort="low",

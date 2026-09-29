@@ -20,7 +20,7 @@ now = datetime.now(timezone.utc)
 seven_days_ago = (now - timedelta(days=7)).isoformat()
 now_iso = now.isoformat()
 
-def query_metrics(query, endpoint="/api/public/metrics"):
+def query_metrics(query, endpoint="/api/public/v2/metrics"):
     try:
         url = LANGFUSE_HOST.rstrip("/") + endpoint
         resp = requests.get(url, headers=headers, params={"query": json.dumps(query)}, timeout=15)
@@ -31,10 +31,10 @@ def query_metrics(query, endpoint="/api/public/metrics"):
         return []
 
 trace_counts = query_metrics({
-    "view": "traces",
+    "view": "observations",
     "metrics": [{"measure": "count", "aggregation": "count"}],
-    "dimensions": [{"field": "name"}],
-    "filters": [],
+    "dimensions": [{"field": "traceName"}],
+    "filters": [{"column": "isRootObservation", "operator": "=", "value": True, "type": "boolean"}],
     "fromTimestamp": seven_days_ago,
     "toTimestamp": now_iso,
     "timeDimension": {"granularity": "day"}

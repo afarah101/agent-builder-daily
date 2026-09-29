@@ -21,7 +21,7 @@ os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGCHAIN_PROJECT", "")
 from langsmith import Client
 client = Client()
 
-from langfuse import Langfuse, observe
+from langfuse import Langfuse, observe, propagate_attributes
 langfuse = Langfuse()
 
 OUTPUT_DIR = "logs"
@@ -456,20 +456,20 @@ def build_graph():
 def run_industry_news_scout():
     print("[DEBUG] Starting Industry News Scout...")
     today = datetime.now().strftime("%Y-%m-%d")
-    langfuse.update_current_trace(tags=["news", "rss", "automated"])
-    langfuse.update_current_span(
-        input={"date": today, "sources": len(RSS_SOURCES) + len(SCRAPE_SOURCES)},
-        metadata={"max_items": MAX_ITEMS, "max_per_source": MAX_PER_SOURCE},
-    )
-    graph = build_graph()
-    result = graph.invoke(
-        {"raw_articles": [], "classified_news": [], "output_file": OUTPUT_DIR + "/news_" + today + ".json"},
-        config={"configurable": {"thread_id": "news-" + today}},
-    )
-    classified = result.get("classified_news", [])
-    langfuse.update_current_span(
-        output={"items_saved": len(classified), "date": today},
-    )
+    with propagate_attributes(tags=["news", "rss", "automated"]):
+        langfuse.update_current_span(
+            input={"date": today, "sources": len(RSS_SOURCES) + len(SCRAPE_SOURCES)},
+            metadata={"max_items": MAX_ITEMS, "max_per_source": MAX_PER_SOURCE},
+        )
+        graph = build_graph()
+        result = graph.invoke(
+            {"raw_articles": [], "classified_news": [], "output_file": OUTPUT_DIR + "/news_" + today + ".json"},
+            config={"configurable": {"thread_id": "news-" + today}},
+        )
+        classified = result.get("classified_news", [])
+        langfuse.update_current_span(
+            output={"items_saved": len(classified), "date": today},
+        )
     print("[DEBUG] Complete")
     langfuse.flush()
     return result

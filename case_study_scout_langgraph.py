@@ -11,7 +11,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
 from dotenv import load_dotenv
 import google.genai as genai_client
-from langfuse import Langfuse, observe
+from langfuse import Langfuse, observe, propagate_attributes
 load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "")
@@ -520,20 +520,20 @@ def build_graph():
 def run_case_study_scout():
     print("[DEBUG] Starting Case Study Scout (arXiv)...")
     today = datetime.now().strftime("%Y-%m-%d")
-    langfuse.update_current_trace(tags=["arxiv", "case-studies", "automated"])
-    langfuse.update_current_span(
-        input={"date": today, "source": "arxiv"},
-        metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS},
-    )
-    graph = build_graph()
-    result = graph.invoke(
-        {"raw_papers": [], "scored_papers": [], "output_file": OUTPUT_DIR + "/" + today + ".json"},
-        config={"configurable": {"thread_id": "cs-" + today}},
-    )
-    scored = result.get("scored_papers", [])
-    langfuse.update_current_span(
-        output={"papers_saved": len(scored), "date": today},
-    )
+    with propagate_attributes(tags=["arxiv", "case-studies", "automated"]):
+        langfuse.update_current_span(
+            input={"date": today, "source": "arxiv"},
+            metadata={"queries": len(QUERIES), "max_papers": MAX_PAPERS},
+        )
+        graph = build_graph()
+        result = graph.invoke(
+            {"raw_papers": [], "scored_papers": [], "output_file": OUTPUT_DIR + "/" + today + ".json"},
+            config={"configurable": {"thread_id": "cs-" + today}},
+        )
+        scored = result.get("scored_papers", [])
+        langfuse.update_current_span(
+            output={"papers_saved": len(scored), "date": today},
+        )
     print("[DEBUG] Complete")
     langfuse.flush()
 
@@ -545,14 +545,30 @@ def run_case_study_scout():
         host = os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
         if public_key and secret_key:
             auth = base64.b64encode(f"{public_key}:{secret_key}".encode()).decode()
-            r = requests.get(
-                f"{host}/api/public/traces",
-                headers={"Authorization": f"Basic {auth}"},
-                params={"limit": 1},
-                timeout=10,
-            )
-            if r.status_code == 200:
-                total = r.json().get("meta", {}).get("totalItems", 0)
+            # v2 has cursor-based pagination only (no totalItems) — loop all pages
+            total = 0
+            cursor = None
+            status_ok = False
+            while True:
+                params = {"isRootObservation": "true", "limit": 1000, "fields": "core"}
+                if cursor:
+                    params["cursor"] = cursor
+                r = requests.get(
+                    f"{host}/api/public/v2/observations",
+                    headers={"Authorization": f"Basic {auth}"},
+                    params=params,
+                    timeout=30,
+                )
+                if r.status_code != 200:
+                    break
+                status_ok = True
+                body = r.json()
+                data = body.get("data", [])
+                total += len(data)
+                cursor = body.get("meta", {}).get("cursor")
+                if not cursor or not data:
+                    break
+            if status_ok:
                 snapshot = {"total_traces": total, "updated_at": datetime.now().isoformat()}
                 os.makedirs("site", exist_ok=True)
                 Path("site/langfuse_snapshot.json").write_text(

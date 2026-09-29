@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
-from langfuse import Langfuse, observe
+from langfuse import Langfuse, observe, propagate_attributes
 load_dotenv()
 langfuse = Langfuse()
 
@@ -513,28 +513,28 @@ def build_remediation_graph():
 def run_remediation():
     print("\n[REMEDIATION] Starting remediation agent...")
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    langfuse.update_current_trace(tags=["remediation", "monitoring", "automated"])
-    langfuse.update_current_span(input={"date": today, "run_type": "remediation"})
+    with propagate_attributes(tags=["remediation", "monitoring", "automated"]):
+        langfuse.update_current_span(input={"date": today, "run_type": "remediation"})
 
-    graph = build_remediation_graph()
+        graph = build_remediation_graph()
 
-    initial_state = {
-        "papers_saved": 0,
-        "site_fresh": False,
-        "site_remediated": False,
-        "key1_pct": 0.0,
-        "key2_pct": 0.0,
-        "token_warning": False,
-        "token_approval": "pending",
-        "langfuse_traces": 0,
-        "actions_taken": [],
-        "alerts": [],
-        "email_sent": False,
-        "run_timestamp": ""
-    }
+        initial_state = {
+            "papers_saved": 0,
+            "site_fresh": False,
+            "site_remediated": False,
+            "key1_pct": 0.0,
+            "key2_pct": 0.0,
+            "token_warning": False,
+            "token_approval": "pending",
+            "langfuse_traces": 0,
+            "actions_taken": [],
+            "alerts": [],
+            "email_sent": False,
+            "run_timestamp": ""
+        }
 
-    config = {"configurable": {"thread_id": "remediation-1"}}
-    result = graph.invoke(initial_state, config=config)
+        config = {"configurable": {"thread_id": "remediation-1"}}
+        result = graph.invoke(initial_state, config=config)
 
     print(f"\n[REMEDIATION] Complete.")
     print(f"  Papers: {result['papers_saved']}")
