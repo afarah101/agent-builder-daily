@@ -5,23 +5,69 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 28 Sep 2026 23:13:40 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 29 Sep 2026 12:36:47 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Authority at Commit Time: Reject-and-Rerun Semantics for Governed Agentic Systems</title>
-    <link>https://arxiv.org/abs/2609.31490v1</link>
-    <guid>https://arxiv.org/abs/2609.31490v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research tackles the problem that automated agents can act on outdated policy or system state, risking unapproved changes. The authors built a governance service that, at the moment an agent proposes an action, checks the current state and verifies the proposal; if it is still valid the action is reserved for execution, otherwise it is rejected and must be retried. The result is that only up‑to‑date, authorised actions are allowed, preventing stale or unauthorized changes from reaching the infrastructure.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure with automated change agents, 1) integrate a commit‑time verification step that checks proposals against the latest state, 2) reject any action that no longer matches current policies or resources, 3) queue approved actions for idempotent dispatch to your cloud platform.</p>]]></description>
+    <title>TokenCast: Forecasting Token Consumption During LLM Agent Execution</title>
+    <link>https://arxiv.org/abs/2609.35760v1</link>
+    <guid>https://arxiv.org/abs/2609.35760v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>TokenCast predicts how many tokens a large‑language‑model (LLM) agent will use during a task, helping organisations estimate costs and manage resource limits before and during execution. The authors built a system that learns a cost profile for each execution segment and updates the estimate as the agent’s context grows. The result is a more accurate token‑usage forecast, reducing surprise cost spikes for cloud‑based LLM services.</p><p><strong>IT Breakdown:</strong> If you manage cloud LLM services, 1) monitor token‑usage forecasts from TokenCast to set API rate limits; 2) adjust your billing alerts based on predicted consumption; 3) use the forecast to optimise batch processing windows for cost efficiency.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>AGATE: Provenance-Based Runtime Defense Against Compositional Attacks on LLM Agents</title>
-    <link>https://arxiv.org/abs/2609.30830v1</link>
-    <guid>https://arxiv.org/abs/2609.30830v1</guid>
-    <pubDate>Fri, 25 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>AGATE is a runtime defence for large‑language‑model agents that tracks where data comes from and who authorises each action, then limits what the agent can do based on those rules. It was built as a gate between an agent and its host, using operator declarations, grants and an effect ledger to enforce data provenance and authorization. The result was a system that can prevent compositional attacks by ensuring every step a model takes is authorised and its data origins are traceable.
-</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work.</p>]]></description>
+    <title>Tracekit: Tamper-Evident Intent-Reasoning-Action Auditing for Autonomous Coding Agents</title>
+    <link>https://arxiv.org/abs/2609.35659v1</link>
+    <guid>https://arxiv.org/abs/2609.35659v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Autonomous coding agents can modify files, run commands and spawn other agents without a tamper‑proof record, which makes it hard to audit their behaviour. Tracekit logs each session’s human intent, the model’s reasoning and the actual actions to a hash‑chained ledger that can be cross‑checked, giving an immutable audit trail. The system is open‑source, dependency‑free and already hooks into Claude Code’s lifecycle events.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that uses autonomous coding agents, do the following: 1. Deploy Tracekit alongside your agents and enable its event hooks; 2. Store the resulting ledger on a secure, immutable storage (e.g. S3 with versioning or a blockchain oracle); 3. Periodically verify the hash chain against an external anchor to detect tampering.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>MINT: Modeling GenAI Impact on Network Traffic</title>
+    <link>https://arxiv.org/abs/2609.35742v1</link>
+    <guid>https://arxiv.org/abs/2609.35742v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>MINT provides a data‑driven model of the packet traffic generated by generative AI workloads, fixing the gap where researchers had to fake AI traffic with unrelated services. The team built an end‑to‑end capture pipeline that logs real traffic from three large‑language‑model providers in a variety of network settings and then derives a traffic model from that data. The result is a set of validated, modality‑specific traffic profiles that can be plugged into network simulators to predict how GenAI will use bandwidth and affect scheduling.
+</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do:
+1. Export your existing network performance data to the MINT capture format.
+2. Feed the captured traces into the MINT modelling tool to generate accurate GenAI traffic profiles.
+3. Use those profiles in your capacity‑planning simulations to adjust bandwidth, QoS and routing for the expected GenAI load.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Report: Progressive Disclosure of Agent Skills</title>
+    <link>https://arxiv.org/abs/2609.35692v1</link>
+    <guid>https://arxiv.org/abs/2609.35692v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study shows that letting LLM agents load their ‘skills’ only when needed – a technique called progressive disclosure – cuts operational cost and actually improves how well the agent finds the right skill. The researchers tested this on Workday’s LLM agents and measured better skill‑retrieval quality with lower costs. This matters for anyone running large LLM workloads in the cloud.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑based services, adopt lazy‑loading of skill modules: 1) identify skills that can be modularised, 2) deploy a skill catalogue that loads modules on demand, and 3) monitor cost and retrieval latency to confirm savings and quality gains.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>When Valid Tool Calls Change Meaning: Formation-Consistent Dispatch for LLM Agents</title>
+    <link>https://arxiv.org/abs/2609.35088v1</link>
+    <guid>https://arxiv.org/abs/2609.35088v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>A new method called Formation‑Consistent Dispatch (FCD) stops a problem where the same tool call can later be executed with a different meaning because the system chooses a new implementation. It connects the call’s description to the authority that actually runs it, giving a proven record of what the call can do. The result is safer, predictable tool use that reduces security drift as systems evolve.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check how your orchestration platform routes external tool calls: 1) Map each call’s descriptor to the specific implementation that will run it. 2) Ensure that the implementation’s authority matches the declared permissions in the descriptor. 3) Audit the provenance log to confirm that no unexpected changes have happened during roll‑out or reconnect. This flags a risk: if your org uses automated tool agents, verify that your dispatch logic ties calls to verified implementations.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>RSI-Router: Evolving Subtask-Level LLM Routing and Skills for Cost-Efficient Agents</title>
+    <link>https://arxiv.org/abs/2609.34712v1</link>
+    <guid>https://arxiv.org/abs/2609.34712v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>RSI‑Router solves the cost‑performance problem of running large language models (LLMs) by routing each sub‑task of a long‑horizon job to the smallest suitable model and continuously improving those routes. The authors built a recursive, self‑learning routing system that automatically assigns sub‑tasks to the right model and adds model‑specific skills as experience grows. The result is a significant drop in inference cost while keeping or improving overall task success rates.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, use RSI‑Router to optimise your LLM workloads: 1) deploy a lightweight orchestration layer that monitors model performance and cost, 2) implement sub‑task routing rules that direct simple queries to small models, 3) enable the system to auto‑update routing policies based on usage data to keep costs low.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>AgentWare: Automating the Lifecycle of Agentic Applications across the Edge-to-Cloud Continuum</title>
+    <link>https://arxiv.org/abs/2609.34586v1</link>
+    <guid>https://arxiv.org/abs/2609.34586v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>AgentWare is a tool that automates the full life cycle of LLM‑powered agent applications, from provisioning and deployment to observability and benchmarking, across heterogeneous edge and cloud environments. It solves the problem of manual, fragmented setup and monitoring for distributed agent systems, reducing time and complexity for operators. The result is a unified framework that speeds deployment and improves insight into performance and reliability of agent applications.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do:
+1. Integrate AgentWare into your CI/CD pipeline to automate agent deployment on edge and cloud nodes.
+2. Configure its observability modules to collect telemetry across all heterogeneous hardware.
+3. Use AgentWare’s benchmarking features to evaluate agent performance and adjust resource allocation accordingly.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
@@ -33,43 +79,43 @@
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Source: Inference provider Modal Labs closing in on $750M round at $15.75B valuation</title>
-    <link>https://techcrunch.com/2026/09/28/source-inference-provider-modal-labs-closing-in-on-750m-round-at-15-75b-valuation/</link>
-    <guid>https://techcrunch.com/2026/09/28/source-inference-provider-modal-labs-closing-in-on-750m-round-at-15-75b-valuation/</guid>
-    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
-    <description><![CDATA[<p>Modal Labs, an AI inference provider, is nearing a $750M funding round that would boost its valuation to $15.75B, more than tripling the company’s value in just four months.</p>]]></description>
+    <title>[News] New Microsoft data innovations unlock what only your business knows</title>
+    <link>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</link>
+    <guid>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:36:47 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft has unveiled new data innovation capabilities that enable AI models to leverage business-specific knowledge, enhancing insights from proprietary data. This update promises tighter integration with Azure and Microsoft 365 services, potentially automating analytics and decision-making within existing workflows.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] AMD will acquire Fei-Fei Li’s World Labs for $8.2 billion</title>
-    <link>https://techcrunch.com/2026/09/28/amd-will-acquire-fei-fei-lis-world-labs-for-8-2-billion/</link>
-    <guid>https://techcrunch.com/2026/09/28/amd-will-acquire-fei-fei-lis-world-labs-for-8-2-billion/</guid>
-    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
-    <description><![CDATA[<p>AMD has announced a $8.2 billion acquisition of Fei-Fei Li’s World Labs, bringing her team into AMD’s AI research arm as executive vice president and chief scientist. The move signals AMD’s intent to deepen its AI chip and software ecosystem, potentially accelerating the integration of advanced AI models into hardware and cloud platforms.</p>]]></description>
+    <title>[News] Anthropic’s prospectus details losses, growth, and, yes, a warning that its AI could end humanity</title>
+    <link>https://techcrunch.com/2026/09/28/anthropics-prospectus-details-losses-growth-and-yes-a-warning-that-its-ai-could-end-humanity/</link>
+    <guid>https://techcrunch.com/2026/09/28/anthropics-prospectus-details-losses-growth-and-yes-a-warning-that-its-ai-could-end-humanity/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:36:47 +0000</pubDate>
+    <description><![CDATA[<p>Anthropic’s latest prospectus reveals heavy losses and rapid growth, while warning that its AI could pose an existential risk. The announcement highlights the broader ethical concerns surrounding advanced AI models.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Shopify opens checkout to browser-based AI agents</title>
-    <link>https://techcrunch.com/2026/09/28/shopify-opens-checkout-to-browser-based-ai-agents/</link>
-    <guid>https://techcrunch.com/2026/09/28/shopify-opens-checkout-to-browser-based-ai-agents/</guid>
-    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
-    <description><![CDATA[<p>Shopify has introduced WebMCP support for its checkout, enabling browser-based AI agents to modify order details and complete purchases with buyer authorization. This expands the platform’s AI integration capabilities, allowing merchants to automate more aspects of the checkout process.</p>]]></description>
+    <title>[News] Peak XV ups Surge seed investment ceiling to $5M, unveils 18-startup cohort</title>
+    <link>https://techcrunch.com/2026/09/28/peak-xv-goes-bigger-at-seed-with-new-surge-cohort-as-series-a-bar-rises/</link>
+    <guid>https://techcrunch.com/2026/09/28/peak-xv-goes-bigger-at-seed-with-new-surge-cohort-as-series-a-bar-rises/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:36:47 +0000</pubDate>
+    <description><![CDATA[<p>Peak XV’s Surge program has raised a $5M seed fund and is launching an 18-startup cohort, with most companies focused on global markets and a significant presence in India.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] The Lenfest Institute grows landmark program with expanded OpenAI support</title>
-    <link>https://openai.com/index/lenfest-ai-collaborative-expansion</link>
-    <guid>https://openai.com/index/lenfest-ai-collaborative-expansion</guid>
-    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI has announced a $5 million funding boost for the Lenfest AI Collaborative and Fellowship Program, adding up to $5 million in software credits and engineering support. The initiative expands research capacity and provides new resources for AI projects worldwide.</p>]]></description>
+    <title>[News] How to Outcompete Your Client’s AI</title>
+    <link>https://sloanreview.mit.edu/article/how-to-outcompete-your-clients-ai/</link>
+    <guid>https://sloanreview.mit.edu/article/how-to-outcompete-your-clients-ai/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:36:47 +0000</pubDate>
+    <description><![CDATA[<p>Alturas Capital Partners’ in-house legal team leverages generative AI to handle lease drafting and review internally, cutting costs and speeding up turnaround. The post highlights a practical case of AI driving operational efficiency in a non‑IT domain.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Are you a Codex Original?</title>
-    <link>https://openai.com/form/codex-originals</link>
-    <guid>https://openai.com/form/codex-originals</guid>
-    <pubDate>Mon, 28 Sep 2026 23:13:40 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI is inviting developers to join its Codex Originals program, seeking real-world projects that showcase the model&#x27;s capabilities.</p>]]></description>
+    <title>[News] Holo4: powering generalist computer-use agents</title>
+    <link>https://huggingface.co/blog/Hcompany/holo4</link>
+    <guid>https://huggingface.co/blog/Hcompany/holo4</guid>
+    <pubDate>Tue, 29 Sep 2026 12:36:47 +0000</pubDate>
+    <description><![CDATA[<p>Hugging Face has unveiled Holo4, a generalist AI model designed to act as a computer-use agent capable of handling a wide variety of tasks across different software applications. The model promises to streamline user interactions by automating routine operations across office suites, cloud services, and developer tools.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
