@@ -43,14 +43,15 @@ class DuckDuckGoSearchTool(BaseTool):
     def _run(self, query: str) -> str:
         try:
             with DDGS() as ddgs:
-                results = list(ddgs.text(query, max_results=8))
+                results = list(ddgs.text(query, max_results=3))
             output = []
             for r in results:
                 output.append(f"Title: {r.get('title','')}")
                 output.append(f"URL: {r.get('href','')}")
                 output.append(f"Snippet: {r.get('body','')}")
                 output.append("---")
-            return "\n".join(output) if output else "No results found"
+            joined = "\n".join(output) if output else "No results found"
+            return joined[:1500]
         except Exception as e:
             return f"Search error: {e}"
 
@@ -261,7 +262,8 @@ def run_client_research_crew():
         agents=[researcher, analyst, synthesiser],
         tasks=[research_task, analysis_task, synthesis_task],
         process=Process.sequential,
-        verbose=True
+        verbose=True,
+        max_rpm=4,
     )
 
     result = crew.kickoff()
