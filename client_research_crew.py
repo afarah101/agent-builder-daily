@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, smtplib
+import os, smtplib, re, time
 os.environ["CREWAI_TRACING_ENABLED"] = "false"
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -7,6 +7,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai.tools import BaseTool
+import litellm
 try:
     from ddgs import DDGS
 except ImportError:
@@ -16,20 +17,59 @@ load_dotenv()
 
 
 # ─────────────────────────────────────────────
-# LLM SETUP — Gemini 2.0 Flash
+# LLM SETUP — Groq gpt-oss-20b
 # ─────────────────────────────────────────────
 
 class GroqLLM(LLM):
     def supports_function_calling(self) -> bool:
         return True
 
+    def call(self, messages, tools=None, callbacks=None, available_functions=None,
+             from_task=None, from_agent=None, response_model=None):
+        wait_count = 0
+        while True:
+            try:
+                return super().call(
+                    messages=messages, tools=tools, callbacks=callbacks,
+                    available_functions=available_functions, from_task=from_task,
+                    from_agent=from_agent, response_model=response_model,
+                )
+            except Exception as e:
+                msg = str(e)
+                is_rate_limit = (
+                    isinstance(e, litellm.RateLimitError)
+                    or "rate_limit_exceeded" in msg
+                    or "429 Too Many Requests" in msg
+                    or "Rate limit" in msg
+                )
+                if not is_rate_limit:
+                    raise
+                if "per day" in msg:
+                    key2 = os.getenv("GROQ_API_KEY_2")
+                    if key2 and self.api_key != key2:
+                        print("[GroqLLM] daily limit on key 1 - switching to key 2")
+                        self.api_key = key2
+                        continue
+                    raise
+                # Per-minute TPM: parse "try again in Xs" or "try again in XmYs"
+                wait_count += 1
+                if wait_count > 5:
+                    raise
+                m = re.search(r'try again in (?:(\d+)m)?(\d+(?:\.\d+)?)s', msg)
+                if m:
+                    wait = float(m.group(1) or 0) * 60 + float(m.group(2)) + 2
+                else:
+                    wait = 20.0
+                print(f"[GroqLLM] 429 - waiting {wait:.0f}s (try {wait_count}/5)")
+                time.sleep(wait)
+
+
 llm = GroqLLM(
     model="groq/openai/gpt-oss-20b",
-    max_tokens=2000,
+    max_tokens=1200,
     reasoning_effort="low",
     api_key=os.getenv("GROQ_API_KEY"),
     temperature=0.3,
-    num_retries=4,
 )
 
 
@@ -79,7 +119,8 @@ researcher = Agent(
     tools=[search_tool],
     llm=llm,
     verbose=True,
-    max_iter=5
+    max_iter=6,
+    max_execution_time=600,
 )
 
 
@@ -102,7 +143,8 @@ analyst = Agent(
     ),
     llm=llm,
     verbose=True,
-    max_iter=3
+    max_iter=6,
+    max_execution_time=600,
 )
 
 
@@ -126,7 +168,8 @@ synthesiser = Agent(
     ),
     llm=llm,
     verbose=True,
-    max_iter=3
+    max_iter=6,
+    max_execution_time=600,
 )
 
 
@@ -232,7 +275,7 @@ def send_email(body: str):
         .replace("—", "-")
         .replace("–", "-")
         .replace("•", "*")
-        .replace(" ", " ")
+        .replace(" ", " ")
         .encode("ascii", "replace").decode("ascii"))
 
     msg = MIMEMultipart()
@@ -264,11 +307,14 @@ def run_client_research_crew():
         tasks=[research_task, analysis_task, synthesis_task],
         process=Process.sequential,
         verbose=True,
-        max_rpm=4,
+        max_rpm=2,
     )
 
     result = crew.kickoff()
     report = str(result)
+
+    if crew.usage_metrics:
+        print(f"[CREW] Tokens used: {crew.usage_metrics.total_tokens}")
 
     print("\n[CREW] Research complete. Sending email...")
     send_email(report)
