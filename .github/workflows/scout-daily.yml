@@ -51,7 +51,8 @@ jobs:
 
   client-research:
     runs-on: ubuntu-22.04
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '0 9 */2 * *')
+    needs: scout
+    if: always() && (github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '0 9 */2 * *'))
     steps:
       - uses: actions/checkout@v4
 

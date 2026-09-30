@@ -28,7 +28,8 @@ llm = GroqLLM(
     max_tokens=2000,
     reasoning_effort="low",
     api_key=os.getenv("GROQ_API_KEY"),
-    temperature=0.3
+    temperature=0.3,
+    num_retries=4,
 )
 
 
