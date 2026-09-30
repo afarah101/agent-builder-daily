@@ -5,54 +5,46 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 30 Sep 2026 16:28:52 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 30 Sep 2026 16:39:18 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>LeapQuant: Efficient Linear Attention with Accurate Recurrent State Quantization</title>
-    <link>https://arxiv.org/abs/2609.38166v1</link>
-    <guid>https://arxiv.org/abs/2609.38166v1</guid>
+    <title>Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reasoning</title>
+    <link>https://arxiv.org/abs/2609.38147v1</link>
+    <guid>https://arxiv.org/abs/2609.38147v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>LeapQuant introduces a new way to quantise the recurrent state used in linear attention models, cutting the cost of repeatedly updating that state while keeping model accuracy. The authors built a lightweight quantisation framework that avoids rounding errors and handles outliers, achieving faster inference on large‑context LLMs.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <description><![CDATA[<p>This research tackles the problem of managing a complex AI agent’s decision‑making during a task, by adding a meta‑reasoning controller that evaluates options, estimates costs, and chooses the next step. The team built a system where a high‑level controller supervises worker modules, improving efficiency and control over long, multi‑step problems. For cloud infrastructure management, this is not directly relevant to everyday operations.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>$S^3$: Spectral Null-Space Swap Makes Reasoning Models Efficient</title>
-    <link>https://arxiv.org/abs/2609.37976v1</link>
-    <guid>https://arxiv.org/abs/2609.37976v1</guid>
+    <title>KV-Kaizen: Learning Context-Adaptive Cache Compression Choices</title>
+    <link>https://arxiv.org/abs/2609.37988v1</link>
+    <guid>https://arxiv.org/abs/2609.37988v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research shows that by swapping out a small part of a large language model’s weights – the part that lies in the null space of a projection defined by a related model – you can reduce the token cost of chain‑of‑thought reasoning without losing accuracy. They built a method that identifies and removes these null‑space weight components and tested it on several reasoning tasks, finding a significant efficiency gain. For typical cloud infrastructure managers, this work is not directly relevant to everyday operations.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <description><![CDATA[<p>The paper tackles the problem of large KV caches in LLM inference that consume too much memory and slow down decoding. The authors built KV‑Kaizen, a context‑adaptive cache‑compression selector that learns which cache entries can be safely compressed rather than evicted, and demonstrated up to 40 % memory savings with negligible accuracy loss. This is relevant for cloud operators running LLMs: it can improve throughput and reduce memory costs.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference on the cloud, here is what to do: 1) Integrate KV‑Kaizen’s compression selector into your inference pipeline; 2) Tune its compression thresholds based on your workload’s context length; 3) Monitor performance to ensure accuracy remains within acceptable bounds.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving</title>
-    <link>https://arxiv.org/abs/2609.37626v1</link>
-    <guid>https://arxiv.org/abs/2609.37626v1</guid>
+    <title>ToolFence: Fine-Grained Authorization for Secure Tool-Using LLM Agents</title>
+    <link>https://arxiv.org/abs/2609.37196v1</link>
+    <guid>https://arxiv.org/abs/2609.37196v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>SPLASH lets you change the way an LLM splits its attention workload (tensor, data, or context parallelism) on the fly, matching the mix of short and long requests in real time. It builds a lightweight controller that monitors request patterns and reconfigures the parallel layout without draining traffic or restarting servers. The result is smoother scaling and lower latency across mixed workloads, especially where request lengths shift during a session.</p><p><strong>IT Breakdown:</strong> If you manage LLM serving, here is what to do: 1) add SPLASH’s controller to your inference stack to monitor request length and batch size; 2) configure it to automatically switch between tensor, data, and context parallelism based on defined thresholds; 3) enable zero‑downtime handoff so workers keep processing while the layout updates. This flags a risk: if your org uses a static parallelism setting, check whether the request mix varies over time and consider adopting SPLASH to avoid performance dips.</p>]]></description>
+    <description><![CDATA[<p>ToolFence provides a fine‑grained permission system for tool‑using LLM agents, solving the problem of indirect prompt injection that current defence mechanisms fail to stop. The authors built a lightweight policy engine that checks each tool call against user‑defined authorisations, achieving a 60‑80% drop in successful attacks with negligible overhead. This directly benefits cloud infra managers by reducing the risk of compromised automated tooling in their environments.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑enabled services, add ToolFence to your agent stack: 1) Define per‑tool permission policies for each user or service account, 2) Wrap the agent’s tool‑calling interface with ToolFence’s auth layer, 3) Monitor and log denied calls to detect suspicious patterns.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>EASE: Behavior-Adaptive Skill Curation for Self-Evolving Agents</title>
-    <link>https://arxiv.org/abs/2609.36746v1</link>
-    <guid>https://arxiv.org/abs/2609.36746v1</guid>
+    <title>Neuro-Symbolic Computer Use: Learning Reusable Policies for Reliable and Efficient Execution</title>
+    <link>https://arxiv.org/abs/2609.36927v1</link>
+    <guid>https://arxiv.org/abs/2609.36927v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>EASE tackles the problem that AI skill curators often pick skills that work well only with the specific executor they were trained on, leading to poor performance when paired with other executors. It builds a behaviour‑adaptive skill curator that learns to pick skills based on the current executor’s behaviour, reducing cross‑executor performance loss. The result is a more robust agent that can switch between different executors without losing efficiency. This is not directly relevant to typical cloud infrastructure work.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <description><![CDATA[<p>The research tackles the wasteful re‑planning of routine computer tasks by learning reusable policies that encode stable decisions and delegate only variable parts to neural models. The authors built a neuro‑symbolic system that generates executable code for recurring workflows, improving reliability and reducing execution cost. As a result, repetitive tasks run faster and with fewer errors.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Identify scripts that repeat daily (e.g., auto‑scaling, backup). 2) Replace their ad‑hoc planners with a policy that fixes loop ordering and variable names, while keeping state checks neural. 3) Deploy the new policy and monitor for reduced CPU usage and error rates.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>CounterSteer: Suppressing Indirect Prompt Injection with Activation Steering</title>
-    <link>https://arxiv.org/abs/2609.36570v1</link>
-    <guid>https://arxiv.org/abs/2609.36570v1</guid>
+    <title>SKILLLITE: Evidence-Guided Malicious Skill Auditing with Compact LLMs</title>
+    <link>https://arxiv.org/abs/2609.36879v1</link>
+    <guid>https://arxiv.org/abs/2609.36879v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>CounterSteer blocks an LLM from acting on untrusted text that looks like instructions, preventing indirect prompt injection. It builds an inference‑time filter that learns a direction to subtract from model outputs, using only a few examples and no fine‑tuning. The result is a safer model that ignores malicious instruction cues while still performing normally.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check whether your LLM‑based services might feed untrusted data as tool results; if so, apply a CounterSteer‑style vector subtraction to each response to block indirect instructions, following the three‑step recipe: (1) generate paired episodes with and without embedded instructions, (2) learn the residual direction and gate it, (3) subtract the direction from every token during prefill. This reduces injection risk without extra training.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Towards an AI Software Factory for Data Systems</title>
-    <link>https://arxiv.org/abs/2609.36323v1</link>
-    <guid>https://arxiv.org/abs/2609.36323v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the slow, manual stages of software development by building an AI‑driven Software Factory that speeds up target definition, coding, reviewing and operations for data systems. The team produced a system that generates detailed metadata, which it uses to fine‑tune its models and update a World Model, leading to quicker, higher‑quality code and smoother operational hand‑off. The result is a more automated, self‑improving SDLC that cuts cycle time and reduces human error.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, use the AI SW Factory to auto‑generate deployment scripts and configuration files: 1) feed your current data‑system specs into the factory, 2) let it produce IaC and CI/CD pipelines, 3) integrate the output into your existing Ops workflow and monitor for performance regressions.</p>]]></description>
+    <description><![CDATA[<p>The paper tackles the problem of third‑party &#x27;Agent Skills&#x27; that can be inserted into large language model (LLM) agents and may contain hidden malicious code, potentially compromising the host environment. The authors developed a lightweight audit framework that uses compact LLMs to analyse skill packages and flag suspicious behaviour, achieving high detection accuracy while keeping resource use low. This means if you run LLM agents that load external skills, you now have a practical tool to vet them before deployment.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑based agents, first integrate the SKILLLITE audit tool into your CI pipeline: 1) Scan each skill package with the compact LLM auditor; 2) Review the generated risk report; 3) Block or sandbox any skill flagged as potentially malicious before it can be activated.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
@@ -64,46 +56,43 @@
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Forecasting space weather risks on power grids</title>
-    <link>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</link>
-    <guid>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft Research has unveiled a machine learning system that forecasts space-weather induced damage to power grids and GPS infrastructure 30–60 minutes before an event. This predictive capability could help IT operators anticipate and mitigate downstream disruptions to cloud services and network operations.</p>]]></description>
+    <title>[News] Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning</title>
+    <link>https://huggingface.co/blog/open-tts-leaderboard</link>
+    <guid>https://huggingface.co/blog/open-tts-leaderboard</guid>
+    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
+    <description><![CDATA[<p>The Open TTS Leaderboard, released by Hugging Face, provides a standardized, scalable framework for evaluating multilingual text‑to‑speech and voice cloning models. It aggregates model performance metrics across languages, enabling developers to benchmark and compare TTS systems more efficiently.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Helping small businesses put AI to work</title>
     <link>https://openai.com/index/helping-small-businesses-put-ai-to-work</link>
     <guid>https://openai.com/index/helping-small-businesses-put-ai-to-work</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI is collaborating with America’s Small Business Development Centers (SBDC) to deliver practical AI training and local support to small businesses, accompanied by a report detailing how small teams are adopting AI tools. The initiative focuses on empowering entrepreneurs with hands‑on experience rather than direct product releases.</p>]]></description>
+    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI is partnering with America&#x27;s SBDC to provide AI training and support for small businesses, and released a report on how these teams are adopting AI tools. This initiative expands access to AI resources beyond enterprise customers.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Instinct’s new product recommendations are giving some users the ick</title>
-    <link>https://techcrunch.com/2026/09/30/instincts-new-product-recommendations-are-giving-some-users-the-ick/</link>
-    <guid>https://techcrunch.com/2026/09/30/instincts-new-product-recommendations-are-giving-some-users-the-ick/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Instinct has launched a new product and travel recommendation feature that relies on human curation, but early feedback shows some users are upset with unsolicited suggestions. The rollout highlights a shift toward hybrid AI-human recommendation models in the e-commerce space.</p>]]></description>
+    <title>[News] Meta disputes claim that Muse read a user’s private messages without permission</title>
+    <link>https://techcrunch.com/2026/09/30/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission/</link>
+    <guid>https://techcrunch.com/2026/09/30/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission/</guid>
+    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
+    <description><![CDATA[<p>Meta argues that its Muse AI agent cannot access users’ private Messages without explicit permission, countering a journalist’s claim that the agent read messages while the required Mac setting was off.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Introducing SynthID Bio</title>
-    <link>https://deepmind.google/blog/introducing-synthid-bio/</link>
-    <guid>https://deepmind.google/blog/introducing-synthid-bio/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Google DeepMind unveils SynthID Bio, a watermarking technique for AI-generated proteins that maintains their biological function.
-
-This breakthrough demonstrates how synthetic biology can embed traceable identifiers in engineered proteins without compromising their activity.
-</p>]]></description>
+    <title>[News] DoorDash launches an AI agent you can text to order food</title>
+    <link>https://techcrunch.com/2026/09/30/doordash-launches-an-ai-agent-you-can-text-to-order-food/</link>
+    <guid>https://techcrunch.com/2026/09/30/doordash-launches-an-ai-agent-you-can-text-to-order-food/</guid>
+    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
+    <description><![CDATA[<p>DoorDash has introduced an AI agent that users can text to place food orders, aiming to differentiate itself from competitors like Uber Eats and Grubhub.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning</title>
-    <link>https://huggingface.co/blog/open-tts-leaderboard</link>
-    <guid>https://huggingface.co/blog/open-tts-leaderboard</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Hugging Face has released the Open TTS Leaderboard, a scalable benchmark for multilingual text‑to‑speech and voice cloning models. The resource evaluates thousands of TTS systems and provides open‑source code for reproducing results.</p>]]></description>
+    <title>[News] Forecasting space weather risks on power grids</title>
+    <link>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</link>
+    <guid>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</guid>
+    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft Research has developed a machine learning system that can forecast space‑weather events, predicting potential damage to power grids and GPS systems 30‑60 minutes in advance. The technology aims to improve preparedness for extreme solar storms that could disrupt critical infrastructure.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
