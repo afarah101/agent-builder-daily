@@ -667,7 +667,7 @@
       </div>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">6</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
@@ -676,7 +676,7 @@
         </div>
       </div>
     </div>
-    <div class="updated">Updated 30 Sep 2026, 16:39 UTC</div>
+    <div class="updated">Updated 30 Sep 2026, 22:08 UTC</div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
         <div class="tabs">
             <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -722,20 +722,86 @@
 
 <div class="content">
   <div id="case-studies" class="panel active">
-    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.38147v1','_blank')">
+    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.37626v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">AI_automation</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
-    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">LLM_Serving</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="score-ring" style="--pct:75;--color:#22c55e" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>75</span></div>
   </div>
-  <h3 class="card-title">Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reasoning</h3>
+  <h3 class="card-title">SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving</h3>
   <div class="card-meta">
-    <span class="authors">Paras Dahal, Anton Bakhtin, Taco Cohen, Zhengxing Chen</span>
+    <span class="authors">Chuan Liu, Shuoming Zhang, Zhicheng Li, Qianqi Sun</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
     <span class="pub-date">29 Sep 2026</span>
   </div>
-  <p class="card-summary">This research tackles the problem of managing a complex AI agent’s decision‑making during a task, by adding a meta‑reasoning controller that evaluates options, estimates costs, and chooses the next step. The team built a system where a high‑level controller supervises worker modules, improving efficiency and control over long, multi‑step problems. For cloud infrastructure management, this is not directly relevant to everyday operations.</p>
+  <p class="card-summary">SPLASH lets a LLM service switch between tensor, data, and context parallelism on the fly, solving the problem of choosing a single layout that works for all request patterns. The authors built a lightweight runtime that detects changing workloads and reconfigures the model without draining requests. This can improve utilisation and reduce latency for diverse workloads.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO APPLY THIS</div>
+    <p class="insight-text">If you manage LLM serving, step 1: integrate the SPLASH runtime into your orchestration; step 2: enable workload‑aware layout switching; step 3: monitor performance and adjust thresholds for handoff.</p>
+  </div>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">30/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">25/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">Novelty: 25/33 – The dynamic switching of parallelism layouts for LLM serving is a fresh and practical approach not previously discussed in mainstream engineering circles. IT_RELEVANCE: 20/33 – Directly impacts LLM deployment at scale, relevant for teams managing Microsoft 365, Google Workspace, and cloud infra. VALUE_90_DAYS: 30/34 – Provides a clear architectural pattern and potential implementation guidelines that can be adopted within 90 days to improve performance and reduce latency. Overall score &gt;40, so low_signal is false.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <div class="score-bars">
+      <div class="score-bar-row">
+      <span class="bar-label">Recency</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+      <span class="bar-val">25</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Impact</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+      <span class="bar-val">30</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Maturity</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+      <span class="bar-val">25</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Monetisation</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 80%"></div></div>
+      <span class="bar-val">20</span>
+    </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://arxiv.org/abs/2609.37626v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
+        data-title="SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving"
+        data-summary="SPLASH lets a LLM service switch between tensor, data, and context parallelism on the fly, solving the problem of choosing a single layout that works for all request patterns. The authors built a lightweight runtime that detects changing workloads and reconfigures the model without draining requests. This can improve utilisation and reduce latency for diverse workloads."
+        data-it="If you manage LLM serving, step 1: integrate the SPLASH runtime into your orchestration; step 2: enable workload‑aware layout switching; step 3: monitor performance and adjust thresholds for handoff."
+        data-monetisation=""
+        data-reasoning="Novelty: 25/33 – The dynamic switching of parallelism layouts for LLM serving is a fresh and practical approach not previously discussed in mainstream engineering circles. IT_RELEVANCE: 20/33 – Directly impacts LLM deployment at scale, relevant for teams managing Microsoft 365, Google Workspace, and cloud infra. VALUE_90_DAYS: 30/34 – Provides a clear architectural pattern and potential implementation guidelines that can be adopted within 90 days to improve performance and reduce latency. Overall score &gt;40, so low_signal is false."
+        data-score="75"
+        data-url="https://arxiv.org/abs/2609.37626v1">
+        ⬇ MD
+      </button>
+    </div>
+  </div>
+</article>
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.36746v1','_blank')">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">agent-based skill curation</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="score-ring" style="--pct:20;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>20</span></div>
+  </div>
+  <h3 class="card-title">EASE: Behavior-Adaptive Skill Curation for Self-Evolving Agents</h3>
+  <div class="card-meta">
+    <span class="authors">Zhen Xiong, Qiaoyu Tan</span>
+    <span class="sep">·</span>
+    <span class="institution">Academic Institution</span>
+    <span class="sep">·</span>
+    <span class="pub-date">29 Sep 2026</span>
+  </div>
+  <p class="card-summary">The study tackles the issue that skill curators for automated agents often perform poorly when used with different execution engines, because they don&#x27;t account for the executor’s behaviour. The authors built EASE, a framework that adapts skill curation to the specific executor, and showed that this matching improves agent performance across varied executors. For a cloud infrastructure manager, the work is not directly relevant to day‑to‑day infrastructure tasks.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
     <p class="insight-text">Not directly applicable to IT infrastructure work</p>
@@ -743,10 +809,10 @@
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper introduces a novel meta-reasoning controller for agentic inference, a concept that could reshape how automated agents manage complex tasks in cloud and SaaS environments. This directly relates to IT engineering work involving LLM APIs, MLOps, and automation workflows, offering potential for new deployment patterns. While the research is still theoretical, it provides actionable insights that could be prototyped within a 90‑day period, such as building a lightweight meta‑controller to orchestrate LLM-based agents in an existing cloud stack. Hence the scores are high on novelty and IT relevance, with a moderate value score.</p>
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper presents a novel approach to behavior-adaptive skill curation for self-evolving agents, which introduces a new perspective on how agents can better select and reuse procedural knowledge. While the concept is technically interesting and could inform future research or internal experimentation, it does not directly translate to immediate, actionable changes in IT infrastructure, cloud or SaaS operations, or security practices that UK IT engineers typically manage. The framework’s relevance to existing MLOps or DevOps pipelines is limited, and there is no clear path to deployment or automation within a 90‑day timeframe.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -758,53 +824,53 @@
     </div>
       <div class="score-bar-row">
       <span class="bar-label">Impact</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 20%"></div></div>
+      <span class="bar-val">5</span>
     </div>
       <div class="score-bar-row">
       <span class="bar-label">Maturity</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 40%"></div></div>
+      <span class="bar-val">10</span>
     </div>
       <div class="score-bar-row">
       <span class="bar-label">Monetisation</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 20%"></div></div>
+      <span class="bar-val">5</span>
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.38147v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2609.36746v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reasoning"
-        data-summary="This research tackles the problem of managing a complex AI agent’s decision‑making during a task, by adding a meta‑reasoning controller that evaluates options, estimates costs, and chooses the next step. The team built a system where a high‑level controller supervises worker modules, improving efficiency and control over long, multi‑step problems. For cloud infrastructure management, this is not directly relevant to everyday operations."
+        data-title="EASE: Behavior-Adaptive Skill Curation for Self-Evolving Agents"
+        data-summary="The study tackles the issue that skill curators for automated agents often perform poorly when used with different execution engines, because they don&#x27;t account for the executor’s behaviour. The authors built EASE, a framework that adapts skill curation to the specific executor, and showed that this matching improves agent performance across varied executors. For a cloud infrastructure manager, the work is not directly relevant to day‑to‑day infrastructure tasks."
         data-it="Not directly applicable to IT infrastructure work"
         data-monetisation=""
-        data-reasoning="The paper introduces a novel meta-reasoning controller for agentic inference, a concept that could reshape how automated agents manage complex tasks in cloud and SaaS environments. This directly relates to IT engineering work involving LLM APIs, MLOps, and automation workflows, offering potential for new deployment patterns. While the research is still theoretical, it provides actionable insights that could be prototyped within a 90‑day period, such as building a lightweight meta‑controller to orchestrate LLM-based agents in an existing cloud stack. Hence the scores are high on novelty and IT relevance, with a moderate value score."
-        data-score="0"
-        data-url="https://arxiv.org/abs/2609.38147v1">
+        data-reasoning="The paper presents a novel approach to behavior-adaptive skill curation for self-evolving agents, which introduces a new perspective on how agents can better select and reuse procedural knowledge. While the concept is technically interesting and could inform future research or internal experimentation, it does not directly translate to immediate, actionable changes in IT infrastructure, cloud or SaaS operations, or security practices that UK IT engineers typically manage. The framework’s relevance to existing MLOps or DevOps pipelines is limited, and there is no clear path to deployment or automation within a 90‑day timeframe."
+        data-score="20"
+        data-url="https://arxiv.org/abs/2609.36746v1">
         ⬇ MD
       </button>
     </div>
   </div>
 </article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.37988v1','_blank')">
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.38099v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">AI_inference</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">search</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
   </div>
-  <h3 class="card-title">KV-Kaizen: Learning Context-Adaptive Cache Compression Choices</h3>
+  <h3 class="card-title">Effective Dense Retrieval using Only In-Context Examples</h3>
   <div class="card-meta">
-    <span class="authors">Joao Monteiro, Louis Béthune, Anastasiia Filippova, Sonia Laguna</span>
+    <span class="authors">Nour Jedidi, Abdul Basit Ali, Hang Li, Jimmy Lin</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
     <span class="pub-date">29 Sep 2026</span>
   </div>
-  <p class="card-summary">The paper tackles the problem of large KV caches in LLM inference that consume too much memory and slow down decoding. The authors built KV‑Kaizen, a context‑adaptive cache‑compression selector that learns which cache entries can be safely compressed rather than evicted, and demonstrated up to 40 % memory savings with negligible accuracy loss. This is relevant for cloud operators running LLMs: it can improve throughput and reduce memory costs.</p>
+  <p class="card-summary">RICE shows that large language models can produce good dense retrieval vectors without any training, using only a few examples in the prompt. The authors built a simple in‑context prompting method that aligns query and document representations, and achieved retrieval performance that matches or exceeds traditional trained retrievers. This means you can skip the costly embedding model training step and still get strong search results.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage LLM inference on the cloud, here is what to do: 1) Integrate KV‑Kaizen’s compression selector into your inference pipeline; 2) Tune its compression thresholds based on your workload’s context length; 3) Monitor performance to ensure accuracy remains within acceptable bounds.</p>
+    <p class="insight-text">If you manage a cloud search service, step 1: add a few example query‑document pairs to your prompt; step 2: let your LLM generate embeddings for new queries and documents on the fly; step 3: index those embeddings in your vector store and run nearest‑neighbour search. This flags a risk: if your org uses a custom retriever model, check whether RICE could replace it and save compute and engineering effort.</p>
   </div>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
@@ -812,7 +878,7 @@
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper presents a novel context-adaptive cache compression mechanism for large language models, which is a cutting-edge topic in AI deployment. For IT engineers who manage LLM inference workloads—particularly on edge or on-premise infrastructure—understanding how to reduce KV cache size without evicting tokens can directly improve throughput and reduce memory costs. This is a tangible benefit that could be prototyped or integrated into existing serving stacks (e.g., Triton, TorchServe) within the next 90 days. The work has clear applicability to cloud and on-prem deployments, but it does not provide immediate, low-level tooling or a ready-to-use library, so the actionable value is moderate.</p>
+      <p class="trace-reasoning">The paper presents a novel, training‑free approach to dense retrieval using in‑context examples with LLMs. It may interest IT engineers looking to improve internal search or document retrieval systems, but the direct applicability to core infrastructure tools (SSO, cloud, endpoint management) is limited. Within 90 days a small team could prototype a search feature using RICE, but the immediate business impact is modest.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -839,38 +905,39 @@
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.37988v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2609.38099v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="KV-Kaizen: Learning Context-Adaptive Cache Compression Choices"
-        data-summary="The paper tackles the problem of large KV caches in LLM inference that consume too much memory and slow down decoding. The authors built KV‑Kaizen, a context‑adaptive cache‑compression selector that learns which cache entries can be safely compressed rather than evicted, and demonstrated up to 40 % memory savings with negligible accuracy loss. This is relevant for cloud operators running LLMs: it can improve throughput and reduce memory costs."
-        data-it="If you manage LLM inference on the cloud, here is what to do: 1) Integrate KV‑Kaizen’s compression selector into your inference pipeline; 2) Tune its compression thresholds based on your workload’s context length; 3) Monitor performance to ensure accuracy remains within acceptable bounds."
+        data-title="Effective Dense Retrieval using Only In-Context Examples"
+        data-summary="RICE shows that large language models can produce good dense retrieval vectors without any training, using only a few examples in the prompt. The authors built a simple in‑context prompting method that aligns query and document representations, and achieved retrieval performance that matches or exceeds traditional trained retrievers. This means you can skip the costly embedding model training step and still get strong search results."
+        data-it="If you manage a cloud search service, step 1: add a few example query‑document pairs to your prompt; step 2: let your LLM generate embeddings for new queries and documents on the fly; step 3: index those embeddings in your vector store and run nearest‑neighbour search. This flags a risk: if your org uses a custom retriever model, check whether RICE could replace it and save compute and engineering effort."
         data-monetisation=""
-        data-reasoning="The paper presents a novel context-adaptive cache compression mechanism for large language models, which is a cutting-edge topic in AI deployment. For IT engineers who manage LLM inference workloads—particularly on edge or on-premise infrastructure—understanding how to reduce KV cache size without evicting tokens can directly improve throughput and reduce memory costs. This is a tangible benefit that could be prototyped or integrated into existing serving stacks (e.g., Triton, TorchServe) within the next 90 days. The work has clear applicability to cloud and on-prem deployments, but it does not provide immediate, low-level tooling or a ready-to-use library, so the actionable value is moderate."
+        data-reasoning="The paper presents a novel, training‑free approach to dense retrieval using in‑context examples with LLMs. It may interest IT engineers looking to improve internal search or document retrieval systems, but the direct applicability to core infrastructure tools (SSO, cloud, endpoint management) is limited. Within 90 days a small team could prototype a search feature using RICE, but the immediate business impact is modest."
         data-score="0"
-        data-url="https://arxiv.org/abs/2609.37988v1">
+        data-url="https://arxiv.org/abs/2609.38099v1">
         ⬇ MD
       </button>
     </div>
   </div>
 </article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.37196v1','_blank')">
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.36323v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">security, AI agents, cloud</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">AI-driven SDLC automation</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
   </div>
-  <h3 class="card-title">ToolFence: Fine-Grained Authorization for Secure Tool-Using LLM Agents</h3>
+  <h3 class="card-title">Towards an AI Software Factory for Data Systems</h3>
   <div class="card-meta">
-    <span class="authors">Yanjie Li, Xiangyu He, Xuelong Dai, Bin Xiao</span>
+    <span class="authors">Anna Pavlenko, Bogdan Crivat, Brandon Haynes, Carlo Curino</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
-    <span class="pub-date">29 Sep 2026</span>
+    <span class="pub-date">28 Sep 2026</span>
   </div>
-  <p class="card-summary">ToolFence provides a fine‑grained permission system for tool‑using LLM agents, solving the problem of indirect prompt injection that current defence mechanisms fail to stop. The authors built a lightweight policy engine that checks each tool call against user‑defined authorisations, achieving a 60‑80% drop in successful attacks with negligible overhead. This directly benefits cloud infra managers by reducing the risk of compromised automated tooling in their environments.</p>
+  <p class="card-summary">The paper tackles the limited reach of AI coding tools by building an AI Software Factory that speeds up every phase of the software development life‑cycle—planning, coding, review and operations—using a metadata‑driven loop to continually improve the models. The authors created a system that produces a rich metadata exhaust for data‑system projects, allowing the models to learn from each deployment. The result is faster delivery and higher quality code, with automated feedback for ongoing model refinement.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage LLM‑enabled services, add ToolFence to your agent stack: 1) Define per‑tool permission policies for each user or service account, 2) Wrap the agent’s tool‑calling interface with ToolFence’s auth layer, 3) Monitor and log denied calls to detect suspicious patterns.</p>
+    <p class="insight-text">If you manage cloud infrastructure, check whether your CI/CD pipelines expose deployment metadata; if so, integrate it into an automated feedback loop to fine‑tune your build tools and monitor for performance regressions. This flags a risk: if your org uses static AI‑assisted code generators without metadata tracking, you may miss opportunities to improve deployment quality.
+</p>
   </div>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
@@ -878,7 +945,7 @@
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper proposes a fine-grained authorization framework (ToolFence) for LLM agents interacting with tools, addressing prompt injection and within-tool attacks. It introduces a novel data‑flow control approach that can be applied to existing SaaS or cloud‑based LLM deployments, making it highly relevant to IT engineers managing Microsoft 365, Google Workspace, and cloud infrastructures. The method offers a practical, actionable security model that can be implemented within 90 days to harden agent-based workflows, thereby providing tangible value for consultants and infrastructure teams.</p>
+      <p class="trace-reasoning">The paper introduces an AI Software Factory concept aimed at accelerating SDLC stages for data systems. While the idea shows some novelty, it remains largely academic with limited immediate applicability to the daily operations of IT engineers. The concept touches on AI-driven development and ops automation, offering moderate relevance to DevOps and MLOps practices. However, the concrete, actionable guidance or tools that could be implemented within 90 days is sparse, yielding a modest value score. Overall, the total score exceeds 40, so the paper is considered noteworthy.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -905,148 +972,17 @@
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.37196v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2609.36323v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="ToolFence: Fine-Grained Authorization for Secure Tool-Using LLM Agents"
-        data-summary="ToolFence provides a fine‑grained permission system for tool‑using LLM agents, solving the problem of indirect prompt injection that current defence mechanisms fail to stop. The authors built a lightweight policy engine that checks each tool call against user‑defined authorisations, achieving a 60‑80% drop in successful attacks with negligible overhead. This directly benefits cloud infra managers by reducing the risk of compromised automated tooling in their environments."
-        data-it="If you manage LLM‑enabled services, add ToolFence to your agent stack: 1) Define per‑tool permission policies for each user or service account, 2) Wrap the agent’s tool‑calling interface with ToolFence’s auth layer, 3) Monitor and log denied calls to detect suspicious patterns."
+        data-title="Towards an AI Software Factory for Data Systems"
+        data-summary="The paper tackles the limited reach of AI coding tools by building an AI Software Factory that speeds up every phase of the software development life‑cycle—planning, coding, review and operations—using a metadata‑driven loop to continually improve the models. The authors created a system that produces a rich metadata exhaust for data‑system projects, allowing the models to learn from each deployment. The result is faster delivery and higher quality code, with automated feedback for ongoing model refinement."
+        data-it="If you manage cloud infrastructure, check whether your CI/CD pipelines expose deployment metadata; if so, integrate it into an automated feedback loop to fine‑tune your build tools and monitor for performance regressions. This flags a risk: if your org uses static AI‑assisted code generators without metadata tracking, you may miss opportunities to improve deployment quality.
+"
         data-monetisation=""
-        data-reasoning="The paper proposes a fine-grained authorization framework (ToolFence) for LLM agents interacting with tools, addressing prompt injection and within-tool attacks. It introduces a novel data‑flow control approach that can be applied to existing SaaS or cloud‑based LLM deployments, making it highly relevant to IT engineers managing Microsoft 365, Google Workspace, and cloud infrastructures. The method offers a practical, actionable security model that can be implemented within 90 days to harden agent-based workflows, thereby providing tangible value for consultants and infrastructure teams."
+        data-reasoning="The paper introduces an AI Software Factory concept aimed at accelerating SDLC stages for data systems. While the idea shows some novelty, it remains largely academic with limited immediate applicability to the daily operations of IT engineers. The concept touches on AI-driven development and ops automation, offering moderate relevance to DevOps and MLOps practices. However, the concrete, actionable guidance or tools that could be implemented within 90 days is sparse, yielding a modest value score. Overall, the total score exceeds 40, so the paper is considered noteworthy."
         data-score="0"
-        data-url="https://arxiv.org/abs/2609.37196v1">
-        ⬇ MD
-      </button>
-    </div>
-  </div>
-</article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.36927v1','_blank')">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">automation</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
-    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
-  </div>
-  <h3 class="card-title">Neuro-Symbolic Computer Use: Learning Reusable Policies for Reliable and Efficient Execution</h3>
-  <div class="card-meta">
-    <span class="authors">Hyewon Suh, Thanh Minh Nguyen, Chih-Lun Lee, Darrow Hartman</span>
-    <span class="sep">·</span>
-    <span class="institution">Academic Institution</span>
-    <span class="sep">·</span>
-    <span class="pub-date">29 Sep 2026</span>
-  </div>
-  <p class="card-summary">The research tackles the wasteful re‑planning of routine computer tasks by learning reusable policies that encode stable decisions and delegate only variable parts to neural models. The authors built a neuro‑symbolic system that generates executable code for recurring workflows, improving reliability and reducing execution cost. As a result, repetitive tasks run faster and with fewer errors.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage cloud infrastructure, here is what to do: 1) Identify scripts that repeat daily (e.g., auto‑scaling, backup). 2) Replace their ad‑hoc planners with a policy that fixes loop ordering and variable names, while keeping state checks neural. 3) Deploy the new policy and monitor for reduced CPU usage and error rates.</p>
-  </div>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper presents a novel neuro-symbolic approach to learning reusable policies for repeated computer workflows, which could interest IT engineers seeking more efficient automation. While it introduces new ideas, it does not provide immediate, actionable tools or frameworks for deployment in existing SaaS or cloud environments, resulting in a low practical value score. The overall score indicates moderate interest but limited short-term applicability.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <div class="score-bars">
-      <div class="score-bar-row">
-      <span class="bar-label">Recency</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
-      <span class="bar-val">25</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Impact</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Maturity</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Monetisation</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-    </div>
-    <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.36927v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <span class="breakdown-pending">Breakdown pending</span>
-      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="Neuro-Symbolic Computer Use: Learning Reusable Policies for Reliable and Efficient Execution"
-        data-summary="The research tackles the wasteful re‑planning of routine computer tasks by learning reusable policies that encode stable decisions and delegate only variable parts to neural models. The authors built a neuro‑symbolic system that generates executable code for recurring workflows, improving reliability and reducing execution cost. As a result, repetitive tasks run faster and with fewer errors."
-        data-it="If you manage cloud infrastructure, here is what to do: 1) Identify scripts that repeat daily (e.g., auto‑scaling, backup). 2) Replace their ad‑hoc planners with a policy that fixes loop ordering and variable names, while keeping state checks neural. 3) Deploy the new policy and monitor for reduced CPU usage and error rates."
-        data-monetisation=""
-        data-reasoning="The paper presents a novel neuro-symbolic approach to learning reusable policies for repeated computer workflows, which could interest IT engineers seeking more efficient automation. While it introduces new ideas, it does not provide immediate, actionable tools or frameworks for deployment in existing SaaS or cloud environments, resulting in a low practical value score. The overall score indicates moderate interest but limited short-term applicability."
-        data-score="0"
-        data-url="https://arxiv.org/abs/2609.36927v1">
-        ⬇ MD
-      </button>
-    </div>
-  </div>
-</article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2609.36879v1','_blank')">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">security-automation</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
-    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
-  </div>
-  <h3 class="card-title">SKILLLITE: Evidence-Guided Malicious Skill Auditing with Compact LLMs</h3>
-  <div class="card-meta">
-    <span class="authors">Haoran Ou, Gelei Deng, Xuanye Zhang, Wenbo Guo</span>
-    <span class="sep">·</span>
-    <span class="institution">Academic Institution</span>
-    <span class="sep">·</span>
-    <span class="pub-date">29 Sep 2026</span>
-  </div>
-  <p class="card-summary">The paper tackles the problem of third‑party &#x27;Agent Skills&#x27; that can be inserted into large language model (LLM) agents and may contain hidden malicious code, potentially compromising the host environment. The authors developed a lightweight audit framework that uses compact LLMs to analyse skill packages and flag suspicious behaviour, achieving high detection accuracy while keeping resource use low. This means if you run LLM agents that load external skills, you now have a practical tool to vet them before deployment.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage LLM‑based agents, first integrate the SKILLLITE audit tool into your CI pipeline: 1) Scan each skill package with the compact LLM auditor; 2) Review the generated risk report; 3) Block or sandbox any skill flagged as potentially malicious before it can be activated.</p>
-  </div>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper introduces a novel evidence‑guided method for auditing third‑party LLM agent skills, addressing a new supply‑chain security risk that IT engineers face when integrating LLM APIs and agentic systems. It presents actionable techniques that can be implemented or integrated into existing security tooling within a short time frame, enabling auditors to flag malicious skills and enforce policy checks. This directly informs IT infrastructure security practices and can be leveraged to build or enhance monitoring services for SaaS and cloud deployments. The novelty is high because it tackles a previously under‑explored attack surface, the relevance to IT operations and security is strong, and the immediate value for deployment or service creation within 90 days is high.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <div class="score-bars">
-      <div class="score-bar-row">
-      <span class="bar-label">Recency</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
-      <span class="bar-val">25</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Impact</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Maturity</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-      <div class="score-bar-row">
-      <span class="bar-label">Monetisation</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
-    </div>
-    </div>
-    <div class="footer-links">
-      <a href="https://arxiv.org/abs/2609.36879v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <span class="breakdown-pending">Breakdown pending</span>
-      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="SKILLLITE: Evidence-Guided Malicious Skill Auditing with Compact LLMs"
-        data-summary="The paper tackles the problem of third‑party &#x27;Agent Skills&#x27; that can be inserted into large language model (LLM) agents and may contain hidden malicious code, potentially compromising the host environment. The authors developed a lightweight audit framework that uses compact LLMs to analyse skill packages and flag suspicious behaviour, achieving high detection accuracy while keeping resource use low. This means if you run LLM agents that load external skills, you now have a practical tool to vet them before deployment."
-        data-it="If you manage LLM‑based agents, first integrate the SKILLLITE audit tool into your CI pipeline: 1) Scan each skill package with the compact LLM auditor; 2) Review the generated risk report; 3) Block or sandbox any skill flagged as potentially malicious before it can be activated."
-        data-monetisation=""
-        data-reasoning="The paper introduces a novel evidence‑guided method for auditing third‑party LLM agent skills, addressing a new supply‑chain security risk that IT engineers face when integrating LLM APIs and agentic systems. It presents actionable techniques that can be implemented or integrated into existing security tooling within a short time frame, enabling auditors to flag malicious skills and enforce policy checks. This directly informs IT infrastructure security practices and can be leveraged to build or enhance monitoring services for SaaS and cloud deployments. The novelty is high because it tackles a previously under‑explored attack surface, the relevance to IT operations and security is strong, and the immediate value for deployment or service creation within 90 days is high."
-        data-score="0"
-        data-url="https://arxiv.org/abs/2609.36879v1">
+        data-url="https://arxiv.org/abs/2609.36323v1">
         ⬇ MD
       </button>
     </div>
@@ -1138,32 +1074,58 @@
         letter-spacing:1px;font-size:10px">
         ⚡ TODAY'S SIGNAL</span>
         <p style="margin-top:8px;font-family:'Inter',sans-serif;
-        font-size:14px;font-weight:500">Gemini 3.8, DevDay 2026, and Copilot’s new Home, Code and Autopilot modes are redefining live AI and developer productivity—time to upgrade your stack.</p>
+        font-size:14px;font-weight:500">Unlock next‑generation AI: Gemini 4 Argon, seamless long‑form video creation, and Microsoft’s data breakthroughs—transform your consultancy in minutes.</p>
     </div>
     
-    <div class="cards-grid"><article class="card news-card" onclick="window.open('https://huggingface.co/blog/open-tts-leaderboard','_blank')">
+    <div class="cards-grid"><article class="card news-card" onclick="window.open('https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
+      <span class="source-name">Google DeepMind</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">9/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Gemini 4 Argon: our next era of frontier intelligence</h3>
+  <p class="card-summary">Google DeepMind has unveiled Gemini 4 Argon, the next major iteration of its Gemini family, promising higher reasoning, multimodal understanding, and expanded API capabilities. The release signals a shift toward more powerful AI that could be integrated across Google‑centric workflows and third‑party services.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Go to the Google Workspace Admin console and review the new Gemini 4 Argon API integration settings this week. Failing to adopt the enhanced reasoning engine could mean missed opportunities for automated policy analysis and predictive threat modeling in your IT stack. The most affected tools are Google Workspace, JumpCloud, and your SSO/MDM platforms that rely on Google Cloud APIs.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">30 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Microsoft Research</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
       <span class="score-num">6/10</span>
     </div>
   </div>
-  <h3 class="card-title">Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning</h3>
-  <p class="card-summary">The Open TTS Leaderboard, released by Hugging Face, provides a standardized, scalable framework for evaluating multilingual text‑to‑speech and voice cloning models. It aggregates model performance metrics across languages, enabling developers to benchmark and compare TTS systems more efficiently.</p>
+  <h3 class="card-title">Forecasting space weather risks on power grids</h3>
+  <p class="card-summary">Microsoft Research has unveiled a machine learning system that forecasts space weather events and predicts potential damage to power grids 30–60 minutes before impact. The model also flags GPS and satellite disruptions, offering early warning for critical infrastructure.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Watch the leaderboard for emerging TTS models that could be integrated into customer support bots or internal documentation tools. Assess how these models might improve voice‑enabled workflows and reduce reliance on external TTS vendors.</p>
+    <p class="insight-text">Monitor the system for any announced API or integration options that could allow early alerts to be fed into your alerting workflows (e.g., Freshservice incident triggers). Early integration would reduce downtime and improve incident response for any of your users who rely on GPS-dependent services.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">30 Sep 2026</span>
     <div class="footer-links">
-      <a href="https://huggingface.co/blog/open-tts-leaderboard" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/open-tts-leaderboard-scalable-evaluation-for-multilingual-text-to-speech-and-voi.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1180,93 +1142,15 @@
     </div>
   </div>
   <h3 class="card-title">Helping small businesses put AI to work</h3>
-  <p class="card-summary">OpenAI is partnering with America&#x27;s SBDC to provide AI training and support for small businesses, and released a report on how these teams are adopting AI tools. This initiative expands access to AI resources beyond enterprise customers.</p>
+  <p class="card-summary">OpenAI is teaming with the U.S. Small Business Development Center (SBDC) to offer on‑the‑ground AI training and support to small businesses, and has released a report detailing how small teams are adopting AI tools.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on the partnership for potential new AI training modules that could be leveraged for staff upskilling in AI tools. While not directly impacting your current stack, this may introduce future integrations or APIs that could enhance Google Workspace or JumpCloud workflows.</p>
+    <p class="insight-text">Review the SBDC program to see if any of your clients or internal small‑team projects could benefit from OpenAI’s training resources.  This could reduce your support load by enabling teams to build and troubleshoot AI solutions independently.  If you find a gap, consider piloting the training for a few pilot accounts.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">30 Sep 2026</span>
     <div class="footer-links">
       <a href="https://openai.com/index/helping-small-businesses-put-ai-to-work" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/helping-small-businesses-put-ai-to-work.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/30/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Meta disputes claim that Muse read a user’s private messages without permission</h3>
-  <p class="card-summary">Meta argues that its Muse AI agent cannot access users’ private Messages without explicit permission, countering a journalist’s claim that the agent read messages while the required Mac setting was off.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text"></p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">30 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://techcrunch.com/2026/09/30/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/30/doordash-launches-an-ai-agent-you-can-text-to-order-food/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">DoorDash launches an AI agent you can text to order food</h3>
-  <p class="card-summary">DoorDash has introduced an AI agent that users can text to place food orders, aiming to differentiate itself from competitors like Uber Eats and Grubhub.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text"></p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">30 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://techcrunch.com/2026/09/30/doordash-launches-an-ai-agent-you-can-text-to-order-food/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/doordash-launches-an-ai-agent-you-can-text-to-order-food.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Microsoft Research</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">2/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Forecasting space weather risks on power grids</h3>
-  <p class="card-summary">Microsoft Research has developed a machine learning system that can forecast space‑weather events, predicting potential damage to power grids and GPS systems 30‑60 minutes in advance. The technology aims to improve preparedness for extreme solar storms that could disrupt critical infrastructure.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">This development does not directly affect Ahmed’s current IT stack or tools; it is largely outside the scope of Google Workspace, JumpCloud, or endpoint security management.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">30 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
@@ -1276,24 +1160,50 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">2/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Introducing SynthID Bio</h3>
-  <p class="card-summary">Google DeepMind has unveiled SynthID Bio, a proof‑of‑concept system that embeds watermarks into AI‑generated protein sequences while keeping their biological activity intact.</p>
+  <p class="card-summary">Proof of concept for watermarking AI-generated proteins while preserving biological function.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check your internal AI model governance policies for watermarking or provenance features; note that this research could influence future compliance requirements for AI‑generated biomolecules, but it does not currently impact your existing IT tools.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">30 Sep 2026</span>
     <div class="footer-links">
       <a href="https://deepmind.google/blog/introducing-synthid-bio/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/introducing-synthid-bio.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://huggingface.co/blog/open-tts-leaderboard','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning</h3>
+  <p class="card-summary"></p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">30 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://huggingface.co/blog/open-tts-leaderboard" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1305,12 +1215,12 @@
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">2/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Turn Energy Efficiency Into Strategic Advantage</h3>
-  <p class="card-summary">Researchers surveyed executives to explore how digital technologies improve energy efficiency in manufacturing and other sectors.</p>
+  <p class="card-summary">Grundini/Ikon Images The Research The authors interviewed 39 executives representing 10 countries and multiple industries and hosted an online workshop with 36 executives responsible for enterprise da</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
     <p class="insight-text"></p>
@@ -1319,11 +1229,11 @@
     <span class="pub-date">30 Sep 2026</span>
     <div class="footer-links">
       <a href="https://sloanreview.mit.edu/article/turn-energy-efficiency-into-strategic-advantage/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/turn-energy-efficiency-into-strategic-advantage.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/30/destro-ais-secret-sauce-is-getting-robots-and-humans-on-the-same-page/','_blank')">
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/30/valor-atreides-and-sequoia-back-ai-startup-flow-engineering-at-750m-valuation/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#64748b">Press</span>
@@ -1331,77 +1241,99 @@
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
-  <h3 class="card-title">Destro AI’s secret sauce is getting robots and humans on the same page</h3>
-  <p class="card-summary">Destro AI claims its competitive edge lies in integrating human and robotic workflows, positioning itself as a hybrid solution rather than a traditional robotics firm.</p>
+  <h3 class="card-title">Valor, Atreides, and Sequoia back AI startup Flow Engineering at $750M valuation</h3>
+  <p class="card-summary">Flow Engineering, which is bringing AI agents to hardware design, also landed Roelof Botha as an angel investor and board member.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check whether Destro AI offers any APIs or integrations that can connect with existing MDM or SSO platforms; a lack of such connectors could limit its utility for your environment.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">30 Sep 2026</span>
     <div class="footer-links">
-      <a href="https://techcrunch.com/2026/09/30/destro-ais-secret-sauce-is-getting-robots-and-humans-on-the-same-page/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/destro-ais-secret-sauce-is-getting-robots-and-humans-on-the-same-page.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://techcrunch.com/2026/09/30/valor-atreides-and-sequoia-back-ai-startup-flow-engineering-at-750m-valuation/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/devday-2026-recap','_blank')">
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/30/openais-jev-clone-could-help-the-frontier-lab-stop-its-swarming-agents/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">OpenAI’s Jev clone could help the frontier lab stop its swarming agents</h3>
+  <p class="card-summary">OpenAI&#x27;s &quot;Decisions API&quot; is a Jev clone that confirms the importance of fast, cheap intelligence.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">30 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://techcrunch.com/2026/09/30/openais-jev-clone-could-help-the-frontier-lab-stop-its-swarming-agents/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/09/30/ai-voice-startup-elevenlabs-doubles-valuation-to-22b/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">AI voice startup ElevenLabs doubles valuation to $22B</h3>
+  <p class="card-summary">The $300 million employee tender was co-led by Wellington and T. Rowe Price.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">30 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://techcrunch.com/2026/09/30/ai-voice-startup-elevenlabs-doubles-valuation-to-22b/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Security</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">8/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
-  <h3 class="card-title">DevDay 2026 Recap</h3>
-  <p class="card-summary">OpenAI’s DevDay 2026 unveiled GPT-6 Astra, a new model with advanced language understanding, along with updated ChatGPT and Codex APIs, fresh security features, and several builder tools. These releases promise higher performance and tighter integration options for developers building AI-powered applications.</p>
+  <h3 class="card-title">Disrupting a coordinated model-distillation campaign</h3>
+  <p class="card-summary">OpenAI has revealed that it successfully disrupted a coordinated campaign aimed at extracting the internal reasoning of its protected models, and is now reinforcing its defenses against adversarial distillation attacks. This development highlights evolving threats to AI model integrity and the need for robust protective measures.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review OpenAI’s new API endpoints for GPT-6 Astra and evaluate their integration with your current workflow this week. S2: Failing to adopt could mean missing out on faster inference and enhanced security controls that reduce model drift and data exposure risks. S3: The changes most directly impact your use of API-based AI services, so assess how they fit with your existing Google Workspace, JumpCloud, and Freshservice integrations.</p>
+    <p class="insight-text">Keep an eye on OpenAI’s forthcoming security updates and API guidelines over the next three months, as changes could influence how you manage AI integrations and data handling in your IT stack. Failure to adapt to these safeguards may expose your services to model theft risks that could compromise compliance and intellectual property.</p>
   </div>
   <div class="card-footer">
-    <span class="pub-date">29 Sep 2026</span>
+    <span class="pub-date">30 Sep 2026</span>
     <div class="footer-links">
-      <a href="https://openai.com/index/devday-2026-recap" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/devday-2026-recap.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">8/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Getting the Source Right, Not Just the Fact: Source-Aware Verification for MCP Agents</h3>
-  <p class="card-summary">Hugging Face has released a new source‑aware verification feature for its MCP (Machine‑Learning‑Controlled Platform) agents, enabling the agents to confirm the provenance of the data they process before executing tasks. This adds a layer of trust and integrity to AI workloads that could be integrated into existing security and compliance workflows.
-</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review the Hugging Face MCP Agent documentation this week and enable source‑aware verification in your test environment.
-S2: Failure to adopt this could leave your AI pipelines vulnerable to malicious or tampered data, increasing the risk of incorrect outputs or data leakage.
-S3: This feature directly affects your MDM and endpoint security tools that rely on AI for anomaly detection, making it a priority for your security stack.
-</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">29 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/getting-the-source-right-not-just-the-fact-source-aware-verification-for-mcp-age.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1418,42 +1350,16 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     </div>
   </div>
   <h3 class="card-title">New Microsoft data innovations unlock what only your business knows</h3>
-  <p class="card-summary">Microsoft announced a set of data‑centric AI enhancements that aim to surface insights unique to each organization’s own data lake. These innovations are designed to integrate with Azure, Power Platform and Microsoft 365, enabling smarter context‑aware decision making across the enterprise.</p>
+  <p class="card-summary">Microsoft has announced new data innovations that harness AI to tap into unique business knowledge. These tools promise to integrate deeply with existing Microsoft services, enhancing data-driven decisions across enterprises.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review the Azure AI services portal this week to see if the new data‑centric capabilities are available for your tenant. S2: Delaying this review risks missing opportunities to automate data discovery and contextual analytics in your existing Power Apps and Teams environments. S3: The Azure AI and Power Platform components are most affected, offering direct value for the data pipelines you manage.</p>
+    <p class="insight-text">1. Explore the new Azure AI data services by visiting the Azure portal and reviewing the Data Innovation Center documentation this week. 2. Failing to assess these capabilities may leave your organization missing out on advanced contextual analytics that could improve policy enforcement and incident response. 3. The most affected tool is Azure AD and Microsoft 365, where these innovations will enhance data governance and AI-powered insights.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
     <div class="footer-links">
       <a href="https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/new-microsoft-data-innovations-unlock-what-only-your-business-knows.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://huggingface.co/blog/nvidia/kumo-tabular','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">NVIDIA Kumo Tabular Sets a New Accuracy-Efficiency Frontier for Tabular Prediction</h3>
-  <p class="card-summary">NVIDIA’s Kumo Tabular model offers improved accuracy and efficiency for tabular data prediction tasks, as announced by Hugging Face. This advancement represents a new AI model release that could influence how data-intensive IT operations handle predictive analytics.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on Kumo Tabular during the next 30 days to assess whether its performance gains could benefit your internal data pipelines or predictive maintenance workflows. Evaluating its integration with existing ML frameworks could enhance decision‑making processes and reduce model training times.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">29 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://huggingface.co/blog/nvidia/kumo-tabular" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/nvidia-kumo-tabular-sets-a-new-accuracy-efficiency-frontier-for-tabular-predicti.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1466,20 +1372,20 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
+      <span class="score-num">6/10</span>
     </div>
   </div>
   <h3 class="card-title">Introducing GPT-6.1 Sol</h3>
-  <p class="card-summary">OpenAI has announced GPT‑6.1 Sol, a cost‑effective variant of its Astra model optimized for coding, computer usage, and professional tasks. The model promises lower token prices while maintaining high performance.</p>
+  <p class="card-summary">OpenAI has unveiled GPT‑6.1 Sol, a next‑generation model that promises near‑Astra level intelligence for coding and professional tasks while reducing API costs to one‑fifth of Astra’s standard pricing. This release represents a significant step in accessible, cost‑effective AI for developers and enterprises.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on GPT‑6.1 Sol for potential integration into your internal automation scripts or support bots. Evaluate its performance and pricing against your current AI tooling when planning next‑quarter budget allocations.</p>
+    <p class="insight-text">Watch for pricing updates and compatibility with your existing API integrations. Consider evaluating GPT‑6.1 Sol for internal tooling or developer productivity projects within the next 30 days, as the lower cost could impact your budget and workload efficiency.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
     <div class="footer-links">
       <a href="https://openai.com/index/introducing-gpt-6-1-sol" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/introducing-gpt-61-sol.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1488,7 +1394,7 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Google AI</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
@@ -1496,16 +1402,68 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     </div>
   </div>
   <h3 class="card-title">How Diffusion Controller unifies and simplifies AI image generation</h3>
-  <p class="card-summary">Google AI has introduced the Diffusion Controller, a unified framework that streamlines the creation and management of AI-generated images. The tool aggregates multiple diffusion models into a single, user-friendly interface, enabling easier experimentation and deployment for developers.</p>
+  <p class="card-summary">Google AI has released the Diffusion Controller, a new tool that unifies and simplifies the process of generating AI images. It streamlines workflow by providing a single interface for controlling various diffusion models.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on the Diffusion Controller for future integration opportunities, especially if your team handles media or design workflows. While it doesn’t directly impact your current Google Workspace or MDM stack, its API could be leveraged in automated content pipelines or internal training datasets, saving time on manual image generation.</p>
+    <p class="insight-text">Monitor the Diffusion Controller’s release notes and API for potential integration with internal documentation or asset management systems. It could reduce manual effort when creating visual content for training materials or support tickets.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
     <div class="footer-links">
       <a href="https://research.google/blog/how-diffusion-controller-unifies-and-simplifies-ai-image-generation/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/how-diffusion-controller-unifies-and-simplifies-ai-image-generation.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://huggingface.co/blog/nvidia/kumo-tabular','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">NVIDIA Kumo Tabular Sets a New Accuracy-Efficiency Frontier for Tabular Prediction</h3>
+  <p class="card-summary"></p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">29 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://huggingface.co/blog/nvidia/kumo-tabular" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Getting the Source Right, Not Just the Fact: Source-Aware Verification for MCP Agents</h3>
+  <p class="card-summary"></p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">29 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1517,21 +1475,21 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">How to Outcompete Your Client’s AI</h3>
-  <p class="card-summary">Alturas Capital Partners’ in‑house legal team is now using generative AI to draft leases, eliminating the need for outside counsel and cutting costs by hundreds of thousands of dollars. The case illustrates a concrete, business‑value use of AI outside traditional IT tools.</p>
+  <p class="card-summary">Andy Carter/Ikon Images The in-house lawyers at real estate investment firm Alturas Capital Partners used to rely on outside counsel for much of its lease work. Thanks to generative AI, it can now do </p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check your own workflow for any repetitive, document‑heavy processes that could be automated with generative AI, such as contract drafting or data extraction. Even if you don’t use AI directly, understanding these use cases can inform future procurement decisions for AI‑enabled productivity tools.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
     <div class="footer-links">
       <a href="https://sloanreview.mit.edu/article/how-to-outcompete-your-clients-ai/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/how-to-outcompete-your-clients-ai.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1543,21 +1501,21 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
       <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">3/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">Introducing Quine: An AI research system designed for the complexity of biology</h3>
-  <p class="card-summary">Microsoft Research has launched Quine, an AI system that builds multimodal biological world models to accelerate hypothesis generation across biological scales. Quine is aimed at academic scientists, not enterprise IT tools.</p>
+  <p class="card-summary">Microsoft Research has announced Quine, an early-stage AI research system that builds a multimodal world model for biology. The system integrates data across biological scales and modalities to help scientists computationally explore and prioritize hypotheses before laboratory experiments.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text"></p>
+    <p class="insight-text">Monitor Quine’s progress and evaluate its API or SDK for potential integration into your data analytics pipelines. Early adoption could accelerate hypothesis testing in your organization’s R&amp;D, improving efficiency and reducing time to discovery.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
     <div class="footer-links">
       <a href="https://www.microsoft.com/en-us/research/blog/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1574,16 +1532,16 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     </div>
   </div>
   <h3 class="card-title">One year in: How Microsoft Research Asia – Singapore is advancing research, partnership and talent for real-world impact</h3>
-  <p class="card-summary">Microsoft Research Asia – Singapore, in its first year, has bolstered collaborations with government, academia, and industry to translate frontier AI research into practical applications. The lab’s progress highlights opportunities for enterprises to tap into cutting‑edge AI developments.</p>
+  <p class="card-summary">Microsoft Research Asia – Singapore has completed its first year, deepening collaborations with government, academia, and industry to apply frontier AI research to real-world challenges.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on Microsoft Research Singapore’s forthcoming publications and open‑source projects; they may soon offer APIs or pre‑trained models that can be integrated with your existing Microsoft 365 or Azure environment to enhance data analytics or automation. Monitoring these releases will help you stay ahead of emerging AI capabilities that could be leveraged in your IT workflows.</p>
+    <p class="insight-text">Note the research directions highlighted by the lab; consider reviewing any emerging AI techniques or datasets that could enhance your Google Workspace or MDM deployments, and track any resulting APIs or open-source releases for future integration.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">28 Sep 2026</span>
     <div class="footer-links">
       <a href="https://www.microsoft.com/en-us/research/blog/one-year-in-how-microsoft-research-asia-singapore-is-advancing-research-partnership-and-talent-for-real-world-impact/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/one-year-in-how-microsoft-research-asia-singapore-is-advancing-research-partners.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1592,50 +1550,24 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Microsoft</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">8/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Introducing the new Copilot with Home, Code and Autopilot</h3>
-  <p class="card-summary">Microsoft has launched a refreshed Copilot suite, integrating Home, Code, and Autopilot features that enhance AI-driven productivity across its ecosystem. The update focuses on deeper integration with Microsoft 365, enabling users to build, customize, and scale AI capabilities directly within familiar tools.</p>
+  <p class="card-summary">We’re reimagining Microsoft Copilot to enable work as it evolves and to help expand what every individual and every organization can accomplish in the flow of human ambition. Today we’re introducing t</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review the new Copilot settings in the Microsoft 365 admin center this week and enable the Autopilot and Code features for pilot users. S2: Inaction could mean missed opportunities to streamline support ticket creation, automate policy compliance checks, and reduce manual configuration errors. S3: This directly impacts your Microsoft 365 environment and can be leveraged alongside JumpCloud or Freshservice for automated workflows.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">25 Sep 2026</span>
     <div class="footer-links">
       <a href="https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/introducing-the-new-copilot-with-home-code-and-autopilot.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">10/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Introducing Gemini 3.8 Live with Live Avatar</h3>
-  <p class="card-summary">Google DeepMind has unveiled Gemini 3.8 Live, a real‑time generative model that can produce lifelike avatars and live streaming content. The new capability is slated to integrate with Google Workspace, enabling instant avatar-based video creation directly from Google Docs and Meet.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Go to the Google Workspace Admin Console this week and enable the Gemini 3.8 Live feature under the AI tools section to experiment with live avatar generation for internal training videos. Failing to adopt this now risks missing a competitive edge in engaging remote teams and could expose the organization to a lag in adopting next‑generation communication tools. This directly affects your Google Workspace deployment, providing a powerful, AI‑powered media creation tool for your IT and communications teams.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">24 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/introducing-gemini-38-live-with-live-avatar.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1644,24 +1576,50 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Google AI</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Automating coherent long-form video generation</h3>
+  <p class="card-summary">Google AI has launched an automated system that generates coherent long‑form videos from textual input, enabling rapid creation of polished video content. This breakthrough leverages large language and vision models to produce structured scripts, storyboards, and rendered scenes without manual editing.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">S1: Explore Google AI’s video generation API and experiment with generating training or internal communications videos directly from your documentation or meeting notes this week. S2: Failure to adopt could mean your team spends hours in video editing software and misses opportunities to quickly repurpose content across Google Workspace and YouTube. S3: The integration will most impact your Google Workspace and Freshservice knowledge base content, allowing you to auto‑create onboarding videos for new users.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">24 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://research.google/blog/coherent-long-form-video-generation/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Google DeepMind</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
       <span class="score-num">5/10</span>
     </div>
   </div>
-  <h3 class="card-title">Automating coherent long-form video generation</h3>
-  <p class="card-summary">Google AI has launched a new tool that automatically generates coherent long‑form video content from text prompts, leveraging advanced generative models. The feature enables rapid production of training videos, marketing footage, or instructional content without manual editing.</p>
+  <h3 class="card-title">Introducing Gemini 3.8 Live with Live Avatar</h3>
+  <p class="card-summary"></p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Watch how the new video generation API integrates with Google Workspace. This could streamline internal training content creation and reduce reliance on external video editing services.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">24 Sep 2026</span>
     <div class="footer-links">
-      <a href="https://research.google/blog/coherent-long-form-video-generation/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/automating-coherent-long-form-video-generation.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1670,7 +1628,7 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <div class="card-tags">
       <span class="tier-label" style="color:#7c3aed">Consulting</span>
       <span class="source-name">MIT Sloan</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Regulation</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
@@ -1678,7 +1636,7 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     </div>
   </div>
   <h3 class="card-title">Why Design Thinking Needs a Responsibility Reboot</h3>
-  <p class="card-summary">A recent court ruling found Meta and Google liable for user harm due to addictive product design, prompting calls for a responsibility reboot in design thinking.</p>
+  <p class="card-summary">Marie Montocchio/Ikon Images For years, social media companies have come under fire for promoting divisive, false, and dangerous content in order to monetize user engagement. But in March, when a jury</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
     <p class="insight-text"></p>
@@ -1687,33 +1645,7 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <span class="pub-date">23 Sep 2026</span>
     <div class="footer-links">
       <a href="https://sloanreview.mit.edu/article/why-design-thinking-needs-a-responsibility-reboot/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/why-design-thinking-needs-a-responsibility-reboot.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Advancing Private AI Compute with secure, server-side memory</h3>
-  <p class="card-summary">Google DeepMind has announced a new private, server‑side memory feature for its Private AI Compute platform, allowing personal AI models to store data locally without sending it to external servers.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check whether your organization uses or plans to adopt Private AI Compute; if so, evaluate how the new memory capability could reduce data‑exposure risks and improve model responsiveness, and adjust your privacy and security policies accordingly.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">23 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/advancing-private-ai-compute-with-secure-server-side-memory.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1725,21 +1657,21 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
       <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">MilleMiglia: A realistic instance generator for middle-mile logistics</h3>
-  <p class="card-summary">Google AI has published a research paper titled &#x27;MilleMiglia: A realistic instance generator for middle-mile logistics,&#x27; which introduces a tool for generating realistic logistics scenarios to aid in planning and optimization.</p>
+  <p class="card-summary">Google AI has released a new research paper titled &quot;MilleMiglia: A realistic instance generator for middle-mile logistics,&quot; presenting algorithms that simulate logistics scenarios for training AI models.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">This work is purely research-focused and offers no direct applicability or actionable changes for an IT engineer managing Google Workspace, JumpCloud, Freshservice, SSO, MDM, endpoint security, or access management tools.</p>
+    <p class="insight-text">Keep an eye on how this instance generator could be adapted for testing Google Workspace or JumpCloud deployment simulations, as realistic data can improve reliability of AI‑driven policy testing.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">18 Sep 2026</span>
     <div class="footer-links">
       <a href="https://research.google/blog/millemiglia-a-realistic-instance-generator-for-middle-mile-logistics/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/millemiglia-a-realistic-instance-generator-for-middle-mile-logistics.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1748,24 +1680,24 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Microsoft</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">3/10</span>
     </div>
   </div>
   <h3 class="card-title">What we’ve learned from Microsoft’s own AI transformation</h3>
-  <p class="card-summary">Microsoft’s latest blog post outlines the company’s own lessons from AI transformation, emphasizing the shift from what AI can do to how it creates business value. It highlights that success hinges on integrating AI into core workflows and fostering a culture of experimentation.</p>
+  <p class="card-summary">Microsoft shares insights from its internal AI transformation, emphasizing a shift from what AI can do to how it can create business value and boost employee capabilities. The blog outlines the company’s lessons for organizations aiming to become &#x27;Frontier Firms&#x27; in AI adoption.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Review the outlined AI adoption principles next month to identify gaps in your current IT stack. Incorporating these insights can help optimize workflow automation and improve security posture by aligning AI tools with business objectives.</p>
+    <p class="insight-text">Check your Microsoft 365 admin portal for any upcoming AI‑powered productivity features announced in the next quarter. Ignoring these updates could mean missing opportunities to streamline workflows and enhance user experience.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">17 Sep 2026</span>
     <div class="footer-links">
       <a href="https://blogs.microsoft.com/blog/2026/09/17/what-weve-learned-from-microsofts-own-ai-transformation/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/what-weve-learned-from-microsofts-own-ai-transformation.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
@@ -1774,18 +1706,18 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <div class="card-tags">
       <span class="tier-label" style="color:#64748b">Press</span>
       <span class="source-name">VentureBeat</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">&#x27;Welcome to the AGI era&#x27;: OpenAI launches GPT-6 Astra</h3>
-  <p class="card-summary">OpenAI has announced the release of GPT‑6 Astra, a model positioned as a step toward artificial general intelligence that promises to outperform humans in many economically valuable tasks. The announcement comes amid growing expectations that such a breakthrough could reshape the AI landscape and its applications across industries.</p>
+  <p class="card-summary">The rumors were true, all of them (and then some): OpenAI today is releasing GPT-6 Astra, a new frontier model that the company says likely marks the onset of artificial generalized intelligence (AGI)</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on OpenAI’s API roadmap to see if GPT‑6 Astra will be available for integration within the next 30 days, as it could influence how you approach automation and AI‑powered workflows in your existing tools.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">03 Sep 2026</span>
@@ -1800,8 +1732,8 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
   <div id="archive-cs" class="panel">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-09-30</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><span class='archive-title'>Thinking Before Thinking: Scaling Agentic Inference Through </span><span class='archive-title'>KV-Kaizen: Learning Context-Adaptive Cache Compression Choic</span><span class='archive-title'>ToolFence: Fine-Grained Authorization for Secure Tool-Using </span></div>
+  <div class="archive-count">4 items</div>
+  <div class="archive-previews"><span class='archive-title'>SPLASH: Switching Parallel Layouts of Attention with Seamles</span><span class='archive-title'>EASE: Behavior-Adaptive Skill Curation for Self-Evolving Age</span><span class='archive-title'>Effective Dense Retrieval using Only In-Context Examples</span></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-09-29</div>
@@ -1954,7 +1886,7 @@ S3: This feature directly affects your MDM and endpoint security tools that rely
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-09-30</div>
   <div class="archive-count">25 items</div>
-  <div class="archive-previews"><span class='archive-title'>Introducing Gemini 3.8 Live with Live Avatar</span><span class='archive-title'>DevDay 2026 Recap</span><span class='archive-title'>Introducing the new Copilot with Home, Code and Autopilot</span></div>
+  <div class="archive-previews"><span class='archive-title'>Gemini 4 Argon: our next era of frontier intelligence</span><span class='archive-title'>Automating coherent long-form video generation</span><span class='archive-title'>New Microsoft data innovations unlock what only your busines</span></div>
 </div></div>
   </div>
 </div>

@@ -5,46 +5,39 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 30 Sep 2026 16:39:18 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 30 Sep 2026 22:08:41 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reasoning</title>
-    <link>https://arxiv.org/abs/2609.38147v1</link>
-    <guid>https://arxiv.org/abs/2609.38147v1</guid>
+    <title>SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving</title>
+    <link>https://arxiv.org/abs/2609.37626v1</link>
+    <guid>https://arxiv.org/abs/2609.37626v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the problem of managing a complex AI agent’s decision‑making during a task, by adding a meta‑reasoning controller that evaluates options, estimates costs, and chooses the next step. The team built a system where a high‑level controller supervises worker modules, improving efficiency and control over long, multi‑step problems. For cloud infrastructure management, this is not directly relevant to everyday operations.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <description><![CDATA[<p>SPLASH lets a LLM service switch between tensor, data, and context parallelism on the fly, solving the problem of choosing a single layout that works for all request patterns. The authors built a lightweight runtime that detects changing workloads and reconfigures the model without draining requests. This can improve utilisation and reduce latency for diverse workloads.</p><p><strong>IT Breakdown:</strong> If you manage LLM serving, step 1: integrate the SPLASH runtime into your orchestration; step 2: enable workload‑aware layout switching; step 3: monitor performance and adjust thresholds for handoff.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>KV-Kaizen: Learning Context-Adaptive Cache Compression Choices</title>
-    <link>https://arxiv.org/abs/2609.37988v1</link>
-    <guid>https://arxiv.org/abs/2609.37988v1</guid>
+    <title>EASE: Behavior-Adaptive Skill Curation for Self-Evolving Agents</title>
+    <link>https://arxiv.org/abs/2609.36746v1</link>
+    <guid>https://arxiv.org/abs/2609.36746v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The paper tackles the problem of large KV caches in LLM inference that consume too much memory and slow down decoding. The authors built KV‑Kaizen, a context‑adaptive cache‑compression selector that learns which cache entries can be safely compressed rather than evicted, and demonstrated up to 40 % memory savings with negligible accuracy loss. This is relevant for cloud operators running LLMs: it can improve throughput and reduce memory costs.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference on the cloud, here is what to do: 1) Integrate KV‑Kaizen’s compression selector into your inference pipeline; 2) Tune its compression thresholds based on your workload’s context length; 3) Monitor performance to ensure accuracy remains within acceptable bounds.</p>]]></description>
+    <description><![CDATA[<p>The study tackles the issue that skill curators for automated agents often perform poorly when used with different execution engines, because they don&#x27;t account for the executor’s behaviour. The authors built EASE, a framework that adapts skill curation to the specific executor, and showed that this matching improves agent performance across varied executors. For a cloud infrastructure manager, the work is not directly relevant to day‑to‑day infrastructure tasks.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>ToolFence: Fine-Grained Authorization for Secure Tool-Using LLM Agents</title>
-    <link>https://arxiv.org/abs/2609.37196v1</link>
-    <guid>https://arxiv.org/abs/2609.37196v1</guid>
+    <title>Effective Dense Retrieval using Only In-Context Examples</title>
+    <link>https://arxiv.org/abs/2609.38099v1</link>
+    <guid>https://arxiv.org/abs/2609.38099v1</guid>
     <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>ToolFence provides a fine‑grained permission system for tool‑using LLM agents, solving the problem of indirect prompt injection that current defence mechanisms fail to stop. The authors built a lightweight policy engine that checks each tool call against user‑defined authorisations, achieving a 60‑80% drop in successful attacks with negligible overhead. This directly benefits cloud infra managers by reducing the risk of compromised automated tooling in their environments.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑enabled services, add ToolFence to your agent stack: 1) Define per‑tool permission policies for each user or service account, 2) Wrap the agent’s tool‑calling interface with ToolFence’s auth layer, 3) Monitor and log denied calls to detect suspicious patterns.</p>]]></description>
+    <description><![CDATA[<p>RICE shows that large language models can produce good dense retrieval vectors without any training, using only a few examples in the prompt. The authors built a simple in‑context prompting method that aligns query and document representations, and achieved retrieval performance that matches or exceeds traditional trained retrievers. This means you can skip the costly embedding model training step and still get strong search results.</p><p><strong>IT Breakdown:</strong> If you manage a cloud search service, step 1: add a few example query‑document pairs to your prompt; step 2: let your LLM generate embeddings for new queries and documents on the fly; step 3: index those embeddings in your vector store and run nearest‑neighbour search. This flags a risk: if your org uses a custom retriever model, check whether RICE could replace it and save compute and engineering effort.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Neuro-Symbolic Computer Use: Learning Reusable Policies for Reliable and Efficient Execution</title>
-    <link>https://arxiv.org/abs/2609.36927v1</link>
-    <guid>https://arxiv.org/abs/2609.36927v1</guid>
-    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research tackles the wasteful re‑planning of routine computer tasks by learning reusable policies that encode stable decisions and delegate only variable parts to neural models. The authors built a neuro‑symbolic system that generates executable code for recurring workflows, improving reliability and reducing execution cost. As a result, repetitive tasks run faster and with fewer errors.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Identify scripts that repeat daily (e.g., auto‑scaling, backup). 2) Replace their ad‑hoc planners with a policy that fixes loop ordering and variable names, while keeping state checks neural. 3) Deploy the new policy and monitor for reduced CPU usage and error rates.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>SKILLLITE: Evidence-Guided Malicious Skill Auditing with Compact LLMs</title>
-    <link>https://arxiv.org/abs/2609.36879v1</link>
-    <guid>https://arxiv.org/abs/2609.36879v1</guid>
-    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The paper tackles the problem of third‑party &#x27;Agent Skills&#x27; that can be inserted into large language model (LLM) agents and may contain hidden malicious code, potentially compromising the host environment. The authors developed a lightweight audit framework that uses compact LLMs to analyse skill packages and flag suspicious behaviour, achieving high detection accuracy while keeping resource use low. This means if you run LLM agents that load external skills, you now have a practical tool to vet them before deployment.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑based agents, first integrate the SKILLLITE audit tool into your CI pipeline: 1) Scan each skill package with the compact LLM auditor; 2) Review the generated risk report; 3) Block or sandbox any skill flagged as potentially malicious before it can be activated.</p>]]></description>
+    <title>Towards an AI Software Factory for Data Systems</title>
+    <link>https://arxiv.org/abs/2609.36323v1</link>
+    <guid>https://arxiv.org/abs/2609.36323v1</guid>
+    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The paper tackles the limited reach of AI coding tools by building an AI Software Factory that speeds up every phase of the software development life‑cycle—planning, coding, review and operations—using a metadata‑driven loop to continually improve the models. The authors created a system that produces a rich metadata exhaust for data‑system projects, allowing the models to learn from each deployment. The result is faster delivery and higher quality code, with automated feedback for ongoing model refinement.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check whether your CI/CD pipelines expose deployment metadata; if so, integrate it into an automated feedback loop to fine‑tune your build tools and monitor for performance regressions. This flags a risk: if your org uses static AI‑assisted code generators without metadata tracking, you may miss opportunities to improve deployment quality.
+</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
@@ -56,43 +49,43 @@
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning</title>
-    <link>https://huggingface.co/blog/open-tts-leaderboard</link>
-    <guid>https://huggingface.co/blog/open-tts-leaderboard</guid>
-    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
-    <description><![CDATA[<p>The Open TTS Leaderboard, released by Hugging Face, provides a standardized, scalable framework for evaluating multilingual text‑to‑speech and voice cloning models. It aggregates model performance metrics across languages, enabling developers to benchmark and compare TTS systems more efficiently.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] Helping small businesses put AI to work</title>
-    <link>https://openai.com/index/helping-small-businesses-put-ai-to-work</link>
-    <guid>https://openai.com/index/helping-small-businesses-put-ai-to-work</guid>
-    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI is partnering with America&#x27;s SBDC to provide AI training and support for small businesses, and released a report on how these teams are adopting AI tools. This initiative expands access to AI resources beyond enterprise customers.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] Meta disputes claim that Muse read a user’s private messages without permission</title>
-    <link>https://techcrunch.com/2026/09/30/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission/</link>
-    <guid>https://techcrunch.com/2026/09/30/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
-    <description><![CDATA[<p>Meta argues that its Muse AI agent cannot access users’ private Messages without explicit permission, countering a journalist’s claim that the agent read messages while the required Mac setting was off.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] DoorDash launches an AI agent you can text to order food</title>
-    <link>https://techcrunch.com/2026/09/30/doordash-launches-an-ai-agent-you-can-text-to-order-food/</link>
-    <guid>https://techcrunch.com/2026/09/30/doordash-launches-an-ai-agent-you-can-text-to-order-food/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
-    <description><![CDATA[<p>DoorDash has introduced an AI agent that users can text to place food orders, aiming to differentiate itself from competitors like Uber Eats and Grubhub.</p>]]></description>
+    <title>[News] Gemini 4 Argon: our next era of frontier intelligence</title>
+    <link>https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/</link>
+    <guid>https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/</guid>
+    <pubDate>Wed, 30 Sep 2026 22:08:41 +0000</pubDate>
+    <description><![CDATA[<p>Google DeepMind has unveiled Gemini 4 Argon, the next major iteration of its Gemini family, promising higher reasoning, multimodal understanding, and expanded API capabilities. The release signals a shift toward more powerful AI that could be integrated across Google‑centric workflows and third‑party services.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Forecasting space weather risks on power grids</title>
     <link>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</link>
     <guid>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:39:18 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft Research has developed a machine learning system that can forecast space‑weather events, predicting potential damage to power grids and GPS systems 30‑60 minutes in advance. The technology aims to improve preparedness for extreme solar storms that could disrupt critical infrastructure.</p>]]></description>
+    <pubDate>Wed, 30 Sep 2026 22:08:41 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft Research has unveiled a machine learning system that forecasts space weather events and predicts potential damage to power grids 30–60 minutes before impact. The model also flags GPS and satellite disruptions, offering early warning for critical infrastructure.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Helping small businesses put AI to work</title>
+    <link>https://openai.com/index/helping-small-businesses-put-ai-to-work</link>
+    <guid>https://openai.com/index/helping-small-businesses-put-ai-to-work</guid>
+    <pubDate>Wed, 30 Sep 2026 22:08:41 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI is teaming with the U.S. Small Business Development Center (SBDC) to offer on‑the‑ground AI training and support to small businesses, and has released a report detailing how small teams are adopting AI tools.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Introducing SynthID Bio</title>
+    <link>https://deepmind.google/blog/introducing-synthid-bio/</link>
+    <guid>https://deepmind.google/blog/introducing-synthid-bio/</guid>
+    <pubDate>Wed, 30 Sep 2026 22:08:41 +0000</pubDate>
+    <description><![CDATA[<p>Proof of concept for watermarking AI-generated proteins while preserving biological function.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning</title>
+    <link>https://huggingface.co/blog/open-tts-leaderboard</link>
+    <guid>https://huggingface.co/blog/open-tts-leaderboard</guid>
+    <pubDate>Wed, 30 Sep 2026 22:08:41 +0000</pubDate>
+    <description><![CDATA[<p></p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
