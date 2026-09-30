@@ -5,62 +5,49 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 29 Sep 2026 22:12:30 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 30 Sep 2026 12:21:10 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Report: Progressive Disclosure of Agent Skills</title>
-    <link>https://arxiv.org/abs/2609.35692v1</link>
-    <guid>https://arxiv.org/abs/2609.35692v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>When LLM agents grow their skill library, the cost of keeping all skills loaded rises. The authors tested progressive (lazy‑loading) of skills and found it improves the quality of skill retrieval while keeping operational costs lower. This is directly relevant if you run LLM‑powered services in the cloud.</p><p><strong>IT Breakdown:</strong> If you manage LLM agents, 1) set up a skill registry that supports lazy‑loading; 2) configure the agent to request a skill only when needed and cache it for the session; 3) monitor cost and retrieval latency to ensure the benefits outweigh any extra request overhead.</p>]]></description>
+    <title>Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reasoning</title>
+    <link>https://arxiv.org/abs/2609.38147v1</link>
+    <guid>https://arxiv.org/abs/2609.38147v1</guid>
+    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This paper tackles the challenge of controlling complex AI agents that must make many decisions during a task, by building a meta‑reasoning controller that explicitly evaluates options and allocates a limited budget. The result is a more structured, efficient decision process for the agent. This research does not directly impact day‑to‑day cloud infrastructure management.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>TokenCast: Forecasting Token Consumption During LLM Agent Execution</title>
-    <link>https://arxiv.org/abs/2609.35760v1</link>
-    <guid>https://arxiv.org/abs/2609.35760v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>TokenCast predicts how many tokens an LLM agent will use while it runs, helping you estimate costs even though token use can jump wildly between runs. It builds a lightweight model that learns a cost for each step of the agent’s plan and updates the prediction as the context grows. The result is a more reliable budget for running large‑model agents in production.</p><p><strong>IT Breakdown:</strong> If you manage LLM workloads, use TokenCast: 1) integrate its cost‑model API into your orchestration layer; 2) feed the model with recent run data to initialise it; 3) adjust your budget thresholds based on the predicted token totals.</p>]]></description>
+    <title>KV-Kaizen: Learning Context-Adaptive Cache Compression Choices</title>
+    <link>https://arxiv.org/abs/2609.37988v1</link>
+    <guid>https://arxiv.org/abs/2609.37988v1</guid>
+    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>KV‑Kaizen learns how to shrink the key‑value cache of a large language model without throwing away useful data, letting the model keep running faster when the context grows. The team built a lightweight selector that predicts which cache entries can be compressed, and in tests the compressed cache stayed as effective as the full one while cutting memory use by up to 40%. For cloud operators this means you can host larger context models on the same hardware or serve more users at lower cost.</p><p><strong>IT Breakdown:</strong> If you manage LLM services, step 1: instrument your KV cache to expose entry sizes and hit patterns; step 2: deploy a KV‑Kaizen‑style selector (or similar) to mark compressible entries; step 3: enable dynamic compression on those entries during decoding and monitor performance and accuracy. Check for any library updates that expose this feature.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>MINT: Modeling GenAI Impact on Network Traffic</title>
-    <link>https://arxiv.org/abs/2609.35742v1</link>
-    <guid>https://arxiv.org/abs/2609.35742v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>MINT is a toolkit that captures real network traffic from large language model (LLM) services and builds statistical models of that traffic. The authors ran a controlled capture across several cloud and edge servers and four AI modalities, then used those traces to create traffic models that reflect true GenAI workloads rather than generic file‑transfer or video traffic. The result is a set of reproducible models that can be plugged into network simulators or traffic generators.</p><p><strong>IT Breakdown:</strong> If you manage cloud infra, here is what to do: 1) run MINT’s capture pipeline on your own LLM endpoints to collect real traffic traces; 2) feed those traces into your network simulation or capacity‑planning tool to replace generic traffic models; 3) re‑evaluate scheduling and bandwidth allocation based on the new GenAI traffic patterns.</p>]]></description>
+    <title>ToolFence: Fine-Grained Authorization for Secure Tool-Using LLM Agents</title>
+    <link>https://arxiv.org/abs/2609.37196v1</link>
+    <guid>https://arxiv.org/abs/2609.37196v1</guid>
+    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>ToolFence tackles the problem of indirect prompt injection in LLM agents that use external tools, which can trick the agent into giving malicious tool calls. It implements fine‑grained authorisation that verifies each tool action against a policy, reducing the success rate of such attacks. The result is stronger security for tool‑using agents, but it adds some processing overhead.</p><p><strong>IT Breakdown:</strong> If you manage an organisation that deploys LLM agents calling APIs or scripts, check whether your agents enforce per‑action authorisation. First, audit your current agent workflows for shared context between instructions and tool outputs. Second, integrate ToolFence or a similar policy engine to vet each tool call before execution, and monitor for performance impact.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Tracekit: Tamper-Evident Intent-Reasoning-Action Auditing for Autonomous Coding Agents</title>
-    <link>https://arxiv.org/abs/2609.35659v1</link>
-    <guid>https://arxiv.org/abs/2609.35659v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Tracekit records three logs – the user’s intent, the model’s self‑reported reasoning, and the actions actually carried out – and stores them in a hash‑chained ledger that can be anchored externally, preventing tampering. The system hooks into Claude Code’s events to build a hierarchy of agent interactions and gate tool usage with pre‑checks. This gives an auditable, tamper‑evident trail for autonomous coding agents.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that runs autonomous coding agents, step 1: integrate Tracekit into the agent lifecycle to capture intent, reasoning, and actions; step 2: configure the hash‑chained ledger to anchor logs to an external, immutable store (e.g., a blockchain or S3 bucket with versioning); step 3: set pre‑checks for tool calls to ensure only authorised commands execute and monitor the ledger for anomalies.</p>]]></description>
+    <title>Neuro-Symbolic Computer Use: Learning Reusable Policies for Reliable and Efficient Execution</title>
+    <link>https://arxiv.org/abs/2609.36927v1</link>
+    <guid>https://arxiv.org/abs/2609.36927v1</guid>
+    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The paper tackles the inefficiency of re‑planning every run of a repeated workflow by teaching a system to learn a reusable policy. It builds a neuro‑symbolic framework that encodes stable decisions (ordering, loops, branches) as code while leaving dynamic checks to a neural component, resulting in faster, more reliable task execution. For IT infrastructure this offers a way to automate recurring cloud‑management scripts with less overhead.</p><p><strong>IT Breakdown:</strong> If you manage cloud infra, here is what to do:
+1. Identify a workflow that repeats often (e.g., VM provisioning, backup scripts).
+2. Use the neuro‑symbolic framework to train a policy on a few example runs, capturing the fixed structure.
+3. Deploy the learned policy to replace manual or scripted re‑planning, monitoring for any unexpected dynamic checks.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>When Valid Tool Calls Change Meaning: Formation-Consistent Dispatch for LLM Agents</title>
-    <link>https://arxiv.org/abs/2609.35088v1</link>
-    <guid>https://arxiv.org/abs/2609.35088v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>When an LLM agent calls a tool, the same call can later be executed with a different implementation, creating a security gap known as schema‑epoch drift. The authors propose Formation‑Consistent Dispatch (FCD) to tie the tool’s implementation to its declared effect, providing provenance‑bound safety checks. This approach ensures that any tool call used in cloud‑managed services remains consistent and secure across updates and deployments.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑enabled cloud services, adopt FCD by: 1) mapping each tool to its authorised implementation; 2) validating every call against this map before execution; 3) auditing changes to tool definitions for drift risks.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>RSI-Router: Evolving Subtask-Level LLM Routing and Skills for Cost-Efficient Agents</title>
-    <link>https://arxiv.org/abs/2609.34712v1</link>
-    <guid>https://arxiv.org/abs/2609.34712v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>RSI‑Router tackles the high cost of running large language models by automatically assigning subtasks to smaller, cheaper models when they are sufficient, improving overall efficiency without sacrificing performance. It builds a framework that mines subtasks, creates model‑specific skills, and recursively improves routing decisions based on experience. The result is a more cost‑effective agent that still meets complex task requirements.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Identify long‑horizon tasks your services run; 2) Deploy RSI‑Router to split these tasks into subtasks and assign smaller models to appropriate steps; 3) Monitor inference cost and performance, iterating on routing rules to keep costs low while maintaining quality.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>AgentWare: Automating the Lifecycle of Agentic Applications across the Edge-to-Cloud Continuum</title>
-    <link>https://arxiv.org/abs/2609.34586v1</link>
-    <guid>https://arxiv.org/abs/2609.34586v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>AgentWare automates provisioning, deployment, observability, and evaluation of LLM‑enabled agentic apps across edge and cloud, solving the problem of scattered tools and manual work. It built a unified AgenticOps framework that manages hardware heterogeneity, simplifies deployment, adds telemetry, and provides benchmarking. The result is faster, more reliable roll‑outs of complex distributed agent applications.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) integrate AgentWare’s deployment engine with your existing CI/CD pipelines; 2) use its observability hooks to collect telemetry from edge and cloud nodes; 3) run the built‑in evaluation suite to benchmark agent performance and adjust resource allocation.</p>]]></description>
+    <title>SKILLLITE: Evidence-Guided Malicious Skill Auditing with Compact LLMs</title>
+    <link>https://arxiv.org/abs/2609.36879v1</link>
+    <guid>https://arxiv.org/abs/2609.36879v1</guid>
+    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>SKILLLITE is a lightweight tool that uses small language models to audit third‑party agent skills for malicious behaviour, helping organisations spot hidden threats before they run in a production LLM‑based agent. It builds a compact audit model that scores skills and flags potentially dangerous actions, saving time on manual reviews. The study shows the tool can detect malicious patterns with high accuracy while keeping resource use low, but it does not directly affect traditional cloud infrastructure management.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure and run LLM agents, step 1: integrate SKILLLITE into your skill ingestion pipeline to automatically audit new skills; step 2: configure the audit thresholds to flag high‑risk behaviours; step 3: review flagged skills in your CI/CD process before deployment. If you do not use LLM agents, this is not directly applicable to IT infrastructure work.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
@@ -72,43 +59,43 @@
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] DevDay 2026 Recap</title>
-    <link>https://openai.com/index/devday-2026-recap</link>
-    <guid>https://openai.com/index/devday-2026-recap</guid>
-    <pubDate>Tue, 29 Sep 2026 22:12:30 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI’s DevDay 2026 unveiled GPT‑6 Astra, a new ChatGPT iteration, updated Codex APIs and a suite of builder‑focused tools. The announcement includes enhanced API rate limits, security hardening, and new model fine‑tuning features that will reshape how enterprise IT teams integrate AI into workflows.</p>]]></description>
+    <title>[News] Airbnb adds AI search, more social features</title>
+    <link>https://techcrunch.com/2026/09/30/airbnb-adds-ai-search-more-social-features/</link>
+    <guid>https://techcrunch.com/2026/09/30/airbnb-adds-ai-search-more-social-features/</guid>
+    <pubDate>Wed, 30 Sep 2026 12:21:10 +0000</pubDate>
+    <description><![CDATA[<p>Airbnb has introduced AI-powered search capabilities along with new social features, expanding its platform to include services like meal delivery and laundry in select locations.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Turn Energy Efficiency Into Strategic Advantage</title>
+    <link>https://sloanreview.mit.edu/article/turn-energy-efficiency-into-strategic-advantage/</link>
+    <guid>https://sloanreview.mit.edu/article/turn-energy-efficiency-into-strategic-advantage/</guid>
+    <pubDate>Wed, 30 Sep 2026 12:21:10 +0000</pubDate>
+    <description><![CDATA[<p></p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] New Microsoft data innovations unlock what only your business knows</title>
     <link>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</link>
     <guid>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</guid>
-    <pubDate>Tue, 29 Sep 2026 22:12:30 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft has announced new data‑centric AI innovations that enable organizations to unlock insights unique to their own business knowledge. These capabilities are designed to work across the Microsoft ecosystem, including Azure and Microsoft 365.</p>]]></description>
+    <pubDate>Wed, 30 Sep 2026 12:21:10 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft has announced new data‑centric AI innovations that allow organizations to unlock unique business insights from their proprietary data. These enhancements target the Microsoft ecosystem, enabling deeper integration with Azure AI, Microsoft 365, and related security and compliance tools.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Introducing GPT-6.1 Sol</title>
-    <link>https://openai.com/index/introducing-gpt-6-1-sol</link>
-    <guid>https://openai.com/index/introducing-gpt-6-1-sol</guid>
-    <pubDate>Tue, 29 Sep 2026 22:12:30 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI has announced GPT‑6.1 Sol, a new model offering near‑Astra level intelligence for coding and professional tasks at significantly lower API token costs. The release highlights a substantial price reduction that could make advanced language models more economically viable for enterprise workloads.</p>]]></description>
+    <title>[News] DevDay 2026 Recap</title>
+    <link>https://openai.com/index/devday-2026-recap</link>
+    <guid>https://openai.com/index/devday-2026-recap</guid>
+    <pubDate>Wed, 30 Sep 2026 12:21:10 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI unveiled GPT-6 Astra and updated ChatGPT and Codex APIs, adding new AI tools and enhanced security features during DevDay 2026. These releases introduce more powerful language models and developer-friendly APIs that can reshape how enterprise IT systems interact with AI services.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] How Diffusion Controller unifies and simplifies AI image generation</title>
-    <link>https://research.google/blog/how-diffusion-controller-unifies-and-simplifies-ai-image-generation/</link>
-    <guid>https://research.google/blog/how-diffusion-controller-unifies-and-simplifies-ai-image-generation/</guid>
-    <pubDate>Tue, 29 Sep 2026 22:12:30 +0000</pubDate>
-    <description><![CDATA[<p>Google AI’s new Diffusion Controller streamlines AI image generation by unifying multiple diffusion models into a single, more efficient workflow. This enables faster, more consistent image output across varied use cases.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] OpenAI’s latest features take direct aim at the app store model</title>
-    <link>https://techcrunch.com/2026/09/29/openais-latest-features-take-direct-aim-at-the-app-store-model/</link>
-    <guid>https://techcrunch.com/2026/09/29/openais-latest-features-take-direct-aim-at-the-app-store-model/</guid>
-    <pubDate>Tue, 29 Sep 2026 22:12:30 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI is expanding ChatGPT into an app discovery platform, allowing users and AI agents to find and deploy software directly within the chat interface. The move signals a shift away from traditional app store ecosystems toward a unified, AI‑centric software marketplace.</p>]]></description>
+    <title>[News] NVIDIA Kumo Tabular Sets a New Accuracy-Efficiency Frontier for Tabular Prediction</title>
+    <link>https://huggingface.co/blog/nvidia/kumo-tabular</link>
+    <guid>https://huggingface.co/blog/nvidia/kumo-tabular</guid>
+    <pubDate>Wed, 30 Sep 2026 12:21:10 +0000</pubDate>
+    <description><![CDATA[<p>NVIDIA’s new Kumo Tabular model delivers unprecedented accuracy while maintaining high computational efficiency for tabular data tasks. The model, released by NVIDIA and showcased on Hugging Face, can significantly accelerate data science pipelines that rely on structured datasets.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
