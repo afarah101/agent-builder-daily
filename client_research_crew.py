@@ -15,6 +15,10 @@ except ImportError:
 
 load_dotenv()
 
+# Active Groq key — starts as key 1, switches to key 2 on daily limit
+ACTIVE_KEY = os.getenv("GROQ_API_KEY")
+_key2_announce_count = 0
+
 
 # ─────────────────────────────────────────────
 # LLM SETUP — Groq gpt-oss-20b
@@ -26,6 +30,12 @@ class GroqLLM(LLM):
 
     def call(self, messages, tools=None, callbacks=None, available_functions=None,
              from_task=None, from_agent=None, response_model=None):
+        global ACTIVE_KEY, _key2_announce_count
+        # Sync api_key from the module-level active key before every request
+        self.api_key = ACTIVE_KEY
+        if _key2_announce_count > 0 and _key2_announce_count <= 3:
+            print("[GroqLLM] now using key 2")
+            _key2_announce_count += 1
         wait_count = 0
         while True:
             try:
@@ -46,9 +56,12 @@ class GroqLLM(LLM):
                     raise
                 if "per day" in msg:
                     key2 = os.getenv("GROQ_API_KEY_2")
-                    if key2 and self.api_key != key2:
+                    if key2 and ACTIVE_KEY != key2:
                         print("[GroqLLM] daily limit on key 1 - switching to key 2")
+                        ACTIVE_KEY = key2
+                        os.environ["GROQ_API_KEY"] = key2
                         self.api_key = key2
+                        _key2_announce_count = 1
                         continue
                     raise
                 # Per-minute TPM: parse "try again in Xs" or "try again in XmYs"
