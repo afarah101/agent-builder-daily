@@ -667,7 +667,7 @@
       </div>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">3</div>
+          <div class="stat-num">6</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
@@ -676,7 +676,7 @@
         </div>
       </div>
     </div>
-    <div class="updated">Updated 04 Oct 2026, 21:12 UTC</div>
+    <div class="updated">Updated 05 Oct 2026, 14:13 UTC</div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
         <div class="tabs">
             <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -722,31 +722,31 @@
 
 <div class="content">
   <div id="case-studies" class="panel active">
-    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.02048v1','_blank')">
+    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.03394v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
-    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">EdgeInference</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="score-ring" style="--pct:45;--color:#f59e0b" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>45</span></div>
   </div>
-  <h3 class="card-title">HydroJEV: A one-second, training-free screen for cyber-attack and fault attribution in water distribution networks</h3>
+  <h3 class="card-title">EdgeAgent: Orchestrating On-Device LLM inference for End-User Multi-Agent Systems on CPU-GPU Unified Memory Architectures</h3>
   <div class="card-meta">
-    <span class="authors">Tianwei Mu, Shengyan Jiang, Mingzhe Yuan, Qing Luo</span>
+    <span class="authors">Yuhai Long, Yuanxin Wei, Kai Wu, Jinhui Wei</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
-    <span class="pub-date">01 Oct 2026</span>
+    <span class="pub-date">02 Oct 2026</span>
   </div>
-  <p class="card-summary">When a SCADA alarm pops up in a water network, operators need to know fast if it’s a cyberattack, a physical fault, a normal glitch or a bad sensor. The authors built Jev, a training‑free model that gives a cause probability in about one second, eliminating the need for labelled data or slow LLMs. Jev achieved competitive accuracy on a four‑class benchmark for the C‑Town water network.</p>
+  <p class="card-summary">EdgeAgent tackles the problem of poor CPU‑GPU co‑execution on unified memory systems when running large language model agents. It orchestrates on‑device inference to minimise bus contention, manage speculative decoding variance, and reduce tool‑induced stalls, leading to higher overall throughput and better hardware utilisation. This directly impacts cloud infra that hosts LLM workloads on edge devices.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage SCADA or OT monitoring, you can add Jev as a first‑pass triage: 1) feed the alarm data into Jev to get instant cause probabilities; 2) use the top suggestion to trigger the appropriate incident response; 3) log the outcome for future training or audit. This reduces manual triage time and improves response accuracy.</p>
+    <p class="insight-text">If you manage LLM inference on edge CPUs and GPUs, 1) profile your memory traffic to spot bus contention, 2) deploy EdgeAgent or a similar orchestrator to schedule CPU/GPU work, 3) monitor throughput and adjust speculative decoding settings to keep GPUs busy.</p>
   </div>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper presents a training-free, one-second model for attributing cyber-attacks in water distribution SCADA systems. While technically interesting, the scope is highly specialized to industrial control systems in water utilities, which is peripheral to the typical Microsoft 365, Google Workspace, Okta, AWS, Azure, and endpoint management environments of the target audience. The novelty is limited to a niche domain, offering little cross-application to common IT infrastructures. There is no direct actionable content for immediate automation or risk flagging within the next 90 days for general IT engineers. Consequently, the total score falls below 40, and low_signal is set to true.</p>
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">10/25</span></div>
+      <p class="trace-reasoning">The paper presents a novel orchestration framework for running multi‑agent large language models on unified memory CPU‑GPU platforms, addressing bus contention and speculative decoding challenges. This is a significant technical contribution that would intrigue an IT engineer working on edge or hybrid deployments, especially those concerned with privacy and hardware utilization. The relevance to core infrastructure teams is moderate: while the work does not directly impact cloud SaaS, it offers practical insights for edge‑to‑cloud pipelines, GPU scheduling, and memory‑bound workloads that are increasingly common in enterprise environments. The value within 90 days is substantial: the authors provide algorithmic strategies and prototype performance results that could be translated into configuration guidelines, tooling, or automation scripts for teams experimenting with on‑device inference. This enables immediate experimentation or service proposals to clients looking to deploy privacy‑preserving LLMs on edge hardware.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -758,53 +758,53 @@
     </div>
       <div class="score-bar-row">
       <span class="bar-label">Impact</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 80%"></div></div>
+      <span class="bar-val">20</span>
     </div>
       <div class="score-bar-row">
       <span class="bar-label">Maturity</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 60%"></div></div>
+      <span class="bar-val">15</span>
     </div>
       <div class="score-bar-row">
       <span class="bar-label">Monetisation</span>
-      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
-      <span class="bar-val">0</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 40%"></div></div>
+      <span class="bar-val">10</span>
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2610.02048v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2610.03394v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="HydroJEV: A one-second, training-free screen for cyber-attack and fault attribution in water distribution networks"
-        data-summary="When a SCADA alarm pops up in a water network, operators need to know fast if it’s a cyberattack, a physical fault, a normal glitch or a bad sensor. The authors built Jev, a training‑free model that gives a cause probability in about one second, eliminating the need for labelled data or slow LLMs. Jev achieved competitive accuracy on a four‑class benchmark for the C‑Town water network."
-        data-it="If you manage SCADA or OT monitoring, you can add Jev as a first‑pass triage: 1) feed the alarm data into Jev to get instant cause probabilities; 2) use the top suggestion to trigger the appropriate incident response; 3) log the outcome for future training or audit. This reduces manual triage time and improves response accuracy."
+        data-title="EdgeAgent: Orchestrating On-Device LLM inference for End-User Multi-Agent Systems on CPU-GPU Unified Memory Architectures"
+        data-summary="EdgeAgent tackles the problem of poor CPU‑GPU co‑execution on unified memory systems when running large language model agents. It orchestrates on‑device inference to minimise bus contention, manage speculative decoding variance, and reduce tool‑induced stalls, leading to higher overall throughput and better hardware utilisation. This directly impacts cloud infra that hosts LLM workloads on edge devices."
+        data-it="If you manage LLM inference on edge CPUs and GPUs, 1) profile your memory traffic to spot bus contention, 2) deploy EdgeAgent or a similar orchestrator to schedule CPU/GPU work, 3) monitor throughput and adjust speculative decoding settings to keep GPUs busy."
         data-monetisation=""
-        data-reasoning="The paper presents a training-free, one-second model for attributing cyber-attacks in water distribution SCADA systems. While technically interesting, the scope is highly specialized to industrial control systems in water utilities, which is peripheral to the typical Microsoft 365, Google Workspace, Okta, AWS, Azure, and endpoint management environments of the target audience. The novelty is limited to a niche domain, offering little cross-application to common IT infrastructures. There is no direct actionable content for immediate automation or risk flagging within the next 90 days for general IT engineers. Consequently, the total score falls below 40, and low_signal is set to true."
-        data-score="0"
-        data-url="https://arxiv.org/abs/2610.02048v1">
+        data-reasoning="The paper presents a novel orchestration framework for running multi‑agent large language models on unified memory CPU‑GPU platforms, addressing bus contention and speculative decoding challenges. This is a significant technical contribution that would intrigue an IT engineer working on edge or hybrid deployments, especially those concerned with privacy and hardware utilization. The relevance to core infrastructure teams is moderate: while the work does not directly impact cloud SaaS, it offers practical insights for edge‑to‑cloud pipelines, GPU scheduling, and memory‑bound workloads that are increasingly common in enterprise environments. The value within 90 days is substantial: the authors provide algorithmic strategies and prototype performance results that could be translated into configuration guidelines, tooling, or automation scripts for teams experimenting with on‑device inference. This enables immediate experimentation or service proposals to clients looking to deploy privacy‑preserving LLMs on edge hardware."
+        data-score="45"
+        data-url="https://arxiv.org/abs/2610.03394v1">
         ⬇ MD
       </button>
     </div>
   </div>
 </article>
-<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.01349v1','_blank')">
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.03675v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">AI_deployment_security</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">cost-optimized LLM usage</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
   </div>
-  <h3 class="card-title">PACE: Provenance-Aware Capability Enforcement for Tool-Using LLM Agents</h3>
+  <h3 class="card-title">FrugalEvo: Towards Cost-Aware LLM-Guided Program Evolution</h3>
   <div class="card-meta">
-    <span class="authors">Fengpeng Li, Qizhou Wang, Yuke Hu, Kemou Li</span>
+    <span class="authors">Hui Chen, Xuan Qi, James Xu Zhao, Zhaopeng Feng</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
-    <span class="pub-date">01 Oct 2026</span>
+    <span class="pub-date">02 Oct 2026</span>
   </div>
-  <p class="card-summary">Tool‑using LLM agents can be misdirected by poisoned tool data or memory, leading to unsafe actions. PACE intercepts every tool call, checks its provenance and context before execution, and blocks unsafe calls. This reduces the risk of unintended behaviour in automated systems using LLMs.</p>
+  <p class="card-summary">FrugalEvo tackles the high cost of using large language models for automated code evolution by splitting the job: a powerful, expensive LLM designs strategies while a cheaper LLM implements and refines the code, saving money while still improving performance. The team built a dual‑LLM framework with a cache‑efficient evolution loop and showed it delivered better results for optimisation tasks with fewer expensive model calls. This approach is relevant if you run AI‑powered development workflows in the cloud, as it can reduce compute spend and speed up deployment cycles.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage cloud infrastructure that runs LLM‑based automation, add a PACE‑style middleware to your tool‑execution pipeline: 1) Log the provenance of each tool (source, version, checksum). 2) Before calling the tool, verify the provenance against an approved catalogue. 3) Block or audit any call that fails the check.</p>
+    <p class="insight-text">If you manage cloud infrastructure that uses LLMs for code generation, step 1: benchmark the cost per inference of your current LLM; step 2: set up a two‑tier system where a small LLM handles routine code changes and a larger LLM is called only for high‑impact strategy decisions; step 3: monitor the overall inference cost and performance gain to ensure the split remains cost‑effective.</p>
   </div>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
@@ -812,7 +812,7 @@
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper proposes a provenance-aware enforcement mechanism for tool‑using LLM agents, which is novel and directly addresses security and operational concerns when deploying LLMs that invoke external tools. IT engineers working with LLM APIs, agentic systems, and MLOps could integrate such a guard to mitigate malicious or unintended tool usage. The methodology is actionable within 90 days for those with existing LLM deployments, enabling them to build a middleware component to intercept tool calls and verify provenance before execution. Thus it scores moderately high on novelty and relevance, and offers practical value for near‑term implementation.</p>
+      <p class="trace-reasoning">The paper introduces a cost-aware LLM-guided evolution framework that could inform cost-optimized use of LLM APIs, but it remains theoretical and not immediately actionable for IT infrastructure. It offers some novelty in the cost-aware angle but limited direct relevance to current tooling or deployment practices, and offers little immediate value for implementation within 90 days.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -839,16 +839,214 @@
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2610.01349v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2610.03675v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="PACE: Provenance-Aware Capability Enforcement for Tool-Using LLM Agents"
-        data-summary="Tool‑using LLM agents can be misdirected by poisoned tool data or memory, leading to unsafe actions. PACE intercepts every tool call, checks its provenance and context before execution, and blocks unsafe calls. This reduces the risk of unintended behaviour in automated systems using LLMs."
-        data-it="If you manage cloud infrastructure that runs LLM‑based automation, add a PACE‑style middleware to your tool‑execution pipeline: 1) Log the provenance of each tool (source, version, checksum). 2) Before calling the tool, verify the provenance against an approved catalogue. 3) Block or audit any call that fails the check."
+        data-title="FrugalEvo: Towards Cost-Aware LLM-Guided Program Evolution"
+        data-summary="FrugalEvo tackles the high cost of using large language models for automated code evolution by splitting the job: a powerful, expensive LLM designs strategies while a cheaper LLM implements and refines the code, saving money while still improving performance. The team built a dual‑LLM framework with a cache‑efficient evolution loop and showed it delivered better results for optimisation tasks with fewer expensive model calls. This approach is relevant if you run AI‑powered development workflows in the cloud, as it can reduce compute spend and speed up deployment cycles."
+        data-it="If you manage cloud infrastructure that uses LLMs for code generation, step 1: benchmark the cost per inference of your current LLM; step 2: set up a two‑tier system where a small LLM handles routine code changes and a larger LLM is called only for high‑impact strategy decisions; step 3: monitor the overall inference cost and performance gain to ensure the split remains cost‑effective."
         data-monetisation=""
-        data-reasoning="The paper proposes a provenance-aware enforcement mechanism for tool‑using LLM agents, which is novel and directly addresses security and operational concerns when deploying LLMs that invoke external tools. IT engineers working with LLM APIs, agentic systems, and MLOps could integrate such a guard to mitigate malicious or unintended tool usage. The methodology is actionable within 90 days for those with existing LLM deployments, enabling them to build a middleware component to intercept tool calls and verify provenance before execution. Thus it scores moderately high on novelty and relevance, and offers practical value for near‑term implementation."
+        data-reasoning="The paper introduces a cost-aware LLM-guided evolution framework that could inform cost-optimized use of LLM APIs, but it remains theoretical and not immediately actionable for IT infrastructure. It offers some novelty in the cost-aware angle but limited direct relevance to current tooling or deployment practices, and offers little immediate value for implementation within 90 days."
         data-score="0"
-        data-url="https://arxiv.org/abs/2610.01349v1">
+        data-url="https://arxiv.org/abs/2610.03675v1">
+        ⬇ MD
+      </button>
+    </div>
+  </div>
+</article>
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.03480v1','_blank')">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
+  </div>
+  <h3 class="card-title">Metropolis-Hastings Dominates Importance Resampling for Policy Composition</h3>
+  <div class="card-meta">
+    <span class="authors">Alexey Kurennoy, Ramil Yarullin, Fergal Reid</span>
+    <span class="sep">·</span>
+    <span class="institution">Academic Institution</span>
+    <span class="sep">·</span>
+    <span class="pub-date">02 Oct 2026</span>
+  </div>
+  <p class="card-summary">The paper tackles the bias that arises when mixing different reward‑driven policies at decoding time in large language models. The authors propose using a Metropolis‑Hastings (MH) correction instead of the usual next‑token combination, and show that MH outperforms importance resampling. The result is a more accurate way to combine policies for better trade‑offs without retraining the model.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO APPLY THIS</div>
+    <p class="insight-text">Not directly applicable to IT infrastructure work</p>
+  </div>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
+      <p class="trace-reasoning">The paper discusses an advanced decoding-time technique (Metropolis–Hastings policy composition) that could improve inference-time flexibility of LLMs deployed via APIs. Novelty is moderate because it offers a new sampling correction approach that may interest engineers working on LLM inference. IT relevance is moderate; the technique applies directly to LLM inference pipelines and could affect how services are tuned, but it does not address broader infrastructure or security concerns. Value in 90 days is low: while the method could theoretically be implemented, the paper provides limited guidance on integration into production systems or measurable performance gains, so only a handful of practitioners might adopt it quickly. Overall score 50, above the 40 threshold.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <div class="score-bars">
+      <div class="score-bar-row">
+      <span class="bar-label">Recency</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+      <span class="bar-val">25</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Impact</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Maturity</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Monetisation</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://arxiv.org/abs/2610.03480v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
+        data-title="Metropolis-Hastings Dominates Importance Resampling for Policy Composition"
+        data-summary="The paper tackles the bias that arises when mixing different reward‑driven policies at decoding time in large language models. The authors propose using a Metropolis‑Hastings (MH) correction instead of the usual next‑token combination, and show that MH outperforms importance resampling. The result is a more accurate way to combine policies for better trade‑offs without retraining the model."
+        data-it="Not directly applicable to IT infrastructure work"
+        data-monetisation=""
+        data-reasoning="The paper discusses an advanced decoding-time technique (Metropolis–Hastings policy composition) that could improve inference-time flexibility of LLMs deployed via APIs. Novelty is moderate because it offers a new sampling correction approach that may interest engineers working on LLM inference. IT relevance is moderate; the technique applies directly to LLM inference pipelines and could affect how services are tuned, but it does not address broader infrastructure or security concerns. Value in 90 days is low: while the method could theoretically be implemented, the paper provides limited guidance on integration into production systems or measurable performance gains, so only a handful of practitioners might adopt it quickly. Overall score 50, above the 40 threshold."
+        data-score="0"
+        data-url="https://arxiv.org/abs/2610.03480v1">
+        ⬇ MD
+      </button>
+    </div>
+  </div>
+</article>
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.03448v1','_blank')">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">LLM agent security</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
+  </div>
+  <h3 class="card-title">Passing the Test You Trained On: Re-evaluating Prompt-Injection Detectors for LLM Agents</h3>
+  <div class="card-meta">
+    <span class="authors">Zhuowen Liu</span>
+    <span class="sep">·</span>
+    <span class="institution">Academic Institution</span>
+    <span class="sep">·</span>
+    <span class="pub-date">02 Oct 2026</span>
+  </div>
+  <p class="card-summary">The study shows that detectors chosen based on public benchmarks may not reliably catch prompt‑injection attacks inside real LLM agents. Researchers replayed tool outputs without an LLM to compare fifteen detectors and found that rankings often differ when the detectors are used in practice. The work highlights a mismatch between benchmark performance and real‑world effectiveness, offering a new evaluation framework.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO APPLY THIS</div>
+    <p class="insight-text">If you manage cloud‑based LLM deployments, test your chosen prompt‑injection detector against a replay‑based benchmark: 1) generate benign tool outputs, 2) inject malicious prompts manually, 3) measure detection rates; if your detector fails, replace it with one that scores well in the replay evaluation.</p>
+  </div>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
+      <p class="trace-reasoning">The paper provides a novel empirical study of prompt‑injection detectors within LLM agents, offering actionable insights into which detectors perform best in realistic agent workflows. It directly informs IT engineers who deploy and secure LLM‑based agents, making it highly relevant to cloud, DevOps, and security tooling. The methodology and findings can be implemented within 90 days to improve agent security and compliance in production environments.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <div class="score-bars">
+      <div class="score-bar-row">
+      <span class="bar-label">Recency</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+      <span class="bar-val">25</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Impact</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Maturity</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Monetisation</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://arxiv.org/abs/2610.03448v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
+        data-title="Passing the Test You Trained On: Re-evaluating Prompt-Injection Detectors for LLM Agents"
+        data-summary="The study shows that detectors chosen based on public benchmarks may not reliably catch prompt‑injection attacks inside real LLM agents. Researchers replayed tool outputs without an LLM to compare fifteen detectors and found that rankings often differ when the detectors are used in practice. The work highlights a mismatch between benchmark performance and real‑world effectiveness, offering a new evaluation framework."
+        data-it="If you manage cloud‑based LLM deployments, test your chosen prompt‑injection detector against a replay‑based benchmark: 1) generate benign tool outputs, 2) inject malicious prompts manually, 3) measure detection rates; if your detector fails, replace it with one that scores well in the replay evaluation."
+        data-monetisation=""
+        data-reasoning="The paper provides a novel empirical study of prompt‑injection detectors within LLM agents, offering actionable insights into which detectors perform best in realistic agent workflows. It directly informs IT engineers who deploy and secure LLM‑based agents, making it highly relevant to cloud, DevOps, and security tooling. The methodology and findings can be implemented within 90 days to improve agent security and compliance in production environments."
+        data-score="0"
+        data-url="https://arxiv.org/abs/2610.03448v1">
+        ⬇ MD
+      </button>
+    </div>
+  </div>
+</article>
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.02732v1','_blank')">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">moderate</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
+  </div>
+  <h3 class="card-title">ServeTwin: A Benchmark-Validated Simulator for Distributed LLM Architecture Exploration</h3>
+  <div class="card-meta">
+    <span class="authors">Sungjoon Park, Changue Jung, Kyungno Joo, Mincheol Kang</span>
+    <span class="sep">·</span>
+    <span class="institution">Academic Institution</span>
+    <span class="sep">·</span>
+    <span class="pub-date">02 Oct 2026</span>
+  </div>
+  <p class="card-summary">Evaluating distributed LLM serving designs on real clusters is expensive and existing simulators miss key features like stateful closed‑loop behaviour and full benchmark support. The authors built ServeTwin, a simulator that combines analytical timing with a stateful serving loop, accurately modelling request flow, queue dynamics, and KV‑cache changes. The result is a low‑cost tool that lets designers predict performance and optimise scheduling without hardware trials.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO APPLY THIS</div>
+    <p class="insight-text">If you manage a distributed LLM infrastructure, use ServeTwin to model your deployment: 1) define your architecture in the simulator’s spec, 2) run full benchmarks to get timing predictions, 3) analyse queue and cache dynamics to tweak scheduling or resource allocation.</p>
+  </div>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
+      <p class="trace-reasoning">The paper introduces a closed‑loop simulator for distributed LLM serving, offering realistic timing predictions and stateful queue modelling. This is a novel contribution but primarily of interest to researchers or highly specialised infrastructure teams working on large‑scale LLM deployments. It has limited direct applicability for everyday Microsoft‑365, Google Workspace, or typical cloud‑hosted SaaS environments that the target audience manages. The simulator could inform future LLM‑based services but would require substantial expertise to implement and integrate. Thus, the overall relevance and actionable value for the reader are modest. The total score sits at 40, just meeting the threshold for a non‑low signal.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <div class="score-bars">
+      <div class="score-bar-row">
+      <span class="bar-label">Recency</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+      <span class="bar-val">25</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Impact</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Maturity</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Monetisation</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://arxiv.org/abs/2610.02732v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
+        data-title="ServeTwin: A Benchmark-Validated Simulator for Distributed LLM Architecture Exploration"
+        data-summary="Evaluating distributed LLM serving designs on real clusters is expensive and existing simulators miss key features like stateful closed‑loop behaviour and full benchmark support. The authors built ServeTwin, a simulator that combines analytical timing with a stateful serving loop, accurately modelling request flow, queue dynamics, and KV‑cache changes. The result is a low‑cost tool that lets designers predict performance and optimise scheduling without hardware trials."
+        data-it="If you manage a distributed LLM infrastructure, use ServeTwin to model your deployment: 1) define your architecture in the simulator’s spec, 2) run full benchmarks to get timing predictions, 3) analyse queue and cache dynamics to tweak scheduling or resource allocation."
+        data-monetisation=""
+        data-reasoning="The paper introduces a closed‑loop simulator for distributed LLM serving, offering realistic timing predictions and stateful queue modelling. This is a novel contribution but primarily of interest to researchers or highly specialised infrastructure teams working on large‑scale LLM deployments. It has limited direct applicability for everyday Microsoft‑365, Google Workspace, or typical cloud‑hosted SaaS environments that the target audience manages. The simulator could inform future LLM‑based services but would require substantial expertise to implement and integrate. Thus, the overall relevance and actionable value for the reader are modest. The total score sits at 40, just meeting the threshold for a non‑low signal."
+        data-score="0"
+        data-url="https://arxiv.org/abs/2610.02732v1">
         ⬇ MD
       </button>
     </div>
@@ -924,49 +1122,42 @@
 
   <div id="industry-news" class="panel">
     
-    <div class="cards-grid"><article class="card news-card" onclick="window.open('https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+    <div style="
+        background: linear-gradient(135deg, #1a1d27, #22263a);
+        border: 1px solid #6366f1;
+        border-left: 4px solid #00ff88;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: #f1f5f9;
+        line-height: 1.5;
+    ">
+        <span style="color:#00ff88;font-weight:700;
+        letter-spacing:1px;font-size:10px">
+        ⚡ TODAY'S SIGNAL</span>
+        <p style="margin-top:8px;font-family:'Inter',sans-serif;
+        font-size:14px;font-weight:500">New Microsoft Copilot, Gemini 3.8 Live Avatar and data‑centric innovations promise to turbo‑charge your clients' workflows and insights—time to rethink AI strategy.</p>
     </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">10/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Gemini 4 Argon: our next era of frontier intelligence</h3>
-  <p class="card-summary">Google DeepMind has announced the release of Gemini 4 Argon, the latest generation in its frontier intelligence series, featuring advanced multimodal capabilities and real‑time reasoning. The model promises higher accuracy, faster inference, and tighter integration with Google Cloud services.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Log into the Google Cloud console this week and enable Gemini 4 Argon under the AI Platform for your Workspace domain. S2: Failure to adopt the new model risks falling behind competitors who can leverage its superior natural‑language and vision processing for automated ticket triage, policy drafting, and security alerts. S3: This directly affects your Google Workspace and JumpCloud environments, as the model can be used to augment identity &amp; access management rules and Freshservice ticket routing.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">30 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/gemini-4-argon-our-next-era-of-frontier-intelligence.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/','_blank')">
+    
+    <div class="cards-grid"><article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Microsoft Research</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Forecasting space weather risks on power grids</h3>
-  <p class="card-summary">Microsoft Research has developed a machine learning system that forecasts space-weather events, predicting potential damage to power grids and GPS systems 30‑60 minutes before impact.</p>
+  <p class="card-summary">Microsoft Research has developed a machine‑learning system that forecasts space‑weather induced damage to power grids and GPS systems 30–60 minutes before an event. The model provides early warnings that could help operators plan mitigations and maintain service reliability.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor the release notes for the new model and evaluate integrating it into your incident response workflows, especially if your organization relies on GPS‑dependent services or power‑grid monitoring. Early adoption could help mitigate downtime and improve resilience to solar‑storm disruptions.</p>
+    <p class="insight-text">Review the Microsoft Space Weather Prediction API and evaluate how its alerts could be integrated into your incident‑response playbooks or monitoring dashboards to pre‑empt power‑grid disruptions affecting your data center operations.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">30 Sep 2026</span>
@@ -981,24 +1172,50 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">2/10</span>
     </div>
   </div>
   <h3 class="card-title">Introducing SynthID Bio</h3>
-  <p class="card-summary">Google DeepMind has unveiled a proof‑of‑concept technology called SynthID Bio that embeds watermarks into AI‑generated proteins without compromising their biological activity. The method uses a neural network to identify and tag sequences, enabling traceability of synthetic biomolecules.</p>
+  <p class="card-summary">Google DeepMind has demonstrated a proof‑of‑concept watermarking technique for AI‑generated proteins, called SynthID Bio, that embeds a detectable watermark while preserving the protein’s biological function.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor any downstream tools that ingest or analyze protein data for potential integration of SynthID Bio watermarks. This could enhance audit trails and intellectual property safeguards in your organization’s research workflows.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">30 Sep 2026</span>
     <div class="footer-links">
       <a href="https://deepmind.google/blog/introducing-synthid-bio/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/introducing-synthid-bio.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Google DeepMind</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">0/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Gemini 4 Argon: our next era of frontier intelligence</h3>
+  <p class="card-summary"></p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">30 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/gemini-4-argon-our-next-era-of-frontier-intelligence.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1041,10 +1258,10 @@
     </div>
   </div>
   <h3 class="card-title">New Microsoft data innovations unlock what only your business knows</h3>
-  <p class="card-summary">Microsoft has unveiled new AI-driven data capabilities designed to leverage an organization&#x27;s unique, internal knowledge base. These innovations aim to enhance business intelligence across Microsoft’s productivity and cloud ecosystems.</p>
+  <p class="card-summary">Microsoft announces new AI-powered data capabilities that enable organizations to unlock insights unique to their own operations. These innovations extend across Azure and Microsoft 365, enhancing data modeling, analytics, and business intelligence workflows.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review the new Microsoft data innovations on the Microsoft Blog and identify which feature—such as AI-powered insights in Microsoft 365 or Azure Data services—aligns with your current data workflows. S2: Not addressing this could mean missing out on advanced contextual analytics that reduce manual data curation and accelerate decision-making. S3: Focus first on Microsoft 365 and Azure, as these directly integrate with your existing Google Workspace and Freshservice environments and can streamline your SSO, MDM, and endpoint security policies.</p>
+    <p class="insight-text">S1: Explore the new Microsoft AI data tools in Azure and Microsoft 365 this week to assess their integration with your existing data pipelines. S2: Failure to adopt could mean missing out on automated, context-aware analytics that could streamline incident response and user behavior monitoring. S3: This directly impacts your Azure and Microsoft 365 environments, which are key components of your IT stack.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
@@ -1062,47 +1279,21 @@
       <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">7/10</span>
     </div>
   </div>
   <h3 class="card-title">How Diffusion Controller unifies and simplifies AI image generation</h3>
-  <p class="card-summary">Google AI introduces the Diffusion Controller, a new tool that streamlines AI image generation by consolidating multiple diffusion models into a single, easy-to-use interface. This advancement promises faster, more consistent image outputs for developers and creative teams.</p>
+  <p class="card-summary">Google AI has introduced the Diffusion Controller, a new framework that streamlines and unifies AI image generation across different models and platforms. This tool offers a single interface to manage, optimize, and scale image synthesis tasks, reducing the need for custom pipelines.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on the Diffusion Controller as it may become an integral part of your organization’s content creation workflow. Monitoring its release and integration options will help you evaluate whether to adopt it for internal design teams or external clients within the next 90 days.</p>
+    <p class="insight-text">S1: Explore the Diffusion Controller API in your internal dev environment this week. S2: Integrating it could cut down on custom code and resource usage for any image-heavy applications your team maintains, improving deployment speed and reliability. S3: The most affected tools are your internal workflow automation scripts and any cloud-based image processing services you rely on.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
     <div class="footer-links">
       <a href="https://research.google/blog/how-diffusion-controller-unifies-and-simplifies-ai-image-generation/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/how-diffusion-controller-unifies-and-simplifies-ai-image-generation.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Microsoft Research</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Introducing Quine: An AI research system designed for the complexity of biology</h3>
-  <p class="card-summary">Microsoft Research has unveiled Quine, an AI research system aimed at integrating biological data across scales and modalities to build a multimodal world model of biology. Quine enables scientists to computationally explore vast hypothesis spaces and prioritize experimental directions faster than traditional intuition-driven methods.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor Quine’s progress for potential downstream API integrations that could feed biological data into your existing analytics pipelines. While it doesn’t directly impact your current stack, staying informed may uncover future opportunities to automate data ingestion or enhance anomaly detection in life‑science workloads.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">29 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://www.microsoft.com/en-us/research/blog/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1115,20 +1306,46 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">How to Outcompete Your Client’s AI</h3>
-  <p class="card-summary">In-house lawyers at Alturas Capital Partners are using generative AI to handle lease work internally, cutting costs and speeding up processes. The article illustrates a corporate adoption of AI to replace traditional legal services.</p>
+  <p class="card-summary">Alturas Capital Partners’ legal team adopted generative AI to perform lease drafting and review internally, cutting costs and speeding up processes that previously required external counsel.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text"></p>
+    <p class="insight-text">Check whether your organization’s AI tools could be applied to reduce reliance on external legal services, potentially lowering costs and shortening turnaround times.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
     <div class="footer-links">
       <a href="https://sloanreview.mit.edu/article/how-to-outcompete-your-clients-ai/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/how-to-outcompete-your-clients-ai.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://www.microsoft.com/en-us/research/blog/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Microsoft Research</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">2/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Introducing Quine: An AI research system designed for the complexity of biology</h3>
+  <p class="card-summary">Microsoft Research has unveiled Quine, an AI research system that builds multimodal world models of biology to help scientists explore vast hypothesis spaces and prioritize experiments. The platform integrates cross-scale biological data, aiming to streamline discovery in life sciences.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Check your internal R&amp;D teams’ data pipelines for potential integration points—Quine’s multimodal modeling could reduce time to insight for any biological data your IT stack stores or processes.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">29 Sep 2026</span>
+    <div class="footer-links">
+      <a href="https://www.microsoft.com/en-us/research/blog/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/introducing-quine-an-ai-research-system-designed-for-the-complexity-of-biology.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1140,15 +1357,15 @@
       <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">3/10</span>
     </div>
   </div>
   <h3 class="card-title">One year in: How Microsoft Research Asia – Singapore is advancing research, partnership and talent for real-world impact</h3>
-  <p class="card-summary">Microsoft Research Asia – Singapore celebrates its first anniversary, highlighting collaborations with government, academia, and industry to translate AI research into practical applications. The lab emphasizes partnership-driven talent development and real-world impact.</p>
+  <p class="card-summary">Microsoft Research Asia – Singapore celebrates its first anniversary, highlighting its collaborations with government, academia, and industry to apply frontier AI research for real-world impact. The article focuses on the lab’s research agenda and partnership initiatives rather than new products or features.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on the research outcomes released by MSRA Singapore for potential integration into your IT stack, especially in areas like AI-driven automation and security analytics. Reviewing these findings can inform future tool enhancements and help your team stay ahead of emerging AI capabilities.</p>
+    <p class="insight-text">Check your organization’s existing research or partnership agreements for any collaborations with Microsoft Research Asia, and consider leveraging their expertise for AI projects that could benefit your IT infrastructure. This will help you stay informed about cutting-edge research that might influence future tool integrations.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">28 Sep 2026</span>
@@ -1171,10 +1388,12 @@
     </div>
   </div>
   <h3 class="card-title">Introducing the new Copilot with Home, Code and Autopilot</h3>
-  <p class="card-summary">Microsoft has unveiled an upgraded version of its Copilot suite, now featuring Home, Code, and Autopilot modules that integrate deeper with Microsoft 365 tools and enable users to build, customize, and scale AI-powered workflows. This expansion promises tighter integration across the Microsoft ecosystem, enhancing productivity for IT teams managing the Microsoft stack.</p>
+  <p class="card-summary">Microsoft has unveiled a revamped Copilot that integrates Home, Code, and Autopilot features across its ecosystem. This expansion promises deeper AI integration into daily workflows, potentially reshaping how IT teams manage and automate tasks across Microsoft 365 and related services.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">1. Within this week, review the new Copilot settings in the Microsoft 365 admin center under the ‘Copilot’ tab, and enable the Home and Code modules for your tenant. 2. Failure to adopt these features could mean missed opportunities for automating repetitive tasks, such as policy updates or incident response scripts, leaving your environment more manual and error-prone. 3. The most directly impacted tool is the Microsoft 365 Admin Center, but integration with Azure AD SSO and Intune will amplify the benefits across your entire IT stack.</p>
+    <p class="insight-text">S1: Go to the Microsoft 365 admin center and enable the new Copilot settings under AI &amp; Automation this week.
+S2: Not enabling it risks falling behind competitors who can automate support tickets, policy drafting, and user onboarding faster.
+S3: The most affected tool is the Microsoft 365 suite, which will provide AI-powered document creation, code generation, and workflow automation directly to end users.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">25 Sep 2026</span>
@@ -1189,18 +1408,18 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">10/10</span>
     </div>
   </div>
   <h3 class="card-title">Introducing Gemini 3.8 Live with Live Avatar</h3>
-  <p class="card-summary">Google DeepMind has unveiled Gemini 3.8 Live, featuring a real‑time avatar that can interact with users while the model processes input. The update expands Gemini’s interactive capabilities, making it more suitable for live collaboration tools and customer support scenarios.</p>
+  <p class="card-summary">Google DeepMind has released Gemini 3.8 Live with an integrated Live Avatar feature, enabling real‑time, interactive AI conversations that include a dynamic visual representation. This marks a significant upgrade to the Gemini suite, positioning it for tighter integration with Google Workspace and other enterprise tools.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor how the Live Avatar integration could be leveraged within Google Workspace apps such as Meet or Docs to enhance user experience. Consider evaluating the new API endpoints in the next 30 days to determine if they can streamline internal support workflows or reduce manual ticket handling.</p>
+    <p class="insight-text">S1: Review the new Gemini 3.8 Live API in the Google Workspace Admin console and enable the Live Avatar integration for your user accounts this week. S2: Without enabling the new avatar feature, your support desk may miss opportunities to provide instant, visually enriched AI assistance, potentially reducing agent productivity. S3: The feature directly impacts your Google Workspace and Freshservice environments, so prioritize its deployment to streamline help‑desk interactions.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">24 Sep 2026</span>
@@ -1218,15 +1437,15 @@
       <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Automating coherent long-form video generation</h3>
-  <p class="card-summary">Google AI has unveiled a new generative model capable of automatically creating coherent long‑form videos from text prompts, enabling end‑to‑end video production without manual editing. The technology promises to streamline multimedia content creation for businesses and media outlets.</p>
+  <p class="card-summary">Google AI has unveiled a new system that can automatically produce coherent long‑form video content from textual prompts. The technology uses advanced generative models to script, storyboard, and render video segments end‑to‑end.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check the Google AI documentation for API access and see if the model can be integrated with your existing Google Workspace or content management workflows. Inaction may leave you behind competitors who adopt faster, AI‑driven video pipelines.</p>
+    <p class="insight-text">Monitor the release for potential integration into your content‑management workflows. If your organization produces marketing or training videos, evaluate the tool’s API for automated script and storyboard generation, which could reduce creative cycle time.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">24 Sep 2026</span>
@@ -1236,37 +1455,11 @@
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://sloanreview.mit.edu/article/why-design-thinking-needs-a-responsibility-reboot/','_blank')">
+<article class="card news-card" onclick="window.open('https://sloanreview.mit.edu/article/rehearsal-intelligence-using-digital-twins-for-crisis-readiness/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#7c3aed">Consulting</span>
       <span class="source-name">MIT Sloan</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Regulation</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Why Design Thinking Needs a Responsibility Reboot</h3>
-  <p class="card-summary">A recent court ruling held Meta and Google liable for user harm linked to addictive product design, prompting a call for a responsibility reboot in design thinking. The decision highlights the legal and ethical risks that tech companies face when prioritizing engagement over user well-being.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Watch for upcoming regulatory guidance or policy changes that may affect your organization’s product design and user experience strategies. Adapting your internal design reviews to incorporate user‑wellness metrics can help mitigate future legal exposure.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">23 Sep 2026</span>
-    <div class="footer-links">
-      <a href="https://sloanreview.mit.edu/article/why-design-thinking-needs-a-responsibility-reboot/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/why-design-thinking-needs-a-responsibility-reboot.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/04/google-froze-its-open-source-bug-bounty-program-due-to-a-significant-rise-in-ai-submissions/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">TechCrunch</span>
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Security</span>
     </div>
     <div class="news-score-area">
@@ -1274,21 +1467,73 @@
       <span class="score-num">5/10</span>
     </div>
   </div>
-  <h3 class="card-title">Google froze its open source bug bounty program due to a ‘significant rise’ in AI submissions</h3>
-  <p class="card-summary">Google has suspended its open‑source bug bounty program after a spike in AI‑generated submissions. The pause signals that AI can flood security testing channels with noise, potentially delaying genuine vulnerability reporting.</p>
+  <h3 class="card-title">Rehearsal Intelligence: Using Digital Twins for Crisis Readiness</h3>
+  <p class="card-summary">In July 2024 CrowdStrike released a buggy software update that caused widespread Windows system crashes, affecting 8.5 million devices. The incident highlighted vulnerabilities in CrowdStrike’s update pipeline and raised concerns about the reliability of security platform rollouts.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor your internal security tools for an uptick in false‑positive alerts from AI‑generated code. Adjust your incident‑response playbooks to differentiate legitimate bugs from AI noise to avoid wasted triage effort.</p>
+    <p class="insight-text">Review CrowdStrike’s update deployment procedures within the next 30 days to ensure rollback capabilities and proper testing are in place. Failure to do so risks repeat disruptions to critical infrastructure.</p>
   </div>
   <div class="card-footer">
-    <span class="pub-date">04 Oct 2026</span>
+    <span class="pub-date">05 Oct 2026</span>
     <div class="footer-links">
-      <a href="https://techcrunch.com/2026/10/04/google-froze-its-open-source-bug-bounty-program-due-to-a-significant-rise-in-ai-submissions/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/google-froze-its-open-source-bug-bounty-program-due-to-a-significant-rise-in-ai-.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://sloanreview.mit.edu/article/rehearsal-intelligence-using-digital-twins-for-crisis-readiness/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/04/trump-unveils-his-new-super-intelligence-force/','_blank')">
+<article class="card news-card" onclick="window.open('https://www.technologyreview.com/2026/10/05/1143813/bringing-predictive-analytics-to-the-agentic-ai-era/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Bringing predictive analytics to the agentic AI era</h3>
+  <p class="card-summary">MIT Technology Review discusses the shift from predictive modeling to autonomous decision-making in enterprise AI, highlighting challenges in maintaining business intent while enabling agentic systems. The article underscores the evolving role of AI in driving proactive actions without human intervention.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Monitor emerging AI frameworks that claim autonomous decision capabilities and assess their compliance with your organization’s governance policies. Evaluate whether such tools could be integrated with your existing workflow to automate routine security or IT operations, ensuring alignment with regulatory and risk management standards.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">05 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://www.technologyreview.com/2026/10/05/1143813/bringing-predictive-analytics-to-the-agentic-ai-era/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/bringing-predictive-analytics-to-the-agentic-ai-era.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://openai.com/index/new-chatgpt-ads-format-and-measurement','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Building advertising for the way people use AI</h3>
+  <p class="card-summary">OpenAI has rolled out a new visual advertising format within ChatGPT and enhanced its measurement, attribution, and brand suitability tools. This expands how advertisers can target users through the AI interface, but does not directly alter existing IT infrastructure.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">05 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://openai.com/index/new-chatgpt-ads-format-and-measurement" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/building-advertising-for-the-way-people-use-ai.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/05/can-safeworld-convince-people-that-gen-ai-robots-wont-hurt-them/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#64748b">Press</span>
@@ -1297,24 +1542,24 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
+      <span class="score-num">3/10</span>
     </div>
   </div>
-  <h3 class="card-title">Trump unveils his new Super Intelligence Force</h3>
-  <p class="card-summary">Former President Trump has announced a new task force called the Super Intelligence Force to address AI safety concerns. The move reflects ongoing political attention to AI governance, but it does not involve any specific technology or tool changes.</p>
+  <h3 class="card-title">Can Safeworld convince people that GenAI robots won’t hurt them?</h3>
+  <p class="card-summary">Safeworld is developing digital human avatars designed to demonstrate the safety of GenAI robots, aiming to alleviate public concerns about potential harm from robotic automation. The initiative focuses on creating realistic, non-physical representations that showcase robot behavior without risk.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
     <p class="insight-text"></p>
   </div>
   <div class="card-footer">
-    <span class="pub-date">04 Oct 2026</span>
+    <span class="pub-date">05 Oct 2026</span>
     <div class="footer-links">
-      <a href="https://techcrunch.com/2026/10/04/trump-unveils-his-new-super-intelligence-force/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/trump-unveils-his-new-super-intelligence-force.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://techcrunch.com/2026/10/05/can-safeworld-convince-people-that-gen-ai-robots-wont-hurt-them/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/04/can-super-intelligence-and-a-non-binding-safety-pact-solve-ais-image-problem/','_blank')">
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/05/the-final-disrupt-stage-lineup-three-days-of-conversations-you-wont-hear-anywhere-outside-of-techcrunch-disrupt-2026/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#64748b">Press</span>
@@ -1326,17 +1571,43 @@
       <span class="score-num">0/10</span>
     </div>
   </div>
-  <h3 class="card-title">Can ‘super intelligence’ and a non-binding safety pact solve AI’s image problem?</h3>
-  <p class="card-summary">The Trump administration is attempting to rebrand AI&#x27;s public image, focusing on promoting &#x27;super intelligence&#x27; while adopting a non‑binding safety pact.</p>
+  <h3 class="card-title">The final Disrupt Stage lineup: Three days of conversations you won’t hear anywhere outside of TechCrunch Disrupt 2026</h3>
+  <p class="card-summary">TechCrunch disclosed the final lineup for its 2026 Disrupt event, listing speakers such as Max Hodak and Mark Wahlberg, and offering discounted pass prices.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
     <p class="insight-text"></p>
   </div>
   <div class="card-footer">
+    <span class="pub-date">05 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://techcrunch.com/2026/10/05/the-final-disrupt-stage-lineup-three-days-of-conversations-you-wont-hear-anywhere-outside-of-techcrunch-disrupt-2026/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/the-final-disrupt-stage-lineup-three-days-of-conversations-you-wont-hear-anywher.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/04/google-froze-its-open-source-bug-bounty-program-due-to-a-significant-rise-in-ai-submissions/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Google froze its open source bug bounty program due to a ‘significant rise’ in AI submissions</h3>
+  <p class="card-summary">Google has suspended its open‑source bug bounty program after a sharp increase in AI‑generated submissions. The move underscores the growing risk of automated vulnerability discovery tools and the need for tighter review processes.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">S1: Review your Google Workspace admin console for any new security advisories or policy changes that may have been prompted by Google’s suspension. S2: Failing to act could leave your organization exposed to unreviewed AI‑driven attacks that bypass traditional controls. S3: Focus on Google Workspace’s security settings, as this is where the most immediate impact will be felt.</p>
+  </div>
+  <div class="card-footer">
     <span class="pub-date">04 Oct 2026</span>
     <div class="footer-links">
-      <a href="https://techcrunch.com/2026/10/04/can-super-intelligence-and-a-non-binding-safety-pact-solve-ais-image-problem/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/can-super-intelligence-and-a-non-binding-safety-pact-solve-ais-image-problem.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://techcrunch.com/2026/10/04/google-froze-its-open-source-bug-bounty-program-due-to-a-significant-rise-in-ai-submissions/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/google-froze-its-open-source-bug-bounty-program-due-to-a-significant-rise-in-ai-.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1345,50 +1616,24 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Security</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">The Agent Said It Was Done. The Database Disagreed.</h3>
-  <p class="card-summary">Hugging Face has announced a new AI agent that can interact with structured databases, but early tests revealed inconsistencies between the agent’s responses and the database state. The issue highlights the challenges of integrating LLM agents with traditional data systems.</p>
+  <p class="card-summary">Hugging Face’s latest release of its Agent framework exposed a bug where the agent’s stated actions conflicted with the underlying database state, causing incorrect data handling. The issue highlights the need for tighter validation when deploying conversational AI agents that interact with enterprise data stores.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor Hugging Face’s agent release notes for guidance on handling data consistency. In the next 30 days, evaluate whether your own data pipelines could benefit from a similar agent, and plan how to validate outputs against source tables to avoid stale or incorrect information.</p>
+    <p class="insight-text">Check the change logs and issue tracker for the Hugging Face Agent SDK you are using, and validate that your database schemas are correctly mapped and that transaction consistency is enforced. If your organization uses agent-based automation for IT workflows, consider adding a layer of assertion checks that confirm the database state after each agent action. This will mitigate risks of data corruption and ensure reliable incident response automation.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">03 Oct 2026</span>
     <div class="footer-links">
       <a href="https://huggingface.co/blog/microsoft/thinkingbox" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/the-agent-said-it-was-done-the-database-disagreed.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/chatham-financial','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Chatham scales its capital markets expertise with OpenAI</h3>
-  <p class="card-summary">Chatham Financial has deployed OpenAI&#x27;s Codex and the newly announced GPT-5.6 to streamline trade validation, cutting the process from 30 minutes to under 4 minutes. This showcases a tangible productivity boost from advanced language models in financial operations.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Explore integrating GPT-5.6 via the OpenAI API into your ticket triage or knowledge base automation this week. S2: Failing to adopt could mean missed efficiency gains and a competitive disadvantage in incident response speed. S3: The Freshservice ticketing system and JumpCloud user onboarding workflows are prime candidates for AI‑powered automation.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">02 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://openai.com/index/chatham-financial" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/chatham-scales-its-capital-markets-expertise-with-openai.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1401,98 +1646,22 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
+      <span class="score-num">8/10</span>
     </div>
   </div>
   <h3 class="card-title">AutoSynthData: Generating Training Data for Enterprise Agents</h3>
-  <p class="card-summary">Hugging Face introduces AutoSynthData, a tool that automatically generates synthetic training data for enterprise AI agents. This enables organizations to quickly create large, diverse datasets without manual labeling, potentially accelerating model development cycles.</p>
+  <p class="card-summary">Hugging Face has launched AutoSynthData, a tool that automatically generates synthetic training data for enterprise AI agents. This enables organizations to create large, privacy‑preserving datasets without exposing sensitive information.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review AutoSynthData’s integration options with your current ML workflows this week to determine if it can replace or supplement existing data labeling pipelines. S2: Failing to evaluate this tool risks slower model iteration and higher manual labor costs, while adopting it could reduce training data bottlenecks. S3: The feature is most relevant to your internal AI initiatives and can be leveraged alongside your existing Google Workspace and MDM tools for secure data handling.</p>
+    <p class="insight-text">S1: Explore AutoSynthData by visiting the Hugging Face Hub, reviewing the API documentation, and testing synthetic data generation for your internal AI models this week.
+S2: Not using it could mean continued reliance on limited, potentially biased real datasets, increasing training costs and privacy risks.
+S3: The tool integrates best with your MDM and endpoint security platforms for secure data handling and can enhance the AI capabilities of your existing Google Workspace and JumpCloud workflows.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">02 Oct 2026</span>
     <div class="footer-links">
       <a href="https://huggingface.co/blog/ServiceNow-AI/autosynthdata" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/autosynthdata-generating-training-data-for-enterprise-agents.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/practical-guide-building-gpt-6','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">A model guide for the GPT-6 family</h3>
-  <p class="card-summary">OpenAI has released a guide titled &quot;A model guide for the GPT‑6 family&quot; that provides startups with strategies for selecting GPT‑6 models, tuning reasoning effort, refining prompts and skills, coordinating tools, and preparing production workflows. The guide focuses on practical implementation rather than new product releases or infrastructure changes.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep the guide in your reference library and review its recommendations during your next quarterly AI roadmap planning session. It may inform future decisions on prompt engineering or workflow automation that could improve your IT support ticket handling in Freshservice or streamline integration with JumpCloud’s MDM. No immediate action is required.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">02 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://openai.com/index/practical-guide-building-gpt-6" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/a-model-guide-for-the-gpt-6-family.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://www.technologyreview.com/2026/10/02/1143774/redefining-enterprise-intelligence-with-autonomous-ai/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">MIT Tech Review</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Redefining enterprise intelligence with autonomous AI</h3>
-  <p class="card-summary">Enterprise AI is now operating at scale, with capabilities outpacing many organizations’ ability to adopt them, and investment is projected to hit $2.5 trillion by 2026. The article highlights the rapid acceleration in AI performance and cost reductions, signaling a shift toward broader enterprise adoption.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor your organization’s AI adoption strategy and budget planning for the next 90 days. Understanding the accelerated pace and cost dynamics will help you prioritize investments in AI tools that can integrate with Google Workspace, JumpCloud, and Freshservice, ensuring your IT infrastructure keeps pace with enterprise expectations.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">02 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://www.technologyreview.com/2026/10/02/1143774/redefining-enterprise-intelligence-with-autonomous-ai/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/redefining-enterprise-intelligence-with-autonomous-ai.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://research.google/blog/toward-provably-private-learning-from-federated-data/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Google AI</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Toward provably private learning from federated data</h3>
-  <p class="card-summary">Google AI has published a paper on provably private learning from federated data, detailing methods to ensure privacy guarantees while training models across distributed devices.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor Google AI’s federated learning updates for potential integration with your organization’s MDM or SSO platforms, as they could enable privacy-preserving analytics on endpoint data without compromising user confidentiality.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">02 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://research.google/blog/toward-provably-private-learning-from-federated-data/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/toward-provably-private-learning-from-federated-data.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1504,21 +1673,99 @@
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">7/10</span>
     </div>
   </div>
   <h3 class="card-title">Open-sourcing AstaBrief, the fast report-generation model in Asta</h3>
-  <p class="card-summary">Hugging Face has released AstaBrief, a fast, open‑source report‑generation model that can produce concise summaries from large text datasets. The model is designed to accelerate content creation and could be integrated into internal reporting workflows.</p>
+  <p class="card-summary">Hugging Face has open‑sourced AstaBrief, a fast report‑generation model built on the Asta framework. This model enables rapid automated text creation for business documents and can be integrated into existing AI pipelines.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on how AstaBrief performs on structured data; it could reduce time spent on generating status reports. Consider evaluating it in the next 30 days to see if it streamlines your reporting process.</p>
+    <p class="insight-text">1. Review the AstaBrief documentation and evaluate integration with your existing Google Workspace and Freshservice ticketing workflows this week. 2. Missing adoption could keep your team manually drafting reports, increasing time to resolution and reducing productivity. 3. The model is most relevant to your MDM and SSO stack through potential use in automating audit report generation and compliance documentation.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">02 Oct 2026</span>
     <div class="footer-links">
       <a href="https://huggingface.co/blog/allenai/astabrief" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/open-sourcing-astabrief-the-fast-report-generation-model-in-asta.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://openai.com/index/practical-guide-building-gpt-6','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">A model guide for the GPT-6 family</h3>
+  <p class="card-summary">OpenAI has released a comprehensive guide for the GPT‑6 family, detailing how startups can select models, tune reasoning effort, refine prompts, coordinate tools, and prepare production workflows. The guide serves as a strategic resource for teams looking to leverage the latest generation of large language models.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Review the guide to evaluate how GPT‑6 could fit into existing AI initiatives. Incorporate its best‑practice recommendations into future proof‑reading and automation scripts to ensure efficient model deployment.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">02 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://openai.com/index/practical-guide-building-gpt-6" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/a-model-guide-for-the-gpt-6-family.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://research.google/blog/toward-provably-private-learning-from-federated-data/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Google AI</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Toward provably private learning from federated data</h3>
+  <p class="card-summary">Google AI’s Mobile Systems team published a research paper on achieving provable privacy guarantees in federated learning. The study outlines algorithms that reduce data leakage during distributed model training on mobile devices.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Keep an eye on how these privacy‑enhancing federated learning techniques could be integrated into your organization’s mobile device management and data‑policy workflows. Implementing such methods could reduce the risk of sensitive data exposure during app updates or analytics, especially for services that rely on distributed user data.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">02 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://research.google/blog/toward-provably-private-learning-from-federated-data/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/toward-provably-private-learning-from-federated-data.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://openai.com/index/chatham-financial','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Chatham scales its capital markets expertise with OpenAI</h3>
+  <p class="card-summary">OpenAI’s GPT‑5.6, integrated with Codex, has enabled Chatham Financial to redesign trade validation workflows, reducing processing time from 30 minutes to under four minutes.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Monitor the adoption of GPT‑5.6 in industry use cases to anticipate potential workflow optimizations or integration opportunities within your IT stack. Consider evaluating whether similar AI‑driven automation could streamline internal processes such as incident triage or asset inventory updates.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">02 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://openai.com/index/chatham-financial" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/chatham-scales-its-capital-markets-expertise-with-openai.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1531,14 +1778,14 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">Microsoft 365 and LinkedIn leadership update</h3>
-  <p class="card-summary">Microsoft announced that LinkedIn Executive Vice President Ryan Roslansky will step down from Microsoft to pursue other opportunities. The announcement does not introduce new technology or policy changes for IT operations.</p>
+  <p class="card-summary">Microsoft announced that LinkedIn Executive Vice President Ryan Roslansky will leave Microsoft to pursue a new opportunity. The statement was shared with Microsoft and LinkedIn employees, indicating an upcoming leadership transition.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">No immediate action required for the IT stack. Keep this leadership change in mind for future collaboration or partnership discussions with LinkedIn, but it does not affect current tools or configurations.</p>
+    <p class="insight-text">Note the leadership change; it may affect future integration plans between Microsoft 365 and LinkedIn, but no immediate action is required.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">01 Oct 2026</span>
@@ -1547,39 +1794,16 @@
       <a href="breakdowns/microsoft-365-and-linkedin-leadership-update.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
-</article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/the-eternal-complement','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">The eternal complement</h3>
-  <p class="card-summary">OpenAI highlights the potential of advanced AI to drive execution behind breakthrough ideas, suggesting that efficient AI tools could accelerate future economic growth.
-</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">This is broad AI commentary with no immediate actionable impact on the engineer’s current IT stack.
-</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">01 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://openai.com/index/the-eternal-complement" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/the-eternal-complement.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-10-05</div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><span class='archive-title'>EdgeAgent: Orchestrating On-Device LLM inference for End-Use</span><span class='archive-title'>FrugalEvo: Towards Cost-Aware LLM-Guided Program Evolution</span><span class='archive-title'>Metropolis-Hastings Dominates Importance Resampling for Poli</span></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-10-04</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><span class='archive-title'>HydroJEV: A one-second, training-free screen for cyber-attac</span><span class='archive-title'>PACE: Provenance-Aware Capability Enforcement for Tool-Using</span></div>
@@ -1723,19 +1947,14 @@
   <div class="archive-date">2026-05-04</div>
   <div class="archive-count">20 items</div>
   <div class="archive-previews"><span class='archive-title'>Experimental Performance of a 5G N78 Reconfigurable Intellig</span><span class='archive-title'>Social Bias in LLM-Generated Code: Benchmark and Mitigation</span><span class='archive-title'>When RAG Chatbots Expose Their Backend: An Anonymized Case S</span></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-05-03</div>
-  <div class="archive-count">20 items</div>
-  <div class="archive-previews"><span class='archive-title'>Experimental Performance of a 5G N78 Reconfigurable Intellig</span><span class='archive-title'>Computing Equilibrium beyond Unilateral Deviation</span><span class='archive-title'>PhyCo: Learning Controllable Physical Priors for Generative </span></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel">
     <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-10-04</div>
+  <div class="archive-date">2026-10-05</div>
   <div class="archive-count">25 items</div>
-  <div class="archive-previews"><span class='archive-title'>Introducing the new Copilot with Home, Code and Autopilot</span><span class='archive-title'>Gemini 4 Argon: our next era of frontier intelligence</span><span class='archive-title'>New Microsoft data innovations unlock what only your busines</span></div>
+  <div class="archive-previews"><span class='archive-title'>Introducing the new Copilot with Home, Code and Autopilot</span><span class='archive-title'>Introducing Gemini 3.8 Live with Live Avatar</span><span class='archive-title'>New Microsoft data innovations unlock what only your busines</span></div>
 </div></div>
   </div>
 </div>

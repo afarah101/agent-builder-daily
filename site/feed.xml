@@ -5,22 +5,46 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sun, 04 Oct 2026 21:12:13 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 05 Oct 2026 14:13:38 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>HydroJEV: A one-second, training-free screen for cyber-attack and fault attribution in water distribution networks</title>
-    <link>https://arxiv.org/abs/2610.02048v1</link>
-    <guid>https://arxiv.org/abs/2610.02048v1</guid>
-    <pubDate>Thu, 01 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>When a SCADA alarm pops up in a water network, operators need to know fast if it’s a cyberattack, a physical fault, a normal glitch or a bad sensor. The authors built Jev, a training‑free model that gives a cause probability in about one second, eliminating the need for labelled data or slow LLMs. Jev achieved competitive accuracy on a four‑class benchmark for the C‑Town water network.</p><p><strong>IT Breakdown:</strong> If you manage SCADA or OT monitoring, you can add Jev as a first‑pass triage: 1) feed the alarm data into Jev to get instant cause probabilities; 2) use the top suggestion to trigger the appropriate incident response; 3) log the outcome for future training or audit. This reduces manual triage time and improves response accuracy.</p>]]></description>
+    <title>EdgeAgent: Orchestrating On-Device LLM inference for End-User Multi-Agent Systems on CPU-GPU Unified Memory Architectures</title>
+    <link>https://arxiv.org/abs/2610.03394v1</link>
+    <guid>https://arxiv.org/abs/2610.03394v1</guid>
+    <pubDate>Fri, 02 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>EdgeAgent tackles the problem of poor CPU‑GPU co‑execution on unified memory systems when running large language model agents. It orchestrates on‑device inference to minimise bus contention, manage speculative decoding variance, and reduce tool‑induced stalls, leading to higher overall throughput and better hardware utilisation. This directly impacts cloud infra that hosts LLM workloads on edge devices.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference on edge CPUs and GPUs, 1) profile your memory traffic to spot bus contention, 2) deploy EdgeAgent or a similar orchestrator to schedule CPU/GPU work, 3) monitor throughput and adjust speculative decoding settings to keep GPUs busy.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>PACE: Provenance-Aware Capability Enforcement for Tool-Using LLM Agents</title>
-    <link>https://arxiv.org/abs/2610.01349v1</link>
-    <guid>https://arxiv.org/abs/2610.01349v1</guid>
-    <pubDate>Thu, 01 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Tool‑using LLM agents can be misdirected by poisoned tool data or memory, leading to unsafe actions. PACE intercepts every tool call, checks its provenance and context before execution, and blocks unsafe calls. This reduces the risk of unintended behaviour in automated systems using LLMs.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that runs LLM‑based automation, add a PACE‑style middleware to your tool‑execution pipeline: 1) Log the provenance of each tool (source, version, checksum). 2) Before calling the tool, verify the provenance against an approved catalogue. 3) Block or audit any call that fails the check.</p>]]></description>
+    <title>FrugalEvo: Towards Cost-Aware LLM-Guided Program Evolution</title>
+    <link>https://arxiv.org/abs/2610.03675v1</link>
+    <guid>https://arxiv.org/abs/2610.03675v1</guid>
+    <pubDate>Fri, 02 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>FrugalEvo tackles the high cost of using large language models for automated code evolution by splitting the job: a powerful, expensive LLM designs strategies while a cheaper LLM implements and refines the code, saving money while still improving performance. The team built a dual‑LLM framework with a cache‑efficient evolution loop and showed it delivered better results for optimisation tasks with fewer expensive model calls. This approach is relevant if you run AI‑powered development workflows in the cloud, as it can reduce compute spend and speed up deployment cycles.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that uses LLMs for code generation, step 1: benchmark the cost per inference of your current LLM; step 2: set up a two‑tier system where a small LLM handles routine code changes and a larger LLM is called only for high‑impact strategy decisions; step 3: monitor the overall inference cost and performance gain to ensure the split remains cost‑effective.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Metropolis-Hastings Dominates Importance Resampling for Policy Composition</title>
+    <link>https://arxiv.org/abs/2610.03480v1</link>
+    <guid>https://arxiv.org/abs/2610.03480v1</guid>
+    <pubDate>Fri, 02 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The paper tackles the bias that arises when mixing different reward‑driven policies at decoding time in large language models. The authors propose using a Metropolis‑Hastings (MH) correction instead of the usual next‑token combination, and show that MH outperforms importance resampling. The result is a more accurate way to combine policies for better trade‑offs without retraining the model.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Passing the Test You Trained On: Re-evaluating Prompt-Injection Detectors for LLM Agents</title>
+    <link>https://arxiv.org/abs/2610.03448v1</link>
+    <guid>https://arxiv.org/abs/2610.03448v1</guid>
+    <pubDate>Fri, 02 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study shows that detectors chosen based on public benchmarks may not reliably catch prompt‑injection attacks inside real LLM agents. Researchers replayed tool outputs without an LLM to compare fifteen detectors and found that rankings often differ when the detectors are used in practice. The work highlights a mismatch between benchmark performance and real‑world effectiveness, offering a new evaluation framework.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑based LLM deployments, test your chosen prompt‑injection detector against a replay‑based benchmark: 1) generate benign tool outputs, 2) inject malicious prompts manually, 3) measure detection rates; if your detector fails, replace it with one that scores well in the replay evaluation.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>ServeTwin: A Benchmark-Validated Simulator for Distributed LLM Architecture Exploration</title>
+    <link>https://arxiv.org/abs/2610.02732v1</link>
+    <guid>https://arxiv.org/abs/2610.02732v1</guid>
+    <pubDate>Fri, 02 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Evaluating distributed LLM serving designs on real clusters is expensive and existing simulators miss key features like stateful closed‑loop behaviour and full benchmark support. The authors built ServeTwin, a simulator that combines analytical timing with a stateful serving loop, accurately modelling request flow, queue dynamics, and KV‑cache changes. The result is a low‑cost tool that lets designers predict performance and optimise scheduling without hardware trials.</p><p><strong>IT Breakdown:</strong> If you manage a distributed LLM infrastructure, use ServeTwin to model your deployment: 1) define your architecture in the simulator’s spec, 2) run full benchmarks to get timing predictions, 3) analyse queue and cache dynamics to tweak scheduling or resource allocation.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
@@ -32,34 +56,34 @@
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Gemini 4 Argon: our next era of frontier intelligence</title>
-    <link>https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/</link>
-    <guid>https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/</guid>
-    <pubDate>Sun, 04 Oct 2026 21:12:13 +0000</pubDate>
-    <description><![CDATA[<p>Google DeepMind has announced the release of Gemini 4 Argon, the latest generation in its frontier intelligence series, featuring advanced multimodal capabilities and real‑time reasoning. The model promises higher accuracy, faster inference, and tighter integration with Google Cloud services.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
     <title>[News] Forecasting space weather risks on power grids</title>
     <link>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</link>
     <guid>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</guid>
-    <pubDate>Sun, 04 Oct 2026 21:12:13 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft Research has developed a machine learning system that forecasts space-weather events, predicting potential damage to power grids and GPS systems 30‑60 minutes before impact.</p>]]></description>
+    <pubDate>Mon, 05 Oct 2026 14:13:38 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft Research has developed a machine‑learning system that forecasts space‑weather induced damage to power grids and GPS systems 30–60 minutes before an event. The model provides early warnings that could help operators plan mitigations and maintain service reliability.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Introducing SynthID Bio</title>
     <link>https://deepmind.google/blog/introducing-synthid-bio/</link>
     <guid>https://deepmind.google/blog/introducing-synthid-bio/</guid>
-    <pubDate>Sun, 04 Oct 2026 21:12:13 +0000</pubDate>
-    <description><![CDATA[<p>Google DeepMind has unveiled a proof‑of‑concept technology called SynthID Bio that embeds watermarks into AI‑generated proteins without compromising their biological activity. The method uses a neural network to identify and tag sequences, enabling traceability of synthetic biomolecules.</p>]]></description>
+    <pubDate>Mon, 05 Oct 2026 14:13:38 +0000</pubDate>
+    <description><![CDATA[<p>Google DeepMind has demonstrated a proof‑of‑concept watermarking technique for AI‑generated proteins, called SynthID Bio, that embeds a detectable watermark while preserving the protein’s biological function.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Gemini 4 Argon: our next era of frontier intelligence</title>
+    <link>https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/</link>
+    <guid>https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/</guid>
+    <pubDate>Mon, 05 Oct 2026 14:13:38 +0000</pubDate>
+    <description><![CDATA[<p></p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Turn Energy Efficiency Into Strategic Advantage</title>
     <link>https://sloanreview.mit.edu/article/turn-energy-efficiency-into-strategic-advantage/</link>
     <guid>https://sloanreview.mit.edu/article/turn-energy-efficiency-into-strategic-advantage/</guid>
-    <pubDate>Sun, 04 Oct 2026 21:12:13 +0000</pubDate>
+    <pubDate>Mon, 05 Oct 2026 14:13:38 +0000</pubDate>
     <description><![CDATA[<p></p>]]></description>
     <category>Industry News</category>
   </item>
@@ -67,8 +91,8 @@
     <title>[News] New Microsoft data innovations unlock what only your business knows</title>
     <link>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</link>
     <guid>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</guid>
-    <pubDate>Sun, 04 Oct 2026 21:12:13 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft has unveiled new AI-driven data capabilities designed to leverage an organization&#x27;s unique, internal knowledge base. These innovations aim to enhance business intelligence across Microsoft’s productivity and cloud ecosystems.</p>]]></description>
+    <pubDate>Mon, 05 Oct 2026 14:13:38 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft announces new AI-powered data capabilities that enable organizations to unlock insights unique to their own operations. These innovations extend across Azure and Microsoft 365, enhancing data modeling, analytics, and business intelligence workflows.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
