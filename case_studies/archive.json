@@ -1,5 +1,97 @@
 [
   {
+    "date": "2026-10-11",
+    "total": 3,
+    "case_studies": [
+      {
+        "id": "http://arxiv.org/abs/2610.12375v1",
+        "title": "OnTrack: Real-Time Monitoring and Intervention in LLM Agent Trajectories via Streaming Structure-Aware Optimal Transport",
+        "abstract": "Agents are deployed in applications from trip planners and stock trading to IT incident triage. In most cases, LLM agents work autonomously with minimal rule-based safeguarding, leading to cost and safety issues from irreversible actions. Recent works resolve this either by using a safeguard agent to monitor behavior or evaluating logs post-hoc. The first adds cost and latency to every step; the second delivers its verdict after the run, when tokens are burned and damage is done. To overcome this, we propose OnTrack, a streaming monitoring mechanism that compares an agent's steps and dependenc",
+        "authors": [
+          "Babak Barazandeh",
+          "Connor Swanson",
+          "Chinmay Kulkarni",
+          "Nikhil Mungel"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-10-08",
+        "url": "https://arxiv.org/abs/2610.12375v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 0,
+        "ai_maturity": 0,
+        "monetisation_potential": 0,
+        "total_score": 0,
+        "summary": "OnTrack tackles the problem of costly and unsafe actions by autonomous LLM agents by providing a real\u2011time, streaming monitoring system that compares each step of an agent\u2019s plan with a reference trajectory using structure\u2011aware optimal transport. The authors built a lightweight monitoring module that can be plugged into any LLM agent\u2019s workflow, flagging deviations as they occur and allowing for immediate intervention. The result was a reduction in unsafe outcomes and lower operational cost compared to post\u2011hoc evaluation or safeguard agents that add latency.",
+        "it_breakdown": "If you manage cloud infrastructure, here is what to do: 1) Identify any LLM\u2011driven services (e.g., automated incident triage or deployment bots) in your stack. 2) Integrate OnTrack\u2019s streaming monitor as a side\u2011channel to the LLM\u2019s output pipeline. 3) Configure the monitor to trigger a rollback or human\u2011review alarm when a deviation exceeds a predefined threshold.",
+        "monetisation": "",
+        "relevance_tag": "LLM agent monitoring",
+        "author_built_product": false,
+        "score_reasoning": "The paper presents a novel streaming monitoring framework (OnTrack) for LLM agents, offering real\u2011time intervention which is directly applicable to IT incident triage and other autonomous agent use cases in enterprise environments. The method addresses cost, latency, and safety\u2014key concerns for IT engineers managing LLM\u2011based tooling. Its techniques could be translated into a service or tool within 90 days, making it valuable for practitioners.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2610.12327v1",
+        "title": "SparseDecoding: Decoding-Aware Pruning for Accurate and Efficient LLM Inference",
+        "abstract": "The memory-bound nature of the decoding stage of large language model (LLM) inference incurs significant latency. Layer-wise training-free network pruning approaches guided by the Hessian have been a prominent solution to this problem, as pruning reduces the number of nonzero parameters read from memory during decoding. Nevertheless, typical methods in this line compute the Hessian using pre-collected natural sequences, whereas the model is fed self-generated tokens during decoding, creating a distribution shift between the two sequences. The Hessian calculated on the natural sequence is diffe",
+        "authors": [
+          "Qitong Wang",
+          "Xinwei Niu",
+          "Mingluo Su",
+          "Shanwei Zhao"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-10-08",
+        "url": "https://arxiv.org/abs/2610.12327v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 0,
+        "ai_maturity": 0,
+        "monetisation_potential": 0,
+        "total_score": 0,
+        "summary": "They developed SparseDecoding, a pruning method that uses the Hessian calculated on tokens the model itself generates during decoding, reducing memory read and cutting inference latency while keeping accuracy. The result is a lighter, faster LLM that can run with fewer resources. This can help you reduce cost and speed up inference on your cloud infrastructure.",
+        "it_breakdown": "If you manage LLM inference on the cloud, do the following: 1. Identify your deployment\u2019s bottleneck \u2013 the memory read during decoding. 2. Apply SparseDecoding\u2019s pruning, which recomputes the Hessian on self\u2011generated tokens, not on static data. 3. Deploy the pruned model and monitor latency and cost savings.",
+        "monetisation": "",
+        "relevance_tag": "Other",
+        "author_built_product": false,
+        "score_reasoning": "",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pending",
+        "eval_flagged": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2610.10184v1",
+        "title": "Agentic AI-Assisted Modeling for Production Scheduling: Assessment in Constraint Programming",
+        "abstract": "Developing optimization models for production scheduling requires substantial expert effort. Research on large language models (LLMs) has followed two directions: specialized approaches for automated modeling, mostly for mixed-integer linear programming, which often rely on dedicated training or problem-specific architectures that limit industrial deployment; and agentic artificial intelligence for operational decision support, which generally assumes that the optimization model already exists. This study bridges both directions by assessing whether general-purpose LLMs, orchestrated as agents",
+        "authors": [
+          "\u00c1ngel S\u00e1nchez-Fern\u00e1ndez",
+          "Javier Pernas-\u00c1lvarez",
+          "Diego Crespo-Pereira"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-10-07",
+        "url": "https://arxiv.org/abs/2610.10184v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 0,
+        "ai_maturity": 0,
+        "monetisation_potential": 0,
+        "total_score": 0,
+        "summary": "The paper investigates whether general-purpose large language models, run as agents, can automatically create and solve production scheduling optimisation models, a task that usually needs specialist expertise. The authors built an agent\u2011orchestrated system that translates natural\u2011language problem descriptions into constraint\u2011programming models and then solves them, showing that the approach can produce workable schedules but with mixed performance. The work is largely research\u2011focused and does not directly impact typical cloud\u2011infrastructure management.",
+        "it_breakdown": "Not directly applicable to IT infrastructure work",
+        "monetisation": "",
+        "relevance_tag": "LLM APIs, agentic systems, optimization modeling",
+        "author_built_product": false,
+        "score_reasoning": "The paper explores using general-purpose LLMs as agents to generate constraint programming models for production scheduling, which is a novel approach for IT engineers dealing with automation and cloud-based optimization services. It presents a potential workflow that could be integrated with existing MLOps or DevOps pipelines, offering a tangible use case for LLM APIs and agentic systems. The methodology is actionable enough that a practitioner could prototype a solution within a few weeks, making the value high for a 90\u2011day horizon. Overall the paper scores moderately high on novelty, relevance, and short\u2011term applicability.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pending",
+        "eval_flagged": false
+      }
+    ]
+  },
+  {
     "date": "2026-10-10",
     "total": 3,
     "case_studies": [
