@@ -667,7 +667,7 @@
       </div>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">2</div>
+          <div class="stat-num">3</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
@@ -676,7 +676,7 @@
         </div>
       </div>
     </div>
-    <div class="updated">Updated 13 Oct 2026, 22:35 UTC</div>
+    <div class="updated">Updated 14 Oct 2026, 11:37 UTC</div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
         <div class="tabs">
             <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -722,26 +722,23 @@
 
 <div class="content">
   <div id="case-studies" class="panel active">
-    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.13886v1','_blank')">
+    <div class="cards-grid"><article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.18642v1','_blank')">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">agentic_security</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">low_signal</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
     <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
   </div>
-  <h3 class="card-title">X-AgentRed: Red-Teaming Personal Agents in Evolving Multi-Service Ecosystems</h3>
+  <h3 class="card-title">MultiAlloc: Budget-Aware Precision Allocation for KV Cache Quantization</h3>
   <div class="card-meta">
-    <span class="authors">Yeonsung Jung, Zhiyuan Wang, Zifan Wang, Vítor Albiero</span>
+    <span class="authors">Yangchengyu Zhou, Zhiping Wu, Runchang Jiang, Dongdong Ren</span>
     <span class="sep">·</span>
     <span class="institution">Academic Institution</span>
     <span class="sep">·</span>
-    <span class="pub-date">09 Oct 2026</span>
+    <span class="pub-date">13 Oct 2026</span>
   </div>
-  <p class="card-summary">The paper tackles the hidden risk that personal AI agents can trigger harmful outcomes when they chain together multiple web services, something hard to spot manually. The authors built a systematic red‑teaming framework that explores diverse cross‑service interaction paths and flags compositional failures before they happen. The result is a tool that can automatically discover dangerous agent behaviours, reducing the chance of accidental service abuse.</p>
+  <p class="card-summary">Large language model inference uses a lot of memory for the KV cache. MultiAlloc solves this by budgeting how many bits to give each part of the cache under a fixed memory limit, keeping accuracy high. The result is a more efficient cache that uses the same space but delivers better performance.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">If you manage cloud infrastructure, here is what to do:
-1. Identify any services your agents may call.
-2. Run the red‑teaming framework on those services to map out harmful interaction chains.
-3. Patch or limit the identified risky paths in your agents’ permission set.</p>
+    <p class="insight-text">If you manage KV cache for LLMs, use MultiAlloc by: 1) set a total memory budget for the cache; 2) run the MultiAlloc algorithm to decide bit‑precision for each token/layer; 3) apply those precisions during inference to keep accuracy while staying within budget.</p>
   </div>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
@@ -749,7 +746,7 @@
       <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
       <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper presents a novel framework for red‑teaming personal agents that interact with multiple SaaS services, which is of potential interest to IT engineers concerned with agentic system security. It reveals that compositional failures can arise from cross‑service interactions, a surprising insight for those managing modern multi‑service ecosystems. However, the work is largely conceptual and does not provide immediate tooling or deployment guidance, limiting its immediate practical value. It scores modestly on novelty and IT relevance, and lower on actionable use within 90 days. The total exceeds 40, so the paper is considered of moderate to high signal.</p>
+      <p class="trace-reasoning">The paper presents a novel budget‑aware precision allocation strategy for KV cache quantization, which is a technical contribution that might pique an IT engineer’s curiosity (novelty 24/33). However, the work is narrowly focused on internal LLM inference optimisations and does not address broader IT infrastructure concerns such as cloud orchestration, security, or SaaS tooling, so its direct relevance to the target audience is modest (12/33). The actionable value within 90 days is limited; while the method could inform a specialised performance optimisation task, it would require significant research‑to‑production effort and is unlikely to translate into a ready‑to‑use service or automation within three months (6/34). The overall score of 42 just crosses the threshold of 40, but given the narrow applicability and high effort needed, the paper would be considered low‑signal for the intended readership.</p>
     </div>
   </details>
   <div class="card-footer">
@@ -776,19 +773,82 @@
     </div>
     </div>
     <div class="footer-links">
-      <a href="https://arxiv.org/abs/2610.13886v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="https://arxiv.org/abs/2610.18642v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
       <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="X-AgentRed: Red-Teaming Personal Agents in Evolving Multi-Service Ecosystems"
-        data-summary="The paper tackles the hidden risk that personal AI agents can trigger harmful outcomes when they chain together multiple web services, something hard to spot manually. The authors built a systematic red‑teaming framework that explores diverse cross‑service interaction paths and flags compositional failures before they happen. The result is a tool that can automatically discover dangerous agent behaviours, reducing the chance of accidental service abuse."
-        data-it="If you manage cloud infrastructure, here is what to do:
-1. Identify any services your agents may call.
-2. Run the red‑teaming framework on those services to map out harmful interaction chains.
-3. Patch or limit the identified risky paths in your agents’ permission set."
+        data-title="MultiAlloc: Budget-Aware Precision Allocation for KV Cache Quantization"
+        data-summary="Large language model inference uses a lot of memory for the KV cache. MultiAlloc solves this by budgeting how many bits to give each part of the cache under a fixed memory limit, keeping accuracy high. The result is a more efficient cache that uses the same space but delivers better performance."
+        data-it="If you manage KV cache for LLMs, use MultiAlloc by: 1) set a total memory budget for the cache; 2) run the MultiAlloc algorithm to decide bit‑precision for each token/layer; 3) apply those precisions during inference to keep accuracy while staying within budget."
         data-monetisation=""
-        data-reasoning="The paper presents a novel framework for red‑teaming personal agents that interact with multiple SaaS services, which is of potential interest to IT engineers concerned with agentic system security. It reveals that compositional failures can arise from cross‑service interactions, a surprising insight for those managing modern multi‑service ecosystems. However, the work is largely conceptual and does not provide immediate tooling or deployment guidance, limiting its immediate practical value. It scores modestly on novelty and IT relevance, and lower on actionable use within 90 days. The total exceeds 40, so the paper is considered of moderate to high signal."
+        data-reasoning="The paper presents a novel budget‑aware precision allocation strategy for KV cache quantization, which is a technical contribution that might pique an IT engineer’s curiosity (novelty 24/33). However, the work is narrowly focused on internal LLM inference optimisations and does not address broader IT infrastructure concerns such as cloud orchestration, security, or SaaS tooling, so its direct relevance to the target audience is modest (12/33). The actionable value within 90 days is limited; while the method could inform a specialised performance optimisation task, it would require significant research‑to‑production effort and is unlikely to translate into a ready‑to‑use service or automation within three months (6/34). The overall score of 42 just crosses the threshold of 40, but given the narrow applicability and high effort needed, the paper would be considered low‑signal for the intended readership."
         data-score="0"
-        data-url="https://arxiv.org/abs/2610.13886v1">
+        data-url="https://arxiv.org/abs/2610.18642v1">
+        ⬇ MD
+      </button>
+    </div>
+  </div>
+</article>
+<article class="card cs-card" onclick="window.open('https://arxiv.org/abs/2610.17659v1','_blank')">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Compliance_and_Security</span><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b33">⏳ Evaluating</span></div>
+    <div class="score-ring" style="--pct:0;--color:#ef4444" title="AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."><span>0</span></div>
+  </div>
+  <h3 class="card-title">Can Agents Truly Forget? Explore Machine Unlearning for LLM Agents</h3>
+  <div class="card-meta">
+    <span class="authors">Junkai Lin, Ge Xu, Zheng Xu, Junkai Chen</span>
+    <span class="sep">·</span>
+    <span class="institution">Academic Institution</span>
+    <span class="sep">·</span>
+    <span class="pub-date">13 Oct 2026</span>
+  </div>
+  <p class="card-summary">This research tackles the problem of LLM agents leaking sensitive data that they picked up during training. The authors built a machine‑unlearning technique that removes specific unwanted knowledge from an already‑trained agent without retraining from scratch, and showed it keeps the agent’s overall performance intact. If you do not deploy LLM agents, this work is not directly relevant to your day‑to‑day IT infrastructure duties.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO APPLY THIS</div>
+    <p class="insight-text">If your organisation uses LLM agents, check whether those agents were trained on private data; if so, apply the authors’ parameter‑level unlearning method to scrub the model before deployment, then re‑evaluate its performance on core tasks.</p>
+  </div>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">0/25</span></div>
+      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">0/25</span></div>
+      <p class="trace-reasoning"></p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <div class="score-bars">
+      <div class="score-bar-row">
+      <span class="bar-label">Recency</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div>
+      <span class="bar-val">25</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Impact</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Maturity</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+      <div class="score-bar-row">
+      <span class="bar-label">Monetisation</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+      <span class="bar-val">0</span>
+    </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://arxiv.org/abs/2610.17659v1" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
+        data-title="Can Agents Truly Forget? Explore Machine Unlearning for LLM Agents"
+        data-summary="This research tackles the problem of LLM agents leaking sensitive data that they picked up during training. The authors built a machine‑unlearning technique that removes specific unwanted knowledge from an already‑trained agent without retraining from scratch, and showed it keeps the agent’s overall performance intact. If you do not deploy LLM agents, this work is not directly relevant to your day‑to‑day IT infrastructure duties."
+        data-it="If your organisation uses LLM agents, check whether those agents were trained on private data; if so, apply the authors’ parameter‑level unlearning method to scrub the model before deployment, then re‑evaluate its performance on core tasks."
+        data-monetisation=""
+        data-reasoning=""
+        data-score="0"
+        data-url="https://arxiv.org/abs/2610.17659v1">
         ⬇ MD
       </button>
     </div>
@@ -880,7 +940,7 @@
         letter-spacing:1px;font-size:10px">
         ⚡ TODAY'S SIGNAL</span>
         <p style="margin-top:8px;font-family:'Inter',sans-serif;
-        font-size:14px;font-weight:500">Unleash 96% faster threat detection and multi‑gigawatt AI at scale—Microsoft’s new Azure Maia, Daybreak and data tools let your business know what it really needs.</p>
+        font-size:14px;font-weight:500">Cut threat investigation to 96% faster with Sophos Daybreak, Microsoft’s new data tools reveal hidden business insights, and the EU launches agentic AI—what does this mean for you?</p>
     </div>
     
     <div class="cards-grid"><article class="card news-card" onclick="window.open('https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/','_blank')">
@@ -892,14 +952,14 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
+      <span class="score-num">8/10</span>
     </div>
   </div>
   <h3 class="card-title">New Microsoft data innovations unlock what only your business knows</h3>
-  <p class="card-summary">Microsoft announces a suite of AI-driven data tools designed to leverage proprietary business knowledge, integrating advanced models into Azure and Microsoft 365 services. These innovations promise more contextual insights and automated analytics tailored to each organization’s unique data assets.</p>
+  <p class="card-summary">Microsoft has unveiled new data‑centric AI innovations that enable organizations to leverage the unique intelligence embedded in their own data assets. These updates aim to deepen AI insights by integrating business context directly into Azure and Microsoft 365 services.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Explore the new AI data capabilities in the Azure portal and Microsoft 365 admin center this week, testing the data integration endpoints with your existing datasets. S2: Failure to evaluate these tools could leave your organization lagging behind competitors who exploit AI for faster, more accurate decision-making. S3: Prioritize the Azure AI and Power Platform components, as they directly augment your existing cloud infrastructure and productivity suites.</p>
+    <p class="insight-text">S1: Examine the Azure AI and Microsoft 365 AI features introduced in the blog and assess how they can be incorporated into your current data workflows next month. S2: Delaying adoption risks missing opportunities to automate context‑aware insights and stay ahead of competitors who will use these capabilities to improve decision‑making. S3: Focus on the Azure OpenAI Service and Microsoft 365 Copilot, as they directly affect your cloud, security, and endpoint management stack.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">29 Sep 2026</span>
@@ -909,11 +969,37 @@
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/13/facebook-is-giving-users-more-control-over-their-algorithm/','_blank')">
+<article class="card news-card" onclick="window.open('https://openai.com/index/the-eus-next-chapter-in-ai-is-agentic','_blank')">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">TechCrunch</span>
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">The EU’s next chapter in AI is agentic</h3>
+  <p class="card-summary">OpenAI reports that agentic AI is increasingly adopted by EU enterprises and small businesses, with analysis pointing to areas where deeper use could unlock significant value.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">S1: Review the OpenAI analysis report to identify potential agentic AI applications relevant to your organization’s workflow. S2: Understanding these opportunities will help you prioritize pilot projects that could automate repetitive tasks or enhance decision-making across Google Workspace, JumpCloud, and Freshservice.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">14 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://openai.com/index/the-eus-next-chapter-in-ai-is-agentic" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/the-eus-next-chapter-in-ai-is-agentic.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://deepmind.google/blog/on-device-ai-scam-detection-mddi/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Google DeepMind</span>
       <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
@@ -921,69 +1007,95 @@
       <span class="score-num">7/10</span>
     </div>
   </div>
-  <h3 class="card-title">Facebook is giving users more control over their algorithm</h3>
-  <p class="card-summary">Meta has launched a new AI-powered feature called &quot;Your Algorithm&quot; on Instagram, allowing users to customize the content they see. The feature is designed to give users more control over the algorithmic recommendations that shape their feed.</p>
+  <h3 class="card-title">Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection</h3>
+  <p class="card-summary">Google DeepMind and Singapore GovTech have developed a lightweight, on-device Gemma AI model that can detect conversational scams in private chats without sending data to the cloud. The solution intercepts malicious messages in real time, leveraging zero cloud egress to preserve user privacy.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review the new &quot;Your Algorithm&quot; feature in the Instagram app and test how the algorithmic changes affect content visibility for internal marketing or compliance teams. S2: Failure to understand these changes could lead to inaccurate audience targeting or compliance gaps in content moderation. S3: This impacts the social media monitoring tools that integrate with Instagram data feeds.</p>
+    <p class="insight-text">S1: Go to your Google Workspace admin console and review the new &quot;Gemma Scam Detection&quot; add‑on under Security Settings this week. S2: Failure to deploy it leaves your users exposed to real‑time scam attempts that could lead to credential compromise and phishing losses. S3: The feature integrates directly with Google Workspace chat services, making it the most relevant tool in your stack for protecting end‑users.</p>
   </div>
   <div class="card-footer">
-    <span class="pub-date">13 Oct 2026</span>
+    <span class="pub-date">14 Oct 2026</span>
     <div class="footer-links">
-      <a href="https://techcrunch.com/2026/10/13/facebook-is-giving-users-more-control-over-their-algorithm/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/facebook-is-giving-users-more-control-over-their-algorithm.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://deepmind.google/blog/on-device-ai-scam-detection-mddi/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/google-deepmind-and-singapore-government-collaborate-to-build-fine-tuned-ai-mode.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://www.technologyreview.com/2026/10/13/1146382/the-download-open-models-trade-offs-geothermal-power/','_blank')">
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/14/scimplify-raises-25m-to-challenge-chinas-grip-on-critical-materials-with-ai/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Scimplify raises $25M to challenge China’s grip on critical materials with AI</h3>
+  <p class="card-summary">Scimplify, an AI-powered platform focused on critical materials, has secured $25 million in funding to expand into the U.S. market. The company aims to use AI to streamline supply chain decisions and reduce dependency on China.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">14 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://techcrunch.com/2026/10/14/scimplify-raises-25m-to-challenge-chinas-grip-on-critical-materials-with-ai/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://sloanreview.mit.edu/article/why-every-high-performing-leader-needs-a-pacer/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#7c3aed">Consulting</span>
+      <span class="source-name">MIT Sloan</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">0/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Why Every High-Performing Leader Needs a Pacer</h3>
+  <p class="card-summary">The article discusses elite runner Jakob Ingebrigtsen and the benefit of having a pacing partner to achieve high performance. It focuses on sports training and personal achievement rather than technology.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Not relevant to IT infrastructure or AI tools.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">14 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://sloanreview.mit.edu/article/why-every-high-performing-leader-needs-a-pacer/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://www.technologyreview.com/2026/10/14/1145807/us-military-race-to-make-fake-blood/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#64748b">Press</span>
       <span class="source-name">MIT Tech Review</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">0/10</span>
     </div>
   </div>
-  <h3 class="card-title">The Download: open model trade-offs and geothermal power’s promise</h3>
-  <p class="card-summary">Anthropic’s latest report highlights potential cyberattack risks posed by a new large language model released by Chinese company Z.ai. The analysis underscores the trade‑offs between open‑model benefits and security concerns that could impact enterprise AI deployments.</p>
+  <h3 class="card-title">The US military’s race to make fake blood</h3>
+  <p class="card-summary">The article discusses a U.S. military operation involving a helicopter called Morphine 1-2 during a 2007 mission. It focuses on logistics and combat scenarios rather than technology.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review the report this week and assess whether your organization’s AI policies address third‑party model usage. S2: Ignoring these findings may leave your systems vulnerable to emerging adversarial techniques that exploit language models. S3: This is most relevant to your Google Workspace and Freshservice integrations that could incorporate external AI services.</p>
+    <p class="insight-text">None.</p>
   </div>
   <div class="card-footer">
-    <span class="pub-date">13 Oct 2026</span>
+    <span class="pub-date">14 Oct 2026</span>
     <div class="footer-links">
-      <a href="https://www.technologyreview.com/2026/10/13/1146382/the-download-open-models-trade-offs-geothermal-power/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/the-download-open-model-trade-offs-and-geothermal-powers-promise.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/higgsfield-longer-videos-voice','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Higgsfield takes AI video from 1 minute to over 10</h3>
-  <p class="card-summary">OpenAI’s Higgsfield AI now supports video creation over ten minutes using GPT‑6 Astra, with GPT‑Image‑2.5 for precise visuals and GPT‑Live for voice filmmaking. This expands generative media capabilities beyond the one‑minute limit of earlier tools.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Watch for the release of Higgsfield’s API in the next 30 days and evaluate whether its extended video and voice generation can streamline internal training or marketing content production. Integrating these models could reduce manual video editing time, but requires assessing data privacy and licensing for corporate assets.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">13 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://openai.com/index/higgsfield-longer-videos-voice" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/higgsfield-takes-ai-video-from-1-minute-to-over-10.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+      <a href="https://www.technologyreview.com/2026/10/14/1145807/us-military-race-to-make-fake-blood/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/the-us-militarys-race-to-make-fake-blood.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1000,16 +1112,68 @@
     </div>
   </div>
   <h3 class="card-title">Developing Gemini 4 Argon responsibly and safely</h3>
-  <p class="card-summary">Google DeepMind announced the responsible development of Gemini 4 Argon, a new advanced language model designed to enhance AI capabilities while prioritizing safety and ethical considerations. The release signals a shift toward more secure and controllable large language models that could influence enterprise AI deployments.</p>
+  <p class="card-summary">Google DeepMind has announced Gemini 4 Argon, a new large language model that emphasizes responsible and safe AI development. The model is positioned as the next step in Gemini’s evolution, featuring improved alignment and reduced hallucination rates.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor how Google’s Gemini 4 Argon might be integrated into Google Workspace’s AI features—specifically the Admin Console’s Gemini AI add‑on. Evaluate its safety controls and compare them to current AI policies to determine if upgrades or new monitoring tools are needed for your IT stack.</p>
+    <p class="insight-text">Watch for any API availability or integration guidelines from Google that may allow Gemini 4 Argon to be accessed via Google Workspace or other cloud services. The model’s alignment focus could inform future security policies or help in developing internal tools that rely on safer AI outputs.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">13 Oct 2026</span>
     <div class="footer-links">
       <a href="https://deepmind.google/blog/developing-gemini-4-argon-responsibly-and-safely/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/developing-gemini-4-argon-responsibly-and-safely.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/13/cerebras-ceo-says-were-nearing-a-future-where-everyone-has-a-personal-ai-assistant-at-home/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#64748b">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Cerebras CEO says we’re nearing a future where everyone has a personal AI assistant at home</h3>
+  <p class="card-summary">Cerebras CEO Andrew Feldman forecasts a near‑future where personal AI assistants are as common as household appliances, blending local edge computing with cloud services.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text"></p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">13 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://techcrunch.com/2026/10/13/cerebras-ceo-says-were-nearing-a-future-where-everyone-has-a-personal-ai-assistant-at-home/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <span class="breakdown-pending">Breakdown pending</span>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://openai.com/index/higgsfield-longer-videos-voice','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Higgsfield takes AI video from 1 minute to over 10</h3>
+  <p class="card-summary">OpenAI’s Higgsfield now supports generating videos over ten minutes long using GPT‑6 Astra, enhanced visuals with GPT‑Image‑2.5, and a voice‑filmmaking option via GPT‑Live. This expands AI‑powered media creation capabilities for content creators.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Monitor the new Higgsfield API endpoints for future integration into internal training or documentation tools. While not directly impacting your current stack, it could offer a cost‑effective way to produce video training materials for your IT teams. Keep an eye on API pricing and quota limits in the next 30 days.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">13 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://openai.com/index/higgsfield-longer-videos-voice" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/higgsfield-takes-ai-video-from-1-minute-to-over-10.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1021,47 +1185,21 @@
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">Gemini 4 Argon for Robotics</h3>
-  <p class="card-summary">Google DeepMind has unveiled Gemini 4 Argon, a specialized language model designed for advanced robotics applications. This model builds on the Gemini architecture to provide more precise reasoning, perception, and control capabilities for autonomous systems.</p>
+  <p class="card-summary">Google DeepMind has announced Gemini 4 Argon, a new AI model tailored for robotics applications. The release focuses on advanced perception and control capabilities designed to enhance autonomous robot performance.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Watch for upcoming SDKs or APIs that expose Gemini 4 Argon to enterprise robotics platforms. Integrating this model could streamline development of custom robotic workflows, reducing manual scripting and improving on‑board decision making.</p>
+    <p class="insight-text">None at this time; the model is aimed at robotics research and development rather than enterprise IT infrastructure.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">13 Oct 2026</span>
     <div class="footer-links">
       <a href="https://deepmind.google/blog/gemini-4-argon-for-robotics/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/gemini-4-argon-for-robotics.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://deepmind.google/blog/introducing-gemini-4-argon/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Gemini 4 Argon: Built to solve your hardest problems</h3>
-  <p class="card-summary">Google DeepMind has unveiled Gemini 4 Argon, a next‑generation multimodal AI model designed to tackle complex problem‑solving tasks. The release marks a significant step in DeepMind’s generative AI roadmap, offering higher scalability and advanced reasoning capabilities.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor Google’s Cloud AI offerings for any new API endpoints or SDK updates that expose Gemini 4. Consider evaluating the model for future proofing of internal tooling, such as automated ticket triage or policy generation, but plan for integration testing within the next 30 days.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">13 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://deepmind.google/blog/introducing-gemini-4-argon/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/gemini-4-argon-built-to-solve-your-hardest-problems.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1073,15 +1211,15 @@
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">Run fast, private agents on-device with LFM2.5-24B-A2B</h3>
-  <p class="card-summary">Hugging Face has released LFM2.5-24B-A2B, a 24 billion‑parameter language model designed for private, on‑device inference, enabling agents that can run fully offline while preserving user privacy.</p>
+  <p class="card-summary">Hugging Face has released LFM2.5-24B-A2B, a new private-on-device language model designed for fast inference.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Monitor the Hugging Face model hub for LFM2.5-24B-A2B updates and evaluate whether integrating it into internal tooling could reduce external API dependencies for customer‑facing chatbots. This could improve compliance with data‑privacy policies and lower latency for end‑users.</p>
+    <p class="insight-text">Consider evaluating LFM2.5-24B-A2B for future internal tooling that requires on-device inference, though it currently has minimal direct impact on your existing IT stack.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">13 Oct 2026</span>
@@ -1096,18 +1234,18 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#7c3aed">Consulting</span>
       <span class="source-name">MIT Sloan</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">1/10</span>
     </div>
   </div>
   <h3 class="card-title">The New Rules of Brand Visibility in AI Search</h3>
-  <p class="card-summary">Researchers at MIT Sloan examined how brands are adjusting their SEO strategies for AI-driven search and identified key blind spots in visibility metrics. The study highlights that many organizations still struggle to measure and optimize their presence in AI search results, impacting digital marketing effectiveness.</p>
+  <p class="card-summary">The MIT Sloan article examines how companies are adjusting SEO tactics for AI-driven search engines, highlighting blind spots in AI visibility metrics and organizational inertia. It suggests that traditional SEO practices may no longer suffice when search results are generated by language models rather than keyword matching.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on how AI search engines evolve, as changes in visibility metrics could affect how users find and interact with your organization’s services. Incorporate AI search analytics into your IT monitoring to anticipate future adjustments in digital asset management and content delivery.</p>
+    <p class="insight-text">Review your organization&#x27;s current SEO strategy to ensure it aligns with AI search engine requirements, as legacy methods may not deliver optimal visibility.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">13 Oct 2026</span>
@@ -1117,33 +1255,7 @@
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/13/flox-intelligence-is-building-ai-to-keep-wildlife-away-from-trains-airports-and-roads/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#64748b">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Flox Intelligence is building AI to keep wildlife away from trains, airports, and roads</h3>
-  <p class="card-summary">Flox Intelligence has unveiled a new AI-powered wildlife deterrent system that uses edge devices to detect animals and emit species-specific sounds to safely repel them from critical infrastructure such as railways, airports, and roadways. The solution leverages computer vision and acoustic feedback loops to reduce collision risks and protect assets without relying on human intervention.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on Flox’s technology as it could inspire future AI-driven environmental monitoring tools for your organization’s infrastructure. Evaluating its edge deployment model may offer insights for optimizing your own device management and anomaly detection workflows.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">13 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://techcrunch.com/2026/10/13/flox-intelligence-is-building-ai-to-keep-wildlife-away-from-trains-airports-and-roads/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/flox-intelligence-is-building-ai-to-keep-wildlife-away-from-trains-airports-and-.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/13/judge-orders-openai-to-turn-over-hiring-records-in-apple-trade-secrets-case/','_blank')">
+<article class="card news-card" onclick="window.open('https://techcrunch.com/2026/10/13/science-corporation-implants-its-vision-restoring-chip-in-its-first-stargardt-disease-patient/','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#64748b">Press</span>
@@ -1152,20 +1264,20 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="score-num">0/10</span>
     </div>
   </div>
-  <h3 class="card-title">Judge orders OpenAI to turn over hiring records in Apple trade secrets case</h3>
-  <p class="card-summary">A federal judge has ordered OpenAI to provide Apple with hiring records and internal communications related to former Apple employees amid a trade‑secrets lawsuit. The ruling compels OpenAI to disclose sensitive internal documents that could influence its legal defenses.</p>
+  <h3 class="card-title">Science Corporation implants its vision-restoring chip in its first Stargardt disease patient</h3>
+  <p class="card-summary">Science Corporation has implanted its vision-restoring chip in a first patient with Stargardt disease, marking a step toward its brain-computer interface (BCI) goals. The development is primarily a medical innovation and does not involve AI tools or security concerns relevant to IT infrastructure.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">None.</p>
+    <p class="insight-text"></p>
   </div>
   <div class="card-footer">
     <span class="pub-date">13 Oct 2026</span>
     <div class="footer-links">
-      <a href="https://techcrunch.com/2026/10/13/judge-orders-openai-to-turn-over-hiring-records-in-apple-trade-secrets-case/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <span class="breakdown-pending">Breakdown pending</span>
+      <a href="https://techcrunch.com/2026/10/13/science-corporation-implants-its-vision-restoring-chip-in-its-first-stargardt-disease-patient/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/science-corporation-implants-its-vision-restoring-chip-in-its-first-stargardt-di.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1174,18 +1286,18 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Microsoft</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Infrastructure</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">9/10</span>
+      <span class="score-num">7/10</span>
     </div>
   </div>
   <h3 class="card-title">Microsoft to expand Azure Maia system to multi-gigawatt deployments</h3>
-  <p class="card-summary">Microsoft announced that it will scale the Azure Maia inference system to multi‑gigawatt deployments starting in 2027, positioning Maia as the core inference engine for its services. This expansion signals a significant upgrade to Azure’s AI infrastructure, potentially impacting how Microsoft workloads are served and optimized.</p>
+  <p class="card-summary">Microsoft has announced that its Azure Maia inference system will be scaled to multi‑gigawatt deployments starting in 2027, positioning Maia as the core AI inference platform for all Microsoft services. The expansion signals a significant shift toward high‑capacity, low‑latency AI workloads in Azure, affecting future infrastructure planning.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Check the Azure portal this week for updates on the Azure Maia API endpoint and any new pricing tiers or capacity limits that may affect your current deployments. S2: Early awareness will let you plan for increased inference capacity and cost implications before the 2027 rollout, avoiding bottlenecks in critical workloads. S3: Your Azure subscriptions and any AI‑heavy services will be directly influenced, so prioritize reviewing resource allocation and scaling policies now.</p>
+    <p class="insight-text">S1: Review your Azure resource inventory this week to determine which services might benefit from Maia‑powered inference and update your cost‑allocation tagging accordingly. S2: Failing to adjust early could lead to missed opportunities for cost savings and performance gains as Azure migrates to Maia‑based workloads. S3: Azure services such as Cognitive Services, Azure Machine Learning, and Azure OpenAI will be most impacted.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">12 Oct 2026</span>
@@ -1203,15 +1315,15 @@
       <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">2/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
     </div>
   </div>
   <h3 class="card-title">Simulating student learning for better AI tutoring</h3>
-  <p class="card-summary">Microsoft Research released StudentSim, a research system that simulates student interactions with AI tutors to evaluate and improve tutoring algorithms. The tool provides feedback on tutor performance across subjects such as chess, writing, and mathematics.</p>
+  <p class="card-summary">Microsoft Research has unveiled StudentSim, a research platform that simulates student interactions with AI tutoring systems to refine tutor effectiveness. The tool models learner engagement across subjects such as chess, writing, and mathematics, providing feedback for improving AI tutor performance.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check your internal AI research pipeline for opportunities to integrate StudentSim as a validation step before deploying new tutoring modules. Early adoption could surface design flaws and reduce costly field testing.</p>
+    <p class="insight-text">Keep an eye on StudentSim for potential integration points when evaluating AI-driven learning tools that your organization may adopt or support. It could inform future AI tutoring solutions you might implement, helping ensure they are pedagogically sound before deployment.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">12 Oct 2026</span>
@@ -1230,14 +1342,14 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#22c55e" title="High relevance"></span>
-      <span class="score-num">7/10</span>
+      <span class="score-num">8/10</span>
     </div>
   </div>
   <h3 class="card-title">Sophos cuts threat investigation time by 96% with OpenAI Daybreak</h3>
-  <p class="card-summary">Sophos has integrated OpenAI’s Daybreak model to drastically reduce cyber‑threat investigation time by 96% and automate 52% of MDR cases while keeping human oversight. This demonstrates a concrete example of generative AI being used to accelerate security operations for enterprise endpoint protection.</p>
+  <p class="card-summary">Sophos has integrated OpenAI’s Daybreak to drastically cut threat investigation time by 96% and automate 52% of MDR cases while maintaining human oversight. This demonstrates a tangible AI-driven efficiency boost for enterprise security operations.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review Sophos’ new Daybreak‑powered MDR workflow in the next 30 days to assess potential efficiency gains. S2: If your team uses CrowdStrike or a similar MDR platform, compare the automation capabilities and human‑in‑the‑loop controls to ensure you’re not missing out on reduced investigation times. S3: The integration most directly impacts the endpoint security and threat detection layer of your stack, so prioritise any cross‑tool interoperability or policy alignment.</p>
+    <p class="insight-text">S1: Go to your Sophos console and review the new Daybreak integration settings this week. S2: Failure to enable or tune Daybreak could mean missing rapid automation of threat triage, leaving analysts overburdened. S3: Sophos endpoint security is the primary tool affected, directly impacting your MDM and endpoint protection stack.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">09 Oct 2026</span>
@@ -1247,11 +1359,11 @@
     </div>
   </div>
 </article>
-<article class="card news-card" onclick="window.open('https://openai.com/index/asana-browser-agent','_blank')">
+<article class="card news-card" onclick="window.open('https://huggingface.co/blog/allenai/impactful-scheduling','_blank')">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">OpenAI</span>
+      <span class="source-name">Hugging Face</span>
       <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
@@ -1259,37 +1371,11 @@
       <span class="score-num">6/10</span>
     </div>
   </div>
-  <h3 class="card-title">Asana cuts model costs 76x in browser tests with GPT-6.1 Sol</h3>
-  <p class="card-summary">OpenAI’s GPT‑6.1 Sol, integrated via Codex, enabled Asana to reduce the cost of its browser agent by 76× while improving speed fivefold in tests. This showcases a dramatic efficiency gain for AI‑powered productivity tools.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Monitor Asana’s release notes for GPT‑6.1 Sol integration and compare its cost/performance metrics with your current Google Workspace or Microsoft 365 AI add‑ons. S2: Understanding this efficiency leap informs future budgeting for AI features and may reveal opportunities to negotiate better terms or explore similar model scaling in your own tooling. S3: The most affected tool is Asana, but the approach applies to any SaaS with embedded AI, so keep an eye on comparable offerings from Microsoft 365 Copilot or Google Workspace Gemini.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">09 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://openai.com/index/asana-browser-agent" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/asana-cuts-model-costs-76x-in-browser-tests-with-gpt-61-sol.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://huggingface.co/blog/allenai/impactful-scheduling','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
   <h3 class="card-title">Impactful scheduling for GPU clusters</h3>
-  <p class="card-summary">Hugging Face has unveiled an AI-powered scheduling system designed to optimize the allocation of GPU clusters for machine learning workloads. The new tool promises smarter resource management, reducing idle GPU time and cutting operational costs.</p>
+  <p class="card-summary">Hugging Face has introduced a new GPU cluster scheduling feature that optimizes resource allocation for large-scale machine learning workloads. The update promises faster job completion and cost savings for teams running heavy inference or training tasks on shared GPU infrastructure.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Monitor the Hugging Face scheduling feature for compatibility with your existing GPU workloads and evaluate integration with your MLOps pipeline. S2: Incorporating this AI scheduler could streamline resource utilization, lower cloud spend, and free up bandwidth for other IT initiatives.</p>
+    <p class="insight-text">Watch for how this scheduling algorithm integrates with your existing cloud or on-prem GPU setups. If you deploy Hugging Face models for internal tooling, evaluating the new scheduler could reduce idle GPU time and lower operational costs within the next month.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">09 Oct 2026</span>
@@ -1304,50 +1390,24 @@
     <div class="card-tags">
       <span class="tier-label" style="color:#0284c7">AI Lab</span>
       <span class="source-name">Hugging Face</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Tools</span>
+      <span class="tag-pill" style="background:#0284c71a;color:#0284c7;border:1px solid #0284c733">Product Launch</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">The model that didn&#x27;t exist, so you made it yourself</h3>
-  <p class="card-summary">Hugging Face announced a new feature that allows users to generate and deploy their own custom language models directly from the platform. This empowers organizations to create tailored AI solutions without relying on pre-built models from external vendors.</p>
+  <p class="card-summary">Hugging Face unveiled a new feature that lets users build custom models directly within the platform without needing to train from scratch. The tool automates the model creation pipeline, lowering the barrier for non-experts to deploy tailored AI solutions.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Review Hugging Face’s new custom‑model workflow in the past week and experiment with creating a lightweight model for internal documentation search. S2: Leveraging this feature can reduce reliance on third‑party AI services, potentially lowering data egress costs and improving compliance with data residency policies.</p>
+    <p class="insight-text">S1: Explore the new &#x27;Auto-Model&#x27; feature in your Hugging Face account and experiment with generating a lightweight model for internal ticket classification. S2: Leveraging this could streamline your Freshservice ticket routing, reducing manual tagging effort and improving response times.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">08 Oct 2026</span>
     <div class="footer-links">
       <a href="https://huggingface.co/blog/building-with-ml-intern" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <span class="breakdown-pending">Breakdown pending</span>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://research.google/blog/does-better-work-always-mean-better-workers/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Google AI</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Does better work always mean better workers?</h3>
-  <p class="card-summary">Google AI publishes a research study titled &#x27;Does better work always mean better workers?&#x27; exploring how AI-driven tools can influence employee performance and the potential implications for workplace productivity.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">S1: Monitor the study’s findings for insights on how AI can enhance or skew employee productivity metrics. S2: Use these insights to assess whether AI-enabled reporting in your IT stack (e.g., Google Workspace analytics) might introduce bias or performance inflation in user activity logs.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">07 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://research.google/blog/does-better-work-always-mean-better-workers/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/does-better-work-always-mean-better-workers.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1359,21 +1419,47 @@
       <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
   <h3 class="card-title">Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses</h3>
-  <p class="card-summary">Microsoft Research has released Agent Lightning v1.0, a lightweight agentic reinforcement learning framework that simplifies training AI agents by integrating them with existing tools and harnesses. The framework aims to reduce the complexity of building custom RL pipelines, enabling faster experimentation for researchers and developers.</p>
+  <p class="card-summary">Microsoft Research released Agent Lightning v1.0, a lightweight RL framework that connects existing agents to reinforcement learning training without extensive rework. The framework is designed to streamline training of AI agents, reducing the engineering effort needed to build custom RL pipelines.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check the Agent Lightning repository on GitHub and review its integration options with your existing AI development workflows. This tool could reduce time spent on boilerplate RL setup, but it is not directly applicable to your current IT stack, so consider evaluating it within 90 days if your team experiments with RL models.</p>
+    <p class="insight-text">Consider evaluating Agent Lightning for internal AI projects that could benefit from faster RL iteration, especially if you already have agents that could plug into this framework. This could reduce time-to-train and lower the barrier to experimenting with new agent capabilities in your IT operations or automation workflows.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">07 Oct 2026</span>
     <div class="footer-links">
       <a href="https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/agent-lightning-v10-a-3500-line-lightweight-agentic-rl-framework-for-training-ag.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://research.google/blog/does-better-work-always-mean-better-workers/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Google AI</span>
+      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Does better work always mean better workers?</h3>
+  <p class="card-summary">Google AI releases a study titled &quot;Does better work always mean better workers?&quot;.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Check your Google Workspace Admin console for any new AI‑driven productivity metrics that may impact employee monitoring or reporting tools. Missing potential changes could delay adoption of AI insights for workforce management.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">07 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://research.google/blog/does-better-work-always-mean-better-workers/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/does-better-work-always-mean-better-workers.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1386,20 +1472,46 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">1/10</span>
+      <span class="score-num">0/10</span>
     </div>
   </div>
   <h3 class="card-title">When Compliance Workarounds Backfire</h3>
-  <p class="card-summary">Glovo&#x27;s attempt to circumvent Spain&#x27;s Rider Law—designed to classify gig workers as employees—failed as the company’s workaround backfired, exposing legal and operational risks. This case illustrates how regulatory changes can undermine platform business models when compliance is not fully integrated into operational design.</p>
+  <p class="card-summary">The article discusses how Glovo’s compliance workaround for Spain’s Rider Law backfired, highlighting the risks of circumventing regulatory requirements in digital platform operations.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check your compliance frameworks for potential presumption of employment clauses in regions where algorithmic management is used. Identify any controls that could be re‑engineered to avoid legal exposure.</p>
+    <p class="insight-text">None specific actions are required for the IT engineer’s current toolset.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">07 Oct 2026</span>
     <div class="footer-links">
       <a href="https://sloanreview.mit.edu/article/when-compliance-workarounds-backfire/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/when-compliance-workarounds-backfire.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
+    </div>
+  </div>
+</article>
+<article class="card news-card" onclick="window.open('https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/','_blank')">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label" style="color:#0284c7">AI Lab</span>
+      <span class="source-name">Google AI</span>
+      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h3 class="card-title">Unlocking Earth AI’s planetary geospatial foundation models for global public health</h3>
+  <p class="card-summary">Google AI has released Earth AI’s new planetary geospatial foundation models aimed at improving global public health analytics. The models enable richer, AI-driven analysis of Earth observation data, potentially enhancing data-driven decision-making across sectors.</p>
+  <div class="insight-block">
+    <div class="insight-label">HOW TO USE THIS</div>
+    <p class="insight-text">Monitor how these foundation models could be integrated with existing data pipelines or analytics tools you manage; evaluate potential use cases for improving incident response or resource allocation in your organization within the next 30 days. Leveraging these models could provide advanced spatial insights for security or operational planning, complementing your current stack.</p>
+  </div>
+  <div class="card-footer">
+    <span class="pub-date">06 Oct 2026</span>
+    <div class="footer-links">
+      <a href="https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
+      <a href="breakdowns/unlocking-earth-ais-planetary-geospatial-foundation-models-for-global-public-hea.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1412,72 +1524,20 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">4/10</span>
+      <span class="score-num">2/10</span>
     </div>
   </div>
   <h3 class="card-title">What AI gets wrong and what failure teaches us</h3>
-  <p class="card-summary">Microsoft Research’s Jennifer Neville explores the unexpected failures of AI systems and what these failures reveal about handling complex tasks. The piece highlights how recognizing such failures can guide better AI system design and deployment.</p>
+  <p class="card-summary">Microsoft Research published an article titled &quot;What AI gets wrong and what failure teaches us&quot; by Jennifer Neville, detailing how AI struggles with complex problems and the lessons learned from its failures.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Check your AI projects for hidden failure modes and consider integrating systematic failure testing to improve resilience.</p>
+    <p class="insight-text">Review the article to understand the limitations of current AI models; this insight can guide future decisions on which AI tools to adopt or avoid, ensuring that solutions deployed within your IT stack are robust and aligned with real-world capabilities.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">06 Oct 2026</span>
     <div class="footer-links">
       <a href="https://www.microsoft.com/en-us/research/podcast/what-ai-gets-wrong-and-what-failure-teaches-us/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
       <a href="breakdowns/what-ai-gets-wrong-and-what-failure-teaches-us.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#0284c7">AI Lab</span>
-      <span class="source-name">Google AI</span>
-      <span class="tag-pill" style="background:#7c3aed1a;color:#7c3aed;border:1px solid #7c3aed33">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">Unlocking Earth AI’s planetary geospatial foundation models for global public health</h3>
-  <p class="card-summary">Google AI has released Earth AI’s planetary geospatial foundation models, enabling high-resolution, open-access data on land cover, land use, and ecological indicators. These models can be leveraged for advanced analytics in public health, climate monitoring, and environmental risk assessment.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Keep an eye on Earth AI’s public dataset releases; after the next quarter review whether to integrate these geospatial layers into internal analytics dashboards or compliance monitoring tools.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">06 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/unlocking-earth-ais-planetary-geospatial-foundation-models-for-global-public-hea.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
-    </div>
-  </div>
-</article>
-<article class="card news-card" onclick="window.open('https://sloanreview.mit.edu/article/the-real-reasons-why-digital-projects-fail/','_blank')">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label" style="color:#7c3aed">Consulting</span>
-      <span class="source-name">MIT Sloan</span>
-      <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h3 class="card-title">The Real Reasons Why Digital Projects Fail</h3>
-  <p class="card-summary">The article discusses common reasons for digital project failures, emphasizing misalignment between tools and user needs and the lack of measurable outcomes.</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Review current IT projects for alignment between technology and business objectives, ensure metrics are defined, and involve end‑users early in design.</p>
-  </div>
-  <div class="card-footer">
-    <span class="pub-date">06 Oct 2026</span>
-    <div class="footer-links">
-      <a href="https://sloanreview.mit.edu/article/the-real-reasons-why-digital-projects-fail/" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      <a href="breakdowns/the-real-reasons-why-digital-projects-fail.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>
     </div>
   </div>
 </article>
@@ -1494,10 +1554,10 @@
     </div>
   </div>
   <h3 class="card-title">Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle</h3>
-  <p class="card-summary">Google AI researchers published a study titled &quot;Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle,&quot; highlighting new privacy risks that arise when generative AI agents act autonomously. The paper discusses how agentic behavior can expose sensitive data and create unforeseen attack vectors, urging the industry to rethink security models for next‑generation AI systems.</p>
+  <p class="card-summary">Google AI released a research paper titled &quot;Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle&quot; that examines privacy risks and security challenges posed by emerging AI agentic systems. The study highlights potential vulnerabilities that could affect the way IT infrastructures manage AI-driven services.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">Review the paper for insights on potential privacy pitfalls in your AI‑enabled workflows. Incorporate its findings into your security reviews to ensure that any automated decision‑making or data‑sharing features in your tools (e.g., Google Workspace, JumpCloud) are vetted for agentic risks.</p>
+    <p class="insight-text">Review the paper’s findings on agentic privacy to inform your organization’s AI governance policy and consider incorporating the suggested safeguards into your existing security controls.</p>
   </div>
   <div class="card-footer">
     <span class="pub-date">05 Oct 2026</span>
@@ -1515,12 +1575,12 @@
       <span class="tag-pill" style="background:#64748b1a;color:#64748b;border:1px solid #64748b33">Other</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot" style="background:#ef4444" title="Low relevance"></span>
-      <span class="score-num">0/10</span>
+      <span class="rel-dot" style="background:#f59e0b" title="Medium relevance"></span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
   <h3 class="card-title">Microsoft 365 and LinkedIn leadership update</h3>
-  <p class="card-summary">Microsoft CEO Satya Nadella announced that LinkedIn executive Ryan Roslansky is leaving Microsoft. The message was shared with Microsoft and LinkedIn employees.</p>
+  <p class="card-summary">Microsoft announced a leadership change with LinkedIn Executive VP Ryan Roslansky stepping down from Microsoft to pursue other opportunities. The announcement is internal and does not introduce new products or features.</p>
   <div class="insight-block">
     <div class="insight-label">HOW TO USE THIS</div>
     <p class="insight-text"></p>
@@ -1537,6 +1597,11 @@
 
   <div id="archive-cs" class="panel">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-10-14</div>
+  <div class="archive-count">2 items</div>
+  <div class="archive-previews"><span class='archive-title'>MultiAlloc: Budget-Aware Precision Allocation for KV Cache Q</span><span class='archive-title'>Can Agents Truly Forget? Explore Machine Unlearning for LLM </span></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-10-13</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><span class='archive-title'>X-AgentRed: Red-Teaming Personal Agents in Evolving Multi-Se</span></div>
@@ -1680,19 +1745,14 @@
   <div class="archive-date">2026-05-14</div>
   <div class="archive-count">9 items</div>
   <div class="archive-previews"><span class='archive-title'>ChipMATE: Multi-Agent Training via Reinforcement Learning fo</span><span class='archive-title'>Attention Once Is All You Need: Efficient Streaming Inferenc</span><span class='archive-title'>History Anchors: How Prior Behavior Steers LLM Decisions Tow</span></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-05-13</div>
-  <div class="archive-count">14 items</div>
-  <div class="archive-previews"><span class='archive-title'>Autonomy and Agency in Agentic AI: Architectural Tactics for</span><span class='archive-title'>No Action Without a NOD: A Heterogeneous Multi-Agent Archite</span><span class='archive-title'>Covering Human Action Space for Computer Use: Data Synthesis</span></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel">
     <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-10-13</div>
+  <div class="archive-date">2026-10-14</div>
   <div class="archive-count">25 items</div>
-  <div class="archive-previews"><span class='archive-title'>Microsoft to expand Azure Maia system to multi-gigawatt depl</span><span class='archive-title'>Sophos cuts threat investigation time by 96% with OpenAI Day</span><span class='archive-title'>New Microsoft data innovations unlock what only your busines</span></div>
+  <div class="archive-previews"><span class='archive-title'>Sophos cuts threat investigation time by 96% with OpenAI Day</span><span class='archive-title'>New Microsoft data innovations unlock what only your busines</span><span class='archive-title'>The EU’s next chapter in AI is agentic</span></div>
 </div></div>
   </div>
 </div>
