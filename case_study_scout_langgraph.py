@@ -86,6 +86,18 @@ def is_blocked(paper):
     text = (paper.get("title", "") + " " + paper.get("abstract", "")).lower()
     return any(tag in text for tag in BLOCKED_TAGS)
 
+ABSTRACT_CAP = 3000
+
+def cap_abstract(text, cap=ABSTRACT_CAP):
+    if len(text) <= cap:
+        return text
+    window = text[:cap + 1]
+    ends = [i for i, ch in enumerate(window[:cap]) if ch in ".!?" and (i + 1 == len(text) or window[i + 1] == " ")]
+    if ends:
+        return text[:ends[-1] + 1]
+    # No sentence boundary within the cap: fall back to the last word boundary.
+    return text[:cap].rsplit(" ", 1)[0]
+
 UNIVERSITIES = [
     "Stanford", "Berkeley", "MIT", "Carnegie Mellon", "Toronto",
     "Oxford", "Cambridge", "ETH", "Singapore", "Tsinghua",
@@ -225,7 +237,7 @@ def fetch_papers(state):
                     continue
                 seen.add(pid)
                 title_text = " ".join((title_el.text or "").split())
-                abstract_text = " ".join((summary_el.text or "").split())[:600]
+                abstract_text = cap_abstract(" ".join((summary_el.text or "").split()))
                 pub_date = (published_el.text or "")[:10] if published_el is not None else ""
                 if len(abstract_text) < 80:
                     continue
