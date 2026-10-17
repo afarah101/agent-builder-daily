@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proof-based general-purpose computing with Magnetar - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
+    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .summary-body p{margin-bottom:16px}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
+    .guide-block.green{border-left-color:var(--accent-green)}
+    .guide-block.amber{border-left-color:#f59e0b}
+    .guide-block.red{border-left-color:#ef4444}
+    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
+    .guide-block.green .guide-label{color:var(--accent-green)}
+    .guide-block.amber .guide-label{color:#f59e0b}
+    .guide-block.red .guide-label{color:#ef4444}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
+    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">Proof-based general-purpose computing with Magnetar</h1>
+  <div class="meta-line">Microsoft Research · 15 Oct 202 · Generated 17 Oct 2026, 10:29</div>
+  <a href="https://www.microsoft.com/en-us/research/blog/proof-based-general-purpose-computing-with-magnetar/" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Detailed Summary</div>
+  </div>
+  <div class="summary-body"><p>Microsoft Research has released Magnetar, a general‑purpose zero‑knowledge proof (ZKP) library that can be integrated into mainstream programming languages. Magnetar enables developers to generate cryptographic proofs that a computation was performed correctly without revealing the underlying data or re‑executing the logic. The library supports standard languages such as C#, Java, and Python, and claims up to a 10× performance improvement over prior ZKP frameworks. Importantly, Magnetar’s construction is quantum‑resistant, leveraging lattice‑based primitives that are believed to withstand attacks from quantum computers.</p><p>For enterprise IT teams, Magnetar offers a new tool for securing identity and access management (IAM) workflows. By embedding ZKP verification into single sign‑on (SSO) and credential exchange processes, organizations can reduce reliance on manual audit logs and provide cryptographic proof that authentication steps were performed correctly. This is particularly relevant for cloud‑based IAM platforms like JumpCloud and Okta, where proof‑based authentication can strengthen login integrity and mitigate credential‑stealing attacks. The library’s compatibility with existing language ecosystems means that integration can be achieved without a full rewrite of legacy systems.</p><p>Vendors involved include Microsoft Research (developer of Magnetar) and major IAM providers such as JumpCloud, Okta, and Azure AD. The broader industry implication is a shift toward “proof‑based” security models, where trust is established through cryptographic evidence rather than opaque logs. This aligns with emerging regulatory demands for verifiable compliance, such as the EU’s Digital Services Act and the UK’s Data Protection Act. As quantum threats become more imminent, adopting quantum‑resistant ZKPs could become a differentiator for enterprises that need to future‑proof their authentication and audit mechanisms.</p><p>The release also signals a maturation of ZKP technology, moving from niche academic prototypes to production‑ready libraries. Enterprises that can quickly evaluate and adopt Magnetar will gain early access to a technology that can reduce audit overhead, improve data privacy, and provide a quantum‑safe foundation for next‑generation identity verification.</p></div>
+  <div class="divider"></div>
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">IT Engineer Application Guide</div>
+  </div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">• Inventory current SSO and credential‑exchange flows in JumpCloud, Okta, and Azure AD.  
+   • Identify points where manual audit logs are the sole source of trust (e.g., MFA token issuance, password reset).  
+   • Assess existing cryptographic libraries and their compatibility with ZKP primitives (e.g., pairing‑based vs lattice‑based).  
+   • Review compliance requirements (UK GDPR, SOC 2) that mandate verifiable evidence of authentication events.</div></div>
+<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">• Quantify audit overhead: current manual log review time per month vs projected time after ZKP integration.  
+   • Estimate cost savings from reduced audit staffing and lower risk of credential‑stealing incidents.  
+   • Benchmark Magnetar’s performance (latency, CPU usage) against current authentication latency.  
+   • Present a risk‑reduction metric: percentage decrease in potential data exposure incidents due to cryptographic proof.</div></div>
+<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">• Magnetar (Microsoft Research) – ZKP SDK for C#, Java, Python.  
+   • JumpCloud – IAM platform with API hooks for custom authentication logic.  
+   • Okta – SSO platform with support for custom extensions and webhooks.  
+   • Azure AD – Conditional Access policies that can incorporate custom proof verification.  
+   • OpenZKP – open‑source ZKP framework for comparison and potential hybrid use.</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">• Technical: Integration complexity may introduce latency; ensure that ZKP verification does not exceed acceptable response times.  
+   • Compliance: Verify that ZKP proofs meet UK GDPR requirements for data minimization and lawful processing.  
+   • Operational: Staff training on ZKP concepts and debugging of proof generation failures.  
+   • Vendor lock‑in: Magnetar is currently a Microsoft Research project; assess long‑term support and community activity.</div></div>
+<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">• Deploy Magnetar in a pilot authentication flow for a non‑critical application (e.g., internal dashboard).  
+   • Configure a proof‑based MFA challenge that returns a ZKP to the IAM platform.  
+   • Measure latency impact and document proof logs for audit purposes within 30 days.</div></div>
+<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">• Roll out ZKP‑based verification across all critical SSO flows over 6–12 months.  
+   • Integrate proof verification into Okta’s policy engine and JumpCloud’s API.  
+   • Develop a governance framework that records ZKP proofs as part of compliance evidence.  
+   • Monitor quantum‑resistance metrics and plan for future upgrades as lattice‑based algorithms evolve.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 17 Oct 2026, 10:29</div>
+</div>
+</body>
+</html>
