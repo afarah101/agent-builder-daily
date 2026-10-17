@@ -23,6 +23,7 @@ client = Client()
 
 from langfuse import Langfuse, observe, propagate_attributes
 langfuse = Langfuse()
+import llm_cache
 
 OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
@@ -54,8 +55,42 @@ SCRAPE_SOURCES = [
     {"url": "https://www.deloitte.com/us/en/insights.html", "name": "Deloitte", "tier": "consulting", "article_selector": "a[href*='/insights/']", "base_url": "https://www.deloitte.com"},
 ]
 
+def _parse_classify_output(text):
+    if "```" in text:
+        text = text.split("```")[1]
+        if text.startswith("json"):
+            text = text[4:]
+    start = text.find("{")
+    end = text.rfind("}") + 1
+    if start >= 0 and end > start:
+        text = text[start:end]
+    g = json.loads(text.strip())
+    int(g.get("relevance_score", 5))
+    return g
+
+def _passes(validate, text):
+    try:
+        validate(text)
+        return True
+    except Exception:
+        return False
+
 @observe(as_type="generation", name="groq-complete")
-def groq_complete(messages, max_tokens=300):
+def groq_complete(messages, max_tokens=300, validate=None, call_site=""):
+    # validate: parser that raises on bad output. Only calls with a validator use the cache,
+    # and a response is saved only if it passes.
+    model = "openai/gpt-oss-20b"
+    cache_key = None
+    if validate is not None:
+        cache_key = llm_cache.key(model, messages, None, max_tokens, "low", "hidden")
+        cached = llm_cache.get(cache_key)
+        if cached is not None:
+            langfuse.update_current_generation(
+                model=model, input=messages, output=cached,
+                usage_details={"input": 0, "output": 0, "total": 0},
+                metadata={"cache_hit": True, "call_site": call_site},
+            )
+            return cached
     keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
     keys = [k for k in keys if k]
     last_error = None
@@ -83,14 +118,17 @@ def groq_complete(messages, max_tokens=300):
                         "output": usage.completion_tokens,
                         "total": usage.total_tokens,
                     },
-                    metadata={"groq_key": f"key_{i+1}"},
+                    metadata={"groq_key": f"key_{i+1}", "cache_hit": False, "call_site": call_site},
                 )
             else:
                 langfuse.update_current_generation(
                     model="openai/gpt-oss-20b",
                     input=messages,
                     output=result,
+                    metadata={"cache_hit": False, "call_site": call_site},
                 )
+            if cache_key and _passes(validate, result):
+                llm_cache.put(cache_key, result, model, call_site)
             return result
         except Exception as e:
             if "429" in str(e) or "rate" in str(e).lower():
@@ -357,16 +395,9 @@ Source: {source}
 Content: {content}
 """
         try:
-            text = groq_complete([{"role": "user", "content": classify_prompt}], max_tokens=400)
-            if "```" in text:
-                text = text.split("```")[1]
-                if text.startswith("json"):
-                    text = text[4:]
-            start = text.find("{")
-            end = text.rfind("}") + 1
-            if start >= 0 and end > start:
-                text = text[start:end]
-            g = json.loads(text.strip())
+            text = groq_complete([{"role": "user", "content": classify_prompt}], max_tokens=400,
+                                 validate=_parse_classify_output, call_site="news.classify")
+            g = _parse_classify_output(text)
             classified.append({
                 **article,
                 "summary": g.get("summary", ""),
@@ -417,6 +448,10 @@ def save_and_archive(state):
         json.dump(archive, f, indent=2, ensure_ascii=False)
     print("Saved " + str(len(state["classified_news"])) + " news items.")
     generate_daily_hook(state["classified_news"])
+    try:
+        print(f"[CACHE] Saved {llm_cache.save()} entries to {llm_cache.CACHE_FILE}")
+    except Exception as e:
+        print(f"[CACHE] Save failed: {e}")
     return state
 
 def generate_daily_hook(classified_news):
@@ -433,7 +468,7 @@ def generate_daily_hook(classified_news):
         "Return the hook sentence only."
     )
     try:
-        hook = groq_complete([{"role": "user", "content": prompt}], max_tokens=60)
+        hook = groq_complete([{"role": "user", "content": prompt}], max_tokens=60, call_site="news.daily_hook")
         os.makedirs("logs", exist_ok=True)
         with open("logs/daily_hook.txt", "w") as f:
             f.write(hook.strip())

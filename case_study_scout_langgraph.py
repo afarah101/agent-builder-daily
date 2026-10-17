@@ -12,6 +12,7 @@ from groq import Groq
 from dotenv import load_dotenv
 import google.genai as genai_client
 from langfuse import Langfuse, observe, propagate_attributes
+import llm_cache
 load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "")
@@ -93,8 +94,32 @@ UNIVERSITIES = [
     "NYU", "Harvard", "KAIST", "Nanyang", "Zhejiang",
 ]
 
+def _parse_json_output(text):
+    clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    return json.loads(clean)
+
+def _passes(validate, text):
+    try:
+        validate(text)
+        return True
+    except Exception:
+        return False
+
 @observe(as_type="generation", name="groq-complete")
-def groq_complete(messages, max_tokens=500, model=MODEL_SUMMARY):
+def groq_complete(messages, max_tokens=500, model=MODEL_SUMMARY, validate=None, call_site=""):
+    # validate: parser that raises on bad output. Only calls with a validator use the cache,
+    # and a response is saved only if it passes.
+    cache_key = None
+    if validate is not None:
+        cache_key = llm_cache.key(model, messages, None, max_tokens, "low", "hidden")
+        cached = llm_cache.get(cache_key)
+        if cached is not None:
+            langfuse.update_current_generation(
+                model=model, input=messages, output=cached,
+                usage_details={"input": 0, "output": 0, "total": 0},
+                metadata={"cache_hit": True, "model": model, "call_site": call_site},
+            )
+            return cached
     keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
     keys = [k for k in keys if k]
     last_error = None
@@ -130,7 +155,7 @@ def groq_complete(messages, max_tokens=500, model=MODEL_SUMMARY):
                         "output": usage.completion_tokens,
                         "total": usage.total_tokens,
                     },
-                    metadata={"groq_key": f"key_{i+1}", "model": model},
+                    metadata={"groq_key": f"key_{i+1}", "model": model, "cache_hit": False, "call_site": call_site},
                 )
             else:
                 _groq_token_stats["header_miss_count"] += 1
@@ -139,7 +164,10 @@ def groq_complete(messages, max_tokens=500, model=MODEL_SUMMARY):
                     model=model,
                     input=messages,
                     output=result,
+                    metadata={"cache_hit": False, "call_site": call_site},
                 )
+            if cache_key and _passes(validate, result):
+                llm_cache.put(cache_key, result, model, call_site)
             return result
         except Exception as e:
             if "429" in str(e):
@@ -371,12 +399,13 @@ Abstract:
                     [{"role": "user", "content": score_prompt}],
                     max_tokens=400,
                     model=MODEL_SCORING,
+                    validate=_parse_json_output,
+                    call_site="case_study.score_papers",
                 )
                 last_text = text
                 if text is None:
                     continue
-                clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-                g = json.loads(clean)
+                g = _parse_json_output(text)
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] Score JSON parse error on attempt {attempt+1}/3 — retrying...")
@@ -395,11 +424,12 @@ Abstract:
                     [{"role": "user", "content": summary_prompt}],
                     max_tokens=350,
                     model=MODEL_SUMMARY,
+                    validate=_parse_json_output,
+                    call_site="case_study.summary",
                 )
                 if text is None:
                     continue
-                clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-                s = json.loads(clean)
+                s = _parse_json_output(text)
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] Summary JSON parse error on attempt {attempt+1}/3 — retrying...")
@@ -502,6 +532,11 @@ def save_and_archive(state):
                 print(f"[METRICS] Updated article_count: {len(state['scored_papers'])}")
     except Exception as e:
         print(f"[METRICS] Update failed: {e}")
+
+    try:
+        print(f"[CACHE] Saved {llm_cache.save()} entries to {llm_cache.CACHE_FILE}")
+    except Exception as e:
+        print(f"[CACHE] Save failed: {e}")
 
     return state
 
