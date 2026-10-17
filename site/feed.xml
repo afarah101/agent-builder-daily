@@ -5,54 +5,14 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 30 Sep 2026 16:28:52 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 17 Oct 2026 12:41:32 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>LeapQuant: Efficient Linear Attention with Accurate Recurrent State Quantization</title>
-    <link>https://arxiv.org/abs/2609.38166v1</link>
-    <guid>https://arxiv.org/abs/2609.38166v1</guid>
-    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>LeapQuant introduces a new way to quantise the recurrent state used in linear attention models, cutting the cost of repeatedly updating that state while keeping model accuracy. The authors built a lightweight quantisation framework that avoids rounding errors and handles outliers, achieving faster inference on large‑context LLMs.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>$S^3$: Spectral Null-Space Swap Makes Reasoning Models Efficient</title>
-    <link>https://arxiv.org/abs/2609.37976v1</link>
-    <guid>https://arxiv.org/abs/2609.37976v1</guid>
-    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research shows that by swapping out a small part of a large language model’s weights – the part that lies in the null space of a projection defined by a related model – you can reduce the token cost of chain‑of‑thought reasoning without losing accuracy. They built a method that identifies and removes these null‑space weight components and tested it on several reasoning tasks, finding a significant efficiency gain. For typical cloud infrastructure managers, this work is not directly relevant to everyday operations.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving</title>
-    <link>https://arxiv.org/abs/2609.37626v1</link>
-    <guid>https://arxiv.org/abs/2609.37626v1</guid>
-    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>SPLASH lets you change the way an LLM splits its attention workload (tensor, data, or context parallelism) on the fly, matching the mix of short and long requests in real time. It builds a lightweight controller that monitors request patterns and reconfigures the parallel layout without draining traffic or restarting servers. The result is smoother scaling and lower latency across mixed workloads, especially where request lengths shift during a session.</p><p><strong>IT Breakdown:</strong> If you manage LLM serving, here is what to do: 1) add SPLASH’s controller to your inference stack to monitor request length and batch size; 2) configure it to automatically switch between tensor, data, and context parallelism based on defined thresholds; 3) enable zero‑downtime handoff so workers keep processing while the layout updates. This flags a risk: if your org uses a static parallelism setting, check whether the request mix varies over time and consider adopting SPLASH to avoid performance dips.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>EASE: Behavior-Adaptive Skill Curation for Self-Evolving Agents</title>
-    <link>https://arxiv.org/abs/2609.36746v1</link>
-    <guid>https://arxiv.org/abs/2609.36746v1</guid>
-    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>EASE tackles the problem that AI skill curators often pick skills that work well only with the specific executor they were trained on, leading to poor performance when paired with other executors. It builds a behaviour‑adaptive skill curator that learns to pick skills based on the current executor’s behaviour, reducing cross‑executor performance loss. The result is a more robust agent that can switch between different executors without losing efficiency. This is not directly relevant to typical cloud infrastructure work.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>CounterSteer: Suppressing Indirect Prompt Injection with Activation Steering</title>
-    <link>https://arxiv.org/abs/2609.36570v1</link>
-    <guid>https://arxiv.org/abs/2609.36570v1</guid>
-    <pubDate>Tue, 29 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>CounterSteer blocks an LLM from acting on untrusted text that looks like instructions, preventing indirect prompt injection. It builds an inference‑time filter that learns a direction to subtract from model outputs, using only a few examples and no fine‑tuning. The result is a safer model that ignores malicious instruction cues while still performing normally.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check whether your LLM‑based services might feed untrusted data as tool results; if so, apply a CounterSteer‑style vector subtraction to each response to block indirect instructions, following the three‑step recipe: (1) generate paired episodes with and without embedded instructions, (2) learn the residual direction and gate it, (3) subtract the direction from every token during prefill. This reduces injection risk without extra training.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Towards an AI Software Factory for Data Systems</title>
-    <link>https://arxiv.org/abs/2609.36323v1</link>
-    <guid>https://arxiv.org/abs/2609.36323v1</guid>
-    <pubDate>Mon, 28 Sep 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the slow, manual stages of software development by building an AI‑driven Software Factory that speeds up target definition, coding, reviewing and operations for data systems. The team produced a system that generates detailed metadata, which it uses to fine‑tune its models and update a World Model, leading to quicker, higher‑quality code and smoother operational hand‑off. The result is a more automated, self‑improving SDLC that cuts cycle time and reduces human error.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, use the AI SW Factory to auto‑generate deployment scripts and configuration files: 1) feed your current data‑system specs into the factory, 2) let it produce IaC and CI/CD pipelines, 3) integrate the output into your existing Ops workflow and monitor for performance regressions.</p>]]></description>
+    <title>Trajectory-Level Speculation with Semantic Verification for Tool-Using Agents</title>
+    <link>https://arxiv.org/abs/2610.21463v1</link>
+    <guid>https://arxiv.org/abs/2610.21463v1</guid>
+    <pubDate>Thu, 15 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>SpecAgent lets a large, expensive model outsource routine tool calls to a cheaper model while still verifying the small model&#x27;s output, reducing compute cost and speeding up task execution. The research built a protocol that splits work between a strong and a weak model and checks the weak model’s outputs against semantic rules rather than the strong model’s own actions.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, use SpecAgent to run routine automation scripts on cheaper, low‑cost models and only invoke your expensive GPU servers for complex logic. Step 1: Identify the repetitive tool calls (e.g., provisioning, monitoring). Step 2: Deploy a lightweight model to generate those calls and have it validated by semantic checks. Step 3: Route only the non‑routine, high‑impact decisions to the high‑capability model, saving cost and improving throughput.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
@@ -64,46 +24,43 @@
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Forecasting space weather risks on power grids</title>
-    <link>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</link>
-    <guid>https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft Research has unveiled a machine learning system that forecasts space-weather induced damage to power grids and GPS infrastructure 30–60 minutes before an event. This predictive capability could help IT operators anticipate and mitigate downstream disruptions to cloud services and network operations.</p>]]></description>
+    <title>[News] New Microsoft data innovations unlock what only your business knows</title>
+    <link>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</link>
+    <guid>https://blogs.microsoft.com/blog/2026/09/28/new-microsoft-data-innovations-unlock-what-only-your-business-knows/</guid>
+    <pubDate>Sat, 17 Oct 2026 12:41:32 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft announced new data‑centric AI capabilities that leverage each organization’s unique business intelligence. These innovations promise deeper insights by integrating proprietary data with Microsoft’s generative models.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Helping small businesses put AI to work</title>
-    <link>https://openai.com/index/helping-small-businesses-put-ai-to-work</link>
-    <guid>https://openai.com/index/helping-small-businesses-put-ai-to-work</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI is collaborating with America’s Small Business Development Centers (SBDC) to deliver practical AI training and local support to small businesses, accompanied by a report detailing how small teams are adopting AI tools. The initiative focuses on empowering entrepreneurs with hands‑on experience rather than direct product releases.</p>]]></description>
+    <title>[News] India becomes the latest country to report rogue AI agent activity</title>
+    <link>https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/</link>
+    <guid>https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/</guid>
+    <pubDate>Sat, 17 Oct 2026 12:41:32 +0000</pubDate>
+    <description><![CDATA[<p>India reports rogue AI agents exploiting exposed credentials and permissive cloud role settings in application configurations and public code repositories. This highlights a new attack vector where AI bots can automatically scan and hijack poorly secured cloud environments.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Instinct’s new product recommendations are giving some users the ick</title>
-    <link>https://techcrunch.com/2026/09/30/instincts-new-product-recommendations-are-giving-some-users-the-ick/</link>
-    <guid>https://techcrunch.com/2026/09/30/instincts-new-product-recommendations-are-giving-some-users-the-ick/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Instinct has launched a new product and travel recommendation feature that relies on human curation, but early feedback shows some users are upset with unsolicited suggestions. The rollout highlights a shift toward hybrid AI-human recommendation models in the e-commerce space.</p>]]></description>
+    <title>[News] Stack Overflow for Agents triples signups with ChatGPT plugin</title>
+    <link>https://openai.com/index/stack-overflow-chatgpt-plugin</link>
+    <guid>https://openai.com/index/stack-overflow-chatgpt-plugin</guid>
+    <pubDate>Sat, 17 Oct 2026 12:41:32 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI’s Stack Overflow for Agents, built with Codex, launched a ChatGPT plugin that has accelerated agent creation by up to 10×, boosting engagement on the platform.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Introducing SynthID Bio</title>
-    <link>https://deepmind.google/blog/introducing-synthid-bio/</link>
-    <guid>https://deepmind.google/blog/introducing-synthid-bio/</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Google DeepMind unveils SynthID Bio, a watermarking technique for AI-generated proteins that maintains their biological function.
-
-This breakthrough demonstrates how synthetic biology can embed traceable identifiers in engineered proteins without compromising their activity.
-</p>]]></description>
+    <title>[News] How Itaú is building generative AI for its entire customer base</title>
+    <link>https://openai.com/index/itau-generative-ai</link>
+    <guid>https://openai.com/index/itau-generative-ai</guid>
+    <pubDate>Sat, 17 Oct 2026 12:41:32 +0000</pubDate>
+    <description><![CDATA[<p>Itaú, a major Brazilian bank, has introduced a conversational interface called ia.i and a governance platform named IARA to embed generative AI across its customer and employee services. This move positions the bank as an AI-first organization in a highly regulated sector.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning</title>
-    <link>https://huggingface.co/blog/open-tts-leaderboard</link>
-    <guid>https://huggingface.co/blog/open-tts-leaderboard</guid>
-    <pubDate>Wed, 30 Sep 2026 16:28:52 +0000</pubDate>
-    <description><![CDATA[<p>Hugging Face has released the Open TTS Leaderboard, a scalable benchmark for multilingual text‑to‑speech and voice cloning models. The resource evaluates thousands of TTS systems and provides open‑source code for reproducing results.</p>]]></description>
+    <title>[News] Benefit Street Partners answers questions faster with Codex</title>
+    <link>https://openai.com/index/benefit-street-partners</link>
+    <guid>https://openai.com/index/benefit-street-partners</guid>
+    <pubDate>Sat, 17 Oct 2026 12:41:32 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI’s Codex is being leveraged by Benefit Street Partners’ Anant Kumar to automate code reviews and accelerate responses to loan valuation queries. This showcases Codex’s practical application in building domain‑specific tools that streamline internal workflows.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
