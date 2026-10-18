@@ -132,6 +132,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Deploying LLMs can hide tampering because current evaluators only check outputs, not the runtime stack. The authors created DIB‑Bench to test this blind spot and found that even the most advanced LLM judges often accept tampered deployments. This means you need to verify the underlying infrastructure, not just the model’s answers.\",\"it_breakdown\":\"If you manage LLM deployments, step 1: record the runtime stack version and configuration before evaluation. Step 2: use a simple integrity check (e.g., checksum or signed image verification) to confirm the stack matches the expected state. Step 3: run your output‑only evaluator on a known-good sample; if scores differ, investigate for hidden tampering.\"}"
   },
+  "4de8e7aef6c238ea5dcddd44cc3fbe2635d2dccaca5b8ca95ebb98153344b204": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792354993.4978082,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"novelty\":15,\"it_relevance\":8,\"value_90_days\":5,\"total_score\":28,\"score_reasoning\":\"The paper discusses a technical issue around skill-policy co‑evolution in self‑improving agents, which is largely theoretical and does not provide direct actionable guidance for infrastructure engineers managing SaaS, cloud or endpoint environments. The novelty score is moderate because the co‑evolution concept is new, but the relevance and immediate value are low, as it does not impact current IT operations, deployment pipelines, or security practices. The total falls below 40, so low_signal is true.\",\"relevance_tag\":\"theoretical_ai\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
+  },
   "4ea87fe4f60cf0ac49d50a57cf1072640935446d906aff6756d3f2b9867f1238": {
    "call_site": "case_study.summary",
    "created_at": 1792320134.9899302,
@@ -312,6 +318,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"NOVELTY\": 20,\"IT_RELEVANCE\": 28,\"VALUE_90_DAYS\": 16,\"total_score\": 64,\"score_reasoning\":\"The benchmark focuses on real‑world delivery tasks that mirror the ambiguity and live‑system constraints IT engineers face, providing insights that could inform tool development and training. It is directly relevant to engineers working with SaaS, cloud, and automation platforms. While the research offers actionable ideas, most applications would require some engineering effort, yielding a moderate 90‑day value.\",\"relevance_tag\":\"RealWorldDelivery\",\"low_signal\":false}"
   },
+  "cea2e029ef28b9a4fa332b60221020e8a704177a4afd17d888651a2a86e22728": {
+   "call_site": "case_study.summary",
+   "created_at": 1792354993.8720722,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"The paper looks at how a self‑learning AI’s decision‑making model (policy) and the tools it can use (skills) improve together. They built a test that shows a problem: once the AI is deployed, its skill set can change without re‑training the policy, making the policy less effective. The result is a warning that current evaluation methods miss this drift and that systems need ways to keep the policy updated with changing skills.\",\"it_breakdown\":\"If you manage AI workloads that use reusable skill modules, check whether your deployment pipeline includes periodic policy retraining or a mechanism to re‑evaluate the policy against the current skill set.\"}"
+  },
   "cea6dbbfce3e9467b86ea9f9859c536b9ecc6ea977ab3cca6cdcf7aa078ec8b7": {
    "call_site": "news.classify",
    "created_at": 1792268834.0520701,
@@ -329,6 +341,12 @@
    "created_at": 1792268628.9538147,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25,\"real_world_impact\": 0,\"ai_maturity\": 0,\"monetisation_potential\": 0,\"total_score\": 12,\"score_reasoning\":\"The paper proposes a novel method for initializing agentic systems using LLM-derived priors, which is an interesting research contribution but offers limited practical guidance for IT engineers managing cloud, SaaS, or endpoint environments. The methodology is abstract and not directly applicable to existing infrastructure tools, so IT relevance and immediate value are minimal.\",\"relevance_tag\":\"novel_llm_priors\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
+  },
+  "dfe8694afcd172c3b79b76f47842ca0fbd293780fd321b651e19e029730a0302": {
+   "call_site": "news.classify",
+   "created_at": 1792355009.9179718,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"Disney has agreed to hire most of Character.AI’s workforce following a stalking‑horse bid, indicating a potential acquisition or integration of AI talent into its operations.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
   },
   "e01d56c94443681d8efaf07397d491db09a4157b3275779ff6ff50b035ce0646": {
    "call_site": "case_study.score_papers",
