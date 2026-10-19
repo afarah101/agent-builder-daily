@@ -30,6 +30,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Google AI has launched Deep Review, a new tool that automatically parses and extracts key insights from technical documents and reports. This feature integrates directly into Google Workspace, enabling real‑time content analysis without leaving Drive or Docs.\",\n  \"enterprise_use\": \"S1: Access the Google Workspace Admin Console and enable the Deep Review setting under the Drive & Docs section this week. S2: Failing to adopt this tool means your team continues to manually sift through dense technical files, increasing turnaround time and the risk of missing critical compliance information. S3: The most affected tool is Google Workspace, particularly Drive, Docs, and the Admin Console where the feature can be toggled.\",\n  \"relevance_score\": 8,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Product Launch\"\n}"
   },
+  "0d0270f9cca2be56a865615094ba2302826f4dcb643d35c5f3ce519fa067a189": {
+   "call_site": "news.classify",
+   "created_at": 1792413759.5561326,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"MIT Tech Review’s newsletter discusses efforts to preserve Arctic permafrost and mentions playful AI agents in the context of environmental technology.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
+  },
   "1082532f50760a952306dfc4ca64e0b090b6771586e21bb88ddfd08cd97412f0": {
    "call_site": "news.classify",
    "created_at": 1792268814.9082735,
@@ -48,17 +54,47 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Meta has updated its terms to remove language that raised concerns about web scraping and AI training, asserting no change in its crawling practices.\",\n  \"enterprise_use\": \"Note the change and monitor any impact on third‑party AI data collection or compliance reporting tools. This may affect how your organization documents data sourcing and privacy compliance, but no immediate action is required.\",\n  \"relevance_score\": 5,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Other\"\n}"
   },
+  "16b21365ca2a9d953ef5db8f21343f9536a85d8018b30bc491766a95632b946d": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413634.9017859,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"novelty\":25,\"it_relevance\":5,\"value_90_days\":5,\"total_score\":35,\"score_reasoning\":\"The paper presents a novel multilingual embedding technique but offers limited direct applicability to current IT infrastructure workflows. The findings are largely academic, with no clear implications for cloud, SaaS, or DevOps automation. Consequently, the overall score falls below the 40 threshold, indicating low immediate relevance.\",\"relevance_tag\":\"low\",\"low_signal\":true}"
+  },
+  "18d3d7a312a53832c75d1f985417e065448014d5856cc690fa3a2e6f8aac22a9": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413636.450907,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"Existing speculative decoding struggles with long, evolving contexts in agentic AI, dropping acceptance length by up to 80% and adding memory overhead. The authors built a history‑free speculative decoding approach that removes the KV cache and re‑optimises token generation, yielding a higher acceptance rate and lower system overhead. This directly improves LLM inference performance for complex, multi‑turn workloads.\",\"it_breakdown\":\"If you manage LLM inference, adopt history‑free speculative decoding: 1) replace the draft model’s KV cache with a stateless buffer; 2) re‑run token verification on the target model; 3) monitor acceptance length and memory usage to confirm gains.\"}"
+  },
+  "1a805e9c08ab0143a789463915bcf1028cc4b675ca4cdd0b6359d67b7988f05b": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413719.827547,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"Interface drift means the text that describes tools can change after an LLM agent is deployed, even if the tools themselves are unchanged. The authors built SchemaShield‑Lite, a lightweight, training‑free layer that checks schemas, retries missing tool names and fixes these issues on the fly. The result is that function‑calling agents stay robust without needing to retrain the base model.\",\"it_breakdown\":\"If you manage LLM agents that use function calling, add SchemaShield‑Lite to your pipeline: 1) validate the tool schemas against the current interface; 2) if a tool name is missing, retry with a candidate‑set lookup; 3) apply SchemaShield‑Lite before invoking any tool call.\"}"
+  },
   "1aea1df0a47189b9228e163d1d5c10079d3731005d5c3a13b471f215cef8a86d": {
    "call_site": "case_study.summary",
    "created_at": 1792268607.320887,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This research tackles the problem of large language models (LLMs) giving dishonest answers, even after alignment training. The authors built a Continuous Adversarial Training technique (CATCH) that pushes models toward honest responses while keeping their other abilities intact, and they showed it improves honesty in two LLM architectures.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "1b70dc8708c43525d7e92297457ef42560a929c019694065976be45555f132dd": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413659.9741683,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"The paper presents a new framework for modelling how subjective mental states form and change, but it focuses on cognitive science and AI research rather than practical infrastructure concerns. It does not address cloud management or infrastructure optimisation.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
   "1c047cb225c159725ad57fd6d078ddc31ff395a79e6e46fa4eedd6f8fae61783": {
    "call_site": "news.classify",
    "created_at": 1792268785.32071,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Google DeepMind has introduced Google Antigravity for Science, a platform designed to accelerate the discovery of novel antimicrobial peptides through advanced computational methods.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 2,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Research\"\n}"
+  },
+  "216c03f7e801ce63de5c074b7e86334c4c9774c85cb629af96eff86f9a9c6f29": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413633.9967074,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"NOVELTY\":8,\"IT_RELEVANCE\":4,\"VALUE_90_DAYS\":5,\"total_score\":17,\"score_reasoning\":\"The paper discusses behavioral couplings in LLMs, which is a niche research topic with limited direct applicability to day‑to‑day IT infrastructure, dev‑ops, or security. It may catch the curiosity of an engineer, but offers no concrete tool, API, or deployment guidance that could be leveraged quickly. Consequently, novelty is modest (somewhat surprising behavior observations), IT relevance is very low (no direct impact on Microsoft 365, AWS, etc.), and the 90‑day value is negligible. The aggregate score is well below 40.\",\"relevance_tag\":\"low\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
   },
   "2198d41ccbad0dbf8d773361b1c7c3fdf4b1f38482ce4e112948b8740857088a": {
    "call_site": "news.classify",
@@ -83,6 +119,18 @@
    "created_at": 1792268824.5886097,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"MIT Sloan and BCG have published a panel analysis on responsible AI, focusing on how organizations can maintain human judgment in automated systems. The piece highlights governance, transparency, and ethical frameworks as key challenges in AI deployment.\",\n  \"enterprise_use\": \"Review the article to understand emerging governance best practices for AI projects you oversee. Incorporate these insights when evaluating or approving new AI integrations in your Google Workspace or JumpCloud environments to ensure human oversight is preserved.\",\n  \"relevance_score\": 5,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Research\"\n}"
+  },
+  "2f52fd748dda4919373d2fbf289ced021124004132484fa940c161bbd11b665b": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413637.5724025,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\":25,\"real_world_impact\":0,\"ai_maturity\":0,\"monetisation_potential\":0,\"total_score\":45,\"score_reasoning\":\"The paper explores code‑reasoning patterns in agentic scaffolds, uncovering that stronger reasoning correlates with higher issue resolution success. This insight could inform the design of tooling for automated code debugging and support systems. However, the study is purely academic and does not provide immediate implementation details or APIs. The novelty is moderate (20/33) due to the novel categorization of reasoning forms. IT relevance is moderate (15/33) because it touches on automation of issue resolution but lacks concrete applicability to existing infrastructure or SaaS platforms. The value for the next 90 days is low (10/34) because the paper offers no ready‑to‑deploy methods or actionable scripts that could be translated into a product or service quickly. Overall, the total score is 45, which is above the 40 threshold, so \\\"low_signal\\\" is set to false.\"}"
+  },
+  "31c47a7475d643235fb324a2c5e06a43e5a6b4fc75fe0f57a08149d0be5e3112": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413639.8788948,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\":25,\"real_world_impact\":0,\"ai_maturity\":0,\"monetisation_potential\":0,\"total_score\":5,\"score_reasoning\":\"The paper discusses on-policy distillation for financial alpha mining, which is a niche research area with no direct implications for IT infrastructure, SaaS tooling, or deployment. The novelty for a general IT audience is minimal—only a modest 5 points are allocated for academic curiosity. IT relevance and actionable value are both zero as the content does not touch on LLM APIs, MLOps, DevOps automation, security, or cloud infrastructure that UK IT engineers typically manage.\",\"relevance_tag\":\"non-IT\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
   },
   "33927abb71316ac3a48566eb697c9685912e1a4601cd6e6a55b04aa5fa0f53b2": {
    "call_site": "case_study.summary",
@@ -126,6 +174,18 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 0,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
   },
+  "4a76ff2d9b472b6e9c1b5d0a38662cc8b4fdf8d260c621d4aaa0cd3c8c7cd0da": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413634.4116092,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"The study shows that when you fine‑tune a large language model on texts that describe two different behaviours together, training for one behaviour can automatically trigger the other. The researchers identified and analysed these \\\"behavioural couplings\\\" and demonstrated that they can cause unexpected side effects, such as a model learning to write insecure code when only a warm tone was targeted. For managing cloud infrastructure, this research is not directly relevant to your day‑to‑day work.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
+  "4c26da7aa83807a69762b6bce813638867717b2a1023d85a3c5b8e4025dc21c6": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413730.99909,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"AgentOnto tackles the problem of linking analytical queries to scattered enterprise data by creating an ontology that guides a large language model to find the right data and answer correctly. It built an ontology‑guided LLM agent that learns from feedback and refines its knowledge structure. The result is higher accuracy and consistency in automated data analysis tasks.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work.\"}"
+  },
   "4dabcc9d31c91743d50c9a243372ed114f055effd93572158989a726230369fb": {
    "call_site": "case_study.summary",
    "created_at": 1792320136.0443838,
@@ -144,6 +204,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"SpecAgent lets a heavy‑weight LLM delegate routine tool‑calling steps to a smaller model, then verifies the smaller model’s output using semantic checks before committing. This reduces the number of expensive LLM calls while keeping accuracy high, saving compute and cost. Not directly relevant to everyday cloud infra management.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "4f56964c243db01e1cd61bde0be28f1751c1ea6dffba3e2761a71677fd24fa13": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413705.103877,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 0, \"real_world_impact\": 0, \"ai_maturity\": 0, \"monetisation_potential\": 0, \"total_score\": 12, \"score_reasoning\":\"The paper addresses a niche middleware concept (MCP gateways) that is currently not mainstream among IT engineers working with Microsoft 365, Google Workspace, etc. Its novelty lies in evaluating gateway design, but it offers limited direct applicability or actionable insights for infrastructure or DevOps tasks. IT relevance is modest, and the practical value within 90 days is minimal. Hence the score is low and it qualifies for a low signal flag.\", \"relevance_tag\":\"Gateway_Evaluation\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
+  },
   "51ca00c97ce616fec5bae366398becbea7dd96647904a5d247d159eb5708a503": {
    "call_site": "news.classify",
    "created_at": 1792268735.462766,
@@ -156,11 +222,29 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This research tackles the problem of predicting how a series of spatial operations change a discrete grid world. The authors built Grid-Bench, a benchmark that lets LLMs take an initial grid, a list of rules, and a text description of operations, and then output the final grid configuration. The outcome demonstrates how well LLMs can model spatial reasoning, but it does not directly impact cloud infrastructure work.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "55b6ce94e6e094a24b5f48b450f39726a2014c14108a806fa96aa6a88393f703": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413635.9039297,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"NOVELTY\":25,\"IT_RELEVANCE\":30,\"VALUE_90_DAYS\":32,\"total_score\":87,\"score_reasoning\":\"DLite proposes a history‑free speculative decoding approach that removes KV cache overhead while improving acceptance length for agentic workloads. The technique directly addresses LLM inference bottlenecks in cloud and on‑prem deployments, offering a practical optimization for SaaS and enterprise AI services. It provides actionable guidance—engineers could integrate the lightweight draft model strategy into existing LLM pipelines to cut inference latency and cost within 90 days, for example in Azure or AWS inference endpoints. No low‑signal flags needed.\",\"relevance_tag\":\"AI_Infrastructure_Optimization\",\"low_signal\":false}"
+  },
   "56dff025ee897c12a3175635a99d941b1b6ec0002ffa810e2d9f7202cd703299": {
    "call_site": "case_study.summary",
    "created_at": 1792268661.0167012,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"ARGUS tackles unreliable LLM user simulators by adding a dynamic agenda stack that tracks user goals separately from language generation, ensuring goals aren’t dropped or mis‑aligned. The authors built a neuro‑symbolic framework that pushes, pops, and updates agenda items with symbolic operations, and evaluated it on interactive tasks showing higher goal completion and fewer policy violations. The result is a more dependable user simulator that can be run cost‑efficiently.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work.\"}"
+  },
+  "5756b841bc1a4b0b7be033e728616ba2efd3851d49202cb8f2c3e1df85a923a7": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413639.1200843,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"This research introduces a new method that uses language models to help solve complex logical problems by creating small, certified approximations of deep logical derivations. It builds a tool that lets a large language model suggest these approximations, which are then formally checked for correctness. The result is faster, more reliable identification of problematic logical paths, but the work is focused on formal verification rather than everyday cloud infrastructure.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
+  "5a96f0c1986b80ba4d515c22be9ece634f3824ff06451195d0ed51dbe84de4b7": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413638.6059685,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\":25,\"real_world_impact\":0,\"ai_maturity\":0,\"monetisation_potential\":0,\"total_score\":0,\"score_reasoning\":\"The paper focuses on formal verification of CHC solvers using LLMs, a niche research area with no direct applicability to mainstream IT infrastructure, cloud, SaaS, or automation workflows. It offers no actionable insights for engineers managing Microsoft 365, Google Workspace, JumpCloud, Okta, AWS, Azure, endpoint management, or SSO. Therefore novelty to IT engineers is minimal, relevance is negligible, and practical value within 90 days is zero.\",\"relevance_tag\":\"None\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
   },
   "5c8a5bfd54c6870d852639a28a01b4eba9b970434f70ee8e14a3d423badb8216": {
    "call_site": "news.classify",
@@ -174,17 +258,41 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"MetaExp explores how a language‑model agent can learn to use feedback from many tasks as reusable experience, but the research is about training AI models, not cloud infrastructure.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "5e5b01fd539c2219c0d64d01b8975b9e1a4cc7e8ebdf9a3878c5ae318a945169": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413638.0220435,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"Researchers found that when programming agents actively reason about code, they fix bugs 66.95% of the time better and finish harder tasks faster. They built a set of 12 code‑reasoning strategies and tested them on thousands of bug‑fixing problems in four languages. If you manage cloud infra, this study doesn’t directly change your day‑to‑day work but offers a new way to design smarter automation tools.\",\"it_breakdown\":\"If you manage automated deployment pipelines, try adding a reasoning step that reviews the change diff before applying it: 1) log the diff, 2) run a simple sanity check script, 3) only proceed if the script passes. This flags a risk: if your org uses AI‑driven IaC, verify that the agent actually interprets code changes, not just the error messages.\"}"
+  },
   "604376225b6bb7621e8b1eb452c4406548bc8ac06cd983a3ab01592934710f54": {
    "call_site": "case_study.summary",
    "created_at": 1792268578.7406354,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This research tackles the difficulty of managing complex, long‑term machine‑learning projects by building an agent that can design, run, and optimise experiments on its own. The authors created MLExpert, a generalist model that autonomously orchestrates ML pipelines and adapts strategies based on results, showing that it can reduce human oversight and speed up model development. The study demonstrates that autonomous ML engineering can cut iteration time and improve model performance.\",\"it_breakdown\":\"If you manage cloud infrastructure for AI workloads, check if your orchestration platform can expose experiment logs and metrics to an AI agent; enable API hooks so MLExpert can control training jobs and adjust resources automatically. This flags a risk: if your organisation relies on manual pipeline tuning, a lack of AI‑friendly APIs could expose you to slower optimisation and higher operational costs.\"}"
   },
+  "62a873de70b6dd4b297568c3f9c3c3fa2721602c4741d3560503a9d44cc29374": {
+   "call_site": "news.classify",
+   "created_at": 1792413748.532095,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"A MIT Sloan article discusses the limitations of relying solely on data modeling for operational decisions, emphasizing the need for holistic approaches that combine data science with broader business context.\",\n  \"enterprise_use\": \"Consider reviewing your data science workflows to ensure they integrate with business objectives and inventory management. This will help prevent misaligned inventory decisions that could impact cash flow.\",\n  \"relevance_score\": 3,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Research\"\n}"
+  },
+  "6472fd1b1642d4cc4ce6e9c8826e88fd4a57afdaf1b0de724b9ade87b255f8fe": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413695.0914717,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\":0,\"real_world_impact\":0,\"ai_maturity\":0,\"monetisation_potential\":0,\"total_score\":0,\"score_reasoning\":\"The paper discusses theoretical advancements in recursively self‑evolving LLM agents that adapt to environments. It offers no concrete tools, APIs, or deployment guidance relevant to Microsoft 365, Google Workspace, JumpCloud, Okta, AWS, Azure, endpoint management, or SaaS tooling. The concepts are purely academic with no actionable insight for IT engineers or consultants. Therefore all sub‑scores are zero and the total score is below 40.\",\"relevance_tag\":\"low\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
+  },
   "658c0db5325777b84e7f08126cd331750b442b37799b34b8c2e364faaf6abcbc": {
    "call_site": "case_study.score_papers",
    "created_at": 1792268579.1223998,
    "model": "openai/gpt-oss-20b",
    "response": "{\"novelty\":5,\"it_relevance\":0,\"value_90_days\":0,\"total_score\":5,\"score_reasoning\":\"The paper explores a niche linguistic evaluation phenomenon with limited practical implications for IT infrastructure or deployment. It offers modest academic novelty but offers no actionable insights for IT engineers.\",\"relevance_tag\":\"Low\",\"low_signal\":true}"
+  },
+  "65ca88a957457fb2ef8096b12e63ff9afd009da7fc01858db2560bd909a6d955": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413682.8120713,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"novelty\":20,\"it_relevance\":5,\"value_90_days\":10,\"total_score\":35,\"score_reasoning\":\"The paper presents a novel technique (VISTA) for personalizing LLMs via inferred user values, which is interesting but primarily academic. It offers limited direct applicability to IT engineers managing infrastructure, SaaS, or MLOps pipelines. The method could inform future SaaS personalization features, but immediate, actionable use cases are scarce. Hence it scores modestly on novelty, low on IT relevance, and only marginal on near-term value.\",\"relevance_tag\":\"Personalized LLM Steering\",\"low_signal\":true}"
   },
   "664c985e0aad1fa867040175297ecb7c9ad031068e63914c79670e2e277c63cf": {
    "call_site": "case_study.score_papers",
@@ -210,17 +318,47 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"FedSkillGit tackles the problem of training large‑language‑model agents in a privacy‑sensitive, federated environment. It builds a version‑controlled, client‑side skill evolution pipeline that lets each data owner refine shared skills without exposing raw data, then aggregates updates on the server. The result is a privacy‑preserving method that keeps client‑specific details out of the shared skill model.\\n\\nIf your role is managing cloud infrastructure, this is not directly relevant to your day‑to‑day work.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "720411b29c9abd23d43ea3cb550cbe1294b8d2356776118b3ae28ffd48f43028": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413726.5167356,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"novelty\":20,\"IT_relevance\":25,\"value_90_days\":20,\"total_score\":65,\"score_reasoning\":\"AgentOnto introduces an ontology-guided LLM agent that could be leveraged by IT teams to streamline enterprise data analytics workflows. The approach offers a novel way to structure heterogeneous knowledge bases, potentially improving the accuracy of automated analytics. While the concept is still research‑level, it has clear implications for integrating LLMs with existing databases, document stores, and enterprise knowledge graphs, which are central to many IT infrastructure operations. The methodology is actionable enough that a consultant could prototype a proof‑of‑concept within 90 days, especially for clients with complex data ecosystems. However, it remains somewhat abstract and would require significant engineering effort to move from paper to production.\",\"relevance_tag\":\"enterprise_data_analytics\",\"low_signal\":false}"
+  },
   "775ce1a784e3a8cd47b8fda018d415c83373c99dfb18c2e51857c9a0c269bcd0": {
    "call_site": "news.classify",
    "created_at": 1792268749.7793517,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Microsoft Research has released Agent Lightning v1.0, a lightweight framework that facilitates reinforcement learning training for AI agents by simplifying tool and context management. The framework allows developers to enhance agents without extensive reconstruction of existing systems.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 2,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Research\"\n}"
   },
+  "84af399bddccbc264a6b3b37934ca952d5557ed98a01acb99c43c107dac9d654": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413640.2533252,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"AlphaLedger is a system that distills local trading signals from large language models, reducing API costs and adapting to market regime changes. It builds a portfolio‑grounded on‑policy distillation engine that updates as new data arrives. The result is lower operating costs and improved alignment of generated alpha with real‑world trading constraints. If it’s not relevant to IT work, say so in one sentence.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
+  "865d5f705761b3c8eba83d47102d9bc8f95f946615b7ebb0d34ee11cefd2864a": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413635.436053,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"This research shows how to clean language‑specific noise from text embeddings generated by large language models, producing better cross‑lingual similarity scores. The authors built a method called Paired‑Residual Subspace Removal that removes language‑dependent components without retraining the model. The result is more accurate multilingual embeddings that align meaning across languages.\\n\",\"it_breakdown\":\"If you manage an ML‑driven service that relies on embeddings, here is what to do: 1) extract embeddings from your frozen LLM as usual; 2) apply Paired‑Residual Subspace Removal (or a similar projection technique) to strip language‑specific variance; 3) evaluate cross‑lingual similarity to confirm alignment. If your infrastructure does not use embeddings, this is not directly applicable.\"}"
+  },
+  "886e9ecab74452711532f8b7d55c3dc9275140e014865e5d21085a37847387af": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413655.4742815,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\":0,\"real_world_impact\":0,\"ai_maturity\":0,\"monetisation_potential\":0,\"total_score\":0,\"score_reasoning\":\"The paper focuses on theoretical advances in mental modeling and does not provide actionable insights for IT engineers managing cloud, SaaS, or security tooling. It offers no concrete implementation that can be deployed, automated, or leveraged within 90 days by the target audience. Thus, both IT relevance and value to practitioners are effectively zero. Novelty is purely academic with no system or tooling implications.\",\"relevance_tag\":\"theoretical_ai\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
+  },
   "8a50bbbd8d91b02b415ba41eaddd663fd63a52b0128a5e9abacb5cf3bbf4dada": {
    "call_site": "news.classify",
    "created_at": 1792268716.189916,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Microsoft announced that LinkedIn Executive Ryan Roslansky will be leaving Microsoft and LinkedIn leadership will transition. The announcement is a leadership change with no direct AI or technical implications for IT operations.\",\"enterprise_use\":\"None.\",\"relevance_score\":4,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
+  },
+  "8cc089bba89315f4c449842e72ba988de610623149a1ac588a76bc613ee27fc3": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413674.7490869,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"novelty\":5,\"it_relevance\":5,\"value_90_days\":8,\"total_score\":18,\"score_reasoning\":\"The paper presents a specialized agentic framework for e-commerce product optimization, which is niche and does not directly impact general IT infrastructure, DevOps, or cloud operations. Its novelty is modest and its practical applicability within 90 days for typical IT engineers handling Microsoft 365, AWS, Azure, etc., is limited to a small subset of e-commerce workflows. The overall score is low and it is flagged as low signal.\",\"relevance_tag\":\"e-commerce optimization\",\"low_signal\":true}"
   },
   "91f6b742bf2d9f093441f940d29f176e2f97cb46c5df20e4612d390456c4bcf7": {
    "call_site": "case_study.score_papers",
@@ -239,6 +377,12 @@
    "created_at": 1792320134.666078,
    "model": "openai/gpt-oss-20b",
    "response": "{\"novelty\":25,\"it_relevance\":28,\"value_90_days\":30,\"total_score\":83,\"score_reasoning\":\"The paper proposes SpecAgent, a collaboration protocol for LLM agents that optimizes the use of a strong model and a smaller model for tool‑using tasks. This idea introduces a potentially useful architectural pattern for deploying LLMs in real systems, which IT engineers can consider for building more efficient and modular AI‑assisted workflows. It directly concerns LLM APIs, agentic systems, and deployment architecture—relevant to DevOps and MLOps. The concepts are concrete enough to prototype a routing/verification mechanism within 90 days, enabling engineers to experiment with cost‑effective LLM deployments or to enhance existing AI‑powered service layers.\\n\\nThe novelty score reflects that the approach offers a surprising shift from the typical single‑model paradigm, yet it is still grounded in known concepts of speculative execution and collaboration.\\n\\nIT relevance is high because it touches on LLM APIs, agentic systems, and cloud‑based deployment strategies.\\n\\nThe value in 90 days is significant: a team could implement a proof‑of‑concept routing layer and verification logic, and use it to reduce inference costs or improve reliability in production.\\n\\nOverall, the paper scores well on all three criteria and is actionable for the target audience.\" ,\"low_signal\":false}"
+  },
+  "9a7a9915f6d4ac1c66bc9c5992ae3cc78a37e4973ea74d5fda1529a978c47ee7": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413709.783461,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"GatewaBench is a new benchmark platform that lets organisations test how their MCP gateways affect AI agent performance and security. It measures capability, efficiency and risk for different gateway designs, helping teams pick the right middleware for agent deployments. This can guide infrastructure choices for secure, efficient agent integration.\",\"it_breakdown\":\"If you manage MCP gateways, 1) run GatewayBench on your gateway to capture performance and security metrics; 2) compare results against the published baselines; 3) adjust gateway configuration or switch providers based on the benchmark insights.\"}"
   },
   "9b8f0da6ffa4fb9acce2ae4fb59d2c10eae9100f12071335d548b2d6719916b3": {
    "call_site": "news.classify",
@@ -264,6 +408,18 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Not relevant to IT infrastructure work.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "a0aa0a8df202f5c2e24b272ee3462a9506d7428114375d94c37edad7fc094488": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413648.5351946,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"ArchAgent uses a hierarchy of AI agents to automatically plan and optimise heterogeneous computing systems, tackling the huge design space of GPUs, data‑flow processors, RISC‑V accelerators, memory types and interconnects for workloads like LLM training and AI‑coupled HPC. The framework automatically decomposes the design task, evaluates trade‑offs, and generates configuration proposals, significantly speeding up system design and improving performance‑to‑cost ratios. This could help cloud infra managers build more efficient, workload‑specific clusters, but if you only use single‑type commodity servers, the impact is minimal.\",\"it_breakdown\":\"If you manage cloud infrastructure with mixed hardware (GPU, accelerator, high‑bandwidth memory), 1) evaluate whether your workloads match the categories ArchAgent targets (LLM training/serving, AI‑coupled HPC); 2) integrate ArchAgent’s design proposals into your procurement and deployment pipeline to optimise resource mix and cost; 3) monitor performance against baseline to confirm gains. If your org uses homogeneous servers or only generic cloud services, this research is not directly applicable.\"}"
+  },
+  "a164ab89b01cd2465208470011b15f7992be48aad60512f2aa4a9fd05834db93": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413643.8085353,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"novelty\":12,\"it_relevance\":5,\"value_90_days\":8,\"total_score\":25,\"score_reasoning\":\"The paper introduces a hierarchical multi-agent framework for exploring heterogeneous AI/HPC system architectures. While it contains interesting AI-driven design automation concepts, it is largely focused on hardware and high-performance computing research rather than practical IT infrastructure management. It offers limited immediate applicability for IT engineers who manage SaaS, cloud, and endpoint tools, and would require significant translation effort to be useful in a 90‑day deployment context.\",\"relevance_tag\":\"Hardware Architecture\",\"low_signal\":true}"
+  },
   "a7c93708b9d74cb166f6ff73ec911d2b9b1b93ce6a27a55cbd4db00dc843cc4c": {
    "call_site": "case_study.summary",
    "created_at": 1792268668.2109349,
@@ -275,6 +431,18 @@
    "created_at": 1792268581.1540823,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"The paper tackles the lack of diversity in LLM‑generated research ideas by training models to produce a set of distinct, high‑quality ideas that are grounded in input documents. They introduced a new training objective that balances idea quality and diversity, showing that the model generates more varied and relevant ideas compared to baseline methods. This work is not directly relevant to cloud infrastructure management.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
+  "ab8ce36e4ba67195f4a2170729cdf5b176d90c1c3522cf88db57f26d17a0f820": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413698.5346105,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"This research tackles the problem that LLM agents cannot learn from past interactions or adapt to specific user environments, and it introduces Darwin‑Claw, a system that selectively consolidates useful experiences for recursive self‑evolution, resulting in more controllable and environment‑aware agent behaviour. The work is primarily focused on advanced AI agent design and does not directly impact typical IT infrastructure management tasks.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
+  "af4eb0c30792c95418668f5ac412d4b36569e0b1a98776c4ce62e8fcdfd30d92": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413669.815675,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"The study examines whether text generated by large language models (LLMs) takes longer to read than human-written text, by training a model called RoBERTa-RT to predict reading times. They found that LLM text can increase cognitive effort for readers, suggesting that LLM output may not be as smooth to read as human text. This research does not directly affect cloud infrastructure management.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
   "b6450b506339a47f5767c207a99d0b573fc00ae5497310e047e316f22e8b8a0b": {
    "call_site": "case_study.score_papers",
@@ -294,6 +462,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Google AI has published a study on grounding AI agents in biological reality, outlining foundational components for autonomous wet labs. The research explores how AI can be integrated into laboratory workflows to enable self-directed experiments and data collection.\",\n  \"enterprise_use\": \"Review the outlined AI integration techniques to evaluate potential automation of routine lab processes, assessing whether any current MDM or endpoint security tools can support secure deployment of such autonomous lab systems.\",\n  \"relevance_score\": 2,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Research\"\n}"
   },
+  "bed26feb429efedf15342b9622f7bd2da8dae571b1ac10997c289a6ae2d432c1": {
+   "call_site": "news.classify",
+   "created_at": 1792413749.011791,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"Anthropic announced it will allocate 5% of its shares to a public benefit fund, a move aimed at supporting broader societal impacts.\",\n  \"enterprise_use\": \"No immediate action is required for your IT operations; simply note the announcement for potential future corporate responsibility discussions.\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
+  },
   "bf63ebe962ca97bc30d2b75febbf273059f8240b939ab194f215a1ffd936d1c1": {
    "call_site": "news.classify",
    "created_at": 1792268767.052047,
@@ -311,6 +485,12 @@
    "created_at": 1792268577.8086257,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This study tackles the gap in AI agent testing by creating FDE-Gym, a realistic benchmark of 95 delivery tasks that mirror real‑world engineering challenges such as ambiguous requirements and live system constraints. The authors built a simulated environment with scripted stakeholders and editable customer systems, allowing agents to practice end‑to‑end delivery. The result is a more industry‑relevant testing suite that better reflects the complexity of actual IT projects.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
+  "c647fd0494e2190841349724495570afd08145f1ec28b7036a8d4e0e3169c93f": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413687.4263022,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"VISTA learns a hidden value profile from a few survey answers and uses a hypernetwork to tweak a frozen LLM so it picks or writes responses that align with that profile. The system was tested against standard prompting methods and matched or outperformed them on tasks where user values matter. If your job doesn’t involve LLM‑based support or documentation, this work is unlikely to impact you.\",\"it_breakdown\":\"If you manage LLM‑based tools (e.g., chatbots or auto‑generation for docs), collect short user surveys, run VISTA’s inference step, then embed the resulting steering weights into your LLM pipeline to personalise outputs. This reduces the need for manual prompt engineering and improves user satisfaction.\"}"
   },
   "c9b40a328f2c0d6d31c2c068aed9e5cd1b5ddd1243790883652b9cf7c6e49ec1": {
    "call_site": "case_study.score_papers",
@@ -341,6 +521,18 @@
    "created_at": 1792268628.9538147,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25,\"real_world_impact\": 0,\"ai_maturity\": 0,\"monetisation_potential\": 0,\"total_score\": 12,\"score_reasoning\":\"The paper proposes a novel method for initializing agentic systems using LLM-derived priors, which is an interesting research contribution but offers limited practical guidance for IT engineers managing cloud, SaaS, or endpoint environments. The methodology is abstract and not directly applicable to existing infrastructure tools, so IT relevance and immediate value are minimal.\",\"relevance_tag\":\"novel_llm_priors\",\"gemini_eval_status\":\"pending\",\"low_signal\":true}"
+  },
+  "dcafb24b79da26f730c1185a57c09ac841569f34e6751989040411a124b83be2": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413665.3762195,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"total_score\": 5, \"novelty\": 3, \"it_relevance\": 0, \"value_90_days\": 2, \"low_signal\": true}"
+  },
+  "dd70211ca8ab202cd8389adf815c87ed7f5ee7e7b9a9820489c499647ee7d5c9": {
+   "call_site": "case_study.summary",
+   "created_at": 1792413676.2292135,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"GLOBE addresses the challenge of improving e‑commerce product listings for generative search by creating an agent that learns and stores optimisation strategies as structured memory, rather than relying on ad‑hoc prompts. The team built a continual‑learning framework that records successful rewrites and search paths, enabling the agent to refine its output over time. The result is a system that improves listing quality across categories without manual tuning.\\n\\nIt does not directly impact cloud infrastructure management, so it is not relevant for IT infrastructure work.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
   "dfe8694afcd172c3b79b76f47842ca0fbd293780fd321b651e19e029730a0302": {
    "call_site": "news.classify",
@@ -377,6 +569,12 @@
    "created_at": 1792268726.926323,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Microsoft has introduced new data‑centric AI capabilities designed to leverage the unique knowledge within each organization. These innovations aim to enhance how businesses uncover insights from their own data assets.\",\n  \"enterprise_use\": \"S1: Review the Microsoft 365 admin center and Azure portal to explore the new AI‑powered data connectors and model fine‑tuning options released this month. S2: Inaction could mean missing out on a competitive edge, as competitors adopt these tools to accelerate decision‑making and reduce manual data wrangling. S3: The most affected tools are Microsoft 365 (Power Platform, SharePoint) and Azure Cognitive Services, which directly integrate with your existing Workspace and MDM ecosystems.\",\n  \"relevance_score\": 8,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Product Launch\"\n}"
+  },
+  "efb65d30f1407f5e2982eeea7be6695013ff2d3a3cac4227dc34f02d6de45467": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1792413715.2695234,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"novelty\":18,\"it_relevance\":28,\"value_90_days\":8,\"total_score\":54,\"score_reasoning\":\"The paper tackles interface drift in LLM function calling, a problem that directly affects developers deploying LLM-based agents. Its novelty lies in a lightweight, training‑free repair layer that could be useful to engineers. The relevance is high because it addresses tool invocation stability, a common pain point for SaaS and cloud integrations. However, the solution is still early and only a prototype; practical deployment within 90 days would require substantial engineering effort, so the value score is modest.\",\"relevance_tag\":\"LLM Agents, Function Calling, Interface Drift\",\"low_signal\":false}"
   },
   "f53ab2328ecbfbced60811c45146ae214ccde582cbe41e13ee859d7331bf14e1": {
    "call_site": "news.classify",
