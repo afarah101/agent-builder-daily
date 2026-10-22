@@ -376,22 +376,24 @@ def score_papers(state):
 
 They are NOT machine learning researchers. They are NOT in healthcare, finance, or academia. If a paper is not directly relevant to IT infrastructure, software engineering, AI deployment, or automation — score it low.
 
-Score on THREE criteria:
+Score on THREE criteria. Use these exact JSON keys:
 
-NOVELTY (0-33): Would an IT engineer forward this to a colleague saying "have you seen this?" Does it reveal something surprising about tools or systems they use?
-Pure academic novelty with no IT angle = 0-5.
-
-IT_RELEVANCE (0-33): Does this directly affect how IT engineers work? Score high for: LLM APIs, agentic systems, MLOps, DevOps automation, security vulnerabilities, cloud infrastructure, endpoint management, SaaS tooling.
+real_world_impact (0-25): Does this directly affect how IT engineers work? Score high for: LLM APIs, agentic systems, MLOps, DevOps automation, security vulnerabilities, cloud infrastructure, endpoint management, SaaS tooling.
 Score 0 for: medical imaging, geological modelling, social science, pure NLP benchmarks with no deployment angle.
 
-VALUE_90_DAYS (0-34): Could an IT engineer or consultant use this to build something, automate something, flag a risk, or propose a service to a client within 90 days?
-"Could theoretically" = 0. Specific and actionable = 30+.
-Be brutal — most papers score 0-10 here.
+ai_maturity (0-25): Is it built, tested and usable now, not theory? Released code, a working system or real deployment scores high. A proposal or position paper scores low.
 
-IMPORTANT: If total score is below 40, set "low_signal": true in the output.
+monetisation_potential (0-25): Could an IT engineer use it, or sell it as a service, within 90 days?
+"Could theoretically" = 0. Specific and actionable = 20+.
+
+Be brutal — most papers score 0-10 on each criterion.
+
+total_score = real_world_impact + ai_maturity + monetisation_potential (0-75).
+
+IMPORTANT: If total_score is below 30, set "low_signal": true in the output.
 
 Return JSON only. No markdown. No preamble.
-{{"recency_score": 25, "real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "total_score": 0, "score_reasoning": "", "relevance_tag": "", "gemini_eval_status": "pending", "low_signal": false}}
+{{"recency_score": 25, "real_world_impact": <0-25>, "ai_maturity": <0-25>, "monetisation_potential": <0-25>, "total_score": <sum, 0-75>, "score_reasoning": "", "relevance_tag": "", "gemini_eval_status": "pending", "low_signal": <true or false>}}
 
 Paper abstract:
 {paper_block}"""
@@ -480,7 +482,7 @@ Abstract:
             s = {"summary": "", "it_breakdown": "", "monetisation": ""}
 
         g.update(s)
-        if g.get("low_signal") and g.get("total_score", 0) < 40:
+        if g.get("low_signal") and g.get("total_score", 0) < 30:
             print(f"[FILTER] Low signal paper dropped: {paper['title'][:60]}")
             continue
         if i < 5 and not score_failed:

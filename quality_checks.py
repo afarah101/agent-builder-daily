@@ -92,7 +92,10 @@ def c5_url_live(item, timeout=10):
         return FLAG, f"network error: {type(e).__name__}"
     if 200 <= r.status_code < 400:
         return PASS, str(r.status_code)
-    return FAIL, f"HTTP {r.status_code}"
+    if r.status_code in (404, 410):
+        return FAIL, f"HTTP {r.status_code}"
+    # 401/403/429/5xx: bot walls and outages, not proof the link is dead.
+    return FLAG, f"HTTP {r.status_code}"
 
 
 _NOT_NAMES = {"AI", "LLM", "LLMs", "AGI", "API", "APIs", "GPU", "GPUs", "CEO", "US", "UK", "EU", "The", "A", "An",
