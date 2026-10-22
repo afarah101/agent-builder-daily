@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import google.genai as genai_client
 from langfuse import Langfuse, observe, propagate_attributes
 import llm_cache
+import quality_checks
 load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "")
@@ -44,6 +45,8 @@ _groq_token_stats = {
 OUTPUT_DIR = "case_studies"
 ARCHIVE_FILE = "case_studies/archive.json"
 MAX_PAPERS = 20
+MAX_PUBLISHED = 5
+MIN_TOTAL = 20
 FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
 ARXIV_NS = "http://www.w3.org/2005/Atom"
 
@@ -97,6 +100,31 @@ UNIVERSITIES = [
 def _parse_json_output(text):
     clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(clean)
+
+def _all_zero(g):
+    return all(g.get(f, 0) == 0 for f in quality_checks.CS_SCORES)
+
+def _clamp_scores(g, title):
+    for f in quality_checks.CS_SCORES:
+        try:
+            v = int(g.get(f, 0) or 0)
+        except (TypeError, ValueError):
+            print(f"[WARN] {title[:60]}: {f}={g.get(f)!r} is not a number, set to 0")
+            v = 0
+        if not 0 <= v <= quality_checks.CS_MAX:
+            print(f"[WARN] {title[:60]}: {f}={v} outside 0-{quality_checks.CS_MAX}, clamped")
+            v = max(0, min(quality_checks.CS_MAX, v))
+        g[f] = v
+
+def _parse_score_output(text):
+    # Cache gate: never cache an all-zero score, so the one retry reaches Groq.
+    g = _parse_json_output(text)
+    if _all_zero(g):
+        raise ValueError("all-zero scores")
+    return g
+
+_quality = {}
+_run = {}
 
 def _passes(validate, text):
     try:
@@ -351,22 +379,24 @@ def score_papers(state):
 
 They are NOT machine learning researchers. They are NOT in healthcare, finance, or academia. If a paper is not directly relevant to IT infrastructure, software engineering, AI deployment, or automation — score it low.
 
-Score on THREE criteria:
+Score on THREE criteria. Use these exact JSON keys:
 
-NOVELTY (0-33): Would an IT engineer forward this to a colleague saying "have you seen this?" Does it reveal something surprising about tools or systems they use?
-Pure academic novelty with no IT angle = 0-5.
-
-IT_RELEVANCE (0-33): Does this directly affect how IT engineers work? Score high for: LLM APIs, agentic systems, MLOps, DevOps automation, security vulnerabilities, cloud infrastructure, endpoint management, SaaS tooling.
+real_world_impact (0-25): Does this directly affect how IT engineers work? Score high for: LLM APIs, agentic systems, MLOps, DevOps automation, security vulnerabilities, cloud infrastructure, endpoint management, SaaS tooling.
 Score 0 for: medical imaging, geological modelling, social science, pure NLP benchmarks with no deployment angle.
 
-VALUE_90_DAYS (0-34): Could an IT engineer or consultant use this to build something, automate something, flag a risk, or propose a service to a client within 90 days?
-"Could theoretically" = 0. Specific and actionable = 30+.
-Be brutal — most papers score 0-10 here.
+ai_maturity (0-25): Is it built, tested and usable now, not theory? Released code, a working system or real deployment scores high. A proposal or position paper scores low.
 
-IMPORTANT: If total score is below 40, set "low_signal": true in the output.
+monetisation_potential (0-25): Could an IT engineer use it, or sell it as a service, within 90 days?
+"Could theoretically" = 0. Specific and actionable = 20+.
+
+Be brutal — most papers score 0-10 on each criterion.
+
+total_score = real_world_impact + ai_maturity + monetisation_potential (0-75).
+
+IMPORTANT: If total_score is below 30, set "low_signal": true in the output.
 
 Return JSON only. No markdown. No preamble.
-{{"recency_score": 25, "real_world_impact": 0, "ai_maturity": 0, "monetisation_potential": 0, "total_score": 0, "score_reasoning": "", "relevance_tag": "", "gemini_eval_status": "pending", "low_signal": false}}
+{{"recency_score": 25, "real_world_impact": <0-25>, "ai_maturity": <0-25>, "monetisation_potential": <0-25>, "total_score": <sum, 0-75>, "score_reasoning": "", "relevance_tag": "", "gemini_eval_status": "pending", "low_signal": <true or false>}}
 
 Paper abstract:
 {paper_block}"""
@@ -393,15 +423,16 @@ Abstract:
         # --- Scoring prompt (uses 8b-instant — high TPD, sufficient for structured numeric output) ---
         g = None
         last_text = ""
+        score_call = lambda: groq_complete(
+            [{"role": "user", "content": score_prompt}],
+            max_tokens=400,
+            model=MODEL_SCORING,
+            validate=_parse_score_output,
+            call_site="case_study.score_papers",
+        )
         for attempt in range(max_retries):
             try:
-                text = groq_complete(
-                    [{"role": "user", "content": score_prompt}],
-                    max_tokens=400,
-                    model=MODEL_SCORING,
-                    validate=_parse_json_output,
-                    call_site="case_study.score_papers",
-                )
+                text = score_call()
                 last_text = text
                 if text is None:
                     continue
@@ -416,9 +447,30 @@ Abstract:
             print(f"[DEBUG] Raw output: {last_text[:200]}")
             continue
 
+        _clamp_scores(g, paper["title"])
+        if _all_zero(g):
+            print(f"[WARN] All scores 0 for: {paper['title'][:60]} — retrying scoring once")
+            try:
+                # Call Groq directly (validate=None skips cache read and write): a cached
+                # response that clamps to all-zero would otherwise come back unchanged.
+                retry = _parse_json_output(groq_complete(
+                    [{"role": "user", "content": score_prompt}],
+                    max_tokens=400,
+                    model=MODEL_SCORING,
+                    call_site="case_study.score_papers.retry",
+                ))
+                _clamp_scores(retry, paper["title"])
+                if not _all_zero(retry):
+                    g = retry
+            except (json.JSONDecodeError, AttributeError) as e:
+                print(f"[DEBUG] Score retry failed: {e}")
+        score_failed = _all_zero(g)
+        if score_failed:
+            print(f"[QUALITY] score_failed (all scores 0 after retry), will not publish: {paper['title'][:60]}")
+
         # --- Summary prompt (uses 70b — quality matters for reader-facing output) ---
-        s = None
-        for attempt in range(max_retries):
+        s = {"summary": "", "it_breakdown": "", "monetisation": ""} if score_failed else None
+        for attempt in range(0 if score_failed else max_retries):
             try:
                 text = groq_complete(
                     [{"role": "user", "content": summary_prompt}],
@@ -440,10 +492,7 @@ Abstract:
             s = {"summary": "", "it_breakdown": "", "monetisation": ""}
 
         g.update(s)
-        if g.get("low_signal") and g.get("total_score", 0) < 40:
-            print(f"[FILTER] Low signal paper dropped: {paper['title'][:60]}")
-            continue
-        if i < 5:
+        if i < 5 and not score_failed:
             eval_result = gemini_evaluate(paper["abstract"], g)
             if eval_result.get("hallucination_detected"):
                 print("[DEBUG] Hallucination detected — flagging paper")
@@ -470,15 +519,30 @@ Abstract:
             "gemini_eval_status": g.get("gemini_eval_status", "pending"),
             "eval_verdict": eval_verdict,
             "eval_flagged": eval_flagged,
+            "low_signal": bool(g.get("low_signal", False)),
+            **({"score_failed": True} if score_failed else {}),
         })
-        print("[DEBUG] Score: " + str(total) + "/100")
+        print("[DEBUG] Score: " + str(total) + "/75")
     scored.sort(key=lambda x: x["total_score"], reverse=True)
     print("[DEBUG] Scored " + str(len(scored)) + " papers")
     return {"raw_papers": state["raw_papers"], "scored_papers": scored, "output_file": state["output_file"]}
 
+def rank_for_publish(items):
+    """Highest total first; drop totals below MIN_TOTAL; keep the top MAX_PUBLISHED."""
+    ranked = sorted(items, key=lambda x: x.get("total_score", 0), reverse=True)
+    eligible = [x for x in ranked if x.get("total_score", 0) >= MIN_TOTAL]
+    return eligible[:MAX_PUBLISHED], len(ranked) - len(eligible), max(0, len(eligible) - MAX_PUBLISHED)
+
 @observe(name="save-and-archive")
 def save_and_archive(state):
     print("[DEBUG] Saving...")
+    kept, held, results = quality_checks.gate(state["scored_papers"])
+    _quality.clear(); _quality.update(quality_checks.summarize(results))
+    print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
+    published, below_min, beyond_top = rank_for_publish(kept)
+    print(f"[RANK] Publishing {len(published)}; cut {below_min} below {MIN_TOTAL}/75, {beyond_top} beyond top {MAX_PUBLISHED}")
+    state = {**state, "scored_papers": published}
+    _run["written"] = len(published)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
@@ -565,10 +629,11 @@ def run_case_study_scout():
             {"raw_papers": [], "scored_papers": [], "output_file": OUTPUT_DIR + "/" + today + ".json"},
             config={"configurable": {"thread_id": "cs-" + today}},
         )
-        scored = result.get("scored_papers", [])
         langfuse.update_current_span(
-            output={"papers_saved": len(scored), "date": today},
+            output={"papers_saved": _run.get("written", 0), "date": today},
         )
+        if _quality:
+            quality_checks.send_scores(langfuse, _quality)
     print("[DEBUG] Complete")
     langfuse.flush()
 

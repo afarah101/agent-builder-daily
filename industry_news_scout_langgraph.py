@@ -24,6 +24,10 @@ client = Client()
 from langfuse import Langfuse, observe, propagate_attributes
 langfuse = Langfuse()
 import llm_cache
+import quality_checks
+
+_quality = {}
+_run = {}
 
 OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
@@ -355,7 +359,7 @@ that flag anomalous login patterns in real time. This gives IT
 engineers an automated first line of defence against credential
 stuffing without manual rule-writing."
 
-enterprise_use: How Ahmed specifically can use or act on this.
+enterprise_use: How the reader specifically can use or act on this.
 HIGH signal (score 7+): 3 sentences.
   S1: The specific action -- "Go to [tool] and check [setting] this week"
   S2: What risk or opportunity inaction creates
@@ -409,20 +413,25 @@ Content: {content}
             print("[DEBUG] Relevance: " + str(g.get("relevance_score")) + "/10")
         except Exception as e:
             print("[DEBUG] Error: " + str(e))
-            classified.append({
-                **article,
-                "summary": article["summary_raw"][:200],
-                "enterprise_use": "",
-                "relevance_score": 5,
-                "relevance_signal": "medium",
-                "category": "Other",
-            })
+            print("[QUALITY] classify_failed, will not publish: " + article["title"][:60])
+            classified.append({**article, "classify_failed": True, "relevance_score": 0})
     classified.sort(key=lambda x: x["relevance_score"], reverse=True)
     print("[DEBUG] Classified " + str(len(classified)))
     return {"raw_articles": state["raw_articles"], "classified_news": classified, "output_file": state["output_file"]}
 
 def save_and_archive(state):
     print("[DEBUG] Saving...")
+    failed = [x for x in state["classified_news"] if x.get("classify_failed")]
+    kept, held, results = quality_checks.gate([x for x in state["classified_news"] if not x.get("classify_failed")])
+    summary = quality_checks.summarize(results)
+    if failed:  # count classify failures like score_failed: a failed check in the quality report
+        summary["total"] += len(failed)
+        summary["pass_rate"] = summary["passed"] / summary["total"]
+        summary["fails"]["classify_failed"] = [f"{x['title'][:50]}: classify call failed" for x in failed]
+    _quality.clear(); _quality.update(summary)
+    print(f"[QUALITY] {len(kept)} kept, {len(held)} held back, {len(failed)} classify_failed")
+    state = {**state, "classified_news": kept}
+    _run["written"] = len(kept)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
@@ -501,10 +510,11 @@ def run_industry_news_scout():
             {"raw_articles": [], "classified_news": [], "output_file": OUTPUT_DIR + "/news_" + today + ".json"},
             config={"configurable": {"thread_id": "news-" + today}},
         )
-        classified = result.get("classified_news", [])
         langfuse.update_current_span(
-            output={"items_saved": len(classified), "date": today},
+            output={"items_saved": _run.get("written", 0), "date": today},
         )
+        if _quality:
+            quality_checks.send_scores(langfuse, _quality)
     print("[DEBUG] Complete")
     langfuse.flush()
     return result
