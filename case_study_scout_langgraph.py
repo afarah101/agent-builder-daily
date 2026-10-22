@@ -45,6 +45,8 @@ _groq_token_stats = {
 OUTPUT_DIR = "case_studies"
 ARCHIVE_FILE = "case_studies/archive.json"
 MAX_PAPERS = 20
+MAX_PUBLISHED = 5
+MIN_TOTAL = 20
 FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
 ARXIV_NS = "http://www.w3.org/2005/Atom"
 
@@ -482,9 +484,6 @@ Abstract:
             s = {"summary": "", "it_breakdown": "", "monetisation": ""}
 
         g.update(s)
-        if g.get("low_signal") and g.get("total_score", 0) < 30:
-            print(f"[FILTER] Low signal paper dropped: {paper['title'][:60]}")
-            continue
         if i < 5 and not score_failed:
             eval_result = gemini_evaluate(paper["abstract"], g)
             if eval_result.get("hallucination_detected"):
@@ -512,12 +511,19 @@ Abstract:
             "gemini_eval_status": g.get("gemini_eval_status", "pending"),
             "eval_verdict": eval_verdict,
             "eval_flagged": eval_flagged,
+            "low_signal": bool(g.get("low_signal", False)),
             **({"score_failed": True} if score_failed else {}),
         })
-        print("[DEBUG] Score: " + str(total) + "/100")
+        print("[DEBUG] Score: " + str(total) + "/75")
     scored.sort(key=lambda x: x["total_score"], reverse=True)
     print("[DEBUG] Scored " + str(len(scored)) + " papers")
     return {"raw_papers": state["raw_papers"], "scored_papers": scored, "output_file": state["output_file"]}
+
+def rank_for_publish(items):
+    """Highest total first; drop totals below MIN_TOTAL; keep the top MAX_PUBLISHED."""
+    ranked = sorted(items, key=lambda x: x.get("total_score", 0), reverse=True)
+    eligible = [x for x in ranked if x.get("total_score", 0) >= MIN_TOTAL]
+    return eligible[:MAX_PUBLISHED], len(ranked) - len(eligible), max(0, len(eligible) - MAX_PUBLISHED)
 
 @observe(name="save-and-archive")
 def save_and_archive(state):
@@ -525,7 +531,9 @@ def save_and_archive(state):
     kept, held, results = quality_checks.gate(state["scored_papers"])
     _quality.update(quality_checks.summarize(results))
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
-    state = {**state, "scored_papers": kept}
+    published, below_min, beyond_top = rank_for_publish(kept)
+    print(f"[RANK] Publishing {len(published)}; cut {below_min} below {MIN_TOTAL}/75, {beyond_top} beyond top {MAX_PUBLISHED}")
+    state = {**state, "scored_papers": published}
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
