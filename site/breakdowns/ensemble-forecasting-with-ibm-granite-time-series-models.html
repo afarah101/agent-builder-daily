@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ensemble forecasting with IBM Granite time-series models - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
+    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .summary-body p{margin-bottom:16px}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
+    .guide-block.green{border-left-color:var(--accent-green)}
+    .guide-block.amber{border-left-color:#f59e0b}
+    .guide-block.red{border-left-color:#ef4444}
+    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
+    .guide-block.green .guide-label{color:var(--accent-green)}
+    .guide-block.amber .guide-label{color:#f59e0b}
+    .guide-block.red .guide-label{color:#ef4444}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
+    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">Ensemble forecasting with IBM Granite time-series models</h1>
+  <div class="meta-line">Hugging Face · 22 Oct 202 · Generated 22 Oct 2026, 11:32</div>
+  <a href="https://huggingface.co/blog/ibm-research/granite-timeseries-ensemble-r1" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Detailed Summary</div>
+  </div>
+  <div class="summary-body"><p>IBM has released Granite, a time‑series forecasting model now available on Hugging Face. Granite leverages advanced ensemble techniques, combining multiple forecasting algorithms to improve predictive accuracy over single‑model approaches. The model is exposed through a standard Hugging Face API, enabling rapid integration into existing data pipelines without the need for custom model training. For enterprise IT teams, Granite presents an opportunity to replace or augment legacy forecasting solutions such as Prophet, ARIMA, or proprietary vendor tools. By reducing the need for manual feature engineering and iterative model tuning, Granite can shorten data‑prep cycles and lower the skill barrier for data scientists and analysts. The availability of a pre‑trained, continuously updated model also mitigates the operational overhead of maintaining model drift, a common pain point in predictive analytics workloads. IBM’s involvement brings enterprise‑grade support, security certifications, and alignment with its broader AI portfolio, including Watson Studio and IBM Cloud Pak for Data. The model’s presence on Hugging Face expands its reach to open‑source communities, encouraging cross‑vendor experimentation and fostering a more competitive ecosystem for time‑series analytics. Industry implications include a shift toward API‑driven forecasting services, a reduction in the cost of ownership for predictive analytics, and a potential acceleration of AI adoption in sectors that rely heavily on accurate demand, capacity, and anomaly forecasting—such as supply chain, IT operations, and security event monitoring. Enterprises that adopt Granite can expect measurable gains in alerting precision for MDM and endpoint security events, as the model’s ensemble approach better captures subtle patterns in event streams. The broader trend is a move from bespoke, in‑house forecasting models to reusable, cloud‑native services that can be evaluated and deployed at scale, lowering the barrier to entry for advanced analytics.</p></div>
+  <div class="divider"></div>
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">IT Engineer Application Guide</div>
+  </div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory current forecasting tools (Prophet, ARIMA, custom R/Python scripts, vendor SaaS).
+   - Measure baseline accuracy metrics: MAE, RMSE, MAPE on recent 12‑month data.
+   - Assess data‑prep effort: time spent on cleaning, feature engineering, and model retraining.
+   - Identify integration points: data ingestion pipelines, alerting systems, MDM/endpoint security event streams.
+   - Verify compliance posture: data residency, encryption, audit trails for forecast data.</div></div>
+<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit analysis: compare current forecasting spend (licensing, dev hours) against expected savings from Granite (reduced manual prep, lower model maintenance).
+   - Use benchmark results: if Granite reduces MAE by 15% and MAPE by 10% on a pilot dataset, quantify impact on alert precision and incident response time.
+   - Highlight risk mitigation: fewer model drift incidents, reduced data‑prep errors.
+   - Present ROI timeline: 3‑month payback if forecast accuracy improves alerting precision, leading to fewer false positives and lower incident cost.</div></div>
+<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- IBM Granite (Hugging Face Hub) – API access, pre‑trained weights.
+   - Hugging Face Inference Endpoints – scalable hosting.
+   - IBM Cloud Pak for Data – data governance, model deployment.
+   - Dataiku or Alteryx – for data prep and pipeline orchestration.
+   - Splunk or Elastic Stack – for ingesting security event data and feeding forecasts into alerting.
+   - Terraform or Ansible – for IaC deployment of inference endpoints.</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: API latency, version compatibility, model drift if data distribution changes.
+   - Compliance: UK GDPR – ensure data residency, obtain data subject consent if using personal data in forecasts.
+   - Operational: Dependency on external API provider, potential vendor lock‑in, need for monitoring model performance in production.
+   - Security: Secure API keys, encryption at rest and in transit, audit logging.</div></div>
+<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy Granite on a single Hugging Face inference endpoint.
+   - Run a 30‑day pilot against a high‑volume MDM event stream.
+   - Compare forecast accuracy to current baseline and adjust alert thresholds accordingly.
+   - Document results and present to stakeholders within 30 days.</div></div>
+<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Integrate Granite into the enterprise data platform, orchestrated via Airflow or Kubeflow.
+   - Expand to other time‑series domains: capacity planning, demand forecasting, anomaly detection in endpoint logs.
+   - Implement continuous monitoring and retraining pipelines to guard against drift.
+   - Evaluate hybrid models combining Granite with internal models for domain‑specific nuances.
+   - Align with AI strategy: embed Granite into IBM Cloud Pak for Data, leverage Watson Studio for model governance and explainability.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Oct 2026, 11:32</div>
+</div>
+</body>
+</html>
