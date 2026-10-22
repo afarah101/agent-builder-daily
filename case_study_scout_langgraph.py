@@ -124,6 +124,7 @@ def _parse_score_output(text):
     return g
 
 _quality = {}
+_run = {}
 
 def _passes(validate, text):
     try:
@@ -450,7 +451,14 @@ Abstract:
         if _all_zero(g):
             print(f"[WARN] All scores 0 for: {paper['title'][:60]} — retrying scoring once")
             try:
-                retry = _parse_json_output(score_call())
+                # Call Groq directly (validate=None skips cache read and write): a cached
+                # response that clamps to all-zero would otherwise come back unchanged.
+                retry = _parse_json_output(groq_complete(
+                    [{"role": "user", "content": score_prompt}],
+                    max_tokens=400,
+                    model=MODEL_SCORING,
+                    call_site="case_study.score_papers.retry",
+                ))
                 _clamp_scores(retry, paper["title"])
                 if not _all_zero(retry):
                     g = retry
@@ -529,11 +537,12 @@ def rank_for_publish(items):
 def save_and_archive(state):
     print("[DEBUG] Saving...")
     kept, held, results = quality_checks.gate(state["scored_papers"])
-    _quality.update(quality_checks.summarize(results))
+    _quality.clear(); _quality.update(quality_checks.summarize(results))
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
     published, below_min, beyond_top = rank_for_publish(kept)
     print(f"[RANK] Publishing {len(published)}; cut {below_min} below {MIN_TOTAL}/75, {beyond_top} beyond top {MAX_PUBLISHED}")
     state = {**state, "scored_papers": published}
+    _run["written"] = len(published)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
@@ -620,9 +629,8 @@ def run_case_study_scout():
             {"raw_papers": [], "scored_papers": [], "output_file": OUTPUT_DIR + "/" + today + ".json"},
             config={"configurable": {"thread_id": "cs-" + today}},
         )
-        scored = result.get("scored_papers", [])
         langfuse.update_current_span(
-            output={"papers_saved": len(scored), "date": today},
+            output={"papers_saved": _run.get("written", 0), "date": today},
         )
         if _quality:
             quality_checks.send_scores(langfuse, _quality)

@@ -57,7 +57,7 @@ def tag_pill(tag):
     c = tag_colors.get(tag, "#64748b")
     return f'<span class="tag-pill" style="background:{c}1a;color:{c};border:1px solid {c}33">{tag}</span>'
 
-def score_ring(score, max_score=100):
+def score_ring(score, max_score=75):
     pct = int((score / max_score) * 100)
     color = "#22c55e" if pct >= 70 else "#f59e0b" if pct >= 40 else "#ef4444"
     legend = "AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."

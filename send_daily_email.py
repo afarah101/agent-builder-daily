@@ -45,8 +45,13 @@ def _score(item, key):
 
 
 def load_data():
-    news_day = _load(NEWS_ARCHIVE)[0]
-    cs_day = _load(CS_ARCHIVE)[0]
+    """Returns newest=None when a data file is missing, unreadable or empty (main sends the stale alert)."""
+    try:
+        news_day = _load(NEWS_ARCHIVE)[0]
+        cs_day = _load(CS_ARCHIVE)[0]
+    except (OSError, ValueError, IndexError, KeyError) as e:
+        print(f"[EMAIL] Scout data missing or empty: {e}")
+        return {"news": [], "papers": [], "newest": None}
     news = sorted(news_day.get("news", []), key=lambda n: _score(n, "relevance_score"), reverse=True)
     papers = sorted(cs_day.get("case_studies", []), key=lambda c: _score(c, "total_score"), reverse=True)
     stamps = [datetime.strptime(news_day["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc)]
@@ -154,11 +159,14 @@ def render_text(date, s):
 
 
 def build_stale(data, now):
-    age = now - data["newest"]
     subject = f"Scout data is stale — {now:%a %d %b %Y}"
-    text = (f"Scout data is stale: newest data is from {data['newest']:%Y-%m-%d %H:%M} UTC, "
-            f"{age.total_seconds() / 3600:.0f} hours old (limit {STALE_AFTER.total_seconds() / 3600:.0f}h).\n"
-            f"Check the Scout Daily workflow runs. No digest was sent.\n{SITE_URL}")
+    if data["newest"] is None:
+        reason = "Scout data is stale: a data file is missing or empty."
+    else:
+        age = now - data["newest"]
+        reason = (f"Scout data is stale: newest data is from {data['newest']:%Y-%m-%d %H:%M} UTC, "
+                  f"{age.total_seconds() / 3600:.0f} hours old (limit {STALE_AFTER.total_seconds() / 3600:.0f}h).")
+    text = f"{reason}\nCheck the Scout Daily workflow runs. No digest was sent.\n{SITE_URL}"
     body = _p(_e(text).replace("\n", "<br>"))
     page = f'<!doctype html><html><body bgcolor="{C["bg"]}" style="background:{C["bg"]};padding:24px;">{body}</body></html>'
     return subject, page, text
@@ -184,18 +192,18 @@ def smtp_send(subject, html_body, text_body):
 def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
     args = argparse.ArgumentParser(description=__doc__)
     args.add_argument("--dry-run", action="store_true", help="write email/preview.html, send nothing")
-    args.add_argument("--force", action="store_true", help="ignore the weekday and 11:00 rules")
+    args.add_argument("--force", action="store_true", help="ignore the weekday and 11:00 rules (still once per day)")
     args = args.parse_args(argv)
     now = now or datetime.now(LONDON)
     today = now.date().isoformat()
 
+    if not args.dry_run and os.path.exists(LAST_SENT) and open(LAST_SENT).read().strip() == today:
+        print(f"[EMAIL] Already sent for {today}, skipping.")
+        return "already_sent"
     if not args.force and not args.dry_run:
         if now.weekday() >= 5:
             print(f"[EMAIL] {today} is a weekend in London, not sending.")
             return "weekend"
-        if os.path.exists(LAST_SENT) and open(LAST_SENT).read().strip() == today:
-            print(f"[EMAIL] Already sent for {today}, skipping.")
-            return "already_sent"
         send_at = now.replace(hour=SEND_HOUR, minute=0, second=0, microsecond=0)
         if now < send_at:
             wait = (send_at - now).total_seconds()
@@ -204,7 +212,7 @@ def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
             now = send_at
 
     data = load_data()
-    stale = now - data["newest"] > STALE_AFTER
+    stale = data["newest"] is None or now - data["newest"] > STALE_AFTER
     if stale:
         subject, html_body, text_body = build_stale(data, now)
     else:
