@@ -24,6 +24,9 @@ client = Client()
 from langfuse import Langfuse, observe, propagate_attributes
 langfuse = Langfuse()
 import llm_cache
+import quality_checks
+
+_quality = {}
 
 OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
@@ -423,6 +426,10 @@ Content: {content}
 
 def save_and_archive(state):
     print("[DEBUG] Saving...")
+    kept, held, results = quality_checks.gate(state["classified_news"])
+    _quality.update(quality_checks.summarize(results))
+    print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
+    state = {**state, "classified_news": kept}
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
@@ -505,6 +512,8 @@ def run_industry_news_scout():
         langfuse.update_current_span(
             output={"items_saved": len(classified), "date": today},
         )
+        if _quality:
+            quality_checks.send_scores(langfuse, _quality)
     print("[DEBUG] Complete")
     langfuse.flush()
     return result

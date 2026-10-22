@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import google.genai as genai_client
 from langfuse import Langfuse, observe, propagate_attributes
 import llm_cache
+import quality_checks
 load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "")
@@ -97,6 +98,30 @@ UNIVERSITIES = [
 def _parse_json_output(text):
     clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(clean)
+
+def _all_zero(g):
+    return all(g.get(f, 0) == 0 for f in quality_checks.CS_SCORES)
+
+def _clamp_scores(g, title):
+    for f in quality_checks.CS_SCORES:
+        try:
+            v = int(g.get(f, 0) or 0)
+        except (TypeError, ValueError):
+            print(f"[WARN] {title[:60]}: {f}={g.get(f)!r} is not a number, set to 0")
+            v = 0
+        if not 0 <= v <= quality_checks.CS_MAX:
+            print(f"[WARN] {title[:60]}: {f}={v} outside 0-{quality_checks.CS_MAX}, clamped")
+            v = max(0, min(quality_checks.CS_MAX, v))
+        g[f] = v
+
+def _parse_score_output(text):
+    # Cache gate: never cache an all-zero score, so the one retry reaches Groq.
+    g = _parse_json_output(text)
+    if _all_zero(g):
+        raise ValueError("all-zero scores")
+    return g
+
+_quality = {}
 
 def _passes(validate, text):
     try:
@@ -393,15 +418,16 @@ Abstract:
         # --- Scoring prompt (uses 8b-instant — high TPD, sufficient for structured numeric output) ---
         g = None
         last_text = ""
+        score_call = lambda: groq_complete(
+            [{"role": "user", "content": score_prompt}],
+            max_tokens=400,
+            model=MODEL_SCORING,
+            validate=_parse_score_output,
+            call_site="case_study.score_papers",
+        )
         for attempt in range(max_retries):
             try:
-                text = groq_complete(
-                    [{"role": "user", "content": score_prompt}],
-                    max_tokens=400,
-                    model=MODEL_SCORING,
-                    validate=_parse_json_output,
-                    call_site="case_study.score_papers",
-                )
+                text = score_call()
                 last_text = text
                 if text is None:
                     continue
@@ -416,9 +442,23 @@ Abstract:
             print(f"[DEBUG] Raw output: {last_text[:200]}")
             continue
 
+        _clamp_scores(g, paper["title"])
+        if _all_zero(g):
+            print(f"[WARN] All scores 0 for: {paper['title'][:60]} — retrying scoring once")
+            try:
+                retry = _parse_json_output(score_call())
+                _clamp_scores(retry, paper["title"])
+                if not _all_zero(retry):
+                    g = retry
+            except (json.JSONDecodeError, AttributeError) as e:
+                print(f"[DEBUG] Score retry failed: {e}")
+        score_failed = _all_zero(g)
+        if score_failed:
+            print(f"[QUALITY] score_failed (all scores 0 after retry), will not publish: {paper['title'][:60]}")
+
         # --- Summary prompt (uses 70b — quality matters for reader-facing output) ---
-        s = None
-        for attempt in range(max_retries):
+        s = {"summary": "", "it_breakdown": "", "monetisation": ""} if score_failed else None
+        for attempt in range(0 if score_failed else max_retries):
             try:
                 text = groq_complete(
                     [{"role": "user", "content": summary_prompt}],
@@ -443,7 +483,7 @@ Abstract:
         if g.get("low_signal") and g.get("total_score", 0) < 40:
             print(f"[FILTER] Low signal paper dropped: {paper['title'][:60]}")
             continue
-        if i < 5:
+        if i < 5 and not score_failed:
             eval_result = gemini_evaluate(paper["abstract"], g)
             if eval_result.get("hallucination_detected"):
                 print("[DEBUG] Hallucination detected — flagging paper")
@@ -470,6 +510,7 @@ Abstract:
             "gemini_eval_status": g.get("gemini_eval_status", "pending"),
             "eval_verdict": eval_verdict,
             "eval_flagged": eval_flagged,
+            **({"score_failed": True} if score_failed else {}),
         })
         print("[DEBUG] Score: " + str(total) + "/100")
     scored.sort(key=lambda x: x["total_score"], reverse=True)
@@ -479,6 +520,10 @@ Abstract:
 @observe(name="save-and-archive")
 def save_and_archive(state):
     print("[DEBUG] Saving...")
+    kept, held, results = quality_checks.gate(state["scored_papers"])
+    _quality.update(quality_checks.summarize(results))
+    print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
+    state = {**state, "scored_papers": kept}
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output = {
         "timestamp": datetime.now().isoformat(),
@@ -569,6 +614,8 @@ def run_case_study_scout():
         langfuse.update_current_span(
             output={"papers_saved": len(scored), "date": today},
         )
+        if _quality:
+            quality_checks.send_scores(langfuse, _quality)
     print("[DEBUG] Complete")
     langfuse.flush()
 
