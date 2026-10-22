@@ -1,0 +1,41 @@
+name: Scout Daily Email
+
+on:
+  schedule:
+    - cron: '50 10 * * 1-5'
+      timezone: 'Europe/London'
+  workflow_dispatch:
+
+jobs:
+  email:
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: scout-commit
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Send daily email
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+          PYTHONIOENCODING: utf-8
+        run: python send_daily_email.py
+
+      - name: Commit last_sent
+        run: |
+          git config user.email "ahmed94farah@gmail.com"
+          git config user.name "afarah101"
+          git add email/last_sent.txt 2>/dev/null || exit 0
+          git diff --cached --quiet && exit 0
+          git commit -m "Scout Daily email sent - $(cat email/last_sent.txt)"
+          git pull --rebase origin main
+          git push
