@@ -53,15 +53,16 @@ def test_renders_all_sections_from_real_repo_data():
     assert data["news"] and data["papers"], "real repo data missing"
     subject, html_body, text_body, s = de.build_email(data, data["newest"] + timedelta(hours=1))
     assert subject.startswith("Scout Daily — ") and data["news"][0]["title"] in subject
-    for heading in ("Scout Daily", "Good morning, Ahmed", "In today&#x27;s Scout", "The Signal", "Research Radar", "Quick Hits",
+    for heading in ("Scout Daily", "Good morning", "In today&#x27;s Scout", "The Signal", "Research Radar", "Quick Hits",
                     de.SITE_URL, "Data as of"):
         assert heading in html_body, heading
-    for heading in ("Good morning, Ahmed", "IN TODAY'S SCOUT", "THE SIGNAL", "RESEARCH RADAR", "QUICK HITS"):
+    for heading in ("Good morning", "IN TODAY'S SCOUT", "THE SIGNAL", "RESEARCH RADAR", "QUICK HITS"):
         assert heading in text_body
     assert len(s["bullets"]) == 5 and s["signal"] == data["news"][0]
     assert s["hits"] == data["news"][1:6] and s["radar"] == data["papers"][:3]
     assert len(de.re.findall(r"(?<=[.!?])\s+", s["greeting"])) <= 1  # at most 2 sentences
     assert "/75" in html_body and 'max-width:600px' in html_body
+    assert "Ahmed" not in html_body and "Ahmed" not in text_body and "Ahmed" not in subject
 
 
 def test_saturday_does_not_send(run):

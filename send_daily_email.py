@@ -129,7 +129,7 @@ def render_html(date, s):
 <tr><td bgcolor="{C["surface2"]}" style="background:{C["surface2"]};padding:24px;">
 <div style="font:700 24px {FONT};color:{C["text"]};">Scout Daily</div>
 <div style="font:13px {FONT};color:{C["text2"]};margin-top:4px;">{_e(date)} · {_link(SITE_URL, "agent-builder-daily.vercel.app")}</div></td></tr>
-{_block("Good morning, Ahmed", _p(_e(s["greeting"])))}
+{_block("Good morning", _p(_e(s["greeting"])))}
 {_block("In today's Scout", f"<ul {ul}>{bullets}</ul>")}
 {_block("The Signal", _p(_link(sig.get("url"), sig.get("title")), size=16) + _p(_e(sig.get("summary")), C["text2"], 14)
         + _p("<b>Enterprise use:</b> " + _e(sig.get("enterprise_use")), C["text"], 14)
@@ -142,7 +142,7 @@ def render_html(date, s):
 
 def render_text(date, s):
     sig = s["signal"]
-    lines = [f"SCOUT DAILY — {date}", SITE_URL, "", "Good morning, Ahmed", s["greeting"], "", "IN TODAY'S SCOUT"]
+    lines = [f"SCOUT DAILY — {date}", SITE_URL, "", "Good morning", s["greeting"], "", "IN TODAY'S SCOUT"]
     lines += [f"- {b}" for b in s["bullets"]]
     lines += ["", "THE SIGNAL", sig.get("title", ""), sig.get("summary", ""), f"Enterprise use: {sig.get('enterprise_use', '')}",
               safe_url(sig.get("url")), "", "RESEARCH RADAR"]
