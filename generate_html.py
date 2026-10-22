@@ -60,7 +60,7 @@ def tag_pill(tag):
 def score_ring(score, max_score=75):
     pct = int((score / max_score) * 100)
     color = "#22c55e" if pct >= 70 else "#f59e0b" if pct >= 40 else "#ef4444"
-    legend = "AI SCOUT SCORE: A 0-100 metric for Technical Novelty, Market Maturity, and Business Impact."
+    legend = "AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact."
     return f'<div class="score-ring" style="--pct:{pct};--color:{color}" title="{legend}"><span>{score}</span></div>'
 
 def tier_label(tier):

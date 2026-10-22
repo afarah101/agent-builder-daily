@@ -1,4 +1,5 @@
-"""send_daily_email.py: rendering from real repo data, London send rules, once per day, stale alert. SMTP mocked."""
+"""send_daily_email.py: rendering from a fixed fixture, London send rules, once per day, stale alert. SMTP mocked."""
+import json
 import socket
 import sys
 from datetime import datetime, timedelta, timezone
@@ -15,7 +16,7 @@ LON = de.LONDON
 
 @pytest.fixture(autouse=True)
 def isolate(tmp_path, monkeypatch):
-    monkeypatch.chdir(ROOT)  # real repo data files
+    monkeypatch.chdir(tmp_path)  # never the repo: tests use fixtures, not live data
     monkeypatch.setattr(de, "LAST_SENT", str(tmp_path / "last_sent.txt"))
     monkeypatch.setattr(de, "PREVIEW", str(tmp_path / "preview.html"))
     monkeypatch.setattr(socket.socket, "connect", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("network blocked")))
@@ -30,12 +31,24 @@ class Outbox:
         return "250 OK (mock)"
 
 
-REAL_LOAD = de.load_data
+FIXTURE_DATE = "2026-10-22"
+FIXTURE_NEWS = [{"title": f"News {i}", "summary": f"First sentence {i}. Second sentence. Third sentence.",
+                 "enterprise_use": f"Do thing {i}.", "url": f"https://news.example/{i}", "relevance_score": 10 - i,
+                 "source": "TechCrunch" if i % 2 else "OpenAI", "category": "Agents" if i < 4 else "Security"} for i in range(8)]
+FIXTURE_PAPERS = [{"title": f"Paper {i}", "summary": f"Paper summary {i}.", "url": f"https://arxiv.org/abs/{i}",
+                   "total_score": 60 - 10 * i} for i in range(4)]
+
+
+def write_fixture(root, news=FIXTURE_NEWS, papers=FIXTURE_PAPERS, date=FIXTURE_DATE):
+    """Fixed Scout data on disk in the same layout as the repo, for tests that go through load_data()."""
+    (root / "site").mkdir(exist_ok=True); (root / "case_studies").mkdir(exist_ok=True)
+    (root / "site" / "news_archive.json").write_text(json.dumps([{"date": date, "news": news}]))
+    (root / "case_studies" / "archive.json").write_text(json.dumps([{"date": date, "case_studies": papers}]))
+    (root / "case_studies" / f"{date}.json").write_text(json.dumps({"timestamp": f"{date}T06:10:00"}))
 
 
 def fresh_data(now):
-    real = REAL_LOAD()
-    return {**real, "newest": now.astimezone(timezone.utc) - timedelta(hours=5)}
+    return {"news": FIXTURE_NEWS, "papers": FIXTURE_PAPERS, "newest": now.astimezone(timezone.utc) - timedelta(hours=5), "reason": None}
 
 
 @pytest.fixture
@@ -48,18 +61,21 @@ def run(monkeypatch):
     return _run
 
 
-def test_renders_all_sections_from_real_repo_data():
+def test_renders_all_sections_from_fixture(tmp_path, monkeypatch):
+    write_fixture(tmp_path)
+    monkeypatch.chdir(tmp_path)
     data = de.load_data()
-    assert data["news"] and data["papers"], "real repo data missing"
+    assert [n["title"] for n in data["news"]] == [f"News {i}" for i in range(8)] and len(data["papers"]) == 4
     subject, html_body, text_body, s = de.build_email(data, data["newest"] + timedelta(hours=1))
-    assert subject.startswith("Scout Daily — ") and data["news"][0]["title"] in subject
+    assert subject == "Scout Daily — Thu 22 Oct 2026 — News 0"
     for heading in ("Scout Daily", "Good morning", "In today&#x27;s Scout", "The Signal", "Research Radar", "Quick Hits",
                     de.SITE_URL, "Data as of"):
         assert heading in html_body, heading
     for heading in ("Good morning", "IN TODAY'S SCOUT", "THE SIGNAL", "RESEARCH RADAR", "QUICK HITS"):
         assert heading in text_body
     assert len(s["bullets"]) == 5 and s["signal"] == data["news"][0]
-    assert s["hits"] == data["news"][1:6] and s["radar"] == data["papers"][:3]
+    assert s["hits"] == data["news"][1:6] and [c["title"] for c in s["radar"]] == ["Paper 0", "Paper 1", "Paper 2"]
+    assert s["greeting"] == "First sentence 0. Second sentence."
     assert len(de.re.findall(r"(?<=[.!?])\s+", s["greeting"])) <= 1  # at most 2 sentences
     assert "/75" in html_body and 'max-width:600px' in html_body
     assert "Ahmed" not in html_body and "Ahmed" not in text_body and "Ahmed" not in subject

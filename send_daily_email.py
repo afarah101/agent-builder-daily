@@ -45,21 +45,23 @@ def _score(item, key):
 
 
 def load_data():
-    """Returns newest=None when a data file is missing, unreadable or empty (main sends the stale alert)."""
+    """Read the latest news and case-study day. Any missing, unreadable or malformed data (missing file, bad JSON,
+    empty archive, non-object entry, missing or badly formatted date, corrupt day file) returns newest=None with a
+    reason, and main() sends the stale alert instead of crashing."""
     try:
         news_day = _load(NEWS_ARCHIVE)[0]
         cs_day = _load(CS_ARCHIVE)[0]
-    except (OSError, ValueError, IndexError, KeyError) as e:
-        print(f"[EMAIL] Scout data missing or empty: {e}")
-        return {"news": [], "papers": [], "newest": None}
-    news = sorted(news_day.get("news", []), key=lambda n: _score(n, "relevance_score"), reverse=True)
-    papers = sorted(cs_day.get("case_studies", []), key=lambda c: _score(c, "total_score"), reverse=True)
-    stamps = [datetime.strptime(news_day["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc)]
-    runs = sorted(glob.glob("case_studies/[0-9][0-9][0-9][0-9]-*.json"))
-    if runs and _load(runs[-1]).get("timestamp"):
-        ts = datetime.fromisoformat(_load(runs[-1])["timestamp"])
-        stamps.append(ts if ts.tzinfo else ts.replace(tzinfo=timezone.utc))  # scout runs on UTC runners
-    return {"news": news, "papers": papers, "newest": max(stamps)}
+        news = sorted(news_day.get("news", []), key=lambda n: _score(n, "relevance_score"), reverse=True)
+        papers = sorted(cs_day.get("case_studies", []), key=lambda c: _score(c, "total_score"), reverse=True)
+        stamps = [datetime.strptime(news_day["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc)]
+        runs = sorted(glob.glob("case_studies/[0-9][0-9][0-9][0-9]-*.json"))
+        if runs and _load(runs[-1]).get("timestamp"):
+            ts = datetime.fromisoformat(_load(runs[-1])["timestamp"])
+            stamps.append(ts if ts.tzinfo else ts.replace(tzinfo=timezone.utc))  # scout runs on UTC runners
+    except (OSError, ValueError, IndexError, KeyError, TypeError, AttributeError) as e:
+        print(f"[EMAIL] Scout data missing or malformed: {e!r}")
+        return {"news": [], "papers": [], "newest": None, "reason": "a data file is missing or empty, or malformed"}
+    return {"news": news, "papers": papers, "newest": max(stamps), "reason": None}
 
 
 def two_sentences(text):
@@ -158,10 +160,21 @@ def render_text(date, s):
     return "\n".join(lines)
 
 
-def build_stale(data, now):
-    subject = f"Scout data is stale — {now:%a %d %b %Y}"
+def stale_reason(data, now):
+    """Why no digest can be sent, or None when the data is fit for a digest."""
     if data["newest"] is None:
-        reason = "Scout data is stale: a data file is missing or empty."
+        return data.get("reason") or "a data file is missing or empty, or malformed"
+    if not data["news"]:
+        return "no news items today"
+    if now - data["newest"] > STALE_AFTER:
+        return f"data is {(now - data['newest']).total_seconds() / 3600:.0f} hours old"
+    return None
+
+
+def build_stale(data, now, why):
+    subject = f"Scout data is stale: {why} — {now:%a %d %b %Y}"
+    if data["newest"] is None or not data["news"]:
+        reason = f"Scout data is stale: {why}."
     else:
         age = now - data["newest"]
         reason = (f"Scout data is stale: newest data is from {data['newest']:%Y-%m-%d %H:%M} UTC, "
@@ -212,9 +225,10 @@ def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
             now = send_at
 
     data = load_data()
-    stale = data["newest"] is None or now - data["newest"] > STALE_AFTER
+    why = stale_reason(data, now)
+    stale = why is not None
     if stale:
-        subject, html_body, text_body = build_stale(data, now)
+        subject, html_body, text_body = build_stale(data, now, why)
     else:
         subject, html_body, text_body, sections = build_email(data, now)
     print(f"[EMAIL] Subject: {subject}")
