@@ -92,9 +92,6 @@ def c5_url_live(item, timeout=10):
         return FLAG, f"network error: {type(e).__name__}"
     if 200 <= r.status_code < 400:
         return PASS, str(r.status_code)
-    # Bot walls answer 401/403/429 for live pages, so they don't prove the link is dead.
-    if r.status_code in (401, 403, 429):
-        return FLAG, f"HTTP {r.status_code} (bot block?)"
     return FAIL, f"HTTP {r.status_code}"
 
 

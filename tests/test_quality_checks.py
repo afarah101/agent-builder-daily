@@ -83,7 +83,7 @@ def test_url_status_and_network_error(fake_http, monkeypatch):
     fake_http["code"] = 404
     assert qc.c5_url_live(case())[0] == qc.FAIL
     fake_http["code"] = 403
-    assert qc.c5_url_live(case())[0] == qc.FLAG
+    assert qc.c5_url_live(case())[0] == qc.FAIL
 
     def boom(*a, **k):
         raise requests.ConnectionError("down")
