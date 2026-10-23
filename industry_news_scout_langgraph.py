@@ -25,8 +25,10 @@ from langfuse import Langfuse, observe, propagate_attributes
 langfuse = Langfuse()
 import llm_cache
 import quality_checks
+import judge
 
 _quality = {}
+_judge = {}
 _run = {}
 
 OUTPUT_DIR = "logs"
@@ -430,6 +432,8 @@ def save_and_archive(state):
         summary["fails"]["classify_failed"] = [f"{x['title'][:50]}: classify call failed" for x in failed]
     _quality.clear(); _quality.update(summary)
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back, {len(failed)} classify_failed")
+    kept, judge_held, judge_stats = judge.gate(kept, "title", "summary_raw", "summary", "enterprise_use")
+    _judge.clear(); _judge.update(judge_stats)
     state = {**state, "classified_news": kept}
     _run["written"] = len(kept)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -515,6 +519,8 @@ def run_industry_news_scout():
         )
         if _quality:
             quality_checks.send_scores(langfuse, _quality)
+        if _judge:
+            judge.send_scores(langfuse, _judge)
     print("[DEBUG] Complete")
     langfuse.flush()
     return result

@@ -17,6 +17,7 @@ for k, v in {"GROQ_API_KEY": "test-key-1", "GROQ_API_KEY_2": "", "GEMINI_API_KEY
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import llm_cache
+import judge
 import quality_checks
 import case_study_scout_langgraph as cs
 import industry_news_scout_langgraph as news
@@ -56,7 +57,7 @@ def env(tmp_path, monkeypatch):
         monkeypatch.setattr(mod.langfuse, "update_current_span", lambda **kw: spans.append(kw))
         monkeypatch.setattr(mod.langfuse, "score_current_trace", lambda **kw: None)
         monkeypatch.setattr(mod.langfuse, "flush", lambda: None)
-    monkeypatch.setattr(cs, "gemini_evaluate", lambda *a, **k: {})
+    monkeypatch.setattr(judge, "judge_item", lambda *a, **k: {"verdict": "pass", "score": 1.0, "reason": "stub"})
     monkeypatch.setattr(cs.time, "sleep", lambda s: None)
     return SimpleNamespace(tmp=tmp_path, spans=spans)
 
