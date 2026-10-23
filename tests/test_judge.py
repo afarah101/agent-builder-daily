@@ -81,7 +81,7 @@ def test_missing_verdict_is_error_and_held_back(monkeypatch):
     assert held == [items[3]] and items[3] not in kept and stats["errors"] == 1 and stats["passed"] == 4
 
 
-@pytest.mark.parametrize("damage", ["duplicate", "malformed_verdict", "score_out_of_range", "no_score"])
+@pytest.mark.parametrize("damage", ["duplicate", "malformed_verdict", "score_out_of_range", "no_score", "score_true", "score_string"])
 def test_duplicate_or_malformed_verdict_is_error(monkeypatch, damage):
     def answer(items, n):
         out = verdicts(items)
@@ -92,6 +92,10 @@ def test_duplicate_or_malformed_verdict_is_error(monkeypatch, damage):
             v[0]["verdict"] = "maybe"
         elif damage == "score_out_of_range":
             v[0]["score"] = 1.4
+        elif damage == "score_true":
+            v[0]["score"] = True  # float(True) would be 1.0: must be malformed, not a perfect score
+        elif damage == "score_string":
+            v[0]["score"] = "0.9"
         else:
             del v[0]["score"]
         return out
@@ -247,3 +251,23 @@ def test_news_scout_one_batch_before_writing(tmp_path, monkeypatch):
     out = json.loads(Path("logs/news.json").read_text())["news"]
     assert calls == [3] and [x["title"] for x in out] == ["Good"] and news._run["written"] == 1
     assert news._judge["failed"] == 1 and news._judge["errors"] == 1
+
+
+def test_timeout_without_status_code_retries_then_moves_to_model_2(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: TimeoutError("read timed out") if n <= 2 else verdicts(items))
+    kept, _, stats = gate(make(2))
+    assert len(kept) == 2 and g.models == [judge.JUDGE_MODELS[0]] * 2 + [judge.JUDGE_MODELS[1]]
+    assert g.slept == [judge.RETRY_DELAY] and stats["model"] == judge.JUDGE_MODELS[1]
+
+
+def test_connection_error_on_every_model_holds_back(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: ConnectionError("refused"))
+    kept, held, stats = gate(make(2))
+    assert kept == [] and stats["errors"] == 2 and g.models == [m for m in judge.JUDGE_MODELS for _ in range(2)]
+
+
+def test_bad_json_on_model_1_retries_then_moves_to_model_2(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: "{not json" if n <= 2 else verdicts(items))
+    kept, _, stats = gate(make(3))
+    assert len(kept) == 3 and g.models == [judge.JUDGE_MODELS[0]] * 2 + [judge.JUDGE_MODELS[1]]
+    assert stats["model"] == judge.JUDGE_MODELS[1]

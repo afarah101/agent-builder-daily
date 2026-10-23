@@ -72,46 +72,52 @@ def _code(e):
 
 
 def _parse_verdict(v, model):
-    verdict, score = v.get("verdict"), float(v.get("score"))
+    verdict, score = v.get("verdict"), v.get("score")
+    if isinstance(score, bool) or not isinstance(score, (int, float)):  # true / "0.9" are malformed, not a score
+        raise ValueError(f"score is not a number: {score!r}")
     if verdict not in ("pass", "fail") or not 0.0 <= score <= 1.0:
         raise ValueError(f"bad verdict {v!r}")
-    return {"verdict": verdict, "score": score, "reason": str(v.get("reason", "")), "model": model}
+    return {"verdict": verdict, "score": float(score), "reason": str(v.get("reason", "")), "model": model}
 
 
 def _judge_chunk(chunk):
     """One Gemini call for up to BATCH_SIZE items. Returns {id: result}; anything unmatched or malformed is an error."""
     prompt = BATCH_PROMPT.format(rules=RULES, items=json.dumps(chunk, ensure_ascii=False, indent=1))
-    raw, model, last = None, None, None
+    verdicts, model, last = None, None, None
     for candidate in JUDGE_MODELS:
         for attempt in range(2):
             try:
                 _pace()
-                raw, model = _ask(prompt, candidate), candidate
-                break
+                raw = _ask(prompt, candidate)
             except Exception as e:
                 last, code = e, _code(e)
                 if code == 429:  # quota or rate limit on this model: the next model has its own quota
                     print(f"[JUDGE] {candidate} quota hit (429), trying next model")
                     break
-                if code is not None and code >= 500 and attempt == 0:
-                    print(f"[JUDGE] {candidate} {code}, retrying in {RETRY_DELAY}s")
+                if code is not None and code < 500:  # bad request or auth: no model will accept it
+                    return {it["id"]: _error(f"judge call failed: {type(e).__name__}: {str(e)[:200]}") for it in chunk}
+                # 5xx, or no status code (timeout, connection error): retry once, then the next model
+                if attempt == 0:
+                    print(f"[JUDGE] {candidate} {code or type(e).__name__}, retrying in {RETRY_DELAY}s")
                     sleep(RETRY_DELAY)
                     continue
-                if code is not None and code >= 500:
-                    print(f"[JUDGE] {candidate} {code} again, trying next model")
-                    break
-                return {it["id"]: _error(f"judge call failed: {type(e).__name__}: {str(e)[:200]}") for it in chunk}
-        if raw is not None:
+                print(f"[JUDGE] {candidate} {code or type(e).__name__} again, trying next model")
+                break
+            try:
+                verdicts = json.loads(raw)["verdicts"]
+                if not isinstance(verdicts, list):
+                    raise ValueError("verdicts is not a list")
+            except Exception as e:  # unparseable reply: retry once, then the next model
+                last, verdicts = e, None
+                print(f"[JUDGE] {candidate} unparseable reply ({type(e).__name__}), " + ("retrying" if attempt == 0 else "trying next model"))
+                continue
+            model = candidate
             break
-    if raw is None:
+        if verdicts is not None:
+            break
+    if verdicts is None:
         return {it["id"]: _error(f"all judge models failed; last: {type(last).__name__}: {str(last)[:160]}") for it in chunk}
     print(f"[JUDGE] model used: {model}")
-    try:
-        verdicts = json.loads(raw)["verdicts"]
-        if not isinstance(verdicts, list):
-            raise ValueError("verdicts is not a list")
-    except Exception as e:
-        return {it["id"]: _error(f"unparseable judge response: {type(e).__name__}: {str(e)[:120]}") for it in chunk}
     wanted = {it["id"] for it in chunk}
     counts = Counter(str(v.get("id")) for v in verdicts if isinstance(v, dict))
     out = {}
