@@ -40,7 +40,7 @@ class FakeGemini:
         self.t += s
 
     def _ask(self, prompt, model):
-        items = json.loads(prompt.split("ITEMS (JSON list; each has id, title, publisher, date, source, summary, action):\n", 1)[1].split("\n\nReturn JSON only", 1)[0])
+        items = json.loads(prompt.split("ITEMS (JSON list; each has id, title, source, summary, action):\n", 1)[1].split("\n\nReturn JSON only", 1)[0])
         self.calls.append([it["id"] for it in items])
         self.models.append(model)
         self.items.append(items)
@@ -157,9 +157,9 @@ def test_publisher_date_and_full_source_reach_the_judge(monkeypatch):
     paper = {"title": "P", "source_type": "arxiv", "pub_date": "2026-10-21", "summary_raw": "abs", "summary": "s", "enterprise_use": "a"}
     gate([item, paper])
     sent = {it["title"]: it for it in g.items[0]}
-    assert sent[item["title"]]["publisher"] == "OpenAI" and sent[item["title"]]["date"] == "22 Oct 2026"
+    assert sent[item["title"]]["known_facts"] == "Publisher: OpenAI. Date: 22 Oct 2026."
     assert sent[item["title"]]["source"] == item["source_text"]  # full text beats the snippet
-    assert sent["P"]["publisher"] == "arXiv" and sent["P"]["source"] == "abs"
+    assert sent["P"]["known_facts"] == "Publisher: arXiv. Date: 2026-10-21." and sent["P"]["source"] == "abs"
 
 
 def test_503_then_success_is_retried(monkeypatch):

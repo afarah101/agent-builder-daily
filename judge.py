@@ -27,9 +27,7 @@ action are faithful to its source. Judge every item on its own.
 
 {rules}
 
-Each item's publisher and date are known facts: a summary may state them even if the source text does not.
-
-ITEMS (JSON list; each has id, title, publisher, date, source, summary, action):
+ITEMS (JSON list; each has id, title, source, summary, action):
 {items}
 
 Return JSON only, with exactly one verdict per item id:
@@ -139,12 +137,16 @@ def passed(result):
     return result["verdict"] == "pass" and result["score"] >= PASS_SCORE
 
 
+def _publisher(item):
+    return item.get("source") or ("arXiv" if item.get("source_type") == "arxiv" else "")
+
+
 def gate(items, title_key, source_key, summary_key, action_key, log=print):
     """Judge every item in batches. Returns (kept, held_back, stats); only passes with score >= PASS_SCORE are kept."""
     # Full article text (news source_text) beats the scout's short source field when present.
     batch = [{"id": str(i), "title": it.get(title_key) or "",
-              "publisher": it.get("source") or ("arXiv" if it.get("source_type") == "arxiv" else ""),
-              "date": it.get("pub_date") or "", "source": it.get("source_text") or it.get(source_key) or "",
+              "known_facts": f"Publisher: {_publisher(it) or 'unknown'}. Date: {it.get('pub_date') or 'unknown'}.",
+              "source": it.get("source_text") or it.get(source_key) or "",
               "summary": it.get(summary_key) or "", "action": it.get(action_key) or ""} for i, it in enumerate(items)]
     results = judge_batch(batch) if batch else {}
     kept, held, counts = [], [], {"pass": 0, "fail": 0, "error": 0}
