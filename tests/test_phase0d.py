@@ -57,7 +57,7 @@ def env(tmp_path, monkeypatch):
         monkeypatch.setattr(mod.langfuse, "update_current_span", lambda **kw: spans.append(kw))
         monkeypatch.setattr(mod.langfuse, "score_current_trace", lambda **kw: None)
         monkeypatch.setattr(mod.langfuse, "flush", lambda: None)
-    monkeypatch.setattr(judge, "judge_item", lambda *a, **k: {"verdict": "pass", "score": 1.0, "reason": "stub"})
+    monkeypatch.setattr(judge, "judge_batch", lambda items: {it["id"]: {"verdict": "pass", "score": 1.0, "reason": "stub"} for it in items})
     monkeypatch.setattr(cs.time, "sleep", lambda s: None)
     return SimpleNamespace(tmp=tmp_path, spans=spans)
 

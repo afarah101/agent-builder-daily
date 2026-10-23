@@ -33,7 +33,7 @@ def save(tmp_path, monkeypatch):
     monkeypatch.setattr(quality_checks.requests, "get", lambda *a, **k: SimpleNamespace(status_code=200, close=lambda: None))
     monkeypatch.setattr(socket.socket, "connect", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("network blocked")))
     monkeypatch.setattr(cs.llm_cache, "save", lambda *a, **k: 0)
-    monkeypatch.setattr(judge, "judge_item", lambda *a, **k: {"verdict": "pass", "score": 1.0, "reason": "stub"})
+    monkeypatch.setattr(judge, "judge_batch", lambda items: {it["id"]: {"verdict": "pass", "score": 1.0, "reason": "stub"} for it in items})
 
     def run(items):
         cs.save_and_archive({"raw_papers": items, "scored_papers": items, "output_file": "case_studies/out.json"})
