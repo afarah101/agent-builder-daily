@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import os, json, re, feedparser, requests
+import os, json, re, feedparser, requests, trafilatura
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
@@ -35,6 +36,8 @@ OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
 MAX_ITEMS = 25
 MAX_PER_SOURCE = 3
+MIN_SNIPPET = 300   # shorter RSS/scrape snippets get the full article fetched
+SOURCE_CAP = 3000   # characters of article text kept as source_text
 EIGHT_WEEKS_AGO = datetime.now() - timedelta(weeks=8)
 FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
 
@@ -214,6 +217,20 @@ def scrape_articles(source, seen):
         print("[DEBUG] Scrape error " + source["name"] + ": " + str(e))
     return articles
 
+def fetch_source_text(article):
+    """Full article text (up to SOURCE_CAP) when the snippet is thin; the snippet on any failure."""
+    snippet = article.get("summary_raw") or ""
+    if len(snippet) >= MIN_SNIPPET or not article.get("url"):
+        return snippet[:SOURCE_CAP]
+    try:
+        resp = requests.get(article["url"], headers={"User-Agent": "Mozilla/5.0 (compatible; ScoutBot/1.0)"}, timeout=10)
+        resp.raise_for_status()
+        text = (trafilatura.extract(resp.text, include_comments=False, include_tables=False) or "").strip()
+    except Exception as e:
+        print("[DEBUG] Full-text fetch failed for " + article.get("title", "")[:50] + ": " + type(e).__name__)
+        return snippet
+    return text[:SOURCE_CAP] if len(text) > len(snippet) else snippet
+
 def fetch_news(state):
     print("[DEBUG] Fetching industry news...")
     raw_articles = []
@@ -285,6 +302,12 @@ def fetch_news(state):
             source_counts[article["source"]] += 1
 
     print("[DEBUG] Total after diversity filter: " + str(len(diverse)))
+    # Only the first MAX_ITEMS are classified, so only those get full text.
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        texts = list(pool.map(fetch_source_text, diverse[:MAX_ITEMS]))
+    for article, text in zip(diverse, texts):
+        article["source_text"] = text
+    print(f"[DEBUG] Full text fetched for {sum(len(t) > len(a.get('summary_raw') or '') for a, t in zip(diverse, texts))} thin snippets")
     today = datetime.now().strftime("%Y-%m-%d")
     return {
         "raw_articles": diverse,
@@ -303,7 +326,7 @@ def classify_news(state):
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + article["title"][:60])
         title = article["title"]
         source = article["source"]
-        content = article["summary_raw"][:500]
+        content = (article.get("source_text") or article["summary_raw"])[:SOURCE_CAP]
         classify_prompt = f"""
 You are scoring AI industry news for an IT Engineer who manages
 Google Workspace, JumpCloud, Freshservice, SSO, MDM, endpoint

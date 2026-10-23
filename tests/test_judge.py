@@ -28,7 +28,7 @@ class FakeGemini:
     """Stands in for judge._ask. `answer(chunk_items)` builds the reply; every call and its time are recorded."""
 
     def __init__(self, monkeypatch, answer):
-        self.t, self.calls, self.slept, self.answer = 1000.0, [], [], answer
+        self.t, self.calls, self.slept, self.answer, self.models, self.items = 1000.0, [], [], answer, [], []
         monkeypatch.setattr(judge, "clock", lambda: self.t)
         monkeypatch.setattr(judge, "sleep", self._sleep)
         monkeypatch.setattr(judge, "_calls", [])
@@ -39,9 +39,11 @@ class FakeGemini:
         self.slept.append(s)
         self.t += s
 
-    def _ask(self, prompt):
-        items = json.loads(prompt.split("ITEMS (JSON list; each has id, title, source, summary, action):\n", 1)[1].split("\n\nReturn JSON only", 1)[0])
+    def _ask(self, prompt, model):
+        items = json.loads(prompt.split("ITEMS (JSON list; each has id, title, publisher, date, source, summary, action):\n", 1)[1].split("\n\nReturn JSON only", 1)[0])
         self.calls.append([it["id"] for it in items])
+        self.models.append(model)
+        self.items.append(items)
         reply = self.answer(items, len(self.calls))
         if isinstance(reply, Exception):
             raise reply
@@ -127,18 +129,43 @@ def test_pass_below_threshold_is_held_back(monkeypatch):
     assert kept == [] and stats["failed"] == 1
 
 
-def test_429_twice_holds_back_whole_chunk(monkeypatch):
+def test_429_on_every_model_holds_back_whole_chunk(monkeypatch):
     g = FakeGemini(monkeypatch, lambda items, n: ApiError(429))
     items = make(4)
     kept, held, stats = gate(items)
-    assert kept == [] and held == items and stats["errors"] == 4
-    assert len(g.calls) == 2 and g.slept == [judge.RETRY_DELAY]  # exactly one retry after 10 s
+    assert kept == [] and held == items and stats["errors"] == 4 and stats["model"] == "none"
+    assert g.models == judge.JUDGE_MODELS and g.slept == []  # one try per model, no pointless wait on a quota error
+
+
+def test_429_on_model_1_moves_to_model_2(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: ApiError(429) if n == 1 else verdicts(items))
+    kept, _, stats = gate(make(3))
+    assert len(kept) == 3 and g.models == judge.JUDGE_MODELS[:2] and stats["model"] == judge.JUDGE_MODELS[1]
+
+
+def test_5xx_twice_moves_to_next_model(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: ApiError(504) if n <= 2 else verdicts(items))
+    kept, _, stats = gate(make(2))
+    assert len(kept) == 2 and g.models == [judge.JUDGE_MODELS[0]] * 2 + [judge.JUDGE_MODELS[1]]
+    assert g.slept == [judge.RETRY_DELAY]
+
+
+def test_publisher_date_and_full_source_reach_the_judge(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: verdicts(items))
+    item = {"title": "OpenAI models are coming to Google Cloud", "source": "OpenAI", "pub_date": "22 Oct 2026",
+            "summary_raw": "short", "source_text": "Full article body " * 20, "summary": "s", "enterprise_use": "a"}
+    paper = {"title": "P", "source_type": "arxiv", "pub_date": "2026-10-21", "summary_raw": "abs", "summary": "s", "enterprise_use": "a"}
+    gate([item, paper])
+    sent = {it["title"]: it for it in g.items[0]}
+    assert sent[item["title"]]["publisher"] == "OpenAI" and sent[item["title"]]["date"] == "22 Oct 2026"
+    assert sent[item["title"]]["source"] == item["source_text"]  # full text beats the snippet
+    assert sent["P"]["publisher"] == "arXiv" and sent["P"]["source"] == "abs"
 
 
 def test_503_then_success_is_retried(monkeypatch):
     g = FakeGemini(monkeypatch, lambda items, n: ApiError(503) if n == 1 else verdicts(items))
     kept, _, _ = gate(make(3))
-    assert len(kept) == 3 and len(g.calls) == 2
+    assert len(kept) == 3 and len(g.calls) == 2 and g.models == [judge.JUDGE_MODELS[0]] * 2
 
 
 def test_non_retryable_error_is_not_retried(monkeypatch):
@@ -158,20 +185,21 @@ def test_pacing_stays_under_12_a_minute(monkeypatch):
     times = []
     orig = g._ask
 
-    def timed(prompt):
+    def timed(prompt, model):
         times.append(g.t)
-        return orig(prompt)
+        return orig(prompt, model)
     monkeypatch.setattr(judge, "_ask", timed)
     gate(make(25 * 30))  # 30 calls
     assert len(times) == 30
     assert max(sum(1 for t in times if s <= t < s + 60) for s in times) <= judge.MAX_PER_MINUTE < 12
 
 
-def test_send_scores_names_and_values():
+def test_send_scores_names_values_and_model_metadata():
     sent = []
-    judge.send_scores(SimpleNamespace(score_current_trace=lambda **kw: sent.append((kw["name"], kw["value"]))),
-                      {"total": 4, "passed": 2, "failed": 1, "errors": 1, "pass_rate": 0.5})
-    assert sent == [("judge_pass_rate", 0.5), ("judge_fail", 1), ("judge_error", 1)]
+    judge.send_scores(SimpleNamespace(score_current_trace=lambda **kw: sent.append((kw["name"], kw["value"], kw["metadata"]))),
+                      {"total": 4, "passed": 2, "failed": 1, "errors": 1, "pass_rate": 0.5, "model": "gemini-2.5-flash"})
+    meta = {"judge_model": "gemini-2.5-flash"}
+    assert sent == [("judge_pass_rate", 0.5, meta), ("judge_fail", 1, meta), ("judge_error", 1, meta)]
 
 
 # ---------- scout wiring: one batch per run, after the quality gate, before ranking / writing ----------
@@ -200,7 +228,7 @@ def test_case_scout_one_batch_before_ranking(tmp_path, monkeypatch):
     out = json.loads(Path("case_studies/out.json").read_text())["case_studies"]
     assert calls == [6]  # one batch call for the whole run
     assert [p["total_score"] for p in out] == [45, 35, 30, 25] and all(p["eval_verdict"] == "pass" for p in out)
-    assert cs._judge == {"total": 6, "passed": 4, "failed": 2, "errors": 0, "pass_rate": pytest.approx(4 / 6)}
+    assert cs._judge == {"total": 6, "passed": 4, "failed": 2, "errors": 0, "pass_rate": pytest.approx(4 / 6), "model": "none"}
 
 
 def test_news_scout_one_batch_before_writing(tmp_path, monkeypatch):
