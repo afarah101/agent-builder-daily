@@ -7,7 +7,9 @@ puts the password at index 24, and an app password pasted from Google's UI carri
 test_auth_plain_* pins that. The header tests cover the second, latent failure on the same path.
 """
 import _socket
+import base64
 import email
+import ipaddress
 import socket
 import socketserver
 import smtplib
@@ -28,7 +30,11 @@ CLEANED = "Scout Daily — Fri 23 Oct 2026 — Microsoft to expand Azure Maia sy
 
 
 class _SMTPHandler(socketserver.StreamRequestHandler):
-    """Enough of RFC 5321 for smtplib to deliver one message and for us to keep the bytes."""
+    """Enough of RFC 5321 for smtplib to deliver one message and for us to keep the bytes.
+
+    Advertises AUTH PLAIN so the real login() path runs, and refuses any line carrying a byte above 0x7f:
+    a conforming SMTP session for this message is 7-bit throughout (headers are RFC 2047, bodies base64),
+    so a non-ASCII byte on the wire is the CI failure reaching the socket instead of raising locally."""
 
     def handle(self):
         self.wfile.write(b"220 localhost ESMTP\r\n")
@@ -36,6 +42,10 @@ class _SMTPHandler(socketserver.StreamRequestHandler):
         while True:
             line = self.rfile.readline()
             if not line:
+                return
+            if not line.isascii():
+                self.server.non_ascii.append(line)
+                self.wfile.write(b"500 non-ascii byte on the wire\r\n")
                 return
             if in_data:
                 if line in (b".\r\n", b".\n"):
@@ -52,17 +62,37 @@ class _SMTPHandler(socketserver.StreamRequestHandler):
             elif cmd.startswith(b"QUIT"):
                 self.wfile.write(b"221 Bye\r\n")
                 return
-            else:  # EHLO/HELO/MAIL/RCPT
+            elif cmd.startswith(b"EHLO"):
+                self.wfile.write(b"250-localhost\r\n250 AUTH PLAIN\r\n")
+            elif cmd.startswith(b"AUTH PLAIN"):
+                self.server.auth.append(base64.b64decode(line.split(None, 2)[2].strip()))
+                self.wfile.write(b"235 2.7.0 Authentication successful\r\n")
+            else:  # HELO/MAIL/RCPT
                 self.wfile.write(b"250 localhost\r\n")
+
+
+LOOPBACK = frozenset({ipaddress.ip_address("127.0.0.1"), ipaddress.ip_address("::1")})
 
 
 @pytest.fixture
 def loopback(monkeypatch):
     """tests/test_news_cache.py blocks sockets process-wide at import. Restore a real loopback connect for
-    these tests only, going through the C implementation so it cannot be the patched Python one."""
-    def _create_connection(address, timeout=None, *a, **k):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        if timeout is not None:
+    these tests only, going through the C implementation so it cannot be the patched Python one.
+
+    Only 127.0.0.1 and ::1 are allowed: the unrestricted version handed these tests a working route to the
+    whole internet, so a stray hostname would have left the suite making real network calls."""
+    # Default must be the stdlib sentinel, not None: smtplib calls create_connection without a timeout,
+    # which passes _GLOBAL_DEFAULT_TIMEOUT through, and settimeout() rejects that object.
+    def _create_connection(address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, *a, **k):
+        try:
+            ip = ipaddress.ip_address(address[0])
+        except ValueError:
+            raise RuntimeError(f"loopback fixture: {address[0]!r} is not a literal IP address") from None
+        if ip not in LOOPBACK:
+            raise RuntimeError(f"loopback fixture refuses non-loopback address {address[0]!r}")
+        family = socket.AF_INET6 if ip.version == 6 else socket.AF_INET
+        sock = socket.socket(family, socket.SOCK_STREAM)
+        if timeout not in (None, socket._GLOBAL_DEFAULT_TIMEOUT):
             sock.settimeout(timeout)
         _socket.socket.connect(sock, address)
         return sock
@@ -73,13 +103,26 @@ def loopback(monkeypatch):
 @pytest.fixture
 def smtp_server(loopback):
     server = socketserver.ThreadingTCPServer(("127.0.0.1", 0), _SMTPHandler)
-    server.messages = []
+    server.messages, server.auth, server.non_ascii = [], [], []
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     yield server
     server.shutdown()
     server.server_close()
     thread.join(timeout=5)
+
+
+def test_loopback_fixture_refuses_a_public_address(loopback):
+    with pytest.raises(RuntimeError, match="refuses non-loopback address"):
+        socket.create_connection(("1.1.1.1", 53), timeout=5)
+
+
+def test_loopback_fixture_allows_both_loopback_literals(loopback):
+    """Not a connect: asserts the gate's verdict, so the allowed set cannot silently shrink to nothing."""
+    for allowed in ("127.0.0.1", "::1"):
+        assert ipaddress.ip_address(allowed) in LOOPBACK
+    with pytest.raises(RuntimeError, match="not a literal IP address"):
+        socket.create_connection(("smtp.gmail.com", 465), timeout=5)
 
 
 def _subject_header(raw):
@@ -148,3 +191,67 @@ def test_ascii_subject_still_round_trips(smtp_server):
         client.send_message(msg)
     received = email.message_from_bytes(smtp_server.messages[0])
     assert str(make_header(decode_header(received["Subject"]))) == "Plain ASCII subject"
+
+
+def test_clean_secret_strips_zero_width_space_and_bom():
+    """U+200B and U+FEFF are category Cf, not \\s: the whitespace pass alone leaves them in the secret."""
+    assert de.clean_secret("abcd​efgh​ijkl​mnop") == "abcdefghijklmnop"
+    assert de.clean_secret("﻿abcd efgh﻿") == "abcdefgh"
+    assert de.clean_secret("​﻿") == ""
+    for cleaned in (de.clean_secret("abcd​efgh"), de.clean_secret("﻿user@example.com")):
+        assert cleaned.isascii(), cleaned
+
+
+def test_clean_header_strips_c1_control_characters():
+    """cp1252-decoded copy-paste carries C1 bytes; \\s matches only U+0085 of that block."""
+    assert de.clean_header("a\x80b\x9fc") == "a b c"
+    assert de.clean_header("Scout\x85Daily") == "Scout Daily"
+    assert de.clean_header(HOSTILE + "\x9d").isascii() is False  # em dashes stay, the C1 goes
+    assert "\x9d" not in de.clean_header(HOSTILE + "\x9d")
+
+
+def test_logged_subject_is_the_subject_that_gets_sent(smtp_server):
+    """main() logs clean_header(subject); assert that string is byte-for-byte what the server decodes."""
+    logged = de.clean_header(HOSTILE)
+    msg = de.build_message(HOSTILE, "<p>hi</p>", "hi", "from@example.com", "to@example.com")
+    host, port = smtp_server.server_address
+    with smtplib.SMTP(host, port, timeout=10) as client:
+        client.send_message(msg)
+    received = email.message_from_bytes(smtp_server.messages[0])
+    assert str(make_header(decode_header(received["Subject"]))) == logged == CLEANED
+
+
+# Every separator Google's UI and a browser copy can leave in a pasted app password.
+SEPARATORS = {"nbsp-00a0": "\xa0", "nnbsp-202f": " ", "zwsp-200b": "​", "bom-feff": "﻿"}
+
+
+@pytest.mark.parametrize("sep", sorted(SEPARATORS), ids=sorted(SEPARATORS))
+def test_smtp_send_logs_in_and_delivers_over_loopback(smtp_server, monkeypatch, sep):
+    """The real smtp_send, the real smtplib AUTH PLAIN, a real socket: the path run 39970000707 died on."""
+    monkeypatch.setenv("GMAIL_USER", CI_USER)
+    monkeypatch.setenv("GMAIL_APP_PASSWORD", SEPARATORS[sep].join(["abcd", "efgh", "ijkl", "mnop"]))
+    monkeypatch.setenv("REPORT_EMAIL", "to@example.com")
+    host, port = smtp_server.server_address
+
+    result = de.smtp_send(HOSTILE, "<p>hi</p>", "hi", smtp_factory=smtplib.SMTP, host=host, port=port)
+
+    assert smtp_server.non_ascii == [], smtp_server.non_ascii
+    assert smtp_server.auth == [b"\0" + CI_USER.encode() + b"\0abcdefghijklmnop"]
+    assert len(smtp_server.messages) == 1
+    raw = smtp_server.messages[0]
+    assert b"\xa0" not in raw
+    received = email.message_from_bytes(raw)
+    assert str(make_header(decode_header(received["Subject"]))) == CLEANED
+    assert received["To"] == "to@example.com"
+    assert {"text/plain", "text/html"} <= {p.get_content_type() for p in received.walk()}
+    assert "refused=none" in result
+
+
+def test_smtp_send_defaults_stay_on_the_production_path():
+    """The seams must not change production: gmail over implicit TLS, nothing else."""
+    import inspect
+    defaults = inspect.signature(de.smtp_send).parameters
+    assert defaults["smtp_factory"].default is smtplib.SMTP_SSL
+    assert defaults["host"].default == "smtp.gmail.com"
+    assert defaults["port"].default == 465
+    assert all(defaults[n].kind is inspect.Parameter.KEYWORD_ONLY for n in ("smtp_factory", "host", "port"))
