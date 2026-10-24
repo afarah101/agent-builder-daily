@@ -15,7 +15,8 @@ import socketserver
 import smtplib
 import sys
 import threading
-from email.header import decode_header, make_header
+from datetime import datetime, timedelta, timezone
+from email.header import Header, decode_header, make_header
 from pathlib import Path
 
 import pytest
@@ -64,18 +65,20 @@ class _SMTPHandler(socketserver.StreamRequestHandler):
                 return
             elif cmd.startswith(b"EHLO"):
                 self.wfile.write(b"250-localhost\r\n250 AUTH PLAIN\r\n")
+            elif cmd.startswith(b"RCPT"):
+                self.server.rcpt.append(line.split(b"<", 1)[1].split(b">", 1)[0])
+                self.wfile.write(b"250 OK\r\n")
             elif cmd.startswith(b"AUTH PLAIN"):
                 self.server.auth.append(base64.b64decode(line.split(None, 2)[2].strip()))
                 self.wfile.write(b"235 2.7.0 Authentication successful\r\n")
-            else:  # HELO/MAIL/RCPT
+            else:  # HELO/MAIL
                 self.wfile.write(b"250 localhost\r\n")
 
 
 LOOPBACK = frozenset({ipaddress.ip_address("127.0.0.1"), ipaddress.ip_address("::1")})
 
 
-@pytest.fixture
-def loopback(monkeypatch):
+def _gate_loopback(monkeypatch):
     """tests/test_news_cache.py blocks sockets process-wide at import. Restore a real loopback connect for
     these tests only, going through the C implementation so it cannot be the patched Python one.
 
@@ -101,9 +104,14 @@ def loopback(monkeypatch):
 
 
 @pytest.fixture
+def loopback(monkeypatch):
+    _gate_loopback(monkeypatch)
+
+
+@pytest.fixture
 def smtp_server(loopback):
     server = socketserver.ThreadingTCPServer(("127.0.0.1", 0), _SMTPHandler)
-    server.messages, server.auth, server.non_ascii = [], [], []
+    server.messages, server.auth, server.non_ascii, server.rcpt = [], [], [], []
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     yield server
@@ -255,3 +263,76 @@ def test_smtp_send_defaults_stay_on_the_production_path():
     assert defaults["host"].default == "smtp.gmail.com"
     assert defaults["port"].default == 465
     assert all(defaults[n].kind is inspect.Parameter.KEYWORD_ONLY for n in ("smtp_factory", "host", "port"))
+
+
+def test_main_logs_the_subject_that_goes_on_the_wire(tmp_path, monkeypatch, capsys):
+    """The real main(), a headline with NBSP and BEL: the [EMAIL] Subject line must match the decoded wire subject."""
+    now = datetime(2026, 10, 22, 12, 0, tzinfo=de.LONDON)
+    news = [{"title": "Maia\xa0launch\x07 today" if i == 0 else f"News {i}", "summary": "One. Two. Three.",
+             "enterprise_use": "Use.", "url": f"https://news.example/{i}", "relevance_score": 10 - i,
+             "source": "OpenAI", "category": "Agents"} for i in range(8)]
+    papers = [{"title": f"Paper {i}", "summary": "P.", "url": f"https://arxiv.org/abs/{i}", "total_score": 60 - 10 * i}
+              for i in range(4)]
+    monkeypatch.setattr(de, "load_data", lambda: {"news": news, "papers": papers, "reason": None,
+                                                  "newest": now.astimezone(timezone.utc) - timedelta(hours=5)})
+    monkeypatch.setattr(de, "LAST_SENT", str(tmp_path / "last_sent.txt"))
+    monkeypatch.setattr(de, "PREVIEW", str(tmp_path / "preview.html"))
+    received = []
+
+    def fake_send(subject, html_body, text_body):
+        received.append(subject)
+        msg = de.build_message(subject, html_body, text_body, "from@example.com", "to@example.com")
+        received.append(str(make_header(decode_header(email.message_from_string(msg.as_string())["Subject"]))))
+        return "250 OK (fake)"
+
+    assert de.main(["--force"], now=now, sleep=lambda s: None, send=fake_send) == "sent"
+    raw, on_the_wire = received
+    assert "\xa0" in raw and "\x07" in raw  # the hostile headline reached the subject
+    logged = [l for l in capsys.readouterr().out.splitlines() if l.startswith("[EMAIL] Subject: ")]
+    assert logged == ["[EMAIL] Subject: " + on_the_wire]
+
+
+class _SpySMTP:
+    """Wraps a real smtplib.SMTP and records only the calls smtp_send makes on it, not smtplib's internal ones."""
+
+    def __init__(self, host, port):
+        self._smtp, self.calls = smtplib.SMTP(host, port, timeout=10), []
+        _SpySMTP.last = self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return self._smtp.__exit__(*exc)
+
+    def __getattr__(self, name):
+        self.calls.append(name)
+        return getattr(self._smtp, name)
+
+
+def test_smtp_send_cleans_report_email_and_uses_send_message(smtp_server, monkeypatch):
+    monkeypatch.setenv("GMAIL_USER", CI_USER)
+    monkeypatch.setenv("GMAIL_APP_PASSWORD", "abcdefghijklmnop")
+    monkeypatch.setenv("REPORT_EMAIL", "\ufeffto@example.com\xa0")  # BOM and NBSP from a pasted secret
+    host, port = smtp_server.server_address
+
+    de.smtp_send("s", "<p>hi</p>", "hi", smtp_factory=_SpySMTP, host=host, port=port)
+
+    assert smtp_server.rcpt == [b"to@example.com"]
+    assert email.message_from_bytes(smtp_server.messages[0])["To"] == "to@example.com"
+    assert "send_message" in _SpySMTP.last.calls and "sendmail" not in _SpySMTP.last.calls
+
+
+def test_subject_is_an_explicit_utf8_header():
+    """Pins the Header object: compat32's implicit fallback also yields =?utf-8?, so the wire tests cannot tell."""
+    subject = de.build_message("Plain ASCII", "<p>hi</p>", "hi", "from@example.com", "to@example.com")["Subject"]
+    assert isinstance(subject, Header)
+    assert subject.encode().startswith("=?utf-8?")
+
+
+def test_loopback_gate_restores_create_connection():
+    original = socket.create_connection
+    with pytest.MonkeyPatch.context() as mp:
+        _gate_loopback(mp)
+        assert socket.create_connection is not original
+    assert socket.create_connection is original
