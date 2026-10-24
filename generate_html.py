@@ -421,7 +421,7 @@ def generate_html():
     # --- Metadata ---
     slug_map = load_slug_map()
     daily_hook = ""
-    hook_path = Path("logs/daily_hook.txt")
+    hook_path = Path("data/daily_hook.txt")
     if hook_path.exists():
         with open(hook_path) as f:
             daily_hook = f.read().strip()

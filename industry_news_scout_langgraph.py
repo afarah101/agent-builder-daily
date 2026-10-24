@@ -535,15 +535,6 @@ def save_and_archive(state):
     state = {**state, "classified_news": kept}
     _run["written"] = len(kept)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    output = {
-        "timestamp": datetime.now().isoformat(),
-        "filter": "last_4_to_8_weeks",
-        "total_fetched": len(state["raw_articles"]),
-        "total_classified": len(state["classified_news"]),
-        "news": state["classified_news"],
-    }
-    with open(state["output_file"], "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
     archive = []
     if os.path.exists(ARCHIVE_FILE):
         try:
@@ -552,13 +543,48 @@ def save_and_archive(state):
         except:
             pass
     today = datetime.now().strftime("%Y-%m-%d")
-    archive = [e for e in archive if e.get("date") != today]
-    archive.insert(0, {"date": today, "total": len(state["classified_news"]), "news": state["classified_news"]})
-    archive = archive[:60]
-    with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
-        json.dump(archive, f, indent=2, ensure_ascii=False)
-    print("Saved " + str(len(state["classified_news"])) + " news items.")
-    generate_daily_hook(state["classified_news"])
+    daily = []
+    if os.path.exists(state["output_file"]):
+        try:
+            with open(state["output_file"], encoding="utf-8") as f:
+                daily = json.load(f).get("news", [])
+        except Exception:
+            pass
+    # Same-day reruns add to today's items, never replace them (daily file and archive entry both count).
+    entry = next((e for e in archive if e.get("date") == today), {})
+    keys = set()
+
+    def unseen(items):
+        out = []
+        for item in items:
+            k = (item.get("id") or item.get("url") or "").strip()
+            if k not in keys:
+                keys.add(k)
+                out.append(item)
+        return out
+
+    merged = unseen(daily + entry.get("news", []))
+    added = unseen(state["classified_news"])
+    merged += added
+    if added:
+        output = {
+            "timestamp": datetime.now().isoformat(),
+            "filter": "last_4_to_8_weeks",
+            "total_fetched": len(state["raw_articles"]),
+            "total_classified": len(merged),
+            "news": merged,
+        }
+        with open(state["output_file"], "w", encoding="utf-8") as f:
+            json.dump(output, f, indent=2, ensure_ascii=False)
+        archive = [e for e in archive if e.get("date") != today]
+        archive.insert(0, {"date": today, "total": len(merged), "news": merged})
+        archive = archive[:60]
+        with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
+            json.dump(archive, f, indent=2, ensure_ascii=False)
+        print(f"Saved {len(added)} new news items ({len(merged)} today).")
+        generate_daily_hook(merged)
+    else:
+        print("No new news items; today's news left unchanged.")
     try:
         print(f"[CACHE] Saved {llm_cache.save()} entries to {llm_cache.CACHE_FILE}")
     except Exception as e:
@@ -566,7 +592,7 @@ def save_and_archive(state):
     return state
 
 def generate_daily_hook(classified_news):
-    """Write a one-line punchy hook from today's top 3 items to logs/daily_hook.txt."""
+    """Write a one-line punchy hook from today's top 3 items to data/daily_hook.txt."""
     if not classified_news:
         return
     top = sorted(classified_news, key=lambda x: x.get("relevance_score", 0), reverse=True)[:3]
@@ -580,8 +606,8 @@ def generate_daily_hook(classified_news):
     )
     try:
         hook = groq_complete([{"role": "user", "content": prompt}], max_tokens=60, call_site="news.daily_hook")
-        os.makedirs("logs", exist_ok=True)
-        with open("logs/daily_hook.txt", "w") as f:
+        os.makedirs("data", exist_ok=True)
+        with open("data/daily_hook.txt", "w") as f:
             f.write(hook.strip())
         print(f"[DEBUG] Daily hook saved: {hook.strip()}")
     except Exception as e:
