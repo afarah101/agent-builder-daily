@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hugging Face ❤️ TorchTPU: TPUs, Natively - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
+    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .summary-body p{margin-bottom:16px}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
+    .guide-block.green{border-left-color:var(--accent-green)}
+    .guide-block.amber{border-left-color:#f59e0b}
+    .guide-block.red{border-left-color:#ef4444}
+    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
+    .guide-block.green .guide-label{color:var(--accent-green)}
+    .guide-block.amber .guide-label{color:#f59e0b}
+    .guide-block.red .guide-label{color:#ef4444}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
+    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">Hugging Face ❤️ TorchTPU: TPUs, Natively</h1>
+  <div class="meta-line">Hugging Face · 20 Oct 202 · Generated 24 Oct 2026, 19:42</div>
+  <a href="https://huggingface.co/blog/hf-torchtpu" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Detailed Summary</div>
+  </div>
+  <div class="summary-body"><p>Hugging Face has launched TorchTPU, a native PyTorch backend that enables direct execution of Transformers, Diffusers, and other Hugging Face models on Google Cloud TPUs. The release eliminates the need for intermediate layers such as torch_xla or JAX, allowing developers to run standard PyTorch code with a simple device_map="tpu" argument. For enterprise IT teams, this simplifies the deployment pipeline, reduces code complexity, and lowers the barrier to adopting TPU acceleration for large‑scale language and vision workloads. The integration is achieved through a lightweight wrapper that translates PyTorch tensor operations into TPU-compatible calls, leveraging Google Cloud’s TPU v4 and v5 hardware. Vendors involved include Hugging Face (model hub and libraries), Google Cloud (TPU infrastructure and Cloud AI Platform), and PyTorch (core framework). The broader industry implication is a shift toward more homogeneous AI stacks: enterprises can now use a single framework (PyTorch) across CPUs, GPUs, and TPUs, streamlining operations and reducing vendor lock‑in. It also accelerates the adoption of TPU technology in production, as developers no longer need to maintain separate JAX or XLA codebases. This development is likely to influence cloud providers to expose more native TPU support for other frameworks, and may prompt model developers to optimize for TPU execution by default.</p></div>
+  <div class="divider"></div>
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">IT Engineer Application Guide</div>
+  </div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory current AI workloads: model size, inference latency, batch size, and training throughput.  
+   - Identify existing GPU or CPU clusters and their utilization rates.  
+   - Verify that your PyTorch version is 1.13+ and that you have access to Google Cloud IAM roles for TPU usage.  
+   - Assess network bandwidth and storage I/O to ensure TPU pods can be provisioned without bottlenecks.</div></div>
+<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit analysis comparing GPU vs TPU for target workloads.  
+   - Use benchmark data from Hugging Face’s TorchTPU release notes (e.g., 2–3× speedup for BERT‑large inference on TPU v4).  
+   - Quantify potential savings: compute hours, energy consumption, and maintenance overhead.  
+   - Present a phased migration plan with ROI estimates over 12 months.</div></div>
+<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Hugging Face Transformers and Diffusers libraries (with TorchTPU support).  
+   - Google Cloud AI Platform Pipelines for orchestrating training jobs.  
+   - Terraform or Pulumi scripts for provisioning TPU pods.  
+   - Prometheus + Grafana for monitoring TPU utilization and performance.  
+   - Google Cloud IAM & VPC Service Controls for compliance.</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: TPU memory limits may require model sharding; ensure device_map supports your model architecture.  
+   - Compliance: Data residency on Google Cloud must align with UK GDPR; use region‑specific TPU instances.  
+   - Operational: TPU pods have a fixed lifecycle; plan for graceful shutdown and checkpointing.  
+   - Vendor lock‑in: Heavy reliance on Google Cloud may limit future migration options.</div></div>
+<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a single inference service (e.g., a BERT‑base model) on a TPU v4 pod using device_map="tpu".  
+   - Measure latency and throughput against the existing GPU deployment within 30 days.  
+   - Document the configuration and share the results with stakeholders.</div></div>
+<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Scale the TPU strategy to include large‑scale training of multimodal models (e.g., CLIP, Stable Diffusion) across multiple TPU pods.  
+   - Integrate automated model versioning and A/B testing pipelines that leverage TPU acceleration.  
+   - Explore hybrid inference strategies that route latency‑critical requests to GPUs while offloading batch jobs to TPUs.  
+   - Evaluate multi‑cloud TPU options (e.g., Anthos on Google Cloud) to mitigate vendor lock‑in and meet regulatory requirements.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 24 Oct 2026, 19:42</div>
+</div>
+</body>
+</html>
