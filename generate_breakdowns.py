@@ -10,7 +10,7 @@ from datetime import datetime
 from groq import Groq
 
 CASE_STUDIES_DIR = "case_studies"
-NEWS_DIR = "logs"
+NEWS_DIR = "data/news"
 OUTPUT_DIR = "site/breakdowns"
 
 # Dual API key setup — falls back to key 2 if key 1 hits daily limit

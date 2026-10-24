@@ -247,8 +247,8 @@ def test_news_scout_one_batch_before_writing(tmp_path, monkeypatch):
     calls = []
     monkeypatch.setattr(judge, "judge_batch", _fake_batch({"Wrong": {"verdict": "fail", "score": 0.1, "reason": "swapped company"},
                                                           "Broken": {"verdict": "error", "score": 0.0, "reason": "judge failed"}}, calls))
-    news.save_and_archive({"raw_articles": items, "classified_news": items, "output_file": "logs/news.json"})
-    out = json.loads(Path("logs/news.json").read_text())["news"]
+    news.save_and_archive({"raw_articles": items, "classified_news": items, "output_file": "data/news/news.json"})
+    out = json.loads(Path("data/news/news.json").read_text())["news"]
     assert calls == [3] and [x["title"] for x in out] == ["Good"] and news._run["written"] == 1
     assert news._judge["failed"] == 1 and news._judge["errors"] == 1
 

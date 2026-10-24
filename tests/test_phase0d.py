@@ -78,9 +78,9 @@ def test_classify_error_not_published_and_counted(env, monkeypatch):
             raise RuntimeError("groq exploded")
         return GOOD if "News item" in kw["messages"][0]["content"] else "A hook."
     monkeypatch.setattr(news, "Groq", FakeGroq(responder))
-    state = news.classify_news({"raw_articles": articles(), "classified_news": [], "output_file": "logs/news_x.json"})
+    state = news.classify_news({"raw_articles": articles(), "classified_news": [], "output_file": "data/news/news_x.json"})
     news.save_and_archive(state)
-    written = json.loads(Path("logs/news_x.json").read_text())["news"]
+    written = json.loads(Path("data/news/news_x.json").read_text())["news"]
     assert [w["title"] for w in written] == ["AI news item 0", "AI news item 2"]
     assert "classify_failed" in news._quality["fails"] and news._quality["total"] == 3
     assert news._quality["pass_rate"] == pytest.approx(2 / 3)
@@ -129,7 +129,7 @@ def test_items_saved_equals_items_written(env, monkeypatch):
     monkeypatch.setattr(news, "Groq", FakeGroq(lambda kw: (_ for _ in ()).throw(RuntimeError("down"))
                                                if "AI news item 2" in kw["messages"][0]["content"] else (GOOD if "News item" in kw["messages"][0]["content"] else "A hook.")))
     news.run_industry_news_scout()
-    written = json.loads(next(Path("logs").glob("news_*.json")).read_text())["news"]
+    written = json.loads(next(Path("data/news").glob("news_*.json")).read_text())["news"]
     saved = [s["output"]["items_saved"] for s in env.spans if "items_saved" in (s.get("output") or {})]
     assert len(written) == 2 and saved == [2]
 
