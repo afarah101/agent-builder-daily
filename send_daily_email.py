@@ -13,6 +13,7 @@ import smtplib
 import sys
 import time
 from datetime import datetime, timedelta, timezone
+from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from zoneinfo import ZoneInfo
@@ -187,18 +188,39 @@ def build_stale(data, now, why):
 
 # ---------- send ----------
 
-def smtp_send(subject, html_body, text_body):
-    user, password = os.getenv("GMAIL_USER"), os.getenv("GMAIL_APP_PASSWORD")
-    recipient = os.getenv("REPORT_EMAIL") or user
-    if not user or not password:
-        raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD not set")
+_BAD_HEADER_CHARS = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def clean_header(s):
+    """Scraped headlines carry NBSP and control characters; CR/LF would also allow header injection.
+    \\s+ is Unicode-aware, so it folds NBSP into a plain space."""
+    return re.sub(r"\s+", " ", _BAD_HEADER_CHARS.sub(" ", str(s or ""))).strip()
+
+
+def clean_secret(s):
+    """Google shows app passwords in four groups; the spaces are display only and are often pasted as NBSP,
+    which smtplib's AUTH PLAIN cannot ascii-encode (run 39970000707)."""
+    return re.sub(r"\s+", "", str(s or ""))
+
+
+def build_message(subject, html_body, text_body, sender, recipient):
     msg = MIMEMultipart("alternative")
-    msg["From"], msg["To"], msg["Subject"] = user, recipient, subject
+    msg["From"], msg["To"] = sender, recipient
+    msg["Subject"] = Header(clean_header(subject), "utf-8")  # explicit, rather than compat32's implicit fallback
     msg.attach(MIMEText(text_body, "plain", "utf-8"))
     msg.attach(MIMEText(html_body, "html", "utf-8"))
+    return msg
+
+
+def smtp_send(subject, html_body, text_body):
+    user, password = clean_secret(os.getenv("GMAIL_USER")), clean_secret(os.getenv("GMAIL_APP_PASSWORD"))
+    recipient = clean_secret(os.getenv("REPORT_EMAIL")) or user
+    if not user or not password:
+        raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD not set")
+    msg = build_message(subject, html_body, text_body, user, recipient)
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(user, password)
-        refused = server.sendmail(user, recipient, msg.as_string())
+        refused = server.send_message(msg)
     return f"accepted by smtp.gmail.com for {recipient}; refused={refused or 'none'}"
 
 
