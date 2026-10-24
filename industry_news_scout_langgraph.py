@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-import os, json, re, feedparser, requests
+import os, json, re, feedparser, requests, trafilatura
+import ipaddress, socket, threading, time
+from urllib.parse import urljoin, urlsplit
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
@@ -25,14 +28,18 @@ from langfuse import Langfuse, observe, propagate_attributes
 langfuse = Langfuse()
 import llm_cache
 import quality_checks
+import judge
 
 _quality = {}
+_judge = {}
 _run = {}
 
 OUTPUT_DIR = "logs"
 ARCHIVE_FILE = "logs/archive.json"
 MAX_ITEMS = 25
 MAX_PER_SOURCE = 3
+MIN_SNIPPET = 300   # shorter RSS/scrape snippets get the full article fetched
+SOURCE_CAP = 3000   # characters of article text kept as source_text
 EIGHT_WEEKS_AGO = datetime.now() - timedelta(weeks=8)
 FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
 
@@ -212,6 +219,93 @@ def scrape_articles(source, seen):
         print("[DEBUG] Scrape error " + source["name"] + ": " + str(e))
     return articles
 
+FETCH_DEADLINE = 10           # seconds, wall clock, for the whole fetch + extract
+FETCH_MAX_BYTES = 2_000_000
+MAX_REDIRECTS = 3
+_FETCH_UA = {"User-Agent": "Mozilla/5.0 (compatible; ScoutBot/1.0)"}
+
+
+def _resolve_ips(host, port):
+    return {info[4][0] for info in socket.getaddrinfo(host, port, proto=socket.IPPROTO_TCP)}
+
+
+def _refuse_reason(url):
+    """None if url is http(s) and every address its host resolves to is public; otherwise why it is refused."""
+    try:
+        parts = urlsplit(url)
+        port = parts.port
+    except ValueError as e:
+        return f"invalid URL: {e}"
+    if parts.scheme not in ("http", "https") or not parts.hostname:
+        return f"scheme {parts.scheme!r} not allowed"
+    try:
+        ips = _resolve_ips(parts.hostname, port or (443 if parts.scheme == "https" else 80))
+    except (OSError, UnicodeError) as e:
+        return f"cannot resolve {parts.hostname}: {type(e).__name__}"
+    for ip in ips:
+        addr = ipaddress.ip_address(ip.split("%")[0])
+        addr = getattr(addr, "ipv4_mapped", None) or addr
+        if (addr.is_private or addr.is_loopback or addr.is_link_local or addr.is_multicast or addr.is_reserved
+                or addr.is_unspecified or not addr.is_global):
+            return f"{parts.hostname} resolves to non-public address {addr}"
+    return None
+
+
+def _fetch_article_text(url, deadline):
+    """Redirects followed by hand so every hop is address-checked; body streamed, capped and stopped at deadline."""
+    # shortcut: the host is resolved for the check and again by requests, so DNS rebinding can slip past; pin the
+    # resolved IP in the connection if feeds start pointing at hostile hosts.
+    for _ in range(MAX_REDIRECTS + 1):
+        why = _refuse_reason(url)
+        if why:
+            raise PermissionError(why)
+        resp = requests.get(url, headers=_FETCH_UA, timeout=(5, FETCH_DEADLINE), stream=True, allow_redirects=False)
+        if resp.is_redirect:
+            url = urljoin(url, resp.headers.get("Location", ""))
+            resp.close()
+            continue
+        resp.raise_for_status()
+        if "text/html" not in resp.headers.get("Content-Type", "").lower():
+            raise ValueError("not text/html: " + resp.headers.get("Content-Type", "none"))
+        body = bytearray()
+        for chunk in resp.iter_content(65536):
+            body += chunk
+            if len(body) > FETCH_MAX_BYTES:
+                resp.close()
+                raise ValueError(f"page over {FETCH_MAX_BYTES} bytes")
+            if time.monotonic() > deadline:  # a slow drip ends here on its next byte, after the caller has moved on
+                resp.close()
+                raise TimeoutError(f"over {FETCH_DEADLINE}s")
+        resp.close()
+        return (trafilatura.extract(bytes(body), include_comments=False, include_tables=False) or "").strip()
+    raise ValueError(f"more than {MAX_REDIRECTS} redirects")
+
+
+def fetch_source_text(article):
+    """Full article text (up to SOURCE_CAP) when the snippet is thin; the snippet on any failure or limit."""
+    snippet = article.get("summary_raw") or ""
+    if len(snippet) >= MIN_SNIPPET or not article.get("url"):
+        return snippet[:SOURCE_CAP]
+    box, deadline = {}, time.monotonic() + FETCH_DEADLINE
+
+    def work():
+        try:
+            box["text"] = _fetch_article_text(article["url"], deadline)
+        except Exception as e:
+            box["error"] = e
+
+    worker = threading.Thread(target=work, daemon=True)
+    worker.start()
+    worker.join(FETCH_DEADLINE)
+    if worker.is_alive():  # hard wall-clock stop for the caller; the daemon worker stops itself at its next read
+        box = {"error": TimeoutError(f"over {FETCH_DEADLINE}s")}
+    if "error" in box or "text" not in box:
+        e = box.get("error")
+        print("[DEBUG] Full-text fetch skipped for " + article.get("title", "")[:50] + ": " + type(e).__name__ + ": " + str(e)[:100])
+        return snippet
+    text = box["text"]
+    return text[:SOURCE_CAP] if len(text) > len(snippet) else snippet
+
 def fetch_news(state):
     print("[DEBUG] Fetching industry news...")
     raw_articles = []
@@ -283,6 +377,12 @@ def fetch_news(state):
             source_counts[article["source"]] += 1
 
     print("[DEBUG] Total after diversity filter: " + str(len(diverse)))
+    # Only the first MAX_ITEMS are classified, so only those get full text.
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        texts = list(pool.map(fetch_source_text, diverse[:MAX_ITEMS]))
+    for article, text in zip(diverse, texts):
+        article["source_text"] = text
+    print(f"[DEBUG] Full text fetched for {sum(len(t) > len(a.get('summary_raw') or '') for a, t in zip(diverse, texts))} thin snippets")
     today = datetime.now().strftime("%Y-%m-%d")
     return {
         "raw_articles": diverse,
@@ -301,7 +401,7 @@ def classify_news(state):
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + article["title"][:60])
         title = article["title"]
         source = article["source"]
-        content = article["summary_raw"][:500]
+        content = (article.get("source_text") or article["summary_raw"])[:SOURCE_CAP]
         classify_prompt = f"""
 You are scoring AI industry news for an IT Engineer who manages
 Google Workspace, JumpCloud, Freshservice, SSO, MDM, endpoint
@@ -430,6 +530,8 @@ def save_and_archive(state):
         summary["fails"]["classify_failed"] = [f"{x['title'][:50]}: classify call failed" for x in failed]
     _quality.clear(); _quality.update(summary)
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back, {len(failed)} classify_failed")
+    kept, judge_held, judge_stats = judge.gate(kept, "title", "summary_raw", "summary", "enterprise_use")
+    _judge.clear(); _judge.update(judge_stats)
     state = {**state, "classified_news": kept}
     _run["written"] = len(kept)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -515,6 +617,8 @@ def run_industry_news_scout():
         )
         if _quality:
             quality_checks.send_scores(langfuse, _quality)
+        if _judge:
+            judge.send_scores(langfuse, _judge)
     print("[DEBUG] Complete")
     langfuse.flush()
     return result

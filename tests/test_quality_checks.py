@@ -130,7 +130,6 @@ def cs(monkeypatch, tmp_path):
     monkeypatch.setattr(llm_cache, "CACHE_FILE", str(tmp_path / "c.json"))
     llm_cache.load()
     monkeypatch.setattr(mod.langfuse, "update_current_generation", lambda **kw: None)
-    monkeypatch.setattr(mod, "gemini_evaluate", lambda *a, **k: {})
     monkeypatch.setattr(mod.time, "sleep", lambda s: None)
     return mod
 

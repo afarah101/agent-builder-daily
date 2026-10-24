@@ -10,10 +10,10 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
 from groq import Groq
 from dotenv import load_dotenv
-import google.genai as genai_client
 from langfuse import Langfuse, observe, propagate_attributes
 import llm_cache
 import quality_checks
+import judge
 load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "")
@@ -124,6 +124,7 @@ def _parse_score_output(text):
     return g
 
 _quality = {}
+_judge = {}
 _run = {}
 
 def _passes(validate, text):
@@ -327,35 +328,6 @@ def fetch_papers(state):
     today = datetime.now().strftime("%Y-%m-%d")
     return {"raw_papers": raw_papers, "scored_papers": [], "output_file": state.get("output_file", OUTPUT_DIR + "/" + today + ".json")}
 
-def gemini_evaluate(abstract, groq_output):
-    try:
-        client = genai_client.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        time.sleep(6)
-        eval_prompt = (
-            "You are a strict fact checker evaluating an AI-generated summary of an academic paper.\n"
-            "Your job is to check if the summary is accurate and if the scores are reasonable.\n\n"
-            "ORIGINAL ABSTRACT:\n" + abstract + "\n\n"
-            "GENERATED SUMMARY: " + groq_output.get("summary", "") + "\n"
-            "SCORES: impact=" + str(groq_output.get("real_world_impact", 0)) +
-            ", maturity=" + str(groq_output.get("ai_maturity", 0)) +
-            ", monetisation=" + str(groq_output.get("monetisation_potential", 0)) + "\n\n"
-            "Answer in JSON only:\n"
-            '{"hallucination_detected": false, "hallucination_detail": "", "scores_reasonable": true, "score_feedback": "", "verdict": "pass"}'
-        )
-        response = client.models.generate_content(model="gemini-2.0-flash-lite", contents=eval_prompt)
-        text = response.text.strip()
-        if "```" in text:
-            text = text.split("```")[1]
-            if text.startswith("json"):
-                text = text[4:]
-        result = json.loads(text.strip())
-        print("[DEBUG] Gemini eval: " + result.get("verdict", "unknown"))
-        time.sleep(4)
-        return result
-    except Exception as e:
-        print("[DEBUG] Gemini eval error: " + str(e))
-        return {"hallucination_detected": False, "verdict": "pass", "score_feedback": ""}
-
 @observe(name="score-papers")
 def score_papers(state):
     papers = state["raw_papers"]
@@ -492,16 +464,6 @@ Abstract:
             s = {"summary": "", "it_breakdown": "", "monetisation": ""}
 
         g.update(s)
-        if i < 5 and not score_failed:
-            eval_result = gemini_evaluate(paper["abstract"], g)
-            if eval_result.get("hallucination_detected"):
-                print("[DEBUG] Hallucination detected — flagging paper")
-            eval_verdict = eval_result.get("verdict", "pass")
-            eval_flagged = eval_result.get("hallucination_detected", False)
-        else:
-            eval_verdict = "pending"
-            eval_flagged = False
-            eval_result = {}
         total = g.get("real_world_impact", 0) + g.get("ai_maturity", 0) + g.get("monetisation_potential", 0)
         scored.append({
             **paper,
@@ -517,8 +479,8 @@ Abstract:
             "author_built_product": g.get("author_built_product", False),
             "score_reasoning": g.get("score_reasoning", ""),
             "gemini_eval_status": g.get("gemini_eval_status", "pending"),
-            "eval_verdict": eval_verdict,
-            "eval_flagged": eval_flagged,
+            "eval_verdict": "pending",  # set to "pass" in save_and_archive once the judge passes it
+            "eval_flagged": False,
             "low_signal": bool(g.get("low_signal", False)),
             **({"score_failed": True} if score_failed else {}),
         })
@@ -539,6 +501,9 @@ def save_and_archive(state):
     kept, held, results = quality_checks.gate(state["scored_papers"])
     _quality.clear(); _quality.update(quality_checks.summarize(results))
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
+    kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown")
+    _judge.clear(); _judge.update(judge_stats)
+    kept = [{**x, "eval_verdict": "pass"} for x in kept]
     published, below_min, beyond_top = rank_for_publish(kept)
     print(f"[RANK] Publishing {len(published)}; cut {below_min} below {MIN_TOTAL}/75, {beyond_top} beyond top {MAX_PUBLISHED}")
     state = {**state, "scored_papers": published}
@@ -634,6 +599,8 @@ def run_case_study_scout():
         )
         if _quality:
             quality_checks.send_scores(langfuse, _quality)
+        if _judge:
+            judge.send_scores(langfuse, _judge)
     print("[DEBUG] Complete")
     langfuse.flush()
 

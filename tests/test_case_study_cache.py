@@ -57,7 +57,6 @@ def env(tmp_path, monkeypatch):
     llm_cache.load()
     logged = []
     monkeypatch.setattr(cs.langfuse, "update_current_generation", lambda **kw: logged.append(kw))
-    monkeypatch.setattr(cs, "gemini_evaluate", lambda *a, **k: {})
     monkeypatch.setattr(cs.time, "sleep", lambda s: None)
     NETWORK_ATTEMPTS.clear()
     return SimpleNamespace(logged=logged, path=tmp_path / "groq_cache.json")
