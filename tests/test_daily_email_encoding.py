@@ -101,6 +101,11 @@ def _gate_loopback(monkeypatch):
         return sock
 
     monkeypatch.setattr(socket, "create_connection", _create_connection)
+    # smtplib.SMTP() calls getfqdn() for EHLO, a reverse lookup the connect gate never sees. A dotless fqdn makes
+    # it fall back to gethostbyname(gethostname()), so pin the hostname too: only "localhost" is ever resolved.
+    monkeypatch.setattr(socket, "getfqdn", lambda name="": "localhost")
+    monkeypatch.setattr(socket, "gethostbyaddr", lambda ip: ("localhost", [], [ip]))
+    monkeypatch.setattr(socket, "gethostname", lambda: "localhost")
 
 
 @pytest.fixture
