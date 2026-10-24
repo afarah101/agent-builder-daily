@@ -12,6 +12,7 @@ import re
 import smtplib
 import sys
 import time
+import unicodedata
 from datetime import datetime, timedelta, timezone
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
@@ -188,7 +189,7 @@ def build_stale(data, now, why):
 
 # ---------- send ----------
 
-_BAD_HEADER_CHARS = re.compile(r"[\x00-\x1f\x7f]")
+_BAD_HEADER_CHARS = re.compile(r"[\x00-\x1f\x7f-\x9f]")  # C0, DEL, and the C1 block smuggled in by cp1252 paste
 
 
 def clean_header(s):
@@ -199,29 +200,35 @@ def clean_header(s):
 
 def clean_secret(s):
     """Google shows app passwords in four groups; the spaces are display only and are often pasted as NBSP,
-    which smtplib's AUTH PLAIN cannot ascii-encode (run 39970000707)."""
-    return re.sub(r"\s+", "", str(s or ""))
+    which smtplib's AUTH PLAIN cannot ascii-encode (run 39970000707). Zero-width separators (U+200B) and a
+    leading U+FEFF BOM survive the same paste but are category Cf, not \\s, so they need their own pass."""
+    stripped = re.sub(r"\s+", "", str(s or ""))
+    return "".join(c for c in stripped if unicodedata.category(c) != "Cf")
 
 
 def build_message(subject, html_body, text_body, sender, recipient):
     msg = MIMEMultipart("alternative")
     msg["From"], msg["To"] = sender, recipient
-    msg["Subject"] = Header(clean_header(subject), "utf-8")  # explicit, rather than compat32's implicit fallback
+    # Explicit, rather than compat32's implicit fallback. An explicit charset also RFC 2047-encodes a
+    # pure-ASCII subject (=?utf-8?q?...?=) instead of leaving it literal: one code path for every subject,
+    # so the encoding cannot differ between a quiet day and a day with an em dash in the headline.
+    msg["Subject"] = Header(clean_header(subject), "utf-8")
     msg.attach(MIMEText(text_body, "plain", "utf-8"))
     msg.attach(MIMEText(html_body, "html", "utf-8"))
     return msg
 
 
-def smtp_send(subject, html_body, text_body):
+def smtp_send(subject, html_body, text_body, *, smtp_factory=smtplib.SMTP_SSL, host="smtp.gmail.com", port=465):
+    """smtp_factory/host/port are seams for the tests; the defaults are the production path."""
     user, password = clean_secret(os.getenv("GMAIL_USER")), clean_secret(os.getenv("GMAIL_APP_PASSWORD"))
     recipient = clean_secret(os.getenv("REPORT_EMAIL")) or user
     if not user or not password:
         raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD not set")
     msg = build_message(subject, html_body, text_body, user, recipient)
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+    with smtp_factory(host, port) as server:
         server.login(user, password)
         refused = server.send_message(msg)
-    return f"accepted by smtp.gmail.com for {recipient}; refused={refused or 'none'}"
+    return f"accepted by {host} for {recipient}; refused={refused or 'none'}"
 
 
 def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
@@ -253,7 +260,7 @@ def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
         subject, html_body, text_body = build_stale(data, now, why)
     else:
         subject, html_body, text_body, sections = build_email(data, now)
-    print(f"[EMAIL] Subject: {subject}")
+    print(f"[EMAIL] Subject: {clean_header(subject)}")  # what build_message will actually send
 
     if args.dry_run:
         os.makedirs(os.path.dirname(PREVIEW), exist_ok=True)
