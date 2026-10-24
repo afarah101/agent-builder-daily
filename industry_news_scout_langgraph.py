@@ -34,8 +34,8 @@ _quality = {}
 _judge = {}
 _run = {}
 
-OUTPUT_DIR = "logs"
-ARCHIVE_FILE = "logs/archive.json"
+OUTPUT_DIR = "data/news"
+ARCHIVE_FILE = "data/news_archive.json"
 MAX_ITEMS = 25
 MAX_PER_SOURCE = 3
 MIN_SNIPPET = 300   # shorter RSS/scrape snippets get the full article fetched
@@ -312,7 +312,7 @@ def fetch_news(state):
     seen = set()
 
     # Cross-run deduplication: load known IDs from archive and active files
-    archive_path = Path("logs/archive.json")
+    archive_path = Path(ARCHIVE_FILE)
     if archive_path.exists():
         with open(archive_path) as f:
             archive = json.load(f)
@@ -321,7 +321,7 @@ def fetch_news(state):
                 uid = item.get("id") or item.get("url", "")
                 if uid:
                     seen.add(uid.strip())
-    for f in Path("logs").glob("news_*.json"):
+    for f in Path(OUTPUT_DIR).glob("news_*.json"):
         if "archive" not in f.name:
             try:
                 data = json.load(open(f))

@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 CASE_STUDIES_DIR = "case_studies"
-NEWS_DIR = "logs"
+NEWS_DIR = "data/news"
 OUTPUT_FILE = "site/index.html"
 ARCHIVE_CS_FILE = "case_studies/archive.json"
-ARCHIVE_NEWS_FILE = "logs/archive.json"
+ARCHIVE_NEWS_FILE = "data/news_archive.json"
 SLUG_MAP_FILE = "site/breakdowns/slug_map.json"
 
 def load_latest_json(directory, prefix=""):
@@ -1254,8 +1254,8 @@ def generate_html():
     if os.path.exists("case_studies/archive.json"):
         shutil.copy("case_studies/archive.json", "site/case_studies_archive.json")
         print("Copied -> site/case_studies_archive.json")
-    if os.path.exists("logs/archive.json"):
-        shutil.copy("logs/archive.json", "site/news_archive.json")
+    if os.path.exists(ARCHIVE_NEWS_FILE):
+        shutil.copy(ARCHIVE_NEWS_FILE, "site/news_archive.json")
         print("Copied -> site/news_archive.json")
     if os.path.exists("site/groq_token_stats.json"):
         print("groq_token_stats.json already in site/ — no copy needed")
