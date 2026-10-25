@@ -591,6 +591,11 @@ def save_and_archive(state):
             if metrics and isinstance(metrics, list):
                 metrics[-1]["article_count"] = len(state["scored_papers"])
                 metrics[-1]["total_fetched"] = len(state["raw_papers"])
+                # Lets remediation_agent.py tell "judge passed nothing" apart from "ranking cut everything"
+                metrics[-1]["date"] = today
+                metrics[-1]["judge_passed"] = judge_stats.get("passed", 0)
+                metrics[-1]["rank_cut_below_min"] = below_min
+                metrics[-1]["rank_cut_beyond_top"] = beyond_top
                 metrics_path.write_text(json.dumps(metrics, indent=2))
                 print(f"[METRICS] Updated article_count: {len(state['scored_papers'])}")
     except Exception as e:
