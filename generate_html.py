@@ -25,6 +25,16 @@ def load_json(filepath):
             return json.load(f)
     return []
 
+STEP_FIELDS = ("try_this", "try_this_judge")
+
+def public_case_day(day):
+    """An archive day without the step fields, switch on or off: steps reach readers only through the email.
+    Anything that is not a day with a list of item dicts is kept as is."""
+    if not isinstance(day, dict) or not isinstance(day.get("case_studies"), list):
+        return day
+    return {**day, "case_studies": [{k: v for k, v in c.items() if k not in STEP_FIELDS} if isinstance(c, dict) else c
+                                    for c in day["case_studies"]]}
+
 def load_slug_map():
     if os.path.exists(SLUG_MAP_FILE):
         with open(SLUG_MAP_FILE) as f:
@@ -1251,9 +1261,10 @@ def generate_html():
     generate_rss(cs_data, news_data)
     # Copy data files to site/ so Vercel can serve them for the dashboard
     import shutil
-    if os.path.exists("case_studies/archive.json"):
-        shutil.copy("case_studies/archive.json", "site/case_studies_archive.json")
-        print("Copied -> site/case_studies_archive.json")
+    if os.path.exists(ARCHIVE_CS_FILE):  # same json.dump as the archive write above, so only the step fields differ
+        with open("site/case_studies_archive.json", "w") as f_out:
+            json.dump([public_case_day(d) for d in load_json(ARCHIVE_CS_FILE)], f_out, indent=2)
+        print("Wrote -> site/case_studies_archive.json (try_this removed)")
     if os.path.exists(ARCHIVE_NEWS_FILE):
         shutil.copy(ARCHIVE_NEWS_FILE, "site/news_archive.json")
         print("Copied -> site/news_archive.json")
