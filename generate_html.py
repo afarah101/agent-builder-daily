@@ -25,6 +25,14 @@ def load_json(filepath):
             return json.load(f)
     return []
 
+STEP_FIELDS = ("try_this", "try_this_judge")
+
+def without_steps(data):
+    """data with the step fields removed at every depth, switch on or off: steps reach readers only through the email."""
+    if isinstance(data, dict):
+        return {k: without_steps(v) for k, v in data.items() if k not in STEP_FIELDS}
+    return [without_steps(v) for v in data] if isinstance(data, list) else data
+
 def load_slug_map():
     if os.path.exists(SLUG_MAP_FILE):
         with open(SLUG_MAP_FILE) as f:
@@ -1250,13 +1258,11 @@ def generate_html():
         f.write(html)
     generate_rss(cs_data, news_data)
     # Copy data files to site/ so Vercel can serve them for the dashboard
-    import shutil
-    if os.path.exists("case_studies/archive.json"):
-        shutil.copy("case_studies/archive.json", "site/case_studies_archive.json")
-        print("Copied -> site/case_studies_archive.json")
-    if os.path.exists(ARCHIVE_NEWS_FILE):
-        shutil.copy(ARCHIVE_NEWS_FILE, "site/news_archive.json")
-        print("Copied -> site/news_archive.json")
+    for src, dst in ((ARCHIVE_CS_FILE, "site/case_studies_archive.json"), (ARCHIVE_NEWS_FILE, "site/news_archive.json")):
+        if os.path.exists(src):  # same json.dump as the archive writes above, so only the step fields differ
+            with open(dst, "w") as f_out:
+                json.dump(without_steps(load_json(src)), f_out, indent=2)
+            print(f"Wrote -> {dst} (try_this removed)")
     if os.path.exists("site/groq_token_stats.json"):
         print("groq_token_stats.json already in site/ — no copy needed")
     print("HTML generated -> " + OUTPUT_FILE)

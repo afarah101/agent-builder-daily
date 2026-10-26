@@ -25,6 +25,7 @@ CS_ARCHIVE, NEWS_ARCHIVE = "case_studies/archive.json", "site/news_archive.json"
 LAST_SENT, PREVIEW = "email/last_sent.txt", "email/preview.html"
 STALE_AFTER = timedelta(hours=30)
 SEND_HOUR = 11
+CASE_LOOKBACK_DAYS = 7
 
 # Site palette (generate_html.py :root). Dark backgrounds set on every cell so dark-mode clients don't invert them.
 C = {"bg": "#0f1117", "surface": "#1a1d27", "surface2": "#22263a", "border": "#2d2d2d", "text": "#f1f5f9",
@@ -52,7 +53,8 @@ def load_data():
     reason, and main() sends the stale alert instead of crashing."""
     try:
         news_day = _load(NEWS_ARCHIVE)[0]
-        cs_day = _load(CS_ARCHIVE)[0]
+        cs_days = _load(CS_ARCHIVE)
+        cs_day = cs_days[0]
         news = sorted(news_day.get("news", []), key=lambda n: _score(n, "relevance_score"), reverse=True)
         papers = sorted(cs_day.get("case_studies", []), key=lambda c: _score(c, "total_score"), reverse=True)
         stamps = [datetime.strptime(news_day["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc)]
@@ -63,7 +65,69 @@ def load_data():
     except (OSError, ValueError, IndexError, KeyError, TypeError, AttributeError) as e:
         print(f"[EMAIL] Scout data missing or malformed: {e!r}")
         return {"news": [], "papers": [], "newest": None, "reason": "a data file is missing or empty, or malformed"}
-    return {"news": news, "papers": papers, "newest": max(stamps), "reason": None}
+    return {"news": news, "papers": papers, "cs_days": cs_days, "newest": max(stamps), "reason": None}
+
+
+def case_of_the_day(cs_days, today):
+    """Top case study by total score from the newest archive day in the last 7 days (today plus the 6 before).
+    shown_date is None for today and the day's date otherwise. None when no day qualifies: the section is omitted."""
+    dated = []
+    for day in cs_days if isinstance(cs_days, list) else []:
+        try:
+            d = datetime.strptime(day["date"], "%Y-%m-%d").date()
+        except (KeyError, TypeError, ValueError):
+            continue
+        items = [c for c in day.get("case_studies") or [] if isinstance(c, dict) and c.get("title")]
+        if items and 0 <= (today - d).days < CASE_LOOKBACK_DAYS:
+            dated.append((d, items))
+    if not dated:
+        return None
+    d, items = max(dated, key=lambda x: x[0])
+    return {**max(items, key=lambda c: _score(c, "total_score")), "shown_date": None if d == today else d}
+
+
+def try_this_enabled():
+    """The one switch rule, also used by the scout: ON only when TRY_THIS_ENABLED is exactly "1" (no strip, no case change).
+    Off by default: the N1 audit (F1-F4) found invented steps that still pass the checks."""
+    return os.getenv("TRY_THIS_ENABLED") == "1"
+
+
+def try_this(case):
+    """The 3 steps, or [] when the switch is off, the case study predates try_this or the list is malformed."""
+    if not try_this_enabled():
+        return []
+    steps = case.get("try_this") if case else None
+    ok = isinstance(steps, list) and len(steps) == 3 and all(isinstance(s, str) and s.strip() for s in steps)
+    return [s.strip() for s in steps] if ok else []
+
+
+def _count(n, word):
+    return f"{n} {word}{'' if n == 1 else 's'}" if n else ""
+
+
+def teaser(top, case, radar, hits):
+    """One line of counts, e.g. 'Today: 1 security story, 1 case study, 3 papers, 5 quick hits.' No titles, so it never
+    repeats The Signal or the bullets below it."""
+    cat = (top.get("category") or "").strip().lower()
+    parts = [f"1 {cat if cat and cat != 'other' else 'top'} story" if top else "", "1 case study" if case else "",
+             _count(len(radar), "paper"), _count(len(hits), "quick hit")]
+    parts = [p for p in parts if p]
+    return "Today: " + ", ".join(parts) + "." if parts else "Here is today's Scout."
+
+
+SIGNAL_HEADINGS = ("Do this week", "Risk if ignored", "Tools affected")
+_S_PARTS = re.compile(r"^\s*S1\s*:\s*(.*?)\s*S2\s*:\s*(.*?)\s*S3\s*:\s*(.*?)\s*$", re.S)
+_S_LABEL = re.compile(r"\bS[1-3]\s*:\s*")
+
+
+def signal_points(text):
+    """enterprise_use arrives as 'S1: … S2: … S3: …'. Returns (heading, text) pairs: three headed points, or one
+    unheaded point when the labels are missing or out of order. No 'S1:' label survives either way."""
+    m = _S_PARTS.match(text or "")
+    if m and all(m.groups()):
+        return list(zip(SIGNAL_HEADINGS, m.groups()))
+    rest = " ".join(_S_LABEL.sub("", text or "").split())
+    return [(None, rest)] if rest else []
 
 
 def two_sentences(text):
@@ -79,22 +143,25 @@ def safe_url(url):
 
 def build_email(data, now):
     news, papers = data["news"], data["papers"]
-    top, hits, radar = (news[0] if news else {}), news[1:6], papers[:3]
+    case = case_of_the_day(data.get("cs_days"), now.astimezone(LONDON).date())
+    shown = case and (case.get("url") or case.get("title"))  # Radar skips the paper already shown as Case study of the day
+    top, hits = (news[0] if news else {}), news[1:6]
+    radar = [p for p in papers if not shown or (p.get("url") or p.get("title")) != shown][:3]
     date = now.strftime("%a %d %b %Y")
     sources = sorted({n.get("source", "") for n in hits if n.get("source")})
-    categories = [n.get("category") for n in news if n.get("category")]
-    avg = sum(_score(n, "relevance_score") for n in news) / len(news) if news else 0
     bullets = [
         f"The Signal: {top.get('title', 'no top story today')}",
+        *([f"Case study of the day: {case['title']}" + (f" (from {case['shown_date']:%a %d %b})" if case["shown_date"] else "")]
+          if case else []),
         f"Research Radar: {len(radar)} paper(s)" + (f", led by {radar[0]['title']} ({_score(radar[0], 'total_score'):.0f}/75)" if radar else ""),
         f"Quick Hits: {len(hits)} more stories" + (f" from {', '.join(sources[:3])}" if sources else ""),
-        f"{len(news)} news items scored today, average relevance {avg:.1f}/10",
-        f"Most common category: {max(set(categories), key=categories.count)}" if categories else "No categories today",
     ]
     sections = {
-        "greeting": two_sentences(top.get("summary", "")),
+        "greeting": teaser(top, case, radar, hits),
         "bullets": bullets,
         "signal": top,
+        "signal_points": signal_points(top.get("enterprise_use")),
+        "case": case,
         "radar": radar,
         "hits": hits,
         "footer": f"{len(news)} news items, {len(papers)} case studies. Data as of {data['newest']:%Y-%m-%d %H:%M} UTC.",
@@ -130,6 +197,16 @@ def render_html(date, s):
                    f'<span style="color:{C["muted"]};">· {_e(n.get("source"))}</span></li>' for n in s["hits"])
     bullets = "".join(f'<li style="margin:0 0 6px;">{_e(b)}</li>' for b in s["bullets"])
     ul = f'style="margin:0;padding-left:18px;font:14px/1.5 {FONT};color:{C["text"]};"'
+    points = "".join(f'<li style="margin:0 0 6px;">' + (f"<b>{_e(h)}:</b> " if h else "") + f"{_e(t)}</li>"
+                     for h, t in s["signal_points"])
+    case = s["case"]
+    case_block = ""
+    if case:
+        steps = "".join(f'<li style="margin:0 0 6px;">{_e(t)}</li>' for t in try_this(case))
+        case_block = _block("Case study of the day", _p(_link(case.get("url"), case.get("title")), size=16)
+                            + (_p(f"From {case['shown_date']:%a %d %b %Y}", C["muted"], 13) if case["shown_date"] else "")
+                            + _p(_e(two_sentences(case.get("summary"))), C["text2"], 14)
+                            + (_p("<b>Try this today</b>", C["text"], 14) + f"<ol {ul}>{steps}</ol>" if steps else ""))
     return f"""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"></head>
 <body style="margin:0;padding:0;background:{C["bg"]};" bgcolor="{C["bg"]}">
@@ -141,8 +218,9 @@ def render_html(date, s):
 {_block("Good morning", _p(_e(s["greeting"])))}
 {_block("In today's Scout", f"<ul {ul}>{bullets}</ul>")}
 {_block("The Signal", _p(_link(sig.get("url"), sig.get("title")), size=16) + _p(_e(sig.get("summary")), C["text2"], 14)
-        + _p("<b>Enterprise use:</b> " + _e(sig.get("enterprise_use")), C["text"], 14)
+        + (f'<ul {ul.replace("margin:0;", "margin:0 0 10px;")}>{points}</ul>' if points else "")
         + _p(_link(sig.get("url"), "Read at " + (sig.get("source") or "source") + " →"), size=14))}
+{case_block}
 {_block("Research Radar", radar)}
 {_block("Quick Hits", f"<ul {ul}>{hits}</ul>")}
 <tr><td bgcolor="{C["bg"]}" style="background:{C["bg"]};padding:16px 24px;font:12px {FONT};color:{C["muted"]};">{_e(s["footer"])}</td></tr>
@@ -153,8 +231,17 @@ def render_text(date, s):
     sig = s["signal"]
     lines = [f"SCOUT DAILY — {date}", SITE_URL, "", "Good morning", s["greeting"], "", "IN TODAY'S SCOUT"]
     lines += [f"- {b}" for b in s["bullets"]]
-    lines += ["", "THE SIGNAL", sig.get("title", ""), sig.get("summary", ""), f"Enterprise use: {sig.get('enterprise_use', '')}",
-              safe_url(sig.get("url")), "", "RESEARCH RADAR"]
+    lines += ["", "THE SIGNAL", sig.get("title", ""), sig.get("summary", "")]
+    lines += [f"- {h}: {t}" if h else f"- {t}" for h, t in s["signal_points"]]
+    lines += [safe_url(sig.get("url"))]
+    case = s["case"]
+    if case:
+        lines += ["", "CASE STUDY OF THE DAY", case.get("title", "")]
+        lines += [f"From {case['shown_date']:%a %d %b %Y}"] if case["shown_date"] else []
+        lines += [two_sentences(case.get("summary")), safe_url(case.get("url"))]
+        steps = try_this(case)
+        lines += ["Try this today:"] + [f"{i}. {t}" for i, t in enumerate(steps, 1)] if steps else []
+    lines += ["", "RESEARCH RADAR"]
     lines += [f"- {c.get('title')} ({_score(c, 'total_score'):.0f}/75)\n  {c.get('summary', '')}\n  {safe_url(c.get('url'))}"
               for c in s["radar"]] or ["- No papers passed today's checks."]
     lines += ["", "QUICK HITS"] + [f"- {n.get('title')} — {safe_url(n.get('url'))}" for n in s["hits"]]
@@ -268,7 +355,7 @@ def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
             f.write(html_body)
         if not stale:
             print(f"[EMAIL] Sections: bullets={len(sections['bullets'])} signal={1 if sections['signal'] else 0} "
-                  f"radar={len(sections['radar'])} hits={len(sections['hits'])}")
+                  f"case={1 if sections['case'] else 0} radar={len(sections['radar'])} hits={len(sections['hits'])}")
         print(f"[EMAIL] Dry run: wrote {PREVIEW}, nothing sent.")
         return "stale_preview" if stale else "preview"
 

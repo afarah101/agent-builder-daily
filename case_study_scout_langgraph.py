@@ -47,6 +47,7 @@ ARCHIVE_FILE = "case_studies/archive.json"
 MAX_PAPERS = 20
 MAX_PUBLISHED = 5
 MIN_TOTAL = 20
+MAX_ABSTRACT_CHARS = 4000  # safety cap only: arXiv abstracts sampled 2026-10-26 ran 1,041-1,889 chars
 FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
 ARXIV_NS = "http://www.w3.org/2005/Atom"
 
@@ -100,6 +101,32 @@ UNIVERSITIES = [
 def _parse_json_output(text):
     clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(clean)
+
+from send_daily_email import try_this_enabled  # the one switch rule, shared with the email
+
+# Added to the summary prompt only when try_this_enabled(); without it the prompt is the one main sends.
+TRY_THIS_PROMPT = """TRY THIS TODAY (try_this): exactly 3 steps an IT engineer can do today, each taking under 1 hour.
+Each step starts with a verb, names a real tool or setting (for example "Intune compliance policy", "Okta sign-on policy", "Azure Monitor alert rule", "GitHub Actions workflow"), and is 25 words or fewer.
+If the paper gives an IT engineer no practical action, return "try_this": [] instead of inventing steps.
+
+"""
+TRY_THIS_FIELD = ', "try_this": ["", "", ""]'
+
+def _try_this_steps(steps, title=""):
+    """Exactly 3 non-empty steps of 25 words or fewer, else []: the email shows all three or none. Every drop is logged.
+    shortcut: verb-first, real-tool and under-1-hour rules are enforced by the prompt only; add a judge check if they drift."""
+    if steps is None or steps == []:  # no steps offered: nothing dropped
+        return []
+    if not isinstance(steps, list):
+        why = f"try_this is a {type(steps).__name__}, not a list"
+    else:
+        steps = [" ".join(s.split()).rstrip(";,") for s in steps if isinstance(s, str) and s.strip(" ;,")]
+        long = [f"step {n} has {len(s.split())} words (limit 25)" for n, s in enumerate(steps, 1) if len(s.split()) > 25]
+        why = f"{len(steps)} non-empty steps, need 3" if len(steps) != 3 else "; ".join(long)
+        if not why:
+            return steps
+    print(f"[TRY_THIS] DROPPED all steps for {title[:60] or '?'}: {why}")
+    return []
 
 def _all_zero(g):
     return all(g.get(f, 0) == 0 for f in quality_checks.CS_SCORES)
@@ -282,7 +309,7 @@ def fetch_papers(state):
                     continue
                 seen.add(pid)
                 title_text = " ".join((title_el.text or "").split())
-                abstract_text = " ".join((summary_el.text or "").split())[:600]
+                abstract_text = " ".join((summary_el.text or "").split())[:MAX_ABSTRACT_CHARS]
                 pub_date = (published_el.text or "")[:10] if published_el is not None else ""
                 if len(abstract_text) < 80:
                     continue
@@ -333,6 +360,7 @@ def score_papers(state):
     papers = state["raw_papers"]
     print("[DEBUG] Scoring " + str(len(papers)) + " papers...")
     scored = []
+    steps_on = try_this_enabled()
     limit = min(len(papers), MAX_PAPERS)
     for i in range(limit):
         paper = papers[i]
@@ -385,8 +413,8 @@ Either:
 - "Not directly applicable to IT infrastructure work"
 Never vague. Never "could be used for". Max 3 sentences.
 
-Return JSON only. No markdown. No preamble.
-{{"summary": "", "it_breakdown": ""}}
+{TRY_THIS_PROMPT if steps_on else ""}Return JSON only. No markdown. No preamble.
+{{"summary": "", "it_breakdown": ""{TRY_THIS_FIELD if steps_on else ""}}}
 
 Abstract:
 {paper_block}"""
@@ -446,7 +474,7 @@ Abstract:
             try:
                 text = groq_complete(
                     [{"role": "user", "content": summary_prompt}],
-                    max_tokens=350,
+                    max_tokens=800,  # was 350; hidden reasoning used all of 500 in the N1 live test and returned empty
                     model=MODEL_SUMMARY,
                     validate=_parse_json_output,
                     call_site="case_study.summary",
@@ -454,6 +482,7 @@ Abstract:
                 if text is None:
                     continue
                 s = _parse_json_output(text)
+                s["try_this"] = _try_this_steps(s.get("try_this"), paper["title"]) if steps_on else []
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] Summary JSON parse error on attempt {attempt+1}/3 — retrying...")
@@ -474,6 +503,7 @@ Abstract:
             "recency_score": 25,
             "summary": g.get("summary", ""),
             "it_breakdown": g.get("it_breakdown", ""),
+            "try_this": g.get("try_this", []),
             "monetisation": g.get("monetisation", ""),
             "relevance_tag": g.get("relevance_tag", "Other"),
             "author_built_product": g.get("author_built_product", False),
@@ -501,7 +531,11 @@ def save_and_archive(state):
     kept, held, results = quality_checks.gate(state["scored_papers"])
     _quality.clear(); _quality.update(quality_checks.summarize(results))
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
-    kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown")
+    if try_this_enabled():
+        # try_this rides in the same batch: no extra Gemini call. Any failed or unjudged step drops all three.
+        kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown", steps_key="try_this")
+    else:  # off: steps are never judged or saved, whatever the items carry
+        kept, judge_held, judge_stats = judge.gate([{**x, "try_this": []} for x in kept], "title", "abstract", "summary", "it_breakdown")
     _judge.clear(); _judge.update(judge_stats)
     kept = [{**x, "eval_verdict": "pass"} for x in kept]
     published, below_min, beyond_top = rank_for_publish(kept)
