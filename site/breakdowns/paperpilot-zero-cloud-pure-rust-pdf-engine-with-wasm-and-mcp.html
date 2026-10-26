@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaperPilot – Zero-Cloud, Pure-Rust PDF Engine with WASM and MCP - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
+    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .summary-body p{margin-bottom:16px}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
+    .guide-block.green{border-left-color:var(--accent-green)}
+    .guide-block.amber{border-left-color:#f59e0b}
+    .guide-block.red{border-left-color:#ef4444}
+    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
+    .guide-block.green .guide-label{color:var(--accent-green)}
+    .guide-block.amber .guide-label{color:#f59e0b}
+    .guide-block.red .guide-label{color:#ef4444}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
+    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">PaperPilot – Zero-Cloud, Pure-Rust PDF Engine with WASM and MCP</h1>
+  <div class="meta-line">Hacker News · 26 Oct 202 · Generated 26 Oct 2026, 12:40</div>
+  <a href="https://github.com/KrushnaVardhanReddy/PaperPilot" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Detailed Summary</div>
+  </div>
+  <div class="summary-body"><p>PaperPilot, a new open‑source PDF toolkit written entirely in Rust, has been announced on Hacker News. The project offers a zero‑cloud, local‑first approach to PDF manipulation, providing command‑line, REST, MCP, WASM, and desktop interfaces. Core capabilities include merging, splitting, compressing, OCR, and PII scanning, all performed on the client side without external API calls. The release emphasizes security and privacy, positioning itself as a suitable replacement for commercial PDF services that traditionally rely on cloud processing. For enterprise IT teams, this means a potential shift from costly, third‑party PDF engines to a self‑hosted, auditable solution that can run in isolated environments, on-premises servers, or within browsers via WebAssembly. The Rust foundation promises memory safety and performance, while the WASM build allows integration into web‑based AI agents or micro‑services without exposing sensitive documents to external networks. Vendors such as Adobe Acrobat, Foxit, and various cloud‑based document services could see reduced market share if organizations adopt PaperPilot for internal workflows. The broader industry implication is a move toward “zero‑cloud” document handling, reinforcing data sovereignty and compliance with regulations like UK GDPR. The project also illustrates the growing trend of leveraging Rust for security‑critical, high‑performance tooling, potentially influencing other open‑source initiatives to adopt similar stacks.</p></div>
+  <div class="divider"></div>
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">IT Engineer Application Guide</div>
+  </div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory existing PDF processing tools (Adobe, Foxit, ABBYY, commercial APIs).
+   - Measure current usage: number of documents per day, average size, OCR/PII scanning frequency.
+   - Identify compliance requirements: data residency, encryption at rest, audit logging.
+   - Assess infrastructure: on‑prem servers, Kubernetes clusters, edge devices, browser‑based agents.
+   - Benchmark performance: current latency, CPU/memory usage, throughput.</div></div>
+<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost comparison: SaaS subscription vs. PaperPilot deployment (hardware, maintenance, support).
+   - Quantify data exposure risk reduction: estimate number of documents that would no longer traverse external networks.
+   - Include compliance metrics: number of GDPR‑related incidents avoided, audit log coverage.
+   - Present performance gains: expected latency reduction (e.g., 30–50% faster OCR on local GPU), throughput increase.
+   - Highlight security benefits: Rust memory safety, zero‑cloud, ability to run in isolated VMs.</div></div>
+<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- PaperPilot (CLI, REST, MCP, WASM, desktop).
+   - Rust toolchain (cargo, rustup) for building and packaging.
+   - Kubernetes or Docker for containerized deployment.
+   - OpenTelemetry for observability of PDF processing pipelines.
+   - HashiCorp Vault or AWS KMS for key management if encryption is needed.
+   - GitHub Actions or GitLab CI for CI/CD of PaperPilot builds.</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Rust ecosystem maturity, potential bugs in OCR or PII modules, integration complexity with existing micro‑services.
+   - Compliance: Ensure PII scanning meets UK GDPR standards; validate that local processing does not create new data transfer risks.
+   - Operational: Lack of commercial support; need for in‑house expertise to maintain and patch.
+   - Performance: Unexpected CPU spikes during OCR; need for GPU acceleration if required.
+   - Security: Ensure the WASM build does not expose vulnerabilities to browser clients.</div></div>
+<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy the PaperPilot CLI on a single on‑prem server.
+   - Replace one high‑volume PDF merge job with PaperPilot’s merge command.
+   - Measure throughput and CPU usage; document cost savings and latency improvement.
+   - Publish a short internal report with metrics to demonstrate feasibility.</div></div>
+<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Integrate PaperPilot’s WASM module into existing AI agents or web portals, enabling client‑side PDF processing.
+   - Build a micro‑service wrapper around the REST API, exposing a secure internal endpoint for document workflows.
+   - Create a CI/CD pipeline to automatically rebuild and deploy PaperPilot binaries when new Rust releases are available.
+   - Conduct a formal security audit (static analysis, fuzzing) and obtain a compliance certification for the PDF processing stack.
+   - Scale the deployment across multiple data centers or edge nodes, ensuring high availability and redundancy.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 26 Oct 2026, 12:40</div>
+</div>
+</body>
+</html>
