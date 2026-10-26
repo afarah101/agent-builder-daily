@@ -15,10 +15,12 @@ langfuse = Langfuse()
 
 NOT_CHECKED = "Not checked"
 ALERT_STATE_FILE = Path("data/remediation_last_alert.json")
+# case_study_scout_langgraph.py scoring prompt: total_score (0-75) below 30 is low_signal
+LOW_SIGNAL_SCORE = 30
 
 
 def is_dry_run() -> bool:
-    return os.getenv("REMEDIATION_DRY_RUN") == "1"
+    return os.getenv("REMEDIATION_DRY_RUN", "").strip().lower() in ("1", "true", "yes")
 
 
 def fmt(value, suffix=""):
@@ -38,9 +40,23 @@ def load_json(path):
 def load_today_metrics(today):
     """Latest monitoring/metrics.json row, only if the case study scout wrote it today."""
     metrics = load_json("monitoring/metrics.json")
-    if isinstance(metrics, list) and metrics and metrics[-1].get("date") == today:
+    if isinstance(metrics, list) and metrics and isinstance(metrics[-1], dict) and metrics[-1].get("date") == today:
         return metrics[-1]
     return None
+
+
+def as_count(value):
+    """value if it is an int >= 0, else None (missing or wrong type is Not checked, never 0)."""
+    return value if type(value) is int and value >= 0 else None
+
+
+def groq_stats_usable(stats):
+    """True when every field check_tokens reads is present with the right type."""
+    if not isinstance(stats, dict):
+        return False
+    keys = [stats.get("key_1"), stats.get("key_2")]
+    fields_ok = all(isinstance(k, dict) and as_count(k.get(f)) is not None for k in keys for f in ("total_tokens", "calls"))
+    return fields_ok and bool(as_count(stats.get("daily_limit_per_key", 100000)))
 
 
 # ─────────────────────────────────────────────
@@ -84,13 +100,16 @@ def check_papers(state: RemediationState) -> RemediationState:
     info = list(state.get("info", []))
 
     data = load_json(today_file)
-    papers_saved = len(data.get("case_studies", [])) if isinstance(data, dict) else None
+    if isinstance(data, dict) and not isinstance(data.get("case_studies"), list):
+        print(f"[REMEDIATION] {today_file} has no case_studies list - {NOT_CHECKED}")
+        data = None
+    papers_saved = len(data["case_studies"]) if isinstance(data, dict) else None
 
     if papers_saved is not None:
         for vf in cs_path.glob(f"v_{today.replace('-','')}*.json"):
             vdata = load_json(vf)
-            if isinstance(vdata, dict):
-                papers_saved += len(vdata.get("case_studies", []))
+            if isinstance(vdata, dict) and isinstance(vdata.get("case_studies"), list):
+                papers_saved += len(vdata["case_studies"])
 
     if papers_saved is None:
         faults.append("papers_file_missing")
@@ -101,15 +120,16 @@ def check_papers(state: RemediationState) -> RemediationState:
         print("[REMEDIATION] ALERT: today's case study file missing")
     elif papers_saved == 0:
         latest = load_today_metrics(today)
-        judge_passed = latest.get("judge_passed") if latest else None
+        judge_passed = as_count(latest.get("judge_passed")) if latest else None
         if judge_passed:
-            below = latest.get("rank_cut_below_min", 0)
-            beyond = latest.get("rank_cut_beyond_top", 0)
+            below = as_count(latest.get("rank_cut_below_min"))
+            beyond = as_count(latest.get("rank_cut_beyond_top"))
+            cut = below + beyond if below is not None and beyond is not None else None
             info.append(
                 f"INFO: 0 case studies saved. The judge passed {judge_passed}, "
-                f"ranking cut {below + beyond} ({below} below the minimum score, {beyond} beyond the top 5)."
+                f"ranking cut {fmt(cut)} ({fmt(below)} below the minimum score, {fmt(beyond)} beyond the top 5)."
             )
-            print(f"[REMEDIATION] 0 papers saved: ranking cut {below + beyond} judge-passed items (INFO)")
+            print(f"[REMEDIATION] 0 papers saved: ranking cut {fmt(cut)} judge-passed items (INFO)")
         else:
             faults.append("papers_zero")
             reason = "the judge passed 0 items" if judge_passed == 0 else "judge result not recorded today"
@@ -236,13 +256,16 @@ def check_tokens(state: RemediationState) -> RemediationState:
 
     today = datetime.now().strftime("%Y-%m-%d")
     stats = load_json("site/groq_token_stats.json")
+    if stats is not None and not groq_stats_usable(stats):
+        print(f"[REMEDIATION] groq_token_stats.json has missing or wrong-type fields - {NOT_CHECKED}")
+        stats = None
     if isinstance(stats, dict) and not str(stats.get("generated_at", "")).startswith(today):
         print(f"[REMEDIATION] groq_token_stats.json is not from today ({stats.get('generated_at')}) - {NOT_CHECKED}")
         stats = None
     if isinstance(stats, dict):
-        key1_tokens = stats.get("key_1", {}).get("total_tokens", 0)
-        key2_tokens = stats.get("key_2", {}).get("total_tokens", 0)
-        groq_calls = stats.get("key_1", {}).get("calls", 0) + stats.get("key_2", {}).get("calls", 0)
+        key1_tokens = stats["key_1"]["total_tokens"]
+        key2_tokens = stats["key_2"]["total_tokens"]
+        groq_calls = stats["key_1"]["calls"] + stats["key_2"]["calls"]
         DAILY_LIMIT = stats.get("daily_limit_per_key", 100000)
         key1_pct = round((key1_tokens / DAILY_LIMIT) * 100, 1)
         key2_pct = round((key2_tokens / DAILY_LIMIT) * 100, 1)
@@ -299,19 +322,36 @@ def check_langfuse(state: RemediationState) -> RemediationState:
     # the scout's own {total_traces} shape only survives if the proxy skipped.
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     snapshot = load_json("site/langfuse_snapshot.json")
+    proxy_no_rows = False
     try:
         if isinstance(snapshot, dict) and isinstance(snapshot.get("trace_counts"), list):
             if str(snapshot.get("generated_at", "")).startswith(today):
-                langfuse_traces = sum(int(t.get("count_count", 0)) for t in snapshot["trace_counts"]
-                                      if t.get("time_dimension") == today)
+                rows = snapshot["trace_counts"]
+                if not rows:
+                    # langfuse_proxy.py writes [] when its LangFuse query fails, so this is not a 0
+                    proxy_no_rows = True
+                    print(f"[REMEDIATION] LangFuse snapshot has no trace rows (proxy query failed?) - {NOT_CHECKED}")
+                elif not any(t.get("time_dimension") == today for t in rows) and datetime.now(timezone.utc).hour < 2:
+                    # shortcut: assumes a scout run lasts under 2h; a run that crossed UTC midnight traced into yesterday's bucket
+                    print(f"[REMEDIATION] No LangFuse rows for {today} yet, just after UTC midnight - {NOT_CHECKED}")
+                else:
+                    langfuse_traces = sum(as_count(t["count_count"]) for t in rows
+                                          if t.get("time_dimension") == today)
             else:
                 print(f"[REMEDIATION] LangFuse snapshot is not from today ({snapshot.get('generated_at')})")
         elif isinstance(snapshot, dict) and "total_traces" in snapshot:
-            langfuse_traces = int(snapshot["total_traces"])
-    except (TypeError, ValueError) as e:
+            # The scout writes total_traces as an all-time count, so it says nothing about today
+            print(f"[REMEDIATION] LangFuse snapshot has only the all-time total_traces ({snapshot['total_traces']}) - {NOT_CHECKED}")
+    except (TypeError, ValueError, AttributeError, KeyError) as e:
         print(f"[REMEDIATION] LangFuse snapshot unreadable: {e}")
         langfuse_traces = None
 
+    if proxy_no_rows:
+        faults.append("langfuse_no_rows")
+        alerts.append(
+            "WARNING: LangFuse proxy returned no trace rows today (query error or timeout). "
+            "Traces not checked; the LangFuse dashboard data is empty."
+        )
     if langfuse_traces == 0:
         faults.append("langfuse_zero")
         alerts.append(
@@ -355,8 +395,9 @@ def report(state: RemediationState) -> RemediationState:
     avg_tpc = None
     if groq_calls is not None:
         stats = load_json("site/groq_token_stats.json") or {}
-        tpc = stats.get("tokens_per_call", [])
-        avg_tpc = round(sum(tpc) / len(tpc)) if tpc else 0
+        tpc = stats.get("tokens_per_call", []) if isinstance(stats, dict) else None
+        if isinstance(tpc, list) and all(as_count(t) is not None for t in tpc):
+            avg_tpc = round(sum(tpc) / len(tpc)) if tpc else (0 if groq_calls == 0 else None)
 
     # Load metrics.json for score and eval data
     avg_score = "N/A"
@@ -368,14 +409,14 @@ def report(state: RemediationState) -> RemediationState:
     today = date.today().strftime("%Y-%m-%d")
     latest = load_today_metrics(today) or {}
     # article_count is the number published; total_fetched is the arXiv fetch count
-    papers_fetched = latest.get("total_fetched")
-    judge_passed = latest.get("judge_passed")
+    papers_fetched = as_count(latest.get("total_fetched"))
+    judge_passed = as_count(latest.get("judge_passed"))
     try:
         # Load real score and gemini data from today's case study file
         cs_path = Path(f"case_studies/{today}.json")
         if cs_path.exists():
             cs_data = json.loads(cs_path.read_text())
-            papers_fetched = cs_data.get("total_fetched", papers_fetched)
+            papers_fetched = as_count(cs_data.get("total_fetched", papers_fetched))
             studies = cs_data.get("case_studies", [])
             if studies:
                 scores = [s.get("total_score", 0) for s in studies if s.get("total_score")]
@@ -385,12 +426,10 @@ def report(state: RemediationState) -> RemediationState:
                 gemini_pending = sum(1 for s in studies if s.get("gemini_eval_status") == "pending")
 
                 if isinstance(avg_score, (int, float)):
-                    if avg_score >= 70:
-                        score_health = "GOOD"
-                    elif avg_score >= 50:
-                        score_health = "FAIR"
+                    if avg_score >= LOW_SIGNAL_SCORE:
+                        score_health = f"OK (at or above the {LOW_SIGNAL_SCORE}/75 low-signal line)"
                     else:
-                        score_health = "POOR - scoring prompts need review"
+                        score_health = f"POOR - average is below the {LOW_SIGNAL_SCORE}/75 low-signal line"
     except Exception as e:
         print(f"[REMEDIATION] Metrics load error: {e}")
 
@@ -402,7 +441,7 @@ def report(state: RemediationState) -> RemediationState:
     if critical_alerts:
         status = "ACTION REQUIRED"
         status_icon = "URGENT"
-    elif token_warnings:
+    elif alerts:
         status = "WARNING"
         status_icon = "WARNING"
     else:
@@ -421,7 +460,7 @@ def report(state: RemediationState) -> RemediationState:
         f"Papers fetched today:     {fmt(papers_fetched)}",
         f"Passed the judge:         {fmt(judge_passed)}",
         f"Papers saved today:       {fmt(papers_saved)}",
-        f"Average score today:      {avg_score}/100",
+        f"Average score today:      {avg_score}/75",
         f"Score health:             {score_health}",
         "",
         "=" * 50,
@@ -504,8 +543,8 @@ def report(state: RemediationState) -> RemediationState:
             "=" * 50,
             "SCORE QUALITY NOTICE",
             "=" * 50,
-            "Average score is below 50/100. This means papers are scoring",
-            "too low or the scoring rubric needs tuning. Suggested actions:",
+            f"Average score is below {LOW_SIGNAL_SCORE}/75, the scorer's low-signal line. Papers are",
+            "scoring too low or the scoring rubric needs tuning. Suggested actions:",
             "  1. Check if blocklist is filtering too aggressively",
             "  2. Review the scoring prompt in case_study_scout_langgraph.py",
             "  3. Check if arXiv queries are returning relevant papers",
@@ -529,6 +568,8 @@ def report(state: RemediationState) -> RemediationState:
         return {**state, "email_sent": False}
     last = load_json(ALERT_STATE_FILE) if ALERT_STATE_FILE.exists() else None
     sent_today = last.get("sent", []) if isinstance(last, dict) and last.get("date") == alert_day else []
+    if not isinstance(sent_today, list):  # a corrupted state file counts as no state
+        sent_today = []
     if faults in sent_today:
         print(f"[REMEDIATION] no alert - faults {faults} already emailed today")
         return {**state, "email_sent": False}
