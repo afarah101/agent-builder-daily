@@ -264,3 +264,10 @@ def test_force_ignores_weekend_and_dry_run_sends_nothing(run):
     assert run(sat, ["--force"])[0] == "sent"
     result, sent, _ = run(sat, ["--dry-run"])
     assert result == "preview" and sent == [] and "The Signal" in Path(de.PREVIEW).read_text()
+
+
+def test_empty_try_this_shows_case_study_without_steps(tmp_path, monkeypatch):
+    days = cs_days(("2026-10-22", [{"title": "No action paper", "summary": "One. Two.", "total_score": 30, "try_this": []}]))
+    _, html_body, text_body, s = email_on(tmp_path, monkeypatch, days)
+    assert s["case"]["title"] == "No action paper" and "Case study of the day" in html_body
+    assert "Try this today" not in html_body and "Try this today" not in text_body and "<ol" not in html_body

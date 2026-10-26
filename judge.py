@@ -22,16 +22,24 @@ RULES = """FAIL an item if any of these is true:
 
 Otherwise PASS. Be strict: a single invented fact or a swapped name is a fail."""
 
+STEP_RULES = """Some items also have "steps": actions a reader will try today. Judge EACH step on its own, separately
+from the item verdict (a failed step never changes the item verdict). FAIL a step if it names a tool, image, package,
+metric, command or setting that is not in the source AND is not a widely known public product. Docker, Kubernetes,
+Prometheus, Okta, Intune or GitHub Actions are widely known; a Docker image, package, metric or command named after the
+paper's own system is invented unless the source says it is published. Otherwise PASS the step."""
+
 BATCH_PROMPT = """You are a strict fact checker for a daily briefing. For EACH item below, judge whether its summary and
 action are faithful to its source. Judge every item on its own.
 
 {rules}
 
+{step_rules}
+
 ITEMS (JSON list; each has id, title, source, summary, action):
 {items}
 
-Return JSON only, with exactly one verdict per item id:
-{{"verdicts": [{{"id": "<item id>", "verdict": "pass" or "fail", "score": <0.0-1.0, how faithful>, "reason": "<one sentence naming the rule broken, or why it passes>"}}]}}"""
+Return JSON only, with exactly one verdict per item id. Add "steps" only for items that have steps: one entry per step, in order:
+{{"verdicts": [{{"id": "<item id>", "verdict": "pass" or "fail", "score": <0.0-1.0, how faithful>, "reason": "<one sentence naming the rule broken, or why it passes>", "steps": [{{"verdict": "pass" or "fail", "reason": "<short reason>"}}]}}]}}"""
 
 clock, sleep = time.monotonic, time.sleep  # patched in tests
 _calls = []
@@ -80,9 +88,17 @@ def _parse_verdict(v, model):
     return {"verdict": verdict, "score": float(score), "reason": str(v.get("reason", "")), "model": model}
 
 
+def _parse_steps(steps, n):
+    """One {"verdict", "reason"} per step, in order. Anything else makes every step an error: a step never passes by default."""
+    if isinstance(steps, list) and len(steps) == n and all(isinstance(s, dict) and s.get("verdict") in ("pass", "fail") for s in steps):
+        return [{"verdict": s["verdict"], "reason": str(s.get("reason", ""))} for s in steps]
+    return [{"verdict": "error", "reason": "missing or malformed step verdict"} for _ in range(n)]
+
+
 def _judge_chunk(chunk):
     """One Gemini call for up to BATCH_SIZE items. Returns {id: result}; anything unmatched or malformed is an error."""
-    prompt = BATCH_PROMPT.format(rules=RULES, items=json.dumps(chunk, ensure_ascii=False, indent=1))
+    prompt = BATCH_PROMPT.format(rules=RULES, step_rules=STEP_RULES, items=json.dumps(chunk, ensure_ascii=False, indent=1))
+    n_steps = {it["id"]: len(it["steps"]) for it in chunk if it.get("steps")}
     verdicts, model, last = None, None, None
     for candidate in JUDGE_MODELS:
         for attempt in range(2):
@@ -126,6 +142,8 @@ def _judge_chunk(chunk):
         if vid in wanted and counts[vid] == 1:  # extra ids are ignored; duplicated ids count for nothing
             try:
                 out[vid] = _parse_verdict(v, model)
+                if vid in n_steps:
+                    out[vid]["steps"] = _parse_steps(v.get("steps"), n_steps[vid])
             except (TypeError, ValueError):
                 pass
     return {i: out.get(i, _error("missing, duplicate or malformed verdict")) for i in wanted}
@@ -147,19 +165,29 @@ def _publisher(item):
     return item.get("source") or ("arXiv" if item.get("source_type") == "arxiv" else "")
 
 
-def gate(items, title_key, source_key, summary_key, action_key, log=print):
-    """Judge every item in batches. Returns (kept, held_back, stats); only passes with score >= PASS_SCORE are kept."""
+def gate(items, title_key, source_key, summary_key, action_key, log=print, steps_key=None):
+    """Judge every item in batches. Returns (kept, held_back, stats); only passes with score >= PASS_SCORE are kept.
+    steps_key: a list field judged step by step in the same batch. A kept item keeps its steps only if every step
+    passed; otherwise the field becomes [] (a failed or unjudged step is never published). Verdicts go in <steps_key>_judge."""
     # Full article text (news source_text) beats the scout's short source field when present.
     batch = [{"id": str(i), "title": it.get(title_key) or "",
               "known_facts": f"Publisher: {_publisher(it) or 'unknown'}. Date: {it.get('pub_date') or 'unknown'}.",
               "source": it.get("source_text") or it.get(source_key) or "",
-              "summary": it.get(summary_key) or "", "action": it.get(action_key) or ""} for i, it in enumerate(items)]
+              "summary": it.get(summary_key) or "", "action": it.get(action_key) or "",
+              **({"steps": it[steps_key]} if steps_key and it.get(steps_key) else {})} for i, it in enumerate(items)]
     results = judge_batch(batch) if batch else {}
     kept, held, counts = [], [], {"pass": 0, "fail": 0, "error": 0}
     for i, item in enumerate(items):
         r = results.get(str(i), _error("no verdict"))
         ok = passed(r)
         counts["pass" if ok else ("error" if r["verdict"] == "error" else "fail")] += 1
+        if steps_key and item.get(steps_key):  # held items too, so their step verdicts are logged
+            steps = r.get("steps") or _parse_steps(None, len(item[steps_key]))
+            item = {**item, f"{steps_key}_judge": steps}
+            bad = [f"step {n} {s['verdict']}: {s['reason']}" for n, s in enumerate(steps, 1) if s["verdict"] != "pass"]
+            if bad:
+                item[steps_key] = []
+                log(f"[JUDGE] DROPPED {steps_key} for {(item.get(title_key) or '?')[:60]}: " + "; ".join(bad))
         if ok:
             kept.append(item)
         else:

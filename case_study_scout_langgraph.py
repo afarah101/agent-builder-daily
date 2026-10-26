@@ -395,7 +395,7 @@ Never vague. Never "could be used for". Max 3 sentences.
 
 TRY THIS TODAY (try_this): exactly 3 steps an IT engineer can do today, each taking under 1 hour.
 Each step starts with a verb, names a real tool or setting (for example "Intune compliance policy", "Okta sign-on policy", "Azure Monitor alert rule", "GitHub Actions workflow"), and is 25 words or fewer.
-If the paper is not directly applicable, give 3 small steps to test its idea with a tool the engineer already runs.
+If the paper gives an IT engineer no practical action, return "try_this": [] instead of inventing steps.
 
 Return JSON only. No markdown. No preamble.
 {{"summary": "", "it_breakdown": "", "try_this": ["", "", ""]}}
@@ -515,7 +515,8 @@ def save_and_archive(state):
     kept, held, results = quality_checks.gate(state["scored_papers"])
     _quality.clear(); _quality.update(quality_checks.summarize(results))
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
-    kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown")
+    # try_this rides in the same batch: no extra Gemini call. Any failed or unjudged step drops all three.
+    kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown", steps_key="try_this")
     _judge.clear(); _judge.update(judge_stats)
     kept = [{**x, "eval_verdict": "pass"} for x in kept]
     published, below_min, beyond_top = rank_for_publish(kept)

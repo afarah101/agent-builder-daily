@@ -271,3 +271,114 @@ def test_bad_json_on_model_1_retries_then_moves_to_model_2(monkeypatch):
     kept, _, stats = gate(make(3))
     assert len(kept) == 3 and g.models == [judge.JUDGE_MODELS[0]] * 2 + [judge.JUDGE_MODELS[1]]
     assert stats["model"] == judge.JUDGE_MODELS[1]
+
+
+# ---------- try_this steps: judged per step in the same batch, never published unless every step passes ----------
+
+INVENTED = ("Deco Docker image", "deco_decoding_latency")
+DECO_STEPS = ["Deploy Deco in a test container: pull the Deco Docker image, mount your model weights, and run a sample query",
+              "Configure your Kubernetes autoscaler to trigger additional pods only when GPU utilisation exceeds 70% after Deco deployment",
+              "Add a Prometheus exporter to track deco_decoding_latency and compare it against the legacy decoding latency metric."]
+REAL_STEPS = ["Open the Intune compliance policy and list devices missing updates.",
+              "Enable Okta ThreatInsight in report-only mode.", "Add an Azure Monitor alert rule for failed sign-ins."]
+
+
+def step_verdicts(items):
+    """Fake judge: an item passes; a step fails when it names an invented artifact."""
+    out = verdicts(items)
+    for v, it in zip(out["verdicts"], items):
+        if it.get("steps"):
+            v["steps"] = [{"verdict": "fail" if any(x in s for x in INVENTED) else "pass", "reason": "invented" if any(x in s for x in INVENTED) else "public tool"}
+                          for s in it["steps"]]
+    return out
+
+
+def make_cs(*step_lists):
+    return [{"title": f"P{i}", "abstract": "We present Deco.", "summary": "s", "it_breakdown": "b", "try_this": list(st)}
+            for i, st in enumerate(step_lists)]
+
+
+def cs_gate(items, logs=None):
+    return judge.gate(items, "title", "abstract", "summary", "it_breakdown", log=(logs.append if logs is not None else lambda *_: None),
+                      steps_key="try_this")
+
+
+def test_invented_tool_fails_and_drops_all_steps(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: step_verdicts(items))
+    logs = []
+    kept, held, _ = cs_gate(make_cs(DECO_STEPS), logs)
+    assert g.items[0][0]["steps"] == DECO_STEPS  # steps reach the judge in the batch payload
+    assert held == [] and kept[0]["try_this"] == []  # the case study is kept, its steps are not
+    assert [s["verdict"] for s in kept[0]["try_this_judge"]] == ["fail", "pass", "fail"]
+    assert any("DROPPED try_this" in m and "step 1 fail" in m and "step 3 fail" in m for m in logs)
+
+
+def test_real_public_tools_pass_and_keep_steps(monkeypatch):
+    FakeGemini(monkeypatch, lambda items, n: step_verdicts(items))
+    kept, _, _ = cs_gate(make_cs(REAL_STEPS))
+    assert kept[0]["try_this"] == REAL_STEPS and all(s["verdict"] == "pass" for s in kept[0]["try_this_judge"])
+
+
+@pytest.mark.parametrize("damage", [
+    lambda v: v.pop("steps"),                                   # item verdict fine, step verdicts missing
+    lambda v: v["steps"].pop(),                                 # one step verdict short
+    lambda v: v["steps"][0].update(verdict="maybe"),            # malformed step verdict
+    lambda v: v.update(steps="all good"),                       # not a list
+])
+def test_step_judge_error_drops_the_steps(monkeypatch, damage):
+    def answer(items, n):
+        out = step_verdicts(items)
+        damage(out["verdicts"][0])
+        return out
+    FakeGemini(monkeypatch, answer)
+    kept, held, stats = cs_gate(make_cs(REAL_STEPS))
+    assert held == [] and stats["errors"] == 0  # the summary verdict itself was valid
+    assert kept[0]["try_this"] == [] and {s["verdict"] for s in kept[0]["try_this_judge"]} <= {"error", "pass"}
+
+
+def test_whole_judge_call_error_holds_back_item_and_never_passes_steps(monkeypatch):
+    FakeGemini(monkeypatch, lambda items, n: ApiError(400))
+    kept, held, stats = cs_gate(make_cs(REAL_STEPS))
+    assert kept == [] and stats["errors"] == 1 and held[0]["try_this"] == []
+    assert {s["verdict"] for s in held[0]["try_this_judge"]} == {"error"}
+
+
+def test_steps_do_not_change_the_batch_call_count(monkeypatch):
+    plain = FakeGemini(monkeypatch, lambda items, n: step_verdicts(items))
+    cs_gate([{**it, "try_this": []} for it in make_cs(*[REAL_STEPS] * 25)])
+    with_steps = FakeGemini(monkeypatch, lambda items, n: step_verdicts(items))
+    cs_gate(make_cs(*[REAL_STEPS] * 25))
+    assert len(plain.calls) == len(with_steps.calls) == 1
+    more = FakeGemini(monkeypatch, lambda items, n: step_verdicts(items))
+    cs_gate(make_cs(*[REAL_STEPS] * 30))
+    assert len(more.calls) == 2  # same as test_30_items_is_two_calls
+
+
+def test_items_without_steps_send_no_steps_field(monkeypatch):
+    g = FakeGemini(monkeypatch, lambda items, n: step_verdicts(items))
+    kept, _, _ = cs_gate(make_cs([]))
+    gate(make(1))  # news scout: no steps_key at all
+    assert "steps" not in g.items[0][0] and "steps" not in g.items[1][0]
+    assert kept[0]["try_this"] == [] and "try_this_judge" not in kept[0]
+
+
+def test_case_scout_judges_try_this_in_its_one_batch(tmp_path, monkeypatch):
+    import case_study_scout_langgraph as cs
+    import quality_checks
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(quality_checks.requests, "get", lambda *a, **k: SimpleNamespace(status_code=200, close=lambda: None))
+    monkeypatch.setattr(cs.llm_cache, "save", lambda *a, **k: 0)
+    today = datetime.now().strftime("%Y-%m-%d")
+    papers = [{"id": f"p{t}", "title": f"Paper {t}", "abstract": "A.", "summary": "S.", "it_breakdown": "B.",
+               "try_this": DECO_STEPS if t == 50 else REAL_STEPS, "url": f"https://arxiv.org/abs/{t}", "pub_date": today,
+               "real_world_impact": 25, "ai_maturity": t - 25, "monetisation_potential": 0, "total_score": t} for t in (50, 45)]
+    calls, sent = [], []
+    def fake(items):
+        calls.append(len(items)); sent.extend(items)
+        return {it["id"]: {"verdict": "pass", "score": 0.9, "reason": "ok", "steps": [
+            {"verdict": "fail" if any(x in s for x in INVENTED) else "pass", "reason": "r"} for s in it.get("steps", [])]} for it in items}
+    monkeypatch.setattr(judge, "judge_batch", fake)
+    cs.save_and_archive({"raw_papers": papers, "scored_papers": papers, "output_file": "case_studies/out.json"})
+    out = {p["title"]: p for p in json.loads(Path("case_studies/out.json").read_text())["case_studies"]}
+    assert calls == [2] and all("steps" in it for it in sent)  # one batch, steps included
+    assert out["Paper 50"]["try_this"] == [] and out["Paper 45"]["try_this"] == REAL_STEPS
