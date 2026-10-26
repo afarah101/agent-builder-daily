@@ -102,13 +102,21 @@ def _parse_json_output(text):
     clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(clean)
 
-def _try_this_steps(steps):
-    """Exactly 3 non-empty steps of 25 words or fewer, else []: the email shows all three or none.
+def _try_this_steps(steps, title=""):
+    """Exactly 3 non-empty steps of 25 words or fewer, else []: the email shows all three or none. Every drop is logged.
     shortcut: verb-first, real-tool and under-1-hour rules are enforced by the prompt only; add a judge check if they drift."""
-    if not isinstance(steps, list):
+    if steps is None or steps == []:  # no steps offered: nothing dropped
         return []
-    steps = [" ".join(s.split()).rstrip(";,") for s in steps if isinstance(s, str) and s.strip(" ;,")]
-    return steps if len(steps) == 3 and all(len(s.split()) <= 25 for s in steps) else []
+    if not isinstance(steps, list):
+        why = f"try_this is a {type(steps).__name__}, not a list"
+    else:
+        steps = [" ".join(s.split()).rstrip(";,") for s in steps if isinstance(s, str) and s.strip(" ;,")]
+        long = [f"step {n} has {len(s.split())} words (limit 25)" for n, s in enumerate(steps, 1) if len(s.split()) > 25]
+        why = f"{len(steps)} non-empty steps, need 3" if len(steps) != 3 else "; ".join(long)
+        if not why:
+            return steps
+    print(f"[TRY_THIS] DROPPED all steps for {title[:60] or '?'}: {why}")
+    return []
 
 def _all_zero(g):
     return all(g.get(f, 0) == 0 for f in quality_checks.CS_SCORES)
@@ -467,7 +475,7 @@ Abstract:
                 if text is None:
                     continue
                 s = _parse_json_output(text)
-                s["try_this"] = _try_this_steps(s.get("try_this"))
+                s["try_this"] = _try_this_steps(s.get("try_this"), paper["title"])
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] Summary JSON parse error on attempt {attempt+1}/3 — retrying...")

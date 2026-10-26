@@ -311,3 +311,30 @@ def test_titles_are_escaped(tmp_path, monkeypatch):
 def test_href_is_escaped(tmp_path, monkeypatch):
     body = evil_email(tmp_path, monkeypatch, url='https://x.test/"><script>x</script>')
     assert 'href="https://x.test/&quot;&gt;&lt;script&gt;x&lt;/script&gt;"' in body and '"><script>' not in body
+
+
+# ---------- N1e: the escapes and the guard the audit's surviving mutants showed were untested ----------
+
+def test_signal_heading_is_escaped(tmp_path, monkeypatch):
+    monkeypatch.setattr(de, "SIGNAL_HEADINGS", (EVIL, "Risk if ignored", "Tools affected"))
+    body = evil_email(tmp_path, monkeypatch)
+    assert f"<b>{EVIL_ESCAPED}:</b>" in body and "<b><script>" not in body
+
+
+def test_case_study_summary_is_escaped(tmp_path, monkeypatch):
+    block = evil_email(tmp_path, monkeypatch, summary=EVIL).split("Case study of the day</div>")[1].split("</td></tr>")[0]
+    assert EVIL_ESCAPED in block and "<script>" not in block
+
+
+def test_greeting_is_escaped(tmp_path, monkeypatch):
+    now = datetime.fromisoformat("2026-10-22").replace(hour=11, tzinfo=LON)
+    news = [{**FIXTURE_NEWS[0], "category": EVIL}] + FIXTURE_NEWS[1:]
+    _, body, _, s = de.build_email({**fresh_data(now), "news": news, "cs_days": []}, now)
+    greeting = body.split("Good morning</div>")[1].split("</td></tr>")[0]
+    assert EVIL.lower() in s["greeting"] and "&lt;script&gt;" in greeting and "<script>" not in greeting
+
+
+def test_future_dated_case_study_is_never_shown(tmp_path, monkeypatch):
+    days = cs_days(("2026-10-23", [{"title": "Tomorrow", "total_score": 70}]), ("2026-10-20", [{"title": "Two days ago", "total_score": 10}]))
+    assert email_on(tmp_path, monkeypatch, days)[3]["case"]["title"] == "Two days ago"
+    assert email_on(tmp_path, monkeypatch, days[:1])[3]["case"] is None
