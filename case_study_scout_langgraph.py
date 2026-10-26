@@ -101,6 +101,14 @@ def _parse_json_output(text):
     clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(clean)
 
+def _try_this_steps(steps):
+    """Exactly 3 non-empty steps of 25 words or fewer, else []: the email shows all three or none.
+    shortcut: verb-first, real-tool and under-1-hour rules are enforced by the prompt only; add a judge check if they drift."""
+    if not isinstance(steps, list):
+        return []
+    steps = [" ".join(s.split()).rstrip(";,") for s in steps if isinstance(s, str) and s.strip(" ;,")]
+    return steps if len(steps) == 3 and all(len(s.split()) <= 25 for s in steps) else []
+
 def _all_zero(g):
     return all(g.get(f, 0) == 0 for f in quality_checks.CS_SCORES)
 
@@ -385,8 +393,12 @@ Either:
 - "Not directly applicable to IT infrastructure work"
 Never vague. Never "could be used for". Max 3 sentences.
 
+TRY THIS TODAY (try_this): exactly 3 steps an IT engineer can do today, each taking under 1 hour.
+Each step starts with a verb, names a real tool or setting (for example "Intune compliance policy", "Okta sign-on policy", "Azure Monitor alert rule", "GitHub Actions workflow"), and is 25 words or fewer.
+If the paper is not directly applicable, give 3 small steps to test its idea with a tool the engineer already runs.
+
 Return JSON only. No markdown. No preamble.
-{{"summary": "", "it_breakdown": ""}}
+{{"summary": "", "it_breakdown": "", "try_this": ["", "", ""]}}
 
 Abstract:
 {paper_block}"""
@@ -446,7 +458,7 @@ Abstract:
             try:
                 text = groq_complete(
                     [{"role": "user", "content": summary_prompt}],
-                    max_tokens=350,
+                    max_tokens=800,  # was 350; hidden reasoning used all of 500 in the N1 live test and returned empty
                     model=MODEL_SUMMARY,
                     validate=_parse_json_output,
                     call_site="case_study.summary",
@@ -454,6 +466,7 @@ Abstract:
                 if text is None:
                     continue
                 s = _parse_json_output(text)
+                s["try_this"] = _try_this_steps(s.get("try_this"))
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] Summary JSON parse error on attempt {attempt+1}/3 — retrying...")
@@ -474,6 +487,7 @@ Abstract:
             "recency_score": 25,
             "summary": g.get("summary", ""),
             "it_breakdown": g.get("it_breakdown", ""),
+            "try_this": g.get("try_this", []),
             "monetisation": g.get("monetisation", ""),
             "relevance_tag": g.get("relevance_tag", "Other"),
             "author_built_product": g.get("author_built_product", False),
