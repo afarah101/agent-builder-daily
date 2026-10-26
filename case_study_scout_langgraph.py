@@ -102,9 +102,7 @@ def _parse_json_output(text):
     clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(clean)
 
-def try_this_enabled():
-    """Off unless TRY_THIS_ENABLED is exactly "1": the N1 audit (F1-F4) found invented steps that still pass the checks."""
-    return os.getenv("TRY_THIS_ENABLED") == "1"
+from send_daily_email import try_this_enabled  # the one switch rule, shared with the email
 
 # Added to the summary prompt only when try_this_enabled(); without it the prompt is the one main sends.
 TRY_THIS_PROMPT = """TRY THIS TODAY (try_this): exactly 3 steps an IT engineer can do today, each taking under 1 hour.

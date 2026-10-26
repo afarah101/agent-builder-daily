@@ -86,9 +86,15 @@ def case_of_the_day(cs_days, today):
     return {**max(items, key=lambda c: _score(c, "total_score")), "shown_date": None if d == today else d}
 
 
+def try_this_enabled():
+    """The one switch rule, also used by the scout: ON only when TRY_THIS_ENABLED is exactly "1" (no strip, no case change).
+    Off by default: the N1 audit (F1-F4) found invented steps that still pass the checks."""
+    return os.getenv("TRY_THIS_ENABLED") == "1"
+
+
 def try_this(case):
-    """The 3 steps, or [] when TRY_THIS_ENABLED is not exactly "1", the case study predates try_this or the list is malformed."""
-    if os.getenv("TRY_THIS_ENABLED") != "1":  # off by default, as in case_study_scout_langgraph.try_this_enabled
+    """The 3 steps, or [] when the switch is off, the case study predates try_this or the list is malformed."""
+    if not try_this_enabled():
         return []
     steps = case.get("try_this") if case else None
     ok = isinstance(steps, list) and len(steps) == 3 and all(isinstance(s, str) and s.strip() for s in steps)
