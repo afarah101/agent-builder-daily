@@ -278,8 +278,8 @@ def test_bad_json_on_model_1_retries_then_moves_to_model_2(monkeypatch):
 
 # ---------- try_this steps: judged per step in the same batch, never published unless every step passes ----------
 
-INVENTED = ("Deco Docker image", "deco_decoding_latency", "Deco beam optimizer")
-JUDGE_ONLY = "Enable the Deco beam optimizer in your recommender service."  # plain words: only the judge can catch it
+INVENTED = ("Deco Docker image", "deco_decoding_latency", "spelling module")
+JUDGE_ONLY = "Turn on the paper's spelling module in your recommender service."  # unnamed part of the paper's system: judge only
 DECO_STEPS = ["Deploy Deco in a test container: pull the Deco Docker image, mount your model weights, and run a sample query",
               "Configure your Kubernetes autoscaler to trigger additional pods only when GPU utilisation exceeds 70% after Deco deployment",
               "Add a Prometheus exporter to track deco_decoding_latency and compare it against the legacy decoding latency metric."]
@@ -318,8 +318,8 @@ def unmarked(s):
 
 
 def test_invented_tool_fails_and_drops_all_steps(monkeypatch):
-    # Step 1 invents a feature in plain words: no identifier or package shape, so only the judge can catch it.
-    steps = [JUDGE_ONLY, DECO_STEPS[1], REAL_STEPS[2]]
+    # Step 1 uses a part of the paper's system without naming it: no name or package shape, so only the judge can catch it.
+    steps = [JUDGE_ONLY, REAL_STEPS[1], REAL_STEPS[2]]
     g = FakeGemini(monkeypatch, lambda items, n: step_verdicts(items))
     logs = []
     kept, held, _ = cs_gate(make_cs(steps), logs)
