@@ -306,7 +306,7 @@ def test_each_release_and_address_pattern_catches_its_phrase_alone(patterns, phr
 # ---------- N1g: TRY_THIS_ENABLED. Off unless exactly "1": no generation, no step judging, try_this saved as [] ----------
 
 SWITCH = [(None, False), ("", False), ("true", False), ("yes", False), ("0", False), (" 1", False), ("1 ", False),
-          (" 1 ", False), ("1\n", False), ("1", True)]
+          (" 1 ", False), ("1\n", False), ("01", False), ("ON", False), ("\t1", False), ("1", True)]
 
 
 def set_switch(monkeypatch, value):
