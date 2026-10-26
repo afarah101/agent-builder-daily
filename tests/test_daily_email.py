@@ -82,7 +82,7 @@ def test_renders_all_sections_from_fixture(tmp_path, monkeypatch):
                             "Research Radar: 3 paper(s), led by Paper 1 (50/75)", "Quick Hits: 5 more stories from OpenAI, TechCrunch"]
     assert s["signal"] == data["news"][0]
     assert s["hits"] == data["news"][1:6] and [c["title"] for c in s["radar"]] == ["Paper 1", "Paper 2", "Paper 3"]
-    assert s["greeting"] == "Today: News 0, plus Paper 0."
+    assert s["greeting"] == "Today: 1 agents story, 1 case study, 3 papers, 5 quick hits."
     case_text = text_body.split("CASE STUDY OF THE DAY")[1].split("RESEARCH RADAR")[0]
     assert "Paper summary 0. More detail." in case_text and "Even more." not in case_text  # 2-sentence case summary
     assert "https://arxiv.org/abs/0" in case_text and 'href="https://arxiv.org/abs/0"' in html_body
@@ -99,19 +99,23 @@ def test_filler_bullets_removed(tmp_path):
         assert "Most common category" not in body and "average relevance" not in body and "news items scored today" not in body
 
 
-def test_teaser_never_repeats_the_signal_summary(tmp_path):
-    # The Signal's title is also its summary's first sentence, so a title-based teaser would repeat the summary.
-    news = [{**FIXTURE_NEWS[0], "title": "Ads delivered zero-click exploits",
-             "summary": "Ads delivered zero-click exploits. Forty-five devices were infected."}] + FIXTURE_NEWS[1:]
+def test_teaser_uses_counts_not_titles(tmp_path):
+    news = [{**FIXTURE_NEWS[0], "category": "Security"}] + FIXTURE_NEWS[1:]
     write_fixture(tmp_path, news=news)
     data = de.load_data()
     _, html_body, text_body, s = de.build_email(data, data["newest"] + timedelta(hours=1))
-    summary = data["news"][0]["summary"]
-    assert s["greeting"] == "Today: Paper 0, plus News 1."
-    assert s["greeting"] != de.two_sentences(summary)
-    for sentence in de.re.split(r"(?<=[.!?])\s+", summary):
-        assert sentence.rstrip(".").lower() not in s["greeting"].lower()
-    assert "\n" not in s["greeting"]  # one line
+    assert s["greeting"] == "Today: 1 security story, 1 case study, 3 papers, 5 quick hits."
+    titles = [n["title"] for n in data["news"]] + [c["title"] for c in data["papers"]]
+    assert not any(t in s["greeting"] for t in titles) and "\n" not in s["greeting"]  # no title, one line
+
+
+@pytest.mark.parametrize("top, case, radar, hits, expected", [
+    ({"category": "Other"}, None, [{}], [{}], "Today: 1 top story, 1 paper, 1 quick hit."),
+    ({"title": "x"}, {"title": "c"}, [], [], "Today: 1 top story, 1 case study."),
+    ({}, None, [], [], "Here is today's Scout."),
+])
+def test_teaser_counts_skip_empty_parts(top, case, radar, hits, expected):
+    assert de.teaser(top, case, radar, hits) == expected
 
 
 def test_signal_has_three_headed_points_and_no_s_labels(tmp_path):
@@ -271,3 +275,39 @@ def test_empty_try_this_shows_case_study_without_steps(tmp_path, monkeypatch):
     _, html_body, text_body, s = email_on(tmp_path, monkeypatch, days)
     assert s["case"]["title"] == "No action paper" and "Case study of the day" in html_body
     assert "Try this today" not in html_body and "Try this today" not in text_body and "<ol" not in html_body
+
+
+# ---------- escaping: every scraped or model-written string is HTML-escaped (each test fails if its _e() is removed) ----------
+
+EVIL = '<script>alert(1)</script> & "q"'
+EVIL_ESCAPED = "&lt;script&gt;alert(1)&lt;/script&gt; &amp; &quot;q&quot;"
+
+
+def evil_email(tmp_path, monkeypatch, **case):
+    now = datetime.fromisoformat("2026-10-22").replace(hour=11, tzinfo=LON)
+    news = [{**FIXTURE_NEWS[0], "title": EVIL, "enterprise_use": f"S1: {EVIL} S2: b. S3: c."}] + FIXTURE_NEWS[1:]
+    papers = [{**FIXTURE_PAPERS[1], "title": EVIL}] + FIXTURE_PAPERS[2:]
+    day = {"title": "Case", "total_score": 30, "url": "https://arxiv.org/abs/c", **case}
+    return de.build_email({**fresh_data(now), "news": news, "papers": papers, "cs_days": cs_days(("2026-10-22", [day]))}, now)[1]
+
+
+def test_case_study_steps_are_escaped(tmp_path, monkeypatch):
+    body = evil_email(tmp_path, monkeypatch, try_this=[EVIL, "Step two.", "Step three."])
+    steps = body.split("Try this today")[1].split("</ol>")[0]
+    assert "<script>" not in steps and EVIL_ESCAPED in steps
+
+
+def test_signal_points_are_escaped(tmp_path, monkeypatch):
+    points = evil_email(tmp_path, monkeypatch).split("<b>Do this week:</b> ")[1].split("</li>")[0]
+    assert points == EVIL_ESCAPED
+
+
+def test_titles_are_escaped(tmp_path, monkeypatch):
+    body = evil_email(tmp_path, monkeypatch, title=EVIL)
+    assert "<script>" not in body
+    assert body.count(f">{EVIL_ESCAPED}</a>") >= 3  # Signal, Case study of the day and Research Radar links
+
+
+def test_href_is_escaped(tmp_path, monkeypatch):
+    body = evil_email(tmp_path, monkeypatch, url='https://x.test/"><script>x</script>')
+    assert 'href="https://x.test/&quot;&gt;&lt;script&gt;x&lt;/script&gt;"' in body and '"><script>' not in body

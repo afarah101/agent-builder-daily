@@ -93,17 +93,18 @@ def try_this(case):
     return [s.strip() for s in steps] if ok else []
 
 
-def _norm(s):
-    return " ".join(str(s or "").lower().split()).rstrip(".!?")
+def _count(n, word):
+    return f"{n} {word}{'' if n == 1 else 's'}" if n else ""
 
 
-def teaser(top, case, hits):
-    """One line from today's titles. A title that also appears in The Signal summary is skipped, so the teaser never
-    repeats it."""
-    summary = _norm(top.get("summary"))
-    titles = [x.get("title") for x in (top, case or {}, *hits[:1])]
-    picks = [t.strip() for t in titles if t and _norm(t) not in summary][:2]
-    return "Today: " + ", plus ".join(picks) + "." if picks else "Here is today's Scout."
+def teaser(top, case, radar, hits):
+    """One line of counts, e.g. 'Today: 1 security story, 1 case study, 3 papers, 5 quick hits.' No titles, so it never
+    repeats The Signal or the bullets below it."""
+    cat = (top.get("category") or "").strip().lower()
+    parts = [f"1 {cat if cat and cat != 'other' else 'top'} story" if top else "", "1 case study" if case else "",
+             _count(len(radar), "paper"), _count(len(hits), "quick hit")]
+    parts = [p for p in parts if p]
+    return "Today: " + ", ".join(parts) + "." if parts else "Here is today's Scout."
 
 
 SIGNAL_HEADINGS = ("Do this week", "Risk if ignored", "Tools affected")
@@ -148,7 +149,7 @@ def build_email(data, now):
         f"Quick Hits: {len(hits)} more stories" + (f" from {', '.join(sources[:3])}" if sources else ""),
     ]
     sections = {
-        "greeting": teaser(top, case, hits),
+        "greeting": teaser(top, case, radar, hits),
         "bullets": bullets,
         "signal": top,
         "signal_points": signal_points(top.get("enterprise_use")),
