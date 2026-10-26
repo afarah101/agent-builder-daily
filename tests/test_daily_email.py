@@ -18,9 +18,15 @@ LON = de.LONDON
 @pytest.fixture(autouse=True)
 def isolate(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)  # never the repo: tests use fixtures, not live data
+    monkeypatch.delenv("TRY_THIS_ENABLED", raising=False)  # steps are off unless a test uses steps_on
     monkeypatch.setattr(de, "LAST_SENT", str(tmp_path / "last_sent.txt"))
     monkeypatch.setattr(de, "PREVIEW", str(tmp_path / "preview.html"))
     monkeypatch.setattr(socket.socket, "connect", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("network blocked")))
+
+
+@pytest.fixture
+def steps_on(monkeypatch):
+    monkeypatch.setenv("TRY_THIS_ENABLED", "1")
 
 
 class Outbox:
@@ -65,7 +71,7 @@ def run(monkeypatch):
     return _run
 
 
-def test_renders_all_sections_from_fixture(tmp_path, monkeypatch):
+def test_renders_all_sections_from_fixture(tmp_path, monkeypatch, steps_on):
     write_fixture(tmp_path)
     monkeypatch.chdir(tmp_path)
     data = de.load_data()
@@ -199,10 +205,24 @@ def test_case_study_6_days_old_is_still_used(tmp_path, monkeypatch):
 
 
 @pytest.mark.parametrize("steps", [STEPS[:2], STEPS + ["Fourth."], "one string", [1, 2, 3], ["a", "", "c"]])
-def test_malformed_try_this_is_not_rendered(tmp_path, monkeypatch, steps):
+def test_malformed_try_this_is_not_rendered(tmp_path, monkeypatch, steps, steps_on):
     days = cs_days(("2026-10-22", [{"title": "T", "total_score": 30, "try_this": steps}]))
     _, html_body, text_body, s = email_on(tmp_path, monkeypatch, days)
     assert s["case"]["title"] == "T" and "Try this today" not in html_body and "Try this today" not in text_body
+
+
+
+@pytest.mark.parametrize("value", [None, "", "true", "yes", "0", "on"])
+def test_switch_off_never_renders_seeded_steps(tmp_path, monkeypatch, value):
+    if value is not None:
+        monkeypatch.setenv("TRY_THIS_ENABLED", value)
+    write_fixture(tmp_path)  # Paper 0, the case study of the day, carries three saved steps
+    data = de.load_data()
+    _, html_body, text_body, s = de.build_email(data, data["newest"] + timedelta(hours=1))
+    assert s["case"]["title"] == "Paper 0" and "Case study of the day" in html_body and "CASE STUDY OF THE DAY" in text_body
+    assert de.try_this(s["case"]) == []
+    for body in (html_body, text_body):
+        assert "Try this today" not in body and not any(step in body for step in STEPS)
 
 
 def test_scout_try_this_parser_keeps_exactly_three_short_steps():
@@ -270,7 +290,7 @@ def test_force_ignores_weekend_and_dry_run_sends_nothing(run):
     assert result == "preview" and sent == [] and "The Signal" in Path(de.PREVIEW).read_text()
 
 
-def test_empty_try_this_shows_case_study_without_steps(tmp_path, monkeypatch):
+def test_empty_try_this_shows_case_study_without_steps(tmp_path, monkeypatch, steps_on):
     days = cs_days(("2026-10-22", [{"title": "No action paper", "summary": "One. Two.", "total_score": 30, "try_this": []}]))
     _, html_body, text_body, s = email_on(tmp_path, monkeypatch, days)
     assert s["case"]["title"] == "No action paper" and "Case study of the day" in html_body
@@ -291,7 +311,7 @@ def evil_email(tmp_path, monkeypatch, **case):
     return de.build_email({**fresh_data(now), "news": news, "papers": papers, "cs_days": cs_days(("2026-10-22", [day]))}, now)[1]
 
 
-def test_case_study_steps_are_escaped(tmp_path, monkeypatch):
+def test_case_study_steps_are_escaped(tmp_path, monkeypatch, steps_on):
     body = evil_email(tmp_path, monkeypatch, try_this=[EVIL, "Step two.", "Step three."])
     steps = body.split("Try this today")[1].split("</ol>")[0]
     assert "<script>" not in steps and EVIL_ESCAPED in steps

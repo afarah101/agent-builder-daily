@@ -185,6 +185,7 @@ def test_nothing_dropped_logs_nothing(capsys, steps):
 
 
 def test_score_papers_normalises_and_logs_try_this(monkeypatch, capsys):
+    monkeypatch.setenv("TRY_THIS_ENABLED", "1")
     raw = [" Open   the Intune  compliance policy;", "Enable Okta ThreatInsight,", "Add an Azure Monitor alert rule."]
     def fake_groq(messages, **kw):
         if "scoring AI research papers" in messages[0]["content"]:
@@ -300,3 +301,61 @@ def test_each_release_and_address_pattern_catches_its_phrase_alone(patterns, phr
     for n, phrase in enumerate(phrases):
         norm = judge._normalise(phrase)
         assert [i for i, p in enumerate(pats) if re.search(p, norm)] == [n], phrase
+
+
+# ---------- N1g: TRY_THIS_ENABLED. Off unless exactly "1": no generation, no step judging, try_this saved as [] ----------
+
+SWITCH = [(None, False), ("", False), ("true", False), ("yes", False), ("0", False), (" 1", False), ("1", True)]
+
+
+def set_switch(monkeypatch, value):
+    if value is None:
+        monkeypatch.delenv("TRY_THIS_ENABLED", raising=False)
+    else:
+        monkeypatch.setenv("TRY_THIS_ENABLED", value)
+
+
+@pytest.mark.parametrize("value, on", SWITCH)
+def test_switch_controls_try_this_generation(monkeypatch, value, on):
+    set_switch(monkeypatch, value)
+    steps = ["Open the Intune compliance policy.", "Enable Okta ThreatInsight.", "Add an Azure Monitor alert rule."]
+    prompts = []
+    def fake_groq(messages, **kw):
+        prompts.append(messages[0]["content"])
+        if "scoring AI research papers" in messages[0]["content"]:
+            return json.dumps({"real_world_impact": 20, "ai_maturity": 15, "monetisation_potential": 10, "total_score": 45,
+                               "score_reasoning": "r", "relevance_tag": "AI Agents", "low_signal": False})
+        return json.dumps({"summary": "s", "it_breakdown": "b", "try_this": steps})  # a model that sends steps anyway
+    monkeypatch.setattr(cs, "groq_complete", fake_groq)
+    paper = {"id": "p1", "title": "A paper", "abstract": "A" * 100, "authors": [], "institution": "", "pub_date": "",
+             "url": "https://arxiv.org/abs/1", "recency_score": 25, "source_type": "arxiv"}
+    scored = cs.score_papers({"raw_papers": [paper], "scored_papers": [], "output_file": "x"})["scored_papers"]
+    assert cs.try_this_enabled() is on
+    assert len(prompts) == 2  # score + summary either way: steps share the summary call, so off saves no Groq call
+    assert ("TRY THIS TODAY" in prompts[1] and '"try_this"' in prompts[1]) is on and ("try_this" in prompts[1]) is on
+    assert scored[0]["try_this"] == (steps if on else [])
+
+
+@pytest.mark.parametrize("value, on", SWITCH)
+def test_switch_controls_step_judging_and_what_is_saved(tmp_path, monkeypatch, value, on):
+    import quality_checks
+    set_switch(monkeypatch, value)
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(quality_checks.requests, "get", lambda *a, **k: type("R", (), {"status_code": 200, "close": lambda s: None})())
+    monkeypatch.setattr(cs.llm_cache, "save", lambda *a, **k: 0)
+    steps = ["Open the Intune compliance policy.", "Enable Okta ThreatInsight.", "Add an Azure Monitor alert rule."]
+    papers = [{"id": "p1", "title": "Paper 50", "abstract": "A.", "summary": "S.", "it_breakdown": "B.", "try_this": steps,
+               "url": "https://arxiv.org/abs/1", "pub_date": __import__("datetime").datetime.now().strftime("%Y-%m-%d"),
+               "real_world_impact": 25, "ai_maturity": 25, "monetisation_potential": 0, "total_score": 50}]
+    gate_kwargs, sent = [], []
+    real_gate = judge.gate
+    monkeypatch.setattr(judge, "gate", lambda *a, **k: gate_kwargs.append(k) or real_gate(*a, **k))
+    monkeypatch.setattr(judge, "judge_batch", lambda items: sent.extend(items) or {it["id"]: {
+        "verdict": "pass", "score": 0.9, "reason": "ok", "steps": [{"verdict": "pass", "reason": "r"} for _ in it.get("steps", [])]}
+        for it in items})
+    cs.save_and_archive({"raw_papers": papers, "scored_papers": papers, "output_file": "case_studies/out.json"})
+    saved = json.loads(Path("case_studies/out.json").read_text())["case_studies"]
+    assert [("steps_key" in k) for k in gate_kwargs] == [on] and all(("steps" in it) is on for it in sent)
+    assert saved[0]["try_this"] == (steps if on else [])
+    archived = json.loads(Path("case_studies/archive.json").read_text())[0]["case_studies"]
+    assert archived[0]["try_this"] == (steps if on else [])

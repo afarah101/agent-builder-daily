@@ -381,6 +381,7 @@ def test_items_without_steps_send_no_steps_field(monkeypatch):
 def test_case_scout_judges_try_this_in_its_one_batch(tmp_path, monkeypatch):
     import case_study_scout_langgraph as cs
     import quality_checks
+    monkeypatch.setenv("TRY_THIS_ENABLED", "1")
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(quality_checks.requests, "get", lambda *a, **k: SimpleNamespace(status_code=200, close=lambda: None))
     monkeypatch.setattr(cs.llm_cache, "save", lambda *a, **k: 0)

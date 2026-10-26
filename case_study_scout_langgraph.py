@@ -102,6 +102,18 @@ def _parse_json_output(text):
     clean = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(clean)
 
+def try_this_enabled():
+    """Off unless TRY_THIS_ENABLED is exactly "1": the N1 audit (F1-F4) found invented steps that still pass the checks."""
+    return os.getenv("TRY_THIS_ENABLED") == "1"
+
+# Added to the summary prompt only when try_this_enabled(); without it the prompt is the one main sends.
+TRY_THIS_PROMPT = """TRY THIS TODAY (try_this): exactly 3 steps an IT engineer can do today, each taking under 1 hour.
+Each step starts with a verb, names a real tool or setting (for example "Intune compliance policy", "Okta sign-on policy", "Azure Monitor alert rule", "GitHub Actions workflow"), and is 25 words or fewer.
+If the paper gives an IT engineer no practical action, return "try_this": [] instead of inventing steps.
+
+"""
+TRY_THIS_FIELD = ', "try_this": ["", "", ""]'
+
 def _try_this_steps(steps, title=""):
     """Exactly 3 non-empty steps of 25 words or fewer, else []: the email shows all three or none. Every drop is logged.
     shortcut: verb-first, real-tool and under-1-hour rules are enforced by the prompt only; add a judge check if they drift."""
@@ -350,6 +362,7 @@ def score_papers(state):
     papers = state["raw_papers"]
     print("[DEBUG] Scoring " + str(len(papers)) + " papers...")
     scored = []
+    steps_on = try_this_enabled()
     limit = min(len(papers), MAX_PAPERS)
     for i in range(limit):
         paper = papers[i]
@@ -402,12 +415,8 @@ Either:
 - "Not directly applicable to IT infrastructure work"
 Never vague. Never "could be used for". Max 3 sentences.
 
-TRY THIS TODAY (try_this): exactly 3 steps an IT engineer can do today, each taking under 1 hour.
-Each step starts with a verb, names a real tool or setting (for example "Intune compliance policy", "Okta sign-on policy", "Azure Monitor alert rule", "GitHub Actions workflow"), and is 25 words or fewer.
-If the paper gives an IT engineer no practical action, return "try_this": [] instead of inventing steps.
-
-Return JSON only. No markdown. No preamble.
-{{"summary": "", "it_breakdown": "", "try_this": ["", "", ""]}}
+{TRY_THIS_PROMPT if steps_on else ""}Return JSON only. No markdown. No preamble.
+{{"summary": "", "it_breakdown": ""{TRY_THIS_FIELD if steps_on else ""}}}
 
 Abstract:
 {paper_block}"""
@@ -475,7 +484,7 @@ Abstract:
                 if text is None:
                     continue
                 s = _parse_json_output(text)
-                s["try_this"] = _try_this_steps(s.get("try_this"), paper["title"])
+                s["try_this"] = _try_this_steps(s.get("try_this"), paper["title"]) if steps_on else []
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] Summary JSON parse error on attempt {attempt+1}/3 — retrying...")
@@ -524,8 +533,11 @@ def save_and_archive(state):
     kept, held, results = quality_checks.gate(state["scored_papers"])
     _quality.clear(); _quality.update(quality_checks.summarize(results))
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
-    # try_this rides in the same batch: no extra Gemini call. Any failed or unjudged step drops all three.
-    kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown", steps_key="try_this")
+    if try_this_enabled():
+        # try_this rides in the same batch: no extra Gemini call. Any failed or unjudged step drops all three.
+        kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown", steps_key="try_this")
+    else:  # off: steps are never judged or saved, whatever the items carry
+        kept, judge_held, judge_stats = judge.gate([{**x, "try_this": []} for x in kept], "title", "abstract", "summary", "it_breakdown")
     _judge.clear(); _judge.update(judge_stats)
     kept = [{**x, "eval_verdict": "pass"} for x in kept]
     published, below_min, beyond_top = rank_for_publish(kept)
