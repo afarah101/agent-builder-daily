@@ -47,6 +47,7 @@ ARCHIVE_FILE = "case_studies/archive.json"
 MAX_PAPERS = 20
 MAX_PUBLISHED = 5
 MIN_TOTAL = 20
+MAX_ABSTRACT_CHARS = 4000  # safety cap only: arXiv abstracts sampled 2026-10-26 ran 1,041-1,889 chars
 FOUR_MONTHS_AGO = datetime.now() - timedelta(days=120)
 ARXIV_NS = "http://www.w3.org/2005/Atom"
 
@@ -290,7 +291,7 @@ def fetch_papers(state):
                     continue
                 seen.add(pid)
                 title_text = " ".join((title_el.text or "").split())
-                abstract_text = " ".join((summary_el.text or "").split())[:600]
+                abstract_text = " ".join((summary_el.text or "").split())[:MAX_ABSTRACT_CHARS]
                 pub_date = (published_el.text or "")[:10] if published_el is not None else ""
                 if len(abstract_text) < 80:
                     continue
