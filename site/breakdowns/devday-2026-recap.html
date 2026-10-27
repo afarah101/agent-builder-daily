@@ -5,83 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DevDay 2026 Recap - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">DevDay 2026 Recap</h1>
-  <div class="meta-line">OpenAI · 29 Sep 202 · Generated 29 Sep 2026, 22:11</div>
-  <a href="https://openai.com/index/devday-2026-recap" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>OpenAI’s DevDay 2026 marked a significant shift in the AI ecosystem with the launch of GPT‑6 Astra, a next‑generation ChatGPT model that promises higher throughput, lower latency, and tighter security controls. The event also revealed updates to the Codex API, now featuring expanded code generation capabilities, and a new suite of builder‑focused tools designed to accelerate integration into existing DevOps pipelines. The announcement emphasized enhanced API rate limits, hardened authentication flows, and granular fine‑tuning options that allow enterprises to tailor models to domain‑specific data without exposing proprietary content.</p><p>For enterprise IT teams, GPT‑6 Astra introduces a new baseline for AI‑driven automation, customer support, and code review. The higher rate limits mean that services can handle larger volumes of concurrent requests, reducing bottlenecks in ticket triage systems like Freshservice. Security hardening—such as mandatory OAuth 2.0 scopes and optional client‑side encryption—addresses the growing regulatory pressure on data handling, particularly under UK GDPR and similar frameworks. Fine‑tuning capabilities enable organizations to embed internal knowledge bases into the model, improving accuracy while keeping data on‑premise or within compliant cloud regions.</p><p>Key vendors involved include OpenAI (API provider), Microsoft Azure (hosting the GPT‑6 Astra endpoint for enterprise customers), and Atlassian (Freshservice integration). The broader industry implication is a tightening of the AI supply chain: vendors will need to provide clearer audit trails, enforce stricter authentication, and offer modular deployment options. Companies that fail to migrate risk falling behind on performance and compliance, potentially exposing services to outdated authentication mechanisms and missed optimizations.</p><p>The announcement also signals a trend toward “builder‑first” tooling, where AI capabilities are exposed as modular services that can be composed with existing CI/CD workflows. This will accelerate the adoption of AI in software delivery pipelines, but also increases the attack surface for malicious actors if not properly secured. Enterprises must therefore reassess their API governance, monitoring, and incident response plans to accommodate the new model’s capabilities and requirements.</p></div>
+  <p class="meta-line">OpenAI · 29 Sep 202 · Generated 29 Sep 2026, 22:11</p>
+  <a href="https://openai.com/index/devday-2026-recap" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>OpenAI’s DevDay 2026 marked a significant shift in the AI ecosystem with the launch of GPT‑6 Astra, a next‑generation ChatGPT model that promises higher throughput, lower latency, and tighter security controls. The event also revealed updates to the Codex API, now featuring expanded code generation capabilities, and a new suite of builder‑focused tools designed to accelerate integration into existing DevOps pipelines. The announcement emphasized enhanced API rate limits, hardened authentication flows, and granular fine‑tuning options that allow enterprises to tailor models to domain‑specific data without exposing proprietary content.</p><p>For enterprise IT teams, GPT‑6 Astra introduces a new baseline for AI‑driven automation, customer support, and code review. The higher rate limits mean that services can handle larger volumes of concurrent requests, reducing bottlenecks in ticket triage systems like Freshservice. Security hardening—such as mandatory OAuth 2.0 scopes and optional client‑side encryption—addresses the growing regulatory pressure on data handling, particularly under UK GDPR and similar frameworks. Fine‑tuning capabilities enable organizations to embed internal knowledge bases into the model, improving accuracy while keeping data on‑premise or within compliant cloud regions.</p><p>Key vendors involved include OpenAI (API provider), Microsoft Azure (hosting the GPT‑6 Astra endpoint for enterprise customers), and Atlassian (Freshservice integration). The broader industry implication is a tightening of the AI supply chain: vendors will need to provide clearer audit trails, enforce stricter authentication, and offer modular deployment options. Companies that fail to migrate risk falling behind on performance and compliance, potentially exposing services to outdated authentication mechanisms and missed optimizations.</p><p>The announcement also signals a trend toward “builder‑first” tooling, where AI capabilities are exposed as modular services that can be composed with existing CI/CD workflows. This will accelerate the adoption of AI in software delivery pipelines, but also increases the attack surface for malicious actors if not properly secured. Enterprises must therefore reassess their API governance, monitoring, and incident response plans to accommodate the new model’s capabilities and requirements.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory all current OpenAI API endpoints, authentication methods, and usage patterns.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all current OpenAI API endpoints, authentication methods, and usage patterns.
    - Review API call logs for rate‑limit throttling incidents and latency metrics.
    - Verify that existing fine‑tuning pipelines comply with data residency and GDPR requirements.
    - Map current Freshservice ticket triage scripts to OpenAI calls to identify hard‑coded endpoints.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Quantify current API latency and throughput; benchmark against GPT‑6 Astra’s advertised 30% faster inference.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify current API latency and throughput; benchmark against GPT‑6 Astra’s advertised 30% faster inference.
    - Estimate cost savings from reduced API calls due to higher rate limits (e.g., 20% fewer requests per month).
    - Present a risk matrix showing potential compliance violations if migration is delayed (e.g., GDPR breach fines).
    - Include ROI calculation: improved ticket resolution time × average ticket value.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- OpenAI GPT‑6 Astra API (new endpoint, fine‑tuning SDK)
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI GPT‑6 Astra API (new endpoint, fine‑tuning SDK)
    - Azure OpenAI Service (for regional compliance)
    - Atlassian Freshservice (automation script editor)
    - HashiCorp Vault (for secure secret management)
    - Datadog or New Relic (for API performance monitoring)</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Deprecated authentication tokens, potential breaking changes in request payloads.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Deprecated authentication tokens, potential breaking changes in request payloads.
    - Compliance: GDPR data residency, consent for model training on internal data.
    - Operational: Increased API costs if rate limits are not properly managed; potential downtime during migration.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Update the service registry to point to the new GPT‑6 Astra endpoint within 5 days.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Update the service registry to point to the new GPT‑6 Astra endpoint within 5 days.
    - Replace hard‑coded API keys with Vault‑managed secrets in the Freshservice scripts.
    - Run a pilot on a single ticket triage workflow to validate latency improvements.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, implement a full fine‑tuning pipeline that ingests internal knowledge bases, ensuring data stays within compliant regions.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, implement a full fine‑tuning pipeline that ingests internal knowledge bases, ensuring data stays within compliant regions.
    - Integrate GPT‑6 Astra into the CI/CD pipeline for automated code review and security scanning.
    - Establish continuous monitoring of API usage, latency, and error rates, feeding back into the incident response plan.
    - Conduct quarterly compliance audits to verify that all AI interactions remain GDPR‑aligned and that audit logs are retained per regulatory mandates.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 29 Sep 2026, 22:11</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 29 Sep 2026, 22:11</p>
+</main>
 </body>
 </html>

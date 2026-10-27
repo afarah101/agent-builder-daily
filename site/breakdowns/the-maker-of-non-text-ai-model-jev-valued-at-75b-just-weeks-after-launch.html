@@ -5,82 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The maker of non-text AI model Jev valued at $7.5B just weeks after launch - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">The maker of non-text AI model Jev valued at $7.5B just weeks after launch</h1>
-  <div class="meta-line">TechCrunch · 09 Oct 202 · Generated 09 Oct 2026, 22:35</div>
-  <a href="https://techcrunch.com/2026/10/09/the-maker-of-non-text-ai-model-jev-valued-at-7-5b-just-weeks-after-launch/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>TypeSafe AI, a startup focused on non‑text artificial intelligence models, announced a $870 million funding round led by a16z, pushing its valuation to $7.5 billion just weeks after its public launch. The company’s core technology builds multimodal models that process images, audio, and other structured data streams without relying on natural language processing. By securing a large capital infusion, TypeSafe signals that its research is moving from prototype to production‑ready services, and that venture capital confidence in multimodal AI is high.</p><p>For enterprise IT teams, the announcement is a cue that non‑text AI will soon become a mainstream offering. Current workflows that rely on text‑centric models (e.g., GPT‑style LLMs) may need to be complemented with visual or audio inference engines to support use cases such as automated inspection, real‑time surveillance analytics, or multimodal customer support. The funding also indicates that TypeSafe will likely release commercial APIs, SDKs, or managed services, which could be integrated into existing data pipelines, micro‑services, or low‑code platforms.</p><p>Key vendors and technologies involved include TypeSafe AI itself, a16z as the lead investor, and the broader ecosystem of multimodal AI frameworks such as PyTorch, TensorFlow, and ONNX. Competitors in the space include OpenAI’s CLIP and DALL‑E, Google’s Imagen, and Meta’s LLaMA‑Vision. The broader industry implication is a shift toward richer data modalities in AI offerings, prompting enterprises to re‑evaluate data ingestion, storage, and governance strategies to accommodate high‑volume image and audio streams.</p><p>The funding round also highlights the growing appetite for AI startups that can deliver specialized, high‑performance inference at scale. Enterprises may need to assess their current AI infrastructure, including GPU clusters, edge devices, and data lake architectures, to prepare for integrating multimodal models. Additionally, the move underscores the importance of robust model monitoring, explainability, and compliance frameworks as new AI services enter production.</p><p>Overall, TypeSafe AI’s valuation jump signals that non‑text AI is no longer a niche research area but a commercializable technology poised to influence enterprise automation, analytics, and customer experience over the next few years.</p></div>
+  <p class="meta-line">TechCrunch · 09 Oct 202 · Generated 09 Oct 2026, 22:35</p>
+  <a href="https://techcrunch.com/2026/10/09/the-maker-of-non-text-ai-model-jev-valued-at-7-5b-just-weeks-after-launch/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>TypeSafe AI, a startup focused on non‑text artificial intelligence models, announced a $870 million funding round led by a16z, pushing its valuation to $7.5 billion just weeks after its public launch. The company’s core technology builds multimodal models that process images, audio, and other structured data streams without relying on natural language processing. By securing a large capital infusion, TypeSafe signals that its research is moving from prototype to production‑ready services, and that venture capital confidence in multimodal AI is high.</p><p>For enterprise IT teams, the announcement is a cue that non‑text AI will soon become a mainstream offering. Current workflows that rely on text‑centric models (e.g., GPT‑style LLMs) may need to be complemented with visual or audio inference engines to support use cases such as automated inspection, real‑time surveillance analytics, or multimodal customer support. The funding also indicates that TypeSafe will likely release commercial APIs, SDKs, or managed services, which could be integrated into existing data pipelines, micro‑services, or low‑code platforms.</p><p>Key vendors and technologies involved include TypeSafe AI itself, a16z as the lead investor, and the broader ecosystem of multimodal AI frameworks such as PyTorch, TensorFlow, and ONNX. Competitors in the space include OpenAI’s CLIP and DALL‑E, Google’s Imagen, and Meta’s LLaMA‑Vision. The broader industry implication is a shift toward richer data modalities in AI offerings, prompting enterprises to re‑evaluate data ingestion, storage, and governance strategies to accommodate high‑volume image and audio streams.</p><p>The funding round also highlights the growing appetite for AI startups that can deliver specialized, high‑performance inference at scale. Enterprises may need to assess their current AI infrastructure, including GPU clusters, edge devices, and data lake architectures, to prepare for integrating multimodal models. Additionally, the move underscores the importance of robust model monitoring, explainability, and compliance frameworks as new AI services enter production.</p><p>Overall, TypeSafe AI’s valuation jump signals that non‑text AI is no longer a niche research area but a commercializable technology poised to influence enterprise automation, analytics, and customer experience over the next few years.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory existing AI workloads: identify which processes rely on text-only models and assess potential gaps that multimodal inference could fill.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory existing AI workloads: identify which processes rely on text-only models and assess potential gaps that multimodal inference could fill.
    - Assess data pipelines: verify that image, audio, and other structured data streams are captured, stored, and accessible in a format compatible with GPU inference (e.g., TFRecord, Parquet with binary blobs).
    - Review compute resources: inventory GPU/CPU clusters, edge devices, and cloud instances; benchmark current inference latency and throughput to establish baseline metrics.
    - Examine security posture: ensure that data in transit and at rest complies with internal policies and external regulations (e.g., encryption, access controls).</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Business case: quantify potential ROI by estimating reduction in manual inspection hours, improved defect detection rates, or faster customer query resolution. Use metrics such as cost per inference, expected throughput, and projected savings from automation.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Business case: quantify potential ROI by estimating reduction in manual inspection hours, improved defect detection rates, or faster customer query resolution. Use metrics such as cost per inference, expected throughput, and projected savings from automation.
    - Benchmark against competitors: compare projected performance (latency, accuracy) of TypeSafe’s multimodal models with existing solutions (e.g., OpenAI CLIP, Google Vision APIs).
    - Include compliance impact: outline how the new models will handle personal data, referencing UK GDPR requirements for data minimization and lawful processing.
    - Present a phased rollout plan with cost estimates for pilot, production, and scaling stages.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- TypeSafe AI SDK/API (once released) for multimodal inference.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- TypeSafe AI SDK/API (once released) for multimodal inference.
    - NVIDIA CUDA, TensorRT, or AMD ROCm for optimized GPU inference.
    - Kubernetes with GPU scheduling (e.g., NVIDIA device plugin) for scalable deployment.
    - Data ingestion tools: Apache Kafka, AWS Kinesis, or Azure Event Hubs for streaming image/audio data.
    - Monitoring platforms: Prometheus + Grafana, or vendor‑specific observability solutions (Datadog, New Relic) to track inference latency and error rates.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Model drift due to changing data distributions; limited support for edge deployment if models require large GPU memory.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Model drift due to changing data distributions; limited support for edge deployment if models require large GPU memory.
    - Compliance: Potential GDPR issues if models process personal images or audio; need for data residency controls and audit trails.
    - Operational: Increased infrastructure costs for GPU resources; complexity of integrating new SDKs into existing CI/CD pipelines.
    - Vendor lock‑in: Dependency on a single AI provider may limit flexibility; consider open‑source fallback options.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a proof‑of‑concept on a small subset of data: use a pre‑trained multimodal model (e.g., CLIP) to classify images in an existing dataset, measure accuracy and latency, and document results within 30 days.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a proof‑of‑concept on a small subset of data: use a pre‑trained multimodal model (e.g., CLIP) to classify images in an existing dataset, measure accuracy and latency, and document results within 30 days.
    - Update data governance policies to include metadata tagging for non‑text data, ensuring traceability from ingestion to inference.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, build a multimodal AI platform: integrate TypeSafe’s SDK with existing data lake and MLops workflows, automate model training pipelines, and implement continuous monitoring for drift and compliance.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, build a multimodal AI platform: integrate TypeSafe’s SDK with existing data lake and MLops workflows, automate model training pipelines, and implement continuous monitoring for drift and compliance.
    - Expand use cases: move from pilot to production in domains such as quality inspection, security monitoring, and customer service automation.
    - Establish a governance framework: define roles for data stewardship, model validation, and incident response specific to multimodal AI, ensuring alignment with UK GDPR and internal security standards.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 09 Oct 2026, 22:35</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 09 Oct 2026, 22:35</p>
+</main>
 </body>
 </html>

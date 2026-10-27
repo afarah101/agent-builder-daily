@@ -5,84 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Trends - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Tech Trends</h1>
-  <div class="meta-line">Deloitte · 26 Oct 202 · Generated 26 Oct 2026, 12:40</div>
-  <a href="https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends.html?icid=disidenav_tech-trends" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Deloitte’s latest Tech Trends report underscores the unprecedented pace at which generative AI is being adopted across enterprises, outstripping historical adoption curves for the internet and telephone. The report argues that the current cloud, process, security, and IT operating models were designed for slower, human‑centric workflows and are ill‑equipped to support the high‑velocity, data‑intensive demands of AI workloads. As a result, enterprises that continue to rely on legacy architectures risk falling behind competitors that can quickly translate AI experiments into production services. Deloitte recommends a comprehensive rebuild of infrastructure, governance, and security frameworks to align with AI economics, emphasizing the need for real‑time data pipelines, scalable GPU‑enabled compute, and automated policy enforcement. Key vendors highlighted include major cloud providers (AWS, Azure, Google Cloud) for AI‑optimized services, AI‑specific infrastructure platforms (NVIDIA DGX, AMD Instinct), and security solutions that support model governance (IBM Guardium, Palo Alto Networks Prisma Cloud). The broader industry implication is a shift from “AI as a service” experimentation to “AI as a core capability,” requiring enterprises to integrate AI into their core operating models, enforce compliance at scale, and adopt continuous monitoring for model drift and bias. Failure to do so will result in fragmented AI deployments, increased risk of regulatory non‑compliance, and lost competitive advantage.</p></div>
+  <p class="meta-line">Deloitte · 26 Oct 202 · Generated 26 Oct 2026, 12:40</p>
+  <a href="https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends.html?icid=disidenav_tech-trends" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Deloitte’s latest Tech Trends report underscores the unprecedented pace at which generative AI is being adopted across enterprises, outstripping historical adoption curves for the internet and telephone. The report argues that the current cloud, process, security, and IT operating models were designed for slower, human‑centric workflows and are ill‑equipped to support the high‑velocity, data‑intensive demands of AI workloads. As a result, enterprises that continue to rely on legacy architectures risk falling behind competitors that can quickly translate AI experiments into production services. Deloitte recommends a comprehensive rebuild of infrastructure, governance, and security frameworks to align with AI economics, emphasizing the need for real‑time data pipelines, scalable GPU‑enabled compute, and automated policy enforcement. Key vendors highlighted include major cloud providers (AWS, Azure, Google Cloud) for AI‑optimized services, AI‑specific infrastructure platforms (NVIDIA DGX, AMD Instinct), and security solutions that support model governance (IBM Guardium, Palo Alto Networks Prisma Cloud). The broader industry implication is a shift from “AI as a service” experimentation to “AI as a core capability,” requiring enterprises to integrate AI into their core operating models, enforce compliance at scale, and adopt continuous monitoring for model drift and bias. Failure to do so will result in fragmented AI deployments, increased risk of regulatory non‑compliance, and lost competitive advantage.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory all AI/ML workloads: model training, inference, data pipelines, and storage.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all AI/ML workloads: model training, inference, data pipelines, and storage.
    - Assess current compute capacity: CPU vs GPU, memory, network bandwidth, and latency requirements.
    - Review data governance: catalog, lineage, quality, and access controls.
    - Audit security posture: IAM policies, encryption at rest and in transit, and model protection mechanisms.
    - Map existing CI/CD pipelines to AI workflows; identify bottlenecks in versioning, testing, and deployment.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit model comparing current spend vs projected AI‑ready architecture.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model comparing current spend vs projected AI‑ready architecture.
    - Use metrics such as Time‑to‑Value (TTTV) for AI projects, model accuracy improvement, and operational cost per inference.
    - Benchmark against industry peers: e.g., average GPU utilization, data ingestion latency, and compliance audit pass rates.
    - Present ROI in terms of revenue uplift from AI‑driven features and cost savings from automation.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Cloud: AWS SageMaker, Azure Machine Learning, Google Vertex AI for managed training and inference.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Cloud: AWS SageMaker, Azure Machine Learning, Google Vertex AI for managed training and inference.
    - Infrastructure: NVIDIA DGX A100, AMD Instinct MI300 for on‑prem GPU clusters.
    - Data: Snowflake, Databricks Delta Lake for unified data lakehouse.
    - Security: Palo Alto Networks Prisma Cloud, IBM Guardium for data protection, and OpenAI’s policy enforcement APIs.
    - Governance: Evidently AI, DataRobot MLOps for model monitoring and drift detection.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Model drift, data poisoning, insufficient GPU scaling, network congestion.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Model drift, data poisoning, insufficient GPU scaling, network congestion.
    - Compliance: GDPR data residency, consent management, model explainability requirements.
    - Operational: Lack of skilled personnel, vendor lock‑in, inadequate monitoring leading to silent failures.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a pilot inference service on a managed cloud platform (e.g., AWS SageMaker Endpoint) within 30 days.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a pilot inference service on a managed cloud platform (e.g., AWS SageMaker Endpoint) within 30 days.
    - Implement automated data lineage tracking using an open‑source tool (e.g., Apache Atlas) to satisfy compliance audit needs.
    - Set up a basic model monitoring dashboard (Prometheus + Grafana) to detect performance anomalies.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, architect a hybrid AI platform that integrates on‑prem GPU clusters with cloud burst capacity.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, architect a hybrid AI platform that integrates on‑prem GPU clusters with cloud burst capacity.
    - Establish an MLOps pipeline that automates data ingestion, model training, validation, and deployment with policy enforcement.
    - Implement a centralized AI governance framework covering model risk, bias, and explainability, aligned with GDPR and ISO/IEC 27001.
    - Upskill the IT workforce through targeted training in AI operations, security, and compliance.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 26 Oct 2026, 12:40</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 26 Oct 2026, 12:40</p>
+</main>
 </body>
 </html>

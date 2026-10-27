@@ -5,86 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Uber brings ChatGPT Work to all employees with OpenAI - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Uber brings ChatGPT Work to all employees with OpenAI</h1>
-  <div class="meta-line">OpenAI · 22 Oct 202 · Generated 22 Oct 2026, 21:24</div>
-  <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Uber has deployed ChatGPT Work, the enterprise‑grade version of OpenAI’s GPT model, to all 30,000 employees. The rollout enables staff to conduct research, analyze internal data sets, generate presentation content, and automate complex workflows through a single, secure interface. The move is significant for enterprise IT because it demonstrates how a large organization can integrate a generative AI platform at scale while maintaining compliance with internal data handling policies and external regulations. Uber’s deployment is built on OpenAI’s API, integrated with Microsoft Azure for compute and storage, and tied into Uber’s existing identity and access management (IAM) system via Azure AD. The company also leverages its internal data lake and analytics stack to feed the AI model with proprietary data, ensuring that outputs are relevant and actionable.</p><p>For IT teams, this case study highlights several critical considerations: (1) the need for robust data governance frameworks to control what data can be ingested by the model; (2) the importance of secure API management and network segmentation to isolate AI workloads; and (3) the necessity of monitoring usage to prevent data leakage and to enforce cost controls. Uber’s approach shows that a well‑architected integration can provide productivity gains without compromising security posture.</p><p>Industry implications are broad. Other enterprises will likely follow, driving demand for AI‑ready cloud platforms, secure API gateways, and advanced data‑privacy controls. Vendors that provide AI‑as‑a‑service, secure data‑in‑motion encryption, and compliance‑ready tooling will see increased adoption. The trend also pressures IT departments to develop new skill sets in AI ethics, prompt engineering, and model monitoring. Ultimately, generative AI is moving from a niche productivity tool to a core component of enterprise workflow automation, reshaping how IT teams manage data, security, and vendor relationships.</p></div>
+  <p class="meta-line">OpenAI · 22 Oct 202 · Generated 22 Oct 2026, 21:24</p>
+  <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Uber has deployed ChatGPT Work, the enterprise‑grade version of OpenAI’s GPT model, to all 30,000 employees. The rollout enables staff to conduct research, analyze internal data sets, generate presentation content, and automate complex workflows through a single, secure interface. The move is significant for enterprise IT because it demonstrates how a large organization can integrate a generative AI platform at scale while maintaining compliance with internal data handling policies and external regulations. Uber’s deployment is built on OpenAI’s API, integrated with Microsoft Azure for compute and storage, and tied into Uber’s existing identity and access management (IAM) system via Azure AD. The company also leverages its internal data lake and analytics stack to feed the AI model with proprietary data, ensuring that outputs are relevant and actionable.</p><p>For IT teams, this case study highlights several critical considerations: (1) the need for robust data governance frameworks to control what data can be ingested by the model; (2) the importance of secure API management and network segmentation to isolate AI workloads; and (3) the necessity of monitoring usage to prevent data leakage and to enforce cost controls. Uber’s approach shows that a well‑architected integration can provide productivity gains without compromising security posture.</p><p>Industry implications are broad. Other enterprises will likely follow, driving demand for AI‑ready cloud platforms, secure API gateways, and advanced data‑privacy controls. Vendors that provide AI‑as‑a‑service, secure data‑in‑motion encryption, and compliance‑ready tooling will see increased adoption. The trend also pressures IT departments to develop new skill sets in AI ethics, prompt engineering, and model monitoring. Ultimately, generative AI is moving from a niche productivity tool to a core component of enterprise workflow automation, reshaping how IT teams manage data, security, and vendor relationships.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory data sources that will feed ChatGPT Work (internal databases, data lakes, CRM, etc.).
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory data sources that will feed ChatGPT Work (internal databases, data lakes, CRM, etc.).
    - Map data classification levels and determine which data can be exposed to an external model.
    - Review current IAM and MFA policies; ensure Azure AD or equivalent can federate with OpenAI’s API.
    - Audit existing network segmentation and API gateway capabilities to isolate AI traffic.
    - Assess cost‑management tools (Azure Cost Management, CloudTrail) for tracking API usage.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Quantify productivity gains: baseline time to create a presentation (e.g., 4 hours) vs. expected with AI (30 minutes). Use this to calculate ROI.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify productivity gains: baseline time to create a presentation (e.g., 4 hours) vs. expected with AI (30 minutes). Use this to calculate ROI.
    - Benchmark cost per API call (e.g., $0.02 per 1,000 tokens) and project monthly spend for 30,000 users with average 500 tokens/day.
    - Include metrics on error rates, data leakage incidents, and compliance audit findings before and after deployment.
    - Present a phased rollout plan with pilot, pilot‑scale, and enterprise‑wide stages, each with defined success criteria.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- OpenAI ChatGPT Work (API + UI)
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI ChatGPT Work (API + UI)
    - Microsoft Azure OpenAI Service (for on‑prem or hybrid deployment)
    - Azure AD for IAM integration
    - Azure API Management or Kong for secure gateway
    - Data Loss Prevention (DLP) solutions (Microsoft Purview, Symantec DLP)
    - Cost‑management platforms (Azure Cost Management, CloudHealth)</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: model hallucinations leading to incorrect data; insufficient token limits for complex queries; latency issues in remote data retrieval.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: model hallucinations leading to incorrect data; insufficient token limits for complex queries; latency issues in remote data retrieval.
    - Compliance: inadvertent transmission of PII or GDPR‑protected data; lack of audit trails for AI outputs; potential violation of UK GDPR Article 6 (lawful basis) if data is processed without explicit consent.
    - Operational: vendor lock‑in; dependency on external API uptime; difficulty in scaling token usage under cost constraints.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a pilot for 200 users in a single department (e.g., marketing) with strict data‑exclusion rules.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a pilot for 200 users in a single department (e.g., marketing) with strict data‑exclusion rules.
    - Configure Azure AD single sign‑on and enforce MFA for API access.
    - Set up a basic DLP policy that flags any outbound data containing PII before it reaches the model.
    - Measure baseline vs. post‑pilot productivity in 30 days and report findings to leadership.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, expand to full enterprise rollout with role‑based access controls and fine‑grained data‑exclusion lists.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, expand to full enterprise rollout with role‑based access controls and fine‑grained data‑exclusion lists.
    - Implement continuous monitoring of model outputs for bias, hallucinations, and compliance violations.
    - Integrate AI usage metrics into the IT Service Management (ITSM) platform for SLA tracking.
    - Develop internal prompt‑engineering guidelines and a governance board to oversee model updates and policy changes.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Oct 2026, 21:24</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Oct 2026, 21:24</p>
+</main>
 </body>
 </html>

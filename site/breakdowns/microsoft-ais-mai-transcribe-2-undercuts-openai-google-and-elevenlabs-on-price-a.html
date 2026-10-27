@@ -5,90 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Microsoft AI’s MAI-Transcribe-2 undercuts OpenAI, Google and ElevenLabs on price and speed - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Microsoft AI’s MAI-Transcribe-2 undercuts OpenAI, Google and ElevenLabs on price and speed</h1>
-  <div class="meta-line">VentureBeat · 03 Sep 202 · Generated 22 Sep 2026, 00:17</div>
-  <a href="https://venturebeat.com/infrastructure/microsoft-ais-mai-transcribe-2-undercuts-openai-google-and-elevenlabs-on-price-and-speed" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Microsoft has released MAI‑Transcribe‑2, a new speech‑recognition model that it claims outperforms OpenAI’s Whisper, Google’s Speech‑to‑Text, and ElevenLabs in speed, accuracy, and cost. The model is priced at 10 cents per audio hour, a dramatic drop from the earlier 36 cents. The announcement comes as Microsoft positions the service as a cost‑effective solution for large‑scale transcription workloads, such as call‑center recordings, meeting notes, and compliance‑related audio archives. For enterprise IT teams, the key implications are threefold. First, the pricing model offers a direct cost advantage for organizations that already rely on Microsoft 365 and Azure for other workloads; integrating MAI‑Transcribe‑2 could reduce transcription spend by up to 70 % compared with competing services. Second, the performance claims—higher accuracy and faster processing—could lower the need for post‑processing, reduce latency in real‑time captioning, and improve downstream analytics pipelines. Third, the integration into the Microsoft 365 Admin Center means that existing governance, compliance, and data residency controls can be leveraged without significant architectural changes. Vendors involved include Microsoft (Azure Cognitive Services, Microsoft 365), OpenAI (Whisper), Google Cloud (Speech‑to‑Text), and ElevenLabs. The broader industry impact is a tightening of the competitive landscape for speech‑to‑text services. As Microsoft deepens its AI stack, other providers may need to revisit pricing, licensing models, or feature differentiation to maintain market share. Enterprises that have already committed to a single vendor for transcription may find an incentive to re‑evaluate their contracts, especially if they process hundreds of thousands of audio hours annually. The shift also signals a continued trend toward commoditization of AI services, where performance gains are increasingly coupled with aggressive pricing strategies.</p></div>
+  <p class="meta-line">VentureBeat · 03 Sep 202 · Generated 22 Sep 2026, 00:17</p>
+  <a href="https://venturebeat.com/infrastructure/microsoft-ais-mai-transcribe-2-undercuts-openai-google-and-elevenlabs-on-price-and-speed" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Microsoft has released MAI‑Transcribe‑2, a new speech‑recognition model that it claims outperforms OpenAI’s Whisper, Google’s Speech‑to‑Text, and ElevenLabs in speed, accuracy, and cost. The model is priced at 10 cents per audio hour, a dramatic drop from the earlier 36 cents. The announcement comes as Microsoft positions the service as a cost‑effective solution for large‑scale transcription workloads, such as call‑center recordings, meeting notes, and compliance‑related audio archives. For enterprise IT teams, the key implications are threefold. First, the pricing model offers a direct cost advantage for organizations that already rely on Microsoft 365 and Azure for other workloads; integrating MAI‑Transcribe‑2 could reduce transcription spend by up to 70 % compared with competing services. Second, the performance claims—higher accuracy and faster processing—could lower the need for post‑processing, reduce latency in real‑time captioning, and improve downstream analytics pipelines. Third, the integration into the Microsoft 365 Admin Center means that existing governance, compliance, and data residency controls can be leveraged without significant architectural changes. Vendors involved include Microsoft (Azure Cognitive Services, Microsoft 365), OpenAI (Whisper), Google Cloud (Speech‑to‑Text), and ElevenLabs. The broader industry impact is a tightening of the competitive landscape for speech‑to‑text services. As Microsoft deepens its AI stack, other providers may need to revisit pricing, licensing models, or feature differentiation to maintain market share. Enterprises that have already committed to a single vendor for transcription may find an incentive to re‑evaluate their contracts, especially if they process hundreds of thousands of audio hours annually. The shift also signals a continued trend toward commoditization of AI services, where performance gains are increasingly coupled with aggressive pricing strategies.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">• Inventory all audio sources: call‑center recordings, meeting recordings, podcasts, and compliance logs.  
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Inventory all audio sources: call‑center recordings, meeting recordings, podcasts, and compliance logs.  
    • Quantify current transcription spend: hourly rates, volume, and vendor mix.  
    • Measure baseline accuracy: use a sample of 100 hours, compare ASR error rates, and note post‑editing effort.  
    • Assess latency requirements: real‑time vs batch, and current processing times.  
    • Review data residency and compliance constraints: UK GDPR, data sovereignty, and encryption at rest.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">• Build a cost‑benefit model:  
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a cost‑benefit model:  
      – Current spend = X USD per hour × Y hours.  
      – Proposed spend with MAI‑Transcribe‑2 = 0.10 USD × Y hours.  
      – Savings = (Current spend – Proposed spend).  
    • Include accuracy uplift: estimate reduction in post‑editing hours (e.g., 20 % fewer edits).  
    • Benchmark processing speed: target 2× faster than existing solution.  
    • Present ROI timeline: break‑even in 3–6 months for a 100,000‑hour workload.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">• Microsoft 365 Admin Center – transcription settings and cost dashboards.  
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• Microsoft 365 Admin Center – transcription settings and cost dashboards.  
    • Azure Cognitive Services – MAI‑Transcribe‑2 API.  
    • Azure Purview – data catalog and compliance mapping.  
    • Azure Logic Apps or Power Automate – orchestrate ingestion and post‑processing workflows.  
    • Microsoft Sentinel – monitor usage and detect anomalies.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">• Technical: API limits, concurrency throttling, and potential latency spikes under load.  
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Technical: API limits, concurrency throttling, and potential latency spikes under load.  
    • Compliance: Ensure that audio data remains within UK jurisdiction; verify that Microsoft’s data residency policies align with GDPR.  
    • Operational: Migration of existing transcription pipelines, training of staff on new APIs, and potential vendor lock‑in.  
    • Security: Protect audio streams during transit; enforce encryption at rest and in motion.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">• Deploy a pilot for a single call‑center queue (10,000 hours) using MAI‑Transcribe‑2.  
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Deploy a pilot for a single call‑center queue (10,000 hours) using MAI‑Transcribe‑2.  
    • Configure Azure Purview to tag and classify transcribed text for compliance.  
    • Measure accuracy and cost savings within 30 days; present findings to stakeholders.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">LONG‑TERM PLAY
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">LONG‑TERM PLAY
    • Scale the solution across all audio workloads, integrating with existing BI and search platforms.  
    • Implement automated quality checks using Azure Machine Learning to flag transcription errors.  
    • Explore hybrid models: combine MAI‑Transcribe‑2 for bulk processing with specialized models for niche vocabularies.  
    • Negotiate enterprise contracts with Microsoft to lock in pricing and ensure SLA guarantees.  
    • Continuously monitor market offerings; maintain a competitive analysis to adapt if new entrants disrupt pricing or performance.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 00:17</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 00:17</p>
+</main>
 </body>
 </html>

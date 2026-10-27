@@ -5,83 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How to Use NVIDIA Warp and MjWarp to Accelerate Robotics Simulation and Learning Workflows - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">How to Use NVIDIA Warp and MjWarp to Accelerate Robotics Simulation and Learning Workflows</h1>
-  <div class="meta-line">Hugging Face · 23 Sep 202 · Generated 23 Sep 2026, 21:25</div>
-  <a href="https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>NVIDIA has released Warp, a GPU‑accelerated physics engine, and its open‑source counterpart MjWarp, designed to dramatically reduce simulation times for robotics and machine learning workflows. The announcement includes a step‑by‑step integration guide, performance benchmarks showing up to 10× speedups over CPU‑based simulators, and a roadmap for API updates. Warp is built on NVIDIA’s CUDA platform and integrates with popular robotics frameworks such as ROS, PyBullet, and Isaac Sim. MjWarp extends the MuJoCo physics engine with GPU support, making it accessible to developers who prefer an open‑source stack. For enterprise IT teams, the key takeaway is the potential to cut simulation cycles from days to hours, thereby accelerating prototyping, training, and validation of autonomous systems. The technology stack involves NVIDIA GPUs (RTX, A100, H100), CUDA, cuDNN, and container runtimes like Docker and NVIDIA Container Toolkit. Vendors such as NVIDIA, ROS, Isaac Sim, and the open‑source MuJoCo community are central to the ecosystem. Industry implications include a shift toward GPU‑centric simulation pipelines, tighter integration between simulation and training, and a new competitive pressure on cloud providers to offer GPU‑optimized simulation services. Enterprises that rely on robotics, autonomous vehicles, or AI research will need to evaluate whether their current hardware and software can support Warp’s requirements and whether the performance gains justify the migration effort. The announcement also signals NVIDIA’s continued push into the robotics domain, potentially influencing procurement decisions around GPU infrastructure, software licensing, and talent acquisition.</p></div>
+  <p class="meta-line">Hugging Face · 23 Sep 202 · Generated 23 Sep 2026, 21:25</p>
+  <a href="https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>NVIDIA has released Warp, a GPU‑accelerated physics engine, and its open‑source counterpart MjWarp, designed to dramatically reduce simulation times for robotics and machine learning workflows. The announcement includes a step‑by‑step integration guide, performance benchmarks showing up to 10× speedups over CPU‑based simulators, and a roadmap for API updates. Warp is built on NVIDIA’s CUDA platform and integrates with popular robotics frameworks such as ROS, PyBullet, and Isaac Sim. MjWarp extends the MuJoCo physics engine with GPU support, making it accessible to developers who prefer an open‑source stack. For enterprise IT teams, the key takeaway is the potential to cut simulation cycles from days to hours, thereby accelerating prototyping, training, and validation of autonomous systems. The technology stack involves NVIDIA GPUs (RTX, A100, H100), CUDA, cuDNN, and container runtimes like Docker and NVIDIA Container Toolkit. Vendors such as NVIDIA, ROS, Isaac Sim, and the open‑source MuJoCo community are central to the ecosystem. Industry implications include a shift toward GPU‑centric simulation pipelines, tighter integration between simulation and training, and a new competitive pressure on cloud providers to offer GPU‑optimized simulation services. Enterprises that rely on robotics, autonomous vehicles, or AI research will need to evaluate whether their current hardware and software can support Warp’s requirements and whether the performance gains justify the migration effort. The announcement also signals NVIDIA’s continued push into the robotics domain, potentially influencing procurement decisions around GPU infrastructure, software licensing, and talent acquisition.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory existing simulation workloads: identify CPU vs GPU usage, current runtimes, and bottlenecks.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory existing simulation workloads: identify CPU vs GPU usage, current runtimes, and bottlenecks.
    - Assess GPU capacity: verify that current NVIDIA GPUs support CUDA 12+ and that drivers are up to date.
    - Review software stack compatibility: ROS version, MuJoCo license, Isaac Sim, and container orchestration (Kubernetes, Docker).
    - Benchmark baseline: run a representative simulation on current hardware to capture wall‑time, CPU/GPU utilization, and memory footprint.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit analysis: compare current CPU hours (e.g., 10,000 CPU‑hrs/month) to projected GPU hours with Warp (e.g., 1,000 GPU‑hrs/month).
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit analysis: compare current CPU hours (e.g., 10,000 CPU‑hrs/month) to projected GPU hours with Warp (e.g., 1,000 GPU‑hrs/month).
    - Highlight ROI: faster iteration cycles reduce time‑to‑market by X%, lower cloud compute costs by Y%, and improve model accuracy due to more training iterations.
    - Include performance metrics from NVIDIA: 8–12× speedup on typical robotics scenarios, 30% lower energy consumption per simulation.
    - Present a phased pilot: 3‑month proof‑of‑concept with a single team, followed by enterprise rollout.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- NVIDIA Warp (proprietary) and MjWarp (open‑source MuJoCo GPU extension).
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA Warp (proprietary) and MjWarp (open‑source MuJoCo GPU extension).
    - NVIDIA CUDA Toolkit, cuDNN, and Nsight Systems for profiling.
    - ROS 2, Isaac Sim, and PyBullet for integration.
    - Docker with NVIDIA Container Toolkit or Kubernetes with NVIDIA device plugin for deployment.
    - Cloud providers: AWS EC2 G5/G4 instances, Azure N-series, Google Cloud GPU offerings for scalable testing.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: GPU driver incompatibilities, CUDA version drift, limited support for older ROS releases.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: GPU driver incompatibilities, CUDA version drift, limited support for older ROS releases.
    - Compliance: Ensure that data processed in simulation complies with UK GDPR; verify that any cloud deployment uses data residency controls.
    - Operational: Increased GPU utilization may strain existing power and cooling; plan for capacity scaling.
    - Vendor lock‑in: Proprietary Warp may tie future development to NVIDIA hardware; maintain an open‑source fallback with MjWarp.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a single GPU node with Docker and NVIDIA Container Toolkit, install Warp, and run a baseline simulation to validate performance gains.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a single GPU node with Docker and NVIDIA Container Toolkit, install Warp, and run a baseline simulation to validate performance gains.
    - Document the setup in an internal wiki and share results with the simulation team within 30 days.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, integrate Warp into the CI/CD pipeline for robotics software, enabling automated simulation tests on GPU clusters.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, integrate Warp into the CI/CD pipeline for robotics software, enabling automated simulation tests on GPU clusters.
    - Expand GPU fleet to include H100 or A100 GPUs for high‑throughput training and inference workloads.
    - Develop a governance framework for GPU resource allocation, cost tracking, and performance monitoring.
    - Evaluate cloud‑native simulation services (e.g., NVIDIA Omniverse, AWS RoboMaker) to support hybrid on‑premise and cloud workloads.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 23 Sep 2026, 21:25</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 23 Sep 2026, 21:25</p>
+</main>
 </body>
 </html>

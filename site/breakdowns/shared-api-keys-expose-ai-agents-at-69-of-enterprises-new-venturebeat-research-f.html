@@ -5,66 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shared API keys expose AI agents at 69% of enterprises, new VentureBeat research finds - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Shared API keys expose AI agents at 69% of enterprises, new VentureBeat research finds</h1>
-  <div class="meta-line">VentureBeat · 09 Jul 202 · Generated 10 Jul 2026, 09:50</div>
-  <a href="https://venturebeat.com/security/shared-api-keys-expose-ai-agent-fleets-venturebeat-research" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>VentureBeat research has found that 69% of enterprises expose AI agents to API key sharing, which puts multiple AI instances under a single compromised key's control. This is a significant security risk as it makes it challenging to detect the root cause of attacks, as forensic trails are erased by shared credentials. The use of shared API keys between multiple AI agents is a common practice in many enterprises, with AWS, Azure, Okta, and SSO providers being some of the most widely used platforms. This lack of credential isolation can have severe consequences, including unauthorized access to sensitive data and systems. The fact that 69% of similar enterprises use shared API keys between multiple AI agents highlights the need for enterprise IT teams to review their API key management practices. The broader industry implications of this research are that it highlights the need for stricter credential isolation and the use of AI-specific endpoint security tools to monitor for suspicious activity. Vendors such as CrowdStrike are already offering solutions to address this issue. The research also underscores the importance of implementing robust security measures to protect AI systems and data, as the use of AI becomes more widespread in enterprises.</p><p>The use of shared API keys is a significant security risk that can have severe consequences for enterprises. The fact that 69% of enterprises are exposed to this risk highlights the need for immediate action to address this issue. Enterprise IT teams need to take a closer look at their API key management practices and consider implementing stricter credential isolation and using AI-specific endpoint security tools. The research also highlights the need for vendors to provide more secure solutions for API key management and for enterprises to prioritize the security of their AI systems and data. The industry implications of this research are significant, and it is likely that we will see a shift towards more secure API key management practices in the coming months and years.</p></div>
+  <p class="meta-line">VentureBeat · 09 Jul 202 · Generated 10 Jul 2026, 09:50</p>
+  <a href="https://venturebeat.com/security/shared-api-keys-expose-ai-agent-fleets-venturebeat-research" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>VentureBeat research has found that 69% of enterprises expose AI agents to API key sharing, which puts multiple AI instances under a single compromised key&#x27;s control. This is a significant security risk as it makes it challenging to detect the root cause of attacks, as forensic trails are erased by shared credentials. The use of shared API keys between multiple AI agents is a common practice in many enterprises, with AWS, Azure, Okta, and SSO providers being some of the most widely used platforms. This lack of credential isolation can have severe consequences, including unauthorized access to sensitive data and systems. The fact that 69% of similar enterprises use shared API keys between multiple AI agents highlights the need for enterprise IT teams to review their API key management practices. The broader industry implications of this research are that it highlights the need for stricter credential isolation and the use of AI-specific endpoint security tools to monitor for suspicious activity. Vendors such as CrowdStrike are already offering solutions to address this issue. The research also underscores the importance of implementing robust security measures to protect AI systems and data, as the use of AI becomes more widespread in enterprises.</p><p>The use of shared API keys is a significant security risk that can have severe consequences for enterprises. The fact that 69% of enterprises are exposed to this risk highlights the need for immediate action to address this issue. Enterprise IT teams need to take a closer look at their API key management practices and consider implementing stricter credential isolation and using AI-specific endpoint security tools. The research also highlights the need for vendors to provide more secure solutions for API key management and for enterprises to prioritize the security of their AI systems and data. The industry implications of this research are significant, and it is likely that we will see a shift towards more secure API key management practices in the coming months and years.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">To address the issue of shared API keys, IT teams should start by auditing their current API key management practices. This includes reviewing the use of API keys across all AI agents and identifying any instances of shared API keys. IT teams should also assess their current security measures, including endpoint security tools and access controls, to determine if they are sufficient to protect against API key-based attacks.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">When building a business case for leadership, IT teams should highlight the significant security risks associated with shared API keys. They should also provide metrics on the potential cost of a security breach, such as the average cost of a data breach, which is around $3.92 million. IT teams can also benchmark their API key management practices against industry best practices and highlight the benefits of implementing stricter credential isolation.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">IT teams should consider using AI-specific endpoint security tools, such as CrowdStrike, to monitor for suspicious activity. They should also consider using API key management platforms, such as AWS IAM or Azure Active Directory, to manage and secure API keys.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">IT teams should flag the technical risks associated with shared API keys, including the risk of unauthorized access to sensitive data and systems. They should also flag compliance risks, such as the risk of non-compliance with UK GDPR regulations.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">A quick win for IT teams is to implement a policy of least privilege access for all API keys. This means that each AI agent should only have access to the resources and data that it needs to function, and no more. IT teams can achieve this by reviewing and updating their access controls and API key management practices.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">The long-term play for IT teams is to implement a robust API key management system that includes strict credential isolation and monitoring for suspicious activity. This may involve implementing a new API key management platform or updating existing security measures to include AI-specific endpoint security tools. IT teams should also consider implementing a culture of security awareness and training for all employees to ensure that they understand the risks associated with shared API keys and the importance of secure API key management practices.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 10 Jul 2026, 09:50</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">To address the issue of shared API keys, IT teams should start by auditing their current API key management practices. This includes reviewing the use of API keys across all AI agents and identifying any instances of shared API keys. IT teams should also assess their current security measures, including endpoint security tools and access controls, to determine if they are sufficient to protect against API key-based attacks.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">When building a business case for leadership, IT teams should highlight the significant security risks associated with shared API keys. They should also provide metrics on the potential cost of a security breach, such as the average cost of a data breach, which is around $3.92 million. IT teams can also benchmark their API key management practices against industry best practices and highlight the benefits of implementing stricter credential isolation.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">IT teams should consider using AI-specific endpoint security tools, such as CrowdStrike, to monitor for suspicious activity. They should also consider using API key management platforms, such as AWS IAM or Azure Active Directory, to manage and secure API keys.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">IT teams should flag the technical risks associated with shared API keys, including the risk of unauthorized access to sensitive data and systems. They should also flag compliance risks, such as the risk of non-compliance with UK GDPR regulations.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">A quick win for IT teams is to implement a policy of least privilege access for all API keys. This means that each AI agent should only have access to the resources and data that it needs to function, and no more. IT teams can achieve this by reviewing and updating their access controls and API key management practices.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">The long-term play for IT teams is to implement a robust API key management system that includes strict credential isolation and monitoring for suspicious activity. This may involve implementing a new API key management platform or updating existing security measures to include AI-specific endpoint security tools. IT teams should also consider implementing a culture of security awareness and training for all employees to ensure that they understand the risks associated with shared API keys and the importance of secure API key management practices.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 10 Jul 2026, 09:50</p>
+</main>
 </body>
 </html>

@@ -5,84 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How we made the first comprehensive map of deaths along the US border’s “virtual wall” - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">How we made the first comprehensive map of deaths along the US border’s “virtual wall”</h1>
-  <div class="meta-line">MIT Tech Review · 21 Sep 202 · Generated 22 Sep 2026, 00:17</div>
-  <a href="https://www.technologyreview.com/2026/09/21/1144161/border-towers-surveillance-methodology/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>MIT Technology Review’s investigation mapped 1,300 deaths within a 5‑mile radius of U.S.‑Mexico border surveillance towers, revealing that 70% of fatalities occurred within 1,000 feet of a tower. The study used satellite imagery, public death records, and GIS analytics to produce a high‑resolution heat map. The findings expose a direct safety hazard associated with the deployment of unmanned aerial vehicles (UAVs), ground‑based cameras, and fiber‑optic cables that constitute the “virtual wall.” For enterprise IT teams, the report underscores the need to scrutinize the security and operational footprint of government‑contracted surveillance infrastructure that may intersect with corporate networks, especially for firms with data centers or edge sites in border states. Vendors such as Raytheon, Lockheed Martin, and Palantir are involved in data aggregation, analytics, and sensor deployment. The broader industry implication is a heightened regulatory focus on the intersection of national security technology and public safety. Data privacy laws, including the UK GDPR and the U.S. CLOUD Act, may now apply to contractors handling personal data from border surveillance. Enterprises must consider the potential for supply‑chain exposure, cyber‑physical threats, and reputational risk if their infrastructure is linked to hazardous or controversial deployments. The study also signals a shift toward more granular, open‑source intelligence (OSINT) tools for risk assessment, encouraging IT leaders to adopt GIS‑enabled monitoring and incident‑response frameworks that can detect and mitigate risks arising from third‑party hardware and software in critical infrastructure.</p></div>
+  <p class="meta-line">MIT Tech Review · 21 Sep 202 · Generated 22 Sep 2026, 00:17</p>
+  <a href="https://www.technologyreview.com/2026/09/21/1144161/border-towers-surveillance-methodology/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>MIT Technology Review’s investigation mapped 1,300 deaths within a 5‑mile radius of U.S.‑Mexico border surveillance towers, revealing that 70% of fatalities occurred within 1,000 feet of a tower. The study used satellite imagery, public death records, and GIS analytics to produce a high‑resolution heat map. The findings expose a direct safety hazard associated with the deployment of unmanned aerial vehicles (UAVs), ground‑based cameras, and fiber‑optic cables that constitute the “virtual wall.” For enterprise IT teams, the report underscores the need to scrutinize the security and operational footprint of government‑contracted surveillance infrastructure that may intersect with corporate networks, especially for firms with data centers or edge sites in border states. Vendors such as Raytheon, Lockheed Martin, and Palantir are involved in data aggregation, analytics, and sensor deployment. The broader industry implication is a heightened regulatory focus on the intersection of national security technology and public safety. Data privacy laws, including the UK GDPR and the U.S. CLOUD Act, may now apply to contractors handling personal data from border surveillance. Enterprises must consider the potential for supply‑chain exposure, cyber‑physical threats, and reputational risk if their infrastructure is linked to hazardous or controversial deployments. The study also signals a shift toward more granular, open‑source intelligence (OSINT) tools for risk assessment, encouraging IT leaders to adopt GIS‑enabled monitoring and incident‑response frameworks that can detect and mitigate risks arising from third‑party hardware and software in critical infrastructure.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory all border‑proximate assets: fiber routes, satellite uplinks, and third‑party sensor nodes.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all border‑proximate assets: fiber routes, satellite uplinks, and third‑party sensor nodes.
    - Map network topology against the MIT heat map to identify proximity to high‑risk zones.
    - Conduct a threat‑modeling exercise focusing on cyber‑physical attacks (e.g., spoofed UAV signals, fiber cut).
    - Review compliance status: UK GDPR for any personal data processed by surveillance vendors, and the U.S. CLOUD Act for cross‑border data flows.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit analysis: quantify potential downtime (average 4 hours per incident) versus investment in hardened perimeter controls ($150k per site).
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit analysis: quantify potential downtime (average 4 hours per incident) versus investment in hardened perimeter controls ($150k per site).
    - Use metrics: Mean Time to Detect (MTTD) for sensor anomalies, Mean Time to Recover (MTTR) for fiber outages.
    - Benchmark against industry peers who have implemented edge‑security appliances; target a 30% reduction in incident response time.
    - Present a risk‑adjusted ROI: expected loss avoidance ($2M annual) versus implementation cost ($500k).</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Cisco Secure Edge for network segmentation and anomaly detection.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Cisco Secure Edge for network segmentation and anomaly detection.
    - Palo Alto Networks Cortex XDR for integrated endpoint and network telemetry.
    - Palantir Foundry for GIS‑based risk mapping and data fusion.
    - AWS Ground Station or Azure Orbital for secure satellite data ingestion.
    - Splunk Enterprise Security for real‑time log correlation and incident playbooks.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Legacy firmware on border sensors may be unpatched; risk of remote exploitation.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Legacy firmware on border sensors may be unpatched; risk of remote exploitation.
    - Compliance: GDPR “right to be forgotten” conflicts with immutable surveillance logs.
    - Operational: Physical tampering of fiber or UAV infrastructure could disrupt connectivity.
    - Vendor lock‑in: Proprietary analytics platforms may limit data portability.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a network segmentation policy that isolates all border‑proximate devices from the corporate LAN within 30 days.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a network segmentation policy that isolates all border‑proximate devices from the corporate LAN within 30 days.
    - Implement a basic SIEM rule set to alert on anomalous traffic to/from known surveillance IP ranges.
    - Conduct a patch audit of all border‑connected hardware; apply critical updates immediately.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, architect a hybrid cloud edge‑security model that decouples critical services from border infrastructure.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, architect a hybrid cloud edge‑security model that decouples critical services from border infrastructure.
    - Integrate a continuous risk‑assessment pipeline using Palantir or similar GIS analytics to update threat maps in real time.
    - Negotiate data‑processing agreements with vendors that include GDPR‑compliant data handling clauses and audit rights.
    - Develop a cyber‑physical incident‑response playbook that aligns with NIST SP 800‑61 and incorporates UAV‑specific contingencies.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 00:17</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 00:17</p>
+</main>
 </body>
 </html>

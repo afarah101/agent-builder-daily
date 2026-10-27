@@ -4,7 +4,9 @@ load_dotenv()
 import os
 import json
 import re
+import sys
 import time
+from html import escape, unescape
 from pathlib import Path
 from datetime import datetime
 from groq import Groq
@@ -154,7 +156,7 @@ def parse_groq_response(raw):
         guide_raw = guide_raw.replace(prefix, "").strip()
 
     summary_paras = [p.strip() for p in summary_raw.split("\n\n") if p.strip()]
-    summary_html = "".join(f"<p>{p}</p>" for p in summary_paras)
+    summary_html = summary_block_html(summary_paras)
 
     guide_labels = [
         ("1.", "EVALUATE", ""),
@@ -173,14 +175,7 @@ def parse_groq_response(raw):
 
     def flush_block():
         if current_label and current_lines:
-            text = "\n".join(current_lines).strip()
-            color_class = f" {current_color}" if current_color else ""
-            blocks.append(
-                f'<div class="guide-block{color_class}">'
-                f'<div class="guide-label">{current_label}</div>'
-                f'<div class="guide-text">{text}</div>'
-                f'</div>'
-            )
+            blocks.append(guide_block_html(current_label, current_color, "\n".join(current_lines).strip()))
 
     for line in lines:
         matched = False
@@ -204,7 +199,32 @@ def parse_groq_response(raw):
     return summary_html, guide_html
 
 
+def summary_block_html(paras):
+    """Summary paragraphs, every one escaped: the text is AI-written."""
+    return "".join(f"<p>{escape(p)}</p>" for p in paras)
+
+
+def guide_block_html(label, color, text):
+    """One guide block. Label, colour and text are all escaped; the colour only ever picks a CSS class."""
+    color_class = f" {color}" if color in ("green", "amber", "red") else ""
+    return (f'<div class="guide-block{color_class}">'
+            f'<h3 class="guide-label">{escape(label.capitalize())}</h3>'
+            f'<div class="guide-text">{escape(text)}</div>'
+            f'</div>')
+
+
+def source_link_html(url):
+    """A link to the source only for an https URL; anything else (javascript:, data:, http:) is not a link."""
+    url = str(url or "").strip()
+    if not url.lower().startswith("https://"):
+        return ""
+    return f'<a href="{escape(url)}" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>'
+
+
 def render_breakdown_page(title, slug, url, source_label, summary_html, guide_html, meta_line, generated_at):
+    """The page frame. title, url, meta_line and generated_at are raw text and are escaped here; summary_html and
+    guide_html come from summary_block_html / guide_block_html, which escape their text."""
+    title, meta_line, generated_at = escape(str(title)), escape(str(meta_line)), escape(str(generated_at))
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -212,64 +232,104 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
-    :root{{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}}
+    :root{{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}}
     body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}}
-    .topbar{{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}}
-    .brand-link{{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}}
-    .back-btn{{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}}
+    ::selection{{background:var(--accent);color:var(--accent-ink)}}
+    :focus-visible{{outline:2px solid var(--accent);outline-offset:2px}}
+    .topbar{{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}}
+    .brand-link,.back-btn,.source-link{{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}}
+    .brand-link{{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}}
+    .back-btn{{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}}
+    .back-btn:hover{{color:var(--text)}}
     .page-wrap{{max-width:860px;margin:0 auto;padding:48px 32px 96px}}
-    .badge{{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}}
-    .page-title{{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}}
-    .meta-line{{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}}
-    .source-link{{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}}
-    .divider{{height:1px;background:var(--border);margin:40px 0}}
-    .section-header{{display:flex;align-items:center;gap:12px;margin-bottom:24px}}
-    .section-num{{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}}
-    .section-title{{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}}
-    .summary-body{{font-size:15px;line-height:1.8;color:var(--text-secondary)}}
+    .page-title{{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}}
+    .meta-line{{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}}
+    .source-link{{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}}
+    .source-link:hover{{background:rgba(0,255,136,0.16)}}
+    .section-title{{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}}
+    .summary-body{{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}}
     .summary-body p{{margin-bottom:16px}}
+    .divider{{height:1px;background:var(--border);margin:40px 0}}
     .guide-grid{{display:flex;flex-direction:column;gap:16px}}
-    .guide-block{{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}}
-    .guide-block.green{{border-left-color:var(--accent-green)}}
-    .guide-block.amber{{border-left-color:#f59e0b}}
-    .guide-block.red{{border-left-color:#ef4444}}
-    .guide-label{{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}}
-    .guide-block.green .guide-label{{color:var(--accent-green)}}
-    .guide-block.amber .guide-label{{color:#f59e0b}}
-    .guide-block.red .guide-label{{color:#ef4444}}
-    .guide-text{{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}}
-    .generated-note{{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}}
-    @media(max-width:700px){{.page-wrap{{padding:32px 16px 64px}}.page-title{{font-size:24px}}.topbar{{padding:14px 16px}}}}
+    .guide-block{{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}}
+    .guide-label{{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}}
+    .guide-block.green .guide-label{{color:var(--accent)}}
+    .guide-block.amber .guide-label{{color:var(--warn)}}
+    .guide-block.red .guide-label{{color:var(--danger)}}
+    .guide-text{{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}}
+    .generated-note{{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}}
+    @media(max-width:700px){{.page-wrap{{padding:32px 16px 64px}}.topbar{{padding:4px 16px;position:static}}}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">{title}</h1>
-  <div class="meta-line">{meta_line} · Generated {generated_at}</div>
-  <a href="{url}" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body">{summary_html}</div>
+  <p class="meta-line">{meta_line} · Generated {generated_at}</p>
+  {source_link_html(url)}
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body">{summary_html}</div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid">{guide_html}</div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · {generated_at}</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid">{guide_html}</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · {generated_at}</p>
+</main>
 </body>
 </html>"""
+
+
+STORED = re.compile(
+    r'<h1 class="page-title">(?P<title>.*?)</h1>.*?'
+    r'<div class="meta-line">(?P<meta>.*?)</div>.*?'
+    r'<a href="(?P<url>[^"]*)"[^>]*class="source-link">.*?'
+    r'<div class="summary-body">(?P<summary>.*?)</div>\s*<div class="divider">.*?'
+    r'<div class="guide-grid">(?P<guide>.*?)</div>\s*<div class="generated-note">', re.S)
+STORED_BLOCK = re.compile(
+    r'<div class="guide-block(?: (?P<color>\w+))?"><div class="guide-label">(?P<label>.*?)</div>'
+    r'<div class="guide-text">(?P<text>.*?)</div></div>', re.S)
+
+
+def stored_text(fragment):
+    """What a browser shows for a stored fragment: tags dropped, entities decoded. The escape on re-render undoes it."""
+    return unescape(re.sub(r"</?[a-zA-Z][^<>]*>", "", fragment))  # a tag starts with a letter: "<10 ms" is text
+
+
+def restyle_page(old_html):
+    """New frame and style around an old page's stored text, with no AI call. None when the page has a shape this
+    does not recognise, so the caller leaves it as it is."""
+    m = STORED.search(old_html)
+    if not m:
+        return None
+    meta, sep, generated_at = stored_text(m["meta"]).rpartition(" · Generated ")
+    blocks = list(STORED_BLOCK.finditer(m["guide"]))
+    if not sep or len(blocks) != m["guide"].count('class="guide-block'):
+        return None
+    summary = summary_block_html(stored_text(p) for p in re.findall(r"<p>(.*?)</p>", m["summary"], re.S))
+    guide = "\n".join(guide_block_html(stored_text(b["label"]), b["color"] or "", stored_text(b["text"])) for b in blocks)
+    return render_breakdown_page(stored_text(m["title"]), "", unescape(m["url"]), "", summary, guide, meta, generated_at)
+
+
+def restyle_existing_pages(directory=OUTPUT_DIR):
+    """Rewrite every existing breakdown page in the current frame. Returns (restyled, skipped file names)."""
+    restyled, skipped = 0, []
+    for path in sorted(Path(directory).glob("*.html")):
+        new_html = restyle_page(path.read_text(encoding="utf-8"))
+        if new_html is None:
+            skipped.append(path.name)
+            continue
+        path.write_text(new_html, encoding="utf-8")
+        restyled += 1
+    return restyled, skipped
 
 
 def process_case_studies(cs_data, generated_at):
@@ -395,4 +455,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--restyle" in sys.argv:  # re-frame existing pages only: no Groq call
+        done, skipped = restyle_existing_pages()
+        print(f"Restyled {done} pages; skipped {len(skipped)} with an unknown shape: {skipped}")
+    else:
+        main()

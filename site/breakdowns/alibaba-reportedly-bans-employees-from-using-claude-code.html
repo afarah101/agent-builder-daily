@@ -5,71 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alibaba reportedly bans employees from using Claude Code - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Alibaba reportedly bans employees from using Claude Code</h1>
-  <div class="meta-line">TechCrunch · 04 Jul 202 · Generated 04 Jul 2026, 19:28</div>
-  <a href="https://techcrunch.com/2026/07/04/alibaba-reportedly-bans-employees-from-using-claude-code/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Alibaba has reportedly banned its employees from using Claude AI, a high-risk software that poses potential security risks. This move highlights the caution that companies should exercise when it comes to AI security and the potential risks associated with high-risk software. The ban is significant for enterprise IT teams as it serves as a reminder to regularly review and update their own high-risk software classifications. Alibaba's decision may be in response to the potential risks posed by Claude AI, such as data breaches or unauthorized access to sensitive information. The ban may also be a precautionary measure to prevent any potential security threats that could compromise the company's systems or data. 
+  <p class="meta-line">TechCrunch · 04 Jul 202 · Generated 04 Jul 2026, 19:28</p>
+  <a href="https://techcrunch.com/2026/07/04/alibaba-reportedly-bans-employees-from-using-claude-code/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Alibaba has reportedly banned its employees from using Claude AI, a high-risk software that poses potential security risks. This move highlights the caution that companies should exercise when it comes to AI security and the potential risks associated with high-risk software. The ban is significant for enterprise IT teams as it serves as a reminder to regularly review and update their own high-risk software classifications. Alibaba&#x27;s decision may be in response to the potential risks posed by Claude AI, such as data breaches or unauthorized access to sensitive information. The ban may also be a precautionary measure to prevent any potential security threats that could compromise the company&#x27;s systems or data. 
 The vendors or technologies involved in this news item include Claude AI and potentially other high-risk software that may be used by Alibaba or other companies. The broader industry implications of this news item are that companies should be cautious when using high-risk software and should regularly review and update their own high-risk software classifications to ensure the security and integrity of their systems and data. 
 Enterprise IT teams should take note of this news item and review their own AI usage policies to ensure that they are adequate and up-to-date. They should also be prepared to update their compliance and risk management processes in response to changing classifications of high-risk software. This may involve conducting regular audits and risk assessments to identify potential security threats and taking steps to mitigate those threats. 
 The news item also highlights the importance of having a robust risk management framework in place to identify and mitigate potential security risks associated with high-risk software. This framework should include regular reviews and updates of high-risk software classifications, as well as procedures for auditing and assessing the use of high-risk software within the company. 
 In addition, the news item may have implications for companies that use Claude AI or other high-risk software, as they may need to review and update their own AI usage policies and risk management processes in response to the potential security risks posed by these software. 
 Overall, the news item serves as a reminder to enterprise IT teams of the importance of being cautious when using high-risk software and of the need to regularly review and update their own high-risk software classifications to ensure the security and integrity of their systems and data.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">To respond to this news item, IT teams should start by auditing their current environment to identify any high-risk software that is being used, including Claude AI. This audit should include an assessment of the potential security risks associated with each piece of software, as well as an evaluation of the company's current AI usage policies and risk management processes.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">When building a business case for leadership, IT teams should propose a review and update of the company's high-risk software classifications, as well as an assessment of the potential security risks associated with each piece of software. This proposal should include metrics or benchmarks on the potential risks and benefits of using high-risk software, such as the potential for data breaches or the benefits of increased productivity.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">IT teams may want to consider using tools such as vulnerability scanners or penetration testing software to identify potential security risks associated with high-risk software. They may also want to consider using AI usage monitoring software to track and monitor the use of high-risk software within the company.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">IT teams should flag potential technical, compliance, and operational risks associated with high-risk software, including the potential for data breaches, unauthorized access to sensitive information, and non-compliance with regulatory requirements such as UK GDPR.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">A quick win that IT teams can achieve in under 30 days is to conduct a preliminary audit of the company's high-risk software classifications and to identify any potential security risks associated with those software. This audit can be used to inform a more comprehensive review and update of the company's AI usage policies and risk management processes.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">The long-term play for IT teams is to develop and implement a robust risk management framework that includes regular reviews and updates of high-risk software classifications, as well as procedures for auditing and assessing the use of high-risk software within the company. This framework should also include metrics or benchmarks for measuring the effectiveness of the company's AI usage policies and risk management processes, such as the number of security incidents or the level of compliance with regulatory requirements.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 04 Jul 2026, 19:28</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">To respond to this news item, IT teams should start by auditing their current environment to identify any high-risk software that is being used, including Claude AI. This audit should include an assessment of the potential security risks associated with each piece of software, as well as an evaluation of the company&#x27;s current AI usage policies and risk management processes.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">When building a business case for leadership, IT teams should propose a review and update of the company&#x27;s high-risk software classifications, as well as an assessment of the potential security risks associated with each piece of software. This proposal should include metrics or benchmarks on the potential risks and benefits of using high-risk software, such as the potential for data breaches or the benefits of increased productivity.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">IT teams may want to consider using tools such as vulnerability scanners or penetration testing software to identify potential security risks associated with high-risk software. They may also want to consider using AI usage monitoring software to track and monitor the use of high-risk software within the company.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">IT teams should flag potential technical, compliance, and operational risks associated with high-risk software, including the potential for data breaches, unauthorized access to sensitive information, and non-compliance with regulatory requirements such as UK GDPR.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">A quick win that IT teams can achieve in under 30 days is to conduct a preliminary audit of the company&#x27;s high-risk software classifications and to identify any potential security risks associated with those software. This audit can be used to inform a more comprehensive review and update of the company&#x27;s AI usage policies and risk management processes.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">The long-term play for IT teams is to develop and implement a robust risk management framework that includes regular reviews and updates of high-risk software classifications, as well as procedures for auditing and assessing the use of high-risk software within the company. This framework should also include metrics or benchmarks for measuring the effectiveness of the company&#x27;s AI usage policies and risk management processes, such as the number of security incidents or the level of compliance with regulatory requirements.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 04 Jul 2026, 19:28</p>
+</main>
 </body>
 </html>

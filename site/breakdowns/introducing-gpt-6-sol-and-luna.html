@@ -5,84 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Introducing GPT-6 Sol and Luna - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Introducing GPT-6 Sol and Luna</h1>
-  <div class="meta-line">OpenAI · 22 Sep 202 · Generated 22 Sep 2026, 21:11</div>
-  <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>OpenAI has released two new language models, GPT‑6 Sol and GPT‑6 Luna, through its API portal. GPT‑6 Sol is positioned as a higher‑performance, higher‑cost option, while GPT‑6 Luna offers a more cost‑effective balance with slightly lower capability. The announcement includes updated pricing tiers, quota limits, and new endpoint identifiers. For enterprise IT teams, the release is significant because it expands the set of models that can be leveraged for mission‑critical workloads such as automated ticket triage, policy engine augmentation, and security monitoring. The models are available immediately in the OpenAI API, and the pricing structure now includes a “pay‑as‑you‑go” option for low‑volume use and a dedicated enterprise plan with higher throughput and SLAs. Vendors that will be impacted include Freshservice, which can integrate GPT‑6 APIs into its automation scripts, and JumpCloud, which can extend its policy engine to consume the new models for smarter user provisioning and incident response. The broader industry implication is a continued shift toward model specialization: organizations will need to evaluate which model aligns best with their cost and performance requirements. The release also pressures competitors to accelerate their own model development or to offer differentiated pricing. For IT operations, the new models mean more granular control over AI workloads, but also increased complexity in monitoring usage, managing quotas, and ensuring compliance with data protection regulations.</p></div>
+  <p class="meta-line">OpenAI · 22 Sep 202 · Generated 22 Sep 2026, 21:11</p>
+  <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>OpenAI has released two new language models, GPT‑6 Sol and GPT‑6 Luna, through its API portal. GPT‑6 Sol is positioned as a higher‑performance, higher‑cost option, while GPT‑6 Luna offers a more cost‑effective balance with slightly lower capability. The announcement includes updated pricing tiers, quota limits, and new endpoint identifiers. For enterprise IT teams, the release is significant because it expands the set of models that can be leveraged for mission‑critical workloads such as automated ticket triage, policy engine augmentation, and security monitoring. The models are available immediately in the OpenAI API, and the pricing structure now includes a “pay‑as‑you‑go” option for low‑volume use and a dedicated enterprise plan with higher throughput and SLAs. Vendors that will be impacted include Freshservice, which can integrate GPT‑6 APIs into its automation scripts, and JumpCloud, which can extend its policy engine to consume the new models for smarter user provisioning and incident response. The broader industry implication is a continued shift toward model specialization: organizations will need to evaluate which model aligns best with their cost and performance requirements. The release also pressures competitors to accelerate their own model development or to offer differentiated pricing. For IT operations, the new models mean more granular control over AI workloads, but also increased complexity in monitoring usage, managing quotas, and ensuring compliance with data protection regulations.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory existing AI workloads: list all services that currently use GPT‑3.5 or GPT‑4, including ticket automation, policy engines, and monitoring scripts.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory existing AI workloads: list all services that currently use GPT‑3.5 or GPT‑4, including ticket automation, policy engines, and monitoring scripts.
    - Measure current usage: capture token consumption per month, peak concurrency, and latency requirements.
    - Assess data sensitivity: identify any PII or regulated data that flows through the AI layer; confirm that the new models comply with UK GDPR and any internal data‑handling policies.
    - Review cost baseline: calculate current spend on OpenAI API and compare against projected spend with GPT‑6 Sol and Luna.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit model: use current token usage to estimate monthly cost under each new model; include potential savings from reduced manual effort (e.g., 20% fewer support tickets processed manually).
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: use current token usage to estimate monthly cost under each new model; include potential savings from reduced manual effort (e.g., 20% fewer support tickets processed manually).
    - Quantify performance gains: benchmark GPT‑6 Sol against GPT‑4 on a representative set of support tickets; document improvements in accuracy, response time, and user satisfaction scores.
    - Present ROI: combine cost savings, productivity gains, and risk reduction (e.g., fewer SLA breaches) into a single metric such as NPV over 12 months.
    - Align with strategic goals: tie the proposal to digital transformation, automation maturity, or security posture improvement.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- OpenAI API: new endpoints for GPT‑6 Sol and GPT‑6 Luna, with updated pricing and quota controls.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI API: new endpoints for GPT‑6 Sol and GPT‑6 Luna, with updated pricing and quota controls.
    - Freshservice Automation Scripts: update existing scripts to call the new GPT‑6 endpoints; use the Freshservice REST API for ticket ingestion and resolution.
    - JumpCloud Policy Engine: extend policy evaluation logic to consume GPT‑6 responses for dynamic user provisioning and role assignment.
    - Azure Key Vault or HashiCorp Vault: secure API keys and manage secrets for the new models.
    - Datadog or New Relic: monitor API latency, error rates, and cost per token in real time.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: increased token limits may lead to higher latency if not throttled; ensure proper rate limiting and retry logic.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: increased token limits may lead to higher latency if not throttled; ensure proper rate limiting and retry logic.
    - Compliance: UK GDPR requires that any PII sent to third‑party AI services be encrypted in transit and that data residency is respected; verify OpenAI’s data handling agreements.
    - Operational: sudden quota changes could disrupt automation workflows; set up alerts for quota exhaustion.
    - Vendor lock‑in: reliance on OpenAI’s proprietary models may limit future migration options; consider multi‑cloud AI strategies.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a pilot in Freshservice: replace the existing GPT‑4 call in one high‑volume support queue with GPT‑6 Luna; monitor token usage and ticket resolution time for 30 days.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a pilot in Freshservice: replace the existing GPT‑4 call in one high‑volume support queue with GPT‑6 Luna; monitor token usage and ticket resolution time for 30 days.
    - Configure cost alerts in the OpenAI dashboard to trigger when spending exceeds a predefined threshold.
    - Update documentation and run a brief training session for support staff on new AI‑assisted ticket handling.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, migrate core automation workflows to GPT‑6 Sol for high‑value, low‑volume tasks that require maximum accuracy (e.g., incident triage for critical services).
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, migrate core automation workflows to GPT‑6 Sol for high‑value, low‑volume tasks that require maximum accuracy (e.g., incident triage for critical services).
    - Implement a governance framework that includes model versioning, data retention policies, and periodic compliance audits.
    - Integrate GPT‑6 outputs into a centralized analytics platform to feed back into policy engine tuning and to refine the AI‑driven decision tree.
    - Explore hybrid AI strategies: combine GPT‑6 with open‑source models for redundancy and cost optimization, ensuring that the enterprise remains agile and not overly dependent on a single vendor.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 21:11</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 21:11</p>
+</main>
 </body>
 </html>
