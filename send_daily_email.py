@@ -26,6 +26,8 @@ LAST_SENT, PREVIEW = "email/last_sent.txt", "email/preview.html"
 STALE_AFTER = timedelta(hours=30)
 SEND_HOUR = 11
 CASE_LOOKBACK_DAYS = 7
+CREATORS_GLOB = "data/creators/[0-9][0-9][0-9][0-9]-*.json"  # written by creator_watch.py
+CREATOR_MAX = 3
 
 # Site palette (generate_html.py :root). Dark backgrounds set on every cell so dark-mode clients don't invert them.
 C = {"bg": "#0f1117", "surface": "#1a1d27", "surface2": "#22263a", "border": "#2d2d2d", "text": "#f1f5f9",
@@ -65,7 +67,36 @@ def load_data():
     except (OSError, ValueError, IndexError, KeyError, TypeError, AttributeError) as e:
         print(f"[EMAIL] Scout data missing or malformed: {e!r}")
         return {"news": [], "papers": [], "newest": None, "reason": "a data file is missing or empty, or malformed"}
-    return {"news": news, "papers": papers, "cs_days": cs_days, "newest": max(stamps), "reason": None}
+    return {"news": news, "papers": papers, "cs_days": cs_days, "newest": max(stamps), "reason": None,
+            "creators": load_creators()}
+
+
+def load_creators():
+    """Creator Watch rows from the newest 8 day files (one per run day covers the 7-day window). An unreadable file is
+    skipped: Creator Watch never stops the digest."""
+    rows = []
+    for path in sorted(glob.glob(CREATORS_GLOB))[-8:]:
+        try:
+            items = _load(path).get("items")
+        except (OSError, ValueError, AttributeError) as e:
+            print(f"[EMAIL] Skipping {path}: {e!r}")
+            continue
+        rows += [i for i in items if isinstance(i, dict)] if isinstance(items, list) else []
+    return rows
+
+
+def creator_watch(rows, now):
+    """Up to CREATOR_MAX items published in the last 7 days, newest first, one per URL. [] omits the section."""
+    picked = {}
+    for it in rows or []:
+        try:
+            published = datetime.fromisoformat(it["published"])
+            fresh = now - timedelta(days=CASE_LOOKBACK_DAYS) <= published <= now
+        except (KeyError, TypeError, ValueError):  # naive or missing date: TypeError on the compare
+            continue
+        if fresh and it.get("title") and safe_url(it.get("url")) == it.get("url"):
+            picked.setdefault(it["url"], {**it, "published_at": published})
+    return sorted(picked.values(), key=lambda i: i["published_at"], reverse=True)[:CREATOR_MAX]
 
 
 def case_of_the_day(cs_days, today):
@@ -162,6 +193,7 @@ def build_email(data, now):
         "signal": top,
         "signal_points": signal_points(top.get("enterprise_use")),
         "case": case,
+        "creators": creator_watch(data.get("creators"), now),
         "radar": radar,
         "hits": hits,
         "footer": f"{len(news)} news items, {len(papers)} case studies. Data as of {data['newest']:%Y-%m-%d %H:%M} UTC.",
@@ -207,6 +239,13 @@ def render_html(date, s):
                             + (_p(f"From {case['shown_date']:%a %d %b %Y}", C["muted"], 13) if case["shown_date"] else "")
                             + _p(_e(two_sentences(case.get("summary"))), C["text2"], 14)
                             + (_p("<b>Try this today</b>", C["text"], 14) + f"<ol {ul}>{steps}</ol>" if steps else ""))
+    creators = "".join(
+        _p(_link(c["url"], c.get("title")), size=15)
+        + _p(f"{_e(c.get('creator'))} · {c['published_at']:%a %d %b}", C["muted"], 13)
+        + (_p(f"<b>AI summary:</b> {_e(c.get('summary'))}", C["text2"], 14) if c.get("summary") else "")
+        + (_p(f"<b>Key idea:</b> {_e(c.get('key_idea'))}", C["text2"], 14) if c.get("key_idea") else "")
+        for c in s["creators"])
+    creator_block = _block("Creator Watch", creators) if creators else ""
     return f"""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"></head>
 <body style="margin:0;padding:0;background:{C["bg"]};" bgcolor="{C["bg"]}">
@@ -220,7 +259,7 @@ def render_html(date, s):
 {_block("The Signal", _p(_link(sig.get("url"), sig.get("title")), size=16) + _p(_e(sig.get("summary")), C["text2"], 14)
         + (f'<ul {ul.replace("margin:0;", "margin:0 0 10px;")}>{points}</ul>' if points else "")
         + _p(_link(sig.get("url"), "Read at " + (sig.get("source") or "source") + " →"), size=14))}
-{case_block}
+{case_block}{creator_block}
 {_block("Research Radar", radar)}
 {_block("Quick Hits", f"<ul {ul}>{hits}</ul>")}
 <tr><td bgcolor="{C["bg"]}" style="background:{C["bg"]};padding:16px 24px;font:12px {FONT};color:{C["muted"]};">{_e(s["footer"])}</td></tr>
@@ -241,6 +280,13 @@ def render_text(date, s):
         lines += [two_sentences(case.get("summary")), safe_url(case.get("url"))]
         steps = try_this(case)
         lines += ["Try this today:"] + [f"{i}. {t}" for i, t in enumerate(steps, 1)] if steps else []
+    if s["creators"]:
+        lines += ["", "CREATOR WATCH"]
+        for c in s["creators"]:
+            lines += [c.get("title", ""), f"{c.get('creator', '')} · {c['published_at']:%a %d %b}"]
+            lines += [f"AI summary: {c['summary']}"] if c.get("summary") else []
+            lines += [f"Key idea: {c['key_idea']}"] if c.get("key_idea") else []
+            lines += [c["url"]]
     lines += ["", "RESEARCH RADAR"]
     lines += [f"- {c.get('title')} ({_score(c, 'total_score'):.0f}/75)\n  {c.get('summary', '')}\n  {safe_url(c.get('url'))}"
               for c in s["radar"]] or ["- No papers passed today's checks."]

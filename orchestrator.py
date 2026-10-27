@@ -32,4 +32,5 @@ if __name__ == "__main__":
     run_script("generate_html.py")
     run_script("langfuse_proxy.py", allow_failure=True)
     run_script("remediation_agent.py", allow_failure=True)
+    run_script("creator_watch.py", allow_failure=True)
     print("Scout Daily Update: Success!")
