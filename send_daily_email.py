@@ -86,7 +86,13 @@ def load_creators():
 
 
 def creator_watch(rows, now):
-    """Up to CREATOR_MAX items published in the last 7 days, newest first, one per URL. [] omits the section."""
+    """Up to CREATOR_MAX items published in the last 7 days, newest first, one per URL. [] omits the section.
+    The link must be https on youtube.com or on the creator's own blog host in data/creators.json. Title, summary and
+    key idea get creator_watch.py's checks again, so a day file written before a check existed cannot bypass it."""
+    from urllib.parse import urlsplit
+    import creator_watch as cw  # stdlib-only at import
+    blogs = {c.get("name"): urlsplit(str(c.get("feed_url"))).hostname
+             for c in cw._read_json(cw.CREATORS_FILE, []) if isinstance(c, dict) and c.get("type") == "blog"}
     picked = {}
     for it in rows or []:
         try:
@@ -94,8 +100,11 @@ def creator_watch(rows, now):
             fresh = now - timedelta(days=CASE_LOOKBACK_DAYS) <= published <= now
         except (KeyError, TypeError, ValueError):  # naive or missing date: TypeError on the compare
             continue
-        if fresh and it.get("title") and safe_url(it.get("url")) == it.get("url"):
-            picked.setdefault(it["url"], {**it, "published_at": published})
+        if fresh and cw.item_url_ok(it.get("url"), cw.YOUTUBE_HOSTS | {blogs.get(it.get("creator"))}):
+            picked.setdefault(it["url"], {**it, "published_at": published,
+                                          "title": cw.safe_title(it.get("title"), it.get("creator"), it.get("type")),
+                                          "summary": cw.clean_summary(it.get("summary")),
+                                          "key_idea": cw.clean_summary(it.get("key_idea"), 1)})
     return sorted(picked.values(), key=lambda i: i["published_at"], reverse=True)[:CREATOR_MAX]
 
 

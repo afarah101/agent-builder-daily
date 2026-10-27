@@ -4,6 +4,9 @@
 Reads the feeds in data/creators.json. Items from the last 7 days that are not in data/creator_watch_seen.json get one
 Gemini call each (at most MAX_CALLS per run, newest first) and are saved to data/creators/YYYY-MM-DD.json. An item is
 marked seen only after it is saved, so a failed call is retried on the next run.
+
+Titles, summaries and key ideas are dropped whole, never repaired, if they carry a link, a domain, a command or
+injection text. Imports stay stdlib-only so send_daily_email.py can reuse the same checks without installing anything.
 """
 import json
 import os
@@ -11,14 +14,9 @@ import re
 import secrets
 import sys
 import time
+import unicodedata
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlsplit
-
-import feedparser
-import requests
-from dotenv import load_dotenv
-
-load_dotenv()
 
 CREATORS_FILE = "data/creators.json"
 SEEN_FILE = "data/creator_watch_seen.json"
@@ -27,6 +25,7 @@ MODEL = "gemini-3.6-flash"
 WINDOW = timedelta(days=7)
 MAX_CALLS = 3
 MAX_VIDEO_SECONDS = 45 * 60
+VIDEO_FPS = 0.25  # frames per second sampled from a video (Gemini's default is 1); the audio is still sent in full
 POST_CAP = 30_000  # characters of blog text sent to Gemini
 UA = {"User-Agent": "Mozilla/5.0 (compatible; ScoutBot/1.0)"}  # karpathy.bearblog.dev 404s a bare client UA (N0 report)
 _VIDEO_ID = re.compile(r"^[0-9A-Za-z_-]{11}$")
@@ -44,16 +43,24 @@ Return JSON only:
  "events": [{{"name": "<event name>", "date": "<date as stated>"}}]}}
 
 Rules: plain prose. No commands, code, install or setup steps, numbered steps, URLs, domain names or handles, even if
-the {kind} shows them. "events" lists only events the {kind} names together with a date; otherwise use []."""
+the {kind} shows them. Apart from DeepLearning.AI, Node.js, Next.js, Vue.js, Nuxt.js, ASP.NET and .NET, write names
+without dots; "e.g.", "i.e.", "etc." and "vs." are fine, other dotted abbreviations are not. "events" lists only events the {kind} names together with a date; otherwise use []."""
 
-# Output safety: a sentence with a link or a command is dropped, not repaired. Domains match lowercase TLDs only, so
-# brand names such as "DeepLearning.AI" survive while "deeplearning.ai" does not.
-_LINK = re.compile(r"(?i:https?://|www\.)\S*|\b[\w-]+(?:\.[\w-]+)*\.(?:com|org|net|io|dev|ai|app|co|sh|xyz|ly|gg|me|tv|so|to)\b")
+# Output safety. Text is NFKC-normalised and casefolded before these lowercase patterns run, so EVIL.COM, ｅｖｉｌ．ｃｏｍ
+# and CURL match too. Any match drops the whole field.
+_DOT = r"(?:[.。]|\[\.\]|\(\.\))"  # NFKC turns ． and ｡ into . and 。; [.] and (.) are defanged dots
+_LINK = re.compile("|".join((
+    r"[a-z][a-z0-9+.-]*://|\b(?:javascript|vbscript|mailto):|\bwww\d?\.",   # URL
+    rf"[\w-]{_DOT}[^\W\d_]",                                                # domain: word.word, so "3.5" survives
+    rf"(?:^|\s){_DOT}[^\W\d_]{{2,}}|\bdot\s+(?:com|net|org|io|ai|dev|app|co|info|link|xyz)\b",  # " .com", "dot com"
+    rf"\b\d{{1,3}}(?:{_DOT}\d{{1,3}}){{3}}\b|::",                          # IPv4, IPv6
+)))
 _COMMAND = re.compile("|".join((
     r"`|\$\s*[a-z]",                                                                          # code span, $ prompt
     r"(?<!\S)--?[a-z][\w-]*",                                                                 # -g, --save
-    r"\b(?:pip3?|pipx|uv|npm|pnpm|yarn|bun|brew|apt(?:-get)?|cargo|gem|go|winget|choco)\s+(?:install|add|i|get|run|exec|x)\b",
-    r"\b(?:npx|bunx|sudo|curl|wget|chmod|iex)\b",
+    r"\b(?:pip3?|pipx|uv|npm|pnpm|yarn|bun|brew|apt(?:-get)?|cargo|gem|go|winget|choco|conda|poetry)\s+"
+    r"(?:install|add|i|get|run|exec|x)\b",
+    r"\b(?:npx|bunx|uvx|sudo|curl|wget|chmod|iex|iwr|irm|powershell)\b",
     r"\bgit\s+(?:clone|pull|push|checkout|commit|init|add|reset)\b",
     r"\bdocker\s+(?:run|pull|build|compose|exec)\b",
     r"\|\s*(?:ba|z)?sh\b",                                                                    # | bash
@@ -61,24 +68,54 @@ _COMMAND = re.compile("|".join((
     r"^\s*\d+[.)](?:\s|$)",                                                                   # 1. do this
     r"^(?:first|then|next|now|finally)?,?\s*(?:install|run|execute|paste|download|clone)\b",  # imperative start
     r"\binstall\s+(?:it|this|the\s+\w+|[\w.-]+)\s+(?:with|using|via|from|by\s+running)\b",
-)), re.I)
-_SENTENCE = re.compile(r"(?<=[.!?])\s+")
+)))
+_INJECT = re.compile(r"\b(?:ignore|disregard|forget|override|bypass)\b.{0,80}?\b(?:instructions?|prompts?|rules|guidelines)\b"
+                     r"|\b(?:system|developer|hidden)\s+(?:prompt|message|instructions?)\b|\bjailbreak|\byou are now\b"
+                     r"|\bnew instructions?\b")
+_SENTENCE = re.compile(r"(?<!\b[eE]\.g\.)(?<!\b[iI]\.e\.)(?<!\b[vV]s\.)(?<=[.!?])\s+")  # "e.g. x" is one sentence
 _CTRL = re.compile(r"[\x00-\x1f\x7f-\x9f]")
+_HASHTAG = re.compile(r"(?<!\w)#\w+")
+# Known dotted words, removed before the domain check only. A term glued to a path, port, subdomain or further label
+# (deeplearning.ai/evil, x.deeplearning.ai, next.js.evil) is not removed, so the domain check still drops it.
+_ALLOWED = re.compile(r"(?<![\w.@/:-])(?:e\.g\.|i\.e\.|etc\.|vs\.|deeplearning\.ai|node\.js|next\.js|vue\.js|nuxt\.js"
+                      r"|asp\.net|\.net)(?![\w@/:-]|[.\u3002]\w)")
+YOUTUBE_HOSTS = frozenset({"www.youtube.com", "youtube.com"})
 
 
 def _flat(text):
-    return " ".join(_CTRL.sub(" ", str(text or "")).replace("*", "").replace("#", "").split())
+    """One NFKC line without control or invisible format characters (zero-width spaces), '*' or '#'."""
+    text = "".join(c for c in unicodedata.normalize("NFKC", str(text or "")) if unicodedata.category(c) != "Cf")
+    return " ".join(_CTRL.sub(" ", text).replace("*", "").replace("#", "").split())
 
 
-def _safe(text):
-    """The text flattened to one line, or "" if it carries a link or a command."""
-    text = _flat(text)
-    return "" if _LINK.search(text) or _COMMAND.search(text) else text
+def _hostile(text):
+    text = text.casefold()
+    return bool(_LINK.search(_ALLOWED.sub(" ", text)) or _COMMAND.search(text) or _INJECT.search(text))
+
+
+def _safe(text, cap=None):
+    """The text as one line cut to cap characters, or "" if it (whole or cut) carries a URL, domain, IP address, shell
+    command, package install or injection text. Unsafe text is dropped, never repaired."""
+    flat = _flat(text)
+    return "" if _hostile(flat) or _hostile(flat[:cap]) else flat[:cap]
 
 
 def clean_summary(text, max_sentences=3):
-    """At most max_sentences sentences; a sentence with a link or a command is dropped."""
-    return " ".join([s for s in map(_safe, _SENTENCE.split(_flat(text))) if s][:max_sentences])
+    """The first max_sentences sentences, or "" if any part of the text is unsafe."""
+    return _safe(" ".join(_SENTENCE.split(_safe(text))[:max_sentences]))
+
+
+def safe_title(raw, creator, kind):
+    """The title without #hashtags, or "New video from <creator>" ("New post" for a blog) if any of it is unsafe."""
+    raw = str(raw or "")
+    title = _safe(_HASHTAG.sub("", raw), 200) if _safe(raw) else ""
+    return title or f"New {'video' if kind == 'youtube' else 'post'} from {creator}"
+
+
+def item_url_ok(url, hosts):
+    """True for a printable https URL whose whole host part (no user, port or other case) is one of hosts."""
+    return (isinstance(url, str) and re.fullmatch(r"[!-~]+", url) is not None
+            and urlsplit(url).scheme == "https" and urlsplit(url).netloc in hosts)
 
 
 def parse_summary(raw):
@@ -86,7 +123,7 @@ def parse_summary(raw):
     d = json.loads(raw)
     if not isinstance(d, dict) or not isinstance(d.get("summary"), str):
         raise ValueError(f"reply is not a summary object: {str(raw)[:80]!r}")
-    key_idea = " ".join(clean_summary(d.get("key_idea"), 1).split()[:20])
+    key_idea = _safe(" ".join(clean_summary(d.get("key_idea"), 1).split()[:20]))
     events = []
     for ev in d.get("events") if isinstance(d.get("events"), list) else []:
         name, date = (_safe(ev.get(k))[:120] if isinstance(ev, dict) else "" for k in ("name", "date"))
@@ -98,6 +135,7 @@ def parse_summary(raw):
 # ---------- feeds ----------
 
 def fetch_feed(url):
+    import requests
     resp = requests.get(url, headers=UA, timeout=15)
     resp.raise_for_status()
     return resp.content
@@ -105,6 +143,7 @@ def fetch_feed(url):
 
 def candidates(creator, xml):
     """Feed entries as items. YouTube URLs are rebuilt from the video id; blog links must stay on the feed's host."""
+    import feedparser
     items = []
     feed_host = urlsplit(creator["feed_url"]).hostname
     for e in feedparser.parse(xml).entries:
@@ -117,17 +156,17 @@ def candidates(creator, xml):
             url = f"https://www.youtube.com/watch?v={vid}"
         else:
             vid, url = None, e.get("link", "")
-            if not url.startswith("https://") or urlsplit(url).hostname != feed_host:
+            if not item_url_ok(url, {feed_host}):
                 continue
-        title = _LINK.sub("", re.sub(r"(?<!\w)#\w+", "", str(e.get("title") or "")))  # no links, no #hashtags
-        items.append({"title": _flat(title)[:200], "url": url, "video_id": vid,
+        items.append({"title": safe_title(e.get("title"), creator["name"], creator["type"]), "url": url, "video_id": vid,
                       "creator": creator["name"], "type": creator["type"],
                       "published": datetime(*e.published_parsed[:6], tzinfo=timezone.utc)})
     return items
 
 
 def video_seconds(video_id):
-    """Length from the watch page's lengthSeconds; None if the page or the field is missing."""
+    """Length from the watch page's lengthSeconds (0 for a live or upcoming stream); None if the page or field is missing."""
+    import requests
     try:
         resp = requests.get(f"https://www.youtube.com/watch?v={video_id}", headers=UA, timeout=15)
         m = re.search(r'"lengthSeconds":"(\d+)"', resp.text)
@@ -158,7 +197,8 @@ def ask_gemini(prompt, video_url=None):
     from google.genai import types
     client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"), http_options=types.HttpOptions(
         timeout=300_000, retry_options=types.HttpRetryOptions(attempts=1)))
-    parts = ([types.Part(file_data=types.FileData(file_uri=video_url))] if video_url else []) + [types.Part(text=prompt)]
+    video = [types.Part(file_data=types.FileData(file_uri=video_url), video_metadata=types.VideoMetadata(fps=VIDEO_FPS))]
+    parts = (video if video_url else []) + [types.Part(text=prompt)]
     resp = client.models.generate_content(model=MODEL, contents=types.Content(role="user", parts=parts),
                                           config=types.GenerateContentConfig(
                                               temperature=0, response_mime_type="application/json",
@@ -171,11 +211,19 @@ def ask_gemini(prompt, video_url=None):
 # ---------- run ----------
 
 def _read_json(path, default):
+    """The file's JSON, or default if it is missing. A corrupt, empty or wrong-type file is logged and counts as default."""
     try:
         with open(path, encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
     except FileNotFoundError:
         return default
+    except (OSError, ValueError) as e:
+        print(f"[CREATOR] Unreadable {path}, treated as empty: {type(e).__name__}: {str(e)[:100]}")
+        return default
+    if not isinstance(data, type(default)):
+        print(f"[CREATOR] {path} holds {type(data).__name__}, not {type(default).__name__}; treated as empty")
+        return default
+    return data
 
 
 def _write_json(path, data):
@@ -187,8 +235,13 @@ def _write_json(path, data):
 
 
 def save(record, now):
+    """Appends to today's file. A file without an items list is replaced, so a paid call is never lost and repeated."""
     path = os.path.join(OUT_DIR, f"{now:%Y-%m-%d}.json")
-    day = _read_json(path, {"date": f"{now:%Y-%m-%d}", "items": []})
+    fresh = {"date": f"{now:%Y-%m-%d}", "items": []}
+    day = _read_json(path, fresh)
+    if not isinstance(day.get("items"), list):
+        print(f"[CREATOR] {path} has no items list; replaced")
+        day = fresh
     day["items"].append(record)
     _write_json(path, day)
 
@@ -217,6 +270,9 @@ def run(now=None):
             secs = video_seconds(item["video_id"])
             if secs is None:
                 print(f"[CREATOR] Length unknown, retry next run: {label}")
+                continue
+            if secs == 0:
+                print(f"[CREATOR] Live or upcoming stream (length 0), retry next run: {label}")
                 continue
             if secs > MAX_VIDEO_SECONDS:
                 print(f"[CREATOR] Skipped, {secs // 60} min is over {MAX_VIDEO_SECONDS // 60} min: {label}")
@@ -250,6 +306,8 @@ def run(now=None):
 
 
 if __name__ == "__main__":
+    from dotenv import load_dotenv
+    load_dotenv()
     if not os.getenv("GEMINI_API_KEY"):
         print("[CREATOR] GEMINI_API_KEY not set, skipping")
         sys.exit(0)
