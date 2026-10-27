@@ -3,6 +3,8 @@ import os, json, html as html_lib
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from send_daily_email import signal_points  # the email's S1/S2/S3 parser, so site and email agree
+
 CASE_STUDIES_DIR = "case_studies"
 NEWS_DIR = "data/news"
 OUTPUT_FILE = "site/index.html"
@@ -42,10 +44,31 @@ def load_slug_map():
 def esc(val):
     return html_lib.escape(str(val)) if val or val == 0 else ""  # a score of 0 still shows
 
+def https_url(url):
+    """The URL when it is https, else "". Nothing else (http:, javascript:, data:) ever becomes a link."""
+    url = str(url or "").strip()
+    return url if url.lower().startswith("https://") else ""
+
 def safe_url(url):
-    if not url or not str(url).startswith(("https://", "http://")):
-        return "#"
-    return url
+    return https_url(url) or "#"
+
+def item_key(item):
+    return item.get("url") or item.get("title")
+
+def archive_day(archive, kind, date_str, items):
+    """Save items under date_str in archive (newest day first: the email reads archive[0]). A day that already exists
+    keeps its items and gains the new ones, matched by url then title, so archiving a file never drops what it holds."""
+    day = next((e for e in archive if e.get("date") == date_str), None)
+    if day is None:
+        at = next((n for n, e in enumerate(archive) if e.get("date", "") < date_str), len(archive))
+        archive.insert(at, {"date": date_str, "total": len(items), kind: list(items)})
+        return
+    have = day.setdefault(kind, [])
+    seen = {item_key(x) for x in have}
+    new = [x for x in items if item_key(x) not in seen]
+    if new:
+        have.extend(new)
+        day["total"] = len(have)
 
 CASE_STUDY_WINDOW_DAYS = 120  # the scout's FOUR_MONTHS_AGO window; applies to every item, video or not
 
@@ -101,6 +124,18 @@ def insight_html(label, text):
         return ""
     return f'<p class="insight"><strong>{label}</strong> {esc(text)}</p>'
 
+def signal_html(text):
+    """News 'How to use': 'S1: … S2: … S3: …' becomes three headed bullets, as in the email; no S-label survives."""
+    if not text or any(p in str(text).lower() for p in NOT_APPLICABLE):
+        return ""
+    points = signal_points(str(text))
+    if not points:
+        return ""
+    if points[0][0] is None:  # labels missing or out of order: one plain line
+        return insight_html("How to use:", points[0][1])
+    lis = "".join(f"<li><strong>{esc(h)}:</strong> {esc(t)}</li>" for h, t in points)
+    return f'<ul class="signal-points">{lis}</ul>'
+
 def render_case_studies(data, slug_map):
     if not data or not data.get("case_studies"):
         return "<div class='empty-state'><p>No case studies available yet.</p></div>"
@@ -128,7 +163,7 @@ def render_case_studies(data, slug_map):
             meta.append("Author shipped a product")
         meta_html = '<span class="sep" aria-hidden="true">·</span>'.join(f"<span>{m}</span>" for m in meta)
 
-        slug = cs_slugs.get(title)
+        slug = cs_slugs.get(cs.get("title", "Untitled"))  # slug_map is keyed by the raw title
         breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
         total = cs.get("total_score", 0)
 
@@ -152,7 +187,7 @@ def render_case_studies(data, slug_map):
   </details>
   <div class="card-footer">
     {breakdown_link}
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+    <button type="button" class="md-export-btn"
       data-title="{title}"
       data-summary="{esc(cs.get('summary',''))}"
       data-it="{esc(cs.get('it_breakdown',''))}"
@@ -173,7 +208,7 @@ def render_news(data, slug_map):
         url = esc(safe_url(item.get("url", "#")))
         title = esc(item.get("title", ""))
 
-        slug = news_slugs.get(title)
+        slug = news_slugs.get(item.get("title", ""))  # slug_map is keyed by the raw title
         breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
 
         cards.append(f"""<article class="card news-card">
@@ -190,7 +225,7 @@ def render_news(data, slug_map):
   </div>
   <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
   <p class="card-summary">{esc(item.get('summary',''))}</p>
-  {insight_html("How to use:", item.get('enterprise_use',''))}
+  {signal_html(item.get('enterprise_use',''))}
   <div class="card-footer">
     <span class="pub-date">{esc(item.get('pub_date', ''))}</span>
     {breakdown_link}
@@ -214,6 +249,11 @@ def render_archive(archive, kind="cs"):
 </div>""")
     return "\n".join(rows) or "<div class='empty-state'><p>No archive yet.</p></div>"
 
+def rss_links(url):
+    """<link> and <guid> for an https URL, escaped for XML; nothing for any other URL."""
+    url = https_url(url)
+    return f"\n    <link>{esc(url)}</link>\n    <guid>{esc(url)}</guid>" if url else ""
+
 def generate_rss(cs_data, news_data):
     base_url = "https://agent-builder-daily.vercel.app"
     now_rfc = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
@@ -222,39 +262,34 @@ def generate_rss(cs_data, news_data):
     if cs_data:
         for cs in cs_data.get("case_studies", [])[:10]:
             title = esc(cs.get("title", "Untitled"))
-            url = cs.get("url", base_url)
-            summary = esc(cs.get("summary", ""))
-            it_breakdown = esc(cs.get("it_breakdown", ""))
+            links = rss_links(cs.get("url"))
+            description = esc(f"<p>{esc(cs.get('summary', ''))}</p><p><strong>IT Breakdown:</strong> {esc(cs.get('it_breakdown', ''))}</p>")
             pub = cs.get("pub_date", "")
             try:
                 pub_rfc = datetime.strptime(pub, "%Y-%m-%d").strftime("%a, %d %b %Y 07:00:00 +0000")
             except:
                 pub_rfc = now_rfc
             items.append(f"""  <item>
-    <title>{title}</title>
-    <link>{url}</link>
-    <guid>{url}</guid>
+    <title>{title}</title>{links}
     <pubDate>{pub_rfc}</pubDate>
-    <description><![CDATA[<p>{summary}</p><p><strong>IT Breakdown:</strong> {it_breakdown}</p>]]></description>
+    <description>{description}</description>
     <category>Case Study</category>
   </item>""")
 
     if news_data:
         for item in news_data.get("news", [])[:5]:
             title = esc(item.get("title", "Untitled"))
-            url = item.get("url", base_url)
-            summary = esc(item.get("summary", ""))
+            links = rss_links(item.get("url"))
+            description = esc(f"<p>{esc(item.get('summary', ''))}</p>")
             pub = item.get("pub_date", "")
             try:
                 pub_rfc = datetime.strptime(pub, "%Y-%m-%d").strftime("%a, %d %b %Y 07:00:00 +0000")
             except:
                 pub_rfc = now_rfc
             items.append(f"""  <item>
-    <title>[News] {title}</title>
-    <link>{url}</link>
-    <guid>{url}</guid>
+    <title>[News] {title}</title>{links}
     <pubDate>{pub_rfc}</pubDate>
-    <description><![CDATA[<p>{summary}</p>]]></description>
+    <description>{description}</description>
     <category>Industry News</category>
   </item>""")
 
@@ -282,7 +317,7 @@ def generate_email_capture():
   <div class="email-banner">
     <div class="email-inner">
       <p class="email-title" id="email-title">Get Scout Daily in your inbox</p>
-      <form class="email-form" onsubmit="submitEmail(event)" aria-labelledby="email-title">
+      <form class="email-form" aria-labelledby="email-title">
         <label class="visually-hidden" for="email-input">Email address</label>
         <input type="email" id="email-input" class="email-input" placeholder="your@email.com" autocomplete="email" required />
         <button type="submit" class="email-btn">Subscribe</button>
@@ -303,6 +338,7 @@ def generate_html():
     all_cs_files = [f for f in path_cs.glob("*.json") if "archive" not in f.name]
     cs_archive = load_json(ARCHIVE_CS_FILE)
     active_cs = []
+    archived_files = []  # removed only after the archive holding their items is written
 
     sorted_cs = sorted(all_cs_files)
     for i, f in enumerate(sorted_cs):
@@ -315,22 +351,17 @@ def generate_html():
             if studies is not None:
                 # video files are named v_YYYYMMDD_<id>, so date them by their newest item instead
                 date_str = f.stem if f.stem[:4].isdigit() else max((str(cs.get("pub_date") or "")[:10] for cs in studies), default=f.stem)
-                if not any(item["date"] == date_str for item in cs_archive):
-                    # keep newest first: the email reads archive[0] as the latest day
-                    at = next((n for n, e in enumerate(cs_archive) if e.get("date", "") < date_str), len(cs_archive))
-                    cs_archive.insert(at, {
-                        "date": date_str,
-                        "total": len(studies),
-                        "case_studies": studies
-                    })
-                os.remove(f)
-                print(f"Archived and removed {f}")
+                archive_day(cs_archive, "case_studies", date_str, studies)
+                archived_files.append(f)
         else:
             if studies:
                 active_cs.extend(studies)
 
     with open(ARCHIVE_CS_FILE, 'w') as f_out:
         json.dump(cs_archive, f_out, indent=2)
+    for f in archived_files:
+        os.remove(f)
+        print(f"Archived and removed {f}")
 
     # Fallback: If no active items (all archived), load latest from archive
     if not active_cs and cs_archive:
@@ -345,6 +376,7 @@ def generate_html():
     all_news_files = [f for f in path_news.glob("news_*.json") if "archive" not in f.name]
     news_archive = load_json(ARCHIVE_NEWS_FILE)
     active_news = []
+    archived_files = []
     
     sorted_news = sorted(all_news_files)
     for i, f in enumerate(sorted_news):
@@ -353,14 +385,8 @@ def generate_html():
         if date_str < today_str and not is_latest:
             data = load_json(str(f))
             if data and "news" in data:
-                if not any(item["date"] == date_str for item in news_archive):
-                    news_archive.insert(0, {
-                        "date": date_str,
-                        "total": len(data["news"]),
-                        "news": data["news"]
-                    })
-                os.remove(f)
-                print(f"Archived and removed {f}")
+                archive_day(news_archive, "news", date_str, data["news"])
+                archived_files.append(f)
         else:
             data = load_json(str(f))
             if data and "news" in data:
@@ -368,6 +394,9 @@ def generate_html():
                 
     with open(ARCHIVE_NEWS_FILE, 'w') as f_out:
         json.dump(news_archive, f_out, indent=2)
+    for f in archived_files:
+        os.remove(f)
+        print(f"Archived and removed {f}")
 
     active_news.sort(key=lambda x: by_score(x, "relevance_score"), reverse=True)
 
@@ -715,6 +744,17 @@ def generate_html():
 
     .insight strong { font-weight: 600; color: var(--accent); }
 
+    .signal-points {
+      padding-left: 20px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .signal-points li { margin-bottom: 6px; }
+    .signal-points strong { font-weight: 600; color: var(--accent); }
+
     .agent-trace { margin-bottom: 4px; }
 
     .trace-toggle {
@@ -976,13 +1016,13 @@ def generate_html():
     <p class="updated">Updated """ + generated_at + """</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
-            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false" onclick="showTab('industry-news',this)">Industry News</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false" onclick="showTab('archive-cs',this)">Archive: Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false" onclick="showTab('archive-news',this)">Archive: News</button>
+            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true">Case Studies</button>
+            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false">Industry News</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false">Archive: Studies</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false">Archive: News</button>
         </div>
         <label class="visually-hidden" for="scout-search">Search stories</label>
-        <input type="search" id="scout-search" class="search" placeholder="Search stories" oninput="filterCards(this.value)" />
+        <input type="search" id="scout-search" class="search" placeholder="Search stories" />
     </div>
   </div>
 </header>
@@ -1020,6 +1060,12 @@ def generate_html():
 
 <script src="js/subscribe.js"></script>
 <script>
+  // Handlers are attached here, not as on*= attributes, so the page carries no inline event handlers
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.getAttribute('aria-controls'), t)));
+  document.getElementById('scout-search').addEventListener('input', e => filterCards(e.target.value));
+  document.querySelector('.email-form').addEventListener('submit', e => submitEmail(e));
+  document.addEventListener('click', e => { const b = e.target.closest('.md-export-btn'); if (b) copyMarkdown(b); });
+
   function showTab(id, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });

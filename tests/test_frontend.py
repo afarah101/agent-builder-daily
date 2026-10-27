@@ -50,7 +50,7 @@ def test_only_the_title_link_opens_the_source():
     assert re.search(r'<h2 class="card-title"><a href="https://arxiv.org/abs/1" target="_blank" rel="noopener noreferrer">', html)
     # the reasoning toggle and the copy button are plain controls, not inside a link
     assert '<summary class="trace-toggle">View Technical Reasoning</summary>' in html
-    assert '<button type="button" class="md-export-btn" onclick="copyMarkdown(this)"' in html
+    assert '<button type="button" class="md-export-btn"' in html and "onclick" not in html
 
 
 def test_news_card_has_one_source_link_in_the_title():
@@ -258,3 +258,204 @@ def test_every_committed_breakdown_page_has_the_new_style():
     assert pages
     stale = [p.name for p in pages if "--text-muted:#8592a8" not in p.read_text() or "#6366f1" in p.read_text()]
     assert stale == []
+
+
+# ---------- F3: dashboard XSS, feed.xml, archive merge, raw-title slugs, S-labels, https only ----------
+
+DASHBOARD = ROOT / "site" / "dashboard.html"
+DASH_HARNESS = r"""
+const vm = require('vm'), fs = require('fs');
+const script = fs.readFileSync(process.argv[2], 'utf8').split('<script>')[1].split('</script>')[0];
+const H = process.argv[3], els = {}, errors = [];
+const el = id => els[id] || (els[id] = { id, innerHTML: '', textContent: '', style: {}, addEventListener() {} });
+const paper = { title: H, relevance_tag: H, hallucination_detail: H, total_score: 55, eval_verdict: 'fail', gemini_eval_status: 'fail' };
+const day = { date: '2026-10-27', total: 1, case_studies: [paper] };
+const body = url => url.includes('case_studies_archive') ? [day] : url.includes('news_archive') ? [] :
+  url.includes('groq_token_stats') ? { generated_at: 'x', key_1: {}, key_2: {} } : {};
+const ctx = { document: { getElementById: el }, console: { error: (...a) => errors.push(a.map(String).join(' ')), log() {} },
+  fetch: async url => ({ ok: true, json: async () => body(url) }), setTimeout() {} };
+vm.createContext(ctx);
+vm.runInContext(script, ctx);
+setTimeout(() => console.log(JSON.stringify({ errors,
+  html: Object.fromEntries(Object.entries(els).map(([k, v]) => [k, String(v.innerHTML)])) })), 100);
+"""
+
+
+@pytest.fixture
+def dashboard_run(tmp_path):
+    import shutil, subprocess
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("node not installed")
+    harness = tmp_path / "harness.js"
+    harness.write_text(DASH_HARNESS)
+    out = subprocess.run([node, str(harness), str(DASHBOARD), HOSTILE], capture_output=True, text=True, timeout=30)
+    assert out.returncode == 0, out.stderr
+    return json.loads(out.stdout)
+
+
+def test_dashboard_escapes_injected_titles(dashboard_run):
+    html = dashboard_run["html"]
+    rendered = "".join(html.values())
+    assert "<script>" not in rendered and "<img" not in rendered
+    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html["qc-fail-list"]  # title and hallucination detail
+    assert "&lt;script&gt;" in html["pipeline-lower"]  # top-paper title and tag
+
+
+def test_dashboard_render_pipeline_has_no_error(dashboard_run):
+    assert dashboard_run["errors"] == []
+    assert "Score Distribution" in dashboard_run["html"]["pipeline-lower"]
+
+
+def test_dashboard_ids_exist_and_no_inline_handlers():
+    page = DASHBOARD.read_text()
+    for el_id in set(re.findall(r"getElementById\('([\w-]+)'\)", page)):
+        assert f'id="{el_id}"' in page, el_id
+    assert not re.search(r"\son[a-z]+=", page)
+
+
+def test_subscribe_csp_allows_apps_script():
+    csp = json.loads((ROOT / "site" / "vercel.json").read_text())["headers"][0]["headers"][0]["value"]
+    connect = next(d for d in csp.split(";") if d.strip().startswith("connect-src"))
+    assert "https://script.google.com" in connect and "https://script.googleusercontent.com" in connect
+
+
+def test_feed_escapes_every_field_and_links_https_only(tmp_path, monkeypatch):
+    import xml.etree.ElementTree as ET
+    monkeypatch.chdir(tmp_path)
+    gh.generate_rss({"case_studies": [study(title=HOSTILE, url="javascript:alert(1)", summary=HOSTILE, it_breakdown=HOSTILE),
+                                      study(title="Good & fine", url="https://a.test/?a=1&b=2")]},
+                    {"news": [{"title": HOSTILE, "url": 'https://n.test/"><script>x</script>', "summary": HOSTILE},
+                              {"title": "Plain", "url": "http://insecure.test"}]})
+    raw = (tmp_path / "site" / "feed.xml").read_text()
+    assert "<script" not in raw and "javascript:" not in raw and "<img" not in raw and "CDATA" not in raw
+    items = ET.fromstring(raw).find("channel").findall("item")
+    links = [i.findtext("link") for i in items]
+    assert links == [None, "https://a.test/?a=1&b=2", 'https://n.test/"><script>x</script>', None]
+    assert [i.findtext("guid") for i in items] == links
+    assert items[0].findtext("title") == HOSTILE  # a feed reader shows the text, never runs it
+    desc = items[0].findtext("description")  # HTML for the reader: the hostile text inside it is still escaped
+    assert desc.startswith("<p>&lt;script&gt;alert(1)") and "<script" not in desc
+
+
+def test_safe_url_allows_https_only():
+    assert gh.safe_url("https://a.test/x") == "https://a.test/x"
+    for bad in ("http://a.test", "javascript:alert(1)", " JavaScript:x", "data:text/html,x", "//a.test", "", None):
+        assert gh.safe_url(bad) == "#", bad
+    assert 'href="#"' in cards(study(url="http://a.test"))
+
+
+def test_breakdown_links_use_the_raw_title():
+    title = 'AT&T’s “AI” <plan>'
+    assert 'href="breakdowns/att.html"' in gh.render_case_studies({"case_studies": [study(title=title)]},
+                                                                  {"case_studies": {title: "att"}})
+    assert 'href="breakdowns/att.html"' in gh.render_news({"news": [{"title": title, "url": "https://n.test"}]},
+                                                          {"news": {title: "att"}})
+
+
+def test_news_signal_points_replace_s_labels():
+    news = lambda text: gh.render_news({"news": [{"title": "N", "url": "https://n.test", "enterprise_use": text}]}, {"news": {}})
+    html = news("S1: Patch <b>X</b>. S2: Breach risk. S3: Okta, Intune.")
+    assert ('<ul class="signal-points"><li><strong>Do this week:</strong> Patch &lt;b&gt;X&lt;/b&gt;.</li>'
+            '<li><strong>Risk if ignored:</strong> Breach risk.</li><li><strong>Tools affected:</strong> Okta, Intune.</li></ul>') in html
+    assert not re.search(r"S[1-3]\s*:", html)
+    plain = news("Watch the rollout. S2: dangling label")
+    assert "How to use:" in plain and not re.search(r"S[1-3]\s*:", plain) and "signal-points" not in plain
+
+
+def test_archived_file_merges_into_an_existing_day(site):
+    paper_a = study(title="Paper A", url="https://a.test/A", pub_date="2026-05-06")
+    video = study(title="From Vibe Coding to Agentic Engineering", url="https://youtube.test/v", pub_date="2026-05-06",
+                  source_type="youtube_agent", is_evergreen=True, total_score=90)
+    archive = [{"date": "2026-10-27", "total": 1, "case_studies": [study(title="Fresh")]},
+               {"date": "2026-05-06", "total": 1, "case_studies": [paper_a]}]
+    (site / "case_studies" / "archive.json").write_text(json.dumps(archive))
+    (site / "case_studies" / "2026-10-27.json").write_text(json.dumps({"case_studies": [study(title="Fresh")]}))
+    (site / "case_studies" / "v_20260506_7xTGNNLPyMI.json").write_text(json.dumps({"case_studies": [video, paper_a]}))
+    gh.generate_html()
+    days = json.loads((site / "case_studies" / "archive.json").read_text())
+    may = next(d for d in days if d["date"] == "2026-05-06")
+    assert [c["title"] for c in may["case_studies"]] == ["Paper A", "From Vibe Coding to Agentic Engineering"]
+    assert may["total"] == 2 and [d["date"] for d in days] == ["2026-10-27", "2026-05-06"]
+    assert not (site / "case_studies" / "v_20260506_7xTGNNLPyMI.json").exists()
+
+
+def test_files_are_kept_when_the_archive_cannot_be_written(site, monkeypatch):
+    (site / "case_studies" / "v_20260506_x.json").write_text(json.dumps({"case_studies": [study(pub_date="2026-05-06")]}))
+    (site / "data" / "news" / "news_2026-10-20.json").write_text(json.dumps({"news": [{"title": "Old", "url": "https://o.test"}]}))
+    (site / "data" / "news" / "news_2026-10-27.json").write_text(json.dumps({"news": []}))
+    monkeypatch.setattr(gh, "ARCHIVE_CS_FILE", str(site / "missing-dir" / "archive.json"))
+    with pytest.raises(OSError):
+        gh.generate_html()
+    assert (site / "case_studies" / "v_20260506_x.json").exists()
+    monkeypatch.setattr(gh, "ARCHIVE_CS_FILE", "case_studies/archive.json")
+    (site / "case_studies" / "archive.json").write_text("[]")
+    monkeypatch.setattr(gh, "ARCHIVE_NEWS_FILE", str(site / "missing-dir" / "news_archive.json"))
+    with pytest.raises(OSError):
+        gh.generate_html()
+    assert (site / "data" / "news" / "news_2026-10-20.json").exists()
+
+
+def test_newer_day_stays_first_when_an_older_day_is_archived_after_it(site):
+    (site / "case_studies" / "archive.json").write_text(json.dumps([{"date": "2026-10-26", "total": 1, "case_studies": [study()]}]))
+    (site / "case_studies" / "2026-10-24.json").write_text(json.dumps({"case_studies": [study(title="Older paper")]}))
+    (site / "case_studies" / "2026-10-27.json").write_text(json.dumps({"case_studies": [study(title="Today")]}))
+    (site / "data" / "news_archive.json").write_text(json.dumps([{"date": "2026-10-26", "total": 1, "news": [{"title": "N26"}]}]))
+    (site / "data" / "news" / "news_2026-10-24.json").write_text(json.dumps({"news": [{"title": "N24", "url": "https://n.test/24"}]}))
+    (site / "data" / "news" / "news_2026-10-27.json").write_text(json.dumps({"news": [{"title": "N27", "url": "https://n.test/27"}]}))
+    gh.generate_html()
+    assert [d["date"] for d in json.loads((site / "case_studies" / "archive.json").read_text())] == ["2026-10-26", "2026-10-24"]
+    assert [d["date"] for d in json.loads((site / "data" / "news_archive.json").read_text())] == ["2026-10-26", "2026-10-24"]
+
+
+def _ratio(a, b):
+    def lum(h):
+        c = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        c = [v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+    hi, lo = sorted((lum(a), lum(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def test_home_colour_tokens_meet_4_5_to_1(site):
+    (site / "case_studies" / "archive.json").write_text("[]")
+    gh.generate_html()
+    root = (site / "site" / "index.html").read_text().split(":root {")[1].split("}")[0]
+    tokens = dict(re.findall(r"--([\w-]+):\s*(#[0-9a-fA-F]{6})", root))
+    for fg in ("text", "text-secondary", "text-muted", "accent", "warn", "danger"):
+        for bg in ("bg", "surface", "surface2"):
+            assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
+    assert _ratio(tokens["accent-ink"], tokens["accent"]) >= 4.5
+
+
+def test_hostile_build_has_no_injected_markup(site):
+    """Every data file seeded with hostile text and URLs: no raw tag, handler or javascript: reaches the outputs."""
+    bad = dict(title=HOSTILE, url="javascript:alert(1)", summary=HOSTILE, it_breakdown=HOSTILE, score_reasoning=HOSTILE,
+               relevance_tag=HOSTILE, institution=HOSTILE, authors=[HOSTILE], pub_date="2026-10-27")
+    (site / "case_studies" / "archive.json").write_text(json.dumps([{"date": "2026-10-26", "total": 1, "case_studies": [study(**bad)]}]))
+    (site / "case_studies" / "2026-10-27.json").write_text(json.dumps({"case_studies": [study(**bad)]}))
+    news = {"title": HOSTILE, "url": "javascript:alert(1)", "summary": HOSTILE, "enterprise_use": f"S1: {HOSTILE} S2: x S3: y",
+            "source": HOSTILE, "category": HOSTILE, "tier": HOSTILE, "relevance_signal": HOSTILE, "relevance_score": HOSTILE,
+            "pub_date": HOSTILE}
+    (site / "data" / "news" / "news_2026-10-27.json").write_text(json.dumps({"news": [news]}))
+    (site / "data" / "news_archive.json").write_text(json.dumps([{"date": HOSTILE, "total": 1, "news": [news]}]))
+    (site / "data" / "daily_hook.txt").write_text(HOSTILE)
+    gh.generate_html()
+    page = (site / "site" / "index.html").read_text()
+    feed = (site / "site" / "feed.xml").read_text()
+    tags, handlers = parsed(page)
+    assert tags.count("script") == 2 and "img" not in tags and handlers == []  # the page's own two scripts only
+    assert "javascript:" not in page.lower() and "javascript:" not in feed.lower() and "<script" not in feed and "<img" not in feed
+
+
+def parsed(page):
+    """Real tags and on*= attribute names, as a browser parser sees them (escaped text inside attributes is not one)."""
+    from html.parser import HTMLParser
+    tags, handlers = [], []
+
+    class P(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+            tags.append(tag)
+            handlers.extend(f"{tag}[{k}]" for k, _ in attrs if k.startswith("on"))
+    P().feed(page)
+    return tags, handlers
