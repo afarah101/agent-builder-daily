@@ -268,7 +268,8 @@ const vm = require('vm'), fs = require('fs');
 const script = fs.readFileSync(process.argv[2], 'utf8').split('<script>')[1].split('</script>')[0];
 const H = process.argv[3], els = {}, errors = [];
 const el = id => els[id] || (els[id] = { id, innerHTML: '', textContent: '', style: {}, addEventListener() {} });
-const paper = { title: H, relevance_tag: H, hallucination_detail: H, total_score: 55, eval_verdict: 'fail', gemini_eval_status: 'fail' };
+const paper = Object.assign({ title: H, relevance_tag: H, hallucination_detail: H, total_score: 55, eval_verdict: 'fail',
+  gemini_eval_status: 'fail' }, JSON.parse(process.argv[4] || '{}'));
 const day = { date: '2026-10-27', total: 1, case_studies: [paper] };
 const body = url => url.includes('case_studies_archive') ? [day] : url.includes('news_archive') ? [] :
   url.includes('groq_token_stats') ? { generated_at: 'x', key_1: {}, key_2: {} } : {};
@@ -277,21 +278,26 @@ const ctx = { document: { getElementById: el }, console: { error: (...a) => erro
 vm.createContext(ctx);
 vm.runInContext(script, ctx);
 setTimeout(() => console.log(JSON.stringify({ errors,
-  html: Object.fromEntries(Object.entries(els).map(([k, v]) => [k, String(v.innerHTML)])) })), 100);
+  html: Object.fromEntries(Object.entries(els).map(([k, v]) => [k, String(v.innerHTML)])),
+  text: Object.fromEntries(Object.entries(els).map(([k, v]) => [k, String(v.textContent)])) })), 100);
 """
 
 
-@pytest.fixture
-def dashboard_run(tmp_path):
+def run_node(tmp_path, harness, *args):
     import shutil, subprocess
     node = shutil.which("node")
     if not node:
         pytest.skip("node not installed")
-    harness = tmp_path / "harness.js"
-    harness.write_text(DASH_HARNESS)
-    out = subprocess.run([node, str(harness), str(DASHBOARD), HOSTILE], capture_output=True, text=True, timeout=30)
+    path = tmp_path / "harness.js"
+    path.write_text(harness)
+    out = subprocess.run([node, str(path), *map(str, args)], capture_output=True, text=True, timeout=30)
     assert out.returncode == 0, out.stderr
     return json.loads(out.stdout)
+
+
+@pytest.fixture
+def dashboard_run(tmp_path):
+    return run_node(tmp_path, DASH_HARNESS, DASHBOARD, HOSTILE)
 
 
 def test_dashboard_escapes_injected_titles(dashboard_run):
@@ -459,3 +465,72 @@ def parsed(page):
             handlers.extend(f"{tag}[{k}]" for k, _ in attrs if k.startswith("on"))
     P().feed(page)
     return tags, handlers
+
+
+# ---------- F3b: subscribe shows success only on a confirmed reply; dashboard QC counts ----------
+
+SUBSCRIBE_JS = ROOT / "site" / "js" / "subscribe.js"
+SUB_HARNESS = r"""
+const vm = require('vm'), fs = require('fs');
+const [file, mode] = process.argv.slice(2);
+const node = () => ({ textContent: '', disabled: false, value: '' });
+const input = Object.assign(node(), { value: ' reader@example.test ' }), btn = node(), confirm = node();
+const container = { querySelector: s => s === '.email-input' ? input : btn };
+const timers = [], calls = [];
+let release;
+const reply = { ok: { ok: true, status: 200, text: async () => 'Success! Email captured: reader@example.test' },
+  http500: { ok: false, status: 500, text: async () => 'Success! (from an error page)' },
+  unconfirmed: { ok: true, status: 200, text: async () => 'Error: script failed' } };
+const ctx = {
+  document: { querySelector: () => container, getElementById: () => confirm },
+  AbortController, setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; }, clearTimeout() {},
+  fetch: (url, opts) => {
+    calls.push({ url, method: opts.method, type: opts.headers && opts.headers['Content-Type'], body: opts.body, mode: opts.mode || null });
+    if (mode === 'network') return Promise.reject(new TypeError('Failed to fetch'));
+    return new Promise((resolve, reject) => {
+      if (mode === 'timeout') opts.signal.addEventListener('abort', () => reject(new Error('AbortError')));
+      else release = () => resolve(reply[mode]);
+    });
+  },
+};
+vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(file, 'utf8'), ctx);
+const tick = () => new Promise(r => setImmediate(r));
+(async () => {
+  const done = Promise.resolve(vm.runInContext('submitEmail({ preventDefault() {} })', ctx));
+  await tick();
+  const before = { btn: btn.textContent, confirm: confirm.textContent };  // the reply has not arrived yet
+  if (mode === 'timeout') timers.filter(t => t.ms === 10000).forEach(t => t.fn());
+  else if (release) release();
+  for (let i = 0; i < 10; i++) await tick();
+  await done;
+  console.log(JSON.stringify({ before, btn: btn.textContent, confirm: confirm.textContent, disabled: btn.disabled,
+    inputValue: input.value, calls, timeouts: timers.map(t => t.ms) }));
+})();
+"""
+
+
+def subscribe(tmp_path, mode):
+    return run_node(tmp_path, SUB_HARNESS, SUBSCRIBE_JS, mode)
+
+
+def test_subscribe_shows_success_only_after_a_confirmed_reply(tmp_path):
+    r = subscribe(tmp_path, "ok")
+    assert r["before"] == {"btn": "Submitting…", "confirm": ""}  # nothing claims success while the request is out
+    assert r["btn"] == "Subscribed" and r["confirm"] == "Subscribed" and r["inputValue"] == ""
+    [call] = r["calls"]
+    assert call["method"] == "POST" and call["type"].startswith("text/plain") and call["mode"] is None  # readable, not no-cors
+    assert json.loads(call["body"]) == {"email": "reader@example.test"} and "@" not in call["url"]  # email not in the URL
+
+
+@pytest.mark.parametrize("mode", ["network", "http500", "unconfirmed", "timeout"])
+def test_subscribe_errors_and_timeout_show_the_error(tmp_path, mode):
+    r = subscribe(tmp_path, mode)
+    assert r["confirm"] == "Something went wrong, please try again"
+    assert r["btn"] == "Subscribe" and r["disabled"] is False and "Subscribed" not in r["btn"] + r["confirm"]
+    assert 10000 in r["timeouts"]
+
+
+def test_dashboard_counts_a_passed_item_as_passed(tmp_path):
+    r = run_node(tmp_path, DASH_HARNESS, DASHBOARD, "Paper", json.dumps({"eval_verdict": "pass", "gemini_eval_status": "pending"}))
+    assert (r["text"]["qc-pass-count"], r["text"]["qc-fail-count"], r["text"]["qc-pending-count"]) == ("1", "0", "0")

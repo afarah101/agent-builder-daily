@@ -639,7 +639,8 @@
     const failedPapers = [];
 
     allPapers.forEach(p => {
-      const status = p.gemini_eval_status || p.eval_verdict || 'pending';
+      // eval_verdict (the judge) first, then gemini_eval_status: the home page's rule
+      const status = [p.eval_verdict, p.gemini_eval_status].find(s => s === 'pass' || s === 'fail') || 'pending';
       verdicts[status] = (verdicts[status] || 0) + 1;
       if (status === 'fail') {
         failedPapers.push(p);
