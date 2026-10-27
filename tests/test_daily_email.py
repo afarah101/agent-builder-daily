@@ -358,3 +358,57 @@ def test_future_dated_case_study_is_never_shown(tmp_path, monkeypatch):
     days = cs_days(("2026-10-23", [{"title": "Tomorrow", "total_score": 70}]), ("2026-10-20", [{"title": "Two days ago", "total_score": 10}]))
     assert email_on(tmp_path, monkeypatch, days)[3]["case"]["title"] == "Two days ago"
     assert email_on(tmp_path, monkeypatch, days[:1])[3]["case"] is None
+
+
+def creator(i, age_days, **kw):
+    published = (datetime(2026, 10, 22, 11, tzinfo=timezone.utc) - timedelta(days=age_days)).isoformat()
+    return {"title": f"Video {i}", "url": f"https://www.youtube.com/watch?v=vid{i:08d}", "creator": "DeepLearning.AI",
+            "published": published, "summary": f"Summary {i}.", "key_idea": f"Idea {i}.", **kw}
+
+
+def creator_email(creators):
+    now = datetime.fromisoformat("2026-10-22").replace(hour=11, tzinfo=LON)
+    days = cs_days(("2026-10-22", [{"title": "Case pick", "total_score": 70}]))
+    return de.build_email({**fresh_data(now), "cs_days": days, "creators": creators}, now)
+
+
+@pytest.mark.parametrize("creators", [None, [], [creator(1, 7.1)], [{"title": "No date", "url": "https://x.example/"}]])
+def test_creator_watch_omitted_without_placeholder(creators):
+    _, html_body, text_body, s = creator_email(creators)
+    assert s["creators"] == []
+    assert "Creator Watch" not in html_body and "CREATOR WATCH" not in text_body and "AI summary" not in html_body
+    assert creator_email(None)[1] == html_body  # nothing else on the page moves
+
+
+def test_creator_watch_after_case_study_max_3_newest_first():
+    rows = [creator(1, 3), creator(2, 0.5), creator(3, 8), creator(4, 1), creator(5, 2), creator(2, 0.5, title="Dup")]
+    subject, html_body, text_body, s = creator_email(rows)
+    assert [c["title"] for c in s["creators"]] == ["Video 2", "Video 4", "Video 5"]
+    heading = lambda name: html_body.index(f">{name}</div>")
+    assert heading("Case study of the day") < heading("Creator Watch") < heading("Research Radar")
+    assert text_body.index("CASE STUDY OF THE DAY") < text_body.index("CREATOR WATCH") < text_body.index("RESEARCH RADAR")
+    assert html_body.count("<b>AI summary:</b>") == 3 and "AI summary: Summary 2." in text_body
+    assert 'href="https://www.youtube.com/watch?v=vid00000002"' in html_body and "Video 1" not in html_body
+    # every other section is byte-identical to the page without Creator Watch
+    base_subject, base_html, _, base_s = creator_email([])
+    at = heading("Creator Watch")
+    start, end = html_body.rindex("<tr><td", 0, at), html_body.index("</td></tr>", at) + len("</td></tr>")
+    assert subject == base_subject and html_body[:start] + html_body[end:] == base_html
+    assert {k: v for k, v in s.items() if k != "creators"} == {k: v for k, v in base_s.items() if k != "creators"}
+
+
+def test_creator_watch_fields_are_escaped():
+    _, html_body, _, _ = creator_email([creator(1, 1, title=EVIL, creator=EVIL, summary=EVIL, key_idea=EVIL)])
+    block = html_body.split("Creator Watch</div>")[1].split("</td></tr>")[0]
+    assert block.count(EVIL_ESCAPED) == 4 and "<script>" not in block
+
+
+def test_creator_watch_rejects_non_http_url():
+    assert creator_email([creator(1, 1, url="javascript:alert(1)")])[3]["creators"] == []
+
+
+def test_load_creators_skips_unreadable_files(tmp_path):
+    (tmp_path / "data" / "creators").mkdir(parents=True)
+    (tmp_path / "data" / "creators" / "2026-10-21.json").write_text("{not json")
+    (tmp_path / "data" / "creators" / "2026-10-22.json").write_text(json.dumps({"items": [creator(1, 1), "junk"]}))
+    assert de.load_creators() == [creator(1, 1)]
