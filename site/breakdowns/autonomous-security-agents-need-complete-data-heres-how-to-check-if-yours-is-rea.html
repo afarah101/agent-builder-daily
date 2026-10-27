@@ -3,68 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autonomous security agents need complete data. Here's how to check if yours is ready. - IT Breakdown - Scout Daily</title>
+  <title>Autonomous security agents need complete data. Here&#x27;s how to check if yours is ready. - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
-  <h1 class="page-title">Autonomous security agents need complete data. Here's how to check if yours is ready.</h1>
-  <div class="meta-line">VentureBeat · 26 Jun 202 · Generated 26 Jun 2026, 20:04</div>
-  <a href="https://venturebeat.com/security/autonomous-security-agents-need-complete-data-heres-how-to-check-if-yours-is-ready" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>The 2026 Axonius Actionability Report has revealed that a significant number of devices in enterprise inventories are missing expected security agents, with 12.7% of devices in a 298,000-device median inventory being unaccounted for. This is a critical issue for enterprise IT teams as it creates blind spots in security operations center (SOC) visibility and reconciliation, making it challenging to ensure the security and compliance of the organization. The report highlights the need for complete and accurate data to support autonomous security agents, which rely on comprehensive visibility into the organization's device inventory to function effectively. The primary tool affected by this issue is the configuration management database (CMDB), which is used to store and manage device inventory information. To address this issue, IT teams can utilize mobile device management (MDM) platforms such as JumpCloud to improve inventory management and reduce the risk of stale or missing records. The broader industry implications of this report are significant, as it underscores the importance of accurate and complete data in supporting autonomous security agents and ensuring the overall security and compliance of the organization.</p><p>The involvement of vendors such as Axonius and JumpCloud in this issue highlights the need for enterprise IT teams to carefully evaluate their current security and inventory management tools to ensure they are providing complete and accurate data. The report's findings also have implications for compliance with regulations such as the UK GDPR, which requires organizations to maintain accurate and up-to-date records of their device inventory. Overall, the report emphasizes the need for enterprise IT teams to prioritize the accuracy and completeness of their device inventory data to support autonomous security agents and ensure the security and compliance of their organization.</p></div>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Autonomous security agents need complete data. Here&#x27;s how to check if yours is ready.</h1>
+  <p class="meta-line">VentureBeat · 26 Jun 202 · Generated 26 Jun 2026, 20:04</p>
+  <a href="https://venturebeat.com/security/autonomous-security-agents-need-complete-data-heres-how-to-check-if-yours-is-ready" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The 2026 Axonius Actionability Report has revealed that a significant number of devices in enterprise inventories are missing expected security agents, with 12.7% of devices in a 298,000-device median inventory being unaccounted for. This is a critical issue for enterprise IT teams as it creates blind spots in security operations center (SOC) visibility and reconciliation, making it challenging to ensure the security and compliance of the organization. The report highlights the need for complete and accurate data to support autonomous security agents, which rely on comprehensive visibility into the organization&#x27;s device inventory to function effectively. The primary tool affected by this issue is the configuration management database (CMDB), which is used to store and manage device inventory information. To address this issue, IT teams can utilize mobile device management (MDM) platforms such as JumpCloud to improve inventory management and reduce the risk of stale or missing records. The broader industry implications of this report are significant, as it underscores the importance of accurate and complete data in supporting autonomous security agents and ensuring the overall security and compliance of the organization.</p><p>The involvement of vendors such as Axonius and JumpCloud in this issue highlights the need for enterprise IT teams to carefully evaluate their current security and inventory management tools to ensure they are providing complete and accurate data. The report&#x27;s findings also have implications for compliance with regulations such as the UK GDPR, which requires organizations to maintain accurate and up-to-date records of their device inventory. Overall, the report emphasizes the need for enterprise IT teams to prioritize the accuracy and completeness of their device inventory data to support autonomous security agents and ensure the security and compliance of their organization.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">To address the issue of missing security agents, IT teams should start by auditing their current device inventory in the CMDB to identify stale or missing records. This can be done by comparing the CMDB data with data from other sources, such as network scans or MDM platforms. IT teams should also assess their current security agent deployment and reporting processes to identify any gaps or inconsistencies.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">To build a business case for addressing this issue, IT teams can use metrics such as the number of devices missing security agents, the potential risk of security breaches or compliance violations, and the cost of remediation. For example, IT teams can estimate the cost of a security breach due to a missing security agent and compare it to the cost of implementing a solution to address the issue.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">IT teams can consider using MDM platforms such as JumpCloud, Microsoft Intune, or VMware Workspace ONE to improve inventory management and reduce the risk of stale or missing records. They can also consider using security information and event management (SIEM) systems to improve SOC visibility and reconciliation.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">IT teams should flag technical risks such as the potential for security breaches or compliance violations due to missing security agents. They should also flag operational risks such as the cost and resource requirements of implementing a solution to address the issue. Additionally, they should consider compliance risks such as the potential for non-compliance with regulations such as the UK GDPR.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">A quick win that IT teams can achieve in under 30 days is to conduct a network scan to identify devices that are missing security agents and update the CMDB accordingly. This can be done using tools such as Nmap or OpenVAS.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">A long-term strategic move that IT teams can make is to implement a comprehensive inventory management solution that integrates with their CMDB and MDM platforms. This can help to ensure that device inventory data is accurate and up-to-date, and that security agents are deployed and reporting correctly. IT teams can also consider implementing automation tools to streamline the process of deploying and managing security agents.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 26 Jun 2026, 20:04</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">To address the issue of missing security agents, IT teams should start by auditing their current device inventory in the CMDB to identify stale or missing records. This can be done by comparing the CMDB data with data from other sources, such as network scans or MDM platforms. IT teams should also assess their current security agent deployment and reporting processes to identify any gaps or inconsistencies.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">To build a business case for addressing this issue, IT teams can use metrics such as the number of devices missing security agents, the potential risk of security breaches or compliance violations, and the cost of remediation. For example, IT teams can estimate the cost of a security breach due to a missing security agent and compare it to the cost of implementing a solution to address the issue.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">IT teams can consider using MDM platforms such as JumpCloud, Microsoft Intune, or VMware Workspace ONE to improve inventory management and reduce the risk of stale or missing records. They can also consider using security information and event management (SIEM) systems to improve SOC visibility and reconciliation.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">IT teams should flag technical risks such as the potential for security breaches or compliance violations due to missing security agents. They should also flag operational risks such as the cost and resource requirements of implementing a solution to address the issue. Additionally, they should consider compliance risks such as the potential for non-compliance with regulations such as the UK GDPR.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">A quick win that IT teams can achieve in under 30 days is to conduct a network scan to identify devices that are missing security agents and update the CMDB accordingly. This can be done using tools such as Nmap or OpenVAS.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">A long-term strategic move that IT teams can make is to implement a comprehensive inventory management solution that integrates with their CMDB and MDM platforms. This can help to ensure that device inventory data is accurate and up-to-date, and that security agents are deployed and reporting correctly. IT teams can also consider implementing automation tools to streamline the process of deploying and managing security agents.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 26 Jun 2026, 20:04</p>
+</main>
 </body>
 </html>

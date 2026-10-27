@@ -5,66 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Peter Sarlin’s QuTwo reaches $380M valuation in angel round - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Peter Sarlin’s QuTwo reaches $380M valuation in angel round</h1>
-  <div class="meta-line">TechCrunch · 06 May 202 · Generated 06 May 2026, 12:33</div>
-  <a href="https://techcrunch.com/2026/05/05/peter-sarlins-qutwo-reaches-380m-valuation-in-angel-round/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>QuTwo, a Finnish AI lab, has reached a valuation of $380M after completing a €25M angel round. This significant investment is a testament to the growing interest in AI and quantum computing in Europe. The funding will enable QuTwo to advance its AI and quantum computing capabilities, potentially leading to significant advancements in various industries. For enterprise IT teams, this development matters as it may lead to the creation of new tools and technologies that can be leveraged to improve business operations and decision-making. The involvement of AI and quantum computing vendors and technologies, such as those developed by QuTwo, may also lead to increased competition and innovation in the market. The broader industry implications of this investment are that it highlights the enduring tailwinds of AI and sovereign tech in Europe, and may lead to increased investment and development in these areas. As a result, enterprise IT teams should be aware of the potential for new technologies and tools to emerge, and be prepared to assess and potentially adopt them. The key vendors and technologies involved in this development are QuTwo and its AI and quantum computing platforms. The investment in QuTwo is also a sign of the growing importance of sovereign tech in Europe, and the need for enterprises to consider the potential implications of this trend on their operations and decision-making.</p><p>The valuation of QuTwo is a significant development, and it highlights the potential for AI and quantum computing to drive business value and innovation. Enterprise IT teams should be aware of the potential for these technologies to improve business operations, and be prepared to assess and potentially adopt them. The investment in QuTwo is also a sign of the growing importance of sovereign tech in Europe, and the need for enterprises to consider the potential implications of this trend on their operations and decision-making. The key takeaways from this development are that AI and quantum computing are likely to continue to drive innovation and business value, and that enterprise IT teams should be prepared to assess and potentially adopt new technologies and tools. The potential applications of QuTwo's technologies are wide-ranging, and may include areas such as data analytics, machine learning, and cybersecurity.</p></div>
+  <p class="meta-line">TechCrunch · 06 May 202 · Generated 06 May 2026, 12:33</p>
+  <a href="https://techcrunch.com/2026/05/05/peter-sarlins-qutwo-reaches-380m-valuation-in-angel-round/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>QuTwo, a Finnish AI lab, has reached a valuation of $380M after completing a €25M angel round. This significant investment is a testament to the growing interest in AI and quantum computing in Europe. The funding will enable QuTwo to advance its AI and quantum computing capabilities, potentially leading to significant advancements in various industries. For enterprise IT teams, this development matters as it may lead to the creation of new tools and technologies that can be leveraged to improve business operations and decision-making. The involvement of AI and quantum computing vendors and technologies, such as those developed by QuTwo, may also lead to increased competition and innovation in the market. The broader industry implications of this investment are that it highlights the enduring tailwinds of AI and sovereign tech in Europe, and may lead to increased investment and development in these areas. As a result, enterprise IT teams should be aware of the potential for new technologies and tools to emerge, and be prepared to assess and potentially adopt them. The key vendors and technologies involved in this development are QuTwo and its AI and quantum computing platforms. The investment in QuTwo is also a sign of the growing importance of sovereign tech in Europe, and the need for enterprises to consider the potential implications of this trend on their operations and decision-making.</p><p>The valuation of QuTwo is a significant development, and it highlights the potential for AI and quantum computing to drive business value and innovation. Enterprise IT teams should be aware of the potential for these technologies to improve business operations, and be prepared to assess and potentially adopt them. The investment in QuTwo is also a sign of the growing importance of sovereign tech in Europe, and the need for enterprises to consider the potential implications of this trend on their operations and decision-making. The key takeaways from this development are that AI and quantum computing are likely to continue to drive innovation and business value, and that enterprise IT teams should be prepared to assess and potentially adopt new technologies and tools. The potential applications of QuTwo&#x27;s technologies are wide-ranging, and may include areas such as data analytics, machine learning, and cybersecurity.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">Before considering the adoption of AI and quantum computing technologies, enterprise IT teams should assess their current environment and identify areas where these technologies can add value. This includes evaluating current data analytics and machine learning capabilities, as well as assessing the potential for AI and quantum computing to improve business operations and decision-making.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">To build a business case for the adoption of AI and quantum computing technologies, enterprise IT teams should identify specific use cases and metrics that can be used to measure the potential return on investment. This may include metrics such as improved data analytics capabilities, increased efficiency, and enhanced decision-making.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">Enterprise IT teams should consider tools and platforms from vendors such as QuTwo, as well as other AI and quantum computing vendors. The key is to identify tools and platforms that can add value to the business, and that can be integrated with existing systems and infrastructure.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">The adoption of AI and quantum computing technologies also carries risks, including technical risks such as the potential for system downtime and data loss, as well as compliance risks such as the need to ensure that AI systems are transparent and explainable. Enterprise IT teams should also be aware of operational risks, such as the potential for AI systems to be used in ways that are not aligned with business goals and objectives.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">One quick win that enterprise IT teams can achieve in under 30 days is to conduct a proof of concept or pilot project using AI and quantum computing technologies. This can help to demonstrate the potential value of these technologies, and can provide a foundation for further adoption and implementation.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">The long-term play for enterprise IT teams is to develop a strategic plan for the adoption and implementation of AI and quantum computing technologies. This should include identifying specific use cases and metrics, as well as developing a roadmap for the integration of these technologies with existing systems and infrastructure. The goal should be to create a comprehensive strategy that can help to drive business value and innovation, and that can position the enterprise for long-term success.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 06 May 2026, 12:33</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">Before considering the adoption of AI and quantum computing technologies, enterprise IT teams should assess their current environment and identify areas where these technologies can add value. This includes evaluating current data analytics and machine learning capabilities, as well as assessing the potential for AI and quantum computing to improve business operations and decision-making.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">To build a business case for the adoption of AI and quantum computing technologies, enterprise IT teams should identify specific use cases and metrics that can be used to measure the potential return on investment. This may include metrics such as improved data analytics capabilities, increased efficiency, and enhanced decision-making.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Enterprise IT teams should consider tools and platforms from vendors such as QuTwo, as well as other AI and quantum computing vendors. The key is to identify tools and platforms that can add value to the business, and that can be integrated with existing systems and infrastructure.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">The adoption of AI and quantum computing technologies also carries risks, including technical risks such as the potential for system downtime and data loss, as well as compliance risks such as the need to ensure that AI systems are transparent and explainable. Enterprise IT teams should also be aware of operational risks, such as the potential for AI systems to be used in ways that are not aligned with business goals and objectives.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">One quick win that enterprise IT teams can achieve in under 30 days is to conduct a proof of concept or pilot project using AI and quantum computing technologies. This can help to demonstrate the potential value of these technologies, and can provide a foundation for further adoption and implementation.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">The long-term play for enterprise IT teams is to develop a strategic plan for the adoption and implementation of AI and quantum computing technologies. This should include identifying specific use cases and metrics, as well as developing a roadmap for the integration of these technologies with existing systems and infrastructure. The goal should be to create a comprehensive strategy that can help to drive business value and innovation, and that can position the enterprise for long-term success.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 06 May 2026, 12:33</p>
+</main>
 </body>
 </html>

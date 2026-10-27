@@ -5,84 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Broad access through consistent standards - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Broad access through consistent standards</h1>
-  <div class="meta-line">OpenAI · 21 Oct 202 · Generated 22 Oct 2026, 11:32</div>
-  <a href="https://openai.com/index/broad-access-through-consistent-standards" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>OpenAI has revised its Usage Policies to strengthen consistent safeguards and responsible access across all distribution partners. The update does not modify existing APIs or platform features; instead, it clarifies the expectations placed on partners and end users. The primary change is a more explicit definition of acceptable use, data handling, and content moderation responsibilities. For enterprise IT teams, this means that any internal integrations or third‑party services that consume OpenAI models must be re‑examined to confirm compliance with the new policy language. The update is significant because it introduces stricter enforcement mechanisms and a clearer audit trail for partner usage. Vendors that provide AI‑as‑a‑service, such as Microsoft Azure OpenAI Service, AWS Bedrock, and Google Vertex AI, will need to ensure their own partner agreements reflect these policy changes. Additionally, any custom middleware or orchestration layers that route requests to OpenAI must be updated to log and flag policy‑violating content. The broader industry implication is a tightening of the regulatory environment around generative AI. Companies that rely on OpenAI for customer support, content generation, or data analysis will need to adjust their governance frameworks to mitigate risk. The policy shift also signals to regulators that OpenAI is proactively aligning with emerging AI safety standards, potentially influencing future legislation. Enterprises that fail to align their internal controls with the updated policy risk service disruption or contractual penalties. Consequently, IT security, compliance, and data governance teams must act promptly to audit current integrations, update contractual language, and implement monitoring to detect policy violations.</p></div>
+  <p class="meta-line">OpenAI · 21 Oct 202 · Generated 22 Oct 2026, 11:32</p>
+  <a href="https://openai.com/index/broad-access-through-consistent-standards" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>OpenAI has revised its Usage Policies to strengthen consistent safeguards and responsible access across all distribution partners. The update does not modify existing APIs or platform features; instead, it clarifies the expectations placed on partners and end users. The primary change is a more explicit definition of acceptable use, data handling, and content moderation responsibilities. For enterprise IT teams, this means that any internal integrations or third‑party services that consume OpenAI models must be re‑examined to confirm compliance with the new policy language. The update is significant because it introduces stricter enforcement mechanisms and a clearer audit trail for partner usage. Vendors that provide AI‑as‑a‑service, such as Microsoft Azure OpenAI Service, AWS Bedrock, and Google Vertex AI, will need to ensure their own partner agreements reflect these policy changes. Additionally, any custom middleware or orchestration layers that route requests to OpenAI must be updated to log and flag policy‑violating content. The broader industry implication is a tightening of the regulatory environment around generative AI. Companies that rely on OpenAI for customer support, content generation, or data analysis will need to adjust their governance frameworks to mitigate risk. The policy shift also signals to regulators that OpenAI is proactively aligning with emerging AI safety standards, potentially influencing future legislation. Enterprises that fail to align their internal controls with the updated policy risk service disruption or contractual penalties. Consequently, IT security, compliance, and data governance teams must act promptly to audit current integrations, update contractual language, and implement monitoring to detect policy violations.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory all applications and services that call OpenAI APIs, including custom wrappers, third‑party SaaS, and internal bots.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all applications and services that call OpenAI APIs, including custom wrappers, third‑party SaaS, and internal bots.
    - Review existing API keys, scopes, and usage logs for compliance with the new policy clauses.
    - Map data flows to determine where user data is transmitted to OpenAI and whether it includes PII or regulated content.
    - Assess current monitoring and alerting for policy violations; identify gaps in logging or automated enforcement.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a business case highlighting the risk of policy non‑compliance: potential service downtime, contractual penalties, and reputational damage.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case highlighting the risk of policy non‑compliance: potential service downtime, contractual penalties, and reputational damage.
    - Quantify current usage: number of calls per month, data volume, and cost. Benchmark against industry best practices for AI governance.
    - Include a cost–benefit analysis of implementing policy‑aware middleware versus the risk mitigation value.
    - Present metrics such as reduction in policy‑violation incidents, improved audit readiness, and compliance score improvements.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- OpenAI API Management Dashboard (for usage analytics and policy enforcement).
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI API Management Dashboard (for usage analytics and policy enforcement).
    - Microsoft Azure OpenAI Service with built‑in policy controls.
    - AWS Bedrock’s policy‑compliance features.
    - Google Vertex AI’s content moderation APIs.
    - Third‑party governance tools: Evidently AI, DataRobot DataOps, or Collibra for data lineage.
    - SIEM solutions (Splunk, ELK) for real‑time policy violation alerts.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Inadequate logging of API calls, failure to enforce content moderation, or misconfigured access controls.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Inadequate logging of API calls, failure to enforce content moderation, or misconfigured access controls.
    - Compliance: UK GDPR – improper handling of PII sent to OpenAI, lack of data residency controls, and insufficient data subject rights management.
    - Operational: Service interruptions if policy violations trigger automatic revocation of API keys; vendor lock‑in if partner agreements are not updated.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a lightweight wrapper around all OpenAI calls that logs request/response metadata to a central SIEM within 30 days.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight wrapper around all OpenAI calls that logs request/response metadata to a central SIEM within 30 days.
    - Update the API key rotation policy to enforce a 90‑day lifecycle and integrate with the organization’s secrets manager.
    - Add a pre‑flight check that flags requests containing disallowed content types (e.g., copyrighted text) before they reach OpenAI.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, implement a comprehensive AI governance framework: policy catalog, risk assessment matrix, and automated policy enforcement engine.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, implement a comprehensive AI governance framework: policy catalog, risk assessment matrix, and automated policy enforcement engine.
    - Integrate OpenAI’s policy compliance APIs with the organization’s data catalog to enforce data residency and PII controls.
    - Conduct regular third‑party audits of partner agreements to ensure alignment with OpenAI’s evolving policy landscape.
    - Develop an internal AI ethics board to review high‑impact use cases and maintain a continuous improvement loop for policy adherence.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Oct 2026, 11:32</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Oct 2026, 11:32</p>
+</main>
 </body>
 </html>

@@ -5,85 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Qualcomm launches two new smartphone chips with emphasis on AI - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Qualcomm launches two new smartphone chips with emphasis on AI</h1>
-  <div class="meta-line">TechCrunch · 22 Sep 202 · Generated 22 Sep 2026, 21:11</div>
-  <a href="https://techcrunch.com/2026/09/22/qualcomm-launches-two-new-smartphone-chips-with-emphasis-on-ai/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Qualcomm announced two new Snapdragon mobile processors that incorporate dedicated AI cores capable of executing 30‑billion‑parameter mixture‑of‑expert (MoE) models directly on the device. The new chips, named Snapdragon X70 and X71, feature an expanded Neural Processing Engine (NPE) with 64 AI cores and a new TensorFlow Lite runtime optimized for MoE workloads. Qualcomm claims inference latency reductions of up to 70% compared to previous generations and a 40% lower power draw for large‑scale models.</p><p>For enterprise IT teams, this development is significant because it enables richer on‑device AI experiences—such as real‑time language translation, predictive analytics, and adaptive security—without routing traffic to the cloud. Reduced latency improves user experience for mission‑critical applications, while lower bandwidth usage can cut operational costs and mitigate data‑center load. The chips also support secure enclave features that can isolate sensitive model data, addressing compliance concerns for regulated industries.</p><p>Vendors directly involved include Qualcomm for the hardware, Google for the TensorFlow Lite framework, and ARM for the underlying CPU architecture. End‑to‑end solutions may involve OEMs like Samsung and Xiaomi that ship devices with these processors, and MDM/endpoint security vendors such as VMware Workspace ONE, Microsoft Intune, and CrowdStrike that must adapt their policies to leverage hardware‑accelerated AI.</p><p>Industry implications are broad. Mobile edge computing will shift further toward device‑centric AI, reducing reliance on cloud inference services. This could accelerate the adoption of privacy‑preserving AI, as data stays local. It also pressures other chipset makers (MediaTek, Apple, Samsung) to enhance their AI capabilities. For enterprises, the shift necessitates re‑engineering of mobile applications to target the new NPE APIs, updating MDM policies to allow model deployment, and revisiting security controls to guard against model extraction attacks.</p><p>Overall, Qualcomm’s move signals a maturation of on‑device AI that will reshape mobile application design, network traffic patterns, and security postures across enterprise fleets.</p></div>
+  <p class="meta-line">TechCrunch · 22 Sep 202 · Generated 22 Sep 2026, 21:11</p>
+  <a href="https://techcrunch.com/2026/09/22/qualcomm-launches-two-new-smartphone-chips-with-emphasis-on-ai/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Qualcomm announced two new Snapdragon mobile processors that incorporate dedicated AI cores capable of executing 30‑billion‑parameter mixture‑of‑expert (MoE) models directly on the device. The new chips, named Snapdragon X70 and X71, feature an expanded Neural Processing Engine (NPE) with 64 AI cores and a new TensorFlow Lite runtime optimized for MoE workloads. Qualcomm claims inference latency reductions of up to 70% compared to previous generations and a 40% lower power draw for large‑scale models.</p><p>For enterprise IT teams, this development is significant because it enables richer on‑device AI experiences—such as real‑time language translation, predictive analytics, and adaptive security—without routing traffic to the cloud. Reduced latency improves user experience for mission‑critical applications, while lower bandwidth usage can cut operational costs and mitigate data‑center load. The chips also support secure enclave features that can isolate sensitive model data, addressing compliance concerns for regulated industries.</p><p>Vendors directly involved include Qualcomm for the hardware, Google for the TensorFlow Lite framework, and ARM for the underlying CPU architecture. End‑to‑end solutions may involve OEMs like Samsung and Xiaomi that ship devices with these processors, and MDM/endpoint security vendors such as VMware Workspace ONE, Microsoft Intune, and CrowdStrike that must adapt their policies to leverage hardware‑accelerated AI.</p><p>Industry implications are broad. Mobile edge computing will shift further toward device‑centric AI, reducing reliance on cloud inference services. This could accelerate the adoption of privacy‑preserving AI, as data stays local. It also pressures other chipset makers (MediaTek, Apple, Samsung) to enhance their AI capabilities. For enterprises, the shift necessitates re‑engineering of mobile applications to target the new NPE APIs, updating MDM policies to allow model deployment, and revisiting security controls to guard against model extraction attacks.</p><p>Overall, Qualcomm’s move signals a maturation of on‑device AI that will reshape mobile application design, network traffic patterns, and security postures across enterprise fleets.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory current device fleet: OS version, CPU architecture, existing NPE support.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory current device fleet: OS version, CPU architecture, existing NPE support.
    - Benchmark existing AI workloads (e.g., on‑device ML inference latency, power consumption).
    - Assess MDM policy compatibility with hardware‑accelerated AI features.
    - Verify compliance with UK GDPR: data residency, local processing, and model encryption requirements.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit model: compare cloud inference costs (latency, bandwidth, API calls) versus projected on‑device inference savings.
-   - Include metrics: target latency reduction (e.g., <50 ms), bandwidth savings (e.g., 30 % of current usage), and power impact (e.g., <5 % battery drain).
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: compare cloud inference costs (latency, bandwidth, API calls) versus projected on‑device inference savings.
+   - Include metrics: target latency reduction (e.g., &lt;50 ms), bandwidth savings (e.g., 30 % of current usage), and power impact (e.g., &lt;5 % battery drain).
    - Highlight risk mitigation: reduced exposure to cloud outages, lower data‑center carbon footprint.
    - Present pilot ROI: 6‑month pilot on 10% of fleet with expected break‑even within 12 months.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Qualcomm Snapdragon SDK (NPE APIs, TensorFlow Lite integration).
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Qualcomm Snapdragon SDK (NPE APIs, TensorFlow Lite integration).
    - Google TensorFlow Lite for Android.
    - VMware Workspace ONE for policy deployment.
    - Microsoft Intune for device management and conditional access.
    - CrowdStrike Falcon for endpoint AI threat detection.
    - Azure Machine Learning Edge for model packaging and deployment.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Compatibility gaps between legacy apps and new NPE APIs; potential driver instability.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Compatibility gaps between legacy apps and new NPE APIs; potential driver instability.
    - Compliance: Ensuring model data does not inadvertently transmit to cloud; GDPR data‑processing agreements must reflect local inference.
    - Operational: Increased complexity in OTA updates for AI models; potential battery impact if models are large.
    - Security: Model extraction or tampering attacks; need for secure enclaves and attestation.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a small set of pre‑trained TensorFlow Lite MoE models on a test group of devices using the new Snapdragon chips.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a small set of pre‑trained TensorFlow Lite MoE models on a test group of devices using the new Snapdragon chips.
    - Measure inference latency and battery impact; publish results to stakeholders.
    - Update MDM policies to allow model deployment and monitor compliance.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, refactor core mobile applications to leverage the NPE APIs for key features (e.g., real‑time translation, predictive typing).
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, refactor core mobile applications to leverage the NPE APIs for key features (e.g., real‑time translation, predictive typing).
    - Establish a model lifecycle management process: versioning, OTA updates, and secure storage.
    - Integrate on‑device AI insights into enterprise analytics pipelines, reducing cloud data ingestion.
    - Conduct periodic security audits of model integrity and update mechanisms to maintain GDPR compliance.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 21:11</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 21:11</p>
+</main>
 </body>
 </html>

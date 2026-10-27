@@ -5,85 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Analyzing technical documents with Deep Review - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Analyzing technical documents with Deep Review</h1>
-  <div class="meta-line">Google AI · 14 Oct 202 · Generated 14 Oct 2026, 21:33</div>
-  <a href="https://research.google/blog/analyzing-technical-documents-with-deep-review/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Google AI has launched Deep Review, an automated content‑analysis engine that parses technical documents, highlights critical sections, and produces concise summaries. The tool uses advanced natural‑language‑processing models trained on large corpora of engineering and research literature. Deep Review is currently available as a standalone API and a beta integration in Google Workspace Docs, with plans to extend to Google Cloud AI services. For enterprise IT teams, the announcement signals a shift toward AI‑driven knowledge management. By reducing manual time spent on reading and extracting information from manuals, compliance guides, and support tickets, Deep Review can lower the cost of technical support and accelerate onboarding of new engineers. The feature also offers a potential competitive advantage for organizations that need to process large volumes of regulatory or security documentation, as the AI can flag relevant clauses and produce compliance‑ready summaries. Vendors such as Microsoft Azure Cognitive Services, AWS Comprehend, and IBM Watson are already offering similar document‑analysis capabilities; Deep Review’s integration with Google’s ecosystem may tilt the balance toward Google Cloud for enterprises that rely on G Suite or GCP. Industry implications include a broader trend toward AI‑assisted documentation workflows, tighter integration of knowledge bases with collaboration platforms, and increased demand for data‑privacy‑compliant AI services. Enterprises will need to evaluate data residency, model governance, and the ability to customize the AI for domain‑specific terminology. Overall, Deep Review represents a tangible step toward automating the “read‑and‑understand” phase of technical documentation, which can translate into measurable productivity gains for IT operations, compliance, and support functions.</p></div>
+  <p class="meta-line">Google AI · 14 Oct 202 · Generated 14 Oct 2026, 21:33</p>
+  <a href="https://research.google/blog/analyzing-technical-documents-with-deep-review/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Google AI has launched Deep Review, an automated content‑analysis engine that parses technical documents, highlights critical sections, and produces concise summaries. The tool uses advanced natural‑language‑processing models trained on large corpora of engineering and research literature. Deep Review is currently available as a standalone API and a beta integration in Google Workspace Docs, with plans to extend to Google Cloud AI services. For enterprise IT teams, the announcement signals a shift toward AI‑driven knowledge management. By reducing manual time spent on reading and extracting information from manuals, compliance guides, and support tickets, Deep Review can lower the cost of technical support and accelerate onboarding of new engineers. The feature also offers a potential competitive advantage for organizations that need to process large volumes of regulatory or security documentation, as the AI can flag relevant clauses and produce compliance‑ready summaries. Vendors such as Microsoft Azure Cognitive Services, AWS Comprehend, and IBM Watson are already offering similar document‑analysis capabilities; Deep Review’s integration with Google’s ecosystem may tilt the balance toward Google Cloud for enterprises that rely on G Suite or GCP. Industry implications include a broader trend toward AI‑assisted documentation workflows, tighter integration of knowledge bases with collaboration platforms, and increased demand for data‑privacy‑compliant AI services. Enterprises will need to evaluate data residency, model governance, and the ability to customize the AI for domain‑specific terminology. Overall, Deep Review represents a tangible step toward automating the “read‑and‑understand” phase of technical documentation, which can translate into measurable productivity gains for IT operations, compliance, and support functions.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory current document repositories (Confluence, SharePoint, internal wikis, PDF libraries).
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory current document repositories (Confluence, SharePoint, internal wikis, PDF libraries).
    - Measure average time spent per document for compliance reviews, support ticket triage, and onboarding.
    - Identify data residency and classification requirements (e.g., UK GDPR, SOC 2).
    - Assess existing AI or NLP tooling and API usage patterns.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit model: estimate 30–40% reduction in manual review hours; quantify savings in support tickets and compliance audit time.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: estimate 30–40% reduction in manual review hours; quantify savings in support tickets and compliance audit time.
    - Use metrics such as average review time per document, number of documents processed per week, and SLA improvement targets.
    - Highlight risk mitigation: faster detection of policy changes, reduced human error in compliance documentation.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Google Deep Review API (beta) – integration with Google Workspace or GCP.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Google Deep Review API (beta) – integration with Google Workspace or GCP.
    - Microsoft Azure Cognitive Search with Text Analytics.
    - AWS Comprehend Medical (if dealing with medical docs) or AWS Textract for structured extraction.
    - IBM Watson Discovery for enterprise search and summarization.
    - Open‑source alternatives: Haystack, LangChain, or GPT‑based summarization pipelines if data residency is critical.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Data privacy: ensure documents are not inadvertently sent to external servers; verify GDPR compliance for data transfer.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Data privacy: ensure documents are not inadvertently sent to external servers; verify GDPR compliance for data transfer.
    - Model bias or misinterpretation of technical jargon leading to incorrect summaries.
    - Vendor lock‑in: Deep Review may tie you to Google Cloud; evaluate exit strategy.
    - API rate limits and cost overruns if document volume spikes.
    - Security: ensure API keys are stored in secrets management and access is role‑based.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy Deep Review on a small set of high‑volume support tickets (e.g., 50 documents) and measure time saved.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy Deep Review on a small set of high‑volume support tickets (e.g., 50 documents) and measure time saved.
    - Create a pilot workflow in Google Workspace: add a “Deep Review” button to Docs and capture feedback from 5 engineers.
    - Document results in a short report to demonstrate feasibility and ROI.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Integrate Deep Review into the enterprise knowledge base: auto‑summarize new documentation and tag key sections for search.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate Deep Review into the enterprise knowledge base: auto‑summarize new documentation and tag key sections for search.
    - Build a custom fine‑tuned model on internal documents to improve accuracy for domain‑specific terminology.
    - Extend the solution to compliance monitoring: automatically scan policy updates and generate alerts for affected teams.
    - Align with data governance: implement audit trails for AI‑generated summaries and establish a review board for critical documents.
    - Plan for multi‑cloud or hybrid deployment to avoid vendor lock‑in while maintaining compliance with UK GDPR and other regulations.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 14 Oct 2026, 21:33</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 14 Oct 2026, 21:33</p>
+</main>
 </body>
 </html>

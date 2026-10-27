@@ -5,66 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>From LLM-Driven Trading Card Generation to Procedural Relatedness: A Pokémon Case Study - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">From LLM-Driven Trading Card Generation to Procedural Relatedness: A Pokémon Case Study</h1>
-  <div class="meta-line">Johannes Pfau, Panagiotis Vrettis · Academic Institution · 2026-04-30 · Generated 01 May 2026, 19:20</div>
-  <a href="https://arxiv.org/abs/2604.27972v1" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>The case study titled From LLM-Driven Trading Card Generation to Procedural Relatedness: A Pokémon Case Study explores the application of Large Language Models and Image Diffusion Models for Procedural Content Generation of Trading Card Game cards. The study aims to address the challenges faced by the Trading Card Game industry, including repetitive and impaired player experiences due to predictable strategies and limited card options. The researchers propose the use of AI models to generate new and engaging card content, enhancing the overall player experience. The study found that the integration of LLMs and Image Diffusion Models can create dynamic and unique card content, leading to improved user experience and increased user engagement. This matters for enterprise IT as it highlights the potential of AI-driven content generation in various applications, including game development and digital media. The real-world implications of this study are significant, as it can lead to the creation of new revenue streams for game developers and publishers, particularly in the multi-billion-dollar TCG industry. The study's findings can be applied to various industries, including entertainment, education, and marketing, where content generation is a key aspect of the business.</p><p>The study's approach can be replicated in other industries, and the use of LLMs and Image Diffusion Models can be explored for generating procedural content. The potential benefits of this approach include increased user engagement, improved customer experience, and new revenue streams. However, the study also highlights the need for careful evaluation and assessment of the current environment before implementing such a solution. The integration of AI models requires significant computational resources, data storage, and expertise, which can be a challenge for some organizations. Nevertheless, the potential benefits of AI-driven content generation make it an attractive solution for enterprise IT to explore.</p></div>
+  <p class="meta-line">Johannes Pfau, Panagiotis Vrettis · Academic Institution · 2026-04-30 · Generated 01 May 2026, 19:20</p>
+  <a href="https://arxiv.org/abs/2604.27972v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The case study titled From LLM-Driven Trading Card Generation to Procedural Relatedness: A Pokémon Case Study explores the application of Large Language Models and Image Diffusion Models for Procedural Content Generation of Trading Card Game cards. The study aims to address the challenges faced by the Trading Card Game industry, including repetitive and impaired player experiences due to predictable strategies and limited card options. The researchers propose the use of AI models to generate new and engaging card content, enhancing the overall player experience. The study found that the integration of LLMs and Image Diffusion Models can create dynamic and unique card content, leading to improved user experience and increased user engagement. This matters for enterprise IT as it highlights the potential of AI-driven content generation in various applications, including game development and digital media. The real-world implications of this study are significant, as it can lead to the creation of new revenue streams for game developers and publishers, particularly in the multi-billion-dollar TCG industry. The study&#x27;s findings can be applied to various industries, including entertainment, education, and marketing, where content generation is a key aspect of the business.</p><p>The study&#x27;s approach can be replicated in other industries, and the use of LLMs and Image Diffusion Models can be explored for generating procedural content. The potential benefits of this approach include increased user engagement, improved customer experience, and new revenue streams. However, the study also highlights the need for careful evaluation and assessment of the current environment before implementing such a solution. The integration of AI models requires significant computational resources, data storage, and expertise, which can be a challenge for some organizations. Nevertheless, the potential benefits of AI-driven content generation make it an attractive solution for enterprise IT to explore.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">Before implementing an AI-driven content generation solution, evaluate your current environment to assess the availability of computational resources, data storage, and expertise. Audit your current content generation processes to identify areas where AI can be integrated. Assess the quality and availability of data required to train AI models.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">Build a business case for leadership by highlighting the potential benefits of AI-driven content generation, including increased user engagement, improved customer experience, and new revenue streams. Use metrics such as user engagement metrics, customer satisfaction scores, and revenue growth to demonstrate the potential impact of the solution.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">Consider using vendor platforms such as Google Cloud AI Platform, Amazon SageMaker, or Microsoft Azure Machine Learning to develop and deploy AI models. Other tools to consider include Hugging Face Transformers, TensorFlow, and PyTorch for building and training LLMs and Image Diffusion Models.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">Flag technical risks such as data quality issues, model drift, and computational resource constraints. Compliance risks such as data privacy and security should also be considered, particularly in regions subject to UK GDPR. Operational risks such as talent acquisition and retention, and change management should also be flagged.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">Achieve a quick win by developing a proof-of-concept AI-driven content generation solution within 30 days. Focus on a specific use case, such as generating procedural content for a game or digital media application. Use pre-trained models and publicly available datasets to accelerate development.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">Develop a 6-12 month strategic plan to integrate AI-driven content generation into your organization's content creation processes. Establish a cross-functional team to develop and deploy AI models, and invest in talent acquisition and retention to build expertise in AI and machine learning. Develop a data strategy to ensure the quality and availability of data required to train AI models, and establish a governance framework to manage compliance and operational risks.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 01 May 2026, 19:20</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">Before implementing an AI-driven content generation solution, evaluate your current environment to assess the availability of computational resources, data storage, and expertise. Audit your current content generation processes to identify areas where AI can be integrated. Assess the quality and availability of data required to train AI models.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">Build a business case for leadership by highlighting the potential benefits of AI-driven content generation, including increased user engagement, improved customer experience, and new revenue streams. Use metrics such as user engagement metrics, customer satisfaction scores, and revenue growth to demonstrate the potential impact of the solution.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Consider using vendor platforms such as Google Cloud AI Platform, Amazon SageMaker, or Microsoft Azure Machine Learning to develop and deploy AI models. Other tools to consider include Hugging Face Transformers, TensorFlow, and PyTorch for building and training LLMs and Image Diffusion Models.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">Flag technical risks such as data quality issues, model drift, and computational resource constraints. Compliance risks such as data privacy and security should also be considered, particularly in regions subject to UK GDPR. Operational risks such as talent acquisition and retention, and change management should also be flagged.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Achieve a quick win by developing a proof-of-concept AI-driven content generation solution within 30 days. Focus on a specific use case, such as generating procedural content for a game or digital media application. Use pre-trained models and publicly available datasets to accelerate development.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Develop a 6-12 month strategic plan to integrate AI-driven content generation into your organization&#x27;s content creation processes. Establish a cross-functional team to develop and deploy AI models, and invest in talent acquisition and retention to build expertise in AI and machine learning. Develop a data strategy to ensure the quality and availability of data required to train AI models, and establish a governance framework to manage compliance and operational risks.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 01 May 2026, 19:20</p>
+</main>
 </body>
 </html>

@@ -5,87 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hackers hit AI coding tool OpenCode, running up charges on users’ AI accounts - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Hackers hit AI coding tool OpenCode, running up charges on users’ AI accounts</h1>
-  <div class="meta-line">TechCrunch · 19 Oct 202 · Generated 19 Oct 2026, 22:11</div>
-  <a href="https://techcrunch.com/2026/10/19/hackers-hit-ai-coding-tool-opencode-running-up-charges-on-users-ai-accounts/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Hackers compromised the OpenCode platform by exploiting a vulnerability that allowed them to extract users’ API keys. The stolen credentials were then used to inject malicious code into downstream AI services that rely on OpenCode’s API, causing those services to block legitimate requests and generate unexpected usage charges. The incident highlights a new attack vector: API key theft that can cascade across an entire AI ecosystem. For enterprise IT teams, the breach underscores the critical need to secure API secrets, enforce strict rotation, and monitor usage patterns for anomalies. OpenCode, a popular open‑source code generation tool, is now a target for attackers seeking to monetize unauthorized access. The broader industry implication is that any organization integrating third‑party AI models via APIs must treat those credentials as high‑value assets. The incident also raises concerns about the adequacy of current secrets management solutions, the visibility of API traffic, and the potential for billing fraud. Regulatory bodies may scrutinize how organizations handle API key security, especially under UK GDPR where unauthorized access to personal data could trigger data breach notifications. The event serves as a wake‑up call for enterprises to audit their API key lifecycle, implement automated rotation, and adopt zero‑trust principles for all external integrations.</p></div>
+  <p class="meta-line">TechCrunch · 19 Oct 202 · Generated 19 Oct 2026, 22:11</p>
+  <a href="https://techcrunch.com/2026/10/19/hackers-hit-ai-coding-tool-opencode-running-up-charges-on-users-ai-accounts/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Hackers compromised the OpenCode platform by exploiting a vulnerability that allowed them to extract users’ API keys. The stolen credentials were then used to inject malicious code into downstream AI services that rely on OpenCode’s API, causing those services to block legitimate requests and generate unexpected usage charges. The incident highlights a new attack vector: API key theft that can cascade across an entire AI ecosystem. For enterprise IT teams, the breach underscores the critical need to secure API secrets, enforce strict rotation, and monitor usage patterns for anomalies. OpenCode, a popular open‑source code generation tool, is now a target for attackers seeking to monetize unauthorized access. The broader industry implication is that any organization integrating third‑party AI models via APIs must treat those credentials as high‑value assets. The incident also raises concerns about the adequacy of current secrets management solutions, the visibility of API traffic, and the potential for billing fraud. Regulatory bodies may scrutinize how organizations handle API key security, especially under UK GDPR where unauthorized access to personal data could trigger data breach notifications. The event serves as a wake‑up call for enterprises to audit their API key lifecycle, implement automated rotation, and adopt zero‑trust principles for all external integrations.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory all API keys used across internal and external AI services, including OpenCode, GPT‑based models, and proprietary ML endpoints.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all API keys used across internal and external AI services, including OpenCode, GPT‑based models, and proprietary ML endpoints.
    - Verify that keys are stored in a secrets manager (e.g., HashiCorp Vault, AWS Secrets Manager, Azure Key Vault) and not in code repositories or environment variables.
    - Assess current rotation frequency and enforce a policy of rotating keys every 90 days or after any change in personnel.
    - Run a penetration test or automated scan (e.g., Trivy, Snyk) to detect exposed keys in source control or CI/CD pipelines.
    - Review API usage logs for anomalies such as spikes in calls, unusual IP addresses, or repeated failed authentication attempts.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Quantify potential cost impact: estimate the average monthly bill per API key and multiply by the number of keys at risk. Present a projected loss if keys were compromised.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify potential cost impact: estimate the average monthly bill per API key and multiply by the number of keys at risk. Present a projected loss if keys were compromised.
    - Show compliance risk: calculate the likelihood of a GDPR notification event and the associated fine (up to €20 million or 4% of global turnover).
    - Benchmark against industry best practices: compare current rotation cadence and secrets storage against NIST SP 800‑53 controls (AC-17, CM-6).
    - Build a cost‑benefit analysis: upfront investment in a secrets manager (~$10k per year) versus potential loss from unauthorized usage (~$100k+ per month).</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- HashiCorp Vault for centralized secrets management with dynamic key generation.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- HashiCorp Vault for centralized secrets management with dynamic key generation.
    - AWS Secrets Manager or Azure Key Vault for cloud‑native solutions.
    - Cloudflare Access or Okta API Access Management for zero‑trust API gateway.
    - Snyk or GitGuardian for real‑time secrets scanning in code repositories.
    - Datadog or Splunk for API usage analytics and anomaly detection.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Inadequate key rotation, hard‑coded credentials, lack of encryption at rest.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Inadequate key rotation, hard‑coded credentials, lack of encryption at rest.
    - Compliance: Failure to notify GDPR authorities within 72 hours if personal data is accessed via compromised APIs.
    - Operational: Downtime from blocked services, increased support tickets, and potential loss of customer trust.
    - Vendor risk: Dependency on a single AI provider increases blast radius; consider multi‑vendor strategy.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Immediately revoke all unused or dormant API keys and generate new ones.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Immediately revoke all unused or dormant API keys and generate new ones.
    - Enable multi‑factor authentication for all accounts that can generate or manage keys.
    - Deploy a secrets scanning tool in the CI/CD pipeline to block commits containing keys.
    - Update API usage policies to require approval for any new key creation.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Implement a zero‑trust API gateway that enforces fine‑grained access control and real‑time threat detection.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Implement a zero‑trust API gateway that enforces fine‑grained access control and real‑time threat detection.
    - Automate key lifecycle management: dynamic key creation, automatic rotation, and revocation based on role changes.
    - Integrate API monitoring with SIEM to correlate usage patterns with threat intelligence feeds.
    - Conduct quarterly penetration tests focused on API surface area and maintain a continuous compliance audit trail.
    - Develop an incident response playbook specific to API key compromise, including notification procedures and remediation steps.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 19 Oct 2026, 22:11</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 19 Oct 2026, 22:11</p>
+</main>
 </body>
 </html>

@@ -5,82 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How Oracle turns days of work into minutes with ChatGPT and Codex - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">How Oracle turns days of work into minutes with ChatGPT and Codex</h1>
-  <div class="meta-line">OpenAI · 08 Oct 202 · Generated 08 Oct 2026, 23:15</div>
-  <a href="https://openai.com/index/oracle" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Oracle has embedded OpenAI’s ChatGPT and Codex into its internal operations, automating tasks across recruiting, engineering, and operational workflows. The integration is achieved through Oracle’s cloud platform, leveraging OpenAI’s APIs to generate code snippets, draft documents, and streamline ticket handling. By converting hours of manual work into minutes, Oracle demonstrates the tangible productivity gains that generative AI can deliver in a large enterprise setting. For IT teams, this case study highlights the feasibility of applying similar AI-driven automation to routine incident tickets in Freshservice or policy drafting in Google Workspace. The vendors involved include Oracle Cloud Infrastructure, OpenAI, and downstream tools such as Freshservice and Google Workspace. The broader industry implication is a shift toward embedding LLMs into existing IT service management (ITSM) and collaboration platforms, enabling faster resolution cycles, reduced manual effort, and more consistent documentation. Enterprises that adopt this approach can expect measurable improvements in mean time to resolution (MTTR), ticket volume reduction, and policy compliance consistency. The Oracle example also underscores the importance of robust governance, data security, and compliance frameworks when integrating third‑party AI services, especially under regulations like UK GDPR. As more vendors release native LLM connectors, IT leaders will need to evaluate integration depth, data residency, and cost‑per‑token models to ensure sustainable ROI.</p></div>
+  <p class="meta-line">OpenAI · 08 Oct 202 · Generated 08 Oct 2026, 23:15</p>
+  <a href="https://openai.com/index/oracle" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Oracle has embedded OpenAI’s ChatGPT and Codex into its internal operations, automating tasks across recruiting, engineering, and operational workflows. The integration is achieved through Oracle’s cloud platform, leveraging OpenAI’s APIs to generate code snippets, draft documents, and streamline ticket handling. By converting hours of manual work into minutes, Oracle demonstrates the tangible productivity gains that generative AI can deliver in a large enterprise setting. For IT teams, this case study highlights the feasibility of applying similar AI-driven automation to routine incident tickets in Freshservice or policy drafting in Google Workspace. The vendors involved include Oracle Cloud Infrastructure, OpenAI, and downstream tools such as Freshservice and Google Workspace. The broader industry implication is a shift toward embedding LLMs into existing IT service management (ITSM) and collaboration platforms, enabling faster resolution cycles, reduced manual effort, and more consistent documentation. Enterprises that adopt this approach can expect measurable improvements in mean time to resolution (MTTR), ticket volume reduction, and policy compliance consistency. The Oracle example also underscores the importance of robust governance, data security, and compliance frameworks when integrating third‑party AI services, especially under regulations like UK GDPR. As more vendors release native LLM connectors, IT leaders will need to evaluate integration depth, data residency, and cost‑per‑token models to ensure sustainable ROI.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory existing ticket types in Freshservice: recurring incident categories, SLA targets, and manual resolution steps.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory existing ticket types in Freshservice: recurring incident categories, SLA targets, and manual resolution steps.
    - Map policy creation workflows in Google Workspace: document templates, approval chains, and compliance checkpoints.
    - Assess data sensitivity: identify PII, confidential business logic, and any UK GDPR‑protected data that may be exposed to external AI services.
    - Review current API usage, authentication mechanisms, and network security posture for both Freshservice and Google Workspace.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Quantify baseline metrics: current MTTR for recurring incidents, average time to draft a policy, and manual effort hours per week.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify baseline metrics: current MTTR for recurring incidents, average time to draft a policy, and manual effort hours per week.
    - Project AI impact: estimate a 30–50% reduction in MTTR and a 40% cut in policy drafting time based on Oracle’s reported gains.
    - Calculate cost savings: compute reduced labor hours, potential overtime elimination, and lower ticket backlog costs.
    - Include a pilot budget: API token costs, integration development hours, and governance tooling.
    - Present a phased ROI timeline: 3‑month pilot, 6‑month full rollout, 12‑month optimization.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- OpenAI API (ChatGPT, Codex) for generative text and code.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI API (ChatGPT, Codex) for generative text and code.
    - Oracle Cloud Infrastructure (OCI) for secure API gateway and data residency controls.
    - Freshservice AI add‑ons or custom webhook integrations for automated ticket triage.
    - Google Workspace Add‑Ons (Apps Script) or Google Cloud AI services for policy drafting automation.
    - Data loss prevention (DLP) tools such as Symantec DLP or Microsoft Purview to monitor outbound AI traffic.
    - Identity and Access Management (IAM) solutions (e.g., Okta, Azure AD) for secure API key management.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: API latency, token limits, model drift affecting accuracy of code or policy drafts.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: API latency, token limits, model drift affecting accuracy of code or policy drafts.
    - Compliance: Potential UK GDPR violations if PII is sent to OpenAI servers; enforce data masking or on‑prem LLM deployment if required.
    - Operational: Overreliance on AI may reduce human oversight; establish a review workflow for critical outputs.
    - Vendor lock‑in: OpenAI’s pricing model and policy changes could impact long‑term cost predictability.
    - Security: Ensure secure key storage, network segmentation, and audit logging for all AI interactions.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a simple chatbot in Freshservice that auto‑populates standard responses for the top 10 recurring incident categories using OpenAI’s text generation. This can be achieved in under 30 days with minimal development effort and will immediately reduce agent ticket handling time.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, build an enterprise‑wide AI service layer that integrates OpenAI models with OCI, Freshservice, and Google Workspace through a unified API gateway. Implement continuous monitoring, model retraining, and governance dashboards. Expand use cases to include code generation for internal tooling, automated compliance checks, and predictive incident routing, thereby transforming the ITSM and policy management functions into data‑driven, AI‑augmented services.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 08 Oct 2026, 23:15</div>
-</div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a simple chatbot in Freshservice that auto‑populates standard responses for the top 10 recurring incident categories using OpenAI’s text generation. This can be achieved in under 30 days with minimal development effort and will immediately reduce agent ticket handling time.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, build an enterprise‑wide AI service layer that integrates OpenAI models with OCI, Freshservice, and Google Workspace through a unified API gateway. Implement continuous monitoring, model retraining, and governance dashboards. Expand use cases to include code generation for internal tooling, automated compliance checks, and predictive incident routing, thereby transforming the ITSM and policy management functions into data‑driven, AI‑augmented services.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 08 Oct 2026, 23:15</p>
+</main>
 </body>
 </html>

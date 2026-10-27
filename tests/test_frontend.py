@@ -132,7 +132,7 @@ def test_breakdown_summary_and_guide_are_escaped():
     for html in (summary, guide, page):
         assert "<script>" not in html and "<img" not in html and "<b>" not in html
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in summary and "&lt;script&gt;" in guide
-    assert summary.startswith("<p>Para one ") and '<div class="guide-label">EVALUATE</div>' in guide
+    assert summary.startswith("<p>Para one ") and '<h3 class="guide-label">Evaluate</h3>' in guide
 
 
 def test_main_page_escapes_ai_fields():
@@ -178,3 +178,83 @@ def test_retired_pages_redirect(name):
     assert '<meta http-equiv="refresh" content="0; url=/">' in page and '<a href="/">' in page
     assert "background: #0f1117" in page and "Agent Builder Daily" not in page
     assert len(page) < 2000
+
+
+# ---------- F2b: every breakdown field escaped, https-only source link, old pages restyled ----------
+
+OLD_PAGE = """<!DOCTYPE html><html lang="en"><head><title>Old - IT Breakdown - Scout Daily</title><style>
+:root{--accent:#6366f1;--text-muted:#64748b}.badge{font-size:10px}</style></head><body>
+<div class="topbar"><a href="../index.html" class="brand-link">Scout Daily</a><a href="../index.html" class="back-btn">← Back to feed</a></div>
+<div class="page-wrap">
+  <div class="badge">IT Engineer Breakdown</div>
+  <h1 class="page-title">Edge AI & robots</h1>
+  <div class="meta-line">Ars Technica · 2026-10-01 · Generated 01 Oct 2026, 09:00</div>
+  <a href="https://example.test/story?a=1&b=2" target="_blank" class="source-link">View Original Source →</a>
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Detailed Summary</div></div>
+  <div class="summary-body"><p>Latency (<10 ms) and throughput (>1 TB/day).</p><p>Second para.</p></div>
+  <div class="divider"></div>
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">IT Engineer Application Guide</div></div>
+  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Step one
+   - Step two</div></div>
+<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">Data residency.</div></div></div>
+  <div class="generated-note">AI-generated breakdown · Scout Daily · 01 Oct 2026, 09:00</div>
+</div></body></html>"""
+
+
+def breakdown(title="T", url="https://a.test/x", meta="Source · 2026-10-01", summary="S.", guide="1. EVALUATE - G."):
+    s, g = gb.parse_groq_response(f"{summary}\n---SPLIT---\n{guide}")
+    return gb.render_breakdown_page(title, "t", url, "Read", s, g, meta, "27 Oct 2026, 09:00")
+
+
+def test_breakdown_title_meta_url_summary_are_escaped():
+    page = breakdown(title=HOSTILE, meta=HOSTILE, url='https://a.test/"><script>alert(3)</script>', summary=HOSTILE)
+    assert "<script>" not in page and "<img" not in page
+    assert page.count("&lt;script&gt;alert(1)&lt;/script&gt;") == 4  # <title>, h1, meta line, summary
+    assert 'href="https://a.test/&quot;&gt;&lt;script&gt;alert(3)&lt;/script&gt;"' in page
+
+
+@pytest.mark.parametrize("url", ["javascript:alert(1)", " JavaScript:alert(1)", "data:text/html,x", "http://a.test", "", None])
+def test_only_https_becomes_a_source_link(url):
+    page = breakdown(url=url)
+    assert "source-link" not in page.split("</style>")[1] and "javascript:" not in page.lower()
+
+
+def test_https_source_link_is_noopener():
+    page = breakdown(url="https://a.test/x")
+    assert '<a href="https://a.test/x" target="_blank" rel="noopener noreferrer" class="source-link">' in page
+
+
+def test_breakdown_page_uses_f2_tokens():
+    page = breakdown()
+    css = page.split("<style>")[1].split("</style>")[0]
+    assert "--text-muted:#8592a8" in css and "--accent:#00ff88" in css and "#6366f1" not in css
+    assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
+    assert ".brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap)" in css
+    assert "--tap:44px" in css and "background-clip" not in css and not re.search(r"border-left:\s*[2-9]px", css)
+    assert "<main" in page and 'class="section-num"' not in page and 'class="badge"' not in page
+
+
+def test_old_page_restyled_keeps_its_text():
+    new = gb.restyle_page(OLD_PAGE)
+    assert new and "--text-muted:#8592a8" in new and "#6366f1" not in new and 'class="badge"' not in new
+    assert '<h1 class="page-title">Edge AI &amp; robots</h1>' in new
+    assert '<p class="meta-line">Ars Technica · 2026-10-01 · Generated 01 Oct 2026, 09:00</p>' in new
+    assert '<p>Latency (&lt;10 ms) and throughput (&gt;1 TB/day).</p><p>Second para.</p>' in new
+    assert '<h3 class="guide-label">Evaluate</h3><div class="guide-text">- Step one\n   - Step two</div>' in new
+    assert '<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3>' in new
+    assert 'href="https://example.test/story?a=1&amp;b=2" target="_blank" rel="noopener noreferrer"' in new
+    assert "AI-generated breakdown · Scout Daily · 01 Oct 2026, 09:00" in new
+
+
+def test_restyle_leaves_unknown_pages_alone(tmp_path):
+    (tmp_path / "odd.html").write_text("<html><body>hand-made</body></html>")
+    (tmp_path / "old.html").write_text(OLD_PAGE)
+    assert gb.restyle_existing_pages(tmp_path) == (1, ["odd.html"])
+    assert (tmp_path / "odd.html").read_text() == "<html><body>hand-made</body></html>"
+
+
+def test_every_committed_breakdown_page_has_the_new_style():
+    pages = sorted((ROOT / "site" / "breakdowns").glob("*.html"))
+    assert pages
+    stale = [p.name for p in pages if "--text-muted:#8592a8" not in p.read_text() or "#6366f1" in p.read_text()]
+    assert stale == []

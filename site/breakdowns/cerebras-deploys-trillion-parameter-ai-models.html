@@ -5,84 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cerebras Deploys Trillion-Parameter AI Models - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Cerebras Deploys Trillion-Parameter AI Models</h1>
-  <div class="meta-line">Hacker News · 25 Oct 202 · Generated 25 Oct 2026, 13:31</div>
-  <a href="https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Cerebras Systems has announced that its latest wafer‑scale engine, the WSE‑3T, can run multi‑trillion‑parameter models such as the open‑source Kimi K3. The company demonstrated that by partitioning the model across 59 individual wafers, the system can achieve inference rates of 1,000–2,000 tokens per second using 4‑bit quantization and a highly efficient key‑value (KV) cache. The post details the memory layout, layer mapping, and inter‑wafer RDMA communication required to maintain throughput. For enterprise IT teams, this represents a potential shift in how large‑scale models are deployed. Traditional GPU or ASIC clusters often require multiple nodes and complex interconnects; the WSE‑3T consolidates the entire model onto a single wafer‑scale chip, reducing network overhead and simplifying scaling. Vendors such as NVIDIA, AMD, and Intel are still dominant in the GPU space, but Cerebras is positioning itself as a direct competitor for high‑parameter workloads. The broader industry implication is a possible acceleration of the trend toward specialized hardware that can host entire models in‑silicon, which could lower inference latency, reduce cloud egress costs, and enable new use cases such as real‑time analytics on edge devices. Enterprises that currently rely on cloud‑based inference for large language models may need to reassess their cost models and evaluate whether on‑prem wafer‑scale solutions can deliver comparable or better performance per watt. The announcement also highlights the importance of software stack readiness: model partitioning, RDMA communication, and 4‑bit quantization support must be integrated into existing pipelines. If these capabilities mature, organizations could transition from multi‑node GPU clusters to single‑chip deployments, simplifying operations and potentially improving security by keeping data on‑prem.</p></div>
+  <p class="meta-line">Hacker News · 25 Oct 202 · Generated 25 Oct 2026, 13:31</p>
+  <a href="https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Cerebras Systems has announced that its latest wafer‑scale engine, the WSE‑3T, can run multi‑trillion‑parameter models such as the open‑source Kimi K3. The company demonstrated that by partitioning the model across 59 individual wafers, the system can achieve inference rates of 1,000–2,000 tokens per second using 4‑bit quantization and a highly efficient key‑value (KV) cache. The post details the memory layout, layer mapping, and inter‑wafer RDMA communication required to maintain throughput. For enterprise IT teams, this represents a potential shift in how large‑scale models are deployed. Traditional GPU or ASIC clusters often require multiple nodes and complex interconnects; the WSE‑3T consolidates the entire model onto a single wafer‑scale chip, reducing network overhead and simplifying scaling. Vendors such as NVIDIA, AMD, and Intel are still dominant in the GPU space, but Cerebras is positioning itself as a direct competitor for high‑parameter workloads. The broader industry implication is a possible acceleration of the trend toward specialized hardware that can host entire models in‑silicon, which could lower inference latency, reduce cloud egress costs, and enable new use cases such as real‑time analytics on edge devices. Enterprises that currently rely on cloud‑based inference for large language models may need to reassess their cost models and evaluate whether on‑prem wafer‑scale solutions can deliver comparable or better performance per watt. The announcement also highlights the importance of software stack readiness: model partitioning, RDMA communication, and 4‑bit quantization support must be integrated into existing pipelines. If these capabilities mature, organizations could transition from multi‑node GPU clusters to single‑chip deployments, simplifying operations and potentially improving security by keeping data on‑prem.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Audit current inference workloads: identify models >10B parameters, latency targets, and throughput requirements.  
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current inference workloads: identify models &gt;10B parameters, latency targets, and throughput requirements.  
    - Measure existing GPU/ASIC cluster performance (TFLOPs, memory bandwidth, RDMA latency).  
    - Inventory software stack: model quantization support, KV cache implementation, and inter‑node communication libraries.  
    - Assess data residency and compliance constraints (e.g., UK GDPR) for on‑prem vs. cloud deployments.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit analysis: compute total cost of ownership (TCO) for WSE‑3T vs. current GPU fleet (hardware, power, cooling, maintenance).  
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit analysis: compute total cost of ownership (TCO) for WSE‑3T vs. current GPU fleet (hardware, power, cooling, maintenance).  
    - Include performance metrics: tokens per second, latency reduction, energy per inference.  
    - Highlight potential savings from reduced cloud egress and lower operational overhead.  
    - Present a phased pilot plan with clear KPIs (e.g., 30% latency reduction in 90 days).</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Cerebras WSE‑3T (hardware).  
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Cerebras WSE‑3T (hardware).  
    - Cerebras CS SDK and Cerebras Model Compiler for partitioning and quantization.  
    - RDMA networking stacks (e.g., Mellanox InfiniBand) for inter‑wafer communication.  
    - Existing model frameworks that support 4‑bit quantization (e.g., Hugging Face Transformers, ONNX Runtime).  
    - Monitoring tools: Cerebras Insight, Prometheus + Grafana for performance telemetry.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Model partitioning complexity, potential bottlenecks in RDMA inter‑wafer traffic, limited support for certain model architectures.  
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Model partitioning complexity, potential bottlenecks in RDMA inter‑wafer traffic, limited support for certain model architectures.  
    - Compliance: Ensuring that on‑prem deployment satisfies UK GDPR data handling and audit requirements; risk of vendor lock‑in.  
    - Operational: Need for specialized training for ops staff, potential downtime during migration, and limited community support compared to GPU ecosystems.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Run a proof‑of‑concept on a 1‑trillion‑parameter subset of Kimi K3 using the WSE‑3T demo kit.  
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Run a proof‑of‑concept on a 1‑trillion‑parameter subset of Kimi K3 using the WSE‑3T demo kit.  
    - Measure baseline latency and throughput on existing GPU cluster, then compare with WSE‑3T results.  
    - Document findings and share with stakeholders within 30 days to validate performance claims.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">LONG‑TERM PLAY
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">LONG‑TERM PLAY
    - Over 6–12 months, develop an internal migration framework: model conversion pipelines, automated partitioning scripts, and RDMA configuration templates.  
    - Scale to full production workloads, integrating with existing CI/CD and monitoring systems.  
    - Explore hybrid deployments: keep smaller models on GPUs for cost efficiency while reserving WSE‑3T for the largest inference tasks.  
    - Engage with Cerebras for joint roadmap planning and potential co‑development of custom kernels to further reduce latency and power consumption.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 25 Oct 2026, 13:31</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 25 Oct 2026, 13:31</p>
+</main>
 </body>
 </html>

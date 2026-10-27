@@ -5,66 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google’s AI Mode now lets you link and interact with select apps - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Google’s AI Mode now lets you link and interact with select apps</h1>
-  <div class="meta-line">TechCrunch · 16 Jul 202 · Generated 16 Jul 2026, 19:26</div>
-  <a href="https://techcrunch.com/2026/07/16/googles-ai-mode-now-lets-you-link-and-interact-with-select-apps/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Google has updated its AI Mode to enable linking and interacting with select apps, allowing the AI to complete tasks across popular apps and enhancing user experience with automation and integration. This update matters for enterprise IT teams as it has the potential to increase productivity and efficiency by automating tasks and workflows. The vendors involved in this update are Google and the select app providers that have integrated with Google's AI Mode. The broader industry implications of this update are the increased adoption of artificial intelligence and machine learning in enterprise environments, and the potential for other vendors to follow suit and integrate their apps with AI platforms. This update also highlights the importance of integration and interoperability in enterprise environments, and the need for IT teams to assess their current workflows and identify areas where automation and integration can be implemented. The update also raises questions about data security and compliance, as IT teams will need to ensure that any integration with Google's AI Mode meets regulatory requirements. The select apps that have been integrated with Google's AI Mode have not been specified, but it is likely that they are popular productivity and collaboration apps. The update is likely to be of interest to IT teams that are looking to increase productivity and efficiency, and are exploring the use of artificial intelligence and machine learning in their environments.</p><p>The update also has implications for IT teams in terms of skills and training, as they will need to have the necessary expertise to integrate and manage AI-powered workflows. IT teams will also need to assess their current infrastructure and ensure that it is capable of supporting AI-powered workflows. The update is also likely to drive further innovation and investment in the area of artificial intelligence and machine learning, as vendors seek to develop new and innovative solutions that can be integrated with AI platforms. Overall, the update is a significant development in the area of artificial intelligence and machine learning, and has the potential to have a major impact on enterprise IT environments.</p></div>
+  <p class="meta-line">TechCrunch · 16 Jul 202 · Generated 16 Jul 2026, 19:26</p>
+  <a href="https://techcrunch.com/2026/07/16/googles-ai-mode-now-lets-you-link-and-interact-with-select-apps/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Google has updated its AI Mode to enable linking and interacting with select apps, allowing the AI to complete tasks across popular apps and enhancing user experience with automation and integration. This update matters for enterprise IT teams as it has the potential to increase productivity and efficiency by automating tasks and workflows. The vendors involved in this update are Google and the select app providers that have integrated with Google&#x27;s AI Mode. The broader industry implications of this update are the increased adoption of artificial intelligence and machine learning in enterprise environments, and the potential for other vendors to follow suit and integrate their apps with AI platforms. This update also highlights the importance of integration and interoperability in enterprise environments, and the need for IT teams to assess their current workflows and identify areas where automation and integration can be implemented. The update also raises questions about data security and compliance, as IT teams will need to ensure that any integration with Google&#x27;s AI Mode meets regulatory requirements. The select apps that have been integrated with Google&#x27;s AI Mode have not been specified, but it is likely that they are popular productivity and collaboration apps. The update is likely to be of interest to IT teams that are looking to increase productivity and efficiency, and are exploring the use of artificial intelligence and machine learning in their environments.</p><p>The update also has implications for IT teams in terms of skills and training, as they will need to have the necessary expertise to integrate and manage AI-powered workflows. IT teams will also need to assess their current infrastructure and ensure that it is capable of supporting AI-powered workflows. The update is also likely to drive further innovation and investment in the area of artificial intelligence and machine learning, as vendors seek to develop new and innovative solutions that can be integrated with AI platforms. Overall, the update is a significant development in the area of artificial intelligence and machine learning, and has the potential to have a major impact on enterprise IT environments.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">To assess the potential impact of Google's AI Mode update on your current environment, audit your current workflows and identify areas where automation and integration can be implemented. Assess your current infrastructure and ensure that it is capable of supporting AI-powered workflows. Evaluate your current skills and training programs to ensure that IT staff have the necessary expertise to integrate and manage AI-powered workflows.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">To build a business case for leadership, propose a pilot project that implements Google's AI Mode in a specific workflow or department. Use metrics such as productivity gains, cost savings, and user satisfaction to measure the success of the pilot project. Benchmark your organization against industry peers and leaders to demonstrate the potential benefits of adopting AI-powered workflows.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">Consider using Google's AI Mode, as well as other AI platforms such as Microsoft Power Automate and IBM Watson. Also consider using integration platforms such as MuleSoft and Zapier to integrate Google's AI Mode with other apps and workflows.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">Flag technical risks such as data security and compliance, as well as operational risks such as workflow disruption and user adoption. Also flag compliance risks such as UK GDPR, and ensure that any integration with Google's AI Mode meets regulatory requirements.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">Implement a simple automation workflow using Google's AI Mode in under 30 days, such as automating a routine task or workflow. Use this quick win to demonstrate the potential benefits of AI-powered workflows and to build momentum for further adoption.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">Develop a 6-12 month strategic plan to implement AI-powered workflows across the organization, using Google's AI Mode and other AI platforms. Identify key workflows and departments to target, and develop a roadmap for implementation and adoption. Ensure that the plan includes adequate training and support for IT staff and users, and that it addresses any technical, operational, and compliance risks.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 16 Jul 2026, 19:26</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">To assess the potential impact of Google&#x27;s AI Mode update on your current environment, audit your current workflows and identify areas where automation and integration can be implemented. Assess your current infrastructure and ensure that it is capable of supporting AI-powered workflows. Evaluate your current skills and training programs to ensure that IT staff have the necessary expertise to integrate and manage AI-powered workflows.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">To build a business case for leadership, propose a pilot project that implements Google&#x27;s AI Mode in a specific workflow or department. Use metrics such as productivity gains, cost savings, and user satisfaction to measure the success of the pilot project. Benchmark your organization against industry peers and leaders to demonstrate the potential benefits of adopting AI-powered workflows.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Consider using Google&#x27;s AI Mode, as well as other AI platforms such as Microsoft Power Automate and IBM Watson. Also consider using integration platforms such as MuleSoft and Zapier to integrate Google&#x27;s AI Mode with other apps and workflows.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">Flag technical risks such as data security and compliance, as well as operational risks such as workflow disruption and user adoption. Also flag compliance risks such as UK GDPR, and ensure that any integration with Google&#x27;s AI Mode meets regulatory requirements.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Implement a simple automation workflow using Google&#x27;s AI Mode in under 30 days, such as automating a routine task or workflow. Use this quick win to demonstrate the potential benefits of AI-powered workflows and to build momentum for further adoption.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Develop a 6-12 month strategic plan to implement AI-powered workflows across the organization, using Google&#x27;s AI Mode and other AI platforms. Identify key workflows and departments to target, and develop a roadmap for implementation and adoption. Ensure that the plan includes adequate training and support for IT staff and users, and that it addresses any technical, operational, and compliance risks.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 16 Jul 2026, 19:26</p>
+</main>
 </body>
 </html>

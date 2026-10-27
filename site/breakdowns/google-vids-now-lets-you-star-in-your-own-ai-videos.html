@@ -5,66 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Vids now lets you star in your own AI videos - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Google Vids now lets you star in your own AI videos</h1>
-  <div class="meta-line">TechCrunch · 16 Jul 202 · Generated 16 Jul 2026, 19:26</div>
-  <a href="https://techcrunch.com/2026/07/16/google-vids-now-lets-you-star-in-your-own-ai-videos/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Google's Vids platform has integrated AI-powered personalized avatars and Gemini Omni tools for video generation and editing, allowing users to star in their own AI-driven videos. This development matters for enterprise IT teams as it has the potential to revolutionize the way companies create and disseminate video content. The integration of AI-powered avatars and video generation tools can help reduce the time and resources required to produce high-quality video content, making it more accessible to businesses of all sizes. The vendors involved in this development are Google and Gemini, with the latter providing the Omni tools for video generation and editing. The broader industry implications of this development are significant, as it has the potential to disrupt the traditional video production industry and create new opportunities for businesses to engage with their customers through personalized video content. Enterprise IT teams should take note of this development and assess its potential impact on their organization's video content strategy. The use of AI-powered avatars and video generation tools can also raise concerns around data privacy and security, particularly in light of regulations such as the UK GDPR. As such, enterprise IT teams should carefully evaluate the potential risks and benefits of adopting this technology.</p><p>The integration of AI-powered personalized avatars and video generation tools can also have significant implications for industries such as marketing, advertising, and education. For example, businesses can use AI-powered avatars to create personalized product demos, while educational institutions can use them to create interactive and engaging video content for students. The use of AI-powered avatars can also help to increase accessibility and inclusivity, as they can be used to create video content that is tailored to individual users' needs and preferences. Overall, the development of AI-powered personalized avatars and video generation tools has the potential to transform the way businesses create and engage with video content, and enterprise IT teams should be aware of the potential opportunities and challenges that this technology presents.</p></div>
+  <p class="meta-line">TechCrunch · 16 Jul 202 · Generated 16 Jul 2026, 19:26</p>
+  <a href="https://techcrunch.com/2026/07/16/google-vids-now-lets-you-star-in-your-own-ai-videos/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Google&#x27;s Vids platform has integrated AI-powered personalized avatars and Gemini Omni tools for video generation and editing, allowing users to star in their own AI-driven videos. This development matters for enterprise IT teams as it has the potential to revolutionize the way companies create and disseminate video content. The integration of AI-powered avatars and video generation tools can help reduce the time and resources required to produce high-quality video content, making it more accessible to businesses of all sizes. The vendors involved in this development are Google and Gemini, with the latter providing the Omni tools for video generation and editing. The broader industry implications of this development are significant, as it has the potential to disrupt the traditional video production industry and create new opportunities for businesses to engage with their customers through personalized video content. Enterprise IT teams should take note of this development and assess its potential impact on their organization&#x27;s video content strategy. The use of AI-powered avatars and video generation tools can also raise concerns around data privacy and security, particularly in light of regulations such as the UK GDPR. As such, enterprise IT teams should carefully evaluate the potential risks and benefits of adopting this technology.</p><p>The integration of AI-powered personalized avatars and video generation tools can also have significant implications for industries such as marketing, advertising, and education. For example, businesses can use AI-powered avatars to create personalized product demos, while educational institutions can use them to create interactive and engaging video content for students. The use of AI-powered avatars can also help to increase accessibility and inclusivity, as they can be used to create video content that is tailored to individual users&#x27; needs and preferences. Overall, the development of AI-powered personalized avatars and video generation tools has the potential to transform the way businesses create and engage with video content, and enterprise IT teams should be aware of the potential opportunities and challenges that this technology presents.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">Before acting on this development, enterprise IT teams should audit their current video content strategy and assess the potential benefits and risks of adopting AI-powered personalized avatars and video generation tools. This should include an evaluation of the organization's current video production workflows, as well as its data privacy and security policies.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">To build a business case for leadership, enterprise IT teams can propose a pilot project to test the use of AI-powered personalized avatars and video generation tools. This can include metrics such as the time and cost savings associated with using AI-powered video generation tools, as well as the potential increase in customer engagement and retention.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">Enterprise IT teams should consider tools such as Google's Vids platform, Gemini Omni, and other AI-powered video generation and editing platforms. They should also evaluate the integration of these tools with their existing video content management systems and workflows.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">The technical risks associated with adopting AI-powered personalized avatars and video generation tools include the potential for data breaches and cyber attacks, as well as the risk of AI-generated content being used for malicious purposes. Compliance risks include the potential for non-compliance with regulations such as the UK GDPR, particularly in relation to data privacy and security.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">A quick win for enterprise IT teams can be to use AI-powered video generation tools to create personalized video content for a specific marketing campaign or product launch. This can be achieved in under 30 days and can help to demonstrate the potential benefits of adopting this technology.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">The long-term play for enterprise IT teams is to develop a comprehensive video content strategy that incorporates AI-powered personalized avatars and video generation tools. This can include the development of new workflows and policies for the creation and dissemination of video content, as well as the integration of AI-powered video generation tools with existing systems and platforms. This can help to drive business transformation and innovation, and can help to establish the organization as a leader in the use of AI-powered video content.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 16 Jul 2026, 19:26</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">Before acting on this development, enterprise IT teams should audit their current video content strategy and assess the potential benefits and risks of adopting AI-powered personalized avatars and video generation tools. This should include an evaluation of the organization&#x27;s current video production workflows, as well as its data privacy and security policies.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">To build a business case for leadership, enterprise IT teams can propose a pilot project to test the use of AI-powered personalized avatars and video generation tools. This can include metrics such as the time and cost savings associated with using AI-powered video generation tools, as well as the potential increase in customer engagement and retention.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Enterprise IT teams should consider tools such as Google&#x27;s Vids platform, Gemini Omni, and other AI-powered video generation and editing platforms. They should also evaluate the integration of these tools with their existing video content management systems and workflows.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">The technical risks associated with adopting AI-powered personalized avatars and video generation tools include the potential for data breaches and cyber attacks, as well as the risk of AI-generated content being used for malicious purposes. Compliance risks include the potential for non-compliance with regulations such as the UK GDPR, particularly in relation to data privacy and security.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">A quick win for enterprise IT teams can be to use AI-powered video generation tools to create personalized video content for a specific marketing campaign or product launch. This can be achieved in under 30 days and can help to demonstrate the potential benefits of adopting this technology.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">The long-term play for enterprise IT teams is to develop a comprehensive video content strategy that incorporates AI-powered personalized avatars and video generation tools. This can include the development of new workflows and policies for the creation and dissemination of video content, as well as the integration of AI-powered video generation tools with existing systems and platforms. This can help to drive business transformation and innovation, and can help to establish the organization as a leader in the use of AI-powered video content.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 16 Jul 2026, 19:26</p>
+</main>
 </body>
 </html>

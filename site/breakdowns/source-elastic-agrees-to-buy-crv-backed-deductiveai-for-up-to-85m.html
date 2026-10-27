@@ -5,68 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Source: Elastic agrees to buy CRV-backed DeductiveAI for up to $85M - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Source: Elastic agrees to buy CRV-backed DeductiveAI for up to $85M</h1>
-  <div class="meta-line">TechCrunch · 19 Jun 202 · Generated 19 Jun 2026, 10:53</div>
-  <a href="https://techcrunch.com/2026/06/18/source-elastic-agrees-to-buy-crv-backed-deductiveai-for-up-to-85m/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Elastic has agreed to acquire DeductiveAI, a startup that utilizes artificial intelligence to detect and resolve bugs in software, for a maximum amount of $85 million. This acquisition is significant for enterprise IT teams as it is likely to integrate AI-powered bug detection and resolution capabilities into Elastic's toolset, enhancing the company's existing offerings. The integration of DeductiveAI's technology will enable Elastic to provide more comprehensive solutions for its customers, improving their ability to identify and fix issues in their software. 
+  <p class="meta-line">TechCrunch · 19 Jun 202 · Generated 19 Jun 2026, 10:53</p>
+  <a href="https://techcrunch.com/2026/06/18/source-elastic-agrees-to-buy-crv-backed-deductiveai-for-up-to-85m/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Elastic has agreed to acquire DeductiveAI, a startup that utilizes artificial intelligence to detect and resolve bugs in software, for a maximum amount of $85 million. This acquisition is significant for enterprise IT teams as it is likely to integrate AI-powered bug detection and resolution capabilities into Elastic&#x27;s toolset, enhancing the company&#x27;s existing offerings. The integration of DeductiveAI&#x27;s technology will enable Elastic to provide more comprehensive solutions for its customers, improving their ability to identify and fix issues in their software. 
 The vendors involved in this acquisition are Elastic and DeductiveAI, with the former being a well-established player in the enterprise search and analytics market. The broader industry implications of this acquisition are that it highlights the growing importance of AI-powered bug detection and resolution in the software development lifecycle. As software systems become increasingly complex, the need for automated tools that can identify and fix issues quickly and efficiently is becoming more pressing. 
-This acquisition is also indicative of the trend towards consolidation in the software development and analytics markets, with larger companies acquiring smaller startups to enhance their capabilities and expand their offerings. For enterprise IT teams, this acquisition matters as it may impact their existing toolsets and workflows, particularly if they are already using Elastic's products. They should monitor Elastic's roadmap and announcements to understand how the integration of DeductiveAI's technology will affect their operations.</p></div>
+This acquisition is also indicative of the trend towards consolidation in the software development and analytics markets, with larger companies acquiring smaller startups to enhance their capabilities and expand their offerings. For enterprise IT teams, this acquisition matters as it may impact their existing toolsets and workflows, particularly if they are already using Elastic&#x27;s products. They should monitor Elastic&#x27;s roadmap and announcements to understand how the integration of DeductiveAI&#x27;s technology will affect their operations.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">Before acting on this news, audit your current environment to assess your existing bug detection and resolution processes, including any tools or platforms you are currently using. Identify areas where AI-powered bug detection and resolution could bring the most value to your organization.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">Build a business case for leadership by highlighting the potential benefits of integrating AI-powered bug detection and resolution into your workflows, such as reduced downtime, improved software quality, and increased developer productivity. Use metrics such as mean time to detect (MTTD) and mean time to resolve (MTTR) to quantify the potential impact.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">Consider tools and platforms from vendors such as Elastic, DeductiveAI, and other providers of AI-powered bug detection and resolution solutions. Evaluate their capabilities, scalability, and integration with your existing toolsets.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">Flag technical risks such as integration challenges, data quality issues, and potential disruptions to existing workflows. Also, consider compliance risks, particularly if you are subject to UK GDPR, and ensure that any new tools or platforms you introduce comply with relevant regulations.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">Achieve a quick win by implementing a pilot project to test AI-powered bug detection and resolution tools, such as those offered by DeductiveAI, and evaluate their effectiveness in a controlled environment. This can be achieved in under 30 days and will provide valuable insights into the potential benefits and challenges of integrating these tools into your workflows.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">The long-term play is to develop a strategic plan for integrating AI-powered bug detection and resolution into your organization's software development lifecycle, including training and support for developers, and ongoing evaluation and refinement of the tools and processes used. This will require a 6-12 month investment of time and resources but has the potential to bring significant benefits to your organization.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 19 Jun 2026, 10:53</div>
-</div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">Before acting on this news, audit your current environment to assess your existing bug detection and resolution processes, including any tools or platforms you are currently using. Identify areas where AI-powered bug detection and resolution could bring the most value to your organization.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">Build a business case for leadership by highlighting the potential benefits of integrating AI-powered bug detection and resolution into your workflows, such as reduced downtime, improved software quality, and increased developer productivity. Use metrics such as mean time to detect (MTTD) and mean time to resolve (MTTR) to quantify the potential impact.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Consider tools and platforms from vendors such as Elastic, DeductiveAI, and other providers of AI-powered bug detection and resolution solutions. Evaluate their capabilities, scalability, and integration with your existing toolsets.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">Flag technical risks such as integration challenges, data quality issues, and potential disruptions to existing workflows. Also, consider compliance risks, particularly if you are subject to UK GDPR, and ensure that any new tools or platforms you introduce comply with relevant regulations.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Achieve a quick win by implementing a pilot project to test AI-powered bug detection and resolution tools, such as those offered by DeductiveAI, and evaluate their effectiveness in a controlled environment. This can be achieved in under 30 days and will provide valuable insights into the potential benefits and challenges of integrating these tools into your workflows.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">The long-term play is to develop a strategic plan for integrating AI-powered bug detection and resolution into your organization&#x27;s software development lifecycle, including training and support for developers, and ongoing evaluation and refinement of the tools and processes used. This will require a 6-12 month investment of time and resources but has the potential to bring significant benefits to your organization.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 19 Jun 2026, 10:53</p>
+</main>
 </body>
 </html>

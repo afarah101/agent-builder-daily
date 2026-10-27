@@ -5,86 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How Third Moment Research runs 10,000 agents for 36+ hours - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">How Third Moment Research runs 10,000 agents for 36+ hours</h1>
-  <div class="meta-line">OpenAI · 14 Oct 202 · Generated 14 Oct 2026, 21:33</div>
-  <a href="https://openai.com/index/third-moment-research" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>OpenAI has released GPT‑6 variants, Astra and 6.1 Sol, that can run autonomous agents continuously for more than 36 hours. In a lab demonstration, the agents maintained focus, persisted through task cycles, and improved their performance over time. The capability is positioned to enhance cybersecurity operations by automating threat detection, incident triage, and response workflows. For enterprise IT teams, this means a potential shift from manual, reactive processes to proactive, AI‑driven monitoring. The announcement directly impacts security operations platforms such as CrowdStrike, Microsoft Azure Sentinel, and any endpoint‑security orchestration that relies on playbooks and automation. Vendors that provide SIEM, SOAR, and EDR solutions will need to evaluate integration points with GPT‑6 agents, as the new models can ingest logs, correlate events, and generate actionable recommendations without human intervention. The broader industry implication is a tightening of the AI‑security convergence, where AI models become first‑line defenders. Organizations that delay adoption risk falling behind competitors who can reduce manual triage time, lower false positives, and accelerate incident containment. The announcement also raises questions about model governance, data privacy, and compliance, especially in regulated environments. OpenAI’s approach to long‑running agents suggests that future security tools will increasingly embed large language models as core components, demanding new skill sets, governance frameworks, and operational procedures from IT and security teams.</p></div>
+  <p class="meta-line">OpenAI · 14 Oct 202 · Generated 14 Oct 2026, 21:33</p>
+  <a href="https://openai.com/index/third-moment-research" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>OpenAI has released GPT‑6 variants, Astra and 6.1 Sol, that can run autonomous agents continuously for more than 36 hours. In a lab demonstration, the agents maintained focus, persisted through task cycles, and improved their performance over time. The capability is positioned to enhance cybersecurity operations by automating threat detection, incident triage, and response workflows. For enterprise IT teams, this means a potential shift from manual, reactive processes to proactive, AI‑driven monitoring. The announcement directly impacts security operations platforms such as CrowdStrike, Microsoft Azure Sentinel, and any endpoint‑security orchestration that relies on playbooks and automation. Vendors that provide SIEM, SOAR, and EDR solutions will need to evaluate integration points with GPT‑6 agents, as the new models can ingest logs, correlate events, and generate actionable recommendations without human intervention. The broader industry implication is a tightening of the AI‑security convergence, where AI models become first‑line defenders. Organizations that delay adoption risk falling behind competitors who can reduce manual triage time, lower false positives, and accelerate incident containment. The announcement also raises questions about model governance, data privacy, and compliance, especially in regulated environments. OpenAI’s approach to long‑running agents suggests that future security tools will increasingly embed large language models as core components, demanding new skill sets, governance frameworks, and operational procedures from IT and security teams.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory current incident‑response playbooks and automation scripts in your SOAR platform.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory current incident‑response playbooks and automation scripts in your SOAR platform.
    - Identify data sources (logs, threat intel feeds, endpoint telemetry) that are currently fed into playbooks.
    - Assess the capacity of your existing infrastructure to host or proxy GPT‑6 agents (CPU, GPU, memory, network latency).
    - Review compliance requirements (UK GDPR, CCPA, PCI‑DSS) for any data that would be processed by an external AI model.
    - Map out the current triage workload: number of alerts, mean time to acknowledge (MTTA), mean time to resolve (MTTR).</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a business case around MTTR reduction: estimate a 20–30% decrease in MTTR if GPT‑6 agents handle initial triage.
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case around MTTR reduction: estimate a 20–30% decrease in MTTR if GPT‑6 agents handle initial triage.
    - Quantify labor savings: calculate hours saved per analyst per month based on current alert volume.
    - Include cost of GPT‑6 API usage (per 1,000 tokens) and compare to existing automation tooling costs.
    - Present a risk‑benefit matrix: potential for improved detection accuracy versus data privacy concerns.
    - Highlight competitive advantage: faster incident containment and reduced exposure to ransomware or data exfiltration.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Microsoft Azure Sentinel (SIEM/SOAR) – native integration points for custom connectors.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Microsoft Azure Sentinel (SIEM/SOAR) – native integration points for custom connectors.
    - CrowdStrike Falcon X – endpoint telemetry and threat intel feeds.
    - Palo Alto Networks Cortex XSOAR – playbook orchestration.
    - OpenAI GPT‑6 API – for agent deployment and fine‑tuning.
    - Data Lake or Azure Data Explorer – for storing agent logs and training data.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: API latency, token limits, model drift, and dependency on external service uptime.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: API latency, token limits, model drift, and dependency on external service uptime.
    - Compliance: GDPR data residency, consent for processing logs, and potential breach of personal data.
    - Operational: Overreliance on AI leading to missed alerts, lack of explainability, and difficulty in auditing decisions.
    - Security: API key exposure, potential for malicious prompt injection, and ensuring secure communication channels.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a sandboxed GPT‑6 agent to run a single, high‑volume alert type (e.g., phishing email detection) for 48 hours.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a sandboxed GPT‑6 agent to run a single, high‑volume alert type (e.g., phishing email detection) for 48 hours.
    - Collect metrics on false positives, MTTA, and analyst feedback.
    - Use the results to refine the prompt and fine‑tune the model before scaling.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, integrate GPT‑6 agents into the core incident‑response workflow: triage, containment, and post‑mortem analysis.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, integrate GPT‑6 agents into the core incident‑response workflow: triage, containment, and post‑mortem analysis.
    - Develop a governance framework for model updates, data handling, and audit trails.
    - Train analysts on interpreting AI recommendations and on prompt engineering best practices.
    - Expand the agent’s scope to cover threat hunting, vulnerability management, and compliance reporting, ensuring continuous improvement through feedback loops and model retraining.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 14 Oct 2026, 21:33</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 14 Oct 2026, 21:33</p>
+</main>
 </body>
 </html>

@@ -5,84 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Roku developer repositories moved from GitHub to GitLab - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Roku developer repositories moved from GitHub to GitLab</h1>
-  <div class="meta-line">Hacker News · 24 Oct 202 · Generated 24 Oct 2026, 19:42</div>
-  <a href="https://blog.roku.com/developer/gitlab-move" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>Roku has announced that all of its public developer repositories will be migrated from GitHub to GitLab. The move is a strategic decision to consolidate its source‑code hosting on a single platform that offers tighter integration with its internal tooling and a more flexible licensing model. For enterprise IT teams, the shift means that any automated processes—CI/CD pipelines, webhooks, vulnerability scanners, or third‑party integrations—that currently reference Roku’s GitHub URLs will break unless updated to point to the new GitLab endpoints. The impact is immediate: build failures, missing code updates, and stale security alerts can surface within hours of the migration.</p><p>The vendors involved are GitHub (the previous host) and GitLab (the new host). Both platforms expose REST and GraphQL APIs, but GitLab’s API endpoints differ in authentication, pagination, and event payloads. If your organization uses GitHub‑centric tools such as GitHub Actions, Dependabot, or third‑party CI services that rely on GitHub webhooks, those will need re‑configuration. Additionally, any security scanners that pull data from GitHub’s public API (e.g., Snyk, GitHub CodeQL) will lose visibility into Roku’s code until they are pointed at GitLab.</p><p>Industry implications are significant. The migration underscores a broader trend of vendors moving away from GitHub’s open‑source dominance toward self‑hosted or alternative SaaS solutions that offer more control over data residency and compliance. Enterprises that rely on public repositories for integration, testing, or compliance will need to audit their tooling dependencies more rigorously. The shift also signals to the market that GitLab’s feature set—particularly its built‑in CI/CD, issue tracking, and security scanning—continues to attract large players, potentially accelerating adoption among other SaaS providers.</p><p>For IT teams, the key takeaway is to perform a rapid inventory of all references to Roku’s GitHub repositories, update webhook URLs, re‑configure CI/CD pipelines, and adjust any vulnerability scanning workflows. Failure to do so can result in build breakage, delayed code reviews, and exposure to unpatched vulnerabilities. The migration also presents an opportunity to evaluate whether your organization’s current GitHub usage aligns with your security and compliance posture, and whether a shift to GitLab or a hybrid model might better serve your needs.</p></div>
+  <p class="meta-line">Hacker News · 24 Oct 202 · Generated 24 Oct 2026, 19:42</p>
+  <a href="https://blog.roku.com/developer/gitlab-move" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Roku has announced that all of its public developer repositories will be migrated from GitHub to GitLab. The move is a strategic decision to consolidate its source‑code hosting on a single platform that offers tighter integration with its internal tooling and a more flexible licensing model. For enterprise IT teams, the shift means that any automated processes—CI/CD pipelines, webhooks, vulnerability scanners, or third‑party integrations—that currently reference Roku’s GitHub URLs will break unless updated to point to the new GitLab endpoints. The impact is immediate: build failures, missing code updates, and stale security alerts can surface within hours of the migration.</p><p>The vendors involved are GitHub (the previous host) and GitLab (the new host). Both platforms expose REST and GraphQL APIs, but GitLab’s API endpoints differ in authentication, pagination, and event payloads. If your organization uses GitHub‑centric tools such as GitHub Actions, Dependabot, or third‑party CI services that rely on GitHub webhooks, those will need re‑configuration. Additionally, any security scanners that pull data from GitHub’s public API (e.g., Snyk, GitHub CodeQL) will lose visibility into Roku’s code until they are pointed at GitLab.</p><p>Industry implications are significant. The migration underscores a broader trend of vendors moving away from GitHub’s open‑source dominance toward self‑hosted or alternative SaaS solutions that offer more control over data residency and compliance. Enterprises that rely on public repositories for integration, testing, or compliance will need to audit their tooling dependencies more rigorously. The shift also signals to the market that GitLab’s feature set—particularly its built‑in CI/CD, issue tracking, and security scanning—continues to attract large players, potentially accelerating adoption among other SaaS providers.</p><p>For IT teams, the key takeaway is to perform a rapid inventory of all references to Roku’s GitHub repositories, update webhook URLs, re‑configure CI/CD pipelines, and adjust any vulnerability scanning workflows. Failure to do so can result in build breakage, delayed code reviews, and exposure to unpatched vulnerabilities. The migration also presents an opportunity to evaluate whether your organization’s current GitHub usage aligns with your security and compliance posture, and whether a shift to GitLab or a hybrid model might better serve your needs.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Run a search across all GitHub repositories, CI/CD configs, and webhook definitions for “roku.com” or specific Roku repo URLs.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Run a search across all GitHub repositories, CI/CD configs, and webhook definitions for “roku.com” or specific Roku repo URLs.
    - Identify all pipelines (GitHub Actions, Jenkins, GitLab CI, CircleCI) that reference Roku repos.
    - Audit vulnerability scanners (Snyk, GitHub CodeQL, Trivy) for data sources pointing to GitHub.
    - Map out any automated deployment scripts that pull code from GitHub via API calls.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Quantify the risk: estimate the number of build failures per week if repos remain on GitHub (e.g., 5 pipelines × 2 failures/day = 10 failures/week).
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the risk: estimate the number of build failures per week if repos remain on GitHub (e.g., 5 pipelines × 2 failures/day = 10 failures/week).
    - Calculate downtime cost: 10 failures × 30 minutes × $200/hr = $60,000/month.
    - Present a cost‑benefit: migration effort (2 weeks) vs. avoided downtime and compliance risk.
    - Include compliance metrics: potential GDPR violations if data remains on a platform with less granular control.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- GitLab Enterprise Edition (self‑hosted or SaaS) for hosting Roku repos.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- GitLab Enterprise Edition (self‑hosted or SaaS) for hosting Roku repos.
    - GitHub Enterprise Server for any remaining GitHub‑only workflows.
    - GitHub‑to‑GitLab migration tools (e.g., gitlab-migrate, git-filter-repo).
    - CI/CD orchestration tools that support both platforms (Jenkins, GitLab CI, Azure DevOps).
    - Vulnerability scanners that integrate with GitLab (Snyk, GitLab Security Dashboard).</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: webhook payload differences may break downstream services; authentication token mismatches.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: webhook payload differences may break downstream services; authentication token mismatches.
    - Compliance: GDPR data residency concerns if GitLab instance is hosted outside the EU; ensure proper data processing agreements.
    - Operational: potential downtime during migration; loss of commit history if migration scripts fail.
    - Security: temporary exposure of secrets if migration scripts are misconfigured.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Within 30 days, update all webhook URLs in GitHub to point to the new GitLab repo URLs.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Within 30 days, update all webhook URLs in GitHub to point to the new GitLab repo URLs.
    - Re‑configure one critical CI pipeline to use GitLab CI and validate a successful build.
    - Run a scan with Snyk against the new GitLab repo to confirm vulnerability data is still captured.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, evaluate a full migration of all internal GitHub usage to GitLab, including self‑hosting for sensitive repos.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, evaluate a full migration of all internal GitHub usage to GitLab, including self‑hosting for sensitive repos.
    - Implement a unified policy framework for repository hosting, access controls, and audit logging across platforms.
    - Integrate GitLab’s security dashboard into the enterprise risk management system to provide real‑time visibility.
    - Conduct periodic compliance reviews to ensure GDPR and other regulations are met with the chosen hosting model.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 24 Oct 2026, 19:42</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 24 Oct 2026, 19:42</p>
+</main>
 </body>
 </html>

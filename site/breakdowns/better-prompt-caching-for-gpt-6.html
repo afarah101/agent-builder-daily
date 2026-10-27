@@ -5,84 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Better prompt caching for GPT-6 - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Better prompt caching for GPT-6</h1>
-  <div class="meta-line">OpenAI · 22 Sep 202 · Generated 22 Sep 2026, 21:11</div>
-  <a href="https://openai.com/index/better-prompt-caching-for-gpt-6" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>OpenAI has released GPT‑6, a new generation of its large language model that introduces a comprehensive overhaul of prompt caching. The update increases cache hit rates, adds diagnostic tooling, and provides explicit breakpoints and controls that allow developers to fine‑tune when and how prompts are cached. The primary goal is to reduce latency and API costs, making interactions with the model more predictable and efficient. For enterprise IT teams, this means a direct impact on operational budgets and user experience, especially for workloads that involve repetitive or high‑volume prompt generation. The new caching API is exposed through the same OpenAI endpoint interface, but with additional parameters to control cache behavior and to retrieve diagnostic metrics. Vendors that already integrate OpenAI services—such as Google Workspace add‑ons, JumpCloud identity management, and other SaaS platforms that embed GPT for content generation, code assistance, or conversational agents—will see the most immediate benefit. By quantifying cache hit rates and cost per token, organizations can identify which services are most cost‑sensitive and target them for optimization. The broader industry implication is a shift toward more granular cost control in AI‑as‑a‑service models. Cloud providers and AI platform vendors will likely follow suit, offering similar caching layers or cost‑control APIs. Enterprises that fail to adopt these optimizations risk higher spend, slower response times during peak demand, and potential SLA violations. The announcement also underscores the growing need for observability in AI workloads, as diagnostics and breakpoints become essential for troubleshooting and compliance auditing. In short, GPT‑6’s caching enhancements provide a tangible lever for IT leaders to reduce spend, improve performance, and maintain tighter governance over AI usage.</p></div>
+  <p class="meta-line">OpenAI · 22 Sep 202 · Generated 22 Sep 2026, 21:11</p>
+  <a href="https://openai.com/index/better-prompt-caching-for-gpt-6" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>OpenAI has released GPT‑6, a new generation of its large language model that introduces a comprehensive overhaul of prompt caching. The update increases cache hit rates, adds diagnostic tooling, and provides explicit breakpoints and controls that allow developers to fine‑tune when and how prompts are cached. The primary goal is to reduce latency and API costs, making interactions with the model more predictable and efficient. For enterprise IT teams, this means a direct impact on operational budgets and user experience, especially for workloads that involve repetitive or high‑volume prompt generation. The new caching API is exposed through the same OpenAI endpoint interface, but with additional parameters to control cache behavior and to retrieve diagnostic metrics. Vendors that already integrate OpenAI services—such as Google Workspace add‑ons, JumpCloud identity management, and other SaaS platforms that embed GPT for content generation, code assistance, or conversational agents—will see the most immediate benefit. By quantifying cache hit rates and cost per token, organizations can identify which services are most cost‑sensitive and target them for optimization. The broader industry implication is a shift toward more granular cost control in AI‑as‑a‑service models. Cloud providers and AI platform vendors will likely follow suit, offering similar caching layers or cost‑control APIs. Enterprises that fail to adopt these optimizations risk higher spend, slower response times during peak demand, and potential SLA violations. The announcement also underscores the growing need for observability in AI workloads, as diagnostics and breakpoints become essential for troubleshooting and compliance auditing. In short, GPT‑6’s caching enhancements provide a tangible lever for IT leaders to reduce spend, improve performance, and maintain tighter governance over AI usage.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory all OpenAI API calls across services (Google Workspace add‑ons, JumpCloud, internal bots).  
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all OpenAI API calls across services (Google Workspace add‑ons, JumpCloud, internal bots).  
    - Measure current latency, token usage, and cost per call.  
    - Identify repetitive prompt patterns that could benefit from caching.  
    - Assess existing monitoring: does your observability stack capture API latency, error rates, and cost?</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a cost‑benefit model: baseline spend vs. projected savings with higher cache hit rates (e.g., 30% reduction in token usage).  
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: baseline spend vs. projected savings with higher cache hit rates (e.g., 30% reduction in token usage).  
    - Include performance metrics: target latency drop (e.g., 20 ms per call) and SLA impact.  
    - Present a pilot scope: select one high‑volume integration (e.g., Google Workspace) and run a 2‑week benchmark.  
    - Highlight risk mitigation: reduced need for over‑provisioning during peak times.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- OpenAI’s new caching API parameters (cache_control, diagnostics).  
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI’s new caching API parameters (cache_control, diagnostics).  
    - Cloud monitoring tools: Datadog, New Relic, or Azure Monitor for API metrics.  
    - Cost‑tracking platforms: CloudHealth, Cloudability, or native OpenAI cost dashboards.  
    - Configuration management: Terraform modules for OpenAI resources, or Ansible playbooks to apply caching settings.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: cache invalidation logic may lead to stale data if prompts change frequently.  
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: cache invalidation logic may lead to stale data if prompts change frequently.  
    - Compliance: cached prompts may contain PII; ensure GDPR (UK) requires encryption at rest and audit trails.  
    - Operational: misconfiguring cache breakpoints could increase latency if not properly tuned.  
    - Vendor lock‑in: reliance on OpenAI’s caching API may limit future migration options.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Enable diagnostic logging for a single high‑volume integration.  
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Enable diagnostic logging for a single high‑volume integration.  
    - Run a 1‑week test to capture cache hit rates and cost per token.  
    - Adjust cache_control parameters to maximize hit rate; document the impact in a 2‑page report.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">LONG‑TERM PLAY
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">LONG‑TERM PLAY
    - Roll out caching controls across all OpenAI‑dependent services over 6–12 months.  
    - Integrate cache metrics into the central observability platform and set automated alerts for cache miss spikes.  
    - Develop a governance policy that defines when to invalidate or refresh cached prompts, aligned with GDPR data‑retention requirements.  
    - Evaluate alternative LLM providers that offer comparable caching features to diversify risk and negotiate better pricing tiers.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 21:11</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Sep 2026, 21:11</p>
+</main>
 </body>
 </html>

@@ -5,86 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Designing an AI serving harness built to last - IT Breakdown - Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--accent:#6366f1;--accent-green:#22c55e;--radius:12px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-    .topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
-    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#ffffff 0%,#00ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-    .back-btn{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
     .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
-    .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;padding:4px 12px;border-radius:20px;margin-bottom:20px}
-    .page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.25;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px}
-    .meta-line{font-size:13px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
-    .source-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-green);text-decoration:none;background:#22c55e1a;border:1px solid #22c55e33;padding:8px 16px;border-radius:8px;margin-bottom:40px}
-    .divider{height:1px;background:var(--border);margin:40px 0}
-    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-    .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);background:#6366f11a;border:1px solid #6366f133;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text)}
-    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary)}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
     .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
     .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;border-left:3px solid var(--accent)}
-    .guide-block.green{border-left-color:var(--accent-green)}
-    .guide-block.amber{border-left-color:#f59e0b}
-    .guide-block.red{border-left-color:#ef4444}
-    .guide-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)}
-    .guide-block.green .guide-label{color:var(--accent-green)}
-    .guide-block.amber .guide-label{color:#f59e0b}
-    .guide-block.red .guide-label{color:#ef4444}
-    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-align:center}
-    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.page-title{font-size:24px}.topbar{padding:14px 16px}}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
   </style>
 </head>
 <body>
-<div class="topbar">
+<header class="topbar">
   <a href="../index.html" class="brand-link">Scout Daily</a>
   <a href="../index.html" class="back-btn">← Back to feed</a>
-</div>
-<div class="page-wrap">
-  <div class="badge">IT Engineer Breakdown</div>
+</header>
+<main class="page-wrap">
   <h1 class="page-title">Designing an AI serving harness built to last</h1>
-  <div class="meta-line">MIT Tech Review · 22 Oct 202 · Generated 22 Oct 2026, 23:25</div>
-  <a href="https://www.technologyreview.com/2026/10/22/1146109/designing-an-ai-serving-harness-built-to-last/" target="_blank" class="source-link">View Original Source →</a>
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div class="section-title">Detailed Summary</div>
-  </div>
-  <div class="summary-body"><p>MIT Technology Review recently published an in‑depth analysis on the design of AI serving harnesses that are engineered to endure. The article argues that the competitive advantage of AI deployments lies less in the specific model or algorithm and more in the underlying serving architecture. It outlines how a modular, container‑based serving layer can decouple model updates from infrastructure changes, enabling enterprises to roll out new models without costly rewrites or downtime. The piece cites real‑world examples from large cloud providers and open‑source projects such as Kubernetes, NVIDIA Triton Inference Server, and TensorFlow Serving. It also highlights the importance of observability, autoscaling, and fault tolerance in production environments. For enterprise IT teams, the article underscores the need to audit current AI pipelines for single points of failure, lack of monitoring, and limited scalability. Vendors such as AWS SageMaker, Azure Machine Learning, and Google Vertex AI are referenced as platforms that provide managed serving but still require careful architecture design to avoid vendor lock‑in. The broader industry implication is a shift toward treating AI serving as a core IT service, with dedicated infrastructure teams and SLAs. As AI adoption accelerates, organizations that invest in robust serving harnesses will be better positioned to iterate quickly, meet regulatory compliance, and maintain high availability. The article serves as a call to action for IT leaders to prioritize architecture over model selection, ensuring that AI capabilities can scale, evolve, and remain resilient over the long term.</p></div>
+  <p class="meta-line">MIT Tech Review · 22 Oct 202 · Generated 22 Oct 2026, 23:25</p>
+  <a href="https://www.technologyreview.com/2026/10/22/1146109/designing-an-ai-serving-harness-built-to-last/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>MIT Technology Review recently published an in‑depth analysis on the design of AI serving harnesses that are engineered to endure. The article argues that the competitive advantage of AI deployments lies less in the specific model or algorithm and more in the underlying serving architecture. It outlines how a modular, container‑based serving layer can decouple model updates from infrastructure changes, enabling enterprises to roll out new models without costly rewrites or downtime. The piece cites real‑world examples from large cloud providers and open‑source projects such as Kubernetes, NVIDIA Triton Inference Server, and TensorFlow Serving. It also highlights the importance of observability, autoscaling, and fault tolerance in production environments. For enterprise IT teams, the article underscores the need to audit current AI pipelines for single points of failure, lack of monitoring, and limited scalability. Vendors such as AWS SageMaker, Azure Machine Learning, and Google Vertex AI are referenced as platforms that provide managed serving but still require careful architecture design to avoid vendor lock‑in. The broader industry implication is a shift toward treating AI serving as a core IT service, with dedicated infrastructure teams and SLAs. As AI adoption accelerates, organizations that invest in robust serving harnesses will be better positioned to iterate quickly, meet regulatory compliance, and maintain high availability. The article serves as a call to action for IT leaders to prioritize architecture over model selection, ensuring that AI capabilities can scale, evolve, and remain resilient over the long term.</p></div>
+  </section>
   <div class="divider"></div>
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div class="section-title">IT Engineer Application Guide</div>
-  </div>
-  <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Inventory all AI workloads: model types, inference latency requirements, throughput targets, and data residency constraints.
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all AI workloads: model types, inference latency requirements, throughput targets, and data residency constraints.
    - Map current serving stack: identify monolithic services, custom containers, or serverless functions.
    - Assess scalability: load testing results, autoscaling policies, and resource utilization patterns.
    - Check resilience: failure handling, redundancy, and disaster recovery procedures.
    - Verify observability: logging, metrics, tracing, and alerting coverage.</div></div>
-<div class="guide-block"><div class="guide-label">PROPOSE</div><div class="guide-text">- Build a business case around ROI metrics: reduction in deployment cycle time, increased model refresh rate, and improved uptime.
-   - Benchmark current latency and throughput against industry standards (e.g., 95th percentile latency < 200 ms for real‑time services).
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case around ROI metrics: reduction in deployment cycle time, increased model refresh rate, and improved uptime.
+   - Benchmark current latency and throughput against industry standards (e.g., 95th percentile latency &lt; 200 ms for real‑time services).
    - Quantify cost savings from containerized, cloud‑native serving versus legacy VM‑based deployments.
    - Present a phased migration plan with clear milestones and risk mitigation steps.</div></div>
-<div class="guide-block green"><div class="guide-label">TOOLS TO CONSIDER</div><div class="guide-text">- Kubernetes (EKS, GKE, AKS) for orchestrating containerized inference services.
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Kubernetes (EKS, GKE, AKS) for orchestrating containerized inference services.
    - NVIDIA Triton Inference Server for GPU‑accelerated model serving.
    - TensorFlow Serving or ONNX Runtime for CPU‑centric workloads.
    - Prometheus + Grafana or Datadog for monitoring and alerting.
    - Istio or Linkerd for service mesh and traffic management.
    - HashiCorp Vault or AWS Secrets Manager for secure credential handling.</div></div>
-<div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">- Technical: Single points of failure in the serving layer, insufficient autoscaling leading to SLA breaches.
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Single points of failure in the serving layer, insufficient autoscaling leading to SLA breaches.
    - Compliance: Data residency and GDPR requirements for model inputs/outputs; ensure encryption at rest and in transit.
    - Operational: Skill gaps in Kubernetes and container security; potential for misconfigurations causing downtime.
    - Vendor lock‑in: Overreliance on managed services without a clear migration path.</div></div>
-<div class="guide-block green"><div class="guide-label">QUICK WIN</div><div class="guide-text">- Deploy a lightweight inference container (e.g., TensorFlow Serving) on an existing Kubernetes cluster.
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight inference container (e.g., TensorFlow Serving) on an existing Kubernetes cluster.
    - Enable basic metrics collection with Prometheus and set up alerting for latency thresholds.
    - Conduct a 24‑hour load test to validate autoscaling and observe resource usage.</div></div>
-<div class="guide-block amber"><div class="guide-label">LONG-TERM PLAY</div><div class="guide-text">- Over 6–12 months, implement a multi‑cluster, multi‑cloud serving architecture with a service mesh for traffic routing.
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, implement a multi‑cluster, multi‑cloud serving architecture with a service mesh for traffic routing.
    - Standardize model packaging (e.g., ONNX) and CI/CD pipelines for automated deployment.
    - Integrate observability across the stack, including distributed tracing and anomaly detection.
    - Establish governance policies for model versioning, rollback, and compliance auditing.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 22 Oct 2026, 23:25</div>
-</div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 22 Oct 2026, 23:25</p>
+</main>
 </body>
 </html>
