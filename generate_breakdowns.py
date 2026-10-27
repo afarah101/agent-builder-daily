@@ -5,6 +5,7 @@ import os
 import json
 import re
 import time
+from html import escape
 from pathlib import Path
 from datetime import datetime
 from groq import Groq
@@ -154,7 +155,7 @@ def parse_groq_response(raw):
         guide_raw = guide_raw.replace(prefix, "").strip()
 
     summary_paras = [p.strip() for p in summary_raw.split("\n\n") if p.strip()]
-    summary_html = "".join(f"<p>{p}</p>" for p in summary_paras)
+    summary_html = "".join(f"<p>{escape(p)}</p>" for p in summary_paras)
 
     guide_labels = [
         ("1.", "EVALUATE", ""),
@@ -173,7 +174,7 @@ def parse_groq_response(raw):
 
     def flush_block():
         if current_label and current_lines:
-            text = "\n".join(current_lines).strip()
+            text = escape("\n".join(current_lines).strip())
             color_class = f" {current_color}" if current_color else ""
             blocks.append(
                 f'<div class="guide-block{color_class}">'

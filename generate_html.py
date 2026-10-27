@@ -40,66 +40,66 @@ def load_slug_map():
     return {"case_studies": {}, "news": {}}
 
 def esc(val):
-    return html_lib.escape(str(val)) if val else ""
+    return html_lib.escape(str(val)) if val or val == 0 else ""  # a score of 0 still shows
 
 def safe_url(url):
     if not url or not str(url).startswith(("https://", "http://")):
         return "#"
     return url
 
+CASE_STUDY_WINDOW_DAYS = 120  # the scout's FOUR_MONTHS_AGO window; applies to every item, video or not
+
+def in_window(cs, cutoff):
+    """True when the item was published inside the 4-month window. No pub_date: kept, as before."""
+    pub = str(cs.get("pub_date") or "")[:10]
+    return not pub or pub >= cutoff
+
+def by_score(item, field):
+    """Sort key: highest score first, newest first within a score. A non-numeric score counts as 0."""
+    score = item.get(field)
+    return (score if isinstance(score, (int, float)) else 0, str(item.get("pub_date") or ""))
+
 def relevance_dot(signal):
-    colors = {"high": "#22c55e", "medium": "#f59e0b", "low": "#ef4444"}
-    labels = {"high": "High relevance", "medium": "Medium relevance", "low": "Low relevance"}
-    c = colors.get(signal, "#94a3b8")
-    l = labels.get(signal, signal)
-    return f'<span class="rel-dot" style="background:{c}" title="{l}"></span>'
+    labels = {"high": "High", "medium": "Medium", "low": "Low"}
+    word = labels.get(signal, esc(signal).capitalize())
+    level = signal if signal in labels else "none"
+    return f'<span class="rel-dot rel-{level}" aria-hidden="true"></span><span class="rel-word">{word} relevance</span>'
 
 def tag_pill(tag):
-    tag_colors = {
-        "AI Agents": "#7c3aed", "LLMs": "#0284c7", "Automation": "#059669",
-        "Safety": "#dc2626", "Computer Vision": "#d97706", "NLP": "#0891b2",
-        "MLOps": "#7c3aed", "Healthcare AI": "#db2777", "Other": "#64748b",
-        "Product Launch": "#0284c7", "Research": "#7c3aed", "Partnership": "#059669",
-        "Market Move": "#d97706", "Tool": "#0891b2", "Policy": "#dc2626",
-    }
-    c = tag_colors.get(tag, "#64748b")
-    return f'<span class="tag-pill" style="background:{c}1a;color:{c};border:1px solid {c}33">{tag}</span>'
+    tag = str(tag or "Other")
+    if "_" in tag:  # raw snake_case from the scorer
+        tag = tag.replace("_", " ").capitalize()
+    return f'<span class="tag-pill">{esc(tag)}</span>'
 
 def score_ring(score, max_score=75):
+    """Ring out of 75. A legacy score above 75 (old 0-100 scale) gets no ring rather than a ring past full."""
+    if not isinstance(score, (int, float)) or not 0 <= score <= max_score:
+        return ""
     pct = int((score / max_score) * 100)
-    color = "#22c55e" if pct >= 70 else "#f59e0b" if pct >= 40 else "#ef4444"
+    level = "high" if pct >= 70 else "mid" if pct >= 40 else "low"
     legend = "AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact."
-    return f'<div class="score-ring" style="--pct:{pct};--color:{color}" title="{legend}"><span>{score}</span></div>'
+    return (f'<div class="score-ring ring-{level}" style="--pct:{pct};" title="{legend}" role="img" '
+            f'aria-label="Scout score {score} of {max_score}"><span>{score}</span></div>')
 
 def tier_label(tier):
     labels = {"ai_labs": "AI Lab", "consulting": "Consulting", "news": "Press", "universities": "Academic"}
-    colors = {"ai_labs": "#0284c7", "consulting": "#7c3aed", "news": "#64748b", "universities": "#059669"}
-    label = labels.get(tier, tier)
-    color = colors.get(tier, "#64748b")
-    return f'<span class="tier-label" style="color:{color}">{label}</span>'
+    return f'<span class="tier-label">{esc(labels.get(tier, tier))}</span>'
 
-def score_bar(label, score, max_val=25):
-    pct = min(100, int((score / max_val) * 100))
-    return f"""<div class="score-bar-row">
-      <span class="bar-label">{label}</span>
-      <div class="bar-track"><div class="bar-fill" style="width: {pct}%"></div></div>
-      <span class="bar-val">{score}</span>
-    </div>"""
+def eval_status(cs):
+    """eval_verdict (the judge) first, then the Gemini field; anything not pass/fail is still pending."""
+    return next((s for s in (cs.get("eval_verdict"), cs.get("gemini_eval_status")) if s in ("pass", "fail")), "pending")
 
 def status_badge(status):
-    if status == 'pass':
-        color = "#22c55e"
-        text = "✅ Gemini Verified"
-        bg = "#22c55e1a"
-    elif status == 'fail':
-        color = "#ef4444"
-        text = "❌ Flagged"
-        bg = "#ef44441a"
-    else:
-        color = "#f59e0b"
-        text = "⏳ Evaluating"
-        bg = "#f59e0b1a"
-    return f'<span class="status-badge" style="background:{bg};color:{color};border:1px solid {color}33">{text}</span>'
+    level, text = {"pass": ("pass", "Verified"), "fail": ("fail", "Flagged")}.get(status, ("pending", "Evaluating"))
+    return f'<span class="status-badge status-{level}">{text}</span>'
+
+NOT_APPLICABLE = ("not applicable", "not directly applicable")
+
+def insight_html(label, text):
+    """'How to apply' line, left out when empty or when the model said it does not apply."""
+    if not text or any(p in str(text).lower() for p in NOT_APPLICABLE):
+        return ""
+    return f'<p class="insight"><strong>{label}</strong> {esc(text)}</p>'
 
 def render_case_studies(data, slug_map):
     if not data or not data.get("case_studies"):
@@ -113,87 +113,53 @@ def render_case_studies(data, slug_map):
             from datetime import datetime as dt
             pub = dt.strptime(pub_raw, "%Y-%m-%d").strftime("%d %b %Y")
         except:
-            pub = pub_raw
-        url = safe_url(cs.get("url", "#"))
-        tag = cs.get("relevance_tag", "Other")
-        institution = esc(cs.get("institution", "Academic Institution"))
-        built = cs.get("author_built_product", False)
-        built_badge = '<span class="built-badge">🚀 Author shipped product</span>' if built else ""
+            pub = esc(pub_raw)
+        url = esc(safe_url(cs.get("url", "#")))
         title = esc(cs.get("title", "Untitled"))
-        
-        # Status badge
-        status = cs.get("gemini_eval_status", cs.get("eval_verdict", "pending"))
-        badge_html = status_badge(status)
+        # Meta: drop the "Academic Institution" placeholder and a name repeated as its own institution
+        institution = esc(cs.get("institution", ""))
+        meta = [authors]
+        if institution and institution != "Academic Institution" and institution != authors:
+            meta.append(institution)
+        meta.append(f'<span class="pub-date">{pub}</span>')
+        if cs.get("source_type", "") == "youtube_agent":
+            meta.append("Video")
+        if cs.get("author_built_product", False):
+            meta.append("Author shipped a product")
+        meta_html = '<span class="sep" aria-hidden="true">·</span>'.join(f"<span>{m}</span>" for m in meta)
 
-        # Video detection
-        source_type = cs.get("source_type", "")
-        video_badge = ""
-        cta_text = "Read Source →"
-        if source_type == "youtube_agent":
-            video_badge = '<span class="status-badge" style="background:#ef44441a;color:#ef4444;border:1px solid #ef444433">▶️ Video Intel</span>'
-            cta_text = "Watch Source →"
-
-        # Evergreen labeling
-        evergreen_badge = ""
-        if cs.get("is_evergreen", False):
-            evergreen_badge = '<span class="status-badge" style="background:#8b5cf61a;color:#8b5cf6;border:1px solid #8b5cf633">✨ Evergreen Intelligence</span>'
-
-        # Breakdown link
         slug = cs_slugs.get(title)
-        breakdown_link = (
-            f'<a href="breakdowns/{slug}.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>'
-            if slug else
-            '<span class="breakdown-pending">Breakdown pending</span>'
-        )
+        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
+        total = cs.get("total_score", 0)
 
-        cards.append(f"""<article class="card cs-card" onclick="window.open('{url}','_blank')">
+        cards.append(f"""<article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags">{tag_pill(tag)}{built_badge}{video_badge}{evergreen_badge}{badge_html}</div>
-    {score_ring(cs.get('total_score', 0))}
+    <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}{status_badge(eval_status(cs))}</div>
+    {score_ring(total)}
   </div>
-  <h3 class="card-title">{title}</h3>
-  <div class="card-meta">
-    <span class="authors">{authors}</span>
-    <span class="sep">·</span>
-    <span class="institution">{institution}</span>
-    <span class="sep">·</span>
-    <span class="pub-date">{pub}</span>
-  </div>
+  <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
+  <div class="card-meta">{meta_html}</div>
   <p class="card-summary">{esc(cs.get('summary',''))}</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO APPLY THIS</div>
-    <p class="insight-text">{esc(cs.get('it_breakdown','') or cs.get('how_to_apply',''))}</p>
-  </div>
+  {insight_html("How to apply:", cs.get('it_breakdown','') or cs.get('how_to_apply',''))}
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">IMPACT</span><span class="trace-val">{cs.get('real_world_impact',0)}/25</span></div>
-      <div class="trace-row"><span class="trace-label">MATURITY</span><span class="trace-val">{cs.get('ai_maturity',0)}/25</span></div>
-      <div class="trace-row"><span class="trace-label">MONETISATION</span><span class="trace-val">{cs.get('monetisation_potential',0)}/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">{esc(cs.get('real_world_impact',0))}/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">{esc(cs.get('ai_maturity',0))}/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">{esc(cs.get('monetisation_potential',0))}/25</span></div>
       <p class="trace-reasoning">{esc(cs.get('score_reasoning',''))}</p>
     </div>
   </details>
   <div class="card-footer">
-    <div class="score-bars">
-      {score_bar('Recency', cs.get('recency_score',0), 25)}
-      {score_bar('Impact', cs.get('real_world_impact',0), 25)}
-      {score_bar('Maturity', cs.get('ai_maturity',0), 25)}
-      {score_bar('Monetisation', cs.get('monetisation_potential',0), 25)}
-    </div>
-    <div class="footer-links">
-      <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">{cta_text}</a>
-      {breakdown_link}
-      <button class="md-export-btn" onclick="event.stopPropagation();copyMarkdown(this)"
-        data-title="{title}"
-        data-summary="{esc(cs.get('summary',''))}"
-        data-it="{esc(cs.get('it_breakdown',''))}"
-        data-monetisation="{esc(cs.get('monetisation',''))}"
-        data-reasoning="{esc(cs.get('score_reasoning',''))}"
-        data-score="{cs.get('total_score',0)}"
-        data-url="{url}">
-        ⬇ MD
-      </button>
-    </div>
+    {breakdown_link}
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="{title}"
+      data-summary="{esc(cs.get('summary',''))}"
+      data-it="{esc(cs.get('it_breakdown',''))}"
+      data-monetisation="{esc(cs.get('monetisation',''))}"
+      data-reasoning="{esc(cs.get('score_reasoning',''))}"
+      data-score="{esc(total)}"
+      data-url="{url}">Copy as Markdown</button>
   </div>
 </article>""")
     return "\n".join(cards)
@@ -204,45 +170,30 @@ def render_news(data, slug_map):
     news_slugs = slug_map.get("news", {})
     cards = []
     for item in data["news"]:
-        signal = item.get("relevance_signal", "medium")
-        url = safe_url(item.get("url", "#"))
-        tier = item.get("tier", "news")
-        category = item.get("category", "Other")
+        url = esc(safe_url(item.get("url", "#")))
         title = esc(item.get("title", ""))
 
         slug = news_slugs.get(title)
-        breakdown_link = (
-            f'<a href="breakdowns/{slug}.html" class="breakdown-link" onclick="event.stopPropagation()">IT Breakdown →</a>'
-            if slug else
-            '<span class="breakdown-pending">Breakdown pending</span>'
-        )
+        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
 
-        pub = item.get('pub_date', '')
-
-        cards.append(f"""<article class="card news-card" onclick="window.open('{url}','_blank')">
+        cards.append(f"""<article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      {tier_label(tier)}
-      <span class="source-name">{item.get('source','')}</span>
-      {tag_pill(category)}
+      {tier_label(item.get("tier", "news"))}
+      <span class="source-name">{esc(item.get('source',''))}</span>
+      {tag_pill(item.get("category", "Other"))}
     </div>
     <div class="news-score-area">
-      {relevance_dot(signal)}
-      <span class="score-num">{item.get('relevance_score',0)}/10</span>
+      {relevance_dot(item.get("relevance_signal", "medium"))}
+      <span class="score-num">{esc(item.get('relevance_score',0))}/10</span>
     </div>
   </div>
-  <h3 class="card-title">{title}</h3>
+  <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
   <p class="card-summary">{esc(item.get('summary',''))}</p>
-  <div class="insight-block">
-    <div class="insight-label">HOW TO USE THIS</div>
-    <p class="insight-text">{esc(item.get('enterprise_use',''))}</p>
-  </div>
+  {insight_html("How to use:", item.get('enterprise_use',''))}
   <div class="card-footer">
-    <span class="pub-date">{pub}</span>
-    <div class="footer-links">
-      <a href="{url}" target="_blank" rel="noopener noreferrer" class="read-link" onclick="event.stopPropagation()">Read Source →</a>
-      {breakdown_link}
-    </div>
+    <span class="pub-date">{esc(item.get('pub_date', ''))}</span>
+    {breakdown_link}
   </div>
 </article>""")
     return "\n".join(cards)
@@ -252,18 +203,16 @@ def render_archive(archive, kind="cs"):
         return "<div class='empty-state'><p>No archive yet.</p></div>"
     rows = []
     key = "case_studies" if kind == "cs" else "news"
-    for entry in archive[:30]:
-        date = entry.get("date","")
-        total = entry.get("total", 0)
-        items = entry.get(key, [])[:3]
-        previews = [i.get("title","")[:60] for i in items]
-        preview_html = "".join([f"<span class='archive-title'>{t}</span>" for t in previews])
+    for entry in [e for e in archive if e.get("total", 0)][:30]:
+        preview_html = "".join(
+            f'<a class="archive-title" href="{esc(safe_url(i.get("url")))}" target="_blank" rel="noopener noreferrer">{esc(i.get("title", ""))}</a>'
+            for i in entry.get(key, [])[:3])
         rows.append(f"""<div class="archive-row">
-  <div class="archive-date">{date}</div>
-  <div class="archive-count">{total} items</div>
+  <div class="archive-date">{esc(entry.get("date", ""))}</div>
+  <div class="archive-count">{esc(entry.get("total", 0))} items</div>
   <div class="archive-previews">{preview_html}</div>
 </div>""")
-    return "\n".join(rows)
+    return "\n".join(rows) or "<div class='empty-state'><p>No archive yet.</p></div>"
 
 def generate_rss(cs_data, news_data):
     base_url = "https://agent-builder-daily.vercel.app"
@@ -332,12 +281,13 @@ def generate_email_capture():
     return """
   <div class="email-banner">
     <div class="email-inner">
-      <h4 class="email-title">Get Scout Daily in your inbox</h4>
-      <div class="email-form">
-        <input type="email" class="email-input" placeholder="your@email.com" required onkeydown="if(event.key==='Enter') submitEmail(event)" />
-        <button type="button" class="email-btn" onclick="submitEmail(event)">Subscribe</button>
-      </div>
-      <span class="email-confirm" id="email-confirm"></span>
+      <p class="email-title" id="email-title">Get Scout Daily in your inbox</p>
+      <form class="email-form" onsubmit="submitEmail(event)" aria-labelledby="email-title">
+        <label class="visually-hidden" for="email-input">Email address</label>
+        <input type="email" id="email-input" class="email-input" placeholder="your@email.com" autocomplete="email" required />
+        <button type="submit" class="email-btn">Subscribe</button>
+      </form>
+      <span class="email-confirm" id="email-confirm" role="status"></span>
     </div>
   </div>"""
 
@@ -346,47 +296,48 @@ def generate_html():
     # --- Rotation Logic ---
     now = datetime.now()
     today_str = now.strftime("%Y-%m-%d")
-    
+    cutoff = (now - timedelta(days=CASE_STUDY_WINDOW_DAYS)).strftime("%Y-%m-%d")
+
     # --- Case Studies Archiving & Loading ---
     path_cs = Path(CASE_STUDIES_DIR)
     all_cs_files = [f for f in path_cs.glob("*.json") if "archive" not in f.name]
     cs_archive = load_json(ARCHIVE_CS_FILE)
     active_cs = []
-    
+
     sorted_cs = sorted(all_cs_files)
     for i, f in enumerate(sorted_cs):
         data = load_json(str(f))
-        is_evergreen = False
-        if data and "case_studies" in data:
-            # Check if any case study in the file is evergreen
-            is_evergreen = any(cs.get("is_evergreen", False) for cs in data["case_studies"])
-            
+        studies = data.get("case_studies") if isinstance(data, dict) else None
         is_latest = (i == len(sorted_cs) - 1)
-        if f.stem < today_str and not is_evergreen and not is_latest:
-            if data and "case_studies" in data:
-                date_str = f.stem
+        # 4-month window for every file: a file whose items all fall outside it is archived too (video files included)
+        out_of_window = bool(studies) and not any(in_window(cs, cutoff) for cs in studies)
+        if (f.stem < today_str and not is_latest) or out_of_window:
+            if studies is not None:
+                # video files are named v_YYYYMMDD_<id>, so date them by their newest item instead
+                date_str = f.stem if f.stem[:4].isdigit() else max((str(cs.get("pub_date") or "")[:10] for cs in studies), default=f.stem)
                 if not any(item["date"] == date_str for item in cs_archive):
-                    cs_archive.insert(0, {
+                    # keep newest first: the email reads archive[0] as the latest day
+                    at = next((n for n, e in enumerate(cs_archive) if e.get("date", "") < date_str), len(cs_archive))
+                    cs_archive.insert(at, {
                         "date": date_str,
-                        "total": len(data["case_studies"]),
-                        "case_studies": data["case_studies"]
+                        "total": len(studies),
+                        "case_studies": studies
                     })
                 os.remove(f)
                 print(f"Archived and removed {f}")
         else:
-            if data and "case_studies" in data:
-                active_cs.extend(data["case_studies"])
-                
+            if studies:
+                active_cs.extend(studies)
+
     with open(ARCHIVE_CS_FILE, 'w') as f_out:
         json.dump(cs_archive, f_out, indent=2)
-    
-    # Sort active articles by pub_date descending
-    active_cs.sort(key=lambda x: x.get("pub_date", ""), reverse=True)
 
     # Fallback: If no active items (all archived), load latest from archive
     if not active_cs and cs_archive:
         active_cs = cs_archive[0].get("case_studies", [])
         print(f"Fallback: Loaded {len(active_cs)} case studies from archive.")
+    active_cs = [cs for cs in active_cs if in_window(cs, cutoff)]
+    active_cs.sort(key=lambda x: by_score(x, "total_score"), reverse=True)
     cs_data = {"case_studies": active_cs}
 
     # --- News Archiving & Loading ---
@@ -418,7 +369,7 @@ def generate_html():
     with open(ARCHIVE_NEWS_FILE, 'w') as f_out:
         json.dump(news_archive, f_out, indent=2)
 
-    active_news.sort(key=lambda x: x.get("pub_date", ""), reverse=True)
+    active_news.sort(key=lambda x: by_score(x, "relevance_score"), reverse=True)
 
     # Fallback: If no active news (all archived), load latest from archive
     if not active_news and news_archive:
@@ -444,7 +395,7 @@ def generate_html():
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scout — AI Intelligence Feed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -452,13 +403,19 @@ def generate_html():
       --bg: #0f1117;
       --surface: #1a1d27;
       --surface2: #22263a;
-      --border: #2d2d2d;
+      --border: #2d3148;
       --text: #f1f5f9;
       --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --accent: #6366f1;
-      --accent-green: #00ff88;
+      --text-muted: #8592a8;
+      --accent: #00ff88;
+      --accent-ink: #0f1117;
+      --accent-tint: rgba(0, 255, 136, 0.1);
+      --warn: #fbbf24;
+      --danger: #f87171;
+      --fs-xs: 12px;
+      --fs-sm: 13px;
       --radius: 8px;
+      --tap: 44px;
     }
 
     body {
@@ -468,6 +425,18 @@ def generate_html():
       font-size: 15px;
       line-height: 1.6;
       min-height: 100vh;
+    }
+
+    ::selection { background: var(--accent); color: var(--accent-ink); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
 
     /* Header */
@@ -495,36 +464,26 @@ def generate_html():
       gap: 16px;
     }
 
-    .brand { display: flex; align-items: center; gap: 0; }
-
-    .brand-name {
+    .brand {
+      display: flex;
+      align-items: center;
       font-family: 'Syne', sans-serif;
-      font-size: 48px;
+      font-size: clamp(32px, 9vw, 48px);
       font-weight: 800;
       letter-spacing: -1px;
       line-height: 1;
-      background: linear-gradient(135deg, #ffffff 0%, #00ff88 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
+
+    .brand-name { color: var(--accent); white-space: nowrap; }
 
     .brand-cursor {
       display: inline-block;
-      width: 10px;
-      height: 40px;
-      background: #00ff88;
+      width: 0.2em;
+      height: 0.8em;
+      background: var(--accent);
       margin-left: 4px;
-      vertical-align: middle;
-      animation: blink 1s infinite;
+      animation: blink 1s 3;
       border-radius: 2px;
-    }
-
-    .brand-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent-green);
-      border-radius: 50%;
-      animation: blink 2s infinite;
     }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -534,46 +493,67 @@ def generate_html():
     .stat { text-align: right; }
 
     .stat-num {
-      font-family: 'JetBrains Mono', monospace;
       font-size: 24px;
       font-weight: 600;
-      color: var(--accent-green);
+      color: var(--accent);
       line-height: 1;
+      font-variant-numeric: tabular-nums;
     }
 
     .stat-label {
-      font-size: 11px;
+      font-size: var(--fs-xs);
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .updated {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+      font-size: var(--fs-xs);
       color: var(--text-muted);
       margin-bottom: 20px;
     }
 
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
     /* Tabs */
-    .tabs { display: flex; gap: 0; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 0; }
 
     .tab {
       padding: 10px 20px;
-      font-size: 13px;
+      font: inherit;
+      font-size: var(--fs-sm);
       font-weight: 500;
       color: var(--text-muted);
       cursor: pointer;
       border: none;
       background: none;
       border-bottom: 2px solid transparent;
-      transition: all 0.15s;
+      transition: color 0.15s, border-color 0.15s;
       white-space: nowrap;
     }
 
     .tab:hover { color: var(--text); }
     .tab.active { color: var(--text); border-bottom-color: var(--accent); }
+
+    .search {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 14px;
+      font: inherit;
+      font-size: var(--fs-sm);
+      color: var(--text);
+      width: 220px;
+      transition: border-color 0.15s;
+    }
+
+    .search::placeholder, .email-input::placeholder { color: var(--text-muted); }
+    .search:focus { border-color: var(--accent); }
 
     /* Content */
     .content {
@@ -588,7 +568,7 @@ def generate_html():
     /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(540px, 100%), 1fr));
       gap: 20px;
     }
 
@@ -597,23 +577,7 @@ def generate_html():
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 24px;
-      cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      position: relative;
-    }
-
-    .status-badge {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent)22;
+      min-width: 0;
     }
 
     .card-header {
@@ -626,49 +590,41 @@ def generate_html():
 
     .card-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-grow: 1; }
 
-    .tag-pill {
-      font-size: 11px;
+    .tag-pill, .status-badge {
+      font-size: var(--fs-xs);
       font-weight: 600;
-      padding: 3px 10px;
+      padding: 3px 8px;
       border-radius: 4px;
-      letter-spacing: 0.3px;
+      line-height: 1.5;
     }
 
-    .tier-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .tag-pill { color: var(--text-secondary); background: var(--surface2); }
+    .status-pass { color: var(--accent); background: var(--accent-tint); }
+    .status-fail { color: var(--danger); background: rgba(248, 113, 113, 0.1); }
+    .status-pending { color: var(--warn); background: rgba(251, 191, 36, 0.1); }
 
-    .source-name {
-      font-size: 12px;
+    .tier-label, .source-name {
+      font-size: var(--fs-xs);
       font-weight: 600;
       color: var(--text-secondary);
     }
 
-    .built-badge {
-      font-size: 11px;
-      color: var(--accent-green);
-      background: #22c55e1a;
-      padding: 3px 8px;
-      border-radius: 4px;
-    }
-
-    /* Score ring */
+    /* Score ring: out of 75 */
     .score-ring {
+      --ring: var(--danger);
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: conic-gradient(var(--color) calc(var(--pct) * 1%), var(--surface2) 0);
+      background: conic-gradient(var(--ring) calc(var(--pct) * 1%), var(--surface2) 0);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      position: absolute;
-      top: 24px;
-      right: 24px;
+      position: relative;
     }
+
+    .ring-high { --ring: var(--accent); }
+    .ring-mid { --ring: var(--warn); }
 
     .score-ring::before {
       content: '';
@@ -681,22 +637,18 @@ def generate_html():
 
     .score-ring span {
       position: relative;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+      font-size: var(--fs-xs);
       font-weight: 700;
       color: var(--text);
-      z-index: 1;
+      font-variant-numeric: tabular-nums;
     }
 
-    /* News score */
+    /* News relevance: a word beside the dot, never colour alone */
     .news-score-area {
       display: flex;
       align-items: center;
       gap: 6px;
       flex-shrink: 0;
-      position: absolute;
-      top: 24px;
-      right: 24px;
     }
 
     .rel-dot {
@@ -704,26 +656,34 @@ def generate_html():
       height: 10px;
       border-radius: 50%;
       flex-shrink: 0;
+      background: var(--text-muted);
     }
 
-    .score-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+    .rel-high { background: var(--accent); }
+    .rel-medium { background: var(--warn); }
+    .rel-low { background: var(--danger); }
+
+    .rel-word, .score-num {
+      font-size: var(--fs-xs);
       color: var(--text-secondary);
       white-space: nowrap;
-      font-weight: 700;
     }
+
+    .score-num { font-weight: 700; font-variant-numeric: tabular-nums; }
 
     /* Card content */
     .card-title {
       font-family: 'Georgia', serif;
-      font-size: 1.8rem;
+      font-size: clamp(1.25rem, 1rem + 1.2vw, 1.6rem);
       font-weight: 700;
       line-height: 1.3;
-      color: #ffffff;
       margin-bottom: 12px;
-      max-width: calc(100% - 60px);
+      overflow-wrap: anywhere;
+      text-wrap: balance;
     }
+
+    .card-title a { color: #ffffff; text-decoration: none; }
+    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--accent); }
 
     .card-meta {
       display: flex;
@@ -731,116 +691,128 @@ def generate_html():
       gap: 8px;
       flex-wrap: wrap;
       margin-bottom: 18px;
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
     }
 
-    .authors { font-size: 13px; color: #00ff88; font-weight: 600; }
-    .institution { font-size: 13px; color: var(--text-secondary); }
-    .pub-date { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
-    .sep { color: var(--border); }
+    .card-meta > span:first-child { color: var(--accent); font-weight: 600; }
+    .pub-date { font-size: var(--fs-xs); color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .sep { color: var(--text-muted); }
 
     .card-summary {
       font-size: 15px;
       line-height: 1.6;
       color: var(--text-secondary);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
-    .insight-block {
-      background: var(--surface2);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 12px;
-      border-left: 4px solid var(--accent);
-    }
-
-    .insight-block.monetisation {
-      border-left-color: #00ff88;
-      background: rgba(0, 255, 136, 0.05);
-    }
-
-    .insight-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 1.5px;
-      margin-bottom: 8px;
-    }
-
-    .monetisation .insight-label { color: #00ff88; }
-
-    .insight-text {
-      font-size: 13px;
+    .insight {
+      font-size: 14px;
       line-height: 1.6;
       color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .insight strong { font-weight: 600; color: var(--accent); }
+
+    .agent-trace { margin-bottom: 4px; }
+
+    .trace-toggle {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: var(--fs-sm);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      list-style: none;
+    }
+
+    .trace-toggle::-webkit-details-marker { display: none; }
+    .trace-toggle:hover, .agent-trace[open] .trace-toggle { color: var(--text); border-color: var(--accent); }
+
+    .trace-body { padding: 12px 0 4px; }
+
+    .trace-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+    }
+
+    .trace-label { font-size: var(--fs-xs); color: var(--text-muted); }
+
+    .trace-val {
+      font-size: var(--fs-xs);
+      color: var(--accent);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .trace-reasoning {
+      font-size: var(--fs-sm);
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-top: 10px;
+      font-style: italic;
     }
 
     /* Card footer */
     .card-footer {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       margin-top: 16px;
       padding-top: 14px;
       border-top: 1px solid var(--border);
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .score-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-
-    .score-pills span {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-      background: var(--bg);
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-    }
-
-    /* Footer links — two distinct CTAs */
-    .footer-links {
-      display: flex;
+    .breakdown-link, .md-export-btn {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .read-link {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      text-decoration: none;
+      font: inherit;
+      font-size: var(--fs-sm);
+      font-weight: 600;
       white-space: nowrap;
-      transition: color 0.15s;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
-
-    .read-link:hover { color: var(--text-secondary); }
 
     .breakdown-link {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--accent-green);
+      color: var(--accent);
       text-decoration: none;
-      white-space: nowrap;
-      background: #22c55e1a;
-      border: 1px solid #22c55e33;
-      padding: 4px 12px;
-      border-radius: 6px;
-      transition: all 0.15s;
+      background: var(--accent-tint);
+      border: 1px solid rgba(0, 255, 136, 0.2);
     }
 
-    .breakdown-link:hover {
-      background: #22c55e2a;
-      border-color: #22c55e55;
+    .breakdown-link:hover { background: rgba(0, 255, 136, 0.16); border-color: rgba(0, 255, 136, 0.35); }
+
+    .md-export-btn {
+      color: var(--text-secondary);
+      background: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
     }
 
-    .breakdown-pending {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
+    .md-export-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    .md-export-btn.copied { color: var(--accent); border-color: var(--accent); }
+
+    /* Today's signal */
+    .signal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
     }
+
+    .signal-title { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+    .signal p { font-size: 15px; color: var(--text); }
 
     /* Archive */
     .archive-list { display: flex; flex-direction: column; gap: 8px; }
@@ -848,35 +820,28 @@ def generate_html():
     .archive-row {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: var(--radius);
       padding: 14px 20px;
       display: grid;
-      grid-template-columns: 110px 80px 1fr;
+      grid-template-columns: 110px 80px minmax(0, 1fr);
       gap: 20px;
       align-items: start;
     }
 
-    .archive-date {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--accent-green);
-    }
+    .archive-date, .archive-count { font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
+    .archive-date { color: var(--accent); }
+    .archive-count { color: var(--text-muted); }
 
-    .archive-count {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .archive-previews { display: flex; flex-direction: column; gap: 4px; }
+    .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 
     .archive-title {
-      font-size: 12px;
+      font-size: var(--fs-sm);
       color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      text-decoration: none;
+      overflow-wrap: anywhere;
     }
+
+    .archive-title:hover { color: var(--text); text-decoration: underline; }
 
     .empty-state {
       text-align: center;
@@ -897,129 +862,13 @@ def generate_html():
       gap: 8px;
     }
 
-    footer span {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+    footer span { font-size: var(--fs-xs); color: var(--text-muted); }
 
-    .agent-trace { margin-bottom: 12px; }
-
-    .trace-toggle {
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.15s;
-      list-style: none;
-    }
-
-    .trace-toggle::-webkit-details-marker { display: none; }
-
-    .trace-toggle:hover { color: var(--text); border-color: var(--accent); }
-
-    .trace-body { padding: 12px 0 4px; }
-
-    .agent-trace[open] .trace-toggle { color: var(--accent); border-color: var(--accent); }
-
-    .trace-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 4px;
-    }
-
-    .trace-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-    }
-
-    .trace-val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--accent-green);
-      font-weight: 600;
-    }
-
-    .trace-reasoning {
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--text-secondary);
-      margin-top: 10px;
-      font-style: italic;
-    }
-
-    /* Score bars */
-    .score-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-width: 180px;
-    }
-
-    .score-bar-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .bar-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-      width: 80px;
-      text-transform: uppercase;
-    }
-
-    .bar-track {
-      flex-grow: 1;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: #00ff88;
-      border-radius: 3px;
-    }
-
-    .bar-val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-secondary);
-      width: 20px;
-      text-align: right;
-    }
-
-    .md-export-btn {
-      font-size: 11px;
-      font-weight: 600;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-muted);
-      background: none;
-      border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
-
-    .md-export-btn:hover { color: var(--text); border-color: var(--accent); }
-    .md-export-btn.copied { color: var(--accent-green); border-color: var(--accent-green); }
-
+    /* Email capture */
     .email-banner {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 6px 32px;
+      padding: 8px 32px;
     }
 
     .email-inner {
@@ -1028,14 +877,14 @@ def generate_html():
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 12px;
     }
 
     .email-title {
-      font-size: 0.85rem;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text-secondary);
-      white-space: nowrap;
     }
 
     .email-form {
@@ -1048,11 +897,11 @@ def generate_html():
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 3px 10px;
-      font-size: 11px;
+      padding: 5px 10px;
+      font: inherit;
+      font-size: var(--fs-sm);
       color: var(--text);
-      width: 160px;
-      outline: none;
+      width: 200px;
       transition: border-color 0.15s;
     }
 
@@ -1060,50 +909,59 @@ def generate_html():
 
     .email-btn {
       background: var(--accent);
-      color: white;
+      color: var(--accent-ink);
       border: none;
       border-radius: 4px;
-      padding: 3px 12px;
-      font-size: 11px;
+      padding: 5px 14px;
+      font: inherit;
+      font-size: var(--fs-sm);
       font-weight: 600;
       cursor: pointer;
       transition: opacity 0.15s;
       white-space: nowrap;
     }
 
-    .email-btn:hover { opacity: 0.85; }
+    .email-btn:hover { opacity: 0.9; }
 
-    .email-confirm {
-      font-size: 12px;
-      color: var(--accent-green);
-      font-family: 'JetBrains Mono', monospace;
-    }
+    .email-confirm { font-size: var(--fs-sm); color: var(--accent); }
 
     @media (max-width: 700px) {
-      .email-banner { padding: 16px; }
-      .email-form { width: 100%; }
-      .email-input { flex: 1; width: auto; }
-    }
-
-    @media (max-width: 700px) {
-      .cards-grid { grid-template-columns: 1fr; }
+      .header { position: static; padding-top: 20px; }
       .header-inner { padding: 0 16px; }
+      .header-top { margin-bottom: 12px; }
+      .updated { margin-bottom: 12px; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: 8px; padding-bottom: 8px; }
+      .tabs { flex-wrap: wrap; }
+      .tab { flex: 1 1 40%; min-height: var(--tap); padding: 10px 12px; }
+      .search { width: 100%; min-height: var(--tap); font-size: 16px; }
+      .email-banner { padding: 12px 16px; }
+      .email-inner { flex-direction: column; align-items: stretch; gap: 8px; }
+      .email-title { text-align: center; }
+      .email-form { width: 100%; }
+      .email-input { flex: 1; width: auto; min-width: 0; min-height: var(--tap); font-size: 16px; }
+      .email-btn { min-height: var(--tap); padding: 0 18px; }
       .content { padding: 24px 16px 48px; }
-      .archive-row { grid-template-columns: 1fr; gap: 6px; }
-      .header-top { flex-direction: column; align-items: flex-start; }
-      .header-stats { flex-direction: row; }
-      .card-footer { flex-direction: column; align-items: flex-start; }
+      .card { padding: 18px; }
+      .card-title a { display: block; min-height: var(--tap); }
+      .trace-toggle, .breakdown-link, .md-export-btn { min-height: var(--tap); }
+      .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
+      .archive-title { display: flex; align-items: center; min-height: var(--tap); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-cursor { animation: none; }
+      * { transition: none !important; }
     }
   </style>
 </head>
 <body>
 
-<div class="header">
+<header class="header">
   <div class="header-inner">
     <div class="header-top">
-      <div class="brand">
-        <span class="brand-name">Scout Daily</span><span class="brand-cursor"></span>
-      </div>
+      <h1 class="brand">
+        <span class="brand-name">Scout Daily</span><span class="brand-cursor" aria-hidden="true"></span>
+      </h1>
       <div class="header-stats">
         <div class="stat">
           <div class="stat-num">""" + str(cs_count) + """</div>
@@ -1115,77 +973,45 @@ def generate_html():
         </div>
       </div>
     </div>
-    <div class="updated">Updated """ + generated_at + """</div>
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('case-studies',this)">Case Studies</button>
-            <button class="tab" onclick="showTab('industry-news',this)">Industry News</button>
-            <button class="tab" onclick="showTab('archive-cs',this)">Archive: Studies</button>
-            <button class="tab" onclick="showTab('archive-news',this)">Archive: News</button>
+    <p class="updated">Updated """ + generated_at + """</p>
+    <div class="toolbar">
+        <div class="tabs" role="tablist" aria-label="Sections">
+            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
+            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false" onclick="showTab('industry-news',this)">Industry News</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false" onclick="showTab('archive-cs',this)">Archive: Studies</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false" onclick="showTab('archive-news',this)">Archive: News</button>
         </div>
-        <input
-            type="text"
-            id="scout-search"
-            placeholder="🔍 Search..."
-            oninput="filterCards(this.value)"
-            style="
-                background:#1a1d27;
-                border:1px solid #2d2d2d;
-                border-radius:6px;
-                padding:7px 14px;
-                font-size:12px;
-                color:#f1f5f9;
-                font-family:'Inter',sans-serif;
-                outline:none;
-                width:200px;
-                transition:border-color 0.15s;
-            "
-            onfocus="this.style.borderColor='#6366f1'"
-            onblur="this.style.borderColor='#2d2d2d'"
-        />
+        <label class="visually-hidden" for="scout-search">Search stories</label>
+        <input type="search" id="scout-search" class="search" placeholder="Search stories" oninput="filterCards(this.value)" />
     </div>
   </div>
-</div>
+</header>
 
 """ + generate_email_capture() + """
 
-<div class="content">
-  <div id="case-studies" class="panel active">
+<main class="content">
+  <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid">""" + render_case_studies(cs_data, slug_map) + """</div>
   </div>
 
-  <div id="industry-news" class="panel">
+  <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     """ + (f'''
-    <div style="
-        background: linear-gradient(135deg, #1a1d27, #22263a);
-        border: 1px solid #6366f1;
-        border-left: 4px solid #00ff88;
-        border-radius: 8px;
-        padding: 16px 20px;
-        margin-bottom: 24px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 13px;
-        color: #f1f5f9;
-        line-height: 1.5;
-    ">
-        <span style="color:#00ff88;font-weight:700;
-        letter-spacing:1px;font-size:10px">
-        ⚡ TODAY\'S SIGNAL</span>
-        <p style="margin-top:8px;font-family:\'Inter\',sans-serif;
-        font-size:14px;font-weight:500">{daily_hook}</p>
-    </div>
+    <section class="signal">
+        <h2 class="signal-title">Today\'s signal</h2>
+        <p>{esc(daily_hook)}</p>
+    </section>
     ''' if daily_hook else "") + """
     <div class="cards-grid">""" + render_news(news_data, slug_map) + """</div>
   </div>
 
-  <div id="archive-cs" class="panel">
+  <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list">""" + render_archive(cs_archive, 'cs') + """</div>
   </div>
 
-  <div id="archive-news" class="panel">
+  <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list">""" + render_archive(news_archive, 'news') + """</div>
   </div>
-</div>
+</main>
 
 <footer>
   <span>Scout · LangGraph + Groq + arXiv</span>
@@ -1196,9 +1022,10 @@ def generate_html():
 <script>
   function showTab(id, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
     document.getElementById(id).classList.add('active');
     btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
     const search = document.getElementById('scout-search');
     if (search) { search.value = ''; filterCards(''); }
   }
@@ -1207,7 +1034,7 @@ def generate_html():
     const q = query.toLowerCase().trim();
     const activePanel = document.querySelector('.panel.active');
     if (!activePanel) return;
-    const cards = activePanel.querySelectorAll('.card');
+    const cards = activePanel.querySelectorAll('.card, .archive-row');
     cards.forEach(card => {
       card.style.display = (!q || card.innerText.toLowerCase().includes(q)) ? '' : 'none';
     });
@@ -1224,7 +1051,7 @@ def generate_html():
     const md = [
       "# " + title,
       "",
-      "**Score:** " + score + "/100",
+      "**Score:** " + score + "/75",
       "",
       "## Summary",
       summary,
@@ -1242,10 +1069,10 @@ def generate_html():
     ].join("\\n");
     navigator.clipboard.writeText(md).then(() => {
       btn.classList.add("copied");
-      btn.textContent = "✓ Copied";
+      btn.textContent = "Copied";
       setTimeout(() => {
         btn.classList.remove("copied");
-        btn.textContent = "⬇ MD";
+        btn.textContent = "Copy as Markdown";
       }, 2000);
     });
   }
