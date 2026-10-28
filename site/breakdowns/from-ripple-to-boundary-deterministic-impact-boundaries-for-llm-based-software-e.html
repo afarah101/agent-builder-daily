@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From Ripple to Boundary: Deterministic Impact Boundaries for LLM-Based Software Evolution - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">From Ripple to Boundary: Deterministic Impact Boundaries for LLM-Based Software Evolution</h1>
+  <p class="meta-line">Jiameng Bai, Zhitao Wang, Long Wang, Keyue Qian · Academic Institution · 2026-10-27 · Generated 28 Oct 2026, 12:35</p>
+  <a href="https://arxiv.org/abs/2610.36549v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study by Bai, Wang, Wang, and Qian addresses the challenge of pinpointing the precise code segments that must be altered when a design asset—such as a configuration template, architecture diagram, or policy document—undergoes modification in systems that rely on large language models (LLMs) for code generation. Traditional LLM‑driven IaC or configuration tools generate code in a monolithic fashion, making it difficult to isolate the impact of a single design change. The authors propose a knowledge‑graph based Merkle Directed Acyclic Graph (DAG) that explicitly maps each design asset to the code artifacts it produces. By hashing nodes and maintaining parent‑child relationships, the DAG allows deterministic traversal to compute an exact “impact boundary”: the minimal set of code files and lines that must be regenerated when a design asset changes. The approach was validated on a real cloud‑infrastructure codebase, demonstrating that the impact boundary is often less than 5% of the total codebase, and that the automated regeneration process produces syntactically correct and functionally equivalent code without manual intervention. For enterprise IT, this means that LLM‑based code generation can be safely integrated into production pipelines with a clear audit trail and rollback capability. The deterministic boundary calculation also enables compliance teams to verify that changes are confined to intended modules, reducing the risk of unintended side effects that could violate security or regulatory constraints. In practice, cloud infrastructure managers can now adopt LLM‑driven IaC tools with confidence, knowing that updates to design assets will not cascade unpredictably across the entire stack. The real‑world implications include faster deployment cycles, reduced manual code review effort, and improved traceability for compliance audits.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Inventory all LLM‑driven code generation workflows (IaC, CI/CD scripts, policy generators).  
+   • Map current design assets (architecture diagrams, Terraform modules, YAML templates) to the generated code artifacts.  
+   • Measure baseline change propagation: record how many files change when a single design asset is updated.  
+   • Assess current audit logs and rollback mechanisms for code changes.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a business case around reduced change‑overhead: quantify time saved by limiting impact boundaries (e.g., 30% fewer files reviewed).  
+   • Use metrics such as Mean Time to Deploy (MTTD), number of failed deployments per change, and compliance audit findings.  
+   • Benchmark against current manual review cycles: show potential 40% reduction in review effort and 25% faster release cadence.  
+   • Highlight risk mitigation: fewer unintended side effects, lower compliance breach probability.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• Graph database platforms: Neo4j, Amazon Neptune, or Azure Cosmos DB (Gremlin API) for the knowledge‑graph.  
+   • Merkle‑DAG libraries: Hyperledger Besu (for Merkle trees), or custom implementation in Go/Python.  
+   • LLM integration: OpenAI GPT‑4o, Anthropic Claude, or Azure OpenAI Service for code generation.  
+   • CI/CD: GitHub Actions, GitLab CI, or Azure DevOps with pipeline triggers on design asset changes.  
+   • Security scanning: Snyk, Checkmarx, or SonarQube to validate regenerated code.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Technical: Incorrect graph mapping leading to incomplete impact boundaries; hash collisions if not using cryptographic hashes.  
+   • Compliance: UK GDPR – ensure that any data used to train or fine‑tune LLMs is anonymized; maintain audit logs of changes.  
+   • Operational: Overhead of maintaining the graph; potential performance bottlenecks in large codebases.  
+   • Vendor lock‑in: Proprietary LLM APIs may restrict future migration.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Implement a lightweight graph mapping for a single critical IaC module (e.g., VPC provisioning).  
+   • Use a simple hash function (SHA‑256) to tag design assets and generated files.  
+   • Run a pilot that automatically regenerates only the impacted files on a design change, and measure the reduction in manual review effort within 30 days.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">• Scale the Merkle‑DAG approach across the entire infrastructure codebase over 6–12 months.  
+   • Integrate the graph into the CI/CD pipeline to trigger automated, deterministic regeneration and testing.  
+   • Establish governance policies that require all design asset changes to be recorded in the graph before code generation.  
+   • Conduct periodic compliance audits using the graph to prove traceability of changes.  
+   • Explore open‑source or vendor‑agnostic implementations to avoid lock‑in and enable future migration.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 28 Oct 2026, 12:35</p>
+</main>
+</body>
+</html>
