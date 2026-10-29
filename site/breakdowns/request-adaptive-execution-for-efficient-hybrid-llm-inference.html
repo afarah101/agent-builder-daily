@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request-Adaptive Execution for Efficient Hybrid LLM Inference - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Request-Adaptive Execution for Efficient Hybrid LLM Inference</h1>
+  <p class="meta-line">Fahao Chen, Xuzhe Yan, Qi Zhang, Peng Li · Academic Institution · 2026-10-27 · Generated 29 Oct 2026, 12:41</p>
+  <a href="https://arxiv.org/abs/2610.37432v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study investigates a hybrid inference framework named Morph that dynamically selects a mix of Attention and State Space Model (SSM) layers for each incoming request to a large language model (LLM). Traditional LLM deployments use a static architecture, which forces all requests to traverse the same sequence of layers regardless of content or length. Morph instead re‑architects the model into modular blocks and, at runtime, chooses a fixed, request‑specific layout that minimizes unnecessary computation. The system also groups similar requests into batches and re‑uses contextual embeddings across calls to reduce redundant processing. Experimental results on several benchmark datasets show that Morph can cut inference latency by up to 3.87× and increase overall throughput by a comparable factor when compared to a baseline static model. The gains are most pronounced for short‑to‑medium length prompts, where the overhead of full attention layers dominates. For enterprise IT, this approach directly addresses the cost and performance constraints of running LLMs in production. By reducing compute cycles per token, organizations can lower GPU utilization, defer scaling events, and improve response times for latency‑sensitive applications such as chatbots, code assistants, or real‑time translation services. Moreover, the ability to batch similar requests and reuse context aligns with existing data‑center optimization practices, enabling smoother integration with autoscaling policies and spot‑instance usage. Real‑world implications include the potential to run larger models on existing hardware, the ability to meet stricter SLAs without additional infrastructure, and a reduction in carbon footprint due to fewer GPU hours. The study also highlights the importance of a modular model design and a flexible runtime that can adapt to varying workloads, suggesting a shift from monolithic LLM deployments to request‑adaptive pipelines in enterprise environments.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1. Profile current LLM workloads: measure per‑request latency, token distribution, and batch sizes.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2. Identify compute bottlenecks: determine whether attention or SSM layers dominate CPU/GPU usage.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3. Assess data locality: evaluate how often context can be reused across requests in your current pipeline.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4. Inventory infrastructure: document GPU models, memory limits, and autoscaling policies.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1. Build a cost‑benefit model: estimate savings from a 3.87× speedup (e.g., reduced GPU hours, lower cloud spend).</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2. Benchmark against current SLA: show how latency reductions translate to higher user satisfaction scores.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3. Include a pilot ROI: allocate a small cluster to run Morph on a subset of traffic; report throughput and cost metrics.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4. Align with sustainability goals: quantify CO₂ reduction from fewer compute cycles.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA Triton Inference Server (supports dynamic batching and model ensembles).
+   - Hugging Face Optimum (provides SSM implementations and model partitioning utilities).
+   - Ray Serve or TorchServe for custom runtime orchestration.
+   - Kubernetes with GPU autoscaling (Kube‑GPU‑Autoscaler) for dynamic resource allocation.
+   - Prometheus + Grafana for detailed latency and resource usage monitoring.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1. Technical: ensuring model partitioning does not introduce numerical instability; validating that SSM layers maintain accuracy.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2. Compliance: UK GDPR requires data minimization; re‑using context must not expose personal data across sessions.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3. Operational: increased complexity in deployment pipelines; need for continuous monitoring of layout selection logic.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4. Vendor lock‑in: reliance on specific frameworks may limit future migration.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy a lightweight version of Morph on a single GPU by:
+   - Replacing the full attention stack with a truncated SSM for short prompts.
+   - Enabling dynamic batching in Triton for requests of similar length.
+   - Running the pilot for 2 weeks to capture baseline vs. optimized metrics.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months:
+   - Refactor the core LLM into a modular architecture with clear layer boundaries.
+   - Implement a policy engine that selects layer mixes based on request metadata (length, topic, priority).
+   - Integrate context‑reuse caches that respect GDPR constraints (e.g., session‑bound tokens).
+   - Automate continuous profiling to adjust thresholds and update the selection model.
+   - Expand to multi‑model serving, allowing the same runtime to switch between different LLMs or fine‑tuned variants based on workload characteristics.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 29 Oct 2026, 12:41</p>
+</main>
+</body>
+</html>
