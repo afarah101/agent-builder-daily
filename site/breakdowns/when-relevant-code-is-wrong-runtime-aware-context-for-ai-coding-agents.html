@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>When Relevant Code Is Wrong: Runtime-Aware Context for AI Coding Agents - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">When Relevant Code Is Wrong: Runtime-Aware Context for AI Coding Agents</h1>
+  <p class="meta-line">Wesley K. G. Assunção, Ramesh Periyathambi · Academic Institution · 2026-10-28 · Generated 30 Oct 2026, 12:33</p>
+  <a href="https://arxiv.org/abs/2610.38800v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study investigates the mismatch between code artifacts that AI coding agents retrieve from version control and the actual runtime environment in which those artifacts are executed. The authors identified a recurring issue: agents often pull legacy code that references deprecated APIs, disabled feature flags, or architectural components that have been removed or replaced. This leads to runtime failures, wasted developer effort, and potential security regressions. To address this, the team developed CASE (Context-Aware Source Extraction), a framework that maps each code artifact to its current runtime configuration. CASE queries the repository for code metadata, cross‑references feature flag states, dependency versions, and deployment topology, then classifies artifacts as “valid” or “invalid” for the current environment. In a prototype run against a large enterprise codebase, CASE successfully filtered out 16 artifacts that had previously been misapplied by the AI agent while retaining all artifacts that were still applicable. The prototype did not yet improve overall agent accuracy, but it demonstrated that runtime‑aware filtering is feasible and can reduce false positives. For enterprise IT, this is significant because it directly tackles the reliability and security of automated code generation tools, which are increasingly used in continuous delivery pipelines. By ensuring that only compatible code is suggested, organizations can reduce runtime errors, shorten debugging cycles, and maintain compliance with internal change‑management policies. Real‑world implications include the need to integrate runtime state into AI tooling, the potential for new governance layers around code reuse, and the opportunity to build more resilient DevOps workflows that automatically adapt to evolving infrastructure.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all feature flag systems (e.g., LaunchDarkly, Optimizely) and map flag states to code branches.  
+   - Audit dependency graphs to identify deprecated libraries or API changes.  
+   - Review deployment topology (microservices, serverless, on‑prem) and document which services are active.  
+   - Verify that your CI/CD pipelines expose runtime metadata (environment variables, config files) to downstream tooling.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify current failure rate of AI‑generated code (e.g., X% of pull requests fail due to runtime incompatibility).  
+   - Estimate cost of debugging per failure (average hours × engineer rate).  
+   - Present a cost‑benefit model: implementing CASE could reduce failures by Y%, saving Z hours per month.  
+   - Highlight compliance risk reduction (e.g., fewer security regressions, lower audit findings).</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- CASE (open‑source prototype) – can be integrated into existing GitOps workflows.  
+   - GitHub Advanced Security or GitLab Security Dashboard for code metadata extraction.  
+   - Feature flag management platforms that expose APIs (LaunchDarkly, Split.io).  
+   - Dependency scanning tools (Snyk, Dependabot) for version mapping.  
+   - Runtime monitoring platforms (Datadog, New Relic) to correlate failures with code artifacts.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: incomplete mapping of runtime state may still allow invalid artifacts; false negatives can cause silent failures.  
+   - Compliance: UK GDPR – ensure that any data used for runtime context (e.g., user‑specific flags) is handled per data protection principles.  
+   - Operational: added complexity to CI pipelines may increase build times; need rollback mechanisms if CASE misclassifies artifacts.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight script that queries the feature flag service and annotates pull requests with a “flag‑compatible” tag.  
+   - Configure the CI pipeline to skip builds for artifacts marked as incompatible, reducing runtime errors within 30 days.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate CASE into the AI coding agent’s retrieval layer so that the agent receives only runtime‑valid artifacts.  
+   - Extend the framework to support dynamic dependency resolution and automated rollback of feature flag changes.  
+   - Build a governance dashboard that tracks artifact validity trends, enabling continuous improvement of the codebase and AI tooling over 6–12 months.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 30 Oct 2026, 12:33</p>
+</main>
+</body>
+</html>
