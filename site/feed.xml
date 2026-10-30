@@ -5,70 +5,62 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 30 Oct 2026 12:33:54 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 30 Oct 2026 22:13:24 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>InferD: A Honeypot Framework for AI Inference Infrastructure</title>
-    <link>https://arxiv.org/abs/2610.39807v1</link>
-    <guid>https://arxiv.org/abs/2610.39807v1</guid>
-    <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>InferD is a honeypot framework that lets security teams study how AI inference services are attacked without risking real models or data. It emulates the visible behaviour of LLM APIs, vector stores and orchestration gateways, while all responses come from static pools and no actual inference runs. The result is a low‑interaction trap that provides evidence of attack paths and credential use without exposing real assets.</p><p><strong>IT Breakdown:</strong> If you manage AI inference infrastructure, add InferD to your security stack: 1) deploy the framework on a separate test environment, 2) configure it to mirror your production API endpoints, 3) monitor the static response logs for malicious activity and adjust firewall rules accordingly.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases</title>
-    <link>https://arxiv.org/abs/2610.39621v1</link>
-    <guid>https://arxiv.org/abs/2610.39621v1</guid>
-    <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research shows how the energy used by LLMs grows with both the input (prefill) and output (decode) tokens, giving clear scaling rules and a simple way to estimate energy from compute time. It builds a profiling tool and statistical models that map token lengths to compute time and energy, proving that compute time is a good stand‑in for energy when measurements are hard to get. The result is a practical framework that can help you predict and reduce the energy footprint of your LLM workloads.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) use the authors’ profiling method to benchmark your LLM workloads and capture prefill and decode token counts; 2) apply the linear/quadratic scaling equations to estimate compute time and energy; 3) adjust your deployment (e.g., limit context length or batch size) to stay within energy budgets and improve sustainability.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>When Relevant Code Is Wrong: Runtime-Aware Context for AI Coding Agents</title>
-    <link>https://arxiv.org/abs/2610.38800v1</link>
-    <guid>https://arxiv.org/abs/2610.38800v1</guid>
+    <title>CARI: Cross-Boundary Adversarial Runtime Injection in Coding-Agent Workflows</title>
+    <link>https://arxiv.org/abs/2610.38799v1</link>
+    <guid>https://arxiv.org/abs/2610.38799v1</guid>
     <pubDate>Wed, 28 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the problem of coding agents misusing older code that no longer runs because of feature flags or architectural changes. The authors built CASE, a framework that links repository code to current runtime settings, classifying artifacts as valid or invalid for guidance. The prototype showed it can filter out 16 previously misapplied artifacts while keeping all applicable ones, proving the idea works but not yet improving agent accuracy.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check your code‑retrieval tools: 1) Integrate runtime metadata (feature flags, deployment configs) into your search queries; 2) Filter out artifacts flagged as invalid by your context‑aware system; 3) Verify that remaining code matches current environment before use.</p>]]></description>
+    <description><![CDATA[<p>CARI shows that a compromised development component can inject malicious instructions into the runtime feedback of coding agents, leading to resource exhaustion, data leaks, or state changes. The researchers built ten attacks across multiple languages and models, achieving up to 94.8% success, and proved the technique works on real product agents like Codex and Claude Code. This is relevant to cloud infra managers because insecure CI/CD or deployment services could become the injection vector.</p><p><strong>IT Breakdown:</strong> If you manage CI/CD or deployment services that provide runtime feedback to development agents, check that the feedback cannot be tampered with by other services; isolate feedback channels and validate authenticity before agents act on them.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Elucidating the Design Space of LM Data Attribution</title>
-    <link>https://arxiv.org/abs/2610.40655v1</link>
-    <guid>https://arxiv.org/abs/2610.40655v1</guid>
+    <title>Understanding and Mitigating Role Spoofing in LLMs</title>
+    <link>https://arxiv.org/abs/2610.40396v1</link>
+    <guid>https://arxiv.org/abs/2610.40396v1</guid>
     <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Not relevant to IT infrastructure work.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <description><![CDATA[<p>This study shows that large language models can be tricked into attributing text to the wrong role (role spoofing) by mixing fake structure and content cues, making them vulnerable to hijacking attacks. The researchers built a detection method using linear probes that reliably flags spoofed roles across different model settings. For IT infrastructure managers, the work highlights a new security risk with LLM‑powered tools but does not directly change day‑to‑day cloud ops.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑enabled services, implement role‑spoof detection: 1) add a linear probe layer to your inference pipeline that flags anomalous role assignments; 2) audit prompt templates to ensure control tokens are unforgeable; 3) train models with adversarial examples that mix fake structure and content to harden against spoofing attacks.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Memoryless Races</title>
-    <link>https://arxiv.org/abs/2610.40613v1</link>
-    <guid>https://arxiv.org/abs/2610.40613v1</guid>
-    <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>TextSeal2 is a watermark that lets you recognise AI‑generated text without hurting model speed or quality. It merges multiple keys into one, keeping the signal clear even when the model uses speculative decoding. The result is higher detection rates (8‑22% better) with no extra latency. This is relevant to anyone who needs to prove text authenticity in a cloud‑hosted LLM service.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted LLMs, enable TextSeal2 by: 1) merge your existing watermark keys with a Gaussian copula in the model’s post‑processing; 2) adjust your inference pipeline to run the extra exponential race only on draft leftovers; 3) monitor detection metrics to confirm no latency increase. </p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>[News] You don’t need to believe in a god to get a religious exemption from using AI at work</title>
-    <link>https://techcrunch.com/2026/10/29/you-dont-need-to-believe-in-a-god-to-get-a-religious-exemption-from-using-ai-at-work/</link>
-    <guid>https://techcrunch.com/2026/10/29/you-dont-need-to-believe-in-a-god-to-get-a-religious-exemption-from-using-ai-at-work/</guid>
-    <pubDate>Fri, 30 Oct 2026 12:33:54 +0000</pubDate>
-    <description><![CDATA[<p>A University of Kentucky administrator secured a religious exemption from using AI at work, citing humanist beliefs. This legal precedent highlights that non-religious convictions may also qualify for workplace AI accommodations.</p>]]></description>
+    <title>[News] GitHub Incident with Actions, Pages, and Webhooks</title>
+    <link>https://www.githubstatus.com/incidents/pwxsjgnvrk6b</link>
+    <guid>https://www.githubstatus.com/incidents/pwxsjgnvrk6b</guid>
+    <pubDate>Fri, 30 Oct 2026 22:13:24 +0000</pubDate>
+    <description><![CDATA[<p>GitHub reported a degradation affecting Actions, Pages, and Webhooks, which has since been mitigated. The incident prompted GitHub to investigate root causes and monitor recovery.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Meta quietly launches an AI fashion app called Style Sketch</title>
-    <link>https://techcrunch.com/2026/10/29/meta-quietly-launches-an-ai-fashion-app-called-style-sketch/</link>
-    <guid>https://techcrunch.com/2026/10/29/meta-quietly-launches-an-ai-fashion-app-called-style-sketch/</guid>
-    <pubDate>Fri, 30 Oct 2026 12:33:54 +0000</pubDate>
-    <description><![CDATA[<p>Meta has quietly released Style Sketch, an AI-powered fashion app that builds a virtual closet from Instagram photos and suggests outfits based on user wardrobe. The app, available in Indonesia, Singapore and Thailand on iOS and Android, offers AI-generated outfit combos and trip planning features.</p>]]></description>
+    <title>[News] Bunny CDN Security Incident</title>
+    <link>https://status.bunny.net/incidents/p6gf1by9kr7m</link>
+    <guid>https://status.bunny.net/incidents/p6gf1by9kr7m</guid>
+    <pubDate>Fri, 30 Oct 2026 22:13:24 +0000</pubDate>
+    <description><![CDATA[<p>Bunny CDN experienced a security incident where an unauthorized access event was detected in a server supplied by an infrastructure provider. The incident prompted an immediate shutdown, data review, and TLS certificate reissuance, with no confirmed data breach.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] elect.horse</title>
-    <link>https://elect.horse/</link>
-    <guid>https://elect.horse/</guid>
-    <pubDate>Fri, 30 Oct 2026 12:33:54 +0000</pubDate>
-    <description><![CDATA[<p>Elect.horse is a daily web-based gerrymandering puzzle that requires JavaScript to play, where players design districts on a hex map to maximize electoral wins for a losing candidate.</p>]]></description>
+    <title>[News] Intel’s stock crashes, knocking $12B from government’s stake</title>
+    <link>https://techcrunch.com/2026/10/30/intels-stock-crashes-knocking-12b-from-governments-stake/</link>
+    <guid>https://techcrunch.com/2026/10/30/intels-stock-crashes-knocking-12b-from-governments-stake/</guid>
+    <pubDate>Fri, 30 Oct 2026 22:13:24 +0000</pubDate>
+    <description><![CDATA[<p>Intel’s shares plunged 28% after the company cut its Q4 revenue and margin forecasts, wiping $12 billion off the U.S. government’s stake in the chipmaker. The sell‑off rattles the broader semiconductor market, potentially tightening budgets for hardware procurement in IT operations.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Making it easier for websites to express AI training preferences</title>
+    <link>https://openai.com/index/helping-websites-express-ai-training-preferences</link>
+    <guid>https://openai.com/index/helping-websites-express-ai-training-preferences</guid>
+    <pubDate>Fri, 30 Oct 2026 22:13:24 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI will honor a new shared signal in robots.txt that lets website operators communicate AI training preferences to multiple AI providers at once. The change simplifies content usage control for publishers but does not directly alter the IT tools the engineer manages.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Fair use benefits everyone</title>
+    <link>https://openai.com/index/fair-use-benefits-everyone</link>
+    <guid>https://openai.com/index/fair-use-benefits-everyone</guid>
+    <pubDate>Fri, 30 Oct 2026 22:13:24 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI and a coalition of industry groups argue that fair use should protect AI training from new copyright restrictions, emphasizing that generative AI is transformative and not harmful to markets. The legal debate centers on whether courts will uphold fair use as a cornerstone of innovation in AI and related sectors.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
