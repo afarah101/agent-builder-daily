@@ -5,21 +5,53 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sat, 31 Oct 2026 15:00:11 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 31 Oct 2026 21:18:30 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Preserving Utility in Continual LLM Unlearning via Orthogonal Projections</title>
-    <link>https://arxiv.org/abs/2610.40483v1</link>
-    <guid>https://arxiv.org/abs/2610.40483v1</guid>
+    <title>InferD: A Honeypot Framework for AI Inference Infrastructure</title>
+    <link>https://arxiv.org/abs/2610.39807v1</link>
+    <guid>https://arxiv.org/abs/2610.39807v1</guid>
     <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the problem of repeatedly removing sensitive data from a large language model without losing performance. The authors built Continual Orthogonal Projection (COP), a simple gradient‑projection method that keeps each deletion orthogonal to previous ones, so utility stays high and forgetting stays strong. Experiments on standard benchmarks show COP outperforms existing continual‑unlearning techniques.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted LLMs, here is what to do: 1) add COP’s low‑rank basis cache to your inference pipeline; 2) whenever a deletion request arrives, run a single gradient step constrained to COP’s orthogonal subspace; 3) monitor utility metrics to confirm no drift. If your org uses continual data deletion, check that your current unlearning routine isn’t causing interference between successive requests.</p>]]></description>
+    <description><![CDATA[<p>InferD is a honeypot framework that lets security teams study how AI inference services are attacked without risking real models or data. It emulates the visible behaviour of LLM APIs, vector stores and orchestration gateways, while all responses come from static pools and no actual inference runs. The result is a low‑interaction trap that provides evidence of attack paths and credential use without exposing real assets.</p><p><strong>IT Breakdown:</strong> If you manage AI inference infrastructure, add InferD to your security stack: 1) deploy the framework on a separate test environment, 2) configure it to mirror your production API endpoints, 3) monitor the static response logs for malicious activity and adjust firewall rules accordingly.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases</title>
+    <link>https://arxiv.org/abs/2610.39621v1</link>
+    <guid>https://arxiv.org/abs/2610.39621v1</guid>
+    <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This research shows how the energy used by LLMs grows with both the input (prefill) and output (decode) tokens, giving clear scaling rules and a simple way to estimate energy from compute time. It builds a profiling tool and statistical models that map token lengths to compute time and energy, proving that compute time is a good stand‑in for energy when measurements are hard to get. The result is a practical framework that can help you predict and reduce the energy footprint of your LLM workloads.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) use the authors’ profiling method to benchmark your LLM workloads and capture prefill and decode token counts; 2) apply the linear/quadratic scaling equations to estimate compute time and energy; 3) adjust your deployment (e.g., limit context length or batch size) to stay within energy budgets and improve sustainability.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>When Relevant Code Is Wrong: Runtime-Aware Context for AI Coding Agents</title>
+    <link>https://arxiv.org/abs/2610.38800v1</link>
+    <guid>https://arxiv.org/abs/2610.38800v1</guid>
+    <pubDate>Wed, 28 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This research tackles the problem of coding agents misusing older code that no longer runs because of feature flags or architectural changes. The authors built CASE, a framework that links repository code to current runtime settings, classifying artifacts as valid or invalid for guidance. The prototype showed it can filter out 16 previously misapplied artifacts while keeping all applicable ones, proving the idea works but not yet improving agent accuracy.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check your code‑retrieval tools: 1) Integrate runtime metadata (feature flags, deployment configs) into your search queries; 2) Filter out artifacts flagged as invalid by your context‑aware system; 3) Verify that remaining code matches current environment before use.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Elucidating the Design Space of LM Data Attribution</title>
+    <link>https://arxiv.org/abs/2610.40655v1</link>
+    <guid>https://arxiv.org/abs/2610.40655v1</guid>
+    <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Not relevant to IT infrastructure work.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Memoryless Races</title>
+    <link>https://arxiv.org/abs/2610.40613v1</link>
+    <guid>https://arxiv.org/abs/2610.40613v1</guid>
+    <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>TextSeal2 is a watermark that lets you recognise AI‑generated text without hurting model speed or quality. It merges multiple keys into one, keeping the signal clear even when the model uses speculative decoding. The result is higher detection rates (8‑22% better) with no extra latency. This is relevant to anyone who needs to prove text authenticity in a cloud‑hosted LLM service.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted LLMs, enable TextSeal2 by: 1) merge your existing watermark keys with a Gaussian copula in the model’s post‑processing; 2) adjust your inference pipeline to run the extra exponential race only on draft leftovers; 3) monitor detection metrics to confirm no latency increase. </p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] Spooky New Infostealer Malware Uses AI to ‘Autodox’ Victims</title>
     <link>https://www.wired.com/story/kernel-panic-volta-autodoxer-ai-infostealer-malware/</link>
     <guid>https://www.wired.com/story/kernel-panic-volta-autodoxer-ai-infostealer-malware/</guid>
-    <pubDate>Sat, 31 Oct 2026 15:00:11 +0000</pubDate>
+    <pubDate>Sat, 31 Oct 2026 21:18:30 +0000</pubDate>
     <description><![CDATA[<p>Cisco Talos has identified a new AI‑enhanced infostealer called Volta‑Autodoxer that automatically profiles victims and prioritizes credential theft using large language models. The malware can harvest tokens, passwords, and personal data, then feed the findings to LLMs for rapid analysis, raising the threat level for enterprise security stacks.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -27,7 +59,7 @@
     <title>[News] How a Contractor’s Claude Agent Got Into the Pentagon</title>
     <link>https://www.wired.com/story/uncanny-valley-podcast-how-a-contractors-claude-agent-got-into-the-pentagon/</link>
     <guid>https://www.wired.com/story/uncanny-valley-podcast-how-a-contractors-claude-agent-got-into-the-pentagon/</guid>
-    <pubDate>Sat, 31 Oct 2026 15:00:11 +0000</pubDate>
+    <pubDate>Sat, 31 Oct 2026 21:18:30 +0000</pubDate>
     <description><![CDATA[<p>A defense contractor integrated Anthropic’s Claude AI into a secure Department of Defense system, raising concerns about potential security gaps in sensitive environments. The incident underscores the need for tighter AI governance and monitoring across all secure IT infrastructures.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -35,7 +67,7 @@
     <title>[News] Anthropic VS code extension on Cursor backdoored for nearly 12 hours</title>
     <link>https://arstechnica.com/security/2026/10/anthropic-vs-code-extension-on-cursor-backdoored-for-nearly-12-hours/</link>
     <guid>https://arstechnica.com/security/2026/10/anthropic-vs-code-extension-on-cursor-backdoored-for-nearly-12-hours/</guid>
-    <pubDate>Sat, 31 Oct 2026 15:00:11 +0000</pubDate>
+    <pubDate>Sat, 31 Oct 2026 21:18:30 +0000</pubDate>
     <description><![CDATA[<p>A malicious version (2.1.313) of Anthropic’s Claude VS Code extension was distributed through Cursor’s marketplace, enabling a persistent SSH backdoor on up to 5,000 developer machines. The attack exploited the official distribution channel and left users vulnerable to credential theft and remote access without their knowledge.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -43,7 +75,7 @@
     <title>[News] Meta’s Muse Could Upend All Kinds of Businesses. It Hasn’t Yet</title>
     <link>https://www.wired.com/story/metas-muse-could-upend-all-kinds-of-businesses-it-hasnt-yet/</link>
     <guid>https://www.wired.com/story/metas-muse-could-upend-all-kinds-of-businesses-it-hasnt-yet/</guid>
-    <pubDate>Sat, 31 Oct 2026 15:00:11 +0000</pubDate>
+    <pubDate>Sat, 31 Oct 2026 21:18:30 +0000</pubDate>
     <description><![CDATA[<p>Meta’s new agentic AI tool, Muse, is gaining traction among consumers for online shopping, with over 10 million users in the US and Canada and partnerships with major retailers like Walmart and Best Buy. The tool’s early adoption is prompting businesses to optimize their websites for agent interactions and monitor potential impacts on brand loyalty and pricing strategy.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -51,7 +83,7 @@
     <title>[News] Tell HN: Scribd Breached</title>
     <link>https://news.ycombinator.com/item?id=50312756</link>
     <guid>https://news.ycombinator.com/item?id=50312756</guid>
-    <pubDate>Sat, 31 Oct 2026 15:00:11 +0000</pubDate>
+    <pubDate>Sat, 31 Oct 2026 21:18:30 +0000</pubDate>
     <description><![CDATA[<p>Scribd, Inc. disclosed a security incident involving an unauthorized third party accessing user data, as reported on October 26, 2026. The breach potentially exposes sensitive documents and media across Scribd&#x27;s platforms, including Slideshare and Everand.</p>]]></description>
     <category>Industry News</category>
   </item>

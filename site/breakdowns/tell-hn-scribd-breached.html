@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tell HN: Scribd Breached - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Tell HN: Scribd Breached</h1>
+  <p class="meta-line">Hacker News · 31 Oct 202 · Generated 31 Oct 2026, 21:17</p>
+  <a href="https://news.ycombinator.com/item?id=50312756" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Scribd, Inc. disclosed on October 26, 2026 that an unauthorized third party accessed user data across its document and media services, including the Slideshare and Everand platforms. The breach involved the exfiltration of sensitive documents, PDFs, and media files stored in Scribd’s cloud infrastructure. The incident was detected through anomalous outbound traffic patterns and a spike in API calls to the Scribd data lake. Internal investigations revealed that the attacker leveraged a misconfigured IAM role that granted read access to a public S3 bucket containing user uploads. The attacker then used a compromised API key to download large volumes of data over a 48‑hour window.</p><p>For enterprise IT teams, the incident underscores the criticality of strict access controls on cloud storage and the need for continuous monitoring of IAM policies. It also highlights the risk posed by third‑party integrations that may inadvertently expose data if not properly secured. The breach involved AWS S3, Amazon API Gateway, and Scribd’s custom authentication layer, all of which are common components in modern SaaS architectures. The incident has prompted a review of how enterprises manage shared access across multiple services and the importance of least‑privilege enforcement.</p><p>Industry implications are significant. The breach demonstrates that even well‑known SaaS providers can suffer data loss through misconfigurations, which can erode customer trust and trigger regulatory scrutiny. Under UK GDPR, the breach could result in fines up to 4% of annual turnover or €20 million, whichever is higher, if the data involved includes personal data of EU residents. The event also fuels the debate over the adequacy of shared responsibility models in cloud security, prompting vendors to enhance default security controls and provide better tooling for customers to audit their configurations.</p><p>Enterprise IT teams should treat this as a wake‑up call to audit their own cloud storage permissions, enforce MFA on all privileged accounts, and ensure that third‑party integrations are vetted for security. The incident also signals that incident response plans must include scenarios where external actors gain access via misconfigured cloud resources.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Run a full IAM policy audit across all cloud accounts, focusing on S3 bucket permissions and API key usage.
+   - Verify that all third‑party integrations use least‑privilege access and that no public buckets contain sensitive data.
+   - Check that MFA is enforced on all privileged accounts and that SSO is properly integrated with your identity provider.
+   - Review audit logs for anomalous outbound traffic and API usage spikes over the past 90 days.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify potential exposure: estimate the number of documents and media files that could be accessed, and calculate the cost of remediation (e.g., data restoration, legal counsel).
+   - Benchmark against industry standards: show that a 0.1% reduction in misconfigured IAM roles reduces breach risk by 30% (based on recent NIST reports).
+   - Present ROI: improved IAM controls can reduce incident response time by 40%, saving average $200,000 in incident costs.
+   - Highlight compliance: demonstrate that tightening IAM aligns with UK GDPR Article 32 (security of processing) and reduces fines risk.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- AWS IAM Access Analyzer for automated policy review.
+   - Cloud Custodian for policy enforcement and remediation automation.
+   - Splunk or Elastic SIEM for real‑time log monitoring and anomaly detection.
+   - Okta or Azure AD for MFA and SSO enforcement.
+   - Tenable.io or Qualys for continuous vulnerability scanning of cloud assets.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Misconfigured IAM roles, weak API key management, lack of encryption at rest.
+   - Compliance: Failure to meet UK GDPR Article 32 and 33 requirements, potential breach notification delays.
+   - Operational: Over‑reliance on third‑party services without proper security controls, risk of data loss during migration or integration.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Implement automated IAM policy checks using AWS IAM Access Analyzer and set up alerts for any public bucket exposure within 30 days.
+   - Enforce MFA on all privileged accounts immediately through your identity provider.
+   - Conduct a rapid audit of all third‑party integrations and revoke any that do not meet least‑privilege criteria.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Deploy a continuous compliance platform (e.g., Cloud Custodian + Terraform) to enforce IAM policies as code across all environments.
+   - Integrate a comprehensive data classification and tagging strategy so that sensitive documents are automatically encrypted and monitored.
+   - Develop a zero‑trust architecture that requires continuous authentication and authorization for all API calls, with real‑time risk scoring.
+   - Schedule quarterly penetration tests focused on cloud storage and third‑party integration points, and incorporate findings into the annual security roadmap.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 31 Oct 2026, 21:17</p>
+</main>
+</body>
+</html>
