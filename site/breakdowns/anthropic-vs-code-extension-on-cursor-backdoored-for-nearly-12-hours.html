@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anthropic VS code extension on Cursor backdoored for nearly 12 hours - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Anthropic VS code extension on Cursor backdoored for nearly 12 hours</h1>
+  <p class="meta-line">Ars Technica · 30 Oct 202 · Generated 31 Oct 2026, 12:01</p>
+  <a href="https://arstechnica.com/security/2026/10/anthropic-vs-code-extension-on-cursor-backdoored-for-nearly-12-hours/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>A malicious version of Anthropic’s Claude VS Code extension (2.1.313) was distributed via Cursor’s marketplace. The compromised extension installed a persistent SSH backdoor on up to 5,000 developer machines. The backdoor allowed attackers to capture credentials and maintain remote access without user awareness. The attack exploited the official distribution channel, meaning that the malicious package appeared legitimate to users and automated update systems. For enterprise IT teams, this incident highlights the risk of third‑party extensions, especially AI‑assistant tools that run privileged code inside the IDE. The incident involved several vendors: Anthropic (the AI model provider), Cursor (the marketplace platform), Microsoft Visual Studio Code (the IDE), and indirectly the underlying operating systems and SSH services on the developer workstations. The broader industry implication is that supply‑chain attacks can now target the developer environment, a traditionally trusted zone. This undermines the assumption that code editors are safe, and forces organizations to re‑evaluate extension trust models, update policies, and endpoint visibility. The incident also underscores the need for signed‑package verification, least‑privilege access controls, and continuous monitoring of anomalous SSH activity. Failure to act can expose internal source code, enable stealthy lateral movement, and increase the attack surface for future threats.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all VS Code extensions installed across the organization, focusing on AI‑assistant and marketplace‑derived extensions.
+   - Verify the current update policy: are extensions set to auto‑update? Are signatures checked?
+   - Assess the SSH configuration on developer machines: default ports, key management, and logging.
+   - Review JumpCloud or other directory services for anomalous SSH logins or privilege escalations.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify potential exposure: number of developers, code repositories, and sensitive data at risk.
+   - Estimate cost of a breach: average incident response time, potential downtime, and regulatory fines (e.g., GDPR penalties up to €20M).
+   - Present a risk reduction metric: reduction in attack surface by disabling auto‑updates for AI extensions and enforcing signature checks.
+   - Highlight ROI: faster incident detection, reduced compliance risk, and avoidance of costly remediation.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Microsoft Defender for Endpoint or CrowdStrike Falcon for endpoint visibility and SSH anomaly detection.
+   - Snyk or GitHub Advanced Security for package signing verification and vulnerability scanning.
+   - JumpCloud or Okta for enforcing least‑privilege SSH access and MFA.
+   - Cursor’s own marketplace audit tools or a custom script to validate extension hashes.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: false positives from SSH monitoring, potential disruption to legitimate remote access.
+   - Compliance: GDPR requires data minimization and breach notification; failure to secure developer credentials could trigger violations.
+   - Operational: disabling auto‑updates may delay critical security patches for other extensions; need a balance between security and productivity.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Disable automatic updates for all AI‑assistant extensions in VS Code immediately.
+   - Deploy a signed‑package verification policy: reject any extension that does not present a valid cryptographic signature.
+   - Enable SSH audit logging on all developer machines and set up a SIEM rule to alert on unknown SSH key usage.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Implement a formal extension governance framework: vet, sign, and periodically review all third‑party extensions.
+   - Integrate continuous supply‑chain security scanning into the CI/CD pipeline to detect malicious code in dependencies.
+   - Deploy a zero‑trust network segmentation strategy for developer environments, limiting SSH access to only necessary hosts.
+   - Conduct regular red‑team exercises focused on developer tooling to validate detection and response capabilities.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 31 Oct 2026, 12:01</p>
+</main>
+</body>
+</html>
