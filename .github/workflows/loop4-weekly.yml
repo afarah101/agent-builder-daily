@@ -1,0 +1,67 @@
+name: Loop 4 Weekly Review
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+  push:
+    branches: [loop4-phase1]
+
+jobs:
+  review:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    concurrency:
+      group: loop4-review
+      cancel-in-progress: true
+    permissions:
+      contents: read
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check merge rules
+        run: python -m loop4.merge_findings --self-check
+
+      - name: Fetch traces
+        env:
+          LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+          LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+          LANGFUSE_HOST: ${{ secrets.LANGFUSE_BASE_URL }}
+        run: python -m loop4.fetch_traces
+
+      - name: Review traces
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python -m loop4.review_traces
+
+      - name: Merge findings
+        run: python -m loop4.merge_findings
+
+      - name: Send report
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+          DRY_RUN_FLAG: ${{ github.event_name == 'push' && '--dry-run' || '' }}
+        run: python -m loop4.send_report $DRY_RUN_FLAG
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loop4-out
+          path: loop4/out
+          if-no-files-found: warn
