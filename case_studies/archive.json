@@ -1,5 +1,42 @@
 [
   {
+    "date": "2026-11-01",
+    "total": 1,
+    "case_studies": [
+      {
+        "id": "http://arxiv.org/abs/2610.40483v1",
+        "title": "Preserving Utility in Continual LLM Unlearning via Orthogonal Projections",
+        "abstract": "Unlearning concerns the task of removing the influence of a sensitive portion of the training data, such as protected, copyrighted or private text, from a model without retraining it from scratch. While unlearning requests happen continuously during a model's lifetime, the vast majority of LLM unlearning methods are ill-suited for iterated removal, yielding steep decay in forgetting and utility upon sequential unlearning. This decay stems from interference between successive updates, as each new deletion can undo earlier ones or push the model further along directions already degraded by them. To address this, we introduce Continual Orthogonal Projection (COP), a gradient-projection scheme that restricts each update to the orthogonal complement of activation subspaces cached from prior forget sets. This approach provably guarantees first-order non-interference with earlier deletions. COP stores only a low-rank basis per layer, requiring neither past gradients nor previous forget sets, and plugs into unlearning methods that update the model through gradient steps on a differentiable loss without modifying its objective. Experiments on standard LLM unlearning benchmarks (TOFU and RWKU) show that COP preserves utility across sequential requests without weakening forgetting, preventing the collapse of standard objectives and forgetting more effectively than continual-specific baselines.",
+        "authors": [
+          "Juan Belieni",
+          "Ana Carolina Erthal",
+          "Eliezer de Souza da Silva",
+          "Diego Mesquita"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40483v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 5,
+        "ai_maturity": 10,
+        "monetisation_potential": 5,
+        "total_score": 20,
+        "summary": "This research tackles the problem of repeatedly removing sensitive data from a large language model without losing performance. The authors built Continual Orthogonal Projection (COP), a simple gradient\u2011projection method that keeps each deletion orthogonal to previous ones, so utility stays high and forgetting stays strong. Experiments on standard benchmarks show COP outperforms existing continual\u2011unlearning techniques.",
+        "it_breakdown": "If you manage cloud\u2011hosted LLMs, here is what to do: 1) add COP\u2019s low\u2011rank basis cache to your inference pipeline; 2) whenever a deletion request arrives, run a single gradient step constrained to COP\u2019s orthogonal subspace; 3) monitor utility metrics to confirm no drift. If your org uses continual data deletion, check that your current unlearning routine isn\u2019t causing interference between successive requests.",
+        "try_this": [],
+        "monetisation": "",
+        "relevance_tag": "Niche research, low impact",
+        "author_built_product": false,
+        "score_reasoning": "The paper addresses a niche research problem (continual unlearning) with limited direct applicability to existing IT infrastructure. No evidence of released code or deployment, and the concept does not translate into a near-term service for engineers.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": true
+      }
+    ]
+  },
+  {
     "date": "2026-10-31",
     "total": 5,
     "case_studies": [
