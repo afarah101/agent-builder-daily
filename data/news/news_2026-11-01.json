@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-01T13:00:49.181041",
+  "timestamp": "2026-11-01T15:37:13.234521",
   "filter": "last_4_to_8_weeks",
   "total_fetched": 28,
-  "total_classified": 3,
+  "total_classified": 5,
   "news": [
     {
       "id": "https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/",
@@ -48,6 +48,36 @@
       "relevance_score": 0,
       "relevance_signal": "low",
       "category": "Other"
+    },
+    {
+      "id": "https://techcrunch.com/2026/10/31/4-days-left-how-techcrunch-founder-summit-helps-you-make-more-useful-connections-to-scale/",
+      "title": "4 days left: How TechCrunch Founder Summit helps you make more useful connections to scale",
+      "summary_raw": "On November 4 at Boston’s SoWa Power Station, get ready for a full day packed with meaningful networking opportunities, actionable insights, and connections that could change the trajectory of your idea and startup. Register before all prices go up at the door.",
+      "source": "TechCrunch",
+      "tier": "news",
+      "pub_date": "31 Oct 2026",
+      "url": "https://techcrunch.com/2026/10/31/4-days-left-how-techcrunch-founder-summit-helps-you-make-more-useful-connections-to-scale/",
+      "source_text": "Networking shouldn’t mean walking into a crowded room and hoping you happen to meet the right person. At TechCrunch Founder Summit, presented by Fidelity Private Shares, founders and VCs have several ways to make the connections they build beyond the sessions more intentional.\nOn November 4 at Boston’s SoWa Power Station, get ready for a full day packed with meaningful networking opportunities, actionable insights, and connections that could change the trajectory of your idea and startup.\nMake game-changing connections, gain valuable insights, and get the advice you need to propel your idea and startup forward. Grab your pass now to save up to $100 and get a second pass free before doors open.\nNetworking intended to push the needle\nThe Founder Summit Networking Lounge, powered by Braindate, gives attendees the ability to schedule one-on-one and small-group conversations around specific topics.\n- That means you don’t have to leave networking entirely to chance.\n- Want to compare fundraising strategies?\n- Talk about a hiring challenge?\n- Find another founder trying to crack enterprise sales?\n- Meet someone building in Boston?\nBring a question, offer your own experience, and find people who want to have the same conversation.\nTurn sessions into conversations\nBraindate also gives attendees an opportunity to continue ideas that start elsewhere in the program.\nHear Kent Bennett discuss product-market fit, then connect with another founder wrestling with the same question.\nWatch founders put their pitches in front of investors, then compare notes with someone preparing for a raise.\nHear Chase Garbarino talk about building in Boston, then meet other founders doing exactly that.\nThe sessions can start the conversation. Networking gives you somewhere to take it next.\nConnect across the entire Founder Summit experience\nThe connections aren’t limited to one lounge. Roundtables create smaller, topic-driven conversations. Breakout sessions are where on-stage panels address questions from those in the room. The Expo Hall brings attendees and partners together throughout the day. The closing reception gives founders, investors, and operators time to continue conversations without rushing to another session.\nAnd the TechCrunch Founder Summit experience extends beyond the venue and event day with official Side Events happening throughout Boston all week long.\nSometimes the most useful thing you leave an event with isn’t another page of notes. It’s a person you didn’t know that morning.\n4 days until doors open and prices rise: Save on your pass now\nJust four days remain until TechCrunch Founder Summit arrives at Boston’s SoWa Power Station! Don’t miss out on ticket savings, a full day of impactful networking, and practical takeaways designed to propel your idea and startup forward. Register now to save up to $100 on your pass and get a second pass free.",
+      "summary": "TechCrunch Founder Summit in Boston offers a structured networking platform powered by Braindate, enabling attendees to schedule targeted one-on-one and small-group conversations on specific topics. The event aims to replace random networking with intentional, topic-driven connections and continued engagement beyond the venue.",
+      "enterprise_use": "Check the event schedule and Braindate integration for any partners or services that may impact your organization’s IT tools or security practices—though no direct action is required now.",
+      "relevance_score": 4,
+      "relevance_signal": "low",
+      "category": "Other"
+    },
+    {
+      "id": "https://nolanlawson.com/2026/10/28/the-ai-cost-of-javascript-frameworks/",
+      "title": "The AI cost of JavaScript frameworks",
+      "summary_raw": "Article URL: https://nolanlawson.com/2026/10/28/the-ai-cost-of-javascript-frameworks/\nComments URL: https://news.ycombinator.com/item?id=50323088\nPoints: 176\n# Comments: 118",
+      "source": "Hacker News",
+      "tier": "news",
+      "pub_date": "01 Nov 2026",
+      "url": "https://nolanlawson.com/2026/10/28/the-ai-cost-of-javascript-frameworks/",
+      "source_text": "The AI cost of JavaScript frameworks\nOne of my pet peeves with the web development community is that so many of the decisions we make are vibes-based. Frameworks are “blazing fast,” tools will “supercharge” your development, the right abstraction will benefit both you and your users (DX and UX all in one!). All of this breathless boasting is usually offered with zero evidence. Alex Russell has called this “frontend’s lost decade”, Baldur Bjarnason has called programming a pop culture, and I’ve tried to counter this trend in my blog with facts and benchmarks (at my best, anyway).\nFor a long time it seemed like our community’s allergy to evidence was driven by the desire for greater DX. In other words, devs just liked the way it felt to type JSX in React, and the arguments promoting React or related tools (“the virtual DOM is fast!”) were largely post-hoc rationalizations to justify those initial gut feelings. (Jonathan Haidt would likely agree with this assessment.)\nBut in the agentic era, when developers are no longer typing code by hand and are thus less constrained by DX, I still see vibes ruling the day (and not just in the sense of “vibe-coding”). Frontends are rewritten because some framework or another is “better for agents.” (Did anyone think to ask the agents?) The resulting code is “faster,” the agents make “fewer mistakes,” etc. Once again, these claims are often made without evidence. Whenever I read one of these accounts, I think to myself, “Where are the benchmarks?”\nWell I got curious, so I wrote a benchmark. The structure of this benchmark is pretty straightforward:\n- Design a small but non-trivial Pokémon app using the PokéAPI (those who have followed my work will be unsurprised)\n- Instruct agents to build the app with a particular JavaScript framework/meta-framework (e.g. Next.js, Nuxt, SvelteKit, etc.)\n- Test the output against a spec conformance suite (to avoid agent cheating)\n- Evaluate the results in terms of development time, tokens spent, lines of code, and performance and accessibility scores in Lighthouse\nThe app is fairly simple: you’ve got a list of Pokémon with their types, moves, and data from various games. You can search, filter, etc.:\nI should start off with some caveats: this is not a perfect experiment. This app represents only one holotype – it’s a relatively content-based site with little interactivity, closer to a Wikipedia than a Figma, GMail, etc. That said, I had to choose some app to build, and this one is at least easy to understand at a high level, and relatively straightforward to spec out and test.\nTo try to even the playing field, I had each framework/meta-framework use the official MCP or skills for that tool. I wanted to avoid accusations of “this framework is not well-represented in the training data, that’s why we built our MCP, we expect people to use it,” etc. I also didn’t over-specify the exact architecture to use (e.g. SSR vs CSR), nor did I specify that the app should be as performant as pos",
+      "summary": "A benchmark study examines the AI resource usage—time, tokens, code length—of various JavaScript frameworks when automated agents generate a simple Pokémon app. The results question common claims that newer frameworks are inherently more efficient for agent-based development.",
+      "enterprise_use": "Review the benchmark data to understand potential AI cost implications for front‑end tooling decisions, but no immediate action is required.",
+      "relevance_score": 3,
+      "relevance_signal": "low",
+      "category": "Research"
     }
   ]
 }
