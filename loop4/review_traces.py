@@ -8,6 +8,7 @@ import json
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from typing import Literal
 
 from dotenv import load_dotenv
@@ -17,8 +18,10 @@ load_dotenv()
 
 OUT_DIR = "loop4/out"
 TRACES_FILE = f"{OUT_DIR}/traces.json"
-GROQ_MODEL = "llama-3.1-8b-instant"
-GEMINI_MODEL = "gemini-3.8-flash"  # newest free-tier Flash on ai.google.dev/gemini-api/docs/pricing, Nov 2026
+GROQ_MODEL = "openai/gpt-oss-20b"  # Groq's named replacement: llama-3.1-8b-instant shut down 2026-08-16
+# Free-tier Flash per ai.google.dev/gemini-api/docs/pricing. Tried in order. 3.8 returned 504s on this key, Nov 2026.
+GEMINI_MODELS = ["gemini-3.6-flash", "gemini-2.5-flash"]
+GEMINI_NEXT_MODEL_CODES = (429, 500, 503, 504)
 TEMPERATURE = 0
 MAX_OUTPUT_TOKENS = 1500
 
@@ -30,7 +33,8 @@ PLAIN_TEXT_CAP = 200
 MAX_BATCHES = 30
 GROQ_GAP_S = 60
 GEMINI_GAP_S = 13
-GEMINI_TIMEOUT_MS = 120_000
+GEMINI_TIMEOUT_MS = 90_000
+MAX_CONSECUTIVE_FAILURES = 3  # a dead model should fail in minutes, not after every batch's pacing gap
 BAD_JSON_RETRIES = 2
 RATE_LIMIT_RETRIES = 3
 RATE_LIMIT_WAIT_S = 65
@@ -136,17 +140,25 @@ def parse_reply(raw, labels):
 def ask_groq(prompt):
     from video_scout_agent import groq_call
     response = groq_call(model=GROQ_MODEL, messages=[{"role": "user", "content": prompt}], temperature=TEMPERATURE,
-                         max_tokens=MAX_OUTPUT_TOKENS, response_format={"type": "json_object"})
+                         max_tokens=MAX_OUTPUT_TOKENS, response_format={"type": "json_object"},
+                         reasoning_effort="low", reasoning_format="hidden")
     return response.choices[0].message.content
 
 
 def ask_gemini(prompt):
     from google import genai
     from google.genai import types
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"), http_options=types.HttpOptions(timeout=GEMINI_TIMEOUT_MS))
-    response = client.models.generate_content(model=GEMINI_MODEL, contents=prompt, config=types.GenerateContentConfig(
-        temperature=TEMPERATURE, response_mime_type="application/json"))
-    return response.text
+    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"), http_options=types.HttpOptions(
+        timeout=GEMINI_TIMEOUT_MS, retry_options=types.HttpRetryOptions(attempts=1)))
+    for model in GEMINI_MODELS:
+        try:
+            response = client.models.generate_content(model=model, contents=prompt, config=types.GenerateContentConfig(
+                temperature=TEMPERATURE, response_mime_type="application/json"))
+            return response.text
+        except Exception as e:
+            if getattr(e, "code", None) not in GEMINI_NEXT_MODEL_CODES or model == GEMINI_MODELS[-1]:
+                raise
+            print(f"[LOOP4]   {model} returned {e.code}, trying next model")
 
 
 def is_rate_limit(error):
@@ -180,16 +192,22 @@ def read_batch(ask, batch, sleep=time.sleep):
 
 
 def run_reader(name, model, ask, gap_s, batches, sleep=time.sleep):
-    findings, reviewed_trace_ids, failed = [], [], 0
+    findings, reviewed_trace_ids, failed, consecutive = [], [], 0, 0
     for i, batch in enumerate(batches, 1):
+        if consecutive >= MAX_CONSECUTIVE_FAILURES:
+            failed += len(batches) - i + 1
+            print(f"[LOOP4] {name} stopped after {consecutive} failures in a row, {len(batches) - i + 1} batches not read")
+            break
         if i > 1:
             sleep(gap_s)
         try:
             batch_findings = read_batch(ask, batch, sleep)
         except Exception as e:
             failed += 1
+            consecutive += 1
             print(f"[LOOP4] {name} batch {i}/{len(batches)} failed: {type(e).__name__}: {str(e)[:200]}")
             continue
+        consecutive = 0
         findings += batch_findings
         reviewed_trace_ids += [trace_id for trace_id, _ in batch]
         print(f"[LOOP4] {name} batch {i}/{len(batches)}: {len(batch_findings)} findings")
@@ -199,7 +217,15 @@ def run_reader(name, model, ask, gap_s, batches, sleep=time.sleep):
             "reviewed_trace_ids": reviewed_trace_ids, "findings": [f.model_dump() for f in findings]}
 
 
-READERS = [("groq", GROQ_MODEL, ask_groq, GROQ_GAP_S), ("gemini", GEMINI_MODEL, ask_gemini, GEMINI_GAP_S)]
+READERS = [("groq", GROQ_MODEL, ask_groq, GROQ_GAP_S), ("gemini", " then ".join(GEMINI_MODELS), ask_gemini, GEMINI_GAP_S)]
+
+
+def review_and_save(reader, batches):
+    name, model, ask, gap = reader
+    result = run_reader(name, model, ask, gap, batches)
+    with open(f"{OUT_DIR}/findings_{name}.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=1)
+    return result
 
 
 def main():
@@ -207,10 +233,9 @@ def main():
         traces = json.load(f)["traces"]
     batches = make_batches(traces)
     print(f"[LOOP4] {len(traces)} traces in {len(batches)} batches")
-    results = [run_reader(name, model, ask, gap, batches) for name, model, ask, gap in READERS]
-    for result in results:
-        with open(f"{OUT_DIR}/findings_{result['reader']}.json", "w", encoding="utf-8") as f:
-            json.dump(result, f, ensure_ascii=False, indent=1)
+    # Side by side, so the job takes as long as the slower reader rather than the sum of both
+    with ThreadPoolExecutor(len(READERS)) as pool:
+        results = list(pool.map(lambda reader: review_and_save(reader, batches), READERS))
     dead = [r["reader"] for r in results if r["failed_batches"] == r["batches"]]
     if dead:
         sys.exit(f"[LOOP4] Every batch failed for: {', '.join(dead)}")
