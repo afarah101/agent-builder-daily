@@ -5,54 +5,86 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sun, 01 Nov 2026 21:55:19 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 02 Nov 2026 15:22:36 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Preserving Utility in Continual LLM Unlearning via Orthogonal Projections</title>
-    <link>https://arxiv.org/abs/2610.40483v1</link>
-    <guid>https://arxiv.org/abs/2610.40483v1</guid>
-    <pubDate>Thu, 29 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the problem of repeatedly removing sensitive data from a large language model without losing performance. The authors built Continual Orthogonal Projection (COP), a simple gradient‑projection method that keeps each deletion orthogonal to previous ones, so utility stays high and forgetting stays strong. Experiments on standard benchmarks show COP outperforms existing continual‑unlearning techniques.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted LLMs, here is what to do: 1) add COP’s low‑rank basis cache to your inference pipeline; 2) whenever a deletion request arrives, run a single gradient step constrained to COP’s orthogonal subspace; 3) monitor utility metrics to confirm no drift. If your org uses continual data deletion, check that your current unlearning routine isn’t causing interference between successive requests.</p>]]></description>
+    <title>Prune Gradually, Adapt Sparsely: Efficient Pruning of Large Language Models at Extreme Sparsity</title>
+    <link>https://arxiv.org/abs/2610.41968v1</link>
+    <guid>https://arxiv.org/abs/2610.41968v1</guid>
+    <pubDate>Fri, 30 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>ETAPS gradually prunes and adapts sparse models, keeping each step small so the model can recover quality without large optimizer states. It outperforms the previous state‑of‑the‑art at 50‑90% sparsity and reduces GPU‑time and memory by up to 49% and 5× respectively. This could help you run cheaper, high‑sparsity LLMs in production.</p><p><strong>IT Breakdown:</strong> If you manage large language models, here is what to do: 1) Use ETAPS to prune in stages, 2) Keep the sparse delta small and train it continuously, 3) Monitor perplexity to ensure quality stays above baseline.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] AI can make tech CEOs’ lives easier. What about everyone else?</title>
-    <link>https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/</link>
-    <guid>https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/</guid>
-    <pubDate>Sun, 01 Nov 2026 21:55:19 +0000</pubDate>
-    <description><![CDATA[<p>TechCrunch reports that several high-profile AI CEOs have made remarks highlighting AI’s role in everyday life, sparking criticism that these leaders may be out of touch with ordinary users. The piece underscores a broader industry debate on how AI marketing and product positioning might alienate non-technical audiences.</p>]]></description>
+    <title>Context as Infrastructure: Knowledge Compilation for Retrieval in Agentic Systems with Harnesses</title>
+    <link>https://arxiv.org/abs/2610.41172v1</link>
+    <guid>https://arxiv.org/abs/2610.41172v1</guid>
+    <pubDate>Fri, 30 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This research shows how to pre‑process and organise knowledge into structured formats (like claim‑evidence trees, entity graphs, timelines) so that an AI agent’s search loop uses only the minimal necessary context, cutting query tokens by 91% and reducing latency from 140s to 30s. The authors built an open‑source pipeline called RAGFlow that turns a chaotic retrieval loop into five disciplined stations, giving the agent a curated, governed context instead of a raw ranked list of passages. For cloud infrastructure managers, this means a way to host and serve structured knowledge bases that improve agent efficiency and governance without adding new retrieval engines.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, set up RAGFlow on your Kubernetes cluster: 1) ingest your documents into the compilation pipeline to generate claim‑evidence trees; 2) expose the compiled store via a REST API; 3) route your agents’ queries through the RAGFlow harness to cut token use and latency.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>SecPO: Principled Adversarial Training for Prompt Injection Security</title>
+    <link>https://arxiv.org/abs/2610.41998v1</link>
+    <guid>https://arxiv.org/abs/2610.41998v1</guid>
+    <pubDate>Fri, 30 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>SecPO introduces a new loss function and adversarial training pipeline that dramatically reduces prompt‑injection attack success rates on LLMs, while keeping normal performance intact. The researchers trained a Qwen‑3.6‑27B model with SecPO and strong synthetic attacks, cutting ASRs 1.5‑14.5× compared to previous methods and 2.4‑4.6× versus standard DPO loss. This shows a practical way to harden AI agents against injection attacks without hurting their usefulness.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted AI services, run the SecPO training code on your models: 1) generate strong injected inputs with their AT pipeline, 2) fine‑tune your model using the SecPO loss, 3) test against known adaptive attacks. This will lower injection success rates and keep service quality high.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>ACCT: Asymmetric Cross-LLM Context Transfer</title>
+    <link>https://arxiv.org/abs/2610.42116v1</link>
+    <guid>https://arxiv.org/abs/2610.42116v1</guid>
+    <pubDate>Fri, 30 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>ACCT lets you move the key‑value cache (the context) from a smaller LLM to a larger one without re‑running the original prompt, saving up to 20× faster inference and cutting memory use by 75%. They built three light components that pick useful tokens, decide how many to keep, and convert the cache into a format the target model can use. The result is that the larger model can infer faster and with fewer tokens, matching or beating its usual performance.</p><p><strong>IT Breakdown:</strong> If you manage multi‑model LLM deployments, step 1: identify which models in your stack can be paired for cross‑cache transfer; step 2: apply a KV selector to keep only the most relevant context tokens within your budget; step 3: convert and load the sparse KV into the target model before inference. This can cut inference time and memory in your cloud infra.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Flide: Accelerating Decision Inference with Exact State Forking</title>
+    <link>https://arxiv.org/abs/2610.42148v1</link>
+    <guid>https://arxiv.org/abs/2610.42148v1</guid>
+    <pubDate>Fri, 30 Oct 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Flide is an inference engine that speeds up decision‑making models by avoiding redundant calculation and keeping results mathematically exact. It does this by flattening token streams and using GPU‑based indices to fork attention across different decision branches, allowing up to 9.5× faster queries than existing engines while maintaining precision. This means faster, more accurate LLM‑driven decision systems for applications that need low latency and high reliability.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑based decision systems, step 1: replace your current inference engine with Flide; step 2: update your deployment to use the flattened token stream format; step 3: test performance and precision against your baseline, aiming for up to 9.5× speed improvement without sacrificing accuracy.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>[News] Supermarket freezers across Europe hit by second suspected cyber-attack</title>
+    <link>https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack</link>
+    <guid>https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack</guid>
+    <pubDate>Mon, 02 Nov 2026 15:22:36 +0000</pubDate>
+    <description><![CDATA[<p>Supermarket chains across Europe have experienced a second suspected cyber‑attack that remotely hijacked refrigeration and freezer systems, raising temperatures and causing significant food losses. The incidents mirror a larger French attack that exploited vulnerabilities in Danfoss controllers, highlighting the risks of connected IoT devices in retail environments.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Chatbots Are Leading Hikers Astray, With Dangerous Consequences</title>
-    <link>https://www.wired.com/story/chatbots-are-leading-hikers-astray-with-dangerous-consequences/</link>
-    <guid>https://www.wired.com/story/chatbots-are-leading-hikers-astray-with-dangerous-consequences/</guid>
-    <pubDate>Sun, 01 Nov 2026 21:55:19 +0000</pubDate>
-    <description><![CDATA[<p>Google Gemini and Anthropic Claude chatbots have been cited as contributing factors in several backcountry hiking accidents, leading to misnavigation and dangerous decision-making by users.</p>]]></description>
+    <title>[News] Omen AI adds liquid know-how in $16 million Aquatic Labs acquisition</title>
+    <link>https://techcrunch.com/2026/11/02/omen-ai-adds-liquid-know-how-in-16-million-aquatic-labs-acquisition/</link>
+    <guid>https://techcrunch.com/2026/11/02/omen-ai-adds-liquid-know-how-in-16-million-aquatic-labs-acquisition/</guid>
+    <pubDate>Mon, 02 Nov 2026 15:22:36 +0000</pubDate>
+    <description><![CDATA[<p>Omen AI has acquired Aquatic Labs for $16 million, combining real‑time water‑sensor technologies to monitor cooling fluids in data centers. The merged solution promises instant detection of valve failure and bacterial contamination, aiming to reduce costly downtime and water waste.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Apple CEO says the company doesn’t ‘want to ship AI for AI’s sake’</title>
-    <link>https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/</link>
-    <guid>https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/</guid>
-    <pubDate>Sun, 01 Nov 2026 21:55:19 +0000</pubDate>
-    <description><![CDATA[<p>Apple CEO John Ternus stated that Apple will not ship AI simply for its own sake, focusing instead on meaningful, user‑centered AI integration in future products. The comment reflects Apple’s cautious approach to AI deployment across its ecosystem.</p>]]></description>
+    <title>[News] Hundreds of Mundane AI Apps Are Hiding Sexually Abusive Deepfake Features</title>
+    <link>https://www.wired.com/story/hundreds-of-mundane-ai-apps-are-hiding-abusive-deepfake-features/</link>
+    <guid>https://www.wired.com/story/hundreds-of-mundane-ai-apps-are-hiding-abusive-deepfake-features/</guid>
+    <pubDate>Mon, 02 Nov 2026 15:22:36 +0000</pubDate>
+    <description><![CDATA[<p>A network of over 400 AI-powered apps, including Viefur, covertly generate sexually abusive deepfake content when accessed under certain conditions. The apps, linked to Chinese developers, bypass platform policies and are promoted via Meta ads, raising serious regulatory and security concerns.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] 4 days left: How TechCrunch Founder Summit helps you make more useful connections to scale</title>
-    <link>https://techcrunch.com/2026/10/31/4-days-left-how-techcrunch-founder-summit-helps-you-make-more-useful-connections-to-scale/</link>
-    <guid>https://techcrunch.com/2026/10/31/4-days-left-how-techcrunch-founder-summit-helps-you-make-more-useful-connections-to-scale/</guid>
-    <pubDate>Sun, 01 Nov 2026 21:55:19 +0000</pubDate>
-    <description><![CDATA[<p>TechCrunch Founder Summit in Boston offers a structured networking platform powered by Braindate, enabling attendees to schedule targeted one-on-one and small-group conversations on specific topics. The event aims to replace random networking with intentional, topic-driven connections and continued engagement beyond the venue.</p>]]></description>
+    <title>[News] Stop counting tokens, start counting what ships</title>
+    <link>https://www.technologyreview.com/2026/11/02/1147702/stop-counting-tokens-start-counting-what-ships/</link>
+    <guid>https://www.technologyreview.com/2026/11/02/1147702/stop-counting-tokens-start-counting-what-ships/</guid>
+    <pubDate>Mon, 02 Nov 2026 15:22:36 +0000</pubDate>
+    <description><![CDATA[<p>The article explains how AI coding agents consume significantly more tokens per task than simple chat prompts, as they plan, generate code, run tests, and iterate to fix errors. It highlights that as agents become more capable, their token usage—and potentially cost—will increase dramatically.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Judge allows NAACP lawsuit over xAI data center pollution to move forward</title>
-    <link>https://techcrunch.com/2026/10/31/judge-allows-naacp-lawsuit-over-xai-data-center-pollution-to-move-forward/</link>
-    <guid>https://techcrunch.com/2026/10/31/judge-allows-naacp-lawsuit-over-xai-data-center-pollution-to-move-forward/</guid>
-    <pubDate>Sun, 01 Nov 2026 21:55:19 +0000</pubDate>
-    <description><![CDATA[<p>A federal judge has allowed the NAACP lawsuit to proceed against xAI, a SpaceX-owned AI company, over alleged violations of the Clean Air Act for operating unpermitted combustion turbines at its Colossus data center.</p>]]></description>
+    <title>[News] The Download: the agentic web arrives and the drive for safer roads</title>
+    <link>https://www.technologyreview.com/2026/11/02/1147889/the-download-agentic-web-arrives-eliminating-traffic-deaths/</link>
+    <guid>https://www.technologyreview.com/2026/11/02/1147889/the-download-agentic-web-arrives-eliminating-traffic-deaths/</guid>
+    <pubDate>Mon, 02 Nov 2026 15:22:36 +0000</pubDate>
+    <description><![CDATA[<p>MIT Tech Review discusses the emergence of the agentic web—a future where autonomous software agents navigate the internet—highlighting its potential to transform online interactions.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
