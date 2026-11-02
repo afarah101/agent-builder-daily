@@ -38,6 +38,8 @@ class Report(BaseModel):
     run_count: int
     error_count: int
     error_rate: float
+    quality_failed_runs: int
+    judge_error_runs: int
     newest_trace: str
     fetch_failures: int
     readers: list[ReaderSummary]
@@ -88,6 +90,19 @@ def merge(findings):
     return sorted(merged, key=lambda m: (m.label != BOTH_AGREE, SEVERITY_RANK[m.severity]))
 
 
+def group_repeats(findings):
+    """For the email: same label, category and file reads as one fault. Keeps merge()'s order, so each group's first is its worst."""
+    groups = {}
+    for finding in findings:
+        groups.setdefault((finding.label, finding.category, finding.target_file), []).append(finding)
+    return list(groups.values())
+
+
+def runs_with_score(traces, prefix):
+    """Runs where a score starting with prefix is above zero. These failures never show in the error rate: the pipeline catches them."""
+    return sum(any(s["name"].startswith(prefix) and s["value"] for s in t["scores"]) for t in traces)
+
+
 def self_check():
     def finding(id, category, traces):
         return Finding(id=id, category=category, description=id, evidence_trace_ids=traces, severity="low",
@@ -100,6 +115,12 @@ def self_check():
     assert merged[0].label == BOTH_AGREE, "agreed faults sort first"
     assert {m.label for m in merged[1:]} == {"only one (Groq)", "only one (Gemini)"}, merged
     assert all(m.suggested_fix is None for m in merged[1:]), "one reader alone keeps no fix"
+    repeats = group_repeats(merge([finding("groq-1", "latency", ["a"]), finding("gemini-1", "latency", ["a"]),
+                                   finding("groq-2", "latency", ["b"]), finding("gemini-2", "latency", ["b"]),
+                                   finding("groq-3", "latency", ["c"])]))
+    assert [len(g) for g in repeats] == [2, 1] and repeats[0][0].label == BOTH_AGREE, repeats
+    runs = [{"scores": [{"name": "quality_fail_C3", "value": 4.0}, {"name": "judge_error", "value": 0.0}]}, {"scores": []}]
+    assert runs_with_score(runs, "quality_fail_") == 1 and runs_with_score(runs, "judge_error") == 0, runs
     print("[LOOP4] merge self-check passed")
 
 
@@ -119,6 +140,8 @@ def main():
         run_count=len(traces),
         error_count=errors,
         error_rate=errors / len(traces),
+        quality_failed_runs=runs_with_score(traces, "quality_fail_"),
+        judge_error_runs=runs_with_score(traces, "judge_error"),
         newest_trace=max(t["timestamp"] for t in traces),
         fetch_failures=fetched["fetch_failures"],
         readers=[ReaderSummary(traces_reviewed=len(r["reviewed_trace_ids"]), **{k: r[k] for k in ("reader", "model", "batches", "failed_batches", "findings")}) for r in results],
