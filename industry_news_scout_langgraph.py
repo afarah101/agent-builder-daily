@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os, json, re, feedparser, requests, trafilatura
-import ipaddress, socket, threading, time
+import ipaddress, socket, sys, threading, time
 from urllib.parse import urljoin, urlsplit
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -33,9 +33,14 @@ import judge
 _quality = {}
 _judge = {}
 _run = {}
+_groq_calls = {"attempted": 0, "failed": 0}  # live calls only: a cache hit is not a Groq call
+_failed_items = {"classify": 0, "hook": 0}
 
 OUTPUT_DIR = "data/news"
 ARCHIVE_FILE = "data/news_archive.json"
+FAILED_ITEMS_FILE = "data/failed_items.json"  # send_daily_email.py states these counts in the digest
+EXIT_ALL_GROQ_CALLS_FAILED = 3  # orchestrator.py fails the whole run on this exit code
+HOOK_MIN_WORDS = 20
 MAX_ITEMS = 25
 MAX_PER_SOURCE = 3
 MIN_SNIPPET = 300   # shorter RSS/scrape snippets get the full article fetched
@@ -102,6 +107,7 @@ def groq_complete(messages, max_tokens=300, validate=None, call_site=""):
                 metadata={"cache_hit": True, "call_site": call_site},
             )
             return cached
+    _groq_calls["attempted"] += 1
     keys = [os.getenv("GROQ_API_KEY"), os.getenv("GROQ_API_KEY_2")]
     keys = [k for k in keys if k]
     last_error = None
@@ -148,6 +154,25 @@ def groq_complete(messages, max_tokens=300, validate=None, call_site=""):
                 continue
             raise e
     raise Exception("All keys exhausted: " + str(last_error))
+
+def _record_groq_failure(call_site, error):
+    _groq_calls["failed"] += 1
+    print(f"[GROQ] Call failed ({call_site}): {error}")
+
+def every_groq_call_failed():
+    return _groq_calls["attempted"] > 0 and _groq_calls["failed"] >= _groq_calls["attempted"]
+
+def _failure_summary():
+    return (f"{_groq_calls['failed']} of {_groq_calls['attempted']} Groq calls failed; "
+            f"{sum(_failed_items.values())} items failed ({_failed_items['classify']} classify, {_failed_items['hook']} hook)")
+
+def save_failed_items():
+    os.makedirs("data", exist_ok=True)
+    report = {"date": datetime.now().strftime("%Y-%m-%d"),
+              "news": {"groq_calls": _groq_calls["attempted"], "failed_calls": _groq_calls["failed"],
+                       "failed_items": sum(_failed_items.values())}}
+    with open(FAILED_ITEMS_FILE, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2)
 
 class NewsScoutState(TypedDict):
     raw_articles: Annotated[list, operator.add]
@@ -512,9 +537,12 @@ Content: {content}
             })
             print("[DEBUG] Relevance: " + str(g.get("relevance_score")) + "/10")
         except Exception as e:
-            print("[DEBUG] Error: " + str(e))
+            _record_groq_failure("news.classify", e)
+            _failed_items["classify"] += 1
             print("[QUALITY] classify_failed, will not publish: " + article["title"][:60])
             classified.append({**article, "classify_failed": True, "relevance_score": 0})
+    if _failed_items["classify"]:
+        langfuse.update_current_span(level="ERROR", status_message=f"{_failed_items['classify']} of {limit} items failed classify")
     classified.sort(key=lambda x: x["relevance_score"], reverse=True)
     print("[DEBUG] Classified " + str(len(classified)))
     return {"raw_articles": state["raw_articles"], "classified_news": classified, "output_file": state["output_file"]}
@@ -591,6 +619,14 @@ def save_and_archive(state):
         print(f"[CACHE] Save failed: {e}")
     return state
 
+def _hook_problem(hook):
+    """Why this hook needs a retry, or None when it is fit to publish."""
+    if not hook:
+        return "it was empty"
+    words = len(hook.split())
+    return f"it was only {words} words" if words < HOOK_MIN_WORDS else None
+
+@observe(name="daily-hook")
 def generate_daily_hook(classified_news):
     """Write a one-line punchy hook from today's top 3 items to data/daily_hook.txt."""
     if not classified_news:
@@ -599,19 +635,32 @@ def generate_daily_hook(classified_news):
     titles = [t["title"] for t in top]
     prompt = (
         "You are a UK AI newsletter writer. Based on these top AI news headlines, write one punchy hook sentence "
-        "(max 25 words) that would make a busy IT consultant stop scrolling. "
+        "(20-25 words) that would make a busy IT consultant stop scrolling. "
         "No fluff. No hashtags. No quotes around the result.\n\n"
         "Headlines:\n" + "\n".join(f"- {t}" for t in titles) + "\n\n"
         "Return the hook sentence only."
     )
+    # 60 tokens left nothing after hidden reasoning, so the hook came back empty
+    complete = lambda text: groq_complete([{"role": "user", "content": text}], max_tokens=800, call_site="news.daily_hook").strip()
+    hook = ""
     try:
-        hook = groq_complete([{"role": "user", "content": prompt}], max_tokens=60, call_site="news.daily_hook")
-        os.makedirs("data", exist_ok=True)
-        with open("data/daily_hook.txt", "w") as f:
-            f.write(hook.strip())
-        print(f"[DEBUG] Daily hook saved: {hook.strip()}")
+        hook = complete(prompt)
+        problem = _hook_problem(hook)
+        if problem:
+            print(f"[HOOK] Retrying once: {problem}")
+            hook = complete(f"{prompt}\n\nYour last attempt was rejected because {problem}. Write 20-25 words.") or hook
     except Exception as e:
-        print(f"[DEBUG] Hook generation failed: {e}")
+        _record_groq_failure("news.daily_hook", e)
+    if not hook:
+        _failed_items["hook"] = 1
+        Path("data/daily_hook.txt").unlink(missing_ok=True)  # yesterday's hook must not stand in for today's
+        langfuse.update_current_span(level="ERROR", status_message="daily hook empty after retry")
+        print("[HOOK] Failed: no hook published")
+        return
+    os.makedirs("data", exist_ok=True)
+    with open("data/daily_hook.txt", "w") as f:
+        f.write(hook)
+    print(f"[HOOK] Saved ({len(hook.split())} words): {hook}")
 
 def build_graph():
     g = StateGraph(NewsScoutState)
@@ -641,6 +690,9 @@ def run_industry_news_scout():
         langfuse.update_current_span(
             output={"items_saved": _run.get("written", 0), "date": today},
         )
+        print("[GROQ] News: " + _failure_summary())
+        if _groq_calls["failed"] or any(_failed_items.values()):
+            langfuse.update_current_span(level="ERROR", status_message=_failure_summary())
         if _quality:
             quality_checks.send_scores(langfuse, _quality)
         if _judge:
@@ -651,7 +703,11 @@ def run_industry_news_scout():
 
 if __name__ == "__main__":
     run_industry_news_scout()
+    save_failed_items()
     from langsmith import Client
     client = Client()
     import time
     time.sleep(5)  # allow trace buffer to flush
+    if every_groq_call_failed():
+        print("[GROQ] Every news Groq call failed")
+        sys.exit(EXIT_ALL_GROQ_CALLS_FAILED)

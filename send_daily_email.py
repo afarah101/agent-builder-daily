@@ -28,6 +28,7 @@ SEND_HOUR = 11
 CASE_LOOKBACK_DAYS = 7
 CREATORS_GLOB = "data/creators/[0-9][0-9][0-9][0-9]-*.json"  # written by creator_watch.py
 CREATOR_MAX = 3
+FAILED_ITEMS = "data/failed_items.json"  # written by the news scout and generate_breakdowns.py
 
 # Site palette (generate_html.py :root). Dark backgrounds set on every cell so dark-mode clients don't invert them.
 C = {"bg": "#0f1117", "surface": "#1a1d27", "surface2": "#22263a", "border": "#2d2d2d", "text": "#f1f5f9",
@@ -68,7 +69,34 @@ def load_data():
         print(f"[EMAIL] Scout data missing or malformed: {e!r}")
         return {"news": [], "papers": [], "newest": None, "reason": "a data file is missing or empty, or malformed"}
     return {"news": news, "papers": papers, "cs_days": cs_days, "newest": max(stamps), "reason": None,
-            "creators": load_creators()}
+            "creators": load_creators(), "failed_items": load_failed_items()}
+
+
+def load_failed_items():
+    """The last scout run's failure report. A missing or broken report must not stop the digest."""
+    try:
+        return _load(FAILED_ITEMS)
+    except FileNotFoundError:
+        return {}
+    except (OSError, ValueError) as e:
+        print(f"[EMAIL] Failed-item report unreadable: {e!r}")
+        return {}
+
+
+def _failed_count(report, section):
+    try:
+        return int(report[section]["failed_items"])
+    except (KeyError, TypeError, ValueError):  # one broken section must not hide the other's count
+        return 0
+
+
+def failed_items_notice(report):
+    """One line saying how many items the last scout run failed on, or "" when none did."""
+    news, breakdowns = _failed_count(report, "news"), _failed_count(report, "breakdowns")
+    total = news + breakdowns
+    if not total:
+        return ""
+    return f"{_count(total, 'item')} failed in the last scout run ({report.get('date', 'date unknown')}): {news} news, {breakdowns} breakdowns."
 
 
 def load_creators():
@@ -197,6 +225,7 @@ def build_email(data, now):
         f"Quick Hits: {len(hits)} more stories" + (f" from {', '.join(sources[:3])}" if sources else ""),
     ]
     sections = {
+        "failed_items": failed_items_notice(data.get("failed_items") or {}),
         "greeting": teaser(top, case, radar, hits),
         "bullets": bullets,
         "signal": top,
@@ -263,6 +292,7 @@ def render_html(date, s):
 <tr><td bgcolor="{C["surface2"]}" style="background:{C["surface2"]};padding:24px;">
 <div style="font:700 24px {FONT};color:{C["text"]};">Scout Daily</div>
 <div style="font:13px {FONT};color:{C["text2"]};margin-top:4px;">{_e(date)} · {_link(SITE_URL, "agent-builder-daily.vercel.app")}</div></td></tr>
+{_block("Failed items", _p(_e(s["failed_items"]))) if s["failed_items"] else ""}
 {_block("Good morning", _p(_e(s["greeting"])))}
 {_block("In today's Scout", f"<ul {ul}>{bullets}</ul>")}
 {_block("The Signal", _p(_link(sig.get("url"), sig.get("title")), size=16) + _p(_e(sig.get("summary")), C["text2"], 14)
@@ -277,7 +307,8 @@ def render_html(date, s):
 
 def render_text(date, s):
     sig = s["signal"]
-    lines = [f"SCOUT DAILY — {date}", SITE_URL, "", "Good morning", s["greeting"], "", "IN TODAY'S SCOUT"]
+    lines = [f"SCOUT DAILY — {date}", SITE_URL, ""] + (["FAILED ITEMS", s["failed_items"], ""] if s["failed_items"] else [])
+    lines += ["Good morning", s["greeting"], "", "IN TODAY'S SCOUT"]
     lines += [f"- {b}" for b in s["bullets"]]
     lines += ["", "THE SIGNAL", sig.get("title", ""), sig.get("summary", "")]
     lines += [f"- {h}: {t}" if h else f"- {t}" for h, t in s["signal_points"]]

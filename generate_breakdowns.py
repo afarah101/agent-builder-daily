@@ -10,10 +10,18 @@ from html import escape, unescape
 from pathlib import Path
 from datetime import datetime
 from groq import Groq
+from langfuse import Langfuse, observe
+
+langfuse = Langfuse()
 
 CASE_STUDIES_DIR = "case_studies"
 NEWS_DIR = "data/news"
 OUTPUT_DIR = "site/breakdowns"
+FAILED_ITEMS_FILE = "data/failed_items.json"  # send_daily_email.py states these counts in the digest
+EXIT_ALL_GROQ_CALLS_FAILED = 3  # orchestrator.py fails the whole run on this exit code
+
+_groq_calls = {"attempted": 0, "failed": 0}
+_failed_items = {"case_studies": 0, "news": 0}
 
 # Dual API key setup — falls back to key 2 if key 1 hits daily limit
 API_KEY_1 = os.environ.get("GROQ_API_KEY")
@@ -43,23 +51,30 @@ def slugify(title):
     return slug[:80]
 
 
+@observe(as_type="generation", name="groq-complete")
+def groq_complete(prompt):
+    # One generation per attempt: @observe marks it ERROR when this raises.
+    response = get_client().chat.completions.create(
+        model="openai/gpt-oss-20b",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1200,
+        reasoning_effort="low",
+        reasoning_format="hidden",
+        temperature=0.4,
+    )
+    return response.choices[0].message.content.strip()
+
+
 def call_groq(prompt, retries=3):
     global _current_key, _key1_exhausted
 
     for attempt in range(retries):
+        _groq_calls["attempted"] += 1
         try:
-            client = get_client()
-            response = client.chat.completions.create(
-                model="openai/gpt-oss-20b",
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=1200,
-                reasoning_effort="low",
-                reasoning_format="hidden",
-                temperature=0.4,
-            )
-            return response.choices[0].message.content.strip()
+            return groq_complete(prompt)
         except Exception as e:
             err = str(e)
+            _groq_calls["failed"] += 1
             print(f"  Groq error (attempt {attempt+1}): {e}")
             if "tokens per day" in err:
                 if not _key1_exhausted and API_KEY_2:
@@ -332,6 +347,11 @@ def restyle_existing_pages(directory=OUTPUT_DIR):
     return restyled, skipped
 
 
+def missing_pages(items):
+    """How many of these items have no breakdown page: the daily limit stops the loop before it reaches them."""
+    return sum(not os.path.exists(f"{OUTPUT_DIR}/{slugify(x.get('title', 'Untitled'))}.html") for x in items)
+
+
 def process_case_studies(cs_data, generated_at):
     if not cs_data or not cs_data.get("case_studies"):
         print("No case studies found.")
@@ -355,13 +375,16 @@ def process_case_studies(cs_data, generated_at):
         raw = generate_content_for_case_study(cs)
 
         if raw == "DAILY_LIMIT":
+            _failed_items["case_studies"] += missing_pages(studies[i:])
             return slug_map
         if not raw:
+            _failed_items["case_studies"] += 1
             print(f"    Failed to generate content.")
             continue
 
         summary_html, guide_html = parse_groq_response(raw)
         if not summary_html:
+            _failed_items["case_studies"] += 1
             print(f"    Failed to parse response.")
             continue
 
@@ -406,13 +429,16 @@ def process_news(news_data, generated_at):
         raw = generate_content_for_news(item)
 
         if raw == "DAILY_LIMIT":
+            _failed_items["news"] += missing_pages(items[i:])
             return slug_map
         if not raw:
+            _failed_items["news"] += 1
             print(f"    Failed to generate content.")
             continue
 
         summary_html, guide_html = parse_groq_response(raw)
         if not summary_html:
+            _failed_items["news"] += 1
             print(f"    Failed to parse response.")
             continue
 
@@ -440,6 +466,24 @@ def save_slug_map(cs_slugs, news_slugs):
     print(f"Slug map saved: site/breakdowns/slug_map.json")
 
 
+def every_groq_call_failed():
+    return _groq_calls["attempted"] > 0 and _groq_calls["failed"] >= _groq_calls["attempted"]
+
+
+def save_failed_items():
+    """Add the breakdown counts to the report the news scout started this run."""
+    try:
+        report = json.loads(Path(FAILED_ITEMS_FILE).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        report = {}
+    report["date"] = datetime.now().strftime("%Y-%m-%d")
+    report["breakdowns"] = {"groq_calls": _groq_calls["attempted"], "failed_calls": _groq_calls["failed"],
+                            "failed_items": sum(_failed_items.values())}
+    os.makedirs("data", exist_ok=True)
+    Path(FAILED_ITEMS_FILE).write_text(json.dumps(report, indent=2), encoding="utf-8")
+
+
+@observe(name="generate-breakdowns")
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
@@ -452,6 +496,12 @@ def main():
     save_slug_map(cs_slugs, news_slugs)
 
     print(f"\nDone. {len(cs_slugs)} case study + {len(news_slugs)} news breakdowns generated.")
+    summary = (f"{_groq_calls['failed']} of {_groq_calls['attempted']} Groq calls failed; "
+               f"{sum(_failed_items.values())} items failed "
+               f"({_failed_items['case_studies']} case studies, {_failed_items['news']} news)")
+    print("[GROQ] Breakdowns: " + summary)
+    if _groq_calls["failed"] or any(_failed_items.values()):
+        langfuse.update_current_span(level="ERROR", status_message=summary)
 
 
 if __name__ == "__main__":
@@ -460,3 +510,8 @@ if __name__ == "__main__":
         print(f"Restyled {done} pages; skipped {len(skipped)} with an unknown shape: {skipped}")
     else:
         main()
+        save_failed_items()
+        langfuse.flush()
+        if every_groq_call_failed():
+            print("[GROQ] Every breakdown Groq call failed")
+            sys.exit(EXIT_ALL_GROQ_CALLS_FAILED)

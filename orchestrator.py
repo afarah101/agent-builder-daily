@@ -6,6 +6,8 @@ if sys.stdout.encoding != 'utf-8':
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
+EXIT_ALL_GROQ_CALLS_FAILED = 3  # set by the news scout and generate_breakdowns.py
+
 def run_script(script_name, allow_failure=False):
     print(f"--- Starting: {script_name} ---")
     result = subprocess.run(
@@ -15,11 +17,12 @@ def run_script(script_name, allow_failure=False):
         encoding='utf-8'
     )
     if result.returncode != 0:
-        if allow_failure:
+        if allow_failure and result.returncode != EXIT_ALL_GROQ_CALLS_FAILED:
             print(f"WARNING: {script_name} failed but continuing pipeline:")
             print(result.stderr)
         else:
             print(f"CRITICAL ERROR in {script_name}:")
+            print(result.stdout)  # failed Groq calls are logged here
             print(result.stderr)
             sys.exit(1)
     print(result.stdout)
