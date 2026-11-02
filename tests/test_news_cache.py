@@ -95,6 +95,11 @@ def test_daily_hook_is_tagged_but_never_cached(env, monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     news.generate_daily_hook([{"title": "A"}, {"title": "B"}])
     news.generate_daily_hook([{"title": "A"}, {"title": "B"}])
-    assert len(fake.calls) == 2
-    assert [e["metadata"]["cache_hit"] for e in env.logged] == [False, False]
+    # A 5-word hook is under the 20-word minimum, so each run calls Groq twice, and neither call is cached.
+    assert len(fake.calls) == 4
+    prompts = [c["messages"][0]["content"] for c in fake.calls]
+    assert ["it was only 5 words" in p for p in prompts] == [False, True, False, True]
+    assert [e["metadata"]["cache_hit"] for e in env.logged] == [False] * 4
+    assert [e["metadata"]["call_site"] for e in env.logged] == ["news.daily_hook"] * 4
     assert llm_cache.load() == {}
+    assert (tmp_path / "data" / "daily_hook.txt").read_text() == "Agents are eating IT tickets."  # short but not empty: published
