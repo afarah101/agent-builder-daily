@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-11-03T00:49:04.745120",
+  "filter": "last_4_months",
+  "source": "arxiv",
+  "total_fetched": 142,
+  "total_scored": 2,
+  "case_studies": [
+    {
+      "id": "http://arxiv.org/abs/2610.41905v1",
+      "title": "Completeness and Cost of Retrieval Structures for Multi-Tool Requests in LLM Agents",
+      "abstract": "An agent that must call several tools to fulfill a request fails when the tool retriever omits any one of them, yet tool retrievers are mostly built and evaluated on queries requiring a single tool. We compare representatives of six retrieval structures (flat lexical and dense retrieval, LLM query decomposition, LLM-navigated hierarchies, server-then-tool matching, dependency graphs, and trained set-level retrievers) across two multi-tool testbeds: 345 AppWorld queries with expert dependency labels and 103 MCP-Bench tasks over 257 MCP tools. We measure completeness@k, the share of queries whose entire required tool set appears in the top k, alongside the LLM calls, tokens, and latency that each structure incurs at retrieval time. A motivating analysis on all 7,961 ToolRet queries shows that aggregate completeness mixes two regimes: completeness at 10 is .58 to .67 on single-target queries and .08 to .17 on queries with four or more targets, and the ordering of retrievers on single-target queries reverses on multi-target ones. Across the two testbeds, none of the compared structures that is untrained on the testbed and makes at most one LLM call per query completes more than 10% of AppWorld queries at k = 16. The two structures that do better incur different costs: a set-level retriever trained on 75 to 90 in-domain queries reaches .33 on AppWorld and .58 on MCP-Bench with no LLM calls, while an LLM-navigated hierarchy reaches .30 and .40 with a median of 31 to 38 LLM calls and about five minutes per query. Their failure modes also differ: the trained retriever mostly ranks the missing tools just below the cutoff, whereas the hierarchy finds the target API and stops before collecting its prerequisites. In a downstream check with the official AppWorld agent, tasks with a complete retrieved set succeeded 21 of 21 times, whereas incomplete ones succeeded 2 of 39 times.",
+      "authors": [
+        "Shuyang Zhang"
+      ],
+      "institution": "Academic Institution",
+      "pub_date": "2026-10-30",
+      "url": "https://arxiv.org/abs/2610.41905v1",
+      "recency_score": 25,
+      "source_type": "arxiv",
+      "real_world_impact": 10,
+      "ai_maturity": 5,
+      "monetisation_potential": 5,
+      "total_score": 20,
+      "summary": "The study tackles the problem that agents calling multiple tools often miss required tools because retrievers are designed for single-tool queries. Researchers compared six retrieval methods, finding that a set-level retriever trained on domain data can retrieve the full set 33% of the time without LLM calls, while a hierarchical LLM approach reaches 40% but needs many LLM calls and long latency. For most IT infra teams, this research is not directly relevant to day‑to‑day cloud management.",
+      "it_breakdown": "If you manage a multi‑tool automation system that relies on a tool retriever, train a set‑level retriever on a sample of your own in‑domain queries to improve completeness; limit LLM calls to avoid high latency and cost.",
+      "try_this": [],
+      "monetisation": "",
+      "relevance_tag": "agentic_tool_retrieval",
+      "author_built_product": false,
+      "score_reasoning": "The paper discusses tool retrieval structures for LLM agents, which could influence how IT engineers design agentic systems that call multiple APIs. However, it presents mainly benchmark results without released code or a deployable system, and it does not provide a clear, actionable solution that can be quickly sold or implemented within 90 days. Consequently, the real‑world impact is modest, the AI maturity is low, and monetisation potential is minimal.",
+      "gemini_eval_status": "pending",
+      "eval_verdict": "pass",
+      "eval_flagged": false,
+      "low_signal": true
+    },
+    {
+      "id": "http://arxiv.org/abs/2610.41397v1",
+      "title": "Cross-Interface Authorization for AI Computer-Use Agents",
+      "abstract": "Computer-use agents act through graphical interfaces, command lines, APIs, scripts, and Model Context Protocol servers. A policy decision can be interface-invariant while its executable authorization is not: another route can bypass mediation, alter a security-relevant default, or commit after the authorized state has changed. We present a profile-bounded protocol for a fixed, versioned computer-use deployment. It enumerates effect-bearing routes and durable sinks, checks a route-to-sink enforcement cut, normalizes each concrete request to a canonical effect, issues a route-bound prepare ticket, and verifies the route, effect, grant, trace, profile, inventory, and authoritative state again at commit. A committed result requires an agreeing sink receipt. Under explicit assumptions, we prove profile-bounded refinement, matched-effect decision invariance, resistance to alternate-route laundering and declared cross-surface recomposition, commit-time state safety, and receipt-grounded outcomes. The reference profile registers 12 effect families, five interfaces, and 60 routes. Two structurally distinct runtime mappings produce 3,464 traces over 1,732 scenarios each: 960 commits, 2,312 denials, and 192 commits after re-preparation. An independent checker accepts every retained trace and pair and rejects 26/26 semantic regressions; coverage and normalizer suites reject 24/24 and 720/720 mutants; and 168/168 commit probes match their declared outcomes. A frozen-source audit passes 52 checks over 12 files from two independent hybrid runtimes and one public authorization substrate. Source-shaped adapter refinements commit 48/48 instrumented calls and reject 15/15 unbound cases. The resulting guarantees bind the declared profile and its effect semantics.",
+      "authors": [
+        "Genliang Zhu",
+        "Chu Wang"
+      ],
+      "institution": "Academic Institution",
+      "pub_date": "2026-10-30",
+      "url": "https://arxiv.org/abs/2610.41397v1",
+      "recency_score": 25,
+      "source_type": "arxiv",
+      "real_world_impact": 10,
+      "ai_maturity": 5,
+      "monetisation_potential": 5,
+      "total_score": 20,
+      "summary": "This research tackles the problem of ensuring consistent security decisions across multiple ways an AI agent can interact with a system (GUI, CLI, APIs, etc.). The authors built a protocol that maps every possible interaction route to a single, canonical security effect, verifies it at commit time, and produces a receipt that proves the action was authorised. In tests across over 3,000 scenarios the system never allowed an action to slip through an alternative route, proving it safe and reliable for complex, multi‑interface environments.",
+      "it_breakdown": "If you manage cloud infrastructure, here is what to do: 1) Map each service’s access routes (API, CLI, UI) into a unified profile and define the effects they can trigger; 2) Deploy the protocol’s prepare‑ticket step before any privileged operation to lock the route and effect; 3) At commit, require the receipt that confirms the authorised state and that no alternate route could have bypassed the check.",
+      "try_this": [],
+      "monetisation": "",
+      "relevance_tag": "Security Authorization",
+      "author_built_product": false,
+      "score_reasoning": "The paper proposes a novel, protocol‑level approach to cross‑interface authorization for AI agents. While it addresses a real security concern that could affect how IT engineers manage agentic workflows, the work is largely theoretical with no released code, prototype, or evidence of deployment in real infrastructure. Consequently, its practical impact and maturity are modest, and there is no clear, actionable path for IT engineers to adopt or monetize the approach within the next 90 days.",
+      "gemini_eval_status": "pending",
+      "eval_verdict": "pass",
+      "eval_flagged": false,
+      "low_signal": true
+    }
+  ]
+}
