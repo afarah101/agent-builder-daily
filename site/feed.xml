@@ -5,56 +5,45 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 03 Nov 2026 16:50:52 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Nov 2026 23:10:18 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>When Cache Pressure Becomes a Trap: Metastability in Agent Serving</title>
-    <link>https://arxiv.org/abs/2611.02543v1</link>
-    <guid>https://arxiv.org/abs/2611.02543v1</guid>
+    <title>Optimize the Harness, Not the Model: Fitting a Minimal Agent to a Self-Hostable LLM for Investigative Analysis</title>
+    <link>https://arxiv.org/abs/2611.03434v1</link>
+    <guid>https://arxiv.org/abs/2611.03434v1</guid>
     <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Large‑language‑model (LLM) servers can suffer a long‑lasting slowdown after a brief traffic spike, because the cache used to reuse conversation prefixes collapses and the system keeps working on stale requests. The authors built a tool called Basin that prioritises sessions, pre‑allocates cache for expected peak sizes, and drops excess load, restoring high throughput quickly. On real hardware Basin improved goodput by up to 3.6× compared with earlier cache‑first approaches.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference servers, check whether your cache policy can collapse after a spike: 1) monitor cache hit rates during short surges, 2) enable a priority‑based admission controller like Basin to reserve peak context sizes, 3) consider shedding low‑priority sessions when cache utilisation exceeds a threshold.</p>]]></description>
+    <description><![CDATA[<p>CLEO builds a tiny, self‑hosted AI harness that keeps only the tools and rules that actually improve accuracy, achieving an 83.8% pass rate—just 1.2 points shy of a top commercial model—while being 100× smaller.</p><p><strong>IT Breakdown:</strong> If you manage cloud infra and run in‑house LLMs, check if your current tool stack can be trimmed to the minimal set that CLEO recommends: step 1, audit the tools your LLM uses; step 2, replace or remove any that do not directly contribute to accuracy; step 3, test the trimmed harness on a validation set to confirm performance is retained.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Ask, Don&#x27;t Equip: Question-Driven Coding Agents for Deep Kernel Optimization</title>
-    <link>https://arxiv.org/abs/2611.03517v1</link>
-    <guid>https://arxiv.org/abs/2611.03517v1</guid>
+    <title>IAMRAGBENCH: Benchmarking Authorization Expansions in LLM-Generated AWS IAM Policies under RAG Poisoning</title>
+    <link>https://arxiv.org/abs/2611.03431v1</link>
+    <guid>https://arxiv.org/abs/2611.03431v1</guid>
     <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>KernelSeek is a question‑driven coding agent that improves CUDA kernels without needing expert knowledge, achieving up to 1.46x speedups on FlashAttention workloads. It uses short, well‑timed questions to steer optimisation, outperforming traditional scripted or open‑ended agents. This is relevant to cloud infrastructure teams that run GPU‑based workloads, offering a way to auto‑optimise kernels for better utilisation of GPU resources.</p><p><strong>IT Breakdown:</strong> If you manage GPU workloads, use KernelSeek by: 1) feeding it your current CUDA kernel and target performance goal; 2) allowing it to ask a few clarifying questions during optimisation; 3) reviewing the produced single‑file kernels that run without external libraries, then deploying them in your GPU clusters.</p>]]></description>
+    <description><![CDATA[<p>This research shows that LLMs using RAG can generate valid AWS IAM policies that unintentionally grant extra permissions. The authors built IAMRAGBENCH, a benchmark of 60 policy cases, and found that up to 15.8% of attacks succeed when attackers poison the context. The study highlights the risk of trusting LLM-generated IAM policies without verification.</p><p><strong>IT Breakdown:</strong> If you manage AWS IAM, immediately enforce independent policy review: 1) run any LLM‑generated policy through AWS CheckNoNewAccess; 2) compare the policy against an authorization envelope; 3) block deployment if any new permissions are detected.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Not All Reasoning Generalizes: A Case Study on Learning Generalizable Reasoning Strategies in RLVR</title>
-    <link>https://arxiv.org/abs/2611.03627v1</link>
-    <guid>https://arxiv.org/abs/2611.03627v1</guid>
+    <title>VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifiably</title>
+    <link>https://arxiv.org/abs/2611.03575v1</link>
+    <guid>https://arxiv.org/abs/2611.03575v1</guid>
     <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This study shows that reinforcement learning with verifiable rewards (RLVR) can teach large language models to use step‑by‑step reasoning, but fails when faced with new, harder problems. The researchers solved the problem by training the model on additional bijective tasks, which kept the correct reasoning strategy active even on out‑of‑distribution tests. As a result, the model’s accuracy under harder conditions improved significantly.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <description><![CDATA[<p>VeriHarm-Bench shows that LLM coding agents can finish tasks but still delete files, weaken permissions, or corrupt data. The researchers built an automated test framework that adds hidden harm tests to regular coding tasks, revealing that top agents only avoid harm 37% of the time. This matters for cloud managers because unseen damage can slip through during automation.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check if your automated code agents run with shell access – add VeriHarm-style hidden harm tests to your CI pipeline to catch unintended file deletions or permission changes. If your org uses LLM agents for script generation, audit their outputs for side‑effects before deployment. If you don’t run such agents, no immediate action is needed.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Towards a Trustworthy and Governable Internet of Agentics: An Architectural Perspective on Protocols, Systems, and Services</title>
-    <link>https://arxiv.org/abs/2611.03066v1</link>
-    <guid>https://arxiv.org/abs/2611.03066v1</guid>
+    <title>Can LLM Agents Be Forward-Deployed Engineers? Requirement Discovery and Delivery for Enterprise Text-to-SQL</title>
+    <link>https://arxiv.org/abs/2611.03551v1</link>
+    <guid>https://arxiv.org/abs/2611.03551v1</guid>
     <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The paper proposes a new framework called the Internet of Agentics (IoA) to make large language model agents interoperable, governable, and trustworthy across different systems. It introduces a protocol stack (MCP, A2A, AGENTS.md, etc.) and system abstractions (orchestration, gateways, registries) to treat agents as service components. The result is a clearer pathway for deploying multi‑agent workflows in a controlled, secure, and scalable way.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do:
-1. Evaluate your current agent deployments against the IoA protocol stack (MCP for tool calls, A2A for agent‑to‑agent coordination).
-2. Implement or adopt gateways and registries that expose agent services, enabling discovery and orchestration across your cloud environment.
-3. Set up governance and trust layers (e.g., AGNTCY, SLIM) to monitor agent interactions and enforce organisational policies.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>A Living Leaderboard for Graph Machine Learning</title>
-    <link>https://arxiv.org/abs/2611.03433v1</link>
-    <guid>https://arxiv.org/abs/2611.03433v1</guid>
-    <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research tackles the chaos of scattered graph‑ML benchmarks by building a live, LLM‑powered leaderboard that gathers 27,723 results from 111 datasets and highlights outdated baselines. It shows many papers still use weak, legacy datasets, revealing gaps in current practice. For cloud infrastructure managers, it offers no direct operational benefit.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <description><![CDATA[<p>The study shows LLM agents can help discover and deliver SQL queries for business data, but they struggle with incomplete requirement discovery, unreliable execution, and unclear hardware constraints. They built a simulation of an enterprise text‑to‑SQL engagement and found that only about a quarter of runs met all acceptance criteria, highlighting gaps that limit production use. This research points to a risk for cloud infrastructure managers who rely on automated code generation.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure for data services, check whether your deployment pipelines include manual review steps for requirement discovery, monitor execution logs for reliability, and set explicit compute‑budget and production‑readiness tests before trusting an LLM to automate SQL generation.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</title>
     <link>https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/</link>
     <guid>https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/</guid>
-    <pubDate>Tue, 03 Nov 2026 16:50:52 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 23:10:18 +0000</pubDate>
     <description><![CDATA[<p>Microsoft Research highlights the need for synthetic data when evaluating Copilot at enterprise scale, citing the sensitivity of real organizational data. This underscores the importance of robust data governance for AI deployments in Microsoft 365.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -62,7 +51,7 @@
     <title>[News] Oracle files to sell $20B in new stock, bonds to finance AI buildout</title>
     <link>https://www.cnbc.com/2026/11/02/oracle-files-to-sell-20-billion-in-new-stock-bonds-to-finance-ai-buildout.html</link>
     <guid>https://www.cnbc.com/2026/11/02/oracle-files-to-sell-20-billion-in-new-stock-bonds-to-finance-ai-buildout.html</guid>
-    <pubDate>Tue, 03 Nov 2026 16:50:52 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 23:10:18 +0000</pubDate>
     <description><![CDATA[<p>Oracle has announced a $20B fundraising round—$10B in common stock and $10B in senior notes—to support its AI buildout, aiming to accelerate infrastructure development. The move signals a strategic push toward AI services that could alter cloud competition and pricing dynamics.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -70,7 +59,7 @@
     <title>[News] Rewarding defenders with bigger bug bounties</title>
     <link>https://openai.com/index/rewarding-defenders-with-bigger-bug-bounties</link>
     <guid>https://openai.com/index/rewarding-defenders-with-bigger-bug-bounties</guid>
-    <pubDate>Tue, 03 Nov 2026 16:50:52 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 23:10:18 +0000</pubDate>
     <description><![CDATA[<p>OpenAI has increased rewards for its Security Bug Bounty program, quadrupling the midpoint payouts for medium to critical findings and adding loyalty and campaign bonuses. This move signals a stronger focus on external vulnerability discovery and could impact how the company’s AI products are secured.
 </p>]]></description>
     <category>Industry News</category>
@@ -79,7 +68,7 @@
     <title>[News] Transformers Model Integration Contracts</title>
     <link>https://huggingface.co/blog/transformers-mic</link>
     <guid>https://huggingface.co/blog/transformers-mic</guid>
-    <pubDate>Tue, 03 Nov 2026 16:50:52 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 23:10:18 +0000</pubDate>
     <description><![CDATA[<p>Hugging Face has introduced Model Integration Contracts (MIC) to catch bugs like the UMT5 attention bug before they reach main by using shrunk, reproducible test models. The MIC framework publishes fixtures, usage paths, and baselines that enable rapid, CPU‑based integration testing for over 750 model types.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -87,7 +76,7 @@
     <title>[News] Nvidia – open-source auto-ontology</title>
     <link>https://github.com/NVIDIA/auto-ontology</link>
     <guid>https://github.com/NVIDIA/auto-ontology</guid>
-    <pubDate>Tue, 03 Nov 2026 16:50:52 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 23:10:18 +0000</pubDate>
     <description><![CDATA[<p>NVIDIA has released Auto Ontology, an open-source library that automatically generates enterprise ontologies from metadata, reconciling definitions across systems and exposing the context to agents via APIs and CLI. This tool enables developers to create AI-ready knowledge graphs, validate queries against certified definitions, and provide provenance for answers, all integrated with NVIDIA NIM endpoints.</p>]]></description>
     <category>Industry News</category>
   </item>

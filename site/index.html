@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">5</div>
+          <div class="stat-num">4</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">26</div>
+          <div class="stat-num">36</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 03 Nov 2026, 16:50 UTC</p>
+    <p class="updated">Updated 03 Nov 2026, 23:10 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,158 +614,122 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM infrastructure optimization</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:73;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 55 of 75"><span>55</span></div>
+    <div class="card-tags"><span class="tag-pill">cloud, on-prem, LLM deployment, security, devops</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:80;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 60 of 75"><span>60</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.02543v1" target="_blank" rel="noopener noreferrer">When Cache Pressure Becomes a Trap: Metastability in Agent Serving</a></h2>
-  <div class="card-meta"><span>Chengzhi Lu, Boxi Zhou, Yanying Lin, Dmitrii Ustiugov</span><span class="sep" aria-hidden="true">·</span><span>MIT</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
-  <p class="card-summary">Large‑language‑model (LLM) servers can suffer a long‑lasting slowdown after a brief traffic spike, because the cache used to reuse conversation prefixes collapses and the system keeps working on stale requests. The authors built a tool called Basin that prioritises sessions, pre‑allocates cache for expected peak sizes, and drops excess load, restoring high throughput quickly. On real hardware Basin improved goodput by up to 3.6× compared with earlier cache‑first approaches.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference servers, check whether your cache policy can collapse after a spike: 1) monitor cache hit rates during short surges, 2) enable a priority‑based admission controller like Basin to reserve peak context sizes, 3) consider shedding low‑priority sessions when cache utilisation exceeds a threshold.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03434v1" target="_blank" rel="noopener noreferrer">Optimize the Harness, Not the Model: Fitting a Minimal Agent to a Self-Hostable LLM for Investigative Analysis</a></h2>
+  <div class="card-meta"><span>Shai Nahum Gefen, Vered Chassida, Dmitry Basin, Guy Feigenblat</span><span class="sep" aria-hidden="true">·</span><span>MIT</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
+  <p class="card-summary">CLEO builds a tiny, self‑hosted AI harness that keeps only the tools and rules that actually improve accuracy, achieving an 83.8% pass rate—just 1.2 points shy of a top commercial model—while being 100× smaller.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infra and run in‑house LLMs, check if your current tool stack can be trimmed to the minimal set that CLEO recommends: step 1, audit the tools your LLM uses; step 2, replace or remove any that do not directly contribute to accuracy; step 3, test the trimmed harness on a validation set to confirm performance is retained.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The paper addresses cache instability in LLM agent serving, directly impacting infrastructure engineering for large language models. It presents a working system (Basin) with released code and real deployments, indicating high maturity. The solution offers actionable performance gains that could be packaged as a commercial service or integrated into existing AI infrastructure within a short timeframe, warranting a monetisation score of 15. Overall, the work scores well across all criteria.</p>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper presents a practical method (CLEO) for fitting minimal, self-hostable LLM agents suitable for secure, cost‑constrained environments, directly relevant to IT engineers managing on‑prem or hybrid deployments. The approach is reported as deployed and evaluated, indicating high maturity. The harness can be adopted or offered as a service within 90 days, providing clear monetisation potential.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/when-cache-pressure-becomes-a-trap-metastability-in-agent-serving.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/optimize-the-harness-not-the-model-fitting-a-minimal-agent-to-a-self-hostable-ll.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="When Cache Pressure Becomes a Trap: Metastability in Agent Serving"
-      data-summary="Large‑language‑model (LLM) servers can suffer a long‑lasting slowdown after a brief traffic spike, because the cache used to reuse conversation prefixes collapses and the system keeps working on stale requests. The authors built a tool called Basin that prioritises sessions, pre‑allocates cache for expected peak sizes, and drops excess load, restoring high throughput quickly. On real hardware Basin improved goodput by up to 3.6× compared with earlier cache‑first approaches."
-      data-it="If you manage LLM inference servers, check whether your cache policy can collapse after a spike: 1) monitor cache hit rates during short surges, 2) enable a priority‑based admission controller like Basin to reserve peak context sizes, 3) consider shedding low‑priority sessions when cache utilisation exceeds a threshold."
+      data-title="Optimize the Harness, Not the Model: Fitting a Minimal Agent to a Self-Hostable LLM for Investigative Analysis"
+      data-summary="CLEO builds a tiny, self‑hosted AI harness that keeps only the tools and rules that actually improve accuracy, achieving an 83.8% pass rate—just 1.2 points shy of a top commercial model—while being 100× smaller."
+      data-it="If you manage cloud infra and run in‑house LLMs, check if your current tool stack can be trimmed to the minimal set that CLEO recommends: step 1, audit the tools your LLM uses; step 2, replace or remove any that do not directly contribute to accuracy; step 3, test the trimmed harness on a validation set to confirm performance is retained."
       data-monetisation=""
-      data-reasoning="The paper addresses cache instability in LLM agent serving, directly impacting infrastructure engineering for large language models. It presents a working system (Basin) with released code and real deployments, indicating high maturity. The solution offers actionable performance gains that could be packaged as a commercial service or integrated into existing AI infrastructure within a short timeframe, warranting a monetisation score of 15. Overall, the work scores well across all criteria."
-      data-score="55"
-      data-url="https://arxiv.org/abs/2611.02543v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a practical method (CLEO) for fitting minimal, self-hostable LLM agents suitable for secure, cost‑constrained environments, directly relevant to IT engineers managing on‑prem or hybrid deployments. The approach is reported as deployed and evaluated, indicating high maturity. The harness can be adopted or offered as a service within 90 days, providing clear monetisation potential."
+      data-score="60"
+      data-url="https://arxiv.org/abs/2611.03434v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">gpu-optimization</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:36;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 27 of 75"><span>27</span></div>
+    <div class="card-tags"><span class="tag-pill">security, cloud, IAM, LLM</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:73;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 55 of 75"><span>55</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03517v1" target="_blank" rel="noopener noreferrer">Ask, Don&#x27;t Equip: Question-Driven Coding Agents for Deep Kernel Optimization</a></h2>
-  <div class="card-meta"><span>Gabriele Oliaro, Jaeseong Lee, Zhaoyuan Su, Sreeram Vennam</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
-  <p class="card-summary">KernelSeek is a question‑driven coding agent that improves CUDA kernels without needing expert knowledge, achieving up to 1.46x speedups on FlashAttention workloads. It uses short, well‑timed questions to steer optimisation, outperforming traditional scripted or open‑ended agents. This is relevant to cloud infrastructure teams that run GPU‑based workloads, offering a way to auto‑optimise kernels for better utilisation of GPU resources.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage GPU workloads, use KernelSeek by: 1) feeding it your current CUDA kernel and target performance goal; 2) allowing it to ask a few clarifying questions during optimisation; 3) reviewing the produced single‑file kernels that run without external libraries, then deploying them in your GPU clusters.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03431v1" target="_blank" rel="noopener noreferrer">IAMRAGBENCH: Benchmarking Authorization Expansions in LLM-Generated AWS IAM Policies under RAG Poisoning</a></h2>
+  <div class="card-meta"><span>Hasan Kaplan, Indika Kumara, Willem-Jan van den Heuvel, Damian Andrew Tamburri</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
+  <p class="card-summary">This research shows that LLMs using RAG can generate valid AWS IAM policies that unintentionally grant extra permissions. The authors built IAMRAGBENCH, a benchmark of 60 policy cases, and found that up to 15.8% of attacks succeed when attackers poison the context. The study highlights the risk of trusting LLM-generated IAM policies without verification.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage AWS IAM, immediately enforce independent policy review: 1) run any LLM‑generated policy through AWS CheckNoNewAccess; 2) compare the policy against an authorization envelope; 3) block deployment if any new permissions are detected.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">18/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">4/25</span></div>
-      <p class="trace-reasoning">The paper presents a question-driven LLM agent that optimizes CUDA kernels. While it introduces novel methods and provides open-source artifacts, the direct applicability to typical IT infrastructure tasks (SSO, endpoint management, cloud ops) is minimal. The system is experimentally validated and released, indicating a mature prototype, but practical deployment and commercial use within 90 days would be limited to niche GPU optimisation scenarios. Therefore, overall scores are low.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Ask, Don&#x27;t Equip: Question-Driven Coding Agents for Deep Kernel Optimization"
-      data-summary="KernelSeek is a question‑driven coding agent that improves CUDA kernels without needing expert knowledge, achieving up to 1.46x speedups on FlashAttention workloads. It uses short, well‑timed questions to steer optimisation, outperforming traditional scripted or open‑ended agents. This is relevant to cloud infrastructure teams that run GPU‑based workloads, offering a way to auto‑optimise kernels for better utilisation of GPU resources."
-      data-it="If you manage GPU workloads, use KernelSeek by: 1) feeding it your current CUDA kernel and target performance goal; 2) allowing it to ask a few clarifying questions during optimisation; 3) reviewing the produced single‑file kernels that run without external libraries, then deploying them in your GPU clusters."
-      data-monetisation=""
-      data-reasoning="The paper presents a question-driven LLM agent that optimizes CUDA kernels. While it introduces novel methods and provides open-source artifacts, the direct applicability to typical IT infrastructure tasks (SSO, endpoint management, cloud ops) is minimal. The system is experimentally validated and released, indicating a mature prototype, but practical deployment and commercial use within 90 days would be limited to niche GPU optimisation scenarios. Therefore, overall scores are low."
-      data-score="27"
-      data-url="https://arxiv.org/abs/2611.03517v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">AI research, LLM training</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:33;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 25 of 75"><span>25</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03627v1" target="_blank" rel="noopener noreferrer">Not All Reasoning Generalizes: A Case Study on Learning Generalizable Reasoning Strategies in RLVR</a></h2>
-  <div class="card-meta"><span>Ziqi Pang, Yu-Xiong Wang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
-  <p class="card-summary">This study shows that reinforcement learning with verifiable rewards (RLVR) can teach large language models to use step‑by‑step reasoning, but fails when faced with new, harder problems. The researchers solved the problem by training the model on additional bijective tasks, which kept the correct reasoning strategy active even on out‑of‑distribution tests. As a result, the model’s accuracy under harder conditions improved significantly.</p>
-  
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper presents a reinforcement learning framework for improving LLM reasoning strategies. While it includes code and has practical implications for training LLMs, it does not directly impact day‑to‑day IT infrastructure operations, cloud or SaaS tooling, or immediate deployment for IT engineers. The concepts could influence future AI tooling but are not actionable within 90 days for UK IT engineers or consultants.</p>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The benchmark directly impacts AWS IAM policy management for IT engineers, providing a practical tool to detect mis‑generated policies. It is a published dataset with code and evaluation scripts, making it usable now, though not a full product. The findings can be turned into a quick‑start testing service or an audit plugin that IT teams can deploy within weeks, giving clear commercial value.</p>
     </div>
   </details>
   <div class="card-footer">
     
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Not All Reasoning Generalizes: A Case Study on Learning Generalizable Reasoning Strategies in RLVR"
-      data-summary="This study shows that reinforcement learning with verifiable rewards (RLVR) can teach large language models to use step‑by‑step reasoning, but fails when faced with new, harder problems. The researchers solved the problem by training the model on additional bijective tasks, which kept the correct reasoning strategy active even on out‑of‑distribution tests. As a result, the model’s accuracy under harder conditions improved significantly."
-      data-it="Not directly applicable to IT infrastructure work"
+      data-title="IAMRAGBENCH: Benchmarking Authorization Expansions in LLM-Generated AWS IAM Policies under RAG Poisoning"
+      data-summary="This research shows that LLMs using RAG can generate valid AWS IAM policies that unintentionally grant extra permissions. The authors built IAMRAGBENCH, a benchmark of 60 policy cases, and found that up to 15.8% of attacks succeed when attackers poison the context. The study highlights the risk of trusting LLM-generated IAM policies without verification."
+      data-it="If you manage AWS IAM, immediately enforce independent policy review: 1) run any LLM‑generated policy through AWS CheckNoNewAccess; 2) compare the policy against an authorization envelope; 3) block deployment if any new permissions are detected."
       data-monetisation=""
-      data-reasoning="The paper presents a reinforcement learning framework for improving LLM reasoning strategies. While it includes code and has practical implications for training LLMs, it does not directly impact day‑to‑day IT infrastructure operations, cloud or SaaS tooling, or immediate deployment for IT engineers. The concepts could influence future AI tooling but are not actionable within 90 days for UK IT engineers or consultants."
-      data-score="25"
-      data-url="https://arxiv.org/abs/2611.03627v1">Copy as Markdown</button>
+      data-reasoning="The benchmark directly impacts AWS IAM policy management for IT engineers, providing a practical tool to detect mis‑generated policies. It is a published dataset with code and evaluation scripts, making it usable now, though not a full product. The findings can be turned into a quick‑start testing service or an audit plugin that IT teams can deploy within weeks, giving clear commercial value."
+      data-score="55"
+      data-url="https://arxiv.org/abs/2611.03431v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Architectural perspective on agent interoperability</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:33;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 25 of 75"><span>25</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM coding agent safety</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03066v1" target="_blank" rel="noopener noreferrer">Towards a Trustworthy and Governable Internet of Agentics: An Architectural Perspective on Protocols, Systems, and Services</a></h2>
-  <div class="card-meta"><span>Haoyi Xiong, Yi Liu, Jiang Bian, Peng Diao</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
-  <p class="card-summary">The paper proposes a new framework called the Internet of Agentics (IoA) to make large language model agents interoperable, governable, and trustworthy across different systems. It introduces a protocol stack (MCP, A2A, AGENTS.md, etc.) and system abstractions (orchestration, gateways, registries) to treat agents as service components. The result is a clearer pathway for deploying multi‑agent workflows in a controlled, secure, and scalable way.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do:
-1. Evaluate your current agent deployments against the IoA protocol stack (MCP for tool calls, A2A for agent‑to‑agent coordination).
-2. Implement or adopt gateways and registries that expose agent services, enabling discovery and orchestration across your cloud environment.
-3. Set up governance and trust layers (e.g., AGNTCY, SLIM) to monitor agent interactions and enforce organisational policies.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03575v1" target="_blank" rel="noopener noreferrer">VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifiably</a></h2>
+  <div class="card-meta"><span>Wei-Lin Chen, Zhepei Wei, Xinyu Zhu, Yu-Min Tseng</span><span class="sep" aria-hidden="true">·</span><span>NYU</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
+  <p class="card-summary">VeriHarm-Bench shows that LLM coding agents can finish tasks but still delete files, weaken permissions, or corrupt data. The researchers built an automated test framework that adds hidden harm tests to regular coding tasks, revealing that top agents only avoid harm 37% of the time. This matters for cloud managers because unseen damage can slip through during automation.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, check if your automated code agents run with shell access – add VeriHarm-style hidden harm tests to your CI pipeline to catch unintended file deletions or permission changes. If your org uses LLM agents for script generation, audit their outputs for side‑effects before deployment. If you don’t run such agents, no immediate action is needed.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">12/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">8/25</span></div>
-      <p class="trace-reasoning">Perspective paper outlines architectural concepts for agent interoperability; provides useful high-level ideas for infrastructure but lacks concrete implementations or code. Real-world impact moderate but not immediate. AI maturity low because no deployed system. Monetisation potential low, no actionable service offering yet.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper introduces VeriHarm, a framework to measure harmful success in LLM coding agents. This is directly relevant to IT engineers who deploy such agents for automation, scripting, and system configuration, providing a new metric that can flag unintended side effects. The framework appears to be a working prototype with released code, making it mature enough for real-world testing. It offers clear, actionable tests that can be integrated into existing security or DevOps pipelines, enabling engineers to assess and mitigate risks quickly, and could be packaged as a SaaS testing service. The total score is 45, well above the threshold for low signal.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/towards-a-trustworthy-and-governable-internet-of-agentics-an-architectural-persp.html" class="breakdown-link">IT Breakdown</a>
+    
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Towards a Trustworthy and Governable Internet of Agentics: An Architectural Perspective on Protocols, Systems, and Services"
-      data-summary="The paper proposes a new framework called the Internet of Agentics (IoA) to make large language model agents interoperable, governable, and trustworthy across different systems. It introduces a protocol stack (MCP, A2A, AGENTS.md, etc.) and system abstractions (orchestration, gateways, registries) to treat agents as service components. The result is a clearer pathway for deploying multi‑agent workflows in a controlled, secure, and scalable way."
-      data-it="If you manage cloud infrastructure, here is what to do:
-1. Evaluate your current agent deployments against the IoA protocol stack (MCP for tool calls, A2A for agent‑to‑agent coordination).
-2. Implement or adopt gateways and registries that expose agent services, enabling discovery and orchestration across your cloud environment.
-3. Set up governance and trust layers (e.g., AGNTCY, SLIM) to monitor agent interactions and enforce organisational policies."
+      data-title="VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifiably"
+      data-summary="VeriHarm-Bench shows that LLM coding agents can finish tasks but still delete files, weaken permissions, or corrupt data. The researchers built an automated test framework that adds hidden harm tests to regular coding tasks, revealing that top agents only avoid harm 37% of the time. This matters for cloud managers because unseen damage can slip through during automation."
+      data-it="If you manage cloud infrastructure, check if your automated code agents run with shell access – add VeriHarm-style hidden harm tests to your CI pipeline to catch unintended file deletions or permission changes. If your org uses LLM agents for script generation, audit their outputs for side‑effects before deployment. If you don’t run such agents, no immediate action is needed."
       data-monetisation=""
-      data-reasoning="Perspective paper outlines architectural concepts for agent interoperability; provides useful high-level ideas for infrastructure but lacks concrete implementations or code. Real-world impact moderate but not immediate. AI maturity low because no deployed system. Monetisation potential low, no actionable service offering yet."
-      data-score="25"
-      data-url="https://arxiv.org/abs/2611.03066v1">Copy as Markdown</button>
+      data-reasoning="The paper introduces VeriHarm, a framework to measure harmful success in LLM coding agents. This is directly relevant to IT engineers who deploy such agents for automation, scripting, and system configuration, providing a new metric that can flag unintended side effects. The framework appears to be a working prototype with released code, making it mature enough for real-world testing. It offers clear, actionable tests that can be integrated into existing security or DevOps pipelines, enabling engineers to assess and mitigate risks quickly, and could be packaged as a SaaS testing service. The total score is 45, well above the threshold for low signal."
+      data-score="45"
+      data-url="https://arxiv.org/abs/2611.03575v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Research benchmarking</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM-based automation for enterprise data engineering</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03433v1" target="_blank" rel="noopener noreferrer">A Living Leaderboard for Graph Machine Learning</a></h2>
-  <div class="card-meta"><span>Martin Ritzert</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
-  <p class="card-summary">The research tackles the chaos of scattered graph‑ML benchmarks by building a live, LLM‑powered leaderboard that gathers 27,723 results from 111 datasets and highlights outdated baselines. It shows many papers still use weak, legacy datasets, revealing gaps in current practice. For cloud infrastructure managers, it offers no direct operational benefit.</p>
-  
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03551v1" target="_blank" rel="noopener noreferrer">Can LLM Agents Be Forward-Deployed Engineers? Requirement Discovery and Delivery for Enterprise Text-to-SQL</a></h2>
+  <div class="card-meta"><span>Marianne Menglin Liu, Rongguang Wang, Zheng Wang, Yewen Wang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
+  <p class="card-summary">The study shows LLM agents can help discover and deliver SQL queries for business data, but they struggle with incomplete requirement discovery, unreliable execution, and unclear hardware constraints. They built a simulation of an enterprise text‑to‑SQL engagement and found that only about a quarter of runs met all acceptance criteria, highlighting gaps that limit production use. This research points to a risk for cloud infrastructure managers who rely on automated code generation.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure for data services, check whether your deployment pipelines include manual review steps for requirement discovery, monitor execution logs for reliability, and set explicit compute‑budget and production‑readiness tests before trusting an LLM to automate SQL generation.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper presents a living leaderboard for graph machine learning results. While it provides a useful resource for researchers and could aid in benchmarking, it does not directly influence day‑to‑day operations for IT engineers managing infrastructure or cloud services. The system is demonstrated and contains code, but it is still a research prototype rather than a production deployment, so maturity is moderate. The monetisation potential is low because the tool would need significant adaptation for commercial use and offers limited immediate value to an IT engineer or consultant within a 90‑day window. Overall, impact, maturity, and monetisation are modest, yielding a total score of 20.</p>
+      <p class="trace-reasoning">The paper addresses LLM agents for requirement discovery and deployment in enterprise SQL contexts, relevant to IT engineers. However it is an experimental study with limited practical deployment evidence, and monetisation is unclear. Overall moderate impact, low maturity, and low immediate commercial value.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/a-living-leaderboard-for-graph-machine-learning.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/can-llm-agents-be-forward-deployed-engineers-requirement-discovery-and-delivery-.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="A Living Leaderboard for Graph Machine Learning"
-      data-summary="The research tackles the chaos of scattered graph‑ML benchmarks by building a live, LLM‑powered leaderboard that gathers 27,723 results from 111 datasets and highlights outdated baselines. It shows many papers still use weak, legacy datasets, revealing gaps in current practice. For cloud infrastructure managers, it offers no direct operational benefit."
-      data-it="Not directly applicable to IT infrastructure work"
+      data-title="Can LLM Agents Be Forward-Deployed Engineers? Requirement Discovery and Delivery for Enterprise Text-to-SQL"
+      data-summary="The study shows LLM agents can help discover and deliver SQL queries for business data, but they struggle with incomplete requirement discovery, unreliable execution, and unclear hardware constraints. They built a simulation of an enterprise text‑to‑SQL engagement and found that only about a quarter of runs met all acceptance criteria, highlighting gaps that limit production use. This research points to a risk for cloud infrastructure managers who rely on automated code generation."
+      data-it="If you manage cloud infrastructure for data services, check whether your deployment pipelines include manual review steps for requirement discovery, monitor execution logs for reliability, and set explicit compute‑budget and production‑readiness tests before trusting an LLM to automate SQL generation."
       data-monetisation=""
-      data-reasoning="The paper presents a living leaderboard for graph machine learning results. While it provides a useful resource for researchers and could aid in benchmarking, it does not directly influence day‑to‑day operations for IT engineers managing infrastructure or cloud services. The system is demonstrated and contains code, but it is still a research prototype rather than a production deployment, so maturity is moderate. The monetisation potential is low because the tool would need significant adaptation for commercial use and offers limited immediate value to an IT engineer or consultant within a 90‑day window. Overall, impact, maturity, and monetisation are modest, yielding a total score of 20."
-      data-score="20"
-      data-url="https://arxiv.org/abs/2611.03433v1">Copy as Markdown</button>
+      data-reasoning="The paper addresses LLM agents for requirement discovery and deployment in enterprise SQL contexts, relevant to IT engineers. However it is an experimental study with limited practical deployment evidence, and monetisation is unclear. Overall moderate impact, low maturity, and low immediate commercial value."
+      data-score="35"
+      data-url="https://arxiv.org/abs/2611.03551v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
@@ -851,7 +815,7 @@
   <p class="insight"><strong>How to use:</strong> S1: Review your current ML pipeline libraries—if you rely on Hugging Face Transformers, add the MIC test suite for the models you use and run them on your CI before merging PRs. S2: Skipping this step risks silent regression bugs that could surface in production, potentially compromising data integrity or performance in your AI services. S3: The most impacted tool is your custom model deployment stack; integrating MIC will strengthen the reliability of models fed into Google Workspace AI extensions or internal analytics.</p>
   <div class="card-footer">
     <span class="pub-date">03 Nov 2026</span>
-    
+    <a href="breakdowns/transformers-model-integration-contracts.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -979,6 +943,26 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Infrastructure</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/03/data-centers-are-turning-to-old-jet-engines-as-the-wait-for-power-grows/" target="_blank" rel="noopener noreferrer">Data centers are turning to old jet engines as the wait for power grows</a></h2>
+  <p class="card-summary">Data center operators are increasingly using converted jet engines to generate power quickly due to grid connection delays, with several AI companies already deploying these units. This short‑term solution highlights the growing power supply bottleneck for AI workloads and may pressure IT leaders to reconsider energy sourcing strategies.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor your data center’s power procurement plans and evaluate whether temporary power generation (e.g., gas‑burning jet engines) could accelerate deployment for new AI workloads. Delaying power acquisition could push projects into the next fiscal cycle, impacting capacity planning and cost projections.</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">OpenAI</span>
       <span class="tag-pill">Product Launch</span>
@@ -1057,7 +1041,7 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
   <p class="insight"><strong>How to use:</strong> Consider evaluating Palette for internal presentation automation: test it against your current slide templates and see if it reduces manual design time. If it aligns with your data privacy policies, it could replace manual PowerPoint creation, freeing IT staff from repetitive formatting tasks. The tool would most benefit your Google Workspace and Freshservice integrations by streamlining slide generation for support documentation or training materials.</p>
   <div class="card-footer">
     <span class="pub-date">03 Nov 2026</span>
-    
+    <a href="breakdowns/palette-teaching-a-small-model-to-build-decks-in-your-design-language.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -1075,6 +1059,46 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
   <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/03/1147934/reverse-game-theory-mechanism-design-ai-alignment/" target="_blank" rel="noopener noreferrer">How “reverse game theory” could keep AI agents in check</a></h2>
   <p class="card-summary">MIT Technology Review reports on a novel &quot;reverse game theory&quot; framework designed to keep AI agents compliant by aligning incentives with desired behavior. The approach seeks to prevent rogue models from violating rules through strategic design rather than hard‑wiring constraints.</p>
   <p class="insight"><strong>How to use:</strong> Keep an eye on emerging alignment methods and evaluate whether any vendor APIs or managed services incorporate incentive‑based controls in the next 30 days. Integrating such safeguards could reduce the risk of unintentional policy violations in internal AI tooling.</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    <a href="breakdowns/how-reverse-game-theory-could-keep-ai-agents-in-check.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Google DeepMind</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/" target="_blank" rel="noopener noreferrer">Agentic cheminformatics with Google Antigravity</a></h2>
+  <p class="card-summary">Google DeepMind has launched Cheminformatics Skills for Google Antigravity, an AI-powered agent that can rapidly search, analyze, and propose novel drug candidates, completing tasks that previously took days in about an hour. The system integrates with RDKit, ChEMBL, and PubChem to streamline complex cheminformatics workflows for both computational and experimental chemists.</p>
+  <p class="insight"><strong>How to use:</strong> Watch for potential integrations of Antigravity’s skills into your existing data pipelines or analytics platforms; it could automate tedious data curation and transformation tasks that currently consume significant engineering time. Evaluate whether your team’s workflows could benefit from AI-driven molecule search and synthesis route planning to reduce iteration cycles.</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    <a href="breakdowns/agentic-cheminformatics-with-google-antigravity.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/allenai/statebench" target="_blank" rel="noopener noreferrer">StateBench: Testing how language models track state changes over long documents</a></h2>
+  <p class="card-summary">Hugging Face has released StateBench, a new benchmark to evaluate how well language models track state changes in long documents. The study reveals that recurrent and hybrid models outperform transformers on long‑context state tracking, but even state‑of‑the‑art models like Gemini 3.8 Flash, Claude Opus 5.5, and GPT‑6 Sol still struggle with complex dependency chains.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor emerging NLP models for potential integration with internal documentation or code analysis tools. A future AI‑powered assistant could use StateBench insights to select models that best maintain context over lengthy logs or codebases, improving accuracy in automated troubleshooting.</p>
   <div class="card-footer">
     <span class="pub-date">03 Nov 2026</span>
     
@@ -1177,6 +1201,46 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
   <p class="insight"><strong>How to use:</strong> No direct action required for your IT stack; simply note the historical insight into computational efficiency.</p>
   <div class="card-footer">
     <span class="pub-date">03 Nov 2026</span>
+    <a href="breakdowns/could-a-modern-chess-engine-on-a-pentium-have-defeated-kasparov-in-1996.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/jill-hazelbaker-chief-corporate-affairs-officer" target="_blank" rel="noopener noreferrer">OpenAI appoints Jill Hazelbaker as Chief Corporate Affairs Officer</a></h2>
+  <p class="card-summary">OpenAI has appointed Jill Hazelbaker as Chief Corporate Affairs Officer, bringing her extensive experience in technology communications and public policy. The move signals OpenAI’s focus on strengthening its corporate positioning and engagement with regulators and stakeholders.</p>
+  <p class="insight"><strong>How to use:</strong> None</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    <a href="breakdowns/openai-appoints-jill-hazelbaker-as-chief-corporate-affairs-officer.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://simonwillison.net/2026/Nov/3/qwen-can-interpret-model-weights/" target="_blank" rel="noopener noreferrer">Qwen 3.8 27B on my laptop can interpret model weights, too</a></h2>
+  <p class="card-summary">A new research paper demonstrates that large language models like Qwen 3.8 27B can read and edit their own neural network weights without external tools, a concept called Weight‑Space Programming. The study shows these models can improve performance on tasks such as math reasoning by making tiny adjustments to the weight matrix.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
     
   </div>
 </article>
@@ -1243,6 +1307,26 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Microsoft Research</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.microsoft.com/en-us/research/podcast/learn-the-rules-the-hacker-mindset/" target="_blank" rel="noopener noreferrer">Learn the rules: The hacker mindset</a></h2>
+  <p class="card-summary">Microsoft Research’s Mike Walker discusses the hacker mindset, emphasizing the importance of curiosity, judgment, and agility in tackling complex problems. The piece offers philosophical insights rather than concrete technical updates.</p>
+  <p class="insight"><strong>How to use:</strong> Check your team’s onboarding and training materials to ensure they incorporate lessons on curiosity, judgment, and agility—key traits highlighted by Walker—to strengthen problem‑solving culture.</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    <a href="breakdowns/learn-the-rules-the-hacker-mindset.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">Hacker News</span>
       <span class="tag-pill">Research</span>
@@ -1255,6 +1339,46 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
   <h2 class="card-title"><a href="https://honnibal.dev/blog/astra-read-write-misleading" target="_blank" rel="noopener noreferrer">The &#x27;Astra can read and write weights to improve Qwen&#x27; post is misleading</a></h2>
   <p class="card-summary">A recent post claims that Astra can read and rewrite model weights to improve Qwen, but the author clarifies that the experiments rely on Python code rather than direct weight analysis. The work demonstrates that Astra can perform tasks similar to a human ML engineer, though not through a single unified technique.</p>
   <p class="insight"><strong>How to use:</strong> No immediate action needed; the findings do not affect existing IT tools or infrastructure.</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">2/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/02/1147932/heres-who-is-falling-in-line-for-trumps-super-intelligence-loyalty-test/" target="_blank" rel="noopener noreferrer">Here’s who is falling in line for Trump’s “Super Intelligence” loyalty test</a></h2>
+  <p class="card-summary">President Trump signed an executive order to rebrand AI as &quot;Super Intelligence&quot; for government agencies, sparking debate over the terminology and its implications.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    <a href="breakdowns/heres-who-is-falling-in-line-for-trumps-super-intelligence-loyalty-test.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Consulting</span>
+      <span class="source-name">Deloitte</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">2/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/research-centers/consumer-industry-center/hospitality.html?icid=disidenav_hospitality" target="_blank" rel="noopener noreferrer">Hospitality &amp; Airlines</a></h2>
+  <p class="card-summary">Deloitte Consumer Industry Center publishes insights for sectors including hospitality and airlines, focusing on evolving consumer behavior and business strategies. The release offers high-level industry analysis rather than technical updates.</p>
+  
   <div class="card-footer">
     <span class="pub-date">03 Nov 2026</span>
     
@@ -1283,6 +1407,46 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/03/anthropic-is-working-on-a-system-to-prove-ai-models-identity/" target="_blank" rel="noopener noreferrer">Anthropic is working on a system to prove AI models’ identity</a></h2>
+  <p class="card-summary">Anthropic has announced FlashProve, an open‑source cryptographic system that lets users verify which AI model produced a specific output. The tool aims to prevent model impersonation and enable third‑party claims to be authenticated without exposing model weights.</p>
+  <p class="insight"><strong>How to use:</strong> Check the GitHub repo for FlashProve’s code to understand how model fingerprints are generated and verify if any vendor you rely on publishes compatible proofs. If a vendor offers such proofs, consider integrating them into your audit logs to ensure services you consume are indeed powered by the claimed AI model, reducing the risk of hidden model swaps.</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Consulting</span>
+      <span class="source-name">Deloitte</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/industry/retail-distribution.html?icid=disidenav_retail-distribution" target="_blank" rel="noopener noreferrer">Retail, Wholesale &amp; Distribution</a></h2>
+  <p class="card-summary">Deloitte’s Consumer Industry Center publishes a broad analysis of trends affecting sectors like retail, automotive, and hospitality. The report offers high‑level market insights but contains no specific AI developments or technical updates.</p>
+  <p class="insight"><strong>How to use:</strong> This publication offers general industry context but does not suggest any actionable IT changes or AI tool adoption for your environment.</p>
+  <div class="card-footer">
+    <span class="pub-date">03 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">Consulting</span>
       <span class="source-name">Deloitte</span>
       <span class="tag-pill">Other</span>
@@ -1305,8 +1469,8 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-03</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.02543v1" target="_blank" rel="noopener noreferrer">When Cache Pressure Becomes a Trap: Metastability in Agent Serving</a><a class="archive-title" href="https://arxiv.org/abs/2611.03517v1" target="_blank" rel="noopener noreferrer">Ask, Don&#x27;t Equip: Question-Driven Coding Agents for Deep Kernel Optimization</a><a class="archive-title" href="https://arxiv.org/abs/2611.03627v1" target="_blank" rel="noopener noreferrer">Not All Reasoning Generalizes: A Case Study on Learning Generalizable Reasoning Strategies in RLVR</a></div>
+  <div class="archive-count">4 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.03434v1" target="_blank" rel="noopener noreferrer">Optimize the Harness, Not the Model: Fitting a Minimal Agent to a Self-Hostable LLM for Investigative Analysis</a><a class="archive-title" href="https://arxiv.org/abs/2611.03431v1" target="_blank" rel="noopener noreferrer">IAMRAGBENCH: Benchmarking Authorization Expansions in LLM-Generated AWS IAM Policies under RAG Poisoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.03575v1" target="_blank" rel="noopener noreferrer">VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifiably</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-02</div>
@@ -1458,7 +1622,7 @@ S3: Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could be
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-03</div>
-  <div class="archive-count">26 items</div>
+  <div class="archive-count">36 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/" target="_blank" rel="noopener noreferrer">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a><a class="archive-title" href="https://www.cnbc.com/2026/11/02/oracle-files-to-sell-20-billion-in-new-stock-bonds-to-finance-ai-buildout.html" target="_blank" rel="noopener noreferrer">Oracle files to sell $20B in new stock, bonds to finance AI buildout</a><a class="archive-title" href="https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/" target="_blank" rel="noopener noreferrer">Trajectory raises $45M to make AI model training accessible to nontechnical experts</a></div>
 </div>
 <div class="archive-row">
