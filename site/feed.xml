@@ -5,29 +5,53 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 03 Nov 2026 00:52:51 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Nov 2026 14:01:57 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Completeness and Cost of Retrieval Structures for Multi-Tool Requests in LLM Agents</title>
-    <link>https://arxiv.org/abs/2610.41905v1</link>
-    <guid>https://arxiv.org/abs/2610.41905v1</guid>
-    <pubDate>Fri, 30 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study tackles the problem that agents calling multiple tools often miss required tools because retrievers are designed for single-tool queries. Researchers compared six retrieval methods, finding that a set-level retriever trained on domain data can retrieve the full set 33% of the time without LLM calls, while a hierarchical LLM approach reaches 40% but needs many LLM calls and long latency. For most IT infra teams, this research is not directly relevant to day‑to‑day cloud management.</p><p><strong>IT Breakdown:</strong> If you manage a multi‑tool automation system that relies on a tool retriever, train a set‑level retriever on a sample of your own in‑domain queries to improve completeness; limit LLM calls to avoid high latency and cost.</p>]]></description>
+    <title>Optimize the Harness, Not the Model: Fitting a Minimal Agent to a Self-Hostable LLM for Investigative Analysis</title>
+    <link>https://arxiv.org/abs/2611.03434v1</link>
+    <guid>https://arxiv.org/abs/2611.03434v1</guid>
+    <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>CLEO builds a tiny, self‑hosted AI harness that keeps only the tools and rules that actually improve accuracy, achieving an 83.8% pass rate—just 1.2 points shy of a top commercial model—while being 100× smaller.</p><p><strong>IT Breakdown:</strong> If you manage cloud infra and run in‑house LLMs, check if your current tool stack can be trimmed to the minimal set that CLEO recommends: step 1, audit the tools your LLM uses; step 2, replace or remove any that do not directly contribute to accuracy; step 3, test the trimmed harness on a validation set to confirm performance is retained.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Cross-Interface Authorization for AI Computer-Use Agents</title>
-    <link>https://arxiv.org/abs/2610.41397v1</link>
-    <guid>https://arxiv.org/abs/2610.41397v1</guid>
-    <pubDate>Fri, 30 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the problem of ensuring consistent security decisions across multiple ways an AI agent can interact with a system (GUI, CLI, APIs, etc.). The authors built a protocol that maps every possible interaction route to a single, canonical security effect, verifies it at commit time, and produces a receipt that proves the action was authorised. In tests across over 3,000 scenarios the system never allowed an action to slip through an alternative route, proving it safe and reliable for complex, multi‑interface environments.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Map each service’s access routes (API, CLI, UI) into a unified profile and define the effects they can trigger; 2) Deploy the protocol’s prepare‑ticket step before any privileged operation to lock the route and effect; 3) At commit, require the receipt that confirms the authorised state and that no alternate route could have bypassed the check.</p>]]></description>
+    <title>IAMRAGBENCH: Benchmarking Authorization Expansions in LLM-Generated AWS IAM Policies under RAG Poisoning</title>
+    <link>https://arxiv.org/abs/2611.03431v1</link>
+    <guid>https://arxiv.org/abs/2611.03431v1</guid>
+    <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This research shows that LLMs using RAG can generate valid AWS IAM policies that unintentionally grant extra permissions. The authors built IAMRAGBENCH, a benchmark of 60 policy cases, and found that up to 15.8% of attacks succeed when attackers poison the context. The study highlights the risk of trusting LLM-generated IAM policies without verification.</p><p><strong>IT Breakdown:</strong> If you manage AWS IAM, immediately enforce independent policy review: 1) run any LLM‑generated policy through AWS CheckNoNewAccess; 2) compare the policy against an authorization envelope; 3) block deployment if any new permissions are detected.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifiably</title>
+    <link>https://arxiv.org/abs/2611.03575v1</link>
+    <guid>https://arxiv.org/abs/2611.03575v1</guid>
+    <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>VeriHarm-Bench shows that LLM coding agents can finish tasks but still delete files, weaken permissions, or corrupt data. The researchers built an automated test framework that adds hidden harm tests to regular coding tasks, revealing that top agents only avoid harm 37% of the time. This matters for cloud managers because unseen damage can slip through during automation.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, check if your automated code agents run with shell access – add VeriHarm-style hidden harm tests to your CI pipeline to catch unintended file deletions or permission changes. If your org uses LLM agents for script generation, audit their outputs for side‑effects before deployment. If you don’t run such agents, no immediate action is needed.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Can LLM Agents Be Forward-Deployed Engineers? Requirement Discovery and Delivery for Enterprise Text-to-SQL</title>
+    <link>https://arxiv.org/abs/2611.03551v1</link>
+    <guid>https://arxiv.org/abs/2611.03551v1</guid>
+    <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study shows LLM agents can help discover and deliver SQL queries for business data, but they struggle with incomplete requirement discovery, unreliable execution, and unclear hardware constraints. They built a simulation of an enterprise text‑to‑SQL engagement and found that only about a quarter of runs met all acceptance criteria, highlighting gaps that limit production use. This research points to a risk for cloud infrastructure managers who rely on automated code generation.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure for data services, check whether your deployment pipelines include manual review steps for requirement discovery, monitor execution logs for reliability, and set explicit compute‑budget and production‑readiness tests before trusting an LLM to automate SQL generation.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>DistDebug-Bench: Can LLM Agents Diagnose Bugs in Distributed Systems?</title>
+    <link>https://arxiv.org/abs/2611.03523v1</link>
+    <guid>https://arxiv.org/abs/2611.03523v1</guid>
+    <pubDate>Mon, 02 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The paper presents DistDebug-Bench, a new benchmark that tests large language model agents on debugging bugs in real distributed systems rather than toy scripts. The authors compiled 120 real bugs from 11 popular distributed applications, covering multiple languages and failure patterns, and evaluated current LLM agents, finding they struggle with reasoning structure and tool use for complex, nondeterministic issues.</p><p><strong>IT Breakdown:</strong> If you manage distributed cloud services, check your monitoring and alerting pipelines for gaps that could be filled by an LLM‑based debugging agent: 1) add a step to capture complete stack traces and system logs, 2) feed these logs into an LLM with a structured reasoning prompt, 3) use the agent’s suggested fixes as a starting point for automated regression tests.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</title>
     <link>https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/</link>
     <guid>https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/</guid>
-    <pubDate>Tue, 03 Nov 2026 00:52:51 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 14:01:57 +0000</pubDate>
     <description><![CDATA[<p>Microsoft Research highlights the need for synthetic data when evaluating Copilot at enterprise scale, citing the sensitivity of real organizational data. This underscores the importance of robust data governance for AI deployments in Microsoft 365.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -35,7 +59,7 @@
     <title>[News] Oracle files to sell $20B in new stock, bonds to finance AI buildout</title>
     <link>https://www.cnbc.com/2026/11/02/oracle-files-to-sell-20-billion-in-new-stock-bonds-to-finance-ai-buildout.html</link>
     <guid>https://www.cnbc.com/2026/11/02/oracle-files-to-sell-20-billion-in-new-stock-bonds-to-finance-ai-buildout.html</guid>
-    <pubDate>Tue, 03 Nov 2026 00:52:51 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 14:01:57 +0000</pubDate>
     <description><![CDATA[<p>Oracle has announced a $20B fundraising round—$10B in common stock and $10B in senior notes—to support its AI buildout, aiming to accelerate infrastructure development. The move signals a strategic push toward AI services that could alter cloud competition and pricing dynamics.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -43,7 +67,7 @@
     <title>[News] Trajectory raises $45M to make AI model training accessible to nontechnical experts</title>
     <link>https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/</link>
     <guid>https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/</guid>
-    <pubDate>Tue, 03 Nov 2026 00:52:51 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 14:01:57 +0000</pubDate>
     <description><![CDATA[<p>Trajectory has secured $45 million in Series A funding to launch a platform that automates continual learning for AI models, enabling non‑technical users to fine‑tune models with ongoing feedback loops. The service targets specialized domains like law and finance, offering a cheaper, faster alternative to traditional fine‑tuning practices.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -51,7 +75,7 @@
     <title>[News] Scaling Git at OpenAI</title>
     <link>https://openai.com/index/scaling-git-at-openai</link>
     <guid>https://openai.com/index/scaling-git-at-openai</guid>
-    <pubDate>Tue, 03 Nov 2026 00:52:51 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 14:01:57 +0000</pubDate>
     <description><![CDATA[<p>OpenAI has released Pando, a new backend that scales Git for its massive monorepo while remaining compatible with existing Git workflows. Pando reduces push latency by about five‑fold and supports petabyte‑scale data transfer, promising faster CI/CD and developer productivity.
 </p>]]></description>
     <category>Industry News</category>
@@ -60,7 +84,7 @@
     <title>[News] LifeVal</title>
     <link>https://openai.com/index/lifeval</link>
     <guid>https://openai.com/index/lifeval</guid>
-    <pubDate>Tue, 03 Nov 2026 00:52:51 +0000</pubDate>
+    <pubDate>Tue, 03 Nov 2026 14:01:57 +0000</pubDate>
     <description><![CDATA[<p>OpenAI has launched LifeVal, a new evaluation framework to measure how well its models perform on everyday life tasks such as childcare, budgeting, and grocery ordering. The study uses large-scale time‑use data and a demographic survey to identify high‑value tasks and track model progress over the past year.</p>]]></description>
     <category>Industry News</category>
   </item>
