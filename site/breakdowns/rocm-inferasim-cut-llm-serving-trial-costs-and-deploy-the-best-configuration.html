@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration</h1>
+  <p class="meta-line">Anshu Raina, Yao Fu, Zhang Jiejing, Peyman Razaghi · Academic Institution · 2026-11-02 · Generated 04 Nov 2026, 23:33</p>
+  <a href="https://arxiv.org/abs/2611.04032v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study evaluates ROCm InferaSim, a lightweight simulation and tuning agent designed to accelerate large‑language‑model (LLM) serving configuration in cloud environments. Traditional LLM deployment requires exhaustive GPU‑hour consumption to identify optimal batch size, GPU count, and kernel parameters, often involving thousands of trial runs. InferaSim reduces this search space by measuring key kernel configurations once and extrapolating performance to other setups, achieving within‑10% accuracy of full‑scale trials. The authors demonstrate a 90% reduction in trial time while preserving near‑optimal throughput for LLM inference workloads. The methodology relies on ROCm’s profiling hooks to capture kernel launch metrics, then applies a linear regression model to predict throughput across different batch sizes and GPU counts. The simulation is lightweight enough to run on a single GPU, making it feasible for use in continuous integration pipelines or on‑prem clusters.</p><p>For enterprise IT, this translates to significant cost savings in both cloud spend and on‑prem resource allocation. By cutting trial time, teams can iterate faster on model deployment, reduce the number of GPU instances required for testing, and accelerate time‑to‑market for AI services. The 10% accuracy margin is acceptable for most production scenarios, especially when combined with a final sanity check on a small set of real traffic. The approach also aligns with DevOps practices, enabling automated performance regression testing and continuous optimization of inference pipelines.</p><p>Real‑world implications include lower operational expenditure on GPU hours, improved utilization of existing hardware, and a more predictable budgeting model for AI workloads. Enterprises can adopt InferaSim to streamline their LLM deployment lifecycle, reduce the skill barrier for tuning inference parameters, and maintain compliance with data‑processing regulations by limiting the exposure of sensitive data during trial runs. The study underscores the viability of simulation‑driven optimization as a standard practice in AI‑heavy workloads, providing a clear path for scaling LLM services without proportional increases in cost or complexity.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory current GPU assets: count, model, ROCm version, and utilization metrics.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Capture baseline inference throughput for existing LLM workloads (batch size, sequence length, GPU count).</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Assess existing CI/CD pipelines for integration points and available profiling hooks.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Verify compliance with UK GDPR: ensure that any data used in trials is anonymized or synthetic.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify current trial overhead: GPU‑hours per configuration sweep and associated cloud cost.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Project savings: 90% reduction in trial time → 0.9 × current GPU‑hour cost.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Benchmark: demonstrate 10% accuracy margin against full trials; present throughput retention metrics.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Build ROI model: cost of InferaSim deployment (software, training) versus annual savings.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">5 Highlight risk mitigation: faster iteration reduces exposure to model drift and compliance lapses.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 ROCm (AMD GPU stack) – required for kernel profiling.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 InferaSim (open‑source or commercial license) – simulation engine.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Kubernetes with GPU scheduling (e.g., NVIDIA device plugin or ROCm device plugin).</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 CI/CD platforms: GitLab CI, Jenkins, or GitHub Actions with GPU runners.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">5 Monitoring: Prometheus + Grafana for GPU metrics; OpenTelemetry for trace collection.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Inaccurate extrapolation if kernel behavior changes with model size or new ROCm releases.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Use of real user data in profiling may breach UK GDPR; enforce data minimization.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Over‑reliance on simulation may miss edge‑case bottlenecks; require final sanity check.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Vendor lock‑in: ROCm ecosystem may limit portability to NVIDIA‑only clusters.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Deploy InferaSim on a single test GPU and run a 5‑configuration sweep for a current LLM service.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Compare predicted throughput to actual measurements; document 10% variance.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Update CI pipeline to trigger InferaSim before full‑scale trials, reducing trial GPU‑hours by at least 50% within 30 days.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Integrate InferaSim into the production inference pipeline as a mandatory pre‑deployment step.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Expand simulation coverage to include mixed‑precision, quantization, and model parallelism scenarios.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Build an internal knowledge base of kernel‑parameter mappings for each LLM model family.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">4 Automate continuous performance regression testing, feeding results back into a central dashboard for capacity planning.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">5 Evaluate cross‑vendor portability by benchmarking equivalent workloads on NVIDIA GPUs and adjusting simulation models accordingly.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 04 Nov 2026, 23:33</p>
+</main>
+</body>
+</html>

@@ -578,12 +578,12 @@
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">11</div>
+          <div class="stat-num">26</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 04 Nov 2026, 14:12 UTC</p>
+    <p class="updated">Updated 04 Nov 2026, 23:36 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,152 +614,152 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM inference scheduling</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM serving optimisation</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-high" style="--pct:73;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 55 of 75"><span>55</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.04807v1" target="_blank" rel="noopener noreferrer">Asymptotic Optimality of $cμ$-Rule for LLM Inference Scheduling under Memory Constraint</a></h2>
-  <div class="card-meta"><span>Zhenghao Li, Shengbo Wang, Nian Si</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
-  <p class="card-summary">This study tackles the problem of GPU memory contention during large language model inference by creating a scheduling rule that prioritises requests based on their combined compute speed, memory bandwidth and memory usage. The authors built a fluid‑model‑based cμ priority rule and proved it is optimal for minimizing latency and maximizing throughput, then validated it on an NVIDIA H800 GPU. As a result, the rule can cut average inference latency while keeping throughput high.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference on GPUs, use the cμ rule: 1) measure each request’s expected compute speed, memory bandwidth and KV‑cache size; 2) compute μ for each class; 3) schedule requests by descending c×μ value to minimise latency and maximise throughput.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.04032v1" target="_blank" rel="noopener noreferrer">ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration</a></h2>
+  <div class="card-meta"><span>Anshu Raina, Yao Fu, Zhang Jiejing, Peyman Razaghi</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
+  <p class="card-summary">ROCm InferaSim helps cloud engineers predict LLM serving performance with far fewer GPU hours by measuring key kernel configurations once and extrapolating to other setups. It builds a lightweight simulation and tuning agent that reduces the search for optimal batch size, GPU count, and other settings from thousands of trials to just a handful of short runs, achieving within‑10% accuracy. The result is a 90% reduction in trial time while maintaining near‑optimal throughput for large‑language‑model deployments.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage AMD Instinct GPUs for LLM serving, run a few short anchor tests (≈10 GPU‑hours) with your chosen engine and model, then use InferaSim to predict best batch size and GPU count; adjust your deployment settings accordingly and validate with a quick benchmark.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper proposes a concrete scheduling rule that improves latency and throughput for LLM inference, directly benefiting infrastructure operators deploying LLM services. The authors demonstrate the rule on a real NVIDIA H800 engine, indicating a working implementation and empirical results. The approach can be incorporated into existing serving stacks within a few weeks, offering tangible operational value.</p>
+      <p class="trace-reasoning">The paper presents a practical tool for LLM deployment optimisation that directly benefits IT engineers working with cloud and GPU infrastructure, offering measurable performance gains. While the abstract suggests a working system, it does not detail open-source availability or production deployment, hence a moderate maturity score. The methodology is actionable and could be monetised by service or tooling within 90 days. Overall impact and potential are high.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/asymptotic-optimality-of-c-rule-for-llm-inference-scheduling-under-memory-constr.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/rocm-inferasim-cut-llm-serving-trial-costs-and-deploy-the-best-configuration.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Asymptotic Optimality of $cμ$-Rule for LLM Inference Scheduling under Memory Constraint"
-      data-summary="This study tackles the problem of GPU memory contention during large language model inference by creating a scheduling rule that prioritises requests based on their combined compute speed, memory bandwidth and memory usage. The authors built a fluid‑model‑based cμ priority rule and proved it is optimal for minimizing latency and maximizing throughput, then validated it on an NVIDIA H800 GPU. As a result, the rule can cut average inference latency while keeping throughput high."
-      data-it="If you manage LLM inference on GPUs, use the cμ rule: 1) measure each request’s expected compute speed, memory bandwidth and KV‑cache size; 2) compute μ for each class; 3) schedule requests by descending c×μ value to minimise latency and maximise throughput."
+      data-title="ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration"
+      data-summary="ROCm InferaSim helps cloud engineers predict LLM serving performance with far fewer GPU hours by measuring key kernel configurations once and extrapolating to other setups. It builds a lightweight simulation and tuning agent that reduces the search for optimal batch size, GPU count, and other settings from thousands of trials to just a handful of short runs, achieving within‑10% accuracy. The result is a 90% reduction in trial time while maintaining near‑optimal throughput for large‑language‑model deployments."
+      data-it="If you manage AMD Instinct GPUs for LLM serving, run a few short anchor tests (≈10 GPU‑hours) with your chosen engine and model, then use InferaSim to predict best batch size and GPU count; adjust your deployment settings accordingly and validate with a quick benchmark."
       data-monetisation=""
-      data-reasoning="The paper proposes a concrete scheduling rule that improves latency and throughput for LLM inference, directly benefiting infrastructure operators deploying LLM services. The authors demonstrate the rule on a real NVIDIA H800 engine, indicating a working implementation and empirical results. The approach can be incorporated into existing serving stacks within a few weeks, offering tangible operational value."
+      data-reasoning="The paper presents a practical tool for LLM deployment optimisation that directly benefits IT engineers working with cloud and GPU infrastructure, offering measurable performance gains. While the abstract suggests a working system, it does not detail open-source availability or production deployment, hence a moderate maturity score. The methodology is actionable and could be monetised by service or tooling within 90 days. Overall impact and potential are high."
       data-score="55"
-      data-url="https://arxiv.org/abs/2611.04807v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.04032v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM deployment optimization</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
+    <div class="card-tags"><span class="tag-pill">Security automation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.05304v1" target="_blank" rel="noopener noreferrer">LoopVQ: Sub 1-bit KV Cache Quantization for Looped Transformers</a></h2>
-  <div class="card-meta"><span>Minsoo Cheong, Sungjoo Yoo</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
-  <p class="card-summary">LoopVQ reduces KV cache size in looped transformers by quantising multiple loop steps together, cutting memory and speeding up inference. The authors built a 0.5‑bit quantiser that keeps accuracy on long‑context tasks and integrated it into SGLang, boosting throughput by up to 6× on 2.6B models. This means you can serve larger context models faster without extra GPU memory.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage a looped transformer deployment, 1) integrate LoopVQ into your inference pipeline, 2) set the target bit‑rate to 0.5–0.25 bits per element, 3) monitor throughput and latency – you should see a 2–6× speed‑up and reduced GPU usage.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The paper presents a quantization technique that can reduce KV cache size and improve throughput for looped transformers. While not directly targeting typical IT infrastructure tools, it offers measurable benefits for LLM deployment on cloud services, making it moderately relevant. The method is implemented in SGLang, indicating a working system, hence high maturity. It can be adopted by cloud service providers to enhance LLM serving performance, providing a tangible monetisation path. Overall, the paper scores in the mid‑range for relevance, maturity, and monetisation potential.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/loopvq-sub-1-bit-kv-cache-quantization-for-looped-transformers.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="LoopVQ: Sub 1-bit KV Cache Quantization for Looped Transformers"
-      data-summary="LoopVQ reduces KV cache size in looped transformers by quantising multiple loop steps together, cutting memory and speeding up inference. The authors built a 0.5‑bit quantiser that keeps accuracy on long‑context tasks and integrated it into SGLang, boosting throughput by up to 6× on 2.6B models. This means you can serve larger context models faster without extra GPU memory."
-      data-it="If you manage a looped transformer deployment, 1) integrate LoopVQ into your inference pipeline, 2) set the target bit‑rate to 0.5–0.25 bits per element, 3) monitor throughput and latency – you should see a 2–6× speed‑up and reduced GPU usage."
-      data-monetisation=""
-      data-reasoning="The paper presents a quantization technique that can reduce KV cache size and improve throughput for looped transformers. While not directly targeting typical IT infrastructure tools, it offers measurable benefits for LLM deployment on cloud services, making it moderately relevant. The method is implemented in SGLang, indicating a working system, hence high maturity. It can be adopted by cloud service providers to enhance LLM serving performance, providing a tangible monetisation path. Overall, the paper scores in the mid‑range for relevance, maturity, and monetisation potential."
-      data-score="45"
-      data-url="https://arxiv.org/abs/2611.05304v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Cloud infrastructure</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.05269v1" target="_blank" rel="noopener noreferrer">ToolSched: Resource-Efficient Tool Scheduling for Shared-Host LLM Agents</a></h2>
-  <div class="card-meta"><span>Shucheng Zou, Yuhao Gu, Long Chen, Zhongchun Zheng</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
-  <p class="card-summary">ToolSched tackles the problem of resource contention for local LLM agents on shared hosts by letting agents estimate their resource needs before sending shell commands. It builds a lightweight MCP server that schedules these commands based on real‑time host conditions, improving resource utilisation by 148% and throughput by 29%. For most IT infra teams, this is not directly relevant unless you run local LLM services on shared servers.</p>
-  <p class="insight"><strong>How to apply:</strong> If you run shared local servers with LLM agents, install ToolSched as a command scheduler, have agents submit resource estimates with each request, and let it stagger executions to reduce OOMs and improve throughput.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03772v1" target="_blank" rel="noopener noreferrer">RuntimeTickets: Source-Grounded Security Obligations for Agent Skills</a></h2>
+  <div class="card-meta"><span>Kuiyi Gao, Xue Liu, Bowei He</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
+  <p class="card-summary">RuntimeTickets lets you enforce and audit security rules for third‑party agent skills while they run, linking each skill’s actions to a set of fine‑grained obligations. They built a protocol that checks every outbound send and records evidence, achieving zero overlooked or over‑blocked attacks in tests. This means you can safely run external skills without trusting the skill itself.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure with autonomous agents, add RuntimeTickets: step 1: define security obligations for each skill task, step 2: deploy the runtime gate to check outbound traffic against those obligations, step 3: use the ticket decoder to audit and enforce compliance. If your org uses third‑party skills, check that your egress filters support fine‑grained per‑skill rules immediately.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">12/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">18/25</span></div>
+      <p class="trace-reasoning">The paper presents a protocol for enforcing security obligations in third‑party agent skills, directly relevant to IT infrastructure security and compliance. The approach is evaluated on real agent frameworks and shows zero failure rates, indicating a mature, deployable solution. It offers a clear, actionable tool that IT engineers could adopt or commercialize within 90 days, such as integrating RuntimeTickets into existing cloud or SaaS environments.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/runtimetickets-source-grounded-security-obligations-for-agent-skills.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="RuntimeTickets: Source-Grounded Security Obligations for Agent Skills"
+      data-summary="RuntimeTickets lets you enforce and audit security rules for third‑party agent skills while they run, linking each skill’s actions to a set of fine‑grained obligations. They built a protocol that checks every outbound send and records evidence, achieving zero overlooked or over‑blocked attacks in tests. This means you can safely run external skills without trusting the skill itself."
+      data-it="If you manage cloud infrastructure with autonomous agents, add RuntimeTickets: step 1: define security obligations for each skill task, step 2: deploy the runtime gate to check outbound traffic against those obligations, step 3: use the ticket decoder to audit and enforce compliance. If your org uses third‑party skills, check that your egress filters support fine‑grained per‑skill rules immediately."
+      data-monetisation=""
+      data-reasoning="The paper presents a protocol for enforcing security obligations in third‑party agent skills, directly relevant to IT infrastructure security and compliance. The approach is evaluated on real agent frameworks and shows zero failure rates, indicating a mature, deployable solution. It offers a clear, actionable tool that IT engineers could adopt or commercialize within 90 days, such as integrating RuntimeTickets into existing cloud or SaaS environments."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.03772v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Cloud cost optimization</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:53;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 40 of 75"><span>40</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.03852v1" target="_blank" rel="noopener noreferrer">Why Pay for Long Reasoning When Rewrite Do Trick? Causal Effects of Reasoning History Compaction on Future Generation and Agent Cost</a></h2>
+  <div class="card-meta"><span>Anton Hristov</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">02 Nov 2026</span></span></div>
+  <p class="card-summary">This research shows that by rewriting a language model’s earlier reasoning into a compact state before new tool results, the model can produce shorter, cheaper future reasoning without retraining. The authors tested this on open‑weight models and found that compact histories typically cut token use and cost, while still keeping task quality. For cloud infra managers, this could lower the compute cost of running large‑language‑model agents that generate long reasoning traces.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM‑based agents, you can reduce run costs by implementing a compaction step: 1) capture the model’s reasoning history before any tool output, 2) rewrite that history into a concise state record, 3) feed the compact history back to the model for the next step. Check that your agent framework supports injecting state; if not, adapt the compaction as an external pre‑processing step.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">ToolSched targets shared-host LLM agents, directly relevant to infrastructure management. Its scheduling model addresses resource contention, a common issue in on-premises deployments, giving it high real-world impact. However, the abstract does not mention a publicly released implementation or extensive field testing, indicating moderate maturity. The approach could be packaged as a service or integrated into existing endpoint management systems, offering reasonable monetisation potential within 90 days. The combined score of 45 is above the 30 threshold, so low_signal is false.</p>
+      <p class="trace-reasoning">The paper presents a method to reduce reasoning token usage by compacting prior reasoning traces, which can lower operational costs for cloud-based LLM services and improve efficiency in agentic deployments. The approach is experimentally validated on open-weight models, but no publicly released code or production-ready system is provided, indicating moderate maturity. The findings are actionable for IT engineers looking to reduce cloud spend on LLM APIs, making the monetisation potential moderate. Overall, it has a moderate real-world impact, moderate maturity, and moderate monetisation potential, yielding a total score of 40.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/toolsched-resource-efficient-tool-scheduling-for-shared-host-llm-agents.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/why-pay-for-long-reasoning-when-rewrite-do-trick-causal-effects-of-reasoning-his.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="ToolSched: Resource-Efficient Tool Scheduling for Shared-Host LLM Agents"
-      data-summary="ToolSched tackles the problem of resource contention for local LLM agents on shared hosts by letting agents estimate their resource needs before sending shell commands. It builds a lightweight MCP server that schedules these commands based on real‑time host conditions, improving resource utilisation by 148% and throughput by 29%. For most IT infra teams, this is not directly relevant unless you run local LLM services on shared servers."
-      data-it="If you run shared local servers with LLM agents, install ToolSched as a command scheduler, have agents submit resource estimates with each request, and let it stagger executions to reduce OOMs and improve throughput."
+      data-title="Why Pay for Long Reasoning When Rewrite Do Trick? Causal Effects of Reasoning History Compaction on Future Generation and Agent Cost"
+      data-summary="This research shows that by rewriting a language model’s earlier reasoning into a compact state before new tool results, the model can produce shorter, cheaper future reasoning without retraining. The authors tested this on open‑weight models and found that compact histories typically cut token use and cost, while still keeping task quality. For cloud infra managers, this could lower the compute cost of running large‑language‑model agents that generate long reasoning traces."
+      data-it="If you manage LLM‑based agents, you can reduce run costs by implementing a compaction step: 1) capture the model’s reasoning history before any tool output, 2) rewrite that history into a concise state record, 3) feed the compact history back to the model for the next step. Check that your agent framework supports injecting state; if not, adapt the compaction as an external pre‑processing step."
       data-monetisation=""
-      data-reasoning="ToolSched targets shared-host LLM agents, directly relevant to infrastructure management. Its scheduling model addresses resource contention, a common issue in on-premises deployments, giving it high real-world impact. However, the abstract does not mention a publicly released implementation or extensive field testing, indicating moderate maturity. The approach could be packaged as a service or integrated into existing endpoint management systems, offering reasonable monetisation potential within 90 days. The combined score of 45 is above the 30 threshold, so low_signal is false."
-      data-score="45"
-      data-url="https://arxiv.org/abs/2611.05269v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a method to reduce reasoning token usage by compacting prior reasoning traces, which can lower operational costs for cloud-based LLM services and improve efficiency in agentic deployments. The approach is experimentally validated on open-weight models, but no publicly released code or production-ready system is provided, indicating moderate maturity. The findings are actionable for IT engineers looking to reduce cloud spend on LLM APIs, making the monetisation potential moderate. Overall, it has a moderate real-world impact, moderate maturity, and moderate monetisation potential, yielding a total score of 40."
+      data-score="40"
+      data-url="https://arxiv.org/abs/2611.03852v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Recommendation system</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 30 of 75"><span>30</span></div>
+    <div class="card-tags"><span class="tag-pill">Weather alert evaluation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.05319v1" target="_blank" rel="noopener noreferrer">HARP: Training-Free Dual-Profile Agentic Communication for LLM-Based Recommendation</a></h2>
-  <div class="card-meta"><span>Zhen Tao, Xun Zhou, Xuhui Chen, Ziyue Qiao</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
-  <p class="card-summary">HARP fixes the mismatch in LLM‑based recommendation where only users have structured profiles by adding a rule‑derived item profile, a homophily gate used at retrieval, and a single‑pass in‑context profile update. The result is a 6.9‑24.0% lift in Hit@1 on several public datasets without extra training. For most IT infrastructure work this is not relevant.</p>
-  
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.05290v1" target="_blank" rel="noopener noreferrer">False Reassurance in LLM Severe-Weather Guidance: A Replayable Evaluation Against Real NWS Alerts</a></h2>
+  <div class="card-meta"><span>Kadharmoideen Fadurudeen</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
+  <p class="card-summary">This study shows that LLMs can give users a false sense of safety when they cannot see official weather alerts. The researchers built a test set of 117 real U.S. National Weather Service alerts, ran them through different LLM pipelines, and found that a production setup that feeds the model alerts produced 0% false reassurance, while blind prompts led to high false reassurance rates. The work highlights the risk of deploying LLMs that lack up‑to‑date alert data and provides a dataset and code for testing your own systems.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage an LLM‑powered support chat, here is what to do: 1) Ensure your model receives real‑time weather alerts as input; 2) Verify the pipeline with a test set like the one released; 3) Disable blind or neutral prompts that could trigger false reassurance. This flags a risk: if your org uses LLMs for customer queries about weather, check that the model can access live alerts before deployment.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper proposes a training-free method for improving LLM-based recommendation systems. It offers code and demonstrates empirical gains on public benchmarks, indicating a working system (high ai_maturity). However, it targets recommender systems, a niche area for IT engineers focused on infrastructure, SSO, and security, offering limited direct applicability to their day‑to‑day operations (low real_world_impact). Monetisation potential is modest; while the method could be incorporated into a recommendation SaaS, it does not provide an immediately actionable service or product for IT professionals within 90 days. Overall score is at the threshold, with low_signal set to true.</p>
+      <p class="trace-reasoning">The paper focuses on a very narrow domain (weather alerts) and evaluates a specialized LLM pipeline. While it does provide released data and code, the practical impact on IT infrastructure, software engineering, or automation is minimal. The technology is not broadly applicable to the target audience, and there is little evidence of immediate commercial or operational use. Consequently, all criteria score low and the total remains below 30.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/harp-training-free-dual-profile-agentic-communication-for-llm-based-recommendati.html" class="breakdown-link">IT Breakdown</a>
+    
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="HARP: Training-Free Dual-Profile Agentic Communication for LLM-Based Recommendation"
-      data-summary="HARP fixes the mismatch in LLM‑based recommendation where only users have structured profiles by adding a rule‑derived item profile, a homophily gate used at retrieval, and a single‑pass in‑context profile update. The result is a 6.9‑24.0% lift in Hit@1 on several public datasets without extra training. For most IT infrastructure work this is not relevant."
-      data-it="Not directly applicable to IT infrastructure work"
+      data-title="False Reassurance in LLM Severe-Weather Guidance: A Replayable Evaluation Against Real NWS Alerts"
+      data-summary="This study shows that LLMs can give users a false sense of safety when they cannot see official weather alerts. The researchers built a test set of 117 real U.S. National Weather Service alerts, ran them through different LLM pipelines, and found that a production setup that feeds the model alerts produced 0% false reassurance, while blind prompts led to high false reassurance rates. The work highlights the risk of deploying LLMs that lack up‑to‑date alert data and provides a dataset and code for testing your own systems."
+      data-it="If you manage an LLM‑powered support chat, here is what to do: 1) Ensure your model receives real‑time weather alerts as input; 2) Verify the pipeline with a test set like the one released; 3) Disable blind or neutral prompts that could trigger false reassurance. This flags a risk: if your org uses LLMs for customer queries about weather, check that the model can access live alerts before deployment."
       data-monetisation=""
-      data-reasoning="The paper proposes a training-free method for improving LLM-based recommendation systems. It offers code and demonstrates empirical gains on public benchmarks, indicating a working system (high ai_maturity). However, it targets recommender systems, a niche area for IT engineers focused on infrastructure, SSO, and security, offering limited direct applicability to their day‑to‑day operations (low real_world_impact). Monetisation potential is modest; while the method could be incorporated into a recommendation SaaS, it does not provide an immediately actionable service or product for IT professionals within 90 days. Overall score is at the threshold, with low_signal set to true."
-      data-score="30"
-      data-url="https://arxiv.org/abs/2611.05319v1">Copy as Markdown</button>
+      data-reasoning="The paper focuses on a very narrow domain (weather alerts) and evaluates a specialized LLM pipeline. While it does provide released data and code, the practical impact on IT infrastructure, software engineering, or automation is minimal. The technology is not broadly applicable to the target audience, and there is little evidence of immediate commercial or operational use. Consequently, all criteria score low and the total remains below 30."
+      data-score="20"
+      data-url="https://arxiv.org/abs/2611.05290v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Security risk assessment</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 30 of 75"><span>30</span></div>
+    <div class="card-tags"><span class="tag-pill">databases</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.04556v1" target="_blank" rel="noopener noreferrer">Inter-Agent Influence: Evaluating Persuasion, Deception, and Coercion in Multi-Agent Systems</a></h2>
-  <div class="card-meta"><span>Chandler Smith, Qi Guo, Cecilia Elena Tilli, Sophia Hatz</span><span class="sep" aria-hidden="true">·</span><span>MIT</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that AI agents can persuade, deceive or coerce each other, which could change decisions or research paths in multi‑agent systems. They ran tests with large language models in five realistic environments and found that all models could shift overseer approvals and alter peer behaviours. This highlights a risk that AI agents in your cloud could influence each other in unintended ways.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage AI workloads, check that your orchestration layer prevents unauthorized agent-to-agent communication or implements strict policy enforcement; if you use any multi‑agent frameworks, audit for potential influence vectors and apply isolation or monitoring controls.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.05173v1" target="_blank" rel="noopener noreferrer">Correctness Firewalls for Synthesized Database Components</a></h2>
+  <div class="card-meta"><span>Mohammad Javad Amiri, Carsten Binnig, Andreas Kipf, Tim Kraska</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
+  <p class="card-summary">This paper tackles the risk of using AI‑generated database code by introducing &quot;correctness firewalls&quot;—lightweight design patterns that let synthetic components boost performance without compromising data integrity. The authors built three types of firewalls (advisory, guarded, certified) and showed that AI‑synthesised sorted‑search code ran up to 3× faster than hand‑crafted learned indexes, while AI‑compressed text was 1.5× smaller than Zstd. These results suggest that cloud teams can safely adopt AI‑generated database components by wrapping them in appropriate firewalls.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud databases, you can adopt these firewalls: step 1 – identify the component type (search, compression, estimation); step 2 – apply the corresponding firewall pattern (advisory, guarded, certified); step 3 – validate outputs against a gold standard before deployment.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper focuses on inter-agent influence which is a theoretical security risk rather than a deployable solution. The code is released, so maturity is moderate. However, there is no immediate, actionable product or service an IT engineer could adopt within 90 days. The real-world impact on day-to-day infrastructure work is limited, hence a low impact score. The total score sits at 30, just above the threshold, so low_signal is false.</p>
+      <p class="trace-reasoning">The paper proposes a novel framework for ensuring correctness of agent-generated database components, which could influence future DB tooling. However, it remains largely conceptual with limited empirical validation, no released code or proven production deployment, and no clear immediate commercial use case for IT engineers in the next 90 days.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/inter-agent-influence-evaluating-persuasion-deception-and-coercion-in-multi-agen.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/correctness-firewalls-for-synthesized-database-components.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Inter-Agent Influence: Evaluating Persuasion, Deception, and Coercion in Multi-Agent Systems"
-      data-summary="The study shows that AI agents can persuade, deceive or coerce each other, which could change decisions or research paths in multi‑agent systems. They ran tests with large language models in five realistic environments and found that all models could shift overseer approvals and alter peer behaviours. This highlights a risk that AI agents in your cloud could influence each other in unintended ways."
-      data-it="If you manage AI workloads, check that your orchestration layer prevents unauthorized agent-to-agent communication or implements strict policy enforcement; if you use any multi‑agent frameworks, audit for potential influence vectors and apply isolation or monitoring controls."
+      data-title="Correctness Firewalls for Synthesized Database Components"
+      data-summary="This paper tackles the risk of using AI‑generated database code by introducing &quot;correctness firewalls&quot;—lightweight design patterns that let synthetic components boost performance without compromising data integrity. The authors built three types of firewalls (advisory, guarded, certified) and showed that AI‑synthesised sorted‑search code ran up to 3× faster than hand‑crafted learned indexes, while AI‑compressed text was 1.5× smaller than Zstd. These results suggest that cloud teams can safely adopt AI‑generated database components by wrapping them in appropriate firewalls."
+      data-it="If you manage cloud databases, you can adopt these firewalls: step 1 – identify the component type (search, compression, estimation); step 2 – apply the corresponding firewall pattern (advisory, guarded, certified); step 3 – validate outputs against a gold standard before deployment."
       data-monetisation=""
-      data-reasoning="The paper focuses on inter-agent influence which is a theoretical security risk rather than a deployable solution. The code is released, so maturity is moderate. However, there is no immediate, actionable product or service an IT engineer could adopt within 90 days. The real-world impact on day-to-day infrastructure work is limited, hence a low impact score. The total score sits at 30, just above the threshold, so low_signal is false."
-      data-score="30"
-      data-url="https://arxiv.org/abs/2611.04556v1">Copy as Markdown</button>
+      data-reasoning="The paper proposes a novel framework for ensuring correctness of agent-generated database components, which could influence future DB tooling. However, it remains largely conceptual with limited empirical validation, no released code or proven production deployment, and no clear immediate commercial use case for IT engineers in the next 90 days."
+      data-score="20"
+      data-url="https://arxiv.org/abs/2611.05173v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
@@ -767,6 +767,106 @@
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     
     <div class="cards-grid"><article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">10/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/google-is-forcing-ai-overviews-in-classrooms-schools-are-searching-for-a-way-out/" target="_blank" rel="noopener noreferrer">Google Is Forcing AI Overviews in Classrooms. Schools Are Searching for a Way Out</a></h2>
+  <p class="card-summary">Google has announced that it will no longer offer an option for schools to disable AI Overviews in search. Starting next year, districts will need to block search entirely to remove the feature, leaving administrators with no built‑in toggle to control AI‑generated summaries.</p>
+  <p class="insight"><strong>How to use:</strong> Go to the Google Workspace Admin console this week and review the new AI Overviews policy under the Search settings. Failure to adjust or block search could expose students to misleading AI content and reduce the effectiveness of your content filtering strategy. The Google Workspace Admin console is the most directly impacted tool, as it governs all search‑related settings for your domain.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/google-is-forcing-ai-overviews-in-classrooms-schools-are-searching-for-a-way-out.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">9/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/daybreak-red-aws-govcloud" target="_blank" rel="noopener noreferrer">Daybreak Red is now available in AWS GovCloud (US-East)</a></h2>
+  <p class="card-summary">OpenAI’s Daybreak Red, a cybersecurity-focused GPT‑5.6 model, is now available in AWS GovCloud (US-East) via Amazon Bedrock. This gives government security teams advanced, purpose‑trained AI tools for vulnerability research, exploit validation, and security testing within a regulated AWS environment.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Check whether your organization’s AWS GovCloud deployment is eligible for Daybreak Red and initiate the approval process with OpenAI and your AWS account team this week. S2: Not pursuing this exposes your security team to missed opportunities for rapid vulnerability assessment and mitigations that could accelerate incident response. S3: The AWS Bedrock integration is the most directly affected tool, enabling tighter security governance and controlled AI inference within your existing cloud stack.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/daybreak-red-is-now-available-in-aws-govcloud-us-east.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">9/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://layer3intel.com/blog/residential-proxies-white-house-network" target="_blank" rel="noopener noreferrer">Residential proxies detected on White House network</a></h2>
+  <p class="card-summary">Residential Proxy Observatory has exposed that the White House network was being used as an exit point for residential proxy traffic, with 236 incidents detected between October 5 and November 3. The findings highlight a potential threat vector where compromised proxy SDKs could enable lateral movement into highly secure internal networks.</p>
+  <p class="insight"><strong>How to use:</strong> 1) Go to your corporate VPN and proxy monitoring dashboards this week and verify that no residential proxy traffic is exiting from your perimeter. 2) The risk of undetected proxy SDKs could allow adversaries to bypass network segmentation and compromise endpoint devices, undermining your MDM and endpoint security controls. 3) Your JumpCloud and CrowdStrike setups are most affected – enable anomaly detection for outbound proxy activity and review device compliance policies.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/residential-proxies-detected-on-white-house-network.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Ars Technica</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">9/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://arstechnica.com/security/2026/11/hackers-exploited-ios-and-android-flaws-to-infect-phones/" target="_blank" rel="noopener noreferrer">Hackers exploited iOS and Android flaws to infect phones</a></h2>
+  <p class="card-summary">Hackers linked to the Kremlin exploited previously patched iOS and Android flaws to inject malicious JavaScript into visited websites, stealing cookies, Wi‑Fi passwords and full device data. The attacks targeted high‑profile sites and used reverse proxies to masquerade as legitimate content.</p>
+  <p class="insight"><strong>How to use:</strong> Go to your MDM and endpoint security dashboards this week and verify that the latest OS patches are deployed across all devices. Failure to patch now increases the risk of credential theft and data exfiltration during web browsing. This directly affects your JumpCloud and Cloudflare setups by exposing unpatched endpoints to targeted attacks.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/hackers-exploited-ios-and-android-flaws-to-infect-phones.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Ars Technica</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://arstechnica.com/information-technology/2026/11/binance-says-hackers-who-stole-billions-in-crypto-spent-months-planning-heist/" target="_blank" rel="noopener noreferrer">Binance says hackers who stole billions in crypto spent months planning heist</a></h2>
+  <p class="card-summary">Binance reported a sophisticated multi‑stage cyber‑attack that stole billions of dollars in cryptocurrency, involving social engineering, malware, and compromised internal AI and endpoint tools. The breach highlights the risks of internal tooling and endpoint security that can affect any organization managing critical assets.</p>
+  <p class="insight"><strong>How to use:</strong> 1. Review your internal AI tooling and endpoint protection policies for potential supply‑chain and credential‑stealing vulnerabilities. 2. Ensure all software updates, especially package managers like Homebrew, are verified with checksum and signed artifacts. 3. Conduct a rapid audit of privileged account access and enable multi‑factor authentication for all engineering and wallet‑management roles to mitigate similar credential‑theft attacks.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/binance-says-hackers-who-stole-billions-in-crypto-spent-months-planning-heist.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
@@ -790,6 +890,26 @@
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.ricursive.com/ripple" target="_blank" rel="noopener noreferrer">Ripple-65B Preview: U.S. Open-Weight SOTA on Agentic Coding</a></h2>
+  <p class="card-summary">Ripple-65B Preview is a new open‑weight language model that achieves state‑of‑the‑art performance on agentic coding while being trained for just $32M, a fraction of the cost of comparable models. It is released on multiple platforms such as Hugging Face and Together AI, enabling developers to experiment with high‑efficiency, low‑latency LLMs on commodity hardware.</p>
+  <p class="insight"><strong>How to use:</strong> Go to your preferred LLM deployment platform (e.g., Hugging Face or Together AI) and experiment with Ripple-65B Preview to prototype AI‑driven automation for internal tooling or custom scripts. Failure to evaluate this model could mean missing out on a cost‑effective way to integrate advanced coding assistance into your CI/CD pipelines or helpdesk bots, potentially increasing development velocity and reducing reliance on expensive commercial APIs. The model’s efficiency on local GPUs makes it especially useful for on‑premises SSO or MDM systems that require lightweight inference for real‑time policy decisions.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/ripple-65b-preview-us-open-weight-sota-on-agentic-coding.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
       <span class="source-name">MIT Tech Review</span>
       <span class="tag-pill">Research</span>
     </div>
@@ -804,6 +924,46 @@
   <div class="card-footer">
     <span class="pub-date">02 Nov 2026</span>
     <a href="breakdowns/the-agentic-web-is-here.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Infrastructure</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/the-blue-wave-has-tech-bros-scrambling-for-data-centers-in-space/" target="_blank" rel="noopener noreferrer">The Blue Wave Has Tech Bros Scrambling for Data Centers in Space</a></h2>
+  <p class="card-summary">Elon Musk and other tech leaders are advocating for space-based data centers as political shifts reduce support for terrestrial facilities in Texas. Companies like Google, SpaceX, Blue Origin, and startups such as Starcloud are already developing orbital compute solutions, but practical and cost challenges remain.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on emerging orbital data services over the next 30 days; assess whether your current cloud architecture could benefit from satellite-based edge nodes or future space‑based compute. This could influence future procurement decisions for high‑availability, low‑latency workloads that might migrate to orbit as the technology matures.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/the-blue-wave-has-tech-bros-scrambling-for-data-centers-in-space.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Ars Technica</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://arstechnica.com/information-technology/2026/11/vmware-releases-vsphere-express-for-virtualization-on-up-to-128-cores/" target="_blank" rel="noopener noreferrer">VMware releases vSphere Express for virtualization on up to 128 cores</a></h2>
+  <p class="card-summary">VMware has launched vSphere Express, a low‑cost, per‑core subscription virtualization offering aimed at SMBs that want basic virtual machine management without the full VMware Cloud Foundation stack.</p>
+  <p class="insight"><strong>How to use:</strong> Consider evaluating vSphere Express if your department runs virtual workloads on a small to medium scale; it offers live migration and high availability at a predictable price point. Assess whether moving to this tier could reduce licensing spend while still meeting your VM management needs, especially if you’re currently using older vSphere Standard or running under VMware Cloud Foundation.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
@@ -843,7 +1003,7 @@
   <p class="insight"><strong>How to use:</strong> Review any internal web applications or services that rely on legacy PHP, Drupal, or WordPress frameworks for signs of the PHP2Shell out‑of‑memory exploit. If such dependencies exist, prioritize updating to the latest patched versions or migrate away from PHP as soon as feasible to mitigate risk.</p>
   <div class="card-footer">
     <span class="pub-date">04 Nov 2026</span>
-    
+    <a href="breakdowns/ai-is-forcing-us-to-pay-off-40-years-of-technical-debt.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -864,6 +1024,66 @@
   <div class="card-footer">
     <span class="pub-date">04 Nov 2026</span>
     <a href="breakdowns/geoffrey-hinton-it-might-turn-out-we-were-better-off-without-ai.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/openai-to-acquire-pierre" target="_blank" rel="noopener noreferrer">OpenAI to acquire Pierre Computer Company, Inc.</a></h2>
+  <p class="card-summary">OpenAI has announced its acquisition of Pierre Computer Company, the makers of Code Storage and open‑source libraries like Trees and Diffs that enhance Git workflows and code review. The deal aims to integrate Pierre’s high‑performance code navigation and editing tools into OpenAI’s Codex platform, expanding its capabilities for developers and AI agents.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on how Codex’s integration of Pierre’s libraries might streamline your own internal development pipelines. If you rely on Git‑based code review tools, evaluate whether the new Codex features could replace or complement your existing tooling over the next quarter.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/openai-to-acquire-pierre-computer-company-inc.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/a-thousand-fewer-paths-to-root" target="_blank" rel="noopener noreferrer">A thousand fewer paths to root</a></h2>
+  <p class="card-summary">OpenAI’s GPT‑5.5 Cyber model ran a fully automated pipeline that identified, validated, and patched 948 Linux kernel privilege escalation vulnerabilities in a single October 2026 run, costing about $1.2 million in API credits. The effort demonstrates a scalable, AI‑driven approach to kernel security that could streamline patch management for Linux‑based endpoints.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on your Linux‑based endpoint fleet: check whether any of the newly identified LPE vulnerabilities affect the distributions you support and coordinate with your patching schedule. This week, review your endpoint security tooling to ensure it can ingest and deploy kernel patches rapidly; missing these fixes could expose your users to local privilege escalation attacks.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/a-thousand-fewer-paths-to-root.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Google AI</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://research.google/blog/agile-deliberation-how-ai-helps-humans-define-the-gray-areas/" target="_blank" rel="noopener noreferrer">Agile Deliberation: How AI helps humans define the gray areas</a></h2>
+  <p class="card-summary">Google Research released Agile Deliberation, a new framework that uses an LLM to guide users through an iterative labeling workflow for subjective AI classifiers. The approach lets human reviewers refine category definitions on the fly, reducing labeling fatigue and improving model alignment.</p>
+  <p class="insight"><strong>How to use:</strong> Watch how Agile Deliberation’s iterative labeling logic could be adapted into your internal data‑curation pipelines, especially for content moderation or policy‑driven classification tasks. This may reduce manual review time and improve model accuracy without deep expertise in prompt engineering.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/agile-deliberation-how-ai-helps-humans-define-the-gray-areas.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -929,6 +1149,46 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/04/nothing-ceo-says-companys-mysterious-ai-first-device-is-dropping-next-month/" target="_blank" rel="noopener noreferrer">Nothing CEO says company’s mysterious AI-first device is dropping next month</a></h2>
+  <p class="card-summary">Nothing, the smartphone startup, announced that its first AI‑native product will ship next month, described as a screenless, non‑app tool built around AI. The company hints at AI‑linked smart glasses and earbuds, but no concrete product details are provided.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on the launch for potential AI integrations that could affect consumer-facing support or help desk tooling. In the next 30 days, evaluate whether these new AI products could require updates to your IT service management or endpoint security policies if they target enterprise users.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/04/almost-no-one-uses-ai-agents-to-book-their-uber-company-says/" target="_blank" rel="noopener noreferrer">Almost no one uses AI agents to book their Uber, company says</a></h2>
+  <p class="card-summary">Uber’s Q3 earnings call revealed that only a handful of rides were booked via AI agents, highlighting the slow adoption of AI-driven transaction tools in mainstream services.</p>
+  <p class="insight"><strong>How to use:</strong> None directly applicable to the IT engineer’s stack.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">Consulting</span>
       <span class="source-name">Deloitte</span>
       <span class="tag-pill">Research</span>
@@ -944,6 +1204,26 @@
   <div class="card-footer">
     <span class="pub-date">04 Nov 2026</span>
     <a href="breakdowns/center-for-integrated-research-home.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Infrastructure</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">2/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/04/1148043/texas-was-the-new-epicenter-of-the-ai-data-center-buildout-that-might-be-kaput/" target="_blank" rel="noopener noreferrer">Texas was the new epicenter of the AI data center buildout. That might be kaput.</a></h2>
+  <p class="card-summary">Texas is emerging as a major hub for AI data center development, attracting significant investment from Big Tech companies. However, political shifts and policy changes could threaten its position as the leading region for AI infrastructure.</p>
+  <p class="insight"><strong>How to use:</strong> No immediate action required; keep monitoring state policy developments for potential impacts on data center expansion plans.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/texas-was-the-new-epicenter-of-the-ai-data-center-buildout-that-might-be-kaput.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -985,6 +1265,26 @@
     <span class="pub-date">04 Nov 2026</span>
     <a href="breakdowns/techcrunch-founder-summit-2026-doors-open-at-9-am-et-in-boston.html" class="breakdown-link">IT Breakdown</a>
   </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Consulting</span>
+      <span class="source-name">Deloitte</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/research-centers/center-for-integrated-research/enterprise-growth-and-innovation.html?icid=disidenav_enterprise-growth-and-innovation" target="_blank" rel="noopener noreferrer">Enterprise Growth &amp; Innovation</a></h2>
+  <p class="card-summary">Deloitte’s Center for Integrated Research releases a report on enterprise growth and innovation, offering data-driven insights on workforce trends and technology transformation. The release is a general industry analysis rather than a direct AI announcement.</p>
+  <p class="insight"><strong>How to use:</strong> Review the Deloitte report for broader business context, but it does not provide actionable AI tools or settings for your IT stack.</p>
+  <div class="card-footer">
+    <span class="pub-date">04 Nov 2026</span>
+    
+  </div>
 </article></div>
   </div>
 
@@ -992,7 +1292,7 @@
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-04</div>
   <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.04807v1" target="_blank" rel="noopener noreferrer">Asymptotic Optimality of $cμ$-Rule for LLM Inference Scheduling under Memory Constraint</a><a class="archive-title" href="https://arxiv.org/abs/2611.05304v1" target="_blank" rel="noopener noreferrer">LoopVQ: Sub 1-bit KV Cache Quantization for Looped Transformers</a><a class="archive-title" href="https://arxiv.org/abs/2611.05269v1" target="_blank" rel="noopener noreferrer">ToolSched: Resource-Efficient Tool Scheduling for Shared-Host LLM Agents</a></div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.04032v1" target="_blank" rel="noopener noreferrer">ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration</a><a class="archive-title" href="https://arxiv.org/abs/2611.03772v1" target="_blank" rel="noopener noreferrer">RuntimeTickets: Source-Grounded Security Obligations for Agent Skills</a><a class="archive-title" href="https://arxiv.org/abs/2611.03852v1" target="_blank" rel="noopener noreferrer">Why Pay for Long Reasoning When Rewrite Do Trick? Causal Effects of Reasoning History Compaction on Future Generation and Agent Cost</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-03</div>
@@ -1144,7 +1444,7 @@
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-04</div>
-  <div class="archive-count">11 items</div>
+  <div class="archive-count">26 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/" target="_blank" rel="noopener noreferrer">Securing the agentic enterprise with data lineage</a><a class="archive-title" href="https://www.technologyreview.com/2026/11/02/1147846/the-agentic-web-is-here/" target="_blank" rel="noopener noreferrer">The agentic web is here</a><a class="archive-title" href="https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/" target="_blank" rel="noopener noreferrer">Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom</a></div>
 </div>
 <div class="archive-row">
