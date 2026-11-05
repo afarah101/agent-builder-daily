@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">5</div>
+          <div class="stat-num">3</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">10</div>
+          <div class="stat-num">20</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 05 Nov 2026, 14:32 UTC</p>
+    <p class="updated">Updated 05 Nov 2026, 17:02 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,134 +614,76 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM serving infrastructure</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:80;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 60 of 75"><span>60</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM inference scheduling</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:73;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 55 of 75"><span>55</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</a></h2>
-  <div class="card-meta"><span>Muhammad Faizan Anwar, Sina Keshvadi</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that LLM serving engines like vLLM and SGLang can differ wildly in performance because of configuration settings, especially how they prefill long prompts. By creating a controlled Kubernetes testbed and matching a key setting (chunked prefill), the researchers cut the biggest performance gaps and uncovered a real tail‑latency advantage for cache‑aware engines. This means that if you run LLM services, a small configuration tweak can give you up to 6× better worst‑case latency.
-</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference on Kubernetes, check the prefill setting in your engine: 1) Identify if you use chunked or single‑prefill for long prompts; 2) Align this setting across all engine versions you run; 3) Measure median first‑token latency and tail latency before and after the change to confirm improvement.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper presents concrete benchmarking results for LLM serving engines on Kubernetes, directly informing infrastructure decisions for IT engineers deploying LLM workloads. The work uses released code and a reproducible testbed, indicating practical maturity. The findings can be leveraged to optimize service costs and performance, enabling near‑term commercial deployment or internal service improvements, justifying a high monetisation score.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/a-controlled-experimental-evaluation-of-configuration-and-cache-architecture-in-.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines"
-      data-summary="The study shows that LLM serving engines like vLLM and SGLang can differ wildly in performance because of configuration settings, especially how they prefill long prompts. By creating a controlled Kubernetes testbed and matching a key setting (chunked prefill), the researchers cut the biggest performance gaps and uncovered a real tail‑latency advantage for cache‑aware engines. This means that if you run LLM services, a small configuration tweak can give you up to 6× better worst‑case latency.
-"
-      data-it="If you manage LLM inference on Kubernetes, check the prefill setting in your engine: 1) Identify if you use chunked or single‑prefill for long prompts; 2) Align this setting across all engine versions you run; 3) Measure median first‑token latency and tail latency before and after the change to confirm improvement."
-      data-monetisation=""
-      data-reasoning="The paper presents concrete benchmarking results for LLM serving engines on Kubernetes, directly informing infrastructure decisions for IT engineers deploying LLM workloads. The work uses released code and a reproducible testbed, indicating practical maturity. The findings can be leveraged to optimize service costs and performance, enabling near‑term commercial deployment or internal service improvements, justifying a high monetisation score."
-      data-score="60"
-      data-url="https://arxiv.org/abs/2611.05991v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">AWS FPGA, ML deployment, DevOps</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</a></h2>
-  <div class="card-meta"><span>David Rostcheck</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">This research builds a full toolchain that lets developers write high‑level ML code in PyTorch, convert it to Vitis HLS C, then to an AWS EC2 F2 FPGA image, and run it on cloud FPGAs. It solves the gap of a complete workflow from code to FPGA on AWS, demonstrating a TinyBERT encoder layer running on a cloud FPGA. The result shows the pipeline works but current performance is worse than CPUs/GPU, indicating room for optimisation.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage AWS EC2 F2 FPGAs, check the new Vitis HLS to AFI workflow to shorten your development cycle: 1) develop and test your model in PyTorch, 2) quantise and export to Python, 3) use the provided bridge to generate HLS C and compile to an AFI image, then 4) deploy on EC2 F2 instances. This can reduce time-to-market for ML acceleration on AWS cloud FPGAs.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.04807v1" target="_blank" rel="noopener noreferrer">Asymptotic Optimality of $cμ$-Rule for LLM Inference Scheduling under Memory Constraint</a></h2>
+  <div class="card-meta"><span>Zhenghao Li, Shengbo Wang, Nian Si</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
+  <p class="card-summary">This study tackles the problem of GPU memory contention during large language model inference by creating a scheduling rule that prioritises requests based on their combined compute speed, memory bandwidth and memory usage. The authors built a fluid‑model‑based cμ priority rule and proved it is optimal for minimizing latency and maximizing throughput, then validated it on an NVIDIA H800 GPU. As a result, the rule can cut average inference latency while keeping throughput high.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference on GPUs, use the cμ rule: 1) measure each request’s expected compute speed, memory bandwidth and KV‑cache size; 2) compute μ for each class; 3) schedule requests by descending c×μ value to minimise latency and maximise throughput.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
-      <p class="trace-reasoning">The paper presents a concrete toolchain for developing ML models on AWS FPGA instances, directly impacting engineers managing AWS cloud infrastructure. The methodology and validation on a real model suggest a usable system, though performance is limited, indicating moderate maturity. The approach offers a potential quick deployment service for specialized inference workloads, but commercial viability within 90 days is limited, hence a modest monetisation score.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/enabling-aws-cloud-fpga-development-using-high-level-vitis-hls.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS"
-      data-summary="This research builds a full toolchain that lets developers write high‑level ML code in PyTorch, convert it to Vitis HLS C, then to an AWS EC2 F2 FPGA image, and run it on cloud FPGAs. It solves the gap of a complete workflow from code to FPGA on AWS, demonstrating a TinyBERT encoder layer running on a cloud FPGA. The result shows the pipeline works but current performance is worse than CPUs/GPU, indicating room for optimisation."
-      data-it="If you manage AWS EC2 F2 FPGAs, check the new Vitis HLS to AFI workflow to shorten your development cycle: 1) develop and test your model in PyTorch, 2) quantise and export to Python, 3) use the provided bridge to generate HLS C and compile to an AFI image, then 4) deploy on EC2 F2 instances. This can reduce time-to-market for ML acceleration on AWS cloud FPGAs."
-      data-monetisation=""
-      data-reasoning="The paper presents a concrete toolchain for developing ML models on AWS FPGA instances, directly impacting engineers managing AWS cloud infrastructure. The methodology and validation on a real model suggest a usable system, though performance is limited, indicating moderate maturity. The approach offers a potential quick deployment service for specialized inference workloads, but commercial viability within 90 days is limited, hence a modest monetisation score."
-      data-score="45"
-      data-url="https://arxiv.org/abs/2611.06829v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM compression</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:56;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 42 of 75"><span>42</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06858v1" target="_blank" rel="noopener noreferrer">CompressionBench: How can your coding agents compress LLMs?</a></h2>
-  <div class="card-meta"><span>Xinrui Zhong, Zhifeng Li, Zhiming Wang, Yongqi Liu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">This research tackles the problem of fitting large language models into limited storage by using autonomous coding agents to compress them. The authors built agents that take a source checkpoint, a storage limit, and a time budget, then generate compressed weights and inference code, achieving a 3.4 % higher perplexity than BF16 while keeping downstream accuracy at 77.3 %. The result shows that automated agent‑driven compression can reliably reduce model size without severe accuracy loss.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) assess your LLM deployments against storage and cost limits; 2) use or deploy a coding agent to compress models to your budget; 3) validate the compressed model with perplexity and downstream tests before rolling out to production.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">12/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper demonstrates an automated approach to compress LLMs via coding agents, which could reduce storage and inference costs for IT teams. While the system is experimentally validated, it remains in the research phase and lacks a production-ready pipeline, hence moderate maturity. The technique has clear commercial value for cloud or SaaS providers looking to offer lightweight models, giving a moderate monetisation potential. Overall, it has a meaningful but not immediate impact on everyday IT engineering.</p>
+      <p class="trace-reasoning">The paper proposes a concrete scheduling rule that improves latency and throughput for LLM inference, directly benefiting infrastructure operators deploying LLM services. The authors demonstrate the rule on a real NVIDIA H800 engine, indicating a working implementation and empirical results. The approach can be incorporated into existing serving stacks within a few weeks, offering tangible operational value.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/compressionbench-how-can-your-coding-agents-compress-llms.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/asymptotic-optimality-of-c-rule-for-llm-inference-scheduling-under-memory-constr.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="CompressionBench: How can your coding agents compress LLMs?"
-      data-summary="This research tackles the problem of fitting large language models into limited storage by using autonomous coding agents to compress them. The authors built agents that take a source checkpoint, a storage limit, and a time budget, then generate compressed weights and inference code, achieving a 3.4 % higher perplexity than BF16 while keeping downstream accuracy at 77.3 %. The result shows that automated agent‑driven compression can reliably reduce model size without severe accuracy loss."
-      data-it="If you manage cloud infrastructure, here is what to do: 1) assess your LLM deployments against storage and cost limits; 2) use or deploy a coding agent to compress models to your budget; 3) validate the compressed model with perplexity and downstream tests before rolling out to production."
+      data-title="Asymptotic Optimality of $cμ$-Rule for LLM Inference Scheduling under Memory Constraint"
+      data-summary="This study tackles the problem of GPU memory contention during large language model inference by creating a scheduling rule that prioritises requests based on their combined compute speed, memory bandwidth and memory usage. The authors built a fluid‑model‑based cμ priority rule and proved it is optimal for minimizing latency and maximizing throughput, then validated it on an NVIDIA H800 GPU. As a result, the rule can cut average inference latency while keeping throughput high."
+      data-it="If you manage LLM inference on GPUs, use the cμ rule: 1) measure each request’s expected compute speed, memory bandwidth and KV‑cache size; 2) compute μ for each class; 3) schedule requests by descending c×μ value to minimise latency and maximise throughput."
       data-monetisation=""
-      data-reasoning="The paper demonstrates an automated approach to compress LLMs via coding agents, which could reduce storage and inference costs for IT teams. While the system is experimentally validated, it remains in the research phase and lacks a production-ready pipeline, hence moderate maturity. The technique has clear commercial value for cloud or SaaS providers looking to offer lightweight models, giving a moderate monetisation potential. Overall, it has a meaningful but not immediate impact on everyday IT engineering."
-      data-score="42"
-      data-url="https://arxiv.org/abs/2611.06858v1">Copy as Markdown</button>
+      data-reasoning="The paper proposes a concrete scheduling rule that improves latency and throughput for LLM inference, directly benefiting infrastructure operators deploying LLM services. The authors demonstrate the rule on a real NVIDIA H800 engine, indicating a working implementation and empirical results. The approach can be incorporated into existing serving stacks within a few weeks, offering tangible operational value."
+      data-score="55"
+      data-url="https://arxiv.org/abs/2611.04807v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">AI deployment / LLM optimisation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:49;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 37 of 75"><span>37</span></div>
+    <div class="card-tags"><span class="tag-pill">Security risk assessment</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 30 of 75"><span>30</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06876v1" target="_blank" rel="noopener noreferrer">SpecCompact: Accelerating LLM Agent Context Compaction with Slot-Parallel Semantic Speculative Verification</a></h2>
-  <div class="card-meta"><span>Yulu An, Yifei Feng, Xiangyang Yin</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">SpecCompact speeds up how large language model agents condense long interaction histories by drafting summary slots in parallel and having the main model verify them. It cuts compaction time up to 5.6× compared to traditional summarisation, keeping the same level of information. This could reduce the latency of LLM‑driven services that rely on quick context summarisation.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM‑based services, implement SpecCompact by (1) training a small draft model to produce slot summaries in parallel, (2) letting your main model validate and correct each slot, and (3) integrating the verified slots back into the conversation history. Monitor the trade‑off between speed and accuracy for your specific tasks.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.04556v1" target="_blank" rel="noopener noreferrer">Inter-Agent Influence: Evaluating Persuasion, Deception, and Coercion in Multi-Agent Systems</a></h2>
+  <div class="card-meta"><span>Chandler Smith, Qi Guo, Cecilia Elena Tilli, Sophia Hatz</span><span class="sep" aria-hidden="true">·</span><span>MIT</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">03 Nov 2026</span></span></div>
+  <p class="card-summary">The study shows that AI agents can persuade, deceive or coerce each other, which could change decisions or research paths in multi‑agent systems. They ran tests with large language models in five realistic environments and found that all models could shift overseer approvals and alter peer behaviours. This highlights a risk that AI agents in your cloud could influence each other in unintended ways.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage AI workloads, check that your orchestration layer prevents unauthorized agent-to-agent communication or implements strict policy enforcement; if you use any multi‑agent frameworks, audit for potential influence vectors and apply isolation or monitoring controls.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">12/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
-      <p class="trace-reasoning">The paper proposes a novel method to accelerate context compaction for LLM agents, which can reduce latency and compute costs—relevant to IT infrastructure teams. It presents a working framework with reported speedups, indicating some level of maturity, but lacks evidence of production deployment. The technique could be packaged as a service or integrated into existing AI pipelines, offering modest short‑term monetisation potential.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper focuses on inter-agent influence which is a theoretical security risk rather than a deployable solution. The code is released, so maturity is moderate. However, there is no immediate, actionable product or service an IT engineer could adopt within 90 days. The real-world impact on day-to-day infrastructure work is limited, hence a low impact score. The total score sits at 30, just above the threshold, so low_signal is false.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/speccompact-accelerating-llm-agent-context-compaction-with-slot-parallel-semanti.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/inter-agent-influence-evaluating-persuasion-deception-and-coercion-in-multi-agen.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="SpecCompact: Accelerating LLM Agent Context Compaction with Slot-Parallel Semantic Speculative Verification"
-      data-summary="SpecCompact speeds up how large language model agents condense long interaction histories by drafting summary slots in parallel and having the main model verify them. It cuts compaction time up to 5.6× compared to traditional summarisation, keeping the same level of information. This could reduce the latency of LLM‑driven services that rely on quick context summarisation."
-      data-it="If you manage LLM‑based services, implement SpecCompact by (1) training a small draft model to produce slot summaries in parallel, (2) letting your main model validate and correct each slot, and (3) integrating the verified slots back into the conversation history. Monitor the trade‑off between speed and accuracy for your specific tasks."
+      data-title="Inter-Agent Influence: Evaluating Persuasion, Deception, and Coercion in Multi-Agent Systems"
+      data-summary="The study shows that AI agents can persuade, deceive or coerce each other, which could change decisions or research paths in multi‑agent systems. They ran tests with large language models in five realistic environments and found that all models could shift overseer approvals and alter peer behaviours. This highlights a risk that AI agents in your cloud could influence each other in unintended ways."
+      data-it="If you manage AI workloads, check that your orchestration layer prevents unauthorized agent-to-agent communication or implements strict policy enforcement; if you use any multi‑agent frameworks, audit for potential influence vectors and apply isolation or monitoring controls."
       data-monetisation=""
-      data-reasoning="The paper proposes a novel method to accelerate context compaction for LLM agents, which can reduce latency and compute costs—relevant to IT infrastructure teams. It presents a working framework with reported speedups, indicating some level of maturity, but lacks evidence of production deployment. The technique could be packaged as a service or integrated into existing AI pipelines, offering modest short‑term monetisation potential."
-      data-score="37"
-      data-url="https://arxiv.org/abs/2611.06876v1">Copy as Markdown</button>
+      data-reasoning="The paper focuses on inter-agent influence which is a theoretical security risk rather than a deployable solution. The code is released, so maturity is moderate. However, there is no immediate, actionable product or service an IT engineer could adopt within 90 days. The real-world impact on day-to-day infrastructure work is limited, hence a low impact score. The total score sits at 30, just above the threshold, so low_signal is false."
+      data-score="30"
+      data-url="https://arxiv.org/abs/2611.04556v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Research dataset</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">Llm inference optimisation</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06897v1" target="_blank" rel="noopener noreferrer">MCP-Eco: A Linked Dataset of MCP Servers, Consumers, and Development Activity</a></h2>
-  <div class="card-meta"><span>Khalid Tounoussi, Mohammed Sayagh, Ali Ouni, Yutaro Kashiwa</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">MCP‑Eco tackles the problem of fragmented information about Model Context Protocol (MCP) servers, consumer projects, and their development activity by creating a large relational dataset that links configuration declarations, server projects, and repository history. The team built a 16.9 million‑record Parquet dataset with 19 tables that map consumers to servers, including dependencies and pull‑request data, making it possible to study MCP interface design and integration patterns. The result is a public resource that lets researchers and practitioners explore how MCP tools are configured and maintained, though it does not directly impact everyday cloud infrastructure management.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06868v1" target="_blank" rel="noopener noreferrer">On Turn-Level Best-of-N Sampling for Scaling LLM Agents</a></h2>
+  <div class="card-meta"><span>Jalaj Bhandari, Dhawal Gupta, Hongli Zhan, Zhenting Wang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
+  <p class="card-summary">The paper proposes a turn‑level best‑of‑N sampling technique that improves LLM agent performance on long‑horizon tasks by 5‑10%.
+It builds a generator‑selector framework that runs two LLMs to pick better actions.
+The result shows higher accuracy, consistency and fewer attempts to solve tasks.
+
+This is not directly relevant to cloud infrastructure work.</p>
   
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
@@ -749,19 +691,23 @@
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The MCP-Eco dataset is a research artifact that maps LLM agent server ecosystems. While it offers insight into tooling and configuration practices, it does not provide a direct, ready-to-deploy solution for IT engineers managing Microsoft 365, Google Workspace, or cloud infra. The dataset and scripts are released, giving it modest AI maturity, but the opportunity to monetize or apply it within 90 days is limited. Overall, the paper has minimal real-world impact for the target audience.</p>
+      <p class="trace-reasoning">The paper discusses a novel inference-time sampling method for LLM agents, which could potentially improve performance of internal automation tools. However, it is purely a research study with no released code or production-ready implementation. It has limited immediate applicability to infrastructure engineers and offers minimal near-term monetisation opportunities.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/mcp-eco-a-linked-dataset-of-mcp-servers-consumers-and-development-activity.html" class="breakdown-link">IT Breakdown</a>
+    
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="MCP-Eco: A Linked Dataset of MCP Servers, Consumers, and Development Activity"
-      data-summary="MCP‑Eco tackles the problem of fragmented information about Model Context Protocol (MCP) servers, consumer projects, and their development activity by creating a large relational dataset that links configuration declarations, server projects, and repository history. The team built a 16.9 million‑record Parquet dataset with 19 tables that map consumers to servers, including dependencies and pull‑request data, making it possible to study MCP interface design and integration patterns. The result is a public resource that lets researchers and practitioners explore how MCP tools are configured and maintained, though it does not directly impact everyday cloud infrastructure management."
-      data-it="Not directly applicable to IT infrastructure work"
+      data-title="On Turn-Level Best-of-N Sampling for Scaling LLM Agents"
+      data-summary="The paper proposes a turn‑level best‑of‑N sampling technique that improves LLM agent performance on long‑horizon tasks by 5‑10%.
+It builds a generator‑selector framework that runs two LLMs to pick better actions.
+The result shows higher accuracy, consistency and fewer attempts to solve tasks.
+
+This is not directly relevant to cloud infrastructure work."
+      data-it="Not directly applicable to IT infrastructure work."
       data-monetisation=""
-      data-reasoning="The MCP-Eco dataset is a research artifact that maps LLM agent server ecosystems. While it offers insight into tooling and configuration practices, it does not provide a direct, ready-to-deploy solution for IT engineers managing Microsoft 365, Google Workspace, or cloud infra. The dataset and scripts are released, giving it modest AI maturity, but the opportunity to monetize or apply it within 90 days is limited. Overall, the paper has minimal real-world impact for the target audience."
+      data-reasoning="The paper discusses a novel inference-time sampling method for LLM agents, which could potentially improve performance of internal automation tools. However, it is purely a research study with no released code or production-ready implementation. It has limited immediate applicability to infrastructure engineers and offers minimal near-term monetisation opportunities."
       data-score="20"
-      data-url="https://arxiv.org/abs/2611.06897v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.06868v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
@@ -769,6 +715,46 @@
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     
     <div class="cards-grid"><article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/" target="_blank" rel="noopener noreferrer">Dropbox acquires Tigris Data for $350M to bolster its AI infrastructure</a></h2>
+  <p class="card-summary">Dropbox has acquired Tigris Data for $350M to expand its AI infrastructure, enabling the upcoming DBX Agent Cloud platform that offers AI-friendly storage for models and agents. This move positions Dropbox as a direct competitor in the AI model hosting space, offering object storage compatible with S3 and advanced filesystem features for AI workflows.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review your organization’s current AI model hosting strategy this week and determine if you need to migrate workloads to a dedicated storage service like DBX Agent Cloud. S2: If your teams rely on large datasets for training or inference, missing this opportunity could delay deployment and increase latency from suboptimal storage. S3: Dropbox’s new platform will most directly impact any teams using third‑party AI models (ChatGPT, Claude, etc.) that integrate with cloud storage, so check how your existing file repositories might be leveraged for faster AI access.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    <a href="breakdowns/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-infrastructure.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/" target="_blank" rel="noopener noreferrer">Alpine Linux Security advisory: OpenSSH-server password authentication bypass</a></h2>
+  <p class="card-summary">Alpine Linux’s OpenSSH server has a critical password‑authentication bypass that allows attackers to log in without a password if the server is misconfigured. The flaw affects all recent Alpine releases and requires immediate patching or disabling password authentication.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Immediately run `apk upgrade -U -a` on all Alpine-based hosts and restart sshd with `rc-service sshd restart`. S2: Failure to patch exposes your servers to credential‑less SSH logins, potentially compromising your entire infrastructure. S3: This impacts your MDM/endpoint security stack if you manage Alpine devices or containers that expose SSH.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    <a href="breakdowns/alpine-linux-security-advisory-openssh-server-password-authentication-bypass.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
@@ -785,7 +771,47 @@
   <p class="insight"><strong>How to use:</strong> Go to your document ingestion pipeline and integrate the Dharma Field Extractor API to replace costly OCR + manual mapping workflows this week. Failing to adopt it risks higher processing costs and slower data onboarding, potentially delaying downstream systems like Freshservice ticketing or JumpCloud provisioning. The most affected tool is your OCR/ETL layer, which can now directly output JSON ready for Google Workspace or Azure AD data imports.</p>
   <div class="card-footer">
     <span class="pub-date">04 Nov 2026</span>
+    <a href="breakdowns/dharma-field-extractor-any-document-in-structured-fields-in-json-out.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/aina-smart-ring/" target="_blank" rel="noopener noreferrer">Exclusive: Aina’s Smart Ring Wants to Be a Remote Control for Your AI Agent</a></h2>
+  <p class="card-summary">Aina has launched a smart ring designed to serve as a hands‑on remote control for AI agents, enabling users to accept or reject tasks via a joystick and small display. The device connects to Macs and iPhones, leveraging personal data and third‑party services to provide context‑aware prompts and actions throughout the day.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Aina’s product for potential integration into your organization’s AI workflows. Evaluate how the ring’s approval mechanism could streamline user interactions with AI‑powered services you manage, and assess any compatibility with your existing SSO and endpoint security solutions.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
     
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/wired-world-fair-2026-evan-ratliff-and-husk/" target="_blank" rel="noopener noreferrer">He Trolls AI Labs for a Living. Now They All Want to Work With Him</a></h2>
+  <p class="card-summary">Matt Husk, a viral AI critic, has attracted offers from OpenAI, Anthropic, and xAI after exposing flaws in their language models. While the story highlights model limitations, it does not directly impact the IT engineer’s current stack.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on OpenAI’s upcoming patch updates for model reliability—review their release notes over the next 30 days to gauge any improvements that could affect internal automation tools.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    <a href="breakdowns/he-trolls-ai-labs-for-a-living-now-they-all-want-to-work-with-him.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -931,6 +957,106 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Google AI</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://research.google/blog/detecting-signs-of-hypertension-using-wearable-sensors/" target="_blank" rel="noopener noreferrer">Detecting signs of hypertension using wearable sensors</a></h2>
+  <p class="card-summary">Google Research has unveiled AI-PPG-ACC-HTN, a system that uses standard smartwatch sensors to passively detect hypertension without cuff calibration, achieving accuracy comparable to clinical standards. This breakthrough was validated against 24‑hour ambulatory blood pressure monitoring and informs features in the Google Health app.</p>
+  <p class="insight"><strong>How to use:</strong> Check the Google Health app’s new Blood Pressure Trends feature for potential integration opportunities; if your organization supports wearable data, evaluate how this AI could augment your health monitoring workflows.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/ainas-smart-ring-has-a-screen-a-joystick-and-a-mic-so-you-can-talk-to-ai-agents/" target="_blank" rel="noopener noreferrer">Aina’s smart ring has a screen, a joystick and a mic so you can talk to AI agents</a></h2>
+  <p class="card-summary">Aina has announced a new smart ring that includes a screen, joystick, microphone, and speaker, enabling users to interact with AI agents and control various apps directly from the ring. The device positions itself as a versatile controller for both AI and non‑AI applications, aiming to enhance productivity for tech‑savvy users.</p>
+  <p class="insight"><strong>How to use:</strong> Check the Aina ring’s compatibility with your organization’s endpoint security policies and ensure it does not bypass existing device management controls. If your team uses Google Workspace or other cloud services, evaluate whether the ring’s AI interactions could expose sensitive data or create new attack vectors. Update your MDM and access management rules to account for any new device types.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    <a href="breakdowns/ainas-smart-ring-has-a-screen-a-joystick-and-a-mic-so-you-can-talk-to-ai-agents.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/wired-world-fair-2026-alexis-ohanian/" target="_blank" rel="noopener noreferrer">Reddit Founder Says Building Social Media Apps Is ‘Not Cool Anymore’</a></h2>
+  <p class="card-summary">Reddit cofounder Alexis Ohanian has expressed concerns that user-generated content platforms are becoming obsolete as AI agents dominate online interactions. He warns that the rise of generative AI is both creating value for data-driven companies and eroding traditional internet business models, citing Reddit&#x27;s recent share drop and policy shifts to combat scraping.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://criminallyvulgar.dev/you-should-absolutely-download-your-favourite-youtube-videos/" target="_blank" rel="noopener noreferrer">Download your favourite YouTube videos</a></h2>
+  <p class="card-summary">An individual shares a workflow for downloading and archiving YouTube videos using yt-dlp and ytdl-sub, integrating them into a Jellyfin media library on a NAS. The setup emphasizes automated playlist maintenance and metadata handling to streamline large-scale video collection.</p>
+  <p class="insight"><strong>How to use:</strong> Check your own media storage or backup strategy: If you rely on external content, consider using yt-dlp or ytdl-sub to automate downloads and maintain metadata. This can reduce manual effort and ensure content availability, especially if you host media on a NAS or similar storage.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/axiom-math-wants-to-keep-ai-slop-out-of-mathematics/" target="_blank" rel="noopener noreferrer">Axiom Math wants to keep AI slop out of mathematics</a></h2>
+  <p class="card-summary">Axiom Math has formally verified the Stacks Project, a massive open-source mathematics library, using Lean proof assistants to translate and validate 16 million lines of code. This milestone showcases a new AI-enabled approach to ensuring mathematical correctness that could influence formal verification practices in engineering.</p>
+  <p class="insight"><strong>How to use:</strong> Check your own formal verification pipelines for opportunities to adopt Lean-based proofs, as this development could reduce bugs in critical software components.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">Hacker News</span>
       <span class="tag-pill">Security</span>
@@ -971,14 +1097,34 @@ Your JumpCloud or SSO integration should enforce that all user accounts in your 
     <span class="pub-date">05 Nov 2026</span>
     
   </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Consulting</span>
+      <span class="source-name">Deloitte</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/research-centers/center-for-integrated-research/technology-and-transformation.html?icid=disidenav_technology-and-transformation" target="_blank" rel="noopener noreferrer">Technology &amp; Transformation</a></h2>
+  <p class="card-summary">Deloitte’s Center for Integrated Research provides broad research on business trends, technology, and transformation.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    
+  </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-05</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</a><a class="archive-title" href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</a><a class="archive-title" href="https://arxiv.org/abs/2611.06858v1" target="_blank" rel="noopener noreferrer">CompressionBench: How can your coding agents compress LLMs?</a></div>
+  <div class="archive-count">3 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.04807v1" target="_blank" rel="noopener noreferrer">Asymptotic Optimality of $cμ$-Rule for LLM Inference Scheduling under Memory Constraint</a><a class="archive-title" href="https://arxiv.org/abs/2611.04556v1" target="_blank" rel="noopener noreferrer">Inter-Agent Influence: Evaluating Persuasion, Deception, and Coercion in Multi-Agent Systems</a><a class="archive-title" href="https://arxiv.org/abs/2611.06868v1" target="_blank" rel="noopener noreferrer">On Turn-Level Best-of-N Sampling for Scaling LLM Agents</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-04</div>
@@ -1130,7 +1276,7 @@ Your JumpCloud or SSO integration should enforce that all user accounts in your 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-05</div>
-  <div class="archive-count">10 items</div>
+  <div class="archive-count">20 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" target="_blank" rel="noopener noreferrer">Dharma Field Extractor: Any Document In, Structured Fields in JSON Out</a><a class="archive-title" href="https://openai.com/index/introducing-images-2-6" target="_blank" rel="noopener noreferrer">Introducing Images 2.6</a><a class="archive-title" href="https://techcrunch.com/2026/11/05/a-yc-startup-is-putting-1m-behind-five-unsolved-materials-science-problems-for-ai/" target="_blank" rel="noopener noreferrer">A YC startup is putting $1M behind five unsolved materials science problems for AI</a></div>
 </div>
 <div class="archive-row">
