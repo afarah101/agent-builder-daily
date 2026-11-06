@@ -578,12 +578,12 @@
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">28</div>
+          <div class="stat-num">11</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 05 Nov 2026, 23:35 UTC</p>
+    <p class="updated">Updated 06 Nov 2026, 14:09 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,154 +614,160 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM serving infrastructure</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:80;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 60 of 75"><span>60</span></div>
+    <div class="card-tags"><span class="tag-pill">AI Infrastructure Deployment</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</a></h2>
-  <div class="card-meta"><span>Muhammad Faizan Anwar, Sina Keshvadi</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that LLM serving engines like vLLM and SGLang can differ wildly in performance because of configuration settings, especially how they prefill long prompts. By creating a controlled Kubernetes testbed and matching a key setting (chunked prefill), the researchers cut the biggest performance gaps and uncovered a real tail‑latency advantage for cache‑aware engines. This means that if you run LLM services, a small configuration tweak can give you up to 6× better worst‑case latency.
-</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference on Kubernetes, check the prefill setting in your engine: 1) Identify if you use chunked or single‑prefill for long prompts; 2) Align this setting across all engine versions you run; 3) Measure median first‑token latency and tail latency before and after the change to confirm improvement.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper presents concrete benchmarking results for LLM serving engines on Kubernetes, directly informing infrastructure decisions for IT engineers deploying LLM workloads. The work uses released code and a reproducible testbed, indicating practical maturity. The findings can be leveraged to optimize service costs and performance, enabling near‑term commercial deployment or internal service improvements, justifying a high monetisation score.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/a-controlled-experimental-evaluation-of-configuration-and-cache-architecture-in-.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines"
-      data-summary="The study shows that LLM serving engines like vLLM and SGLang can differ wildly in performance because of configuration settings, especially how they prefill long prompts. By creating a controlled Kubernetes testbed and matching a key setting (chunked prefill), the researchers cut the biggest performance gaps and uncovered a real tail‑latency advantage for cache‑aware engines. This means that if you run LLM services, a small configuration tweak can give you up to 6× better worst‑case latency.
-"
-      data-it="If you manage LLM inference on Kubernetes, check the prefill setting in your engine: 1) Identify if you use chunked or single‑prefill for long prompts; 2) Align this setting across all engine versions you run; 3) Measure median first‑token latency and tail latency before and after the change to confirm improvement."
-      data-monetisation=""
-      data-reasoning="The paper presents concrete benchmarking results for LLM serving engines on Kubernetes, directly informing infrastructure decisions for IT engineers deploying LLM workloads. The work uses released code and a reproducible testbed, indicating practical maturity. The findings can be leveraged to optimize service costs and performance, enabling near‑term commercial deployment or internal service improvements, justifying a high monetisation score."
-      data-score="60"
-      data-url="https://arxiv.org/abs/2611.05991v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">AWS FPGA, ML deployment, DevOps</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</a></h2>
-  <div class="card-meta"><span>David Rostcheck</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">This research builds a full toolchain that lets developers write high‑level ML code in PyTorch, convert it to Vitis HLS C, then to an AWS EC2 F2 FPGA image, and run it on cloud FPGAs. It solves the gap of a complete workflow from code to FPGA on AWS, demonstrating a TinyBERT encoder layer running on a cloud FPGA. The result shows the pipeline works but current performance is worse than CPUs/GPU, indicating room for optimisation.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage AWS EC2 F2 FPGAs, check the new Vitis HLS to AFI workflow to shorten your development cycle: 1) develop and test your model in PyTorch, 2) quantise and export to Python, 3) use the provided bridge to generate HLS C and compile to an AFI image, then 4) deploy on EC2 F2 instances. This can reduce time-to-market for ML acceleration on AWS cloud FPGAs.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.08116v1" target="_blank" rel="noopener noreferrer">Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup</a></h2>
+  <div class="card-meta"><span>Saad Ahmed Bazaz, Talha Amjad, Abdurrehman Subhani, Sohaib Ahmed Bazaz</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">05 Nov 2026</span></span></div>
+  <p class="card-summary">The study shows that a hybrid AI stack—using local open‑source models for routine tasks and commercial services for complex work—can cut commercial AI costs by up to 36% for a small tech firm. They built a system that offloads 90% of coordination and documentation work to self‑hosted models while still relying on commercial agents for heavy inference. This demonstrates a practical way to reduce spending without sacrificing functionality.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, first map your team’s routine AI tasks (e.g., documentation, context‑transfer) to local models; second, set up a central deployment that routes these to self‑hosted services; third, monitor cost savings and user adoption, adjusting the split between local and commercial models as needed.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
-      <p class="trace-reasoning">The paper presents a concrete toolchain for developing ML models on AWS FPGA instances, directly impacting engineers managing AWS cloud infrastructure. The methodology and validation on a real model suggest a usable system, though performance is limited, indicating moderate maturity. The approach offers a potential quick deployment service for specialized inference workloads, but commercial viability within 90 days is limited, hence a modest monetisation score.</p>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper discusses a hybrid self-hosted AI stack that reduces commercial AI costs by moving lower-complexity tasks to local models. This is directly relevant to infrastructure engineers managing AI workloads and SaaS tools, providing a concrete deployment approach with real cost savings. The experience is based on actual deployment at a software company, indicating a usable system rather than pure theory, but it lacks publicly released code or a reusable framework, limiting immediate reuse. The approach can be adopted by other IT teams within a short timeframe to cut inference costs and improve control, offering tangible monetisation potential. The scores reflect moderate to high real-world relevance, medium maturity, and moderate immediate applicability.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/enabling-aws-cloud-fpga-development-using-high-level-vitis-hls.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/create-your-own-work-stack-deploying-self-hosted-ai-and-tooling-in-a-tech-startu.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS"
-      data-summary="This research builds a full toolchain that lets developers write high‑level ML code in PyTorch, convert it to Vitis HLS C, then to an AWS EC2 F2 FPGA image, and run it on cloud FPGAs. It solves the gap of a complete workflow from code to FPGA on AWS, demonstrating a TinyBERT encoder layer running on a cloud FPGA. The result shows the pipeline works but current performance is worse than CPUs/GPU, indicating room for optimisation."
-      data-it="If you manage AWS EC2 F2 FPGAs, check the new Vitis HLS to AFI workflow to shorten your development cycle: 1) develop and test your model in PyTorch, 2) quantise and export to Python, 3) use the provided bridge to generate HLS C and compile to an AFI image, then 4) deploy on EC2 F2 instances. This can reduce time-to-market for ML acceleration on AWS cloud FPGAs."
+      data-title="Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup"
+      data-summary="The study shows that a hybrid AI stack—using local open‑source models for routine tasks and commercial services for complex work—can cut commercial AI costs by up to 36% for a small tech firm. They built a system that offloads 90% of coordination and documentation work to self‑hosted models while still relying on commercial agents for heavy inference. This demonstrates a practical way to reduce spending without sacrificing functionality."
+      data-it="If you manage cloud infrastructure, first map your team’s routine AI tasks (e.g., documentation, context‑transfer) to local models; second, set up a central deployment that routes these to self‑hosted services; third, monitor cost savings and user adoption, adjusting the split between local and commercial models as needed."
       data-monetisation=""
-      data-reasoning="The paper presents a concrete toolchain for developing ML models on AWS FPGA instances, directly impacting engineers managing AWS cloud infrastructure. The methodology and validation on a real model suggest a usable system, though performance is limited, indicating moderate maturity. The approach offers a potential quick deployment service for specialized inference workloads, but commercial viability within 90 days is limited, hence a modest monetisation score."
-      data-score="45"
-      data-url="https://arxiv.org/abs/2611.06829v1">Copy as Markdown</button>
+      data-reasoning="The paper discusses a hybrid self-hosted AI stack that reduces commercial AI costs by moving lower-complexity tasks to local models. This is directly relevant to infrastructure engineers managing AI workloads and SaaS tools, providing a concrete deployment approach with real cost savings. The experience is based on actual deployment at a software company, indicating a usable system rather than pure theory, but it lacks publicly released code or a reusable framework, limiting immediate reuse. The approach can be adopted by other IT teams within a short timeframe to cut inference costs and improve control, offering tangible monetisation potential. The scores reflect moderate to high real-world relevance, medium maturity, and moderate immediate applicability."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.08116v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM compression</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:56;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 42 of 75"><span>42</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM deployment &amp; pruning</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06858v1" target="_blank" rel="noopener noreferrer">CompressionBench: How can your coding agents compress LLMs?</a></h2>
-  <div class="card-meta"><span>Xinrui Zhong, Zhifeng Li, Zhiming Wang, Yongqi Liu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">This research tackles the problem of fitting large language models into limited storage by using autonomous coding agents to compress them. The authors built agents that take a source checkpoint, a storage limit, and a time budget, then generate compressed weights and inference code, achieving a 3.4 % higher perplexity than BF16 while keeping downstream accuracy at 77.3 %. The result shows that automated agent‑driven compression can reliably reduce model size without severe accuracy loss.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) assess your LLM deployments against storage and cost limits; 2) use or deploy a coding agent to compress models to your budget; 3) validate the compressed model with perplexity and downstream tests before rolling out to production.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.07558v1" target="_blank" rel="noopener noreferrer">SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking</a></h2>
+  <div class="card-meta"><span>Moonseok Choi, Jongwon Jeong, Minki Kang, Giung Nam</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">05 Nov 2026</span></span></div>
+  <p class="card-summary">SKIM tackles the challenge of making large language model agents more efficient when they must follow strict grammar rules, such as in tool‑calling workflows. The authors built a pruning and distillation method that focuses on the few token positions that decide actions, keeping the most important parameters and matching the model’s behaviour on valid outputs. In tests, SKIM kept accuracy high even when models were heavily compressed, outperforming standard pruning techniques.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure for LLM services, here is what to do:
+1. Identify the token positions in your agent that are ‘decision’ points (where the model chooses actions). 2. Apply a category‑aware pruning tool that keeps parameters tied to those decision positions. 3. Use on‑policy distillation to fine‑tune the pruned model against the original on valid token sets before deploying.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">SKIM targets LLM agents used in structured generation, which aligns with the IT engineer’s use of LLM APIs, agentic systems, and deployment optimizations. The paper presents a concrete pruning/distillation framework with empirical results on tool‑calling benchmarks, indicating a working system rather than a pure theory. The method could be incorporated into existing LLM deployment pipelines or sold as a performance‑improvement service for SaaS or cloud‑based LLM offerings. However, it is specialized to grammar‑constrained agents and not a general infrastructure solution, so scores are moderate. The paper has a clear implementation path but would require integration effort, hence the moderate maturity and monetisation scores.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking"
+      data-summary="SKIM tackles the challenge of making large language model agents more efficient when they must follow strict grammar rules, such as in tool‑calling workflows. The authors built a pruning and distillation method that focuses on the few token positions that decide actions, keeping the most important parameters and matching the model’s behaviour on valid outputs. In tests, SKIM kept accuracy high even when models were heavily compressed, outperforming standard pruning techniques."
+      data-it="If you manage cloud infrastructure for LLM services, here is what to do:
+1. Identify the token positions in your agent that are ‘decision’ points (where the model chooses actions). 2. Apply a category‑aware pruning tool that keeps parameters tied to those decision positions. 3. Use on‑policy distillation to fine‑tune the pruned model against the original on valid token sets before deploying."
+      data-monetisation=""
+      data-reasoning="SKIM targets LLM agents used in structured generation, which aligns with the IT engineer’s use of LLM APIs, agentic systems, and deployment optimizations. The paper presents a concrete pruning/distillation framework with empirical results on tool‑calling benchmarks, indicating a working system rather than a pure theory. The method could be incorporated into existing LLM deployment pipelines or sold as a performance‑improvement service for SaaS or cloud‑based LLM offerings. However, it is specialized to grammar‑constrained agents and not a general infrastructure solution, so scores are moderate. The paper has a clear implementation path but would require integration effort, hence the moderate maturity and monetisation scores."
+      data-score="45"
+      data-url="https://arxiv.org/abs/2611.07558v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">AI security for LLMs</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:48;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 36 of 75"><span>36</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.08325v1" target="_blank" rel="noopener noreferrer">Decision Models as Retrieval Gates Against Injection and Pollution</a></h2>
+  <div class="card-meta"><span>Mahdi Ghadamyari, Reza Habibi</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">05 Nov 2026</span></span></div>
+  <p class="card-summary">This research shows that a lightweight decision model can act as a filter to stop malicious or misleading content from tricking language models. They built a Kev-4B gate that scans HTML and cuts injection success from 27.9% to 5.7%, with only 76 ms per page and a small false‑positive rate. The result is a cheaper, faster defence that keeps most queries safe while keeping performance nearly unchanged.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud‑based LLM services, add a gate like Kev‑4B to your retrieval pipeline: step 1, run the gate on each retrieved page; step 2, discard pages flagged as potential injection or pollution; step 3, pass only clean pages to the generation model. This reduces injection risk from ~28% to ~6% and keeps accuracy high. The gate costs only 76 ms per page and is open‑weight, making it easy to integrate.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">12/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper demonstrates an automated approach to compress LLMs via coding agents, which could reduce storage and inference costs for IT teams. While the system is experimentally validated, it remains in the research phase and lacks a production-ready pipeline, hence moderate maturity. The technique has clear commercial value for cloud or SaaS providers looking to offer lightweight models, giving a moderate monetisation potential. Overall, it has a meaningful but not immediate impact on everyday IT engineering.</p>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">14/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
+      <p class="trace-reasoning">The paper presents a practical gate that can be integrated into existing LLM retrieval pipelines to reduce injection and pollution attacks, directly affecting IT engineers working on secure LLM deployments. The method is experimentally validated with open-weight models and offers a usable, low-latency solution, but it is still at the research prototype stage with no commercial release. The monetisation potential is modest, as engineers could adopt it as a security layer, but it would require custom integration and is not a ready‑to‑sell service.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/compressionbench-how-can-your-coding-agents-compress-llms.html" class="breakdown-link">IT Breakdown</a>
+    
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="CompressionBench: How can your coding agents compress LLMs?"
-      data-summary="This research tackles the problem of fitting large language models into limited storage by using autonomous coding agents to compress them. The authors built agents that take a source checkpoint, a storage limit, and a time budget, then generate compressed weights and inference code, achieving a 3.4 % higher perplexity than BF16 while keeping downstream accuracy at 77.3 %. The result shows that automated agent‑driven compression can reliably reduce model size without severe accuracy loss."
-      data-it="If you manage cloud infrastructure, here is what to do: 1) assess your LLM deployments against storage and cost limits; 2) use or deploy a coding agent to compress models to your budget; 3) validate the compressed model with perplexity and downstream tests before rolling out to production."
+      data-title="Decision Models as Retrieval Gates Against Injection and Pollution"
+      data-summary="This research shows that a lightweight decision model can act as a filter to stop malicious or misleading content from tricking language models. They built a Kev-4B gate that scans HTML and cuts injection success from 27.9% to 5.7%, with only 76 ms per page and a small false‑positive rate. The result is a cheaper, faster defence that keeps most queries safe while keeping performance nearly unchanged."
+      data-it="If you manage cloud‑based LLM services, add a gate like Kev‑4B to your retrieval pipeline: step 1, run the gate on each retrieved page; step 2, discard pages flagged as potential injection or pollution; step 3, pass only clean pages to the generation model. This reduces injection risk from ~28% to ~6% and keeps accuracy high. The gate costs only 76 ms per page and is open‑weight, making it easy to integrate."
       data-monetisation=""
-      data-reasoning="The paper demonstrates an automated approach to compress LLMs via coding agents, which could reduce storage and inference costs for IT teams. While the system is experimentally validated, it remains in the research phase and lacks a production-ready pipeline, hence moderate maturity. The technique has clear commercial value for cloud or SaaS providers looking to offer lightweight models, giving a moderate monetisation potential. Overall, it has a meaningful but not immediate impact on everyday IT engineering."
-      data-score="42"
-      data-url="https://arxiv.org/abs/2611.06858v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a practical gate that can be integrated into existing LLM retrieval pipelines to reduce injection and pollution attacks, directly affecting IT engineers working on secure LLM deployments. The method is experimentally validated with open-weight models and offers a usable, low-latency solution, but it is still at the research prototype stage with no commercial release. The monetisation potential is modest, as engineers could adopt it as a security layer, but it would require custom integration and is not a ready‑to‑sell service."
+      data-score="36"
+      data-url="https://arxiv.org/abs/2611.08325v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">AI deployment / LLM optimisation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:49;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 37 of 75"><span>37</span></div>
+    <div class="card-tags"><span class="tag-pill">AI-enhanced UI control</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 30 of 75"><span>30</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06876v1" target="_blank" rel="noopener noreferrer">SpecCompact: Accelerating LLM Agent Context Compaction with Slot-Parallel Semantic Speculative Verification</a></h2>
-  <div class="card-meta"><span>Yulu An, Yifei Feng, Xiangyang Yin</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">SpecCompact speeds up how large language model agents condense long interaction histories by drafting summary slots in parallel and having the main model verify them. It cuts compaction time up to 5.6× compared to traditional summarisation, keeping the same level of information. This could reduce the latency of LLM‑driven services that rely on quick context summarisation.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM‑based services, implement SpecCompact by (1) training a small draft model to produce slot summaries in parallel, (2) letting your main model validate and correct each slot, and (3) integrating the verified slots back into the conversation history. Monitor the trade‑off between speed and accuracy for your specific tasks.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.08428v1" target="_blank" rel="noopener noreferrer">The Power of Meta Access in the Software of the Future --- Demonstrated on LLM Chat UIs and Chat AI</a></h2>
+  <div class="card-meta"><span>Julian Kunkel, Ali Doosthosseini</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">05 Nov 2026</span></span></div>
+  <p class="card-summary">Meta access lets an AI assistant see and interact with the whole workspace of a chat client, not just the conversation. The authors built a prototype that provides structured, permissioned access to interface elements, settings, and context, enabling the AI to organise and operate the UI. The result is a single entry point that turns chat into a control layer for the whole workspace, with risks around grounding, privacy, prompt injection and trust.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1. Ensure your cloud‑hosted chat or agentic tools expose a structured API for interface state and permissions. 2. Implement a control‑plane boundary so the AI cannot alter your settings without confirmation. 3. Monitor for prompt‑injection or unauthorized changes in the workspace to mitigate trust risks.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">12/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
-      <p class="trace-reasoning">The paper proposes a novel method to accelerate context compaction for LLM agents, which can reduce latency and compute costs—relevant to IT infrastructure teams. It presents a working framework with reported speedups, indicating some level of maturity, but lacks evidence of production deployment. The technique could be packaged as a service or integrated into existing AI pipelines, offering modest short‑term monetisation potential.</p>
+      <p class="trace-reasoning">The paper discusses meta access to software UIs via LLMs, which could influence how engineers interact with tools and potentially improve automation and control layers. However, the work appears to be at a prototype stage with limited published code or real deployment, indicating low maturity. While there is some conceptual commercial potential (e.g., building UI‑control layers or accessibility enhancements), it is not yet actionable within 90 days. Thus moderate impact, low maturity, and modest monetisation potential lead to a total of 30.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/speccompact-accelerating-llm-agent-context-compaction-with-slot-parallel-semanti.html" class="breakdown-link">IT Breakdown</a>
+    
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="SpecCompact: Accelerating LLM Agent Context Compaction with Slot-Parallel Semantic Speculative Verification"
-      data-summary="SpecCompact speeds up how large language model agents condense long interaction histories by drafting summary slots in parallel and having the main model verify them. It cuts compaction time up to 5.6× compared to traditional summarisation, keeping the same level of information. This could reduce the latency of LLM‑driven services that rely on quick context summarisation."
-      data-it="If you manage LLM‑based services, implement SpecCompact by (1) training a small draft model to produce slot summaries in parallel, (2) letting your main model validate and correct each slot, and (3) integrating the verified slots back into the conversation history. Monitor the trade‑off between speed and accuracy for your specific tasks."
+      data-title="The Power of Meta Access in the Software of the Future --- Demonstrated on LLM Chat UIs and Chat AI"
+      data-summary="Meta access lets an AI assistant see and interact with the whole workspace of a chat client, not just the conversation. The authors built a prototype that provides structured, permissioned access to interface elements, settings, and context, enabling the AI to organise and operate the UI. The result is a single entry point that turns chat into a control layer for the whole workspace, with risks around grounding, privacy, prompt injection and trust."
+      data-it="If you manage cloud infrastructure, here is what to do: 1. Ensure your cloud‑hosted chat or agentic tools expose a structured API for interface state and permissions. 2. Implement a control‑plane boundary so the AI cannot alter your settings without confirmation. 3. Monitor for prompt‑injection or unauthorized changes in the workspace to mitigate trust risks."
       data-monetisation=""
-      data-reasoning="The paper proposes a novel method to accelerate context compaction for LLM agents, which can reduce latency and compute costs—relevant to IT infrastructure teams. It presents a working framework with reported speedups, indicating some level of maturity, but lacks evidence of production deployment. The technique could be packaged as a service or integrated into existing AI pipelines, offering modest short‑term monetisation potential."
-      data-score="37"
-      data-url="https://arxiv.org/abs/2611.06876v1">Copy as Markdown</button>
+      data-reasoning="The paper discusses meta access to software UIs via LLMs, which could influence how engineers interact with tools and potentially improve automation and control layers. However, the work appears to be at a prototype stage with limited published code or real deployment, indicating low maturity. While there is some conceptual commercial potential (e.g., building UI‑control layers or accessibility enhancements), it is not yet actionable within 90 days. Thus moderate impact, low maturity, and modest monetisation potential lead to a total of 30."
+      data-score="30"
+      data-url="https://arxiv.org/abs/2611.08428v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Research dataset</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
+    <div class="card-tags"><span class="tag-pill">Software development support</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:30;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 23 of 75"><span>23</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.06897v1" target="_blank" rel="noopener noreferrer">MCP-Eco: A Linked Dataset of MCP Servers, Consumers, and Development Activity</a></h2>
-  <div class="card-meta"><span>Khalid Tounoussi, Mohammed Sayagh, Ali Ouni, Yutaro Kashiwa</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">04 Nov 2026</span></span></div>
-  <p class="card-summary">MCP‑Eco tackles the problem of fragmented information about Model Context Protocol (MCP) servers, consumer projects, and their development activity by creating a large relational dataset that links configuration declarations, server projects, and repository history. The team built a 16.9 million‑record Parquet dataset with 19 tables that map consumers to servers, including dependencies and pull‑request data, making it possible to study MCP interface design and integration patterns. The result is a public resource that lets researchers and practitioners explore how MCP tools are configured and maintained, though it does not directly impact everyday cloud infrastructure management.</p>
-  
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.08456v1" target="_blank" rel="noopener noreferrer">Cognitive Tours: Making Understanding a Deliverable in AI-Assisted Development</a></h2>
+  <div class="card-meta"><span>Margaret-Anne Storey</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">05 Nov 2026</span></span></div>
+  <p class="card-summary">The study tackles cognitive and intent debt—hidden problems where teams lack shared understanding or clear goals—by building Cognitive Tours, a web tool that maps user needs, design choices, code, tests, and questions into navigable paths. The prototype shows how AI can spot stale or missing links while humans curate and validate the narrative, aiming to keep teams aligned as systems grow. This could help you document and maintain clear documentation for cloud infrastructure, ensuring changes are understood and aligned with business intent.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do:
+1. Map your infrastructure components, policies, and compliance rules into a Cognitive Tour.
+2. Use the AI audit feature to flag stale documentation or missing links.
+3. Review and approve the suggested waypoints to keep your team’s shared understanding up to date.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">8/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The MCP-Eco dataset is a research artifact that maps LLM agent server ecosystems. While it offers insight into tooling and configuration practices, it does not provide a direct, ready-to-deploy solution for IT engineers managing Microsoft 365, Google Workspace, or cloud infra. The dataset and scripts are released, giving it modest AI maturity, but the opportunity to monetize or apply it within 90 days is limited. Overall, the paper has minimal real-world impact for the target audience.</p>
+      <p class="trace-reasoning">The paper proposes a web-based prototype aimed at reducing cognitive and intent debt in software projects. While it addresses concerns that could affect infrastructure teams indirectly, it does not directly impact day-to-day operations of managing Microsoft 365, Google Workspace, or cloud services. The system is in prototype form with a demo available, indicating some level of maturity but not a fully deployed solution. Monetisation potential is limited as the tool would need further development and integration into existing workflows to be sellable within 90 days. Overall, the impact, maturity, and monetisation scores are modest.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/mcp-eco-a-linked-dataset-of-mcp-servers-consumers-and-development-activity.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/cognitive-tours-making-understanding-a-deliverable-in-ai-assisted-development.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="MCP-Eco: A Linked Dataset of MCP Servers, Consumers, and Development Activity"
-      data-summary="MCP‑Eco tackles the problem of fragmented information about Model Context Protocol (MCP) servers, consumer projects, and their development activity by creating a large relational dataset that links configuration declarations, server projects, and repository history. The team built a 16.9 million‑record Parquet dataset with 19 tables that map consumers to servers, including dependencies and pull‑request data, making it possible to study MCP interface design and integration patterns. The result is a public resource that lets researchers and practitioners explore how MCP tools are configured and maintained, though it does not directly impact everyday cloud infrastructure management."
-      data-it="Not directly applicable to IT infrastructure work"
+      data-title="Cognitive Tours: Making Understanding a Deliverable in AI-Assisted Development"
+      data-summary="The study tackles cognitive and intent debt—hidden problems where teams lack shared understanding or clear goals—by building Cognitive Tours, a web tool that maps user needs, design choices, code, tests, and questions into navigable paths. The prototype shows how AI can spot stale or missing links while humans curate and validate the narrative, aiming to keep teams aligned as systems grow. This could help you document and maintain clear documentation for cloud infrastructure, ensuring changes are understood and aligned with business intent."
+      data-it="If you manage cloud infrastructure, here is what to do:
+1. Map your infrastructure components, policies, and compliance rules into a Cognitive Tour.
+2. Use the AI audit feature to flag stale documentation or missing links.
+3. Review and approve the suggested waypoints to keep your team’s shared understanding up to date."
       data-monetisation=""
-      data-reasoning="The MCP-Eco dataset is a research artifact that maps LLM agent server ecosystems. While it offers insight into tooling and configuration practices, it does not provide a direct, ready-to-deploy solution for IT engineers managing Microsoft 365, Google Workspace, or cloud infra. The dataset and scripts are released, giving it modest AI maturity, but the opportunity to monetize or apply it within 90 days is limited. Overall, the paper has minimal real-world impact for the target audience."
-      data-score="20"
-      data-url="https://arxiv.org/abs/2611.06897v1">Copy as Markdown</button>
+      data-reasoning="The paper proposes a web-based prototype aimed at reducing cognitive and intent debt in software projects. While it addresses concerns that could affect infrastructure teams indirectly, it does not directly impact day-to-day operations of managing Microsoft 365, Google Workspace, or cloud services. The system is in prototype form with a demo available, indicating some level of maturity but not a fully deployed solution. Monetisation potential is limited as the tool would need further development and integration into existing workflows to be sellable within 90 days. Overall, the impact, maturity, and monetisation scores are modest."
+      data-score="23"
+      data-url="https://arxiv.org/abs/2611.08456v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
@@ -771,68 +777,28 @@
     <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">8/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/" target="_blank" rel="noopener noreferrer">Dropbox acquires Tigris Data for $350M to bolster its AI infrastructure</a></h2>
-  <p class="card-summary">Dropbox has acquired Tigris Data for $350M to expand its AI infrastructure, enabling the upcoming DBX Agent Cloud platform that offers AI-friendly storage for models and agents. This move positions Dropbox as a direct competitor in the AI model hosting space, offering object storage compatible with S3 and advanced filesystem features for AI workflows.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Review your organization’s current AI model hosting strategy this week and determine if you need to migrate workloads to a dedicated storage service like DBX Agent Cloud. S2: If your teams rely on large datasets for training or inference, missing this opportunity could delay deployment and increase latency from suboptimal storage. S3: Dropbox’s new platform will most directly impact any teams using third‑party AI models (ChatGPT, Claude, etc.) that integrate with cloud storage, so check how your existing file repositories might be leveraged for faster AI access.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-infrastructure.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">8/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/" target="_blank" rel="noopener noreferrer">Alpine Linux Security advisory: OpenSSH-server password authentication bypass</a></h2>
-  <p class="card-summary">Alpine Linux’s OpenSSH server has a critical password‑authentication bypass that allows attackers to log in without a password if the server is misconfigured. The flaw affects all recent Alpine releases and requires immediate patching or disabling password authentication.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Immediately run `apk upgrade -U -a` on all Alpine-based hosts and restart sshd with `rc-service sshd restart`. S2: Failure to patch exposes your servers to credential‑less SSH logins, potentially compromising your entire infrastructure. S3: This impacts your MDM/endpoint security stack if you manage Alpine devices or containers that expose SSH.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/alpine-linux-security-advisory-openssh-server-password-authentication-bypass.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">8/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" target="_blank" rel="noopener noreferrer">Dharma Field Extractor: Any Document In, Structured Fields in JSON Out</a></h2>
-  <p class="card-summary">Hugging Face has released the Dharma Field Extractor, a 2-billion‑parameter model that extracts specified fields from any document type and returns them as structured JSON, outperforming larger LLMs at lower cost. The model supports open schema extraction or exact schema requests, making it suitable for high‑volume invoice processing, medical requisition parsing, and contract data extraction.</p>
-  <p class="insight"><strong>How to use:</strong> Go to your document ingestion pipeline and integrate the Dharma Field Extractor API to replace costly OCR + manual mapping workflows this week. Failing to adopt it risks higher processing costs and slower data onboarding, potentially delaying downstream systems like Freshservice ticketing or JumpCloud provisioning. The most affected tool is your OCR/ETL layer, which can now directly output JSON ready for Google Workspace or Azure AD data imports.</p>
-  <div class="card-footer">
-    <span class="pub-date">04 Nov 2026</span>
-    <a href="breakdowns/dharma-field-extractor-any-document-in-structured-fields-in-json-out.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/cultfit-builds-with-codex" target="_blank" rel="noopener noreferrer">Cult.fit builds operational muscle with Codex</a></h2>
+  <p class="card-summary">OpenAI’s Codex is being adopted by Cult.fit to streamline internal application development across non-engineering teams, reducing costs and speeding tool creation. The company has built 20+ internal apps, saved $100,000+ annually, and cut customer support costs by 50% through AI-driven automation.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review your organization’s usage of OpenAI’s Codex or similar LLM APIs and evaluate whether standardizing on a single platform could reduce complexity across teams. S2: Failure to do so may lead to fragmented toolchains, higher maintenance overhead, and missed opportunities for rapid feature delivery. S3: This is most relevant to your API and integration workflows, especially if you currently rely on multiple coding assistants or have a fragmented development lifecycle.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Google DeepMind</span>
       <span class="tag-pill">Product Launch</span>
     </div>
     <div class="news-score-area">
@@ -840,79 +806,19 @@
       <span class="score-num">7/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://openai.com/index/merge-builds-with-openai" target="_blank" rel="noopener noreferrer">Merge builds product and business tools with OpenAI technology</a></h2>
-  <p class="card-summary">Merge, an integration platform, now embeds OpenAI&#x27;s GPT‑6 Astra, ChatGPT, and Codex to streamline product reviews, marketing, and business planning. Its new Merge for Workforce module lets teams control AI model and tool access, aiming for high reliability and cost control.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Evaluate Merge for Workforce’s AI access controls and connector reliability for your internal tools this month. S2: Inaction risks slower adoption of AI-enabled workflows and potential data access gaps. S3: The most affected tool is your SSO/MDM stack, as Merge’s access controls could integrate with JumpCloud or Okta.</p>
+  <h2 class="card-title"><a href="https://deepmind.google/blog/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips/" target="_blank" rel="noopener noreferrer">Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips</a></h2>
+  <p class="card-summary">Google DeepMind has launched Gemini Omni 1.2 Flash, a new video generation model that supports up to 15-second clips, multi-turn conversational editing, and tighter reference adherence, all at a 30% lower price. This upgrade makes high‑quality, brand‑consistent video content more affordable and easier to produce for business users via the Gemini API.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Explore integrating Gemini Omni 1.2 Flash into your internal marketing or onboarding video workflows using the Gemini API. S2: Leveraging the lower cost and conversational editing can reduce time‑to‑market for training and promotional content, but missing out could delay your team’s ability to create dynamic video assets quickly. S3: The most relevant tools are your Google Workspace Apps Script environment and your existing Cloudflare CDN for hosting generated videos.</p>
   <div class="card-footer">
     <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/merge-builds-product-and-business-tools-with-openai-technology.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/aina-smart-ring/" target="_blank" rel="noopener noreferrer">Exclusive: Aina’s Smart Ring Wants to Be a Remote Control for Your AI Agent</a></h2>
-  <p class="card-summary">Aina has launched a smart ring designed to serve as a hands‑on remote control for AI agents, enabling users to accept or reject tasks via a joystick and small display. The device connects to Macs and iPhones, leveraging personal data and third‑party services to provide context‑aware prompts and actions throughout the day.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor Aina’s product for potential integration into your organization’s AI workflows. Evaluate how the ring’s approval mechanism could streamline user interactions with AI‑powered services you manage, and assess any compatibility with your existing SSO and endpoint security solutions.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/wired-world-fair-2026-evan-ratliff-and-husk/" target="_blank" rel="noopener noreferrer">He Trolls AI Labs for a Living. Now They All Want to Work With Him</a></h2>
-  <p class="card-summary">Matt Husk, a viral AI critic, has attracted offers from OpenAI, Anthropic, and xAI after exposing flaws in their language models. While the story highlights model limitations, it does not directly impact the IT engineer’s current stack.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on OpenAI’s upcoming patch updates for model reliability—review their release notes over the next 30 days to gauge any improvements that could affect internal automation tools.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/he-trolls-ai-labs-for-a-living-now-they-all-want-to-work-with-him.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://kagi.com/changelog" target="_blank" rel="noopener noreferrer">Kagi Search for Everyone</a></h2>
-  <p class="card-summary">Kagi Search has removed the account requirement for up to 50 searches, expanding free access to all users. The update also introduces a redesigned Android app with voice search, image search, and quick answer features.</p>
-  <p class="insight"><strong>How to use:</strong> Check if Kagi can be configured as your organization’s default search engine in Chrome and Edge; this could bypass Google’s upcoming AI restrictions for school accounts and reduce ad tracking. Not acting means your users may face forced AI off‑by‑default settings in early 2027, limiting search capabilities.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">OpenAI</span>
+      <span class="source-name">TechCrunch</span>
       <span class="tag-pill">Model Release</span>
     </div>
     <div class="news-score-area">
@@ -920,250 +826,29 @@
       <span class="score-num">6/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://openai.com/index/introducing-images-2-6" target="_blank" rel="noopener noreferrer">Introducing Images 2.6</a></h2>
-  <p class="card-summary">OpenAI has launched Images 2.6, a faster, higher‑quality image generation model with new GIF and animation capabilities, as well as enhanced API controls for complexity, quality, and SVG export. This release allows developers to produce and edit images 50% faster and create animated visuals directly in their applications.</p>
-  <p class="insight"><strong>How to use:</strong> Check your API usage to see if your current image generation workflows could benefit from the faster Flare mode or higher‑quality Sunburst mode. Updating your integration to include the new complexity and image markup parameters can reduce manual editing time and improve consistency across marketing assets. This will most directly impact any teams using the OpenAI API for product visuals or marketing content.</p>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/06/underdog-shows-off-a-32mb-speech-model-in-new-demo/" target="_blank" rel="noopener noreferrer">Underdog shows off a 32MB speech model in new demo</a></h2>
+  <p class="card-summary">Underdog has released a 32 MB voice model called Woof that runs entirely on local devices, enabling offline speech generation in browsers without cloud dependency. The model, open‑source and designed for edge deployment, could support lightweight assistant or personalization workloads on end‑user machines.</p>
+  <p class="insight"><strong>How to use:</strong> Check your internal dev environment for opportunities to integrate the Woof model into local assistant features or custom on‑prem voice solutions. Inaction means missing a low‑cost, privacy‑preserving alternative to cloud speech APIs for end‑user devices.</p>
   <div class="card-footer">
-    <span class="pub-date">04 Nov 2026</span>
-    <a href="breakdowns/introducing-images-26.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/a-yc-startup-is-putting-1m-behind-five-unsolved-materials-science-problems-for-ai/" target="_blank" rel="noopener noreferrer">A YC startup is putting $1M behind five unsolved materials science problems for AI</a></h2>
-  <p class="card-summary">Discovered Materials, a YC-backed AI startup, has announced a $1 million challenge to solve five key unsolved materials science problems, ranging from cuprate superconductivity to improving Density Functional Theory. The initiative aims to push AI models toward deeper understanding of advanced materials that underpin future electronics and energy technologies.</p>
-  <p class="insight"><strong>How to use:</strong> This news is mainly of strategic interest; no immediate changes to your current Google Workspace, JumpCloud, or Freshservice configurations are required. Monitor developments from Discovered Materials and similar research labs to anticipate future AI tools that could automate materials design, potentially impacting procurement and product lifecycle management in your organization.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/a-yc-startup-is-putting-1m-behind-five-unsolved-materials-science-problems-for-a.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/agility-is-the-first-pure-humanoid-robot-company-on-the-stock-market-are-you-buying/" target="_blank" rel="noopener noreferrer">Agility is the first pure humanoid robot company on the stock market. Are you buying?</a></h2>
-  <p class="card-summary">Agility, a pure humanoid robotics company, has gone public via a SPAC, raising $465 million to develop its next-generation Digit 5 robot. The new model promises safer human interaction and higher throughput, aiming to secure $300 million in contracts by end‑2027.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor the market impact of robotics on supply chains; consider how increased automation could affect asset and workload management in your environment. No immediate action is required.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/agility-is-the-first-pure-humanoid-robot-company-on-the-stock-market-are-you-buy.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill">Infrastructure</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://openai.com/index/setting-new-standard-responsible-ai-infrastructure" target="_blank" rel="noopener noreferrer">Setting a new standard for responsible AI infrastructure</a></h2>
-  <p class="card-summary">OpenAI has announced a National Community Compact and Compute Campus Policy Blueprint to ensure that its future U.S. compute campuses engage local communities, cover their own energy costs, and share economic benefits. The initiative aims to make AI infrastructure development more transparent and community‑aligned.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor OpenAI’s campus policies for potential impacts on cloud‑based AI workloads you might use; consider evaluating whether your organization’s AI deployments could be affected by changes in data residency or cost structures as OpenAI shifts to self‑paying infrastructure.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/setting-a-new-standard-for-responsible-ai-infrastructure.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/wired-world-fair-2026-clement-delangue-hugging-face/" target="_blank" rel="noopener noreferrer">Hugging Face’s CEO Says His P(Doom) Is ‘Close to Zero’</a></h2>
-  <p class="card-summary">Hugging Face CEO Clément Delangue warned that future AI risks are likely to stem from large companies operating in secret, citing a recent OpenAI agent attack on the startup. He emphasized that open‑source AI platforms and legal accountability are essential to mitigate agentic cyberattacks.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Monitor your AI model deployment pipelines for any hidden or proprietary components that could expose you to similar agentic risks.
-S2: Ensure your team’s AI projects are fully documented, open‑source where possible, and compliant with emerging legal frameworks around agent responsibility.</p>
-  <div class="card-footer">
-    <span class="pub-date">04 Nov 2026</span>
-    <a href="breakdowns/hugging-faces-ceo-says-his-pdoom-is-close-to-zero.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">MIT Tech Review</span>
-      <span class="tag-pill">Infrastructure</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/05/1144908/the-download-texas-fragile-ai-boom-us-energy-policy/" target="_blank" rel="noopener noreferrer">The Download: Texas’s fragile AI boom and energy policy shifts</a></h2>
-  <p class="card-summary">Texas is highlighted as the newest hub for AI data center development, with rapid growth that could stall due to shifting energy policies.</p>
-  
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/the-download-texass-fragile-ai-boom-and-energy-policy-shifts.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/finding-new-drugs-is-laborious-this-ai-startup-is-skipping-the-lab-work/" target="_blank" rel="noopener noreferrer">Finding New Drugs Is Laborious. This AI Startup Is Skipping The Lab Work</a></h2>
-  <p class="card-summary">Potential Sciences, a British AI startup, is using physics-based simulations to generate large chemical datasets for training AI models that predict drug efficacy, potentially accelerating drug discovery without lab work. The company launched on November 5 with seed funding from SovAI and Twin Path Ventures and aims to enable bespoke treatments for rare diseases.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor Potential Sciences’ progress and evaluate their datasets for potential integration with internal drug discovery pipelines or research collaborations. Staying informed will help anticipate shifts in AI-driven pharma tools that could impact future procurement or research priorities.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/finding-new-drugs-is-laborious-this-ai-startup-is-skipping-the-lab-work.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/wired-world-fair-2026-denise-herzing-wild-dolphin/" target="_blank" rel="noopener noreferrer">AI’s Next Trick? Speaking Dolphin</a></h2>
-  <p class="card-summary">A research team led by Denise Herzing has teamed up with Google DeepMind to decode dolphin vocalizations using large language models, aiming toward two‑way communication with marine mammals. The work demonstrates AI’s expanding capability to model complex, non‑human communication systems, though it remains far from practical application.</p>
-  <p class="insight"><strong>How to use:</strong> No immediate action is required for your IT stack; this research is purely exploratory and does not affect existing tools or security posture.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/ais-next-trick-speaking-dolphin.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://erikgahner.github.io/posts/2026/awesome-repositories-are-no-longer-awesome/" target="_blank" rel="noopener noreferrer">Awesome repositories are no longer awesome</a></h2>
-  <p class="card-summary">The article argues that many GitHub &#x27;awesome&#x27; lists have become outdated or cluttered with generic AI‑generated content, making them less useful for developers seeking reliable resources. It highlights that relying on AI models for inspiration may be more efficient than sifting through these stale repositories.</p>
-  <p class="insight"><strong>How to use:</strong> Check your internal code‑base or documentation repositories for similar &#x27;awesome&#x27; lists that may have accumulated outdated or low‑quality contributions; consider pruning or replacing them with curated, AI‑generated references to keep resources current.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/awesome-repositories-are-no-longer-awesome.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Google AI</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://research.google/blog/detecting-signs-of-hypertension-using-wearable-sensors/" target="_blank" rel="noopener noreferrer">Detecting signs of hypertension using wearable sensors</a></h2>
-  <p class="card-summary">Google Research has unveiled AI-PPG-ACC-HTN, a system that uses standard smartwatch sensors to passively detect hypertension without cuff calibration, achieving accuracy comparable to clinical standards. This breakthrough was validated against 24‑hour ambulatory blood pressure monitoring and informs features in the Google Health app.</p>
-  <p class="insight"><strong>How to use:</strong> Check the Google Health app’s new Blood Pressure Trends feature for potential integration opportunities; if your organization supports wearable data, evaluate how this AI could augment your health monitoring workflows.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
+    <span class="pub-date">06 Nov 2026</span>
     
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/ainas-smart-ring-has-a-screen-a-joystick-and-a-mic-so-you-can-talk-to-ai-agents/" target="_blank" rel="noopener noreferrer">Aina’s smart ring has a screen, a joystick and a mic so you can talk to AI agents</a></h2>
-  <p class="card-summary">Aina has announced a new smart ring that includes a screen, joystick, microphone, and speaker, enabling users to interact with AI agents and control various apps directly from the ring. The device positions itself as a versatile controller for both AI and non‑AI applications, aiming to enhance productivity for tech‑savvy users.</p>
-  <p class="insight"><strong>How to use:</strong> Check the Aina ring’s compatibility with your organization’s endpoint security policies and ensure it does not bypass existing device management controls. If your team uses Google Workspace or other cloud services, evaluate whether the ring’s AI interactions could expose sensitive data or create new attack vectors. Update your MDM and access management rules to account for any new device types.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/ainas-smart-ring-has-a-screen-a-joystick-and-a-mic-so-you-can-talk-to-ai-agents.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/wired-world-fair-2026-alexis-ohanian/" target="_blank" rel="noopener noreferrer">Reddit Founder Says Building Social Media Apps Is ‘Not Cool Anymore’</a></h2>
-  <p class="card-summary">Reddit cofounder Alexis Ohanian has expressed concerns that user-generated content platforms are becoming obsolete as AI agents dominate online interactions. He warns that the rise of generative AI is both creating value for data-driven companies and eroding traditional internet business models, citing Reddit&#x27;s recent share drop and policy shifts to combat scraping.</p>
-  
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/reddit-founder-says-building-social-media-apps-is-not-cool-anymore.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Microsoft Research</span>
       <span class="tag-pill">Tools</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://criminallyvulgar.dev/you-should-absolutely-download-your-favourite-youtube-videos/" target="_blank" rel="noopener noreferrer">Download your favourite YouTube videos</a></h2>
-  <p class="card-summary">An individual shares a workflow for downloading and archiving YouTube videos using yt-dlp and ytdl-sub, integrating them into a Jellyfin media library on a NAS. The setup emphasizes automated playlist maintenance and metadata handling to streamline large-scale video collection.</p>
-  <p class="insight"><strong>How to use:</strong> Check your own media storage or backup strategy: If you rely on external content, consider using yt-dlp or ytdl-sub to automate downloads and maintain metadata. This can reduce manual effort and ensure content availability, especially if you host media on a NAS or similar storage.</p>
+  <h2 class="card-title"><a href="https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/" target="_blank" rel="noopener noreferrer">Formally verifying agent-written full-stack web apps with PDD Kit</a></h2>
+  <p class="card-summary">Microsoft Research’s PDD Kit introduces a formal verification framework that translates developer intent into Verus specifications, proving AI-generated full-stack web code meets those specs and supplementing proofs with tests. This reduces the need for line-by-line code review by AI‑written applications.</p>
+  <p class="insight"><strong>How to use:</strong> Watch how PDD Kit integrates with CI/CD pipelines and consider evaluating it for internal development workflows. It could streamline code quality checks for AI‑generated services, saving engineering effort and improving reliability in your IT projects.</p>
   <div class="card-footer">
     <span class="pub-date">05 Nov 2026</span>
     
@@ -1174,79 +859,59 @@ S2: Ensure your team’s AI projects are fully documented, open‑source where p
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">Hugging Face</span>
-      <span class="tag-pill">Model Release</span>
+      <span class="tag-pill">Tools</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://huggingface.co/blog/nvidia/cosmos-interactive-world-simulation" target="_blank" rel="noopener noreferrer">New NVIDIA Cosmos 3 Open Models for Interactive World Simulation</a></h2>
-  <p class="card-summary">NVIDIA has released four new open-weight checkpoints for its Cosmos 3 world model platform, enabling advanced interactive world simulations for autonomous driving and robotics. These models generate multi-sensor, multi-view data, photorealistic video, and predict visual outcomes from actions, providing researchers with rich synthetic environments.</p>
-  <p class="insight"><strong>How to use:</strong> No immediate action is required for the reader’s current IT stack, but staying informed about these open models could be useful for future cloud-based simulation workloads or for evaluating third‑party AI services that might integrate such models.</p>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/allenai/toyblocks" target="_blank" rel="noopener noreferrer">ToyBlocks: A controlled world for robot learning and evaluation</a></h2>
+  <p class="card-summary">Hugging Face has released ToyBlocks, a controlled simulation framework that lets researchers automatically generate tasks and training demonstrations for robot arm manipulation. The platform emphasizes repeatable experiments, realistic physics, and scalability for studying learning dynamics.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on ToyBlocks for future integration opportunities if your organization explores robotic automation or AI-driven process optimization. Evaluate whether the framework could be adapted to simulate internal workflow scenarios or test new automation scripts before deployment.</p>
   <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    
+    <span class="pub-date">06 Nov 2026</span>
+    <a href="breakdowns/toyblocks-a-controlled-world-for-robot-learning-and-evaluation.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/open-asr-leaderboard-liva" target="_blank" rel="noopener noreferrer">Egyptian and Nigerian English join the Open ASR Leaderboard</a></h2>
+  <p class="card-summary">Hugging Face and Liva AI have added Egyptian and Nigerian English accents to the Open ASR Leaderboard, expanding the private data set for more representative speech‑recognition benchmarks. This update enhances evaluation fairness for ASR models across diverse accents.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor the expanded leaderboard for any new models that outperform existing ASR solutions in your region, especially if you rely on speech‑to‑text for support or automation. An improved benchmark set may indicate future shifts in vendor offerings that could affect your choice of transcription services.</p>
+  <div class="card-footer">
+    <span class="pub-date">06 Nov 2026</span>
+    <a href="breakdowns/egyptian-and-nigerian-english-join-the-open-asr-leaderboard.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Product Launch</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Research</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/meta-says-us-users-can-now-video-chat-with-their-muse-ai-avatar/" target="_blank" rel="noopener noreferrer">Meta says US users can now video chat with their Muse AI avatar</a></h2>
-  <p class="card-summary">Meta has released Muse Voice, a new feature that allows U.S. users to video chat with the company’s AI avatar, Muse, across mobile, web, and Mac. The update adds real‑time avatar interactions with voice and gestures, expanding Muse’s capabilities beyond text chat.</p>
-  <p class="insight"><strong>How to use:</strong> Check your organization’s policy on external AI services and evaluate whether any employees are using Meta’s Muse platform. If so, review data handling and privacy settings to ensure compliance with company security guidelines.</p>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/06/1148090/i-watched-a-humanoid-robot-clean-my-apartment-it-felt-like-a-taste-of-the-future/" target="_blank" rel="noopener noreferrer">I watched a humanoid robot clean my apartment. It felt like a taste of the future.</a></h2>
+  <p class="card-summary">Tau Robotics has launched humanoid robots for home cleaning in San Francisco, offering remote‑controlled devices that gather data to improve future autonomous models. The service is still in a pilot phase, requiring human guidance and charging $30–$60 per session.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor the company’s progress as an example of emerging AI‑driven robotics that could impact workplace automation. Consider evaluating their data‑collection methods for insights on remote‑operation and training pipelines that might inform your own AI workflows.</p>
   <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/meta-says-us-users-can-now-video-chat-with-their-muse-ai-avatar.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/ads-in-chatbots-have-arrived-heres-whats-working-and-whats-not/" target="_blank" rel="noopener noreferrer">Ads in Chatbots Have Arrived. Here’s What’s Working—and What’s Not</a></h2>
-  <p class="card-summary">Anthropic confirms it will keep Claude ad‑free, while OpenAI and Google have launched paid ads in their chatbots to offset operating costs. The move highlights a growing trend of monetizing AI chat interfaces, though user experience and regulatory concerns remain contentious.</p>
-  <p class="insight"><strong>How to use:</strong> Check the ad‑policy settings in any chatbot integrations you manage; ensure they comply with your organization’s compliance framework. Failure to monitor emerging ad models could expose your services to unexpected regulatory scrutiny or user‑experience issues. Google’s recent expansion is the most directly relevant to your Google Workspace environment.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/ads-in-chatbots-have-arrived-heres-whats-workingand-whats-not.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/axiom-math-wants-to-keep-ai-slop-out-of-mathematics/" target="_blank" rel="noopener noreferrer">Axiom Math wants to keep AI slop out of mathematics</a></h2>
-  <p class="card-summary">Axiom Math has formally verified the Stacks Project, a massive open-source mathematics library, using Lean proof assistants to translate and validate 16 million lines of code. This milestone showcases a new AI-enabled approach to ensuring mathematical correctness that could influence formal verification practices in engineering.</p>
-  <p class="insight"><strong>How to use:</strong> Check your own formal verification pipelines for opportunities to adopt Lean-based proofs, as this development could reduce bugs in critical software components.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/axiom-math-wants-to-keep-ai-slop-out-of-mathematics.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">06 Nov 2026</span>
+    <a href="breakdowns/i-watched-a-humanoid-robot-clean-my-apartment-it-felt-like-a-taste-of-the-future.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -1254,43 +919,59 @@ S2: Ensure your team’s AI projects are fully documented, open‑source where p
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Security</span>
+      <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">2/10</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://sshhole.com" target="_blank" rel="noopener noreferrer">Sshole</a></h2>
-  <p class="card-summary">The post traces the history of password hashing in Unix and SSH, explaining how the &#x27;*&#x27; placeholder in /etc/passwd and /etc/shadow evolved to prevent login and how crypt() handling of NULL and failure states changed over time.
-It highlights the security implications of legacy authentication mechanisms and the importance of correctly handling crypt() failures in modern systems.</p>
-  <p class="insight"><strong>How to use:</strong> Check that your SSH and PAM configurations properly reject accounts with &#x27;*&#x27; or NULL hashes and ensure your local libc (musl, glibc) is up-to-date to avoid legacy bugs that could lead to authentication bypass.
-Missing this check could allow attackers to craft inputs that exploit mis‑handled hash failures, potentially causing denial‑of‑service or unintended authentication.
-Your JumpCloud or SSO integration should enforce that all user accounts in your directory have valid, non‑placeholder passwords and that the underlying OS rejects any attempt to authenticate with a &#x27;*&#x27; hash.
-</p>
+  <h2 class="card-title"><a href="https://www.msn.com/en-us/technology/tech-companies/tesla-to-wind-down-cybertruck-production-after-years-of-poor-sales-in-few-markets/ar-AA2gSZGv" target="_blank" rel="noopener noreferrer">Tesla winds down Cybertruck production after years of poor sales in few markets</a></h2>
+  <p class="card-summary">Tesla announced it will cease production of the Cybertruck after limited sales in select markets. The decision reflects market challenges but has no direct relevance to IT infrastructure or AI tools.</p>
+  
   <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    <a href="breakdowns/sshole.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">06 Nov 2026</span>
+    <a href="breakdowns/tesla-winds-down-cybertruck-production-after-years-of-poor-sales-in-few-markets.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Consulting</span>
-      <span class="source-name">Deloitte</span>
-      <span class="tag-pill">Research</span>
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/australian-universities-ai-native-graduates" target="_blank" rel="noopener noreferrer">Australian universities are creating AI-native graduates</a></h2>
+  <p class="card-summary">Australian universities are partnering with OpenAI to give students and staff access to cutting‑edge AI tools, integrating AI into learning, research, and industry projects. The initiative reflects a broader trend of embedding AI literacy into higher education to prepare graduates for an AI‑enabled workforce.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor your university’s or organization’s AI adoption plans and evaluate how similar collaborations could enhance staff training or student projects. Consider piloting AI tools that support learning analytics or automated content generation to improve instructional efficiency.</p>
+  <div class="card-footer">
+    <span class="pub-date">05 Nov 2026</span>
+    <a href="breakdowns/australian-universities-are-creating-ai-native-graduates.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
       <span class="score-num">1/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/research-centers/center-for-integrated-research/environmental-and-social-issues.html?icid=disidenav_environmental-and-social-issues" target="_blank" rel="noopener noreferrer">Environmental &amp; Social Issues</a></h2>
-  <p class="card-summary">The Deloitte Center for Integrated Research publishes a report on environmental and social issues impacting businesses, offering data-driven insights on workforce trends, growth, and technology transformation.</p>
-  <p class="insight"><strong>How to use:</strong> Not directly actionable for an IT engineer managing cloud and security tools.</p>
+  <h2 class="card-title"><a href="https://worldstrike.fun/" target="_blank" rel="noopener noreferrer">Multiplayer tanks that demolish real buildings from OpenStreetMap</a></h2>
+  <p class="card-summary">A new browser-based game lets players drive toy tanks through real city maps from OpenStreetMap, destroying blocky buildings that persist for all players. The feature is a creative use of OSM data but offers no direct impact on IT infrastructure.</p>
+  
   <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    
+    <span class="pub-date">06 Nov 2026</span>
+    <a href="breakdowns/multiplayer-tanks-that-demolish-real-buildings-from-openstreetmap.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -1302,41 +983,26 @@ Your JumpCloud or SSO integration should enforce that all user accounts in your 
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">1/10</span>
+      <span class="score-num">0/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/research-centers/center-for-integrated-research/technology-and-transformation.html?icid=disidenav_technology-and-transformation" target="_blank" rel="noopener noreferrer">Technology &amp; Transformation</a></h2>
-  <p class="card-summary">Deloitte’s Center for Integrated Research provides broad research on business trends, technology, and transformation.</p>
-  
+  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/research-centers/economics.html?icid=disidenav_economics" target="_blank" rel="noopener noreferrer">Global Economics Research Center Home</a></h2>
+  <p class="card-summary">The article is a general promotional piece about Deloitte&#x27;s Global Economist Network and related research content. It offers no specific AI developments or tool updates.</p>
+  <p class="insight"><strong>How to use:</strong> None.</p>
   <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Consulting</span>
-      <span class="source-name">Deloitte</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">1/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.deloitte.com/us/en/insights/research-centers/center-for-integrated-research/workforce-trends.html?icid=disidenav_workforce-trends" target="_blank" rel="noopener noreferrer">Workforce Trends</a></h2>
-  <p class="card-summary">The Deloitte Center for Integrated Research publishes broad workplace trend analyses for business leaders.</p>
-  <p class="insight"><strong>How to use:</strong> None applicable.</p>
-  <div class="card-footer">
-    <span class="pub-date">05 Nov 2026</span>
-    
+    <span class="pub-date">06 Nov 2026</span>
+    <a href="breakdowns/global-economics-research-center-home.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-06</div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.08116v1" target="_blank" rel="noopener noreferrer">Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup</a><a class="archive-title" href="https://arxiv.org/abs/2611.07558v1" target="_blank" rel="noopener noreferrer">SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking</a><a class="archive-title" href="https://arxiv.org/abs/2611.08325v1" target="_blank" rel="noopener noreferrer">Decision Models as Retrieval Gates Against Injection and Pollution</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-05</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</a><a class="archive-title" href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</a><a class="archive-title" href="https://arxiv.org/abs/2611.06858v1" target="_blank" rel="noopener noreferrer">CompressionBench: How can your coding agents compress LLMs?</a></div>
@@ -1480,16 +1146,16 @@ Your JumpCloud or SSO integration should enforce that all user accounts in your 
   <div class="archive-date">2026-10-04</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.02048v1" target="_blank" rel="noopener noreferrer">HydroJEV: A one-second, training-free screen for cyber-attack and fault attribution in water distribution networks</a><a class="archive-title" href="https://arxiv.org/abs/2610.01349v1" target="_blank" rel="noopener noreferrer">PACE: Provenance-Aware Capability Enforcement for Tool-Using LLM Agents</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-03</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.02076v1" target="_blank" rel="noopener noreferrer">LLM2Jev: LLMs Are Already Jev-Style Decision Models -- When and How to Fine-Tune Them</a></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-06</div>
+  <div class="archive-count">11 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/cultfit-builds-with-codex" target="_blank" rel="noopener noreferrer">Cult.fit builds operational muscle with Codex</a><a class="archive-title" href="https://deepmind.google/blog/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips/" target="_blank" rel="noopener noreferrer">Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips</a><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/" target="_blank" rel="noopener noreferrer">Formally verifying agent-written full-stack web apps with PDD Kit</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-05</div>
   <div class="archive-count">28 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" target="_blank" rel="noopener noreferrer">Dharma Field Extractor: Any Document In, Structured Fields in JSON Out</a><a class="archive-title" href="https://openai.com/index/introducing-images-2-6" target="_blank" rel="noopener noreferrer">Introducing Images 2.6</a><a class="archive-title" href="https://techcrunch.com/2026/11/05/a-yc-startup-is-putting-1m-behind-five-unsolved-materials-science-problems-for-ai/" target="_blank" rel="noopener noreferrer">A YC startup is putting $1M behind five unsolved materials science problems for AI</a></div>
@@ -1633,11 +1299,6 @@ Your JumpCloud or SSO integration should enforce that all user accounts in your 
   <div class="archive-date">2026-10-08</div>
   <div class="archive-count">10 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/disrupting-ai-enabled-false-front-operations" target="_blank" rel="noopener noreferrer">Disrupting AI-enabled “false front” operations</a><a class="archive-title" href="https://www.technologyreview.com/2026/10/08/1146045/the-download-ai-roadblocks-humanoids-portable-rubber-dams/" target="_blank" rel="noopener noreferrer">The Download: AI roadblocks for humanoids and portable rubber dams</a><a class="archive-title" href="https://huggingface.co/blog/microsoft/thinkingbox" target="_blank" rel="noopener noreferrer">The Agent Said It Was Done. The Database Disagreed.</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-07</div>
-  <div class="archive-count">14 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.technologyreview.com/2026/10/07/1145895/the-download-weight-loss-drugs-slow-aging-carbon-dioxide-batteries/" target="_blank" rel="noopener noreferrer">The Download: weight-loss drugs slowing aging and carbon dioxide batteries</a><a class="archive-title" href="https://openai.com/index/advancing-computer-use-with-ironclad" target="_blank" rel="noopener noreferrer">Advancing computer use with Ironclad</a><a class="archive-title" href="https://research.google/blog/toward-provably-private-learning-from-federated-data/" target="_blank" rel="noopener noreferrer">Toward provably private learning from federated data</a></div>
 </div></div>
   </div>
 </main>

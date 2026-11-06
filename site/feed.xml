@@ -5,87 +5,90 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 05 Nov 2026 23:35:02 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Nov 2026 14:09:49 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</title>
-    <link>https://arxiv.org/abs/2611.05991v1</link>
-    <guid>https://arxiv.org/abs/2611.05991v1</guid>
-    <pubDate>Wed, 04 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows that LLM serving engines like vLLM and SGLang can differ wildly in performance because of configuration settings, especially how they prefill long prompts. By creating a controlled Kubernetes testbed and matching a key setting (chunked prefill), the researchers cut the biggest performance gaps and uncovered a real tail‑latency advantage for cache‑aware engines. This means that if you run LLM services, a small configuration tweak can give you up to 6× better worst‑case latency.
-</p><p><strong>IT Breakdown:</strong> If you manage LLM inference on Kubernetes, check the prefill setting in your engine: 1) Identify if you use chunked or single‑prefill for long prompts; 2) Align this setting across all engine versions you run; 3) Measure median first‑token latency and tail latency before and after the change to confirm improvement.</p>]]></description>
+    <title>Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup</title>
+    <link>https://arxiv.org/abs/2611.08116v1</link>
+    <guid>https://arxiv.org/abs/2611.08116v1</guid>
+    <pubDate>Thu, 05 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study shows that a hybrid AI stack—using local open‑source models for routine tasks and commercial services for complex work—can cut commercial AI costs by up to 36% for a small tech firm. They built a system that offloads 90% of coordination and documentation work to self‑hosted models while still relying on commercial agents for heavy inference. This demonstrates a practical way to reduce spending without sacrificing functionality.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, first map your team’s routine AI tasks (e.g., documentation, context‑transfer) to local models; second, set up a central deployment that routes these to self‑hosted services; third, monitor cost savings and user adoption, adjusting the split between local and commercial models as needed.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</title>
-    <link>https://arxiv.org/abs/2611.06829v1</link>
-    <guid>https://arxiv.org/abs/2611.06829v1</guid>
-    <pubDate>Wed, 04 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research builds a full toolchain that lets developers write high‑level ML code in PyTorch, convert it to Vitis HLS C, then to an AWS EC2 F2 FPGA image, and run it on cloud FPGAs. It solves the gap of a complete workflow from code to FPGA on AWS, demonstrating a TinyBERT encoder layer running on a cloud FPGA. The result shows the pipeline works but current performance is worse than CPUs/GPU, indicating room for optimisation.</p><p><strong>IT Breakdown:</strong> If you manage AWS EC2 F2 FPGAs, check the new Vitis HLS to AFI workflow to shorten your development cycle: 1) develop and test your model in PyTorch, 2) quantise and export to Python, 3) use the provided bridge to generate HLS C and compile to an AFI image, then 4) deploy on EC2 F2 instances. This can reduce time-to-market for ML acceleration on AWS cloud FPGAs.</p>]]></description>
+    <title>SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking</title>
+    <link>https://arxiv.org/abs/2611.07558v1</link>
+    <guid>https://arxiv.org/abs/2611.07558v1</guid>
+    <pubDate>Thu, 05 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>SKIM tackles the challenge of making large language model agents more efficient when they must follow strict grammar rules, such as in tool‑calling workflows. The authors built a pruning and distillation method that focuses on the few token positions that decide actions, keeping the most important parameters and matching the model’s behaviour on valid outputs. In tests, SKIM kept accuracy high even when models were heavily compressed, outperforming standard pruning techniques.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure for LLM services, here is what to do:
+1. Identify the token positions in your agent that are ‘decision’ points (where the model chooses actions). 2. Apply a category‑aware pruning tool that keeps parameters tied to those decision positions. 3. Use on‑policy distillation to fine‑tune the pruned model against the original on valid token sets before deploying.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>CompressionBench: How can your coding agents compress LLMs?</title>
-    <link>https://arxiv.org/abs/2611.06858v1</link>
-    <guid>https://arxiv.org/abs/2611.06858v1</guid>
-    <pubDate>Wed, 04 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the problem of fitting large language models into limited storage by using autonomous coding agents to compress them. The authors built agents that take a source checkpoint, a storage limit, and a time budget, then generate compressed weights and inference code, achieving a 3.4 % higher perplexity than BF16 while keeping downstream accuracy at 77.3 %. The result shows that automated agent‑driven compression can reliably reduce model size without severe accuracy loss.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) assess your LLM deployments against storage and cost limits; 2) use or deploy a coding agent to compress models to your budget; 3) validate the compressed model with perplexity and downstream tests before rolling out to production.</p>]]></description>
+    <title>Decision Models as Retrieval Gates Against Injection and Pollution</title>
+    <link>https://arxiv.org/abs/2611.08325v1</link>
+    <guid>https://arxiv.org/abs/2611.08325v1</guid>
+    <pubDate>Thu, 05 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This research shows that a lightweight decision model can act as a filter to stop malicious or misleading content from tricking language models. They built a Kev-4B gate that scans HTML and cuts injection success from 27.9% to 5.7%, with only 76 ms per page and a small false‑positive rate. The result is a cheaper, faster defence that keeps most queries safe while keeping performance nearly unchanged.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑based LLM services, add a gate like Kev‑4B to your retrieval pipeline: step 1, run the gate on each retrieved page; step 2, discard pages flagged as potential injection or pollution; step 3, pass only clean pages to the generation model. This reduces injection risk from ~28% to ~6% and keeps accuracy high. The gate costs only 76 ms per page and is open‑weight, making it easy to integrate.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>SpecCompact: Accelerating LLM Agent Context Compaction with Slot-Parallel Semantic Speculative Verification</title>
-    <link>https://arxiv.org/abs/2611.06876v1</link>
-    <guid>https://arxiv.org/abs/2611.06876v1</guid>
-    <pubDate>Wed, 04 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>SpecCompact speeds up how large language model agents condense long interaction histories by drafting summary slots in parallel and having the main model verify them. It cuts compaction time up to 5.6× compared to traditional summarisation, keeping the same level of information. This could reduce the latency of LLM‑driven services that rely on quick context summarisation.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑based services, implement SpecCompact by (1) training a small draft model to produce slot summaries in parallel, (2) letting your main model validate and correct each slot, and (3) integrating the verified slots back into the conversation history. Monitor the trade‑off between speed and accuracy for your specific tasks.</p>]]></description>
+    <title>The Power of Meta Access in the Software of the Future --- Demonstrated on LLM Chat UIs and Chat AI</title>
+    <link>https://arxiv.org/abs/2611.08428v1</link>
+    <guid>https://arxiv.org/abs/2611.08428v1</guid>
+    <pubDate>Thu, 05 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Meta access lets an AI assistant see and interact with the whole workspace of a chat client, not just the conversation. The authors built a prototype that provides structured, permissioned access to interface elements, settings, and context, enabling the AI to organise and operate the UI. The result is a single entry point that turns chat into a control layer for the whole workspace, with risks around grounding, privacy, prompt injection and trust.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1. Ensure your cloud‑hosted chat or agentic tools expose a structured API for interface state and permissions. 2. Implement a control‑plane boundary so the AI cannot alter your settings without confirmation. 3. Monitor for prompt‑injection or unauthorized changes in the workspace to mitigate trust risks.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>MCP-Eco: A Linked Dataset of MCP Servers, Consumers, and Development Activity</title>
-    <link>https://arxiv.org/abs/2611.06897v1</link>
-    <guid>https://arxiv.org/abs/2611.06897v1</guid>
-    <pubDate>Wed, 04 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>MCP‑Eco tackles the problem of fragmented information about Model Context Protocol (MCP) servers, consumer projects, and their development activity by creating a large relational dataset that links configuration declarations, server projects, and repository history. The team built a 16.9 million‑record Parquet dataset with 19 tables that map consumers to servers, including dependencies and pull‑request data, making it possible to study MCP interface design and integration patterns. The result is a public resource that lets researchers and practitioners explore how MCP tools are configured and maintained, though it does not directly impact everyday cloud infrastructure management.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <title>Cognitive Tours: Making Understanding a Deliverable in AI-Assisted Development</title>
+    <link>https://arxiv.org/abs/2611.08456v1</link>
+    <guid>https://arxiv.org/abs/2611.08456v1</guid>
+    <pubDate>Thu, 05 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study tackles cognitive and intent debt—hidden problems where teams lack shared understanding or clear goals—by building Cognitive Tours, a web tool that maps user needs, design choices, code, tests, and questions into navigable paths. The prototype shows how AI can spot stale or missing links while humans curate and validate the narrative, aiming to keep teams aligned as systems grow. This could help you document and maintain clear documentation for cloud infrastructure, ensuring changes are understood and aligned with business intent.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do:
+1. Map your infrastructure components, policies, and compliance rules into a Cognitive Tour.
+2. Use the AI audit feature to flag stale documentation or missing links.
+3. Review and approve the suggested waypoints to keep your team’s shared understanding up to date.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Dropbox acquires Tigris Data for $350M to bolster its AI infrastructure</title>
-    <link>https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/</link>
-    <guid>https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/</guid>
-    <pubDate>Thu, 05 Nov 2026 23:35:02 +0000</pubDate>
-    <description><![CDATA[<p>Dropbox has acquired Tigris Data for $350M to expand its AI infrastructure, enabling the upcoming DBX Agent Cloud platform that offers AI-friendly storage for models and agents. This move positions Dropbox as a direct competitor in the AI model hosting space, offering object storage compatible with S3 and advanced filesystem features for AI workflows.</p>]]></description>
+    <title>[News] Cult.fit builds operational muscle with Codex</title>
+    <link>https://openai.com/index/cultfit-builds-with-codex</link>
+    <guid>https://openai.com/index/cultfit-builds-with-codex</guid>
+    <pubDate>Fri, 06 Nov 2026 14:09:49 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI’s Codex is being adopted by Cult.fit to streamline internal application development across non-engineering teams, reducing costs and speeding tool creation. The company has built 20+ internal apps, saved $100,000+ annually, and cut customer support costs by 50% through AI-driven automation.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Alpine Linux Security advisory: OpenSSH-server password authentication bypass</title>
-    <link>https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/</link>
-    <guid>https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/</guid>
-    <pubDate>Thu, 05 Nov 2026 23:35:02 +0000</pubDate>
-    <description><![CDATA[<p>Alpine Linux’s OpenSSH server has a critical password‑authentication bypass that allows attackers to log in without a password if the server is misconfigured. The flaw affects all recent Alpine releases and requires immediate patching or disabling password authentication.</p>]]></description>
+    <title>[News] Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips</title>
+    <link>https://deepmind.google/blog/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips/</link>
+    <guid>https://deepmind.google/blog/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips/</guid>
+    <pubDate>Fri, 06 Nov 2026 14:09:49 +0000</pubDate>
+    <description><![CDATA[<p>Google DeepMind has launched Gemini Omni 1.2 Flash, a new video generation model that supports up to 15-second clips, multi-turn conversational editing, and tighter reference adherence, all at a 30% lower price. This upgrade makes high‑quality, brand‑consistent video content more affordable and easier to produce for business users via the Gemini API.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Dharma Field Extractor: Any Document In, Structured Fields in JSON Out</title>
-    <link>https://huggingface.co/blog/Dharma-AI/dharma-field-extractor</link>
-    <guid>https://huggingface.co/blog/Dharma-AI/dharma-field-extractor</guid>
-    <pubDate>Thu, 05 Nov 2026 23:35:02 +0000</pubDate>
-    <description><![CDATA[<p>Hugging Face has released the Dharma Field Extractor, a 2-billion‑parameter model that extracts specified fields from any document type and returns them as structured JSON, outperforming larger LLMs at lower cost. The model supports open schema extraction or exact schema requests, making it suitable for high‑volume invoice processing, medical requisition parsing, and contract data extraction.</p>]]></description>
+    <title>[News] Underdog shows off a 32MB speech model in new demo</title>
+    <link>https://techcrunch.com/2026/11/06/underdog-shows-off-a-32mb-speech-model-in-new-demo/</link>
+    <guid>https://techcrunch.com/2026/11/06/underdog-shows-off-a-32mb-speech-model-in-new-demo/</guid>
+    <pubDate>Fri, 06 Nov 2026 14:09:49 +0000</pubDate>
+    <description><![CDATA[<p>Underdog has released a 32 MB voice model called Woof that runs entirely on local devices, enabling offline speech generation in browsers without cloud dependency. The model, open‑source and designed for edge deployment, could support lightweight assistant or personalization workloads on end‑user machines.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Merge builds product and business tools with OpenAI technology</title>
-    <link>https://openai.com/index/merge-builds-with-openai</link>
-    <guid>https://openai.com/index/merge-builds-with-openai</guid>
-    <pubDate>Thu, 05 Nov 2026 23:35:02 +0000</pubDate>
-    <description><![CDATA[<p>Merge, an integration platform, now embeds OpenAI&#x27;s GPT‑6 Astra, ChatGPT, and Codex to streamline product reviews, marketing, and business planning. Its new Merge for Workforce module lets teams control AI model and tool access, aiming for high reliability and cost control.</p>]]></description>
+    <title>[News] Formally verifying agent-written full-stack web apps with PDD Kit</title>
+    <link>https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/</link>
+    <guid>https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/</guid>
+    <pubDate>Fri, 06 Nov 2026 14:09:49 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft Research’s PDD Kit introduces a formal verification framework that translates developer intent into Verus specifications, proving AI-generated full-stack web code meets those specs and supplementing proofs with tests. This reduces the need for line-by-line code review by AI‑written applications.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Exclusive: Aina’s Smart Ring Wants to Be a Remote Control for Your AI Agent</title>
-    <link>https://www.wired.com/story/aina-smart-ring/</link>
-    <guid>https://www.wired.com/story/aina-smart-ring/</guid>
-    <pubDate>Thu, 05 Nov 2026 23:35:02 +0000</pubDate>
-    <description><![CDATA[<p>Aina has launched a smart ring designed to serve as a hands‑on remote control for AI agents, enabling users to accept or reject tasks via a joystick and small display. The device connects to Macs and iPhones, leveraging personal data and third‑party services to provide context‑aware prompts and actions throughout the day.</p>]]></description>
+    <title>[News] ToyBlocks: A controlled world for robot learning and evaluation</title>
+    <link>https://huggingface.co/blog/allenai/toyblocks</link>
+    <guid>https://huggingface.co/blog/allenai/toyblocks</guid>
+    <pubDate>Fri, 06 Nov 2026 14:09:49 +0000</pubDate>
+    <description><![CDATA[<p>Hugging Face has released ToyBlocks, a controlled simulation framework that lets researchers automatically generate tasks and training demonstrations for robot arm manipulation. The platform emphasizes repeatable experiments, realistic physics, and scalability for studying learning dynamics.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
