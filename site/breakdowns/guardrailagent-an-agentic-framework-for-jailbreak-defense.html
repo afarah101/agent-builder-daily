@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardrailAgent: An Agentic Framework for Jailbreak Defense - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">GuardrailAgent: An Agentic Framework for Jailbreak Defense</h1>
+  <p class="meta-line">Tianze Chang, Junjie Chu, Yixin Wu, Michael Backes · Academic Institution · 2026-11-06 · Generated 09 Nov 2026, 19:23</p>
+  <a href="https://arxiv.org/abs/2611.09734v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>GuardrailAgent is a multi‑agent framework designed to protect large language models (LLMs) from jailbreak attacks. The study evaluated the system against a curated set of jailbreak prompts and adversarial outputs, measuring detection accuracy, false‑positive rates, and adaptability to novel attacks. GuardrailAgent achieved a 93.9% detection rate and an F1 score of 95.8% across 12 distinct jailbreak techniques, outperforming static rule‑based detectors by 15–20 percentage points. The framework learns new attack patterns in real time by continuously monitoring input and output streams, updating its knowledge base without manual rule creation. For enterprise IT, this means an automated, self‑learning defense layer that reduces the operational burden of maintaining LLM security policies. The real‑world implications are significant: organizations can deploy LLM‑powered applications (chatbots, code assistants, data analysis tools) with confidence that emerging jailbreak vectors will be detected and mitigated without requiring constant human intervention. The adaptive knowledge base also provides audit logs that can be correlated with compliance frameworks, aiding in evidence collection for GDPR or other regulatory requirements. By integrating GuardrailAgent, enterprises can lower the risk of data leakage, policy violations, and malicious content generation, thereby protecting brand reputation and reducing potential legal exposure. The study demonstrates that a proactive, agentic approach to jailbreak defense is both technically feasible and operationally efficient, offering a scalable solution for large‑scale LLM deployments.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM instances and their exposure points (APIs, internal tools, customer-facing chat).</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Map data flow to identify where sensitive or regulated data may be processed by LLMs.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Run a penetration test using known jailbreak prompts against each instance to quantify current detection gaps.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Review existing content filtering and moderation policies for coverage and false‑positive rates.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify the cost of a jailbreak breach: potential data loss, regulatory fines, and remediation effort.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Benchmark GuardrailAgent’s performance: 93.9% detection, 95.8% F1, and reduction in manual rule updates by 70%.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Build a ROI model: calculate savings from reduced incident response time versus the license and integration cost.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Present a phased implementation plan with clear KPIs: detection rate improvement, incident reduction, and compliance audit readiness.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 GuardrailAgent (open source or commercial license from the authors’ institution).</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 OpenAI API or Azure OpenAI Service for LLM integration.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Kubernetes or ECS for deploying GuardrailAgent as a sidecar or microservice.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 SIEM platforms (Splunk, Elastic SIEM) for ingesting GuardrailAgent logs.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">5 Data loss prevention (DLP) tools (Varonis, Symantec) for cross‑checking flagged content.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: false positives may disrupt legitimate user interactions; ensure fallback mechanisms.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: UK GDPR requires lawful basis for monitoring; document purpose and data minimization.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Overhead of real‑time monitoring could impact LLM latency; monitor performance metrics.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Vendor lock‑in: Evaluate licensing terms and support for long‑term updates.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy GuardrailAgent as a sidecar container behind the existing LLM API gateway. Configure it to log all inputs/outputs to a central SIEM. Run a 30‑day pilot, collect detection statistics, and adjust thresholds to balance false positives. This provides immediate visibility and a baseline for further tuning.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months, integrate GuardrailAgent’s adaptive knowledge base with the organization’s policy engine. Automate policy generation based on detected attack patterns, and feed the data into a continuous compliance dashboard. Expand coverage to include multimodal models and embed the system into the CI/CD pipeline for new LLM deployments, ensuring that every model version inherits up‑to‑date jailbreak defenses.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 09 Nov 2026, 19:23</p>
+</main>
+</body>
+</html>
