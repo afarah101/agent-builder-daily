@@ -5,46 +5,86 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sun, 08 Nov 2026 21:55:31 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Nov 2026 15:52:50 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>[News] Palo Alto Networks in talks to buy AI agent security startup Clutch for $500M</title>
-    <link>https://techcrunch.com/2026/11/05/palo-alto-networks-in-talks-to-buy-ai-agent-security-startup-clutch-for-500m/</link>
-    <guid>https://techcrunch.com/2026/11/05/palo-alto-networks-in-talks-to-buy-ai-agent-security-startup-clutch-for-500m/</guid>
-    <pubDate>Sun, 08 Nov 2026 21:55:31 +0000</pubDate>
-    <description><![CDATA[<p>Palo Alto Networks is reportedly negotiating to acquire AI‑agent security startup Clutch for $500M, aiming to bolster its defenses against AI‑driven cyberattacks. The deal would bring Clutch’s agent‑access controls into Palo Alto’s portfolio, potentially reshaping how enterprises secure AI‑powered workflows.</p>]]></description>
+    <title>BitDecoding-FP4: Native FP4 KV Cache Decoding via Algorithm-System Co-Design</title>
+    <link>https://arxiv.org/abs/2611.09825v1</link>
+    <guid>https://arxiv.org/abs/2611.09825v1</guid>
+    <pubDate>Fri, 06 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>BitDecoding‑FP4 tackles the accuracy‑bandwidth trade‑off in 4‑bit KV cache decoding for LLMs by combining new quantisation tricks with hardware‑level softmax optimisation. It delivers near‑BF16 accuracy while boosting serving throughput 2.4–3× on NVIDIA GPUs. This is relevant for cloud infra that hosts large‑context LLMs, offering a way to reduce memory use and increase performance.</p><p><strong>IT Breakdown:</strong> If you manage GPU‑based LLM serving, check if your KV cache uses 4‑bit formats: 1) integrate BitDecoding‑FP4’s dual‑residual query quantisation and outlier‑aware key quantisation into your model export; 2) enable transposed softmax with fused probability quantisation on your GPU kernel; 3) benchmark throughput against BF16 to confirm the 2–3× gain.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>FOSCAR: Accelerating Decode Attention over 2- and 4-Bit KV Caches through Affine Folding</title>
+    <link>https://arxiv.org/abs/2611.09722v1</link>
+    <guid>https://arxiv.org/abs/2611.09722v1</guid>
+    <pubDate>Fri, 06 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>FOSCAR tackles the slow decoding of large‑language models by using affine folding to skip costly scale‑and‑offset operations on 2‑bit and 4‑bit key‑value caches, and by packing these values efficiently for Tensor Cores. The authors built highly specialised GPU pipelines for Hopper (H100) and Blackwell (B200) that deliver 2–3× speedups over existing FP8 and BF16 solutions, boosting long‑context serving throughput by up to 341%.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Intent-Aware Caching for Efficient LLM Serving</title>
+    <link>https://arxiv.org/abs/2611.09715v1</link>
+    <guid>https://arxiv.org/abs/2611.09715v1</guid>
+    <pubDate>Fri, 06 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The research tackles the low hit‑rate problem in LLM prefix caching by using user intent to predict when a conversation will continue. They built an online eviction policy that classifies requests by intent, learns reuse stats, and evicts based on those stats, achieving a 34.6% hit‑rate and up to 46% lower latency. This directly benefits cloud‑based LLM services, improving resource utilisation and response times.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference infrastructure, implement an intent‑aware cache: 1) add a lightweight intent classifier to your request pipeline, 2) log recent intent‑specific reuse patterns, 3) adapt your cache eviction policy to favour prefixes from intents with high continuation rates.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents</title>
+    <link>https://arxiv.org/abs/2611.09802v1</link>
+    <guid>https://arxiv.org/abs/2611.09802v1</guid>
+    <pubDate>Fri, 06 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Stale instruction files cause coding agents to make extra tool calls, adding hidden cost to every run. The authors analysed three real‑world cases, showing that correcting or removing stale docs cuts unnecessary operations. For cloud infra managers, this means keeping agent configs up to date can save time and reduce waste.</p><p><strong>IT Breakdown:</strong> If you manage AI‑powered coding agents, here is what to do: 1) Regularly audit and update your instruction files (e.g., AGENTS.md) to match current repo structure. 2) Remove obsolete sections rather than leaving them stale. 3) Monitor agent run logs for extra tool calls that may indicate stale guidance.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>AutoRefine: Auto-Calibrating Code Judges from Workflow Outcomes</title>
+    <link>https://arxiv.org/abs/2611.09291v1</link>
+    <guid>https://arxiv.org/abs/2611.09291v1</guid>
+    <pubDate>Fri, 06 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>AutoRefine tackles the problem of keeping LLM code reviewers accurate as workflows change, by automatically adjusting the judge prompt using outcome labels from the development pipeline. It builds a feedback loop where a teacher reviews judge predictions against actual outcomes, rewrites the prompt, and flags unclear cases. The result is a significant lift in agreement with real merge decisions, reducing noise and signalling when the judge needs better input data.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted CI/CD pipelines, use AutoRefine by: 1) capturing test pass/fail and merge/abort outcomes from your pipeline; 2) feeding those labels into a teacher‑guided prompt‑rewriter; 3) deploying the updated judge in your CI pipeline and monitoring for flagged ‘unclear’ changes that may need additional context or tests.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>[News] Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50”</title>
+    <link>https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/</link>
+    <guid>https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/</guid>
+    <pubDate>Mon, 09 Nov 2026 15:52:50 +0000</pubDate>
+    <description><![CDATA[<p>Nvidia’s CEO Jensen Huang is under investigation by the company’s board after allegations he was involved with a suspected Chinese spy, raising concerns about potential national‑security breaches and the stability of the company’s leadership. The scandal could affect Nvidia’s role as a critical AI hardware supplier, potentially impacting supply chains for major cloud and IT platforms.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy</title>
-    <link>https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/</link>
-    <guid>https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/</guid>
-    <pubDate>Sun, 08 Nov 2026 21:55:31 +0000</pubDate>
-    <description><![CDATA[<p>Nvidia’s board has launched an independent probe into CEO Jensen Huang after reports he was targeted by a Chinese spy operation. The investigation focuses on potential security breaches and corporate integrity, with the board stating no evidence of compromised secrets so far.</p>]]></description>
+    <title>[News] Automattic debuts a platform to deploy vibe coding apps amid a changing internet</title>
+    <link>https://techcrunch.com/2026/11/09/automattic-debuts-a-platform-to-deploy-vibe-coding-apps-amid-a-changing-internet/</link>
+    <guid>https://techcrunch.com/2026/11/09/automattic-debuts-a-platform-to-deploy-vibe-coding-apps-amid-a-changing-internet/</guid>
+    <pubDate>Mon, 09 Nov 2026 15:52:50 +0000</pubDate>
+    <description><![CDATA[<p>Automattic has launched Spacefast, a platform that enables rapid deployment of vibe‑coded websites and apps with built‑in infrastructure such as databases, authentication, and analytics. The service integrates with popular AI agents and Git, positioning itself as an alternative to cloud hosting solutions for enterprises looking to reduce IT sprawl.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] After the midterms, things are looking rocky for Elon Musk and data centers</title>
-    <link>https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/</link>
-    <guid>https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/</guid>
-    <pubDate>Sun, 08 Nov 2026 21:55:31 +0000</pubDate>
-    <description><![CDATA[<p>US midterm results have led to widespread rejection of data center ballot measures, creating regulatory hurdles for hyperscalers and affecting future data center expansion plans. This policy shift could alter the availability of on‑prem and cloud infrastructure for enterprises relying on large-scale compute resources.</p>]]></description>
+    <title>[News] ChatGPT Desktop forwards your SSH agent to remote machines</title>
+    <link>https://news.ycombinator.com/item?id=50422628</link>
+    <guid>https://news.ycombinator.com/item?id=50422628</guid>
+    <pubDate>Mon, 09 Nov 2026 15:52:50 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI’s ChatGPT Desktop now forwards your local SSH agent to remote machines, enabling those remotes to use your SSH keys for actions like pushing to private GitHub repos. This exposes a new attack vector where compromised remote sessions can gain privileged repository access without needing your password.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] GitHub New pull request overview page in public preview</title>
-    <link>https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview/</link>
-    <guid>https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview/</guid>
-    <pubDate>Sun, 08 Nov 2026 21:55:31 +0000</pubDate>
-    <description><![CDATA[<p>GitHub has launched a new pull request overview page in public preview, placing merge status and actionable next steps at the top of the page to reduce scrolling and improve review efficiency. The feature also introduces compact views of checks, comments, and approvals, along with filters to focus on unresolved discussions and recent activity.</p>]]></description>
+    <title>[News] The climate case for AI has not been made</title>
+    <link>https://www.technologyreview.com/2026/11/09/1148166/the-climate-case-for-ai-has-not-been-made/</link>
+    <guid>https://www.technologyreview.com/2026/11/09/1148166/the-climate-case-for-ai-has-not-been-made/</guid>
+    <pubDate>Mon, 09 Nov 2026 15:52:50 +0000</pubDate>
+    <description><![CDATA[<p>The United Nations climate conference in Antalya has spotlighted AI, urging countries to ensure AI systems are designed, powered, and deployed to support climate action. The discussion signals a growing regulatory focus on AI’s environmental impact.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Physicl raises $10M to make the digital world real enough for robots</title>
-    <link>https://techcrunch.com/2026/11/06/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots/</link>
-    <guid>https://techcrunch.com/2026/11/06/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots/</guid>
-    <pubDate>Sun, 08 Nov 2026 21:55:31 +0000</pubDate>
-    <description><![CDATA[<p>Physicl has secured $10M to develop a high-fidelity simulation platform, Studio, aimed at generating synthetic data for training robots in complex physical tasks. The new tool offers 10,000 3D environments and 100,000 assets, positioning Physicl as a contender in the emerging foundation model data marketplace.</p>]]></description>
+    <title>[News] Nemotron-Personas-Finance-Japan: A Synthetic Dataset Capturing Japan&#x27;s Demographics and Financial Context</title>
+    <link>https://huggingface.co/blog/nvidia/nemotron-personas-finance-japan</link>
+    <guid>https://huggingface.co/blog/nvidia/nemotron-personas-finance-japan</guid>
+    <pubDate>Mon, 09 Nov 2026 15:52:50 +0000</pubDate>
+    <description><![CDATA[<p>Elith and NVIDIA have released Nemotron-Personas-Finance-Japan, a million-record synthetic dataset that blends Japanese demographic and financial data to support AI development in finance without real customer data. The dataset, built with NVIDIA’s NeMo tools, offers realistic, privacy-compliant personas for simulations and model evaluation.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>

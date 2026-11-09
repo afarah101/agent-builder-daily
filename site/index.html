@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">0</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">6</div>
+          <div class="stat-num">10</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 08 Nov 2026, 21:55 UTC</p>
+    <p class="updated">Updated 09 Nov 2026, 15:52 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -612,7 +612,156 @@
 
 <main class="content">
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
-    <div class="cards-grid"><div class='empty-state'><p>No case studies available yet.</p></div></div>
+    <div class="cards-grid"><article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM deployment optimization</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:73;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 55 of 75"><span>55</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.09825v1" target="_blank" rel="noopener noreferrer">BitDecoding-FP4: Native FP4 KV Cache Decoding via Algorithm-System Co-Design</a></h2>
+  <div class="card-meta"><span>Dayou Du, Woon Yee Ng, Guangming Sheng, Nick Lau</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">06 Nov 2026</span></span></div>
+  <p class="card-summary">BitDecoding‑FP4 tackles the accuracy‑bandwidth trade‑off in 4‑bit KV cache decoding for LLMs by combining new quantisation tricks with hardware‑level softmax optimisation. It delivers near‑BF16 accuracy while boosting serving throughput 2.4–3× on NVIDIA GPUs. This is relevant for cloud infra that hosts large‑context LLMs, offering a way to reduce memory use and increase performance.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage GPU‑based LLM serving, check if your KV cache uses 4‑bit formats: 1) integrate BitDecoding‑FP4’s dual‑residual query quantisation and outlier‑aware key quantisation into your model export; 2) enable transposed softmax with fused probability quantisation on your GPU kernel; 3) benchmark throughput against BF16 to confirm the 2–3× gain.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper presents a practical, code‑available method for efficient 4‑bit KV caching in LLM serving, directly impacting cloud‑based LLM deployments. The implementation is released and demonstrably works, making it ready for deployment. IT engineers can integrate it into existing LLM pipelines to boost throughput and reduce GPU memory usage, offering tangible monetisation potential. Overall, the work scores high on all criteria for an infrastructure‑focused audience.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/bitdecoding-fp4-native-fp4-kv-cache-decoding-via-algorithm-system-co-design.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="BitDecoding-FP4: Native FP4 KV Cache Decoding via Algorithm-System Co-Design"
+      data-summary="BitDecoding‑FP4 tackles the accuracy‑bandwidth trade‑off in 4‑bit KV cache decoding for LLMs by combining new quantisation tricks with hardware‑level softmax optimisation. It delivers near‑BF16 accuracy while boosting serving throughput 2.4–3× on NVIDIA GPUs. This is relevant for cloud infra that hosts large‑context LLMs, offering a way to reduce memory use and increase performance."
+      data-it="If you manage GPU‑based LLM serving, check if your KV cache uses 4‑bit formats: 1) integrate BitDecoding‑FP4’s dual‑residual query quantisation and outlier‑aware key quantisation into your model export; 2) enable transposed softmax with fused probability quantisation on your GPU kernel; 3) benchmark throughput against BF16 to confirm the 2–3× gain."
+      data-monetisation=""
+      data-reasoning="The paper presents a practical, code‑available method for efficient 4‑bit KV caching in LLM serving, directly impacting cloud‑based LLM deployments. The implementation is released and demonstrably works, making it ready for deployment. IT engineers can integrate it into existing LLM pipelines to boost throughput and reduce GPU memory usage, offering tangible monetisation potential. Overall, the work scores high on all criteria for an infrastructure‑focused audience."
+      data-score="55"
+      data-url="https://arxiv.org/abs/2611.09825v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM GPU optimisation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:73;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 55 of 75"><span>55</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.09722v1" target="_blank" rel="noopener noreferrer">FOSCAR: Accelerating Decode Attention over 2- and 4-Bit KV Caches through Affine Folding</a></h2>
+  <div class="card-meta"><span>Donglin Zhuang, Pragaash Ponnusamy, Xiaoxia Wu, Shuaiwen Leon Song</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">06 Nov 2026</span></span></div>
+  <p class="card-summary">FOSCAR tackles the slow decoding of large‑language models by using affine folding to skip costly scale‑and‑offset operations on 2‑bit and 4‑bit key‑value caches, and by packing these values efficiently for Tensor Cores. The authors built highly specialised GPU pipelines for Hopper (H100) and Blackwell (B200) that deliver 2–3× speedups over existing FP8 and BF16 solutions, boosting long‑context serving throughput by up to 341%.</p>
+  
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper presents a highly optimized GPU kernel library (FOSCAR) for reducing KV cache quantization overhead in LLM decode attention, directly impacting LLM deployment performance on modern NVIDIA GPUs. The implementation is open‑source and integrated into a production‑grade serving framework (SGLang), indicating practical readiness. While the immediate monetisation is mainly for in‑house LLM serving or as a performance component in managed LLM services, the solution is actionable within 90 days for engineers with access to H100/B200 GPUs.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/foscar-accelerating-decode-attention-over-2-and-4-bit-kv-caches-through-affine-f.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="FOSCAR: Accelerating Decode Attention over 2- and 4-Bit KV Caches through Affine Folding"
+      data-summary="FOSCAR tackles the slow decoding of large‑language models by using affine folding to skip costly scale‑and‑offset operations on 2‑bit and 4‑bit key‑value caches, and by packing these values efficiently for Tensor Cores. The authors built highly specialised GPU pipelines for Hopper (H100) and Blackwell (B200) that deliver 2–3× speedups over existing FP8 and BF16 solutions, boosting long‑context serving throughput by up to 341%."
+      data-it="Not directly applicable to IT infrastructure work"
+      data-monetisation=""
+      data-reasoning="The paper presents a highly optimized GPU kernel library (FOSCAR) for reducing KV cache quantization overhead in LLM decode attention, directly impacting LLM deployment performance on modern NVIDIA GPUs. The implementation is open‑source and integrated into a production‑grade serving framework (SGLang), indicating practical readiness. While the immediate monetisation is mainly for in‑house LLM serving or as a performance component in managed LLM services, the solution is actionable within 90 days for engineers with access to H100/B200 GPUs."
+      data-score="55"
+      data-url="https://arxiv.org/abs/2611.09722v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM Serving Optimization</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:70;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 53 of 75"><span>53</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.09715v1" target="_blank" rel="noopener noreferrer">Intent-Aware Caching for Efficient LLM Serving</a></h2>
+  <div class="card-meta"><span>Kazi Hasan Ibn Arif, JinYi Yoon, Dimitrios S. Nikolopoulos, Hans Vandierendonck</span><span class="sep" aria-hidden="true">·</span><span>MIT</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">06 Nov 2026</span></span></div>
+  <p class="card-summary">The research tackles the low hit‑rate problem in LLM prefix caching by using user intent to predict when a conversation will continue. They built an online eviction policy that classifies requests by intent, learns reuse stats, and evicts based on those stats, achieving a 34.6% hit‑rate and up to 46% lower latency. This directly benefits cloud‑based LLM services, improving resource utilisation and response times.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference infrastructure, implement an intent‑aware cache: 1) add a lightweight intent classifier to your request pipeline, 2) log recent intent‑specific reuse patterns, 3) adapt your cache eviction policy to favour prefixes from intents with high continuation rates.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">18/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper proposes a practical caching strategy for LLM serving that directly benefits infrastructure engineers handling LLM deployments, with measurable latency improvements. The approach appears to be implemented and evaluated, indicating reasonable maturity. It offers a clear, deployable method that could be integrated into existing serving stacks or sold as a performance optimisation service, warranting a high monetisation potential.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Intent-Aware Caching for Efficient LLM Serving"
+      data-summary="The research tackles the low hit‑rate problem in LLM prefix caching by using user intent to predict when a conversation will continue. They built an online eviction policy that classifies requests by intent, learns reuse stats, and evicts based on those stats, achieving a 34.6% hit‑rate and up to 46% lower latency. This directly benefits cloud‑based LLM services, improving resource utilisation and response times."
+      data-it="If you manage LLM inference infrastructure, implement an intent‑aware cache: 1) add a lightweight intent classifier to your request pipeline, 2) log recent intent‑specific reuse patterns, 3) adapt your cache eviction policy to favour prefixes from intents with high continuation rates."
+      data-monetisation=""
+      data-reasoning="The paper proposes a practical caching strategy for LLM serving that directly benefits infrastructure engineers handling LLM deployments, with measurable latency improvements. The approach appears to be implemented and evaluated, indicating reasonable maturity. It offers a clear, deployable method that could be integrated into existing serving stacks or sold as a performance optimisation service, warranting a high monetisation potential."
+      data-score="53"
+      data-url="https://arxiv.org/abs/2611.09715v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Coding Agents / Documentation Debt</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.09802v1" target="_blank" rel="noopener noreferrer">When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents</a></h2>
+  <div class="card-meta"><span>Tural Mehtiyev, Biruk Tadesse, Lawrence Arkoh, Wesley Assunção</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">06 Nov 2026</span></span></div>
+  <p class="card-summary">Stale instruction files cause coding agents to make extra tool calls, adding hidden cost to every run. The authors analysed three real‑world cases, showing that correcting or removing stale docs cuts unnecessary operations. For cloud infra managers, this means keeping agent configs up to date can save time and reduce waste.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage AI‑powered coding agents, here is what to do: 1) Regularly audit and update your instruction files (e.g., AGENTS.md) to match current repo structure. 2) Remove obsolete sections rather than leaving them stale. 3) Monitor agent run logs for extra tool calls that may indicate stale guidance.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper discusses practical issues with LLM-based coding agents that are directly relevant to software engineering workflows. The findings are based on empirical experiments with existing models (Claude Sonnet 5.5) and real-world repositories, indicating a mature system rather than a theoretical proposal. The insights can be turned into actionable tooling to detect and mitigate stale instruction files, offering a clear monetisation path within 90 days. Overall impact, maturity, and monetisation potential are moderate, leading to a solid score above the 30 threshold.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/when-instruction-files-go-stale-documentation-debt-and-hidden-cost-in-coding-age.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents"
+      data-summary="Stale instruction files cause coding agents to make extra tool calls, adding hidden cost to every run. The authors analysed three real‑world cases, showing that correcting or removing stale docs cuts unnecessary operations. For cloud infra managers, this means keeping agent configs up to date can save time and reduce waste."
+      data-it="If you manage AI‑powered coding agents, here is what to do: 1) Regularly audit and update your instruction files (e.g., AGENTS.md) to match current repo structure. 2) Remove obsolete sections rather than leaving them stale. 3) Monitor agent run logs for extra tool calls that may indicate stale guidance."
+      data-monetisation=""
+      data-reasoning="The paper discusses practical issues with LLM-based coding agents that are directly relevant to software engineering workflows. The findings are based on empirical experiments with existing models (Claude Sonnet 5.5) and real-world repositories, indicating a mature system rather than a theoretical proposal. The insights can be turned into actionable tooling to detect and mitigate stale instruction files, offering a clear monetisation path within 90 days. Overall impact, maturity, and monetisation potential are moderate, leading to a solid score above the 30 threshold."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.09802v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">CI/CD, LLM code review, DevOps automation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.09291v1" target="_blank" rel="noopener noreferrer">AutoRefine: Auto-Calibrating Code Judges from Workflow Outcomes</a></h2>
+  <div class="card-meta"><span>Shervin Shahidi, James Poon, Hang Xie, Kenneth O. Xu</span><span class="sep" aria-hidden="true">·</span><span>ETH</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">06 Nov 2026</span></span></div>
+  <p class="card-summary">AutoRefine tackles the problem of keeping LLM code reviewers accurate as workflows change, by automatically adjusting the judge prompt using outcome labels from the development pipeline. It builds a feedback loop where a teacher reviews judge predictions against actual outcomes, rewrites the prompt, and flags unclear cases. The result is a significant lift in agreement with real merge decisions, reducing noise and signalling when the judge needs better input data.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud‑hosted CI/CD pipelines, use AutoRefine by: 1) capturing test pass/fail and merge/abort outcomes from your pipeline; 2) feeding those labels into a teacher‑guided prompt‑rewriter; 3) deploying the updated judge in your CI pipeline and monitoring for flagged ‘unclear’ changes that may need additional context or tests.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper addresses automated calibration of LLM-based code quality gates, directly impacting CI/CD pipelines and code review workflows that IT engineers and consultants manage. It proposes a practical loop with a deployable judge and teacher, suggesting an immediately usable system, although the abstract does not confirm a fully released production version, so maturity is moderate. The method can be packaged as a SaaS or integrated into existing CI tools, offering tangible monetisation within 90 days.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/autorefine-auto-calibrating-code-judges-from-workflow-outcomes.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="AutoRefine: Auto-Calibrating Code Judges from Workflow Outcomes"
+      data-summary="AutoRefine tackles the problem of keeping LLM code reviewers accurate as workflows change, by automatically adjusting the judge prompt using outcome labels from the development pipeline. It builds a feedback loop where a teacher reviews judge predictions against actual outcomes, rewrites the prompt, and flags unclear cases. The result is a significant lift in agreement with real merge decisions, reducing noise and signalling when the judge needs better input data."
+      data-it="If you manage cloud‑hosted CI/CD pipelines, use AutoRefine by: 1) capturing test pass/fail and merge/abort outcomes from your pipeline; 2) feeding those labels into a teacher‑guided prompt‑rewriter; 3) deploying the updated judge in your CI pipeline and monitoring for flagged ‘unclear’ changes that may need additional context or tests."
+      data-monetisation=""
+      data-reasoning="The paper addresses automated calibration of LLM-based code quality gates, directly impacting CI/CD pipelines and code review workflows that IT engineers and consultants manage. It proposes a practical loop with a deployable judge and teacher, suggesting an immediately usable system, although the abstract does not confirm a fully released production version, so maturity is moderate. The method can be packaged as a SaaS or integrated into existing CI tools, offering tangible monetisation within 90 days."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.09291v1">Copy as Markdown</button>
+  </div>
+</article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
@@ -622,19 +771,19 @@
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Product Launch</span>
+      <span class="tag-pill">Security</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">10/10</span>
+      <span class="score-num">8/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/05/palo-alto-networks-in-talks-to-buy-ai-agent-security-startup-clutch-for-500m/" target="_blank" rel="noopener noreferrer">Palo Alto Networks in talks to buy AI agent security startup Clutch for $500M</a></h2>
-  <p class="card-summary">Palo Alto Networks is reportedly negotiating to acquire AI‑agent security startup Clutch for $500M, aiming to bolster its defenses against AI‑driven cyberattacks. The deal would bring Clutch’s agent‑access controls into Palo Alto’s portfolio, potentially reshaping how enterprises secure AI‑powered workflows.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Review your current AI agent access policies in your endpoint and identity management tools this week and document any gaps that could be addressed by Clutch’s technology. S2: Failure to assess these gaps now could leave your organization exposed to emerging AI‑driven attack vectors, increasing incident risk and compliance exposure. S3: Palo Alto’s acquisition indicates a strategic push to integrate AI‑agent security, so your existing tools (e.g., JumpCloud, CrowdStrike, Okta) should be evaluated for compatibility with such solutions.</p>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/" target="_blank" rel="noopener noreferrer">Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50”</a></h2>
+  <p class="card-summary">Nvidia’s CEO Jensen Huang is under investigation by the company’s board after allegations he was involved with a suspected Chinese spy, raising concerns about potential national‑security breaches and the stability of the company’s leadership. The scandal could affect Nvidia’s role as a critical AI hardware supplier, potentially impacting supply chains for major cloud and IT platforms.</p>
+  <p class="insight"><strong>How to use:</strong> Go to your vendor risk assessment portal and flag Nvidia as a high‑risk supplier this week; review all existing contracts for AI GPU usage and assess alternative GPU vendors or additional security controls. Failure to do so could expose your organization to supply‑chain risks and regulatory scrutiny, especially if Nvidia’s leadership stability impacts product availability. This directly affects your cloud and AI infrastructure stack, as many services rely on Nvidia GPUs for training and inference.</p>
   <div class="card-footer">
-    <span class="pub-date">06 Nov 2026</span>
-    <a href="breakdowns/palo-alto-networks-in-talks-to-buy-ai-agent-security-startup-clutch-for-500m.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">09 Nov 2026</span>
+    <a href="breakdowns/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -642,6 +791,26 @@
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/09/automattic-debuts-a-platform-to-deploy-vibe-coding-apps-amid-a-changing-internet/" target="_blank" rel="noopener noreferrer">Automattic debuts a platform to deploy vibe coding apps amid a changing internet</a></h2>
+  <p class="card-summary">Automattic has launched Spacefast, a platform that enables rapid deployment of vibe‑coded websites and apps with built‑in infrastructure such as databases, authentication, and analytics. The service integrates with popular AI agents and Git, positioning itself as an alternative to cloud hosting solutions for enterprises looking to reduce IT sprawl.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review Spacefast’s API and integration capabilities this week to determine if it can replace or complement your current CDN (Cloudflare) and WordPress hosting for internal web prototypes. S2: Failing to evaluate this could mean continued reliance on disparate hosting platforms, increasing maintenance overhead. S3: This is most relevant to your WordPress and CDN management duties.</p>
+  <div class="card-footer">
+    <span class="pub-date">09 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
       <span class="tag-pill">Security</span>
     </div>
     <div class="news-score-area">
@@ -649,98 +818,163 @@
       <span class="score-num">7/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/" target="_blank" rel="noopener noreferrer">Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy</a></h2>
-  <p class="card-summary">Nvidia’s board has launched an independent probe into CEO Jensen Huang after reports he was targeted by a Chinese spy operation. The investigation focuses on potential security breaches and corporate integrity, with the board stating no evidence of compromised secrets so far.</p>
-  <p class="insight"><strong>How to use:</strong> Review your organization’s supply‑chain risk assessment for NVIDIA GPUs and related AI hardware, ensuring that any vendor contracts include robust security clauses and monitoring for potential espionage activities. Failure to do so could expose your IT environment to undiscovered vulnerabilities in critical AI infrastructure. The most affected tool is your GPU deployment strategy within your AI workloads.</p>
+  <h2 class="card-title"><a href="https://news.ycombinator.com/item?id=50422628" target="_blank" rel="noopener noreferrer">ChatGPT Desktop forwards your SSH agent to remote machines</a></h2>
+  <p class="card-summary">OpenAI’s ChatGPT Desktop now forwards your local SSH agent to remote machines, enabling those remotes to use your SSH keys for actions like pushing to private GitHub repos. This exposes a new attack vector where compromised remote sessions can gain privileged repository access without needing your password.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Immediately review your SSH agent forwarding settings in all remote desktop sessions and disable the feature for non‑trusted hosts. S2: Failure to do so allows attackers to use your SSH keys to push malicious code to your private repos, compromising source‑code integrity. S3: This impacts your endpoint security strategy and MDM policies, particularly within JumpCloud and any MDM platform that manages remote access.</p>
   <div class="card-footer">
-    <span class="pub-date">08 Nov 2026</span>
-    <a href="breakdowns/nvidia-will-investigate-ceo-jensen-huangs-relationship-with-possible-chinese-spy.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">09 Nov 2026</span>
+    <a href="breakdowns/chatgpt-desktop-forwards-your-ssh-agent-to-remote-machines.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
+      <span class="source-name">MIT Tech Review</span>
       <span class="tag-pill">Regulation</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">7/10</span>
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/" target="_blank" rel="noopener noreferrer">After the midterms, things are looking rocky for Elon Musk and data centers</a></h2>
-  <p class="card-summary">US midterm results have led to widespread rejection of data center ballot measures, creating regulatory hurdles for hyperscalers and affecting future data center expansion plans. This policy shift could alter the availability of on‑prem and cloud infrastructure for enterprises relying on large-scale compute resources.</p>
-  <p class="insight"><strong>How to use:</strong> 1. Monitor your cloud providers’ announced data‑center expansions for any delays or site‑cancellations in the next 30 days. 2. Evaluate whether your current workloads can be migrated to alternative regions or cloud vendors to mitigate potential capacity shortages. 3. Coordinate with your MDM and endpoint security teams to ensure device policies remain compliant with any new regional compliance requirements that may arise from shifting data‑center locations.</p>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/09/1148166/the-climate-case-for-ai-has-not-been-made/" target="_blank" rel="noopener noreferrer">The climate case for AI has not been made</a></h2>
+  <p class="card-summary">The United Nations climate conference in Antalya has spotlighted AI, urging countries to ensure AI systems are designed, powered, and deployed to support climate action. The discussion signals a growing regulatory focus on AI’s environmental impact.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor upcoming UN guidelines and any resulting policy changes that could influence data center energy usage or cloud provider contracts. This will inform future infrastructure decisions and sustainability reporting.</p>
   <div class="card-footer">
-    <span class="pub-date">07 Nov 2026</span>
-    <a href="breakdowns/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">09 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">7/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview/" target="_blank" rel="noopener noreferrer">GitHub New pull request overview page in public preview</a></h2>
-  <p class="card-summary">GitHub has launched a new pull request overview page in public preview, placing merge status and actionable next steps at the top of the page to reduce scrolling and improve review efficiency. The feature also introduces compact views of checks, comments, and approvals, along with filters to focus on unresolved discussions and recent activity.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Visit GitHub, enable the Overview page for your repositories this week and test the new merge status panel. S2: Without adopting it, reviewers may continue to spend excessive time scrolling through long PRs, slowing deployment pipelines and increasing error risk. S3: Your GitHub integration with CI/CD pipelines and code review workflows will be most affected, impacting overall engineering productivity.</p>
-  <div class="card-footer">
-    <span class="pub-date">07 Nov 2026</span>
-    <a href="breakdowns/github-new-pull-request-overview-page-in-public-preview.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Product Launch</span>
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Research</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
       <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/06/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots/" target="_blank" rel="noopener noreferrer">Physicl raises $10M to make the digital world real enough for robots</a></h2>
-  <p class="card-summary">Physicl has secured $10M to develop a high-fidelity simulation platform, Studio, aimed at generating synthetic data for training robots in complex physical tasks. The new tool offers 10,000 3D environments and 100,000 assets, positioning Physicl as a contender in the emerging foundation model data marketplace.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor Physicl’s Studio as a potential data source for future AI training pipelines. Consider evaluating its synthetic datasets for edge‑case scenarios that could complement your existing security or compliance automation workflows, especially if your organization plans to adopt AI‑driven automation or machine learning models.</p>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/nvidia/nemotron-personas-finance-japan" target="_blank" rel="noopener noreferrer">Nemotron-Personas-Finance-Japan: A Synthetic Dataset Capturing Japan&#x27;s Demographics and Financial Context</a></h2>
+  <p class="card-summary">Elith and NVIDIA have released Nemotron-Personas-Finance-Japan, a million-record synthetic dataset that blends Japanese demographic and financial data to support AI development in finance without real customer data. The dataset, built with NVIDIA’s NeMo tools, offers realistic, privacy-compliant personas for simulations and model evaluation.</p>
+  <p class="insight"><strong>How to use:</strong> Watch for updates on the NeMo Data Designer integration and assess how this synthetic dataset could replace or supplement existing test data in your AI workflows. Incorporating it could reduce compliance risks and accelerate model training, but monitor for licensing and integration compatibility with your current analytics stack.</p>
   <div class="card-footer">
-    <span class="pub-date">06 Nov 2026</span>
-    <a href="breakdowns/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">09 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/amazon/higher-order-pruning-experts" target="_blank" rel="noopener noreferrer">Your Experts Have Partners. There&#x27;s HOPE for Keeping Them Together</a></h2>
+  <p class="card-summary">Hugging Face has introduced HOPE (Higher‑Order Pruning of Experts), a second‑order method for reducing the memory footprint of Mixture‑of‑Experts (MoE) language models by pruning experts based on their pairwise interactions. The approach achieves higher performance retention than first‑order pruning techniques, especially at aggressive pruning rates.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on the research for potential future tooling that could reduce inference costs on cloud‑based LLM services you may be hosting or consuming. While this doesn’t require immediate action, consider evaluating any upcoming API or SDK updates from Hugging Face that incorporate HOPE‑style pruning, as they could improve the cost‑efficiency of your model deployments.</p>
+  <div class="card-footer">
+    <span class="pub-date">09 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/nvidia-ceo-jensen-huang-hired-a-pr-firm-known-for-handling-sex-scandals-last-year/" target="_blank" rel="noopener noreferrer">Jensen Huang Hired a PR Firm Known for Handling Sex Scandals Last Year</a></h2>
+  <p class="card-summary">Nvidia CEO Jensen Huang has engaged Heller, a crisis communications firm known for handling high-profile scandals, to manage both his personal controversies and corporate communications. The firm has been involved since at least October 2025, amid allegations of Huang’s affair with a suspected Chinese spy and potential export control violations involving Nvidia’s chip sales.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">09 Nov 2026</span>
+    <a href="breakdowns/jensen-huang-hired-a-pr-firm-known-for-handling-sex-scandals-last-year.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Consulting</span>
+      <span class="source-name">MIT Sloan</span>
       <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">0/10</span>
+      <span class="score-num">3/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://eli.thegreenplace.net/2025/making-any-integer-with-four-2s/" target="_blank" rel="noopener noreferrer">Making any integer with four 2s (2025)</a></h2>
-  <p class="card-summary">A Hacker News post discusses a math puzzle that uses exactly four 2s to represent any integer using various mathematical operations, including exponents, factorials, and complex numbers.</p>
-  <p class="insight"><strong>How to use:</strong> N/A – This puzzle has no direct application to IT infrastructure or tooling.</p>
+  <h2 class="card-title"><a href="https://sloanreview.mit.edu/article/do-more-with-sustainability-data/" target="_blank" rel="noopener noreferrer">Do More With Sustainability Data</a></h2>
+  <p class="card-summary">The article highlights the financial burden of the EU Corporate Sustainability Reporting Directive on companies, estimating €1.7 billion in one‑off costs and €1.9 billion in recurring expenses. It underscores how sustainability reporting is becoming a significant regulatory and financial concern for enterprises.</p>
+  <p class="insight"><strong>How to use:</strong> Check your organization’s compliance reporting processes to ensure they are aligned with the EU CSRD requirements and evaluate any impact on data storage and management needs in your existing cloud and security platforms.</p>
   <div class="card-footer">
-    <span class="pub-date">07 Nov 2026</span>
-    <a href="breakdowns/making-any-integer-with-four-2s-2025.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">09 Nov 2026</span>
+    <a href="breakdowns/do-more-with-sustainability-data.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/authors-can-defend-against-ai-allegations-with-paper-trail-tools/" target="_blank" rel="noopener noreferrer">Authors Can Defend Against AI Allegations With ‘Paper Trail’ Tools. Is It Enough?</a></h2>
+  <p class="card-summary">Authors now have a suite of AI‑tracking tools—Workings, Blindproof, Wintertext, Human Ink, and ObraVera—to document their writing process and establish provenance. These tools aim to help writers defend against accusations that they used LLMs, a growing concern as publishers and courts grapple with AI‑authorship claims.</p>
+  <p class="insight"><strong>How to use:</strong> While these tools are tailored for writers, the underlying concepts—digital fingerprinting and automated provenance tracking—mirror capabilities in enterprise identity and data governance. If you manage user activity logs or content creation pipelines, consider evaluating similar AI‑audit frameworks to detect anomalous content generation or to prove compliance with internal policy. This could reduce risk of false positives in automated content moderation and strengthen audit trails for sensitive documents.</p>
+  <div class="card-footer">
+    <span class="pub-date">09 Nov 2026</span>
+    <a href="breakdowns/authors-can-defend-against-ai-allegations-with-paper-trail-tools-is-it-enough.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/09/1147654/innovating-with-ai-in-the-special-chemicals-industry/" target="_blank" rel="noopener noreferrer">Innovating with AI in the special chemicals industry</a></h2>
+  <p class="card-summary">Lubrizol, a specialty chemicals manufacturer, is leveraging AI, cloud computing, and advanced modeling to speed up research and development processes, aiming to bring products to market more efficiently.</p>
+  <p class="insight"><strong>How to use:</strong> Check whether any of your organization’s data platforms or AI tooling can be extended to support domain‑specific modeling pipelines for product innovation.</p>
+  <div class="card-footer">
+    <span class="pub-date">09 Nov 2026</span>
+    <a href="breakdowns/innovating-with-ai-in-the-special-chemicals-industry.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-09</div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.09825v1" target="_blank" rel="noopener noreferrer">BitDecoding-FP4: Native FP4 KV Cache Decoding via Algorithm-System Co-Design</a><a class="archive-title" href="https://arxiv.org/abs/2611.09722v1" target="_blank" rel="noopener noreferrer">FOSCAR: Accelerating Decode Attention over 2- and 4-Bit KV Caches through Affine Folding</a><a class="archive-title" href="https://arxiv.org/abs/2611.09715v1" target="_blank" rel="noopener noreferrer">Intent-Aware Caching for Efficient LLM Serving</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-07</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.08116v1" target="_blank" rel="noopener noreferrer">Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup</a><a class="archive-title" href="https://arxiv.org/abs/2611.07558v1" target="_blank" rel="noopener noreferrer">SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking</a><a class="archive-title" href="https://arxiv.org/abs/2611.08325v1" target="_blank" rel="noopener noreferrer">Decision Models as Retrieval Gates Against Injection and Pollution</a></div>
@@ -884,16 +1118,16 @@
   <div class="archive-date">2026-10-06</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.06830v1" target="_blank" rel="noopener noreferrer">MemPilot: Orchestrating On-Demand Multimodal Memory Curation for LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2610.05750v1" target="_blank" rel="noopener noreferrer">Beyond Semantic Similarity: Performance and Costs of Agentic Retrieval for Complex Tasks</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-05</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.02732v1" target="_blank" rel="noopener noreferrer">ServeTwin: A Benchmark-Validated Simulator for Distributed LLM Architecture Exploration</a></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-09</div>
+  <div class="archive-count">10 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/" target="_blank" rel="noopener noreferrer">Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50”</a><a class="archive-title" href="https://techcrunch.com/2026/11/09/automattic-debuts-a-platform-to-deploy-vibe-coding-apps-amid-a-changing-internet/" target="_blank" rel="noopener noreferrer">Automattic debuts a platform to deploy vibe coding apps amid a changing internet</a><a class="archive-title" href="https://news.ycombinator.com/item?id=50422628" target="_blank" rel="noopener noreferrer">ChatGPT Desktop forwards your SSH agent to remote machines</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-08</div>
   <div class="archive-count">6 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/" target="_blank" rel="noopener noreferrer">After the midterms, things are looking rocky for Elon Musk and data centers</a><a class="archive-title" href="https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview/" target="_blank" rel="noopener noreferrer">GitHub New pull request overview page in public preview</a><a class="archive-title" href="https://techcrunch.com/2026/11/06/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots/" target="_blank" rel="noopener noreferrer">Physicl raises $10M to make the digital world real enough for robots</a></div>
@@ -1037,11 +1271,6 @@
   <div class="archive-date">2026-10-11</div>
   <div class="archive-count">8 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/" target="_blank" rel="noopener noreferrer">Introducing the new Copilot with Home, Code and Autopilot</a><a class="archive-title" href="https://techcrunch.com/2026/10/11/can-the-ai-industry-persuade-data-center-opponents-by-getting-rid-of-ndas/" target="_blank" rel="noopener noreferrer">Can the AI industry persuade data center opponents by getting rid of NDAs?</a><a class="archive-title" href="https://www.technologyreview.com/2026/10/09/1146250/the-download-ai-refusal-problem-weight-loss-drug-side-effects/" target="_blank" rel="noopener noreferrer">The Download: AI’s refusal problem and weight-loss drug side effects</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-10</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/10/10/all-the-ai-agents-that-can-live-in-your-text-messages/" target="_blank" rel="noopener noreferrer">Here are the top AI agents that can live in your text messages</a><a class="archive-title" href="https://techcrunch.com/2026/10/09/anthropic-cant-reliably-control-its-ai-agents-its-cutting-off-its-internal-evals-from-the-live-internet-instead/" target="_blank" rel="noopener noreferrer">Anthropic can’t reliably control its AI agents. It’s cutting off its internal evals from the live internet instead</a><a class="archive-title" href="https://techcrunch.com/2026/10/09/an-anthropic-ai-model-sent-a-false-homicide-tip-to-philadelphia-police/" target="_blank" rel="noopener noreferrer">An Anthropic AI model sent a false homicide tip to Philadelphia police</a></div>
 </div></div>
   </div>
 </main>
