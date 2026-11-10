@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intent-Aware Caching for Efficient LLM Serving - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Intent-Aware Caching for Efficient LLM Serving</h1>
+  <p class="meta-line">Kazi Hasan Ibn Arif, JinYi Yoon, Dimitrios S. Nikolopoulos, Hans Vandierendonck · MIT · 2026-11-06 · Generated 10 Nov 2026, 01:25</p>
+  <a href="https://arxiv.org/abs/2611.09715v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study by Kazi Hasan Ibn Arif, JinYi Yoon, Dimitrios S. Nikolopoulos, and Hans Vandierendonck from MIT addresses a critical bottleneck in large language model (LLM) deployment: the low cache hit‑rate for prefix reuse. Traditional LLM serving architectures rely on caching previously computed token embeddings or partial outputs to reduce latency and compute costs. However, in conversational workloads the probability that a user will request the same prefix again is often below 10%, leading to frequent cache misses and wasted GPU cycles. The authors propose an intent‑aware eviction policy that classifies each incoming request into one of several intent categories (e.g., “continue conversation,” “new topic,” “context shift”) using lightweight natural language inference. For each intent, the system maintains empirical reuse statistics (e.g., average time until next reuse, probability of reuse within a window). When a cache slot becomes available, the eviction decision is weighted by these intent‑specific probabilities, favoring removal of prefixes that are unlikely to be reused soon. In an online evaluation with real conversational traces, the policy increased cache hit‑rate from roughly 5% to 34.6% and reduced end‑to‑end latency by up to 46% compared to a baseline LRU strategy. The authors also demonstrate that the policy is agnostic to the underlying LLM architecture and can be integrated into existing serving stacks with minimal overhead.</p><p>For enterprise IT, this research translates directly into cost savings and service quality improvements. Higher cache hit‑rates mean fewer GPU activations per request, lowering energy consumption and extending hardware lifespan. Lower latency enhances user experience, which is critical for SaaS offerings that compete on responsiveness. Moreover, the intent‑aware approach aligns with existing monitoring and logging pipelines: intent classification can be performed on the same request metadata that is already captured for audit and compliance. The study also highlights the importance of dynamic eviction policies that adapt to workload characteristics, a lesson that can be applied beyond LLMs to any stateful inference service.</p><p>Real‑world implications include the ability to scale LLM deployments on commodity GPU clusters without proportionally increasing capacity. Enterprises can re‑allocate freed resources to other workloads or to higher‑capacity models. The methodology also offers a framework for integrating business logic (e.g., prioritizing high‑value customer interactions) into cache management, enabling more granular SLAs. Finally, the research underscores the value of intent detection as a cross‑cutting capability that can be leveraged for other downstream tasks such as routing, personalization, and anomaly detection.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current cache hit‑rate and latency metrics for LLM inference workloads.
+   - Profile request patterns to identify conversation continuity (e.g., session IDs, time gaps).
+   - Measure GPU utilization and cost per inference to establish baseline ROI.
+   - Verify that request metadata (user ID, session token) is available for intent inference.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case showing projected 34.6% hit‑rate improvement and 46% latency reduction.
+   - Quantify cost savings: calculate reduced GPU hours, energy consumption, and potential capacity expansion.
+   - Include benchmarks: current hit‑rate (≈5%), target hit‑rate (≈35%), current latency (e.g., 500 ms), target latency (≈270 ms).
+   - Present risk mitigation plan and quick‑win timeline to demonstrate leadership buy‑in.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Vendor‑agnostic inference frameworks: NVIDIA Triton Inference Server, OpenVINO, TensorRT.
+   - Intent classification models: Hugging Face Transformers (e.g., BERT, RoBERTa) fine‑tuned for intent detection.
+   - Cache management libraries: Redis (with custom eviction hooks), Memcached, or custom in‑memory store.
+   - Monitoring: Prometheus + Grafana for cache metrics, ELK stack for request logs.
+   - Cloud platforms: AWS SageMaker Edge, Azure ML, Google Vertex AI for managed inference.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Increased inference latency due to intent classification overhead; ensure model is lightweight.
+   - Compliance: UK GDPR – ensure user identifiers used for intent inference are pseudonymised; maintain audit trails.
+   - Operational: Complexity of integrating custom eviction logic into existing serving stack; potential for cache thrashing if intent predictions are inaccurate.
+   - Vendor lock‑in: Using proprietary inference servers may limit portability.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight intent classifier (e.g., DistilBERT) on the request gateway to tag sessions as “likely continuation” or “new topic.”
+   - Implement a simple weighted LRU eviction that prefers evicting “new topic” prefixes.
+   - Run A/B test over 30 days to measure hit‑rate and latency improvements; adjust weights based on observed reuse statistics.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Build a continuous learning pipeline that updates intent models and reuse statistics in real time.
+   - Integrate the eviction policy into the core inference server with support for dynamic policy switching.
+   - Expand the system to support multi‑model serving, where intent informs not only cache eviction but also model selection (e.g., lightweight vs. heavy LLM).
+   - Conduct a full cost‑benefit analysis after 6–12 months, including hardware amortisation, energy savings, and SLA improvements, to justify further investment in scaling the architecture.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 10 Nov 2026, 01:25</p>
+</main>
+</body>
+</html>
