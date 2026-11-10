@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LogCDM: Interpretable Log Anomaly Detection via Behavioral Graph Drift and Adaptive Signal Fusion - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">LogCDM: Interpretable Log Anomaly Detection via Behavioral Graph Drift and Adaptive Signal Fusion</h1>
+  <p class="meta-line">Suryansh Talukdar, Taha Sarwat, Jin Soung Yoo · Academic Institution · 2026-11-09 · Generated 10 Nov 2026, 14:44</p>
+  <a href="https://arxiv.org/abs/2611.12775v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>LogCDM is a lightweight anomaly detection system designed for enterprise log monitoring. The authors investigated whether a compact Transformer architecture combined with a graph‑attention embedding and a frequency‑weighted chi‑squared drift metric could detect anomalous user sessions without the computational overhead of large models or GPU acceleration. They constructed a behavioral graph from sequential log events, applied a small Transformer to encode the graph, and fused the resulting embeddings with a chi‑squared drift score that captures deviations in event frequency distributions. Evaluation on multiple real‑world log datasets showed that LogCDM achieved F1 scores within 1–2 percentage points of state‑of‑the‑art methods while requiring less than 11 ms per session on a standard CPU. The study also demonstrated that the system scales linearly with log volume and that its lightweight design enables deployment on on‑premises servers without specialized hardware.</p><p>For enterprise IT, this is significant because log anomaly detection is a core component of security operations, compliance monitoring, and incident response. Traditional solutions often rely on large neural networks or require GPUs, which increases infrastructure costs and complicates deployment in regulated environments. LogCDM’s CPU‑friendly design means it can be integrated into existing SIEM pipelines or deployed as a sidecar in micro‑service architectures without additional hardware. The high detection accuracy combined with low latency allows near‑real‑time alerts, reducing mean time to detection and containment. Moreover, the interpretable drift score provides actionable insights into which event types are contributing to anomalies, aiding root‑cause analysis and compliance reporting.</p><p>Real‑world implications include the ability to run continuous log monitoring on commodity servers, lowering capital and operational expenditures. Enterprises can deploy LogCDM in data centers or edge locations where GPU resources are scarce, improving coverage for distributed applications. The model’s small footprint also simplifies compliance with data residency and privacy regulations, as it can be hosted locally without transmitting logs to external services. Overall, LogCDM offers a pragmatic balance between performance, resource usage, and interpretability that aligns with the constraints of modern enterprise IT environments.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current log ingestion pipeline: volume per second, log format diversity, existing anomaly detection tools, and CPU utilization.
+   - Assess latency requirements: determine acceptable alert delay (e.g., &lt; 30 s) and compare against current system.
+   - Identify compliance constraints: UK GDPR data handling, retention policies, and whether logs contain personal data requiring encryption at rest.
+   - Measure baseline detection accuracy: run existing rule‑based or ML models on a sample dataset to establish current F1, precision, and recall.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case highlighting cost savings: estimate GPU vs CPU cost differential, projected CPU hours saved, and reduction in false positives (estimated 20–30 %).
+   - Use metrics: target F1 ≥ 0.90, latency &lt; 11 ms per session, CPU usage &lt; 10 % on a 4‑core server.
+   - Present ROI: calculate savings from avoided incidents, reduced analyst time, and lower hardware spend over 12 months.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- LogCDM open‑source implementation (GitHub repository) for on‑prem deployment.
+   - Docker or Kubernetes for containerized deployment.
+   - Prometheus/Grafana for monitoring CPU and latency metrics.
+   - ELK Stack or Splunk for log aggregation; integrate LogCDM as a plugin or sidecar.
+   - Python 3.10+, PyTorch (CPU backend), and scikit‑learn for chi‑squared calculations.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: model drift over time may reduce accuracy; need periodic re‑training or drift detection.
+   - Compliance: if logs contain PII, ensure encryption and access controls; UK GDPR requires data minimisation and purpose limitation.
+   - Operational: insufficient CPU resources could cause backlogs; ensure horizontal scaling or queueing.
+   - Security: exposing the model endpoint could become a vector; secure with TLS and role‑based access.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy LogCDM in a sandbox environment: containerize the model, feed a 24‑hour log sample, and compare alerts against existing system.
+   - Configure a simple Prometheus alert for CPU usage spikes; set threshold at 80 % to trigger investigation.
+   - Document findings and adjust hyperparameters (e.g., chi‑squared threshold) within 30 days.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate LogCDM into the central SIEM pipeline, routing anomaly scores to incident ticketing systems (e.g., ServiceNow).
+   - Implement automated retraining: schedule nightly ingestion of new log data, retrain the Transformer on a dedicated CPU node, and validate performance before deployment.
+   - Expand coverage: extend the behavioral graph to include network flow logs and application metrics, enabling multi‑modal anomaly detection.
+   - Conduct a compliance audit annually to ensure continued alignment with UK GDPR and other relevant regulations.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 10 Nov 2026, 14:44</p>
+</main>
+</body>
+</html>
