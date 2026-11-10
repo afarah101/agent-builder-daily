@@ -48,35 +48,17 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Aina has announced a new smart ring that includes a screen, joystick, microphone, and speaker, enabling users to interact with AI agents and control various apps directly from the ring. The device positions itself as a versatile controller for both AI and non‑AI applications, aiming to enhance productivity for tech‑savvy users.\",\"enterprise_use\":\"Check the Aina ring’s compatibility with your organization’s endpoint security policies and ensure it does not bypass existing device management controls. If your team uses Google Workspace or other cloud services, evaluate whether the ring’s AI interactions could expose sensitive data or create new attack vectors. Update your MDM and access management rules to account for any new device types.\",\"relevance_score\":4,\"relevance_signal\":\"low\",\"category\":\"Product Launch\"}"
   },
-  "06d1072f104f5b53374861a34c84d6827f649cf2cff6ece716dda5d082d43725": {
-   "call_site": "news.classify",
-   "created_at": 1793747091.1203077,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"OpenAI has unveiled GPT‑6 based tools that can autonomously generate mechanical designs, PCBs, and firmware for physical products, aiming to accelerate engineering workflows across multiple disciplines.\\nThe announcement signals a shift toward AI‑assisted design, simulation, and manufacturing, but it remains largely experimental and not yet integrated with mainstream engineering suites.\\n\",\"enterprise_use\":\"Watch OpenAI’s upcoming releases of GPT‑6 and Astra for potential integration with your CAD, simulation, and MDM workflows; they could reduce design iteration cycles.\\nIf you are already using third‑party engineering tools (e.g., SolidWorks, Altium, or custom API connectors), evaluate whether these AI services can be hooked in to automate drawing generation or simulation setup within the next 90 days.\\n\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Product Launch\"}"
-  },
   "0732abbae5f6646097d4fbb0afaaed1d0a0882e6f6e0cb46c9c35d8f2454e57c": {
    "call_site": "news.classify",
    "created_at": 1793835101.9726417,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Hackers linked to the Kremlin exploited previously patched iOS and Android flaws to inject malicious JavaScript into visited websites, stealing cookies, Wi‑Fi passwords and full device data. The attacks targeted high‑profile sites and used reverse proxies to masquerade as legitimate content.\",\"enterprise_use\":\"Go to your MDM and endpoint security dashboards this week and verify that the latest OS patches are deployed across all devices. Failure to patch now increases the risk of credential theft and data exfiltration during web browsing. This directly affects your JumpCloud and Cloudflare setups by exposing unpatched endpoints to targeted attacks.\",\"relevance_score\":9,\"relevance_signal\":\"high\",\"category\":\"Security\"}"
   },
-  "07862af56b9ac3a8de0888b4a09496bcb950e1223d282215bced4d52176c2764": {
-   "call_site": "news.classify",
-   "created_at": 1793747187.6403613,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Flipper One is a new open‑source ARM computer launching via Kickstarter, featuring dual‑processor architecture, Wi‑Fi 6E, Gigabit Ethernet, and built‑in AI acceleration. It offers a versatile network multi‑tool set—routing, load balancing, VPN tunneling, and passive network monitoring—with a single USB‑cable interface for all platforms.\",\n  \"enterprise_use\": \"Watch Flipper One’s hardware roadmap over the next 30 days to assess whether its open‑source Linux stack and AI‑accelerated NPU can serve as a cost‑effective, highly‑customizable platform for testing new security controls or developing internal network monitoring tools. Integrating it could reduce vendor lock‑in for your network‑security tooling, but early adoption may require additional in‑house engineering effort.\",\n  \"relevance_score\": 7,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Product Launch\"\n}"
-  },
   "07ec832c52e7f22f26bdafd3f29f6ca8f7f6af8cf246ec1af4fb6174e1135647": {
    "call_site": "case_study.score_papers",
    "created_at": 1793888712.9441988,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 4, \"ai_maturity\": 5, \"monetisation_potential\": 3, \"total_score\": 12, \"score_reasoning\": \"The paper discusses theoretical metamodels for predicting LLM behavior based on context activations. While it demonstrates a novel technique and provides code and experiments, it does not present a ready-to-deploy tool that IT engineers could immediately integrate into infrastructure, DevOps, or security workflows. The insights could be useful for future model optimization or debugging, but currently it offers limited direct application to Microsoft 365, Google Workspace, or cloud infrastructure management. The monetisation potential is minimal, as there is no clear service or product that could be sold within 90 days. Therefore, overall scores remain low.\", \"relevance_tag\": \"low\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
-  },
-  "0813e631d1f4bdb769c2f1c8b9a9ab199c10f6bdd4967b772e2d086cd55439de": {
-   "call_site": "news.classify",
-   "created_at": 1793747148.0858119,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"Data center operators are increasingly using converted jet engines to generate power quickly due to grid connection delays, with several AI companies already deploying these units. This short‑term solution highlights the growing power supply bottleneck for AI workloads and may pressure IT leaders to reconsider energy sourcing strategies.\",\"enterprise_use\":\"Monitor your data center’s power procurement plans and evaluate whether temporary power generation (e.g., gas‑burning jet engines) could accelerate deployment for new AI workloads. Delaying power acquisition could push projects into the next fiscal cycle, impacting capacity planning and cost projections.\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Infrastructure\"}"
   },
   "0897e2d9f5a352c2422f5a7db8778637c0c4b91cad8a6240182c60b98d880e96": {
    "call_site": "case_study.summary",
@@ -95,6 +77,12 @@
    "created_at": 1793834890.1668677,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This research shows that by rewriting a language model’s earlier reasoning into a compact state before new tool results, the model can produce shorter, cheaper future reasoning without retraining. The authors tested this on open‑weight models and found that compact histories typically cut token use and cost, while still keeping task quality. For cloud infra managers, this could lower the compute cost of running large‑language‑model agents that generate long reasoning traces.\",\"it_breakdown\":\"If you manage LLM‑based agents, you can reduce run costs by implementing a compaction step: 1) capture the model’s reasoning history before any tool output, 2) rewrite that history into a concise state record, 3) feed the compact history back to the model for the next step. Check that your agent framework supports injecting state; if not, adapt the compaction as an external pre‑processing step.\"}"
+  },
+  "08ec8060dec3033b9eb009fc3e3279600f7f631f7a59d03d71db7d90554a96c0": {
+   "call_site": "news.classify",
+   "created_at": 1794351860.1624594,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"OpenAI and Upwork research reveals shifting demand for freelance services driven by AI, with clients increasingly combining diverse skills like chatbot development, video production, and marketing automation into single projects. The study highlights that AI-related postings are growing more varied, suggesting a broader application of AI across multiple domains.\",\n  \"enterprise_use\": \"S1: Monitor your freelance talent pool for emerging AI-related skill sets such as chatbot development, AI-assisted video production, and marketing automation. S2: Adjust internal training and recruitment priorities to ensure your team can meet these hybrid demands, avoiding skill gaps that could jeopardize contract fulfillment.\",\n  \"relevance_score\": 5,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Research\"\n}"
   },
   "0905c69d57fddf876278c89da5d0cfef6b4e9e3161b43d450a35fc197f0b3d56": {
    "call_site": "news.classify",
@@ -126,12 +114,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This research shows that a lightweight decision model can act as a filter to stop malicious or misleading content from tricking language models. They built a Kev-4B gate that scans HTML and cuts injection success from 27.9% to 5.7%, with only 76 ms per page and a small false‑positive rate. The result is a cheaper, faster defence that keeps most queries safe while keeping performance nearly unchanged.\",\"it_breakdown\":\"If you manage cloud‑based LLM services, add a gate like Kev‑4B to your retrieval pipeline: step 1, run the gate on each retrieved page; step 2, discard pages flagged as potential injection or pollution; step 3, pass only clean pages to the generation model. This reduces injection risk from ~28% to ~6% and keeps accuracy high. The gate costs only 76 ms per page and is open‑weight, making it easy to integrate.\"}"
   },
-  "0cd234e809141db04856de0db9930e7f2e55fb4568c1bdca611850539538e3ea": {
-   "call_site": "news.classify",
-   "created_at": 1793747121.4598022,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Hugging Face has released CWE-bench v2, a public benchmark comprising 100 realistic security tasks that evaluate AI models’ ability to find and fix vulnerabilities without breaking functionality. The dataset covers 91 CWEs across a broad range of weakness classes and is open‑source, enabling teams to benchmark and improve their own security tooling.\",\n  \"enterprise_use\": \"1. Go to the CWE‑bench v2 GitHub repository and clone the dataset; run the harness against your internal AI or scripting tools to benchmark their vulnerability‑detection capabilities this week. 2. If your team uses automated code review or SSO monitoring, compare the benchmark results to identify gaps in your current security posture and prioritize manual or AI‑enhanced remediation efforts. 3. The benchmark is most relevant to your Google Workspace, JumpCloud, and MDM security settings, as it provides realistic CWEs that can surface in those environments, helping you harden configurations and detect anomalous behavior earlier.\",\n  \"relevance_score\": 8,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Tools\"\n}"
-  },
   "0cdc80e93b09712b5614dc428ec681fe0c8994af8b282c2dffff6d7c45abbf50": {
    "call_site": "news.classify",
    "created_at": 1794273849.8963275,
@@ -144,12 +126,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 5, \"monetisation_potential\": 0, \"total_score\": 10, \"score_reasoning\": \"The paper analyzes theoretical competition dynamics of LLM leaderboards; it offers insights but no actionable tools, code, or deployment mechanisms relevant to IT engineers. Its concepts are largely academic, with limited direct impact on current infrastructure or services that could be monetized quickly.\", \"relevance_tag\": \"theoretical\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
   },
-  "0d8fd580d441c5f23163dd2082eb5330454fbf187e16ef476e33872503d21fa2": {
-   "call_site": "news.classify",
-   "created_at": 1793724351.876987,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Apple has tightened its App Store rules to require all dating or AI companion apps to carry an 18+ rating and to disclose location-sharing features, aiming to curb minor access to sexual or romantic content. The policy will take effect on November 16, affecting developers of such apps worldwide.\",\n  \"enterprise_use\": \"Keep an eye on any third‑party apps your organization uses that include dating or AI companion features, and verify they comply with Apple’s 18+ rating and location‑sharing disclosures. Failure to meet these requirements could result in removal from the App Store, impacting your teams’ access to needed tools or services.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Regulation\"\n}"
-  },
   "0e2127eeb928390973645a955dba97022874d96218153ab4ae8b5eb451529306": {
    "call_site": "case_study.summary",
    "created_at": 1793834889.0578024,
@@ -161,6 +137,12 @@
    "created_at": 1793834889.5702722,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 15, \"ai_maturity\": 10, \"monetisation_potential\": 15, \"total_score\": 40, \"score_reasoning\": \"The paper presents a method to reduce reasoning token usage by compacting prior reasoning traces, which can lower operational costs for cloud-based LLM services and improve efficiency in agentic deployments. The approach is experimentally validated on open-weight models, but no publicly released code or production-ready system is provided, indicating moderate maturity. The findings are actionable for IT engineers looking to reduce cloud spend on LLM APIs, making the monetisation potential moderate. Overall, it has a moderate real-world impact, moderate maturity, and moderate monetisation potential, yielding a total score of 40.\", \"relevance_tag\": \"cloud_cost_optimization\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
+  },
+  "1031c50d6817ac18728af8e3dc21a316d3f76530ccb05a1fc79bef2037a46981": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794351775.3371477,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 4, \"ai_maturity\": 3, \"monetisation_potential\": 2, \"total_score\": 9, \"score_reasoning\":\"The paper presents a specialized self‑driving laboratory testbed focused on chemical formulation. While it involves closed‑loop automation and AI decision‑making, the domain is highly niche and not directly applicable to the infrastructure, SaaS, or endpoint management concerns of UK IT engineers. The system is experimentally demonstrated but not released for commercial use, and there is no clear path to a 90‑day service or product. Thus impact, maturity, and monetisation potential are very low.\", \"relevance_tag\":\"lab-automation\", \"gemini_eval_status\":\"pending\", \"low_signal\": true}"
   },
   "11e29b72f744c5241c7eda22dbac37341ba3c5dbd53ea2e034e9cc3fe83a16b1": {
    "call_site": "case_study.summary",
@@ -239,12 +221,6 @@
    "created_at": 1793973952.2181563,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"ASN Bank in the Netherlands has released an updated Android banking app that now works on devices without Google Play Services, including GrapheneOS, while certain payment features remain incompatible without GMS. This change affects how the bank’s mobile app operates across different Android security environments.\",\n  \"enterprise_use\": \"Watch the app’s behavior on your own devices that run alternative Android builds or stripped‑down OSes; note that core banking functions work, but NFC/wireless payment features may still fail. This insight can guide your policy on supporting non‑GMS devices in the organization and inform users about potential limitations when accessing banking apps via secure work profiles.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Product Launch\"\n}"
-  },
-  "1bdecdad761cee8e8236fa16afced2d105941816a37e01b8d578681cbf2e2594": {
-   "call_site": "case_study.score_papers",
-   "created_at": 1793724293.419836,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 3, \"monetisation_potential\": 0, \"total_score\": 8, \"score_reasoning\": \"The paper proposes a novel architecture for agent decision-making using a shared conditional predictor and frozen language model encoders. While it touches on concepts relevant to AI deployment (LLM APIs, conditional prediction), it lacks concrete implementation details, released code, or a working system. Therefore, its practical impact on day‑to‑day IT engineering tasks is minimal, its maturity is low, and there is no actionable path for monetisation within 90 days. Overall, it falls well below the threshold for high relevance.\", \"relevance_tag\": \"low\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
   },
   "1ea86034024b2c4f74b430ce32c10addba800f84212c8046ae85d073599873b2": {
    "call_site": "case_study.score_papers",
@@ -347,12 +323,6 @@
    "created_at": 1794252017.165426,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 2, \"ai_maturity\": 3, \"monetisation_potential\": 1, \"total_score\": 6, \"score_reasoning\": \"The paper investigates linguistic effects on LLM agent interactions within a game framework. It offers no direct applicability to infrastructure, DevOps, or security tooling. It is an experimental study with no released system or code, so maturity is minimal. No clear commercial or operational use can be derived within 90 days. Hence all scores are low.\", \"relevance_tag\": \"social-deduction agents\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
-  },
-  "2abcb6e83c2959afacdfcbd525a63dbf469e74e5dedbe03a7ebe08e740c0a6e6": {
-   "call_site": "news.classify",
-   "created_at": 1793724352.6640286,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"The TechCrunch Founder Summit in Boston focuses on practical learning for founders, covering building stages, pitching, and scaling. No direct AI or IT infrastructure updates are mentioned.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
   },
   "2acc9a3ba6fc5c5116821f47cce2e94ea028e820fce8213802dd1ee777ff389e": {
    "call_site": "news.classify",
@@ -522,12 +492,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"OpenAI has launched Images 2.6, a faster, higher‑quality image generation model with new GIF and animation capabilities, as well as enhanced API controls for complexity, quality, and SVG export. This release allows developers to produce and edit images 50% faster and create animated visuals directly in their applications.\",\n  \"enterprise_use\": \"Check your API usage to see if your current image generation workflows could benefit from the faster Flare mode or higher‑quality Sunburst mode. Updating your integration to include the new complexity and image markup parameters can reduce manual editing time and improve consistency across marketing assets. This will most directly impact any teams using the OpenAI API for product visuals or marketing content.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Model Release\"\n}"
   },
-  "39634ce7641477603712db40d3f2551834e12fcf18bb6de7d61ca16fd878ea07": {
-   "call_site": "news.classify",
-   "created_at": 1793747107.0858066,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Hugging Face has released StateBench, a new benchmark to evaluate how well language models track state changes in long documents. The study reveals that recurrent and hybrid models outperform transformers on long‑context state tracking, but even state‑of‑the‑art models like Gemini 3.8 Flash, Claude Opus 5.5, and GPT‑6 Sol still struggle with complex dependency chains.\",\n  \"enterprise_use\": \"Monitor emerging NLP models for potential integration with internal documentation or code analysis tools. A future AI‑powered assistant could use StateBench insights to select models that best maintain context over lengthy logs or codebases, improving accuracy in automated troubleshooting.\",\n  \"relevance_score\": 5,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Research\"\n}"
-  },
   "3a4d70b4d9afdd4cf9476ce6a35e51ac232715b0a2b6cccf76a98d9930b6e510": {
    "call_site": "news.classify",
    "created_at": 1793801318.3077538,
@@ -588,12 +552,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"TechCrunch reports that a short seller flagged Nvidia CEO Jensen Huang’s close ties to a suspected Chinese spy months before the scandal broke. The allegations involve potential espionage and export‑control violations linked to Nvidia chip sales in Southeast Asia.\",\n  \"enterprise_use\": \"Watch Nvidia’s export‑control compliance posture and any policy changes that may affect your organization’s use of Nvidia GPUs. Consider reviewing your cloud and on‑prem GPU deployment for potential regulatory impacts, and keep an eye on any updates from the U.S. Treasury’s OFAC or CFIUS that could restrict access to advanced AI hardware.\",\n  \"relevance_score\": 5,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Security\"\n}"
   },
-  "4479e5c7824cd31fed6c44edf9c65d2eec54d5cef3313233f8c4bea2b298232b": {
-   "call_site": "case_study.summary",
-   "created_at": 1793724294.4709249,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"Decoupled Predictive Decision Making (DPDM) solves the problem of making agent decisions that depend on both task descriptions and real‑world observations by separating semantic understanding from empirical prediction. The authors built a frozen conditional predictor that uses a pretrained language model for semantics and a shared learner for evidence‑based prediction, achieving up to 84.92% accuracy across 50 benchmarks. The result shows that a single shared predictor can improve decision accuracy across diverse tasks without updating model parameters.\",\"it_breakdown\":\"If you manage cloud infrastructure, here is what to do: 1) Use DPDM’s frozen predictor to integrate structured log data with language‑based alerts, 2) Map the predictor’s outputs to automated incident‑response actions, and 3) Monitor accuracy gains as more operational history is fed in. This flags a risk: if your org uses separate models for anomaly detection and decision making, check whether a shared conditional predictor could reduce model drift and maintenance overhead.\"}"
-  },
   "44fa6895383541e57f6f694998ba3c17e20b95870c429a5ad1c0782ff4390257": {
    "call_site": "news.classify",
    "created_at": 1793897971.39246,
@@ -611,6 +569,12 @@
    "created_at": 1794239039.3215373,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 0, \"monetisation_potential\": 0, \"total_score\": 5, \"score_reasoning\": \"The study explores how LLMs handle lexical knowledge conflicts in translation, but it is purely experimental without released code or deployment tools. It has minimal direct relevance to IT infrastructure engineers, offering no practical or immediately usable techniques for cloud, endpoint or SaaS management. Therefore, real-world impact is low (5), maturity is zero (no usable system), and monetisation potential is zero.\", \"relevance_tag\": \"translation, LLMs, lexical knowledge conflicts\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
+  },
+  "4a9ddb7737d4196ed8f8efcaa14c3649f5c8512eb6e5b398162c3b32a7932609": {
+   "call_site": "news.classify",
+   "created_at": 1794351911.466654,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"New York’s RAISE Act now takes effect, requiring large frontier AI developers to register, publish safety frameworks, and report incidents within strict timelines. The law also establishes a regulatory office with substantial penalties, signaling a broader shift toward tighter AI oversight that could ripple into vendors and services he relies on.\",\"enterprise_use\":\"Watch for any updates on the New York registration portal and the compliance requirements that might affect the AI services your organization uses—especially if you integrate OpenAI or Anthropic models. Inaction could mean future service disruptions or compliance gaps that impact your IT operations. Pay special attention to any changes in API terms or access controls from these vendors, as those are most likely to affect your Google Workspace and SSO integrations.\",\"relevance_score\":7,\"relevance_signal\":\"high\",\"category\":\"Regulation\"}"
   },
   "4ab8a873096cbda5df9f5673aa96f84e422c08ccefed13fcfb6083a901f69341": {
    "call_site": "case_study.summary",
@@ -774,12 +738,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Nvidia CEO Jensen Huang’s affair with a former employee alleged to be a Chinese spy has sparked intense scrutiny over the company’s China business and potential export control violations. The incident could prompt heightened regulatory oversight and impact Nvidia’s ability to supply AI chips to Chinese customers, potentially affecting global AI supply chains.\",\n  \"enterprise_use\": \"Monitor any updates from U.S. regulators or Congress regarding Nvidia’s export policies. If your organization relies on Nvidia GPUs or cloud services tied to China, consider reviewing vendor contracts for compliance clauses and evaluate alternative chip suppliers in advance.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Regulation\"\n}"
   },
-  "5e24f39e9bc8184d8eece5774329fd133630e50a9b84d1b07a1fddb45c8e598d": {
-   "call_site": "news.classify",
-   "created_at": 1793724356.6991029,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"Wired reports that mainstream AI chatbots—Google Gemini, OpenAI’s ChatGPT, Anthropic Claude, and xAI’s Grok—frequently provide inaccurate or out‑of‑date information on US elections, with up to 40% of answers containing factual errors. The research highlights a growing risk of misinformation from AI that relies on unverified online sources, especially during critical civic events.\",\"enterprise_use\":\"This week, review your organization’s policy on internal use of AI chatbots, ensuring staff are aware of the limitations highlighted by Forum AI. Failing to do so could expose the team to inaccurate data that may affect decision‑making or compliance. The most impacted tool is your internal knowledge base or collaboration platform (e.g., Google Workspace).\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Research\"}"
-  },
   "5e949418460f277baebda1eaef73aa04b5bbf68e4f14fb55016b566bcc3b1653": {
    "call_site": "news.classify",
    "created_at": 1794239383.0408456,
@@ -798,11 +756,11 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"The MIT Sloan article discusses how crises increasingly test organizations' cultural agility across global supply chains and leadership teams. It highlights that businesses must adapt not just to logistical disruptions but also to cultural differences that emerge during emergencies.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 1,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
   },
-  "64c6400dfb87332d61d182ee219f422bcf499516bebddf39b4f34a5568697f27": {
+  "6153d30068ac072d1afc99b1a67da0117ac5ec23c6aa1a10c0d1f0b03a726a31": {
    "call_site": "news.classify",
-   "created_at": 1793724415.1928563,
+   "created_at": 1794351950.5438592,
    "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Deloitte’s Consumer Industry Center offers data-driven research and videos on sustainability, equity, inclusion, and emerging business trends, targeting broad stakeholder groups. It encourages subscribing to content for ongoing insights.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 0,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
+   "response": "{\"summary\":\"Google DeepMind’s AlphaProof Code has formally verified key cryptographic guarantees of the Signal protocol, proving its security properties mathematically. The work demonstrates a significant advance in AI-assisted formal verification, though it remains a research milestone rather than a ready-to-deploy solution.\",\"enterprise_use\":\"Watch for future releases of AI-driven formal verification tools that could be integrated into your security testing pipelines. Understanding how DeepMind’s approach could augment your existing vulnerability assessment processes may improve confidence in third‑party messaging integrations.\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Security\"}"
   },
   "65c4e50269bd0364ab54473a9618ef0c7fcb4c123307efe738b14fde4c099e4e": {
    "call_site": "case_study.summary",
@@ -876,12 +834,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Anthropic confirms it will keep Claude ad‑free, while OpenAI and Google have launched paid ads in their chatbots to offset operating costs. The move highlights a growing trend of monetizing AI chat interfaces, though user experience and regulatory concerns remain contentious.\",\"enterprise_use\":\"Check the ad‑policy settings in any chatbot integrations you manage; ensure they comply with your organization’s compliance framework. Failure to monitor emerging ad models could expose your services to unexpected regulatory scrutiny or user‑experience issues. Google’s recent expansion is the most directly relevant to your Google Workspace environment.\",\"relevance_score\":4,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
   },
-  "6d25b3140b89b1c9986e6436eef290fbb93f821ba44d851a646cc0f51543902f": {
-   "call_site": "news.classify",
-   "created_at": 1793724370.4057806,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"A recent post claims that Astra can read and rewrite model weights to improve Qwen, but the author clarifies that the experiments rely on Python code rather than direct weight analysis. The work demonstrates that Astra can perform tasks similar to a human ML engineer, though not through a single unified technique.\",\n  \"enterprise_use\": \"No immediate action needed; the findings do not affect existing IT tools or infrastructure.\",\n  \"relevance_score\": 2,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Research\"\n}"
-  },
   "6d97d64db050e518f0287091e0e6ed633b47a1c0dd80eeb07f1fdb357f860dd5": {
    "call_site": "news.classify",
    "created_at": 1794321700.3753765,
@@ -894,17 +846,11 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 0,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
   },
-  "6fd5e8c97fd636f05d37532a70c5d6b15fc72776d4443833ce92ce705270cbab": {
-   "call_site": "news.classify",
-   "created_at": 1793747202.0946062,
+  "702ed707f37d3e0783f6934d951eca9c4402df91b177264a39657d3b1f1a167c": {
+   "call_site": "case_study.summary",
+   "created_at": 1794351775.8202376,
    "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"A new research paper demonstrates that large language models like Qwen 3.8 27B can read and edit their own neural network weights without external tools, a concept called Weight‑Space Programming. The study shows these models can improve performance on tasks such as math reasoning by making tiny adjustments to the weight matrix.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Research\"\n}"
-  },
-  "6feb38282feb1dc1cffd5adec0bc105baec0bd85842f77b9425fb31d4a4831e5": {
-   "call_site": "news.classify",
-   "created_at": 1793747161.1477454,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"Ballistic Ventures, a cybersecurity‑focused VC, filed SEC paperwork this week to raise $490 million across two new funds amid a surge in AI‑driven cyber threats. The move underscores how AI is reshaping the security startup landscape and could influence the portfolio of companies that impact tools like CrowdStrike and MDM solutions.\",\"enterprise_use\":\"Keep an eye on the new funds’ investment focus—particularly AI‑enabled security firms—as their growth may lead to innovations that affect your MDM, endpoint security, and SSO platforms; monitoring their portfolio could reveal emerging tools worth evaluating within the next 90 days.\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Other\"}"
+   "response": "{\"summary\":\"This study built a 24‑hour autonomous lab testbed that uses commercial robotics and AI to tweak dye mixtures. It compared Bayesian optimisation with an agentic AI, finding the agentic method needed up to 52% fewer steps to hit the target spectrum. It demonstrates a real‑world platform for testing AI in lab automation, but it does not directly impact cloud infrastructure work.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
   "704a2b8ccdc84920d2ebe90604469c5cb66d92d846d16a2e72d702ebfa9c63e2": {
    "call_site": "case_study.score_papers",
@@ -948,12 +894,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"SpecCompact speeds up how large language model agents condense long interaction histories by drafting summary slots in parallel and having the main model verify them. It cuts compaction time up to 5.6× compared to traditional summarisation, keeping the same level of information. This could reduce the latency of LLM‑driven services that rely on quick context summarisation.\",\"it_breakdown\":\"If you manage LLM‑based services, implement SpecCompact by (1) training a small draft model to produce slot summaries in parallel, (2) letting your main model validate and correct each slot, and (3) integrating the verified slots back into the conversation history. Monitor the trade‑off between speed and accuracy for your specific tasks.\"}"
   },
-  "7649a3da411c1a4fcaa967c153a7063f431b1900766dc8cef57d78cd25b3adbc": {
-   "call_site": "news.classify",
-   "created_at": 1793747220.996615,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Deloitte’s Consumer Industry Center publishes a broad analysis of trends affecting sectors like retail, automotive, and hospitality. The report offers high‑level market insights but contains no specific AI developments or technical updates.\",\n  \"enterprise_use\": \"This publication offers general industry context but does not suggest any actionable IT changes or AI tool adoption for your environment.\",\n  \"relevance_score\": 1,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
-  },
   "76dea0fd95d6f6cc681becd149700e9bec378ea8f8eded0a168d8f8577e7e643": {
    "call_site": "news.classify",
    "created_at": 1793888920.6233573,
@@ -978,11 +918,23 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"The study shows that LLM serving engines like vLLM and SGLang can differ wildly in performance because of configuration settings, especially how they prefill long prompts. By creating a controlled Kubernetes testbed and matching a key setting (chunked prefill), the researchers cut the biggest performance gaps and uncovered a real tail‑latency advantage for cache‑aware engines. This means that if you run LLM services, a small configuration tweak can give you up to 6× better worst‑case latency.\\n\",\"it_breakdown\":\"If you manage LLM inference on Kubernetes, check the prefill setting in your engine: 1) Identify if you use chunked or single‑prefill for long prompts; 2) Align this setting across all engine versions you run; 3) Measure median first‑token latency and tail latency before and after the change to confirm improvement.\"}"
   },
+  "77528e2d0369c095601d1e9ea2f79a44f057f34f81c63e549c68ff07ef99701d": {
+   "call_site": "news.classify",
+   "created_at": 1794351859.4277296,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"OpenAI launches a beta feature called Businesses in ChatGPT, allowing companies to claim a presence, manage up‑to‑date product information, and receive engagement insights via a new Business Hub. The feature also introduces Business Agents for eligible e‑commerce and online service businesses to interact with users directly through ChatGPT.\",\n  \"enterprise_use\": \"S1: Review the Business Hub beta for your company’s presence and enable any applicable Business Agents within the next 30 days. S2: Inaction means missing out on a high‑traffic channel where up‑to‑date product data and automated customer interactions can boost sales and support. S3: This directly impacts your use of Shopify, Google Workspace, and any customer‑facing APIs, so prioritize integration with your existing product catalog and CRM to feed accurate inventory and pricing to ChatGPT.\",\n  \"relevance_score\": 7,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Product Launch\"\n}"
+  },
   "77641d704e1eb2d90ff8e9d293a85522a9b17dccb3112940aa565d8591fff9a4": {
    "call_site": "case_study.summary",
    "created_at": 1794321577.9044476,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"BECON tackles the problem of drifting user preferences and safety budgets in multi‑objective reinforcement learning by treating them as partially observed signals and estimating them from recent history. The authors built a belief‑conditioned framework that fuses these estimates with noisy external signals, allowing the policy to adapt when uncertainty is high. Experiments show BECON outperforms existing methods in robustness and constraint satisfaction when preferences drift.\",\"it_breakdown\":\"If you manage cloud infrastructure, check whether your workloads have shifting performance or compliance requirements; if so, consider using a belief‑conditioned approach to dynamically adjust resource allocation and policy enforcement based on recent usage history and uncertainty estimates.\"}"
+  },
+  "776ebdf709091323817ba64de8885017028cdbcb6540c340065ffaefc1312e9e": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794351774.6177282,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 5, \"monetisation_potential\": 0, \"total_score\": 10, \"score_reasoning\": \"The paper focuses on RL misalignment and safety in generic task contexts. It does not address practical IT infrastructure, SaaS tooling, endpoint management, or cloud deployment. The concepts are theoretical and lack released code or a usable system. There is no clear pathway for IT engineers to deploy or monetize the findings within 90 days.\", \"relevance_tag\": \"low\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
   },
   "777b417cb46925f83e80e51845c767b9080b305425aca4566d533ab28ac447d8": {
    "call_site": "news.classify",
@@ -995,12 +947,6 @@
    "created_at": 1793973983.9076397,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"The article is a general promotional piece about Deloitte's Global Economist Network and related research content. It offers no specific AI developments or tool updates.\",\n  \"enterprise_use\": \"None.\",\n  \"relevance_score\": 0,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
-  },
-  "78c93abec2b21861b81245c58948c0cd3f06ca8a5eabe8da09f1aa60898b2ed5": {
-   "call_site": "news.classify",
-   "created_at": 1793724384.070356,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"A 1996 Pentium Pro running Stockfish can defeat Kasparov, proving that specialized hardware like Deep Blue was unnecessary for top-level chess play.\",\"enterprise_use\":\"No direct action required for your IT stack; simply note the historical insight into computational efficiency.\",\"relevance_score\":4,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
   },
   "79368dd02c5e27df5f3713e22d958a4a67cd5a49dffc103bf8bf954fabebf377": {
    "call_site": "case_study.score_papers",
@@ -1110,6 +1056,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Alpine Linux’s OpenSSH server has a critical password‑authentication bypass that allows attackers to log in without a password if the server is misconfigured. The flaw affects all recent Alpine releases and requires immediate patching or disabling password authentication.\",\"enterprise_use\":\"S1: Immediately run `apk upgrade -U -a` on all Alpine-based hosts and restart sshd with `rc-service sshd restart`. S2: Failure to patch exposes your servers to credential‑less SSH logins, potentially compromising your entire infrastructure. S3: This impacts your MDM/endpoint security stack if you manage Alpine devices or containers that expose SSH.\",\"relevance_score\":8,\"relevance_signal\":\"high\",\"category\":\"Security\"}"
   },
+  "80708b503493b507d88908a58552e9d7fa0599bf29edfae92a11de7908f4d68a": {
+   "call_site": "news.classify",
+   "created_at": 1794351860.8184814,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"Google DeepMind has launched Gemini 4 Carbon, a high‑performance AI model focused on cybersecurity and complex, multi‑step reasoning tasks. The new model is available via the Google AI API and promises superior accuracy and cost efficiency for enterprise use cases such as code review, security analysis, and data‑driven report generation.\",\n  \"enterprise_use\": \"S1: Deploy Gemini 4 Carbon in your Google AI Studio or Gemini for Business environment this week to test its security‑focused capabilities on your existing code‑review and threat‑analysis workflows. S2: Inaction means missing out on a model that outperforms competitors on security benchmarks and cuts per‑task cost by more than 2×, potentially saving your team significant engineering effort and budget. S3: This directly impacts your Google Workspace and MDM integration layer, where the AI can automate complex verification loops for policy compliance and security posture.\",\n  \"relevance_score\": 9,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Product Launch\"\n}"
+  },
   "80de1f8f56fbd542dc86f18cddaa69db78e75e0c30031e7633038db1958844c8": {
    "call_site": "case_study.summary",
    "created_at": 1793888808.2456994,
@@ -1128,6 +1080,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"AARP reports that 63 million Americans will be caregivers in 2025, highlighting a growing need for support tools. Several caregiver apps—including Medisafe, Caring Village, and Mejo—are adding AI features to streamline medication tracking, appointment management, and care planning.\",\"enterprise_use\":\"Watch the evolution of AI assistants in consumer health apps as they could inspire new automation ideas for internal tool integrations. Integrating similar AI-driven reminder or data consolidation features into your IT workflows could reduce manual effort and improve user experience across your organization.\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Product Launch\"}"
   },
+  "82a5ebb388166889b21bc576d6d70eb4ab740467fdc14adb561db29e3e08d85a": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794351776.4111943,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 5, \"monetisation_potential\": 5, \"total_score\": 15, \"score_reasoning\": \"The paper discusses a security audit for LLM agents calling tools. While this is relevant to AI deployment security, the abstract provides limited evidence of a production-ready system or immediate applicability to existing IT infrastructure such as SaaS or cloud services. The concepts are novel but not yet demonstrated at scale or with released code. Hence the scores are low across all criteria.\", \"relevance_tag\": \"security\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
+  },
   "8471b9a0073888cccc67d21f229072cb2138a5c055ca0518da080bfd8b26fe08": {
    "call_site": "case_study.score_papers",
    "created_at": 1794321466.837214,
@@ -1145,12 +1103,6 @@
    "created_at": 1793973723.9746048,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This research explores how large language models can learn to adapt to cultural norms through repeated social interactions, using memory mechanisms to transfer learning across settings and languages. The team built a sandbox environment to test continuous, interaction‑driven cultural adaptation and showed that the models improve over time and across contexts. The findings are largely academic and do not directly impact day‑to‑day cloud infrastructure management.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
-  },
-  "86046503aa85726e014e6e6a6ebb77805defa9ff9edaa286756222010c493e60": {
-   "call_site": "news.classify",
-   "created_at": 1793724351.146309,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"Google will remove AI tools for K‑12 students unless schools opt‑in, but that move also strips them of access to Google Search because AI features are now embedded in the search engine. The change forces school IT administrators to weigh the loss of search against the desire to block AI content, a decision that directly impacts the Google Workspace ecosystem they manage.\",\"enterprise_use\":\"S1: Review your Google Workspace Admin console this week and confirm whether the \\\"Disable AI features for students\\\" toggle is enabled for your school domain. S2: If you leave AI disabled, you will also lose students’ ability to search the web—a critical resource for research and assignments—potentially disrupting learning workflows. S3: The Google Admin console and Google Classroom are the most affected tools in your stack, so prioritize checking those settings to avoid unintended service loss.\",\"relevance_score\":10,\"relevance_signal\":\"high\",\"category\":\"Product Launch\"}"
   },
   "862858d05c49961f85e987ffd3057ab1e71d2408932c16644cda62f8634dc9f5": {
    "call_site": "news.classify",
@@ -1188,17 +1140,17 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"The study shows that a non‑autoregressive language model can give different answers depending on the order of answer options, and that shuffling options during fine‑tuning reduces this variability. They built a 421‑million‑parameter model, tested it on rotated and permuted options, and improved consistency from ~25% to ~7% flips with shuffling.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "8afcfe098bb5c7596b8743c124cec6be6406282e2b6d08da456032d3da038d5f": {
+   "call_site": "news.classify",
+   "created_at": 1794351937.9742708,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"Security researcher uncovered over 100 critical vulnerabilities in UK government code, including a leaked Microsoft Entra ID that could grant god‑tier access to SharePoint and OneDrive. The flaws were identified using consumer‑grade AI models and highlight severe gaps in routine IT health checks.\",\"enterprise_use\":\"S1: Go to your Microsoft Entra ID admin console this week and audit all tenant‑wide permissions, especially for service principals and guest access. S2: Failure to act exposes your organization to accidental credential leaks and potential ransomware attacks, while missing a timely patch could lead to data loss. S3: Your Microsoft 365 and SharePoint environments are most affected, so prioritize reviewing tenant policies and automated anomaly detection settings.\",\"relevance_score\":10,\"relevance_signal\":\"high\",\"category\":\"Security\"}"
+  },
   "8b60b0fd15270a1a1ccd60d073394528af2cbe1aab17ab54f716b067cb16f61b": {
    "call_site": "case_study.score_papers",
    "created_at": 1794239094.1397536,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 5, \"monetisation_potential\": 0, \"total_score\": 10, \"score_reasoning\": \"Benchmarking tool for LLM reliability; no direct impact on infrastructure operations, minimal maturity for deployment, and no immediate commercial use for IT engineers.\", \"relevance_tag\": \"benchmark\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
-  },
-  "8d3c8792bdc3496b7ad1ff24d55affdece14598438f55f48662fb17b2de75510": {
-   "call_site": "news.classify",
-   "created_at": 1793724404.6057928,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"A Deloitte article titled \\\"Top 10 Reading Guide\\\" offers leadership lessons inspired by Renaissance masters, focusing on blending art and science for strategic planning.\",\n  \"enterprise_use\": \"Not applicable to IT stack management; no action required.\",\n  \"relevance_score\": 1,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
   },
   "8de6777c02d195cd8ce4048ee971fd4e28b8b22d2444c15cece0249c7b851b92": {
    "call_site": "case_study.score_papers",
@@ -1212,17 +1164,23 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"VMware has launched vSphere Express, a low‑cost, per‑core subscription virtualization offering aimed at SMBs that want basic virtual machine management without the full VMware Cloud Foundation stack.\",\"enterprise_use\":\"Consider evaluating vSphere Express if your department runs virtual workloads on a small to medium scale; it offers live migration and high availability at a predictable price point. Assess whether moving to this tier could reduce licensing spend while still meeting your VM management needs, especially if you’re currently using older vSphere Standard or running under VMware Cloud Foundation.\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Product Launch\"}"
   },
+  "8e8f49432fd433e87efe1d875fb0bc0ded7344b9abebe96bee3616433acaa015": {
+   "call_site": "case_study.summary",
+   "created_at": 1794351776.8535037,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"The paper tackles indirect prompt injection in LLM agents that call external tools. It introduces a lightweight runtime audit that builds an intent graph from the user’s objective and the available tools, then checks each tool call against that graph in microseconds, flagging suspicious calls for a reasoning guardian. The prototype showed no successful attacks so far, but end‑to‑end validation is still pending.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
   "8f4b2d92b0bb1ee22e26c966a61510d1bb73b93db9ee9e624c158973b8dd223d": {
    "call_site": "case_study.summary",
    "created_at": 1793888672.0300078,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This research tackles the problem of fitting large language models into limited storage by using autonomous coding agents to compress them. The authors built agents that take a source checkpoint, a storage limit, and a time budget, then generate compressed weights and inference code, achieving a 3.4 % higher perplexity than BF16 while keeping downstream accuracy at 77.3 %. The result shows that automated agent‑driven compression can reliably reduce model size without severe accuracy loss.\",\"it_breakdown\":\"If you manage cloud infrastructure, here is what to do: 1) assess your LLM deployments against storage and cost limits; 2) use or deploy a coding agent to compress models to your budget; 3) validate the compressed model with perplexity and downstream tests before rolling out to production.\"}"
   },
-  "8f7ca948beacc1cb6d43d627756786da2036c6ccc61e4b2b321c6d88d7aabd4e": {
+  "8f6365b3f7142eb9d661d87f8716d9021541ba8b2cbdfbab7942762488001b39": {
    "call_site": "news.classify",
-   "created_at": 1793747134.5018835,
+   "created_at": 1794351897.7700617,
    "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Anthropic has announced FlashProve, an open‑source cryptographic system that lets users verify which AI model produced a specific output. The tool aims to prevent model impersonation and enable third‑party claims to be authenticated without exposing model weights.\",\n  \"enterprise_use\": \"Check the GitHub repo for FlashProve’s code to understand how model fingerprints are generated and verify if any vendor you rely on publishes compatible proofs. If a vendor offers such proofs, consider integrating them into your audit logs to ensure services you consume are indeed powered by the claimed AI model, reducing the risk of hidden model swaps.\",\n  \"relevance_score\": 1,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
+   "response": "{\n  \"summary\": \"OpenAI has acquired AI travel startup Odessia in an acqui-hire deal, bringing founder Francis Davidson into the lab to work on future travel-oriented projects. The move signals OpenAI’s continued interest in expanding AI capabilities into the travel domain, although no new products have been announced yet.\",\n  \"enterprise_use\": \"Check your organization's travel booking integrations for any updates from OpenAI or Odessia that might affect your API usage or data handling. Staying alert to future releases will help you prepare for potential new AI‑powered travel features that could impact user experience and data privacy compliance.\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Other\"\n}"
   },
   "8fce692bff21032692b99f732770ba01ee91de1944ebd1269e7de35d564f79f3": {
    "call_site": "news.classify",
@@ -1362,12 +1320,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"This study shows how large language models (LLMs) can be tricked by extra word‑meaning information supplied in prompts when translating from Mandarin to English, especially for rare words and supportive sentence contexts. The authors built a controlled test set and found that larger models often use the supplied meanings even when told to ignore them, and that certain prompt tricks can reduce this bias. The result is a better understanding of how to spot and avoid lexical conflicts in LLM translation.\\n\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
-  "9c7d06dbfbaa548fe8538ff9f1d6ce2750637bd3ef71f28947480908ae7a29bc": {
-   "call_site": "news.classify",
-   "created_at": 1793747214.4586678,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Deloitte Consumer Industry Center publishes insights for sectors including hospitality and airlines, focusing on evolving consumer behavior and business strategies. The release offers high-level industry analysis rather than technical updates.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 2,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
-  },
   "9cbb0455275d49e44b6a6d2bbddd4bcd517f8e5caca0a1a4e6aad11f74090ad4": {
    "call_site": "news.classify",
    "created_at": 1793921429.1981184,
@@ -1452,11 +1404,11 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 20, \"ai_maturity\": 10, \"monetisation_potential\": 15, \"total_score\": 45, \"score_reasoning\": \"ToolSched targets shared-host LLM agents, directly relevant to infrastructure management. Its scheduling model addresses resource contention, a common issue in on-premises deployments, giving it high real-world impact. However, the abstract does not mention a publicly released implementation or extensive field testing, indicating moderate maturity. The approach could be packaged as a service or integrated into existing endpoint management systems, offering reasonable monetisation potential within 90 days. The combined score of 45 is above the 30 threshold, so low_signal is false.\", \"relevance_tag\": \"cloud_infrastructure\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
   },
-  "aab88316936463d28c37e8b40d88d53378b06d40b03ee293dd8bd0c80935625a": {
-   "call_site": "case_study.score_papers",
-   "created_at": 1793724292.3117,
+  "a9c48226b8916abdc6163d10f66351568d09b01b5ff249721dbc3f6a65320367": {
+   "call_site": "news.classify",
+   "created_at": 1794351869.0011916,
    "model": "openai/gpt-oss-20b",
-   "response": "{\"recency_score\": 25, \"real_world_impact\": 20, \"ai_maturity\": 20, \"monetisation_potential\": 15, \"total_score\": 55, \"score_reasoning\": \"The paper addresses cache instability in LLM agent serving, directly impacting infrastructure engineering for large language models. It presents a working system (Basin) with released code and real deployments, indicating high maturity. The solution offers actionable performance gains that could be packaged as a commercial service or integrated into existing AI infrastructure within a short timeframe, warranting a monetisation score of 15. Overall, the work scores well across all criteria.\", \"relevance_tag\": \"LLM infrastructure optimization\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
+   "response": "{\"summary\":\"Hugging Face now lets organizations pay for its Hub services through their existing Google Cloud billing accounts, consolidating costs onto a single invoice. This simplifies procurement and eliminates the need for separate vendor onboarding when companies already run on GCP.\",\"enterprise_use\":\"Monitor whether your GCP bill includes Hugging Face usage; if your team is deploying or testing models on HF, evaluate linking the HF org to your GCP billing account to streamline cost tracking and procurement. Failing to do so may result in duplicate vendor contracts and fragmented spend visibility.\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"API Update\"}"
   },
   "aad99d35bd2980780d56f26815b45d32aae1873c59145acd6ebffabd19ac9481": {
    "call_site": "news.classify",
@@ -1572,11 +1524,11 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 5, \"monetisation_potential\": 0, \"total_score\": 10, \"score_reasoning\": \"The paper presents a benchmark (TASC) for evaluating temporal safety awareness in conversational assistants. It is purely an evaluation study with no direct implementation or tool that IT engineers can deploy. The findings highlight shortcomings of current LLMs but do not provide a usable system or actionable method for infrastructure or automation. Therefore, impact on everyday IT engineering practice is minimal, maturity is low as no system is built, and there is no immediate monetisation path within 90 days.\", \"relevance_tag\": \"benchmark\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
   },
-  "ba9e04112a1f06f71079e6a5360787d6b2544ad7c613d6cb373f5503b50c8a8e": {
+  "b85987a095195dbe64a291b3a360036da6373184cf5e32802d2970d4a91a0ffa": {
    "call_site": "news.classify",
-   "created_at": 1793747173.8836365,
+   "created_at": 1794351861.3504934,
    "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Apple has rolled out Adaptive Dark Mode in Safari 27.3 beta, enabling the browser to automatically adjust light websites to a dark theme when users enable dark mode. This feature uses sophisticated color transformations to preserve contrast and usability across most web content.\",\n  \"enterprise_use\": \"Watch for the release of Safari 27.3 in the next month and test how Adaptive Dark Mode impacts internal web applications accessed via Apple devices. Ensuring that your intranet and portal pages are optimized for dark mode can prevent display issues for users who rely on Safari’s new feature.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Product Launch\"\n}"
+   "response": "{\n  \"summary\": \"Google DeepMind has unveiled Gemini Robotics 2.5, a vision‑language‑action model that dramatically improves robot dexterity, reliability, and safety in real‑world tasks. The upgrade enables robots to learn and perform a broader range of everyday activities faster, positioning them for deployment beyond laboratory settings.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Product Launch\"\n}"
   },
   "bb37363c092a74c669293511dd19e458007c694a5bcbaff18565727b96d7c27b": {
    "call_site": "case_study.summary",
@@ -1644,12 +1596,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Anthropic announced its IPO pricing, targeting a valuation of $1.404 trillion with a share price range of $70 to $78. The move comes as the company secures significant investments from major tech firms and plans a Nasdaq listing in November.\",\n  \"enterprise_use\": \"Monitor the upcoming IPO for potential shifts in Anthropic’s market positioning and investment strategy, as this could influence future AI model licensing or partnership opportunities. Consider evaluating how Anthropic’s product roadmap might impact your organization’s AI tool stack within the next 30 days.\",\n  \"relevance_score\": 5,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Other\"\n}"
   },
-  "c0523dc72d8f8f1cdaa73f2864525a254c68f284acab74e5a245460f369366b4": {
-   "call_site": "news.classify",
-   "created_at": 1793747092.5287259,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"OpenAI has appointed Jill Hazelbaker as Chief Corporate Affairs Officer, bringing her extensive experience in technology communications and public policy. The move signals OpenAI’s focus on strengthening its corporate positioning and engagement with regulators and stakeholders.\",\"enterprise_use\":\"None\",\"relevance_score\":4,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
-  },
   "c0b029e367fdfbdde0612b733a428fb662d529a0d8a06c66e451c86a7c618f08": {
    "call_site": "news.classify",
    "created_at": 1793835069.1151056,
@@ -1667,6 +1613,12 @@
    "created_at": 1794239315.568219,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Hugging Face has introduced HOPE (Higher‑Order Pruning of Experts), a second‑order method for reducing the memory footprint of Mixture‑of‑Experts (MoE) language models by pruning experts based on their pairwise interactions. The approach achieves higher performance retention than first‑order pruning techniques, especially at aggressive pruning rates.\",\n  \"enterprise_use\": \"Keep an eye on the research for potential future tooling that could reduce inference costs on cloud‑based LLM services you may be hosting or consuming. While this doesn’t require immediate action, consider evaluating any upcoming API or SDK updates from Hugging Face that incorporate HOPE‑style pruning, as they could improve the cost‑efficiency of your model deployments.\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Research\"\n}"
+  },
+  "c24321205425cad827010192a482bbab9045ef26dfa35d211edfaa4d19b1231d": {
+   "call_site": "news.classify",
+   "created_at": 1794351962.3394048,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"SpaceXSI’s Grok Build coding agent has leaked thousands of projects, exposing sensitive corporate data to anyone with a link. The breach highlights a critical flaw in the platform’s URL randomization, allowing enumeration of live projects and direct access to confidential information.\",\"enterprise_use\":\"1. Immediately audit any internal or third‑party integrations that rely on Grok Build or similar AI‑coding agents—check for exposed URLs or public share links in your environments. 2. If any are found, restrict access via SSO and MDM policies, enforce least‑privilege on shared resources, and require secure link generation (e.g., time‑bound, authenticated). 3. This vulnerability directly impacts your endpoint security and access‑management stack, especially JumpCloud, Okta, and MDM platforms used for controlling external tooling.\",\"relevance_score\":9,\"relevance_signal\":\"high\",\"category\":\"Security\"}"
   },
   "c29b3c7ade856946ce995eaf2bf6eed0198f3368bb2870910f10ae7c7945f998": {
    "call_site": "news.classify",
@@ -1691,12 +1643,6 @@
    "created_at": 1793973662.257068,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 10, \"monetisation_potential\": 5, \"total_score\": 20, \"score_reasoning\": \"The paper proposes a novel latent-agent swarm approach for evolutionary search, which could theoretically speed up program optimization tasks. However, its applicability to everyday IT engineering tasks (e.g., infrastructure management, SaaS tooling, DevOps automation) is indirect and speculative. No released code or deployment examples are provided, and the system is still a research prototype. Consequently, immediate practical use or monetisation within 90 days is unlikely.\", \"relevance_tag\": \"AI for optimization\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
-  },
-  "c50e20302f735b42f8e586f9d1b73fbfe53ff351507fee5db1333263bcbceed6": {
-   "call_site": "case_study.summary",
-   "created_at": 1793724292.886901,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"Large‑language‑model (LLM) servers can suffer a long‑lasting slowdown after a brief traffic spike, because the cache used to reuse conversation prefixes collapses and the system keeps working on stale requests. The authors built a tool called Basin that prioritises sessions, pre‑allocates cache for expected peak sizes, and drops excess load, restoring high throughput quickly. On real hardware Basin improved goodput by up to 3.6× compared with earlier cache‑first approaches.\",\"it_breakdown\":\"If you manage LLM inference servers, check whether your cache policy can collapse after a spike: 1) monitor cache hit rates during short surges, 2) enable a priority‑based admission controller like Basin to reserve peak context sizes, 3) consider shedding low‑priority sessions when cache utilisation exceeds a threshold.\"}"
   },
   "c522c1192943ce738cafebec353811c653ab80284d59b5ea29458df1466587e2": {
    "call_site": "news.classify",
@@ -1872,12 +1818,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Lubrizol, a specialty chemicals manufacturer, is leveraging AI, cloud computing, and advanced modeling to speed up research and development processes, aiming to bring products to market more efficiently.\",\n  \"enterprise_use\": \"Check whether any of your organization’s data platforms or AI tooling can be extended to support domain‑specific modeling pipelines for product innovation.\",\n  \"relevance_score\": 1,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Research\"\n}"
   },
-  "d4ef594dc73c995b5b4d09f90de1a0ab88dc23a4d103a1510e6e6ae19d6f2244": {
-   "call_site": "news.classify",
-   "created_at": 1793747093.2171345,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Microsoft Research’s Mike Walker discusses the hacker mindset, emphasizing the importance of curiosity, judgment, and agility in tackling complex problems. The piece offers philosophical insights rather than concrete technical updates.\",\n  \"enterprise_use\": \"Check your team’s onboarding and training materials to ensure they incorporate lessons on curiosity, judgment, and agility—key traits highlighted by Walker—to strengthen problem‑solving culture.\",\n  \"relevance_score\": 3,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
-  },
   "d502d5a11e7f911e42487a0685627f6cde0cc7b3b3f167d692c0aa789766c93c": {
    "call_site": "news.classify",
    "created_at": 1794055562.0968633,
@@ -1907,12 +1847,6 @@
    "created_at": 1794087644.4149814,
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Amazon has launched a text‑based interface for its Alexa AI shopping agent, allowing users to chat via SMS to search, add to cart, and purchase items. The feature, rolled out ahead of the holiday season, builds on Alexa’s recent shopping upgrades and will be available to select US customers before a broader release.\",\n  \"enterprise_use\": \"No direct action required for the IT engineer’s current toolset; monitor for potential future integrations or security implications.\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Product Launch\"\n}"
-  },
-  "d824b3a5b40944858d5686431b432f783792eeb509101f97fd3e2fd08d608d0c": {
-   "call_site": "news.classify",
-   "created_at": 1793724349.5747511,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\"summary\":\"Hugging Face’s Palette trains a 20B open‑weight model to auto‑generate slide decks that match a company’s design language, using a two‑step designer‑coder workflow. This allows self‑hosted, confidential deck generation without relying on frontier AI services.\",\"enterprise_use\":\"Consider evaluating Palette for internal presentation automation: test it against your current slide templates and see if it reduces manual design time. If it aligns with your data privacy policies, it could replace manual PowerPoint creation, freeing IT staff from repetitive formatting tasks. The tool would most benefit your Google Workspace and Freshservice integrations by streamlining slide generation for support documentation or training materials.\",\"relevance_score\":5,\"relevance_signal\":\"medium\",\"category\":\"Tools\"}"
   },
   "d8f16c98365a08132bc95263077ec13e21e13060012f210a773169a34fc120f5": {
    "call_site": "news.classify",
@@ -2004,12 +1938,6 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"SAUCE offers a way to check how accurate a speech summary is, without needing a reference transcript, by matching the summary to real facts from the conversation. It builds an explainable pipeline that shows exactly which facts are missing or invented, helping developers spot errors in LLM outputs. The result is a more trustworthy evaluation that lines up with human judgement.\",\"it_breakdown\":\"If you manage cloud infrastructure that hosts LLM services, here is what to do: 1) integrate SAUCE into your monitoring pipeline to automatically score and flag summary outputs; 2) use the fact‑level explanations to tweak model prompts or data pipelines; 3) log and report flagged errors to improve model reliability.\"}"
   },
-  "e07146d5a76ddff72d0e20cb5eca204a1db911c2ccb52042d92ac08d4bc02965": {
-   "call_site": "news.classify",
-   "created_at": 1793747092.0386963,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Cisco has integrated OpenAI models into its network security stack, enabling AI-driven real-time threat correlation across microservices and Kubernetes environments. This new capability promises faster vulnerability detection, automated response, and tighter isolation of compromised segments without compromising data privacy.\",\n  \"enterprise_use\": \"S1: Review Cisco SecureX or Cisco Talos dashboards this week for the new AI-enabled threat detection widgets. S2: Failure to enable these features may leave your network exposed to AI‑powered attacks that can identify and exploit vulnerabilities faster than traditional scans. S3: The most directly impacted tool is Cisco’s network security platform, which your team can use to augment existing endpoint and MDM controls.\",\n  \"relevance_score\": 7,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Security\"\n}"
-  },
   "e074227a282ead105371189231e16914dc1692e4655d0bc52a2b10ef46c11803": {
    "call_site": "news.classify",
    "created_at": 1794239351.822926,
@@ -2027,12 +1955,6 @@
    "created_at": 1794273861.6931458,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"A critical sshole vulnerability, enabling unauthenticated privileged SSH access on Linux systems running OpenSSH with musl, is actively exploited, prompting an urgent patch from OpenSSH. The exploit is being used in sophisticated intrusions with AI‑generated backdoors, raising immediate risk to enterprise Linux endpoints.\",\"enterprise_use\":\"Go to your Linux infrastructure monitoring and patch management console this week and ensure all systems running OpenSSH with musl are updated to the latest OpenSSH release. Failure to patch immediately exposes your servers to rapid, automated credential‑less attacks that can compromise high‑privilege accounts. The most affected tool here is your endpoint security and patch management platform, which must prioritize this update.\",\"relevance_score\":9,\"relevance_signal\":\"high\",\"category\":\"Security\"}"
-  },
-  "e103c553605544dcd5d1c069be4f6af2e5e6bd75c3e9e19a126f5c38c615850c": {
-   "call_site": "news.classify",
-   "created_at": 1793724396.903909,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Microsoft’s UEFI bootkit vulnerability, exploited by BlackLotus and BlackX, bypassed Secure Boot even on fully patched Windows 11 systems by leveraging the Baton Drop flaw (CVE-2022-21894). The attack allowed pre-boot malicious code execution and potential BitLocker key extraction, highlighting a critical gap in firmware trust management.\",\n  \"enterprise_use\": \"Review your device firmware management policies this week: verify that all endpoints have the latest UEFI firmware and the new Microsoft revocation certificates applied; enable automated firmware integrity checks in your endpoint security platform (e.g., CrowdStrike, Microsoft Defender ATP) to detect boot manager tampering. Failure to do so leaves systems vulnerable to bootkit infections that can bypass OS-level defenses, potentially compromising data and compliance.\\n\\n\",\n  \"relevance_score\": 7,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Security\"\n}"
   },
   "e13dde1b5338c9ee2036403ffeb3afacdc5c3ea2e87b17bdaa0c36ee3ac2809d": {
    "call_site": "case_study.score_papers",
@@ -2057,12 +1979,6 @@
    "created_at": 1794273779.7053874,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"OpenAI has unveiled Control Room, a centralized system that monitors and can halt model workloads within 35 seconds to mitigate safety and security risks. The tool integrates with all research inference jobs, ensuring rapid intervention even if other systems fail.\",\"enterprise_use\":\"Monitor your AI model deployments for similar real-time intervention capabilities—evaluate adding a safety monitoring layer to your inference pipeline. Failing to adopt such controls could expose your infrastructure to undetected model misbehavior and compliance gaps, especially as model complexity grows.\",\"relevance_score\":6,\"relevance_signal\":\"medium\",\"category\":\"Tools\"}"
-  },
-  "e3ffbe172d8d96db8f908027086a35a74d786b39e2ace107be874198bfb992a5": {
-   "call_site": "news.classify",
-   "created_at": 1793747094.031609,
-   "model": "openai/gpt-oss-20b",
-   "response": "{\n  \"summary\": \"Google DeepMind has launched Cheminformatics Skills for Google Antigravity, an AI-powered agent that can rapidly search, analyze, and propose novel drug candidates, completing tasks that previously took days in about an hour. The system integrates with RDKit, ChEMBL, and PubChem to streamline complex cheminformatics workflows for both computational and experimental chemists.\",\n  \"enterprise_use\": \"Watch for potential integrations of Antigravity’s skills into your existing data pipelines or analytics platforms; it could automate tedious data curation and transformation tasks that currently consume significant engineering time. Evaluate whether your team’s workflows could benefit from AI-driven molecule search and synthesis route planning to reduce iteration cycles.\",\n  \"relevance_score\": 5,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Product Launch\"\n}"
   },
   "e52d06e719bb066913040a316fb3b6f2524fbd39d2282d2e128caa04c09bc20a": {
    "call_site": "news.classify",
@@ -2219,6 +2135,12 @@
    "created_at": 1794142996.61259,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"A Hacker News post discusses a math puzzle that uses exactly four 2s to represent any integer using various mathematical operations, including exponents, factorials, and complex numbers.\",\"enterprise_use\":\"N/A – This puzzle has no direct application to IT infrastructure or tooling.\",\"relevance_score\":0,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
+  },
+  "ff11a512a91a620ec81418d18530a5d48afacf2b77a71171372d88dc7fbc7b71": {
+   "call_site": "news.classify",
+   "created_at": 1794351924.1223898,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"Anthropic’s founders plan to sell roughly $250 million each in the company’s upcoming IPO, highlighting the firm’s significant valuation and the founders’ continued control over voting rights.\",\"enterprise_use\":\"No direct action needed for your IT stack.\",\"relevance_score\":2,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
   },
   "ff53610322c9360ee2e863ee4e1cf0a880a630cc64088a9b9030e21f69d68ea4": {
    "call_site": "news.classify",
