@@ -5,86 +5,54 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 11 Nov 2026 14:01:42 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Nov 2026 16:53:22 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>ReTrace: Distilling Tool-Using Agents into Planner-Free Workflows</title>
-    <link>https://arxiv.org/abs/2611.14492v1</link>
-    <guid>https://arxiv.org/abs/2611.14492v1</guid>
-    <pubDate>Tue, 10 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>ReTrace turns natural‑language SOPs and logged LLM runs into code‑driven workflows that pick the next step automatically, cutting cost and latency while keeping accuracy close to the original LLM agent. The tool learns conditions from agent reasoning, compiles a rule document, and outputs an executable workflow for any orchestration platform. It achieved about 94% completion on 79 production SOPs at 24% lower cost, and ran 1.3 s versus 170 s for the agent on benchmark tests.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Export your SOP logs and the natural‑language SOPs; 2) Run ReTrace to generate rule‑based workflows; 3) Deploy the generated workflows in your orchestration platform (e.g., Airflow, Step Functions) to replace LLM calls, saving cost and reducing latency.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>REAL Loss: Optimizing Real Expected Acceptance Length for Speculative Decoding</title>
-    <link>https://arxiv.org/abs/2611.14399v1</link>
-    <guid>https://arxiv.org/abs/2611.14399v1</guid>
-    <pubDate>Tue, 10 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>REAL is a new training loss that improves how speculative decoding models decide which draft tokens to keep, cutting inference time. By adjusting the training objective, the authors show that a Qwen model with a Domino drafter runs faster on a variety of tasks, with no change to the model code or inference pipeline. This could let you squeeze more speed out of your LLMs with a simple loss tweak.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference, you can try the REAL loss by re‑training your draft models: step 1, replace your current cross‑entropy loss with the REAL implementation from the provided GitHub repo; step 2, fine‑tune the draft model on your data; step 3, deploy the new model and measure acceptance length – you should see faster inference without altering the drafter architecture.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Comparative Analysis of Agent Evaluation Frameworks: Stability, Detection, and Discovery in Enterprise Analytics Agents</title>
-    <link>https://arxiv.org/abs/2611.14493v1</link>
-    <guid>https://arxiv.org/abs/2611.14493v1</guid>
-    <pubDate>Tue, 10 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research shows how different LLM‑based evaluation methods reliably spot failures in complex agent workflows, proving that a mix of trace‑based checks and security red‑team tests uncovers hidden bugs that regular testing misses. It builds and compares three evaluation frameworks on two analytics agents, finding trace‑based methods give the best precision while red‑team tests find unique security issues.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, run a trace‑based LLM evaluation on your agents first to catch functional bugs, then add a red‑team LLM review for security gaps. Check that your orchestration logs are detailed enough for trace‑based checks. Ensure your CI pipeline stores execution traces for these evaluations.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Don&#x27;t Just Trust Your Memory: Evidence-Linked Memory Reduces Memory-Induced Degradation in LLM Agents</title>
-    <link>https://arxiv.org/abs/2611.14320v1</link>
-    <guid>https://arxiv.org/abs/2611.14320v1</guid>
-    <pubDate>Tue, 10 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Memory in LLM agents can cause mistakes by following bad lessons, and this paper introduces WikiTrace, a system that links each lesson to its original evidence so agents can verify and correct them. The result is better performance and less error on new tasks.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>FERN: Cross-Benchmark Table Retrieval for Text-to-SQL with Frozen Retrievers and Learned Ranking</title>
-    <link>https://arxiv.org/abs/2611.14477v1</link>
-    <guid>https://arxiv.org/abs/2611.14477v1</guid>
-    <pubDate>Tue, 10 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>FERN is a table‑retrieval system for Text‑to‑SQL that uses pre‑trained retrievers and a LightGBM ranker to reorder 100 candidates, achieving near‑state‑of‑the‑art recall on several benchmark datasets without relying on large language models. It solves the problem of efficiently finding the correct database tables for a natural language query, which is crucial for accurate SQL generation. The system delivers high recall (up to 98% on Spider) and fast latency (≈208 ms per query).</p><p><strong>IT Breakdown:</strong> If you manage cloud database services, consider integrating a frozen retriever + LightGBM ranker pipeline like FERN to improve table recall in your Text‑to‑SQL application: 1) deploy a lightweight retriever ensemble (e.g., BM25, dense vector, and keyword matcher) to generate a 100‑candidate set; 2) extract up to 120 descriptive features per candidate (size, column names, statistics); 3) train a LightGBM ranker on a representative dataset (e.g., Spider training questions) and use it to re‑rank candidates at runtime, targeting a recall of 95%+ for top‑5 results.</p>]]></description>
+    <title>Can LLM Agents Organize Their Own Memory?</title>
+    <link>https://arxiv.org/abs/2611.11929v1</link>
+    <guid>https://arxiv.org/abs/2611.11929v1</guid>
+    <pubDate>Mon, 09 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>SoMem lets language‑model agents store and organise their own memory inside plain documents, deciding what to summarise and how to link it, and it outperforms existing methods by 2–3 % on several benchmarks. The system automatically creates linked summaries that can be reused across models, improving answer quality when extra reasoning is added. This is directly relevant if you manage AI‑driven services that need dynamic, self‑organised memory for better performance.</p><p><strong>IT Breakdown:</strong> If you manage AI‑powered applications that use LLMs, step 1: integrate SoMem by adding the repository to your deployment; step 2: configure the memory‑linking settings to match your data flow; step 3: monitor the benchmark improvements and adjust the summarisation depth for your use case.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] A 13-Year-Old Asked AI About Suicide on Her School Laptop. It Didn’t Get Flagged for Weeks</title>
     <link>https://www.wired.com/story/teen-girl-asked-gemini-about-suicide-for-months-until-it-was-flagged/</link>
     <guid>https://www.wired.com/story/teen-girl-asked-gemini-about-suicide-for-months-until-it-was-flagged/</guid>
-    <pubDate>Wed, 11 Nov 2026 14:01:42 +0000</pubDate>
+    <pubDate>Wed, 11 Nov 2026 16:53:22 +0000</pubDate>
     <description><![CDATA[<p>A lawsuit filed this month alleges that Google’s Gemini chatbot, accessed via AI Mode on a school Chromebook, failed to flag a 13‑year‑old’s suicidal intent for weeks, highlighting gaps in Google’s AI monitoring tools. The case underscores the need for tighter controls on generative AI in educational environments and raises questions about how Google Workspace’s AI features are governed.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Cogent and OpenAI build cyber defense factories for enterprises</title>
+    <link>https://openai.com/index/cogent-security</link>
+    <guid>https://openai.com/index/cogent-security</guid>
+    <pubDate>Wed, 11 Nov 2026 16:53:22 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI and Cogent have launched Cyber Defense Factories that use GPT‑6.1 Sol and GPT‑5.6 to automatically investigate and remediate vulnerabilities across an enterprise’s assets, identities, and dependencies. The system leverages a knowledge graph and policy engine to execute remediation tasks safely, promising faster response times and higher triage rates.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Protecting SSH Keys with macOS Secure Enclave</title>
     <link>https://gatezh.com/posts/macos-secure-enclave-ssh-keys/</link>
     <guid>https://gatezh.com/posts/macos-secure-enclave-ssh-keys/</guid>
-    <pubDate>Wed, 11 Nov 2026 14:01:42 +0000</pubDate>
+    <pubDate>Wed, 11 Nov 2026 16:53:22 +0000</pubDate>
     <description><![CDATA[<p>Apple has enabled SSH keys to be stored and used solely within the macOS Secure Enclave, ensuring the private key never leaves the chip and requires Touch ID for each authentication. This offers a hardware‑backed solution that protects keys from filesystem compromise, appealing to engineers who manage SSH access across servers.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Databricks’ new AI agent tells CEO Ali Ghodsi the unvarnished truth</title>
+    <link>https://techcrunch.com/2026/11/11/databricks-new-ai-agent-tells-ceo-ali-ghodsi-the-unvarnished-truth/</link>
+    <guid>https://techcrunch.com/2026/11/11/databricks-new-ai-agent-tells-ceo-ali-ghodsi-the-unvarnished-truth/</guid>
+    <pubDate>Wed, 11 Nov 2026 16:53:22 +0000</pubDate>
+    <description><![CDATA[<p>Databricks has upgraded its AI agent Genie to execute complex, multi‑step jobs autonomously by leveraging an internal ontology that maps to customer data on the Databricks platform. The new capabilities allow enterprise leaders to delegate tasks such as data analysis, reporting, and internal feedback loops to the agent without manual intervention.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Introducing Businesses in ChatGPT</title>
     <link>https://openai.com/index/introducing-businesses-chatgpt</link>
     <guid>https://openai.com/index/introducing-businesses-chatgpt</guid>
-    <pubDate>Wed, 11 Nov 2026 14:01:42 +0000</pubDate>
+    <pubDate>Wed, 11 Nov 2026 16:53:22 +0000</pubDate>
     <description><![CDATA[<p>OpenAI launches a beta feature called Businesses in ChatGPT, allowing companies to claim a presence, manage up‑to‑date product information, and receive engagement insights via a new Business Hub. The feature also introduces Business Agents for eligible e‑commerce and online service businesses to interact with users directly through ChatGPT.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</title>
-    <link>https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/</link>
-    <guid>https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/</guid>
-    <pubDate>Wed, 11 Nov 2026 14:01:42 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft researchers have uncovered a new backdoor technique called &quot;Lazarus&quot; that can reprogram dormant neurons in AI models, enabling a hidden trigger to cause malicious actions such as downloading and executing attacker code. This attack targets AI agents with tool or terminal access and poses a significant risk to any system relying on AI for automation.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] The Download: Pelosi’s successor targets AI and data centers face power woes</title>
-    <link>https://www.technologyreview.com/2026/11/10/1148150/the-download-pelosi-successor-ai-regulation-data-center-backlash/</link>
-    <guid>https://www.technologyreview.com/2026/11/10/1148150/the-download-pelosi-successor-ai-regulation-data-center-backlash/</guid>
-    <pubDate>Wed, 11 Nov 2026 14:01:42 +0000</pubDate>
-    <description><![CDATA[<p>California state senator Scott Wiener has introduced new legislation aimed at curbing the risks associated with advanced AI. The bill, part of the broader push to regulate AI following Nancy Pelosi’s replacement, signals increased scrutiny over AI deployments nationwide.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
