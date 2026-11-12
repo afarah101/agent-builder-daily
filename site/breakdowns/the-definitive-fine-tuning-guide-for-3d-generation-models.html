@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Definitive Fine-Tuning Guide for 3D Generation Models - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">The Definitive Fine-Tuning Guide for 3D Generation Models</h1>
+  <p class="meta-line">Hugging Face · 12 Nov 202 · Generated 12 Nov 2026, 23:29</p>
+  <a href="https://huggingface.co/blog/3d-lora-finetuning" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Hugging Face has published a comprehensive fine‑tuning guide for the TRELLIS.2 3D generation model, a state‑of‑the‑art diffusion architecture designed to produce high‑fidelity 3D meshes. The guide includes ready‑to‑run scripts, Docker container definitions, and step‑by‑step instructions for both local GPU clusters and Hugging Face’s managed Jobs platform. The primary focus is on leveraging Low‑Rank Adaptation (LoRA) adapters to specialize the model for domain‑specific tasks; the example provided targets footwear geometry refinement using the GSO dataset, a curated collection of shoe scans.</p><p>For enterprise IT teams, the release signals a shift toward accessible, open‑source 3D asset pipelines that can be integrated into existing rendering or product‑development workflows. By offering containerized deployments, Hugging Face lowers the barrier to entry for teams that already run Kubernetes or Docker‑based infrastructure. The ability to fine‑tune on proprietary datasets without retraining the full model reduces GPU hours and accelerates time‑to‑value.</p><p>Key vendors and technologies involved include Hugging Face (model hub, inference API, Jobs service), NVIDIA GPUs (CUDA, TensorRT), Docker/Kubernetes for orchestration, and dataset providers such as GSO. The guide also references ONNX export for downstream compatibility with game engines or CAD tools.</p><p>Industry implications are significant: 3D content creation is moving from manual sculpting to AI‑driven generation. Enterprises that can quickly prototype and iterate on 3D assets—whether for e‑commerce, virtual try‑on, or AR/VR experiences—will gain a competitive edge. The LoRA approach demonstrates that large diffusion models can be adapted cost‑effectively, encouraging broader adoption across sectors that rely on 3D visualization.</p><p>Overall, the release provides a clear, actionable path for IT teams to evaluate, pilot, and potentially scale 3D generation capabilities using open‑source tooling, while aligning with existing GPU and container infrastructures.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory GPU resources: count of NVIDIA A100/H100 or equivalent, available CUDA version, and current utilization.
+   - Assess container runtime: Docker version, Kubernetes cluster health, and CI/CD pipelines that can ingest Docker images.
+   - Data readiness: Verify access to proprietary 3D datasets (e.g., CAD files, scans) and confirm they are in a format ingestible by TRELLIS.2 (OBJ, PLY, etc.).
+   - Network bandwidth: Ensure sufficient egress for pulling large model weights (~10–20 GB) from Hugging Face Hub.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Cost baseline: Current manual 3D asset creation cost per item (e.g., $200–$500). Estimate savings by automating 70% of the workflow.
+   - Time‑to‑value: Current iteration cycle is 4–6 weeks; projected cycle with LoRA fine‑tuning is 1–2 weeks.
+   - ROI metric: Compute break‑even GPU hours. If a single A100 costs $3/hour, and fine‑tuning reduces per‑item GPU time from 10 h to 2 h, the savings per item are $24.
+   - Include a pilot KPI: number of assets generated per month, quality score (e.g., mesh error &lt; 0.5 mm), and user adoption rate.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Hugging Face Hub &amp; Jobs: for model hosting and managed training.
+   - NVIDIA CUDA Toolkit &amp; cuDNN: for GPU acceleration.
+   - Docker &amp; Kubernetes: for container orchestration.
+   - ONNX Runtime: for exporting models to production inference engines.
+   - Data versioning tools (e.g., DVC) to track dataset changes.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: GPU memory constraints may limit batch size; LoRA adapters may not converge on highly specialized domains.
+   - Compliance: If training on customer data, ensure GDPR (UK) data residency; encrypt data at rest and in transit.
+   - Operational: Over‑reliance on a single vendor (Hugging Face) for model weights; plan for fallback to open‑source checkpoints.
+   - Security: Container images must be scanned for vulnerabilities; restrict network access to the Jobs service.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy the provided Docker image on a single A100 node and run the LoRA fine‑tuning script on a small subset of the GSO dataset (e.g., 50 shoes). Measure GPU utilization and output mesh quality. Document the pipeline and share results with stakeholders within 30 days.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, expand the pipeline to support multiple 3D domains (e.g., automotive, apparel). Integrate the fine‑tuned models into the existing rendering workflow via ONNX or TensorRT. Build a governance framework for dataset curation, model versioning, and audit logging to meet enterprise compliance standards. Consider hybrid deployment: on‑prem GPU clusters for sensitive data, with fallback to Hugging Face Jobs for non‑confidential workloads.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 12 Nov 2026, 23:29</p>
+</main>
+</body>
+</html>
