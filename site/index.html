@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">0</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">31</div>
+          <div class="stat-num">14</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 12 Nov 2026, 23:31 UTC</p>
+    <p class="updated">Updated 13 Nov 2026, 14:28 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -612,72 +612,166 @@
 
 <main class="content">
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
-    <div class="cards-grid"><div class='empty-state'><p>No case studies available yet.</p></div></div>
+    <div class="cards-grid"><article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Database debugging, llm agents, forensic layer</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.17304v1" target="_blank" rel="noopener noreferrer">Where LLM Agents Get Stuck Debugging Databases: Access More Than Reasoning</a></h2>
+  <div class="card-meta"><span>Gustavo Pinto</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
+  <p class="card-summary">Large‑language‑model coding agents often fail to debug database issues because they lack real‑time access to production state such as lock views and deadlock logs. The study analysed Claude Code fixing eight incidents and showed that missing production data caused repeated misdiagnoses and extra deploys. A new forensics layer could give these agents the needed state without breaking security controls.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infra that uses LLM agents for debugging, first check if your agents have a secure API to fetch live lock views and deadlock reports. Second, enable a production replay harness so the agent can run in read‑only mode with the current state. Third, monitor for repeated deploy‑and‑observe cycles – if they appear, add the forensics layer before relying on the agent for live fixes.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper addresses a real-world challenge faced by IT engineers—debugging database concurrency issues with LLM agents. It highlights practical limitations and proposes a forensic layer that could be implemented within existing security frameworks, offering a tangible service for infrastructure teams. While the agent itself is still in experimental use, the concepts are mature enough to be prototyped and deployed, and the proposed forensic layer presents clear monetisation opportunities within 90 days.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/where-llm-agents-get-stuck-debugging-databases-access-more-than-reasoning.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Where LLM Agents Get Stuck Debugging Databases: Access More Than Reasoning"
+      data-summary="Large‑language‑model coding agents often fail to debug database issues because they lack real‑time access to production state such as lock views and deadlock logs. The study analysed Claude Code fixing eight incidents and showed that missing production data caused repeated misdiagnoses and extra deploys. A new forensics layer could give these agents the needed state without breaking security controls."
+      data-it="If you manage cloud infra that uses LLM agents for debugging, first check if your agents have a secure API to fetch live lock views and deadlock reports. Second, enable a production replay harness so the agent can run in read‑only mode with the current state. Third, monitor for repeated deploy‑and‑observe cycles – if they appear, add the forensics layer before relying on the agent for live fixes."
+      data-monetisation=""
+      data-reasoning="The paper addresses a real-world challenge faced by IT engineers—debugging database concurrency issues with LLM agents. It highlights practical limitations and proposes a forensic layer that could be implemented within existing security frameworks, offering a tangible service for infrastructure teams. While the agent itself is still in experimental use, the concepts are mature enough to be prototyped and deployed, and the proposed forensic layer presents clear monetisation opportunities within 90 days."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.17304v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Security vulnerability</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.17280v1" target="_blank" rel="noopener noreferrer">Synthesis Smuggling: Maliciously Hiding Inferred Personal Attributes in LLM Outputs</a></h2>
+  <div class="card-meta"><span>Gautam Galada, Supreeth Shastri, Sagnik Ray Choudhury</span><span class="sep" aria-hidden="true">·</span><span>ETH</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
+  <p class="card-summary">This research shows how a malicious language model can hide personal details in its outputs, turning normal messages into covert channels for attackers. It demonstrates the technique by training models to infer gender and age from conversations and embedding that info in invisible characters or word choices. The result is a stealthy way to leak user data without direct communication with the attacker.</p>
+  
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
+      <p class="trace-reasoning">The paper identifies a real security threat that could affect how IT engineers secure LLM outputs and monitor for covert channels, warranting a moderate impact score. The authors provide a working demonstration with trained models, indicating a mature system suitable for immediate testing, hence a high maturity score. While the findings could be used to build security monitoring services, the paper does not provide a clear, deployable product or API, resulting in a lower monetisation score. Overall the research is relevant, implementable, and potentially commercially useful within 90 days.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Synthesis Smuggling: Maliciously Hiding Inferred Personal Attributes in LLM Outputs"
+      data-summary="This research shows how a malicious language model can hide personal details in its outputs, turning normal messages into covert channels for attackers. It demonstrates the technique by training models to infer gender and age from conversations and embedding that info in invisible characters or word choices. The result is a stealthy way to leak user data without direct communication with the attacker."
+      data-it="Not directly applicable to IT infrastructure work"
+      data-monetisation=""
+      data-reasoning="The paper identifies a real security threat that could affect how IT engineers secure LLM outputs and monitor for covert channels, warranting a moderate impact score. The authors provide a working demonstration with trained models, indicating a mature system suitable for immediate testing, hence a high maturity score. While the findings could be used to build security monitoring services, the paper does not provide a clear, deployable product or API, resulting in a lower monetisation score. Overall the research is relevant, implementable, and potentially commercially useful within 90 days."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.17280v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">mobile security, agent testing</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.16693v1" target="_blank" rel="noopener noreferrer">MobileProbe: Adaptive Security Evaluation of Mobile Agents via Trajectory-Aware Injection</a></h2>
+  <div class="card-meta"><span>Yingbin Jin, Ji&#x27;an Wang, HaoYang Chai, Hanjun Luo</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
+  <p class="card-summary">MobileProbe is an automated testing tool that finds hidden security risks in mobile app‑automation agents by injecting malicious content during their task execution. It builds a trajectory‑aware framework that automatically discovers vulnerable points, crafts adaptive payloads, and tests 83 real‑world scenarios across 12 apps, beating existing methods in finding attacks. This work is relevant for anyone deploying or managing mobile automation – it offers a practical auditing tool to spot and fix security holes before launch.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage mobile automation agents, use MobileProbe to run automated penetration tests: 1. Integrate MobileProbe into your CI pipeline to scan new agent builds. 2. Review the identified attack paths and harden those UI surfaces. 3. Re‑run tests after changes to confirm vulnerabilities are mitigated.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper addresses a concrete security risk for mobile agents that could impact IT engineers managing mobile device security. The framework is described as a prototype with a benchmark, but no public code or deployed system is reported, so maturity is moderate. The approach could be turned into a security testing service within 90 days, giving it good monetisation potential.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/mobileprobe-adaptive-security-evaluation-of-mobile-agents-via-trajectory-aware-i.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="MobileProbe: Adaptive Security Evaluation of Mobile Agents via Trajectory-Aware Injection"
+      data-summary="MobileProbe is an automated testing tool that finds hidden security risks in mobile app‑automation agents by injecting malicious content during their task execution. It builds a trajectory‑aware framework that automatically discovers vulnerable points, crafts adaptive payloads, and tests 83 real‑world scenarios across 12 apps, beating existing methods in finding attacks. This work is relevant for anyone deploying or managing mobile automation – it offers a practical auditing tool to spot and fix security holes before launch."
+      data-it="If you manage mobile automation agents, use MobileProbe to run automated penetration tests: 1. Integrate MobileProbe into your CI pipeline to scan new agent builds. 2. Review the identified attack paths and harden those UI surfaces. 3. Re‑run tests after changes to confirm vulnerabilities are mitigated."
+      data-monetisation=""
+      data-reasoning="The paper addresses a concrete security risk for mobile agents that could impact IT engineers managing mobile device security. The framework is described as a prototype with a benchmark, but no public code or deployed system is reported, so maturity is moderate. The approach could be turned into a security testing service within 90 days, giving it good monetisation potential."
+      data-score="45"
+      data-url="https://arxiv.org/abs/2611.16693v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Vulnerability assessment</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:53;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 40 of 75"><span>40</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.16588v1" target="_blank" rel="noopener noreferrer">CrossPloit: A Benchmark for Cross-Version PoC Migration in Python Web Applications</a></h2>
+  <div class="card-meta"><span>Hung Nguyen-Huu, Nguyen Anh Tuan, Ting Zhang, Yue Liu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
+  <p class="card-summary">Many vulnerability databases miss older releases of Python web applications, leaving them mistakenly marked as safe. CrossPloit builds a benchmark of 127 real-world cases, proving that 149 earlier versions were in fact vulnerable and that a specialised migration approach can validate over half of these cases. This shows that your vulnerability scanning and patching pipelines may need to be checked for hidden exposure.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage Python web apps, first cross‑check your affected‑version lists against the CrossPloit findings; then run a cross‑version PoC migration on any version flagged as missing to confirm exposure; finally, integrate the benchmark’s validation step into your CI pipeline to catch silent vulnerabilities.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper addresses cross-version PoC migration for Python web apps, directly impacting vulnerability assessment workflows used by IT engineers. It provides a benchmark and some trained models, but lacks a fully deployed system, hence moderate maturity. The reference PoC packages could be packaged into a service for rapid vulnerability validation, yielding some monetisation potential.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/crossploit-a-benchmark-for-cross-version-poc-migration-in-python-web-application.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="CrossPloit: A Benchmark for Cross-Version PoC Migration in Python Web Applications"
+      data-summary="Many vulnerability databases miss older releases of Python web applications, leaving them mistakenly marked as safe. CrossPloit builds a benchmark of 127 real-world cases, proving that 149 earlier versions were in fact vulnerable and that a specialised migration approach can validate over half of these cases. This shows that your vulnerability scanning and patching pipelines may need to be checked for hidden exposure."
+      data-it="If you manage Python web apps, first cross‑check your affected‑version lists against the CrossPloit findings; then run a cross‑version PoC migration on any version flagged as missing to confirm exposure; finally, integrate the benchmark’s validation step into your CI pipeline to catch silent vulnerabilities."
+      data-monetisation=""
+      data-reasoning="The paper addresses cross-version PoC migration for Python web apps, directly impacting vulnerability assessment workflows used by IT engineers. It provides a benchmark and some trained models, but lacks a fully deployed system, hence moderate maturity. The reference PoC packages could be packaged into a service for rapid vulnerability validation, yielding some monetisation potential."
+      data-score="40"
+      data-url="https://arxiv.org/abs/2611.16588v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">GPU power management for AI workloads</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:33;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 25 of 75"><span>25</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.17206v1" target="_blank" rel="noopener noreferrer">PACER: GPU Excursion Management for ML Workloads</a></h2>
+  <div class="card-meta"><span>Rutwik Jain, Nathaniel Morris, Yiwei Jiang, Shidhartha Das</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
+  <p class="card-summary">GPU workloads for LLMs suffer from power overshoot spikes that cause throttling and inconsistent performance. The authors built hardware and firmware controls that smooth these power peaks, boosting performance by 3‑12 % over existing GPU power‑management solutions. This can directly improve the reliability and speed of your GPU‑based ML services.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage GPU‑based ML workloads, 1) audit your GPU power‑management logs for transient power spikes; 2) upgrade to firmware that includes fine‑grained power‑management to dampen spikes; 3) monitor performance gains to ensure 3‑12 % improvement is realised.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper tackles GPU power management for LLM workloads, which is relevant to infrastructure engineers managing GPU clusters. However, the work appears to be experimental, with no released code or production deployment, and the monetisation potential is limited due to lack of ready-to-use tooling.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/pacer-gpu-excursion-management-for-ml-workloads.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="PACER: GPU Excursion Management for ML Workloads"
+      data-summary="GPU workloads for LLMs suffer from power overshoot spikes that cause throttling and inconsistent performance. The authors built hardware and firmware controls that smooth these power peaks, boosting performance by 3‑12 % over existing GPU power‑management solutions. This can directly improve the reliability and speed of your GPU‑based ML services."
+      data-it="If you manage GPU‑based ML workloads, 1) audit your GPU power‑management logs for transient power spikes; 2) upgrade to firmware that includes fine‑grained power‑management to dampen spikes; 3) monitor performance gains to ensure 3‑12 % improvement is realised."
+      data-monetisation=""
+      data-reasoning="The paper tackles GPU power management for LLM workloads, which is relevant to infrastructure engineers managing GPU clusters. However, the work appears to be experimental, with no released code or production deployment, and the monetisation potential is limited due to lack of ready-to-use tooling."
+      data-score="25"
+      data-url="https://arxiv.org/abs/2611.17206v1">Copy as Markdown</button>
+  </div>
+</article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     
-    <div class="cards-grid"><article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">8/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/12/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/" target="_blank" rel="noopener noreferrer">The unfolding Jensen Huang scandal: a timeline</a></h2>
-  <p class="card-summary">Nvidia CEO Jensen Huang has resigned amid scandal involving alleged personal misconduct and potential national security concerns. The controversy raises questions about Nvidia’s role in AI chip supply and U.S. export controls that could affect global AI infrastructure.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Review your organization’s GPU and AI hardware procurement contracts for any clauses tied to Nvidia products. S2: If you rely on Nvidia GPUs for workloads, assess the risk of supply chain disruptions or export control restrictions that may arise from this leadership upheaval. S3: Update your incident response playbooks to include monitoring of vendor status changes in key AI hardware suppliers, particularly Nvidia, to pre‑empt potential service interruptions.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/the-unfolding-jensen-huang-scandal-a-timeline.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Google DeepMind</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">8/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://deepmind.google/blog/introducing-gemini-4-hydrogen/" target="_blank" rel="noopener noreferrer">Introducing Gemini 4 Hydrogen</a></h2>
-  <p class="card-summary">Google DeepMind has launched Gemini 4 Hydrogen, a faster, cost‑efficient model for everyday coding and agentic workflows, and introduced Orchestrator to switch between models automatically. This update promises significant speedups and lower token costs for developers using the Gemini API, Google AI Studio, and related enterprise tools.</p>
-  <p class="insight"><strong>How to use:</strong> Review your current use of the Gemini API or Google AI Studio this week: enable Hydrogen for rapid code generation and testing to reduce execution time and cost. Inaction means continued reliance on slower models and higher token spend, potentially slowing development velocity. The Gemini API is the most directly affected tool for your engineering workflows.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/introducing-gemini-4-hydrogen.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Infrastructure</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">7/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/12/nebius-tests-the-neocloud-playbook-with-40-billion-in-planned-spending/" target="_blank" rel="noopener noreferrer">Nebius tests the neocloud playbook with $40 billion in planned spending</a></h2>
-  <p class="card-summary">Nebius, a neocloud provider, announced a $40 billion spend plan for 2027 but faces significant construction delays, especially at a Microsoft‑contracted New Jersey site. The setbacks risk financial penalties and could impact the reliability of cloud services for large customers.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Monitor Nebius and Microsoft cloud capacity updates in the next 30 days for any service impact. S2: Delays could reduce available compute resources for your teams, affecting workload scheduling. S3: Pay attention to Azure or AWS migration options if Nebius services become unreliable.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
+    <section class="signal">
+        <h2 class="signal-title">Today's signal</h2>
+        <p>Discover how Amplitude, Holiday Extras and weather labs are using OpenAI, Codex and open data to ship faster, build smarter, and forecast tomorrow.</p>
+    </section>
     
-  </div>
-</article>
-<article class="card news-card">
+    <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
@@ -689,89 +783,9 @@
       <span class="score-num">7/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://openai.com/index/jiostar-vijay-seshadri" target="_blank" rel="noopener noreferrer">JioStar’s chief architect on AI discovery at 500M-user scale</a></h2>
-  <p class="card-summary">JioStar has deployed a conversational video and cricket-stat discovery assistant on its JioHotstar platform using the OpenAI API, enabling voice‑visual search across 15 languages for 500 million users. The solution balances accuracy, latency, and cost to deliver real‑time recommendations and statistics to millions of concurrent viewers.</p>
-  <p class="insight"><strong>How to use:</strong> Go to your OpenAI API dashboard and review the cost and latency metrics for large‑scale voice‑visual requests; adjust request limits or enable caching if needed to keep response times under 200 ms for 500 M users. Inaction could lead to increased API spend or degraded user experience during peak events. This directly impacts the AI integration layer of your IT stack, so monitor usage through your API management portal.</p>
-  <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/jiostars-chief-architect-on-ai-discovery-at-500m-user-scale.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">7/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://huggingface.co/blog/qvac/botpsy" target="_blank" rel="noopener noreferrer">BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model</a></h2>
-  <p class="card-summary">Hugging Face’s BotPsy is a 0.8B‑parameter agentic language model optimized for on‑device deployment, excelling in tool‑use and instruction following while keeping user data private. Its low cost and high performance make it attractive for privacy‑conscious, low‑to‑medium task automation in enterprise workflows.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Explore integrating BotPsy as a lightweight, on‑device assistant for end‑user devices via a custom MDM push or container app. S2: Failure to adopt this could leave your organization reliant on costly, cloud‑hosted LLMs with higher latency and privacy risks. S3: The model best complements your JumpCloud MDM and endpoint security stack by enabling secure, offline automation without compromising corporate data.</p>
-  <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/botpsy-on-device-personal-assistant-with-a-sub-billion-parameter-agentic-languag.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/nvidia-ceo-jensen-huang-steps-down/" target="_blank" rel="noopener noreferrer">Jensen Huang Resigns as Nvidia CEO</a></h2>
-  <p class="card-summary">Nvidia CEO Jensen Huang resigned amid allegations of an affair with a Chinese intelligence asset, prompting an internal investigation and raising concerns about potential espionage. The leadership change signals heightened scrutiny of AI supply chains and could impact Nvidia’s chip and AI product availability for enterprise customers.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor Nvidia’s product roadmap and supply‑chain announcements for any shifts in GPU availability or pricing that could affect your AI workloads. If you rely on Nvidia GPUs for critical workloads, consider diversifying your accelerator portfolio or negotiating service level agreements that account for potential disruptions.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://ipo.anthropic.com/us/" target="_blank" rel="noopener noreferrer">Anthropic IPO</a></h2>
-  <p class="card-summary">Anthropic is going public with an IPO set to trade on Nasdaq under the ticker ANT, targeting a valuation that reflects its rapid revenue growth and large enterprise customer base. The announcement signals broader market confidence in large‑language‑model companies and could influence investment trends in AI infrastructure and security vendors.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor Anthropic’s market performance over the next 30 days to gauge investor sentiment toward AI tech. This insight can inform risk‑assessment discussions for AI‑driven security tooling and help prioritize budget allocation for future AI platform evaluations.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/anthropic-ipo.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://openai.com/index/amplitude" target="_blank" rel="noopener noreferrer">How Amplitude ships product improvements in 1–2 days with OpenAI</a></h2>
-  <p class="card-summary">Amplitude has introduced a new AI-driven product agent called Wave that leverages OpenAI models to recommend features, auto-generate code, and measure impact, enabling rapid product iterations. This tool can accelerate development cycles by reducing the time from idea to deployment to 1–2 days.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor Amplitude’s Wave deployment and evaluate how its rapid iteration capabilities could integrate with your existing development workflows. Incorporating this tool could reduce your build cycle time, freeing resources for more complex security and infrastructure tasks.</p>
+  <h2 class="card-title"><a href="https://openai.com/business/customer-stories/amplitude" target="_blank" rel="noopener noreferrer">How Amplitude ships product improvements in 1–2 days with OpenAI</a></h2>
+  <p class="card-summary">Amplitude’s new AI-driven product agent, Wave, leverages OpenAI models to identify, plan, and ship product improvements in 1–2 days, dramatically accelerating iteration cycles. The tool reduces coding time by integrating with coding agents like Codex and lowers model costs through targeted model use.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Explore integrating Wave’s rapid iteration capabilities into your internal product or service monitoring by setting up a pilot in Amplitude to track feature deployment metrics this week. S2: Missing this could mean slower response to user feedback and longer release cycles, impacting user satisfaction. S3: Your team’s product analytics platform and internal development pipeline would benefit most from Wave’s ability to automate code generation and impact measurement.</p>
   <div class="card-footer">
     <span class="pub-date">12 Nov 2026</span>
     <a href="breakdowns/how-amplitude-ships-product-improvements-in-12-days-with-openai.html" class="breakdown-link">IT Breakdown</a>
@@ -780,41 +794,81 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/business/customer-stories/holidays-extras-codex" target="_blank" rel="noopener noreferrer">Holiday Extras is rethinking what it can build with Codex</a></h2>
+  <p class="card-summary">OpenAI’s Codex has helped Holiday Extras accelerate app development, cutting rebuild time from six months to two weeks, boosting open‑to‑book conversion by 32.5% and cutting error rates in half. The company’s use of Codex demonstrates how generative AI can speed feature delivery and improve customer‑centric design across iOS and Android platforms.</p>
+  <p class="insight"><strong>How to use:</strong> Check your current development pipeline for opportunities to integrate Codex or similar generative‑AI tools to shorten build cycles and enable rapid iteration. By experimenting with AI‑driven code generation, you can reduce release cadences, lower bug rates, and create a more responsive app development workflow—benefiting your SSO, MDM, and endpoint security integrations. If you are already using GitHub Copilot or similar, evaluate whether switching to Codex could give you higher accuracy or faster feature implementation for your Google Workspace‑integrated tools.</p>
+  <div class="card-footer">
+    <span class="pub-date">12 Nov 2026</span>
+    <a href="breakdowns/holiday-extras-is-rethinking-what-it-can-build-with-codex.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
+      <span class="source-name">Wired AI</span>
       <span class="tag-pill">Regulation</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/12/democrats-launch-nvidia-investigation-write-scathing-letter-on-huangs-scheme-with-trump/" target="_blank" rel="noopener noreferrer">Democrats launch Nvidia investigation, write scathing letter on Huang’s ‘scheme’ with Trump</a></h2>
-  <p class="card-summary">Democrats have launched a congressional inquiry into Nvidia’s alleged export practices to China, questioning the legality of sales arrangements and the company’s ties to the former administration. The investigation highlights potential regulatory violations that could impact global supply chains and compliance oversight.</p>
-  <p class="insight"><strong>How to use:</strong> Watch for any new export compliance policies or sanctions that may affect the procurement of GPU-accelerated services used in data centers or AI workloads. Early review of your organization’s hardware vendor contracts can preempt similar regulatory scrutiny and ensure alignment with U.S. export controls.</p>
+  <h2 class="card-title"><a href="https://www.wired.com/story/uncanny-valley-podcast-jensen-huangs-dollar470-billion-affair/" target="_blank" rel="noopener noreferrer">Jensen Huang’s $470 Billion Affair</a></h2>
+  <p class="card-summary">Nvidia CEO Jensen Huang admitted an affair with a woman linked to China’s intelligence, raising concerns about potential espionage and affecting the company’s stance on chip export controls. The scandal could influence GPU supply chains and the availability of high‑performance hardware for AI workloads.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Monitor Nvidia’s public statements and any changes to export‑control policies that could impact GPU licensing or availability this week. S2: A sudden tightening of export controls could delay or restrict access to critical GPUs needed for training or inference workloads, increasing costs or forcing a shift to alternative hardware. S3: The Google Cloud AI Platform, JumpCloud’s device management (if using Nvidia GPUs), and any in‑house ML pipelines are most directly affected.</p>
   <div class="card-footer">
     <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/democrats-launch-nvidia-investigation-write-scathing-letter-on-huangs-scheme-wit.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/jensen-huangs-470-billion-affair.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
-      <span class="source-name">Google AI</span>
+      <span class="source-name">Google DeepMind</span>
       <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://deepmind.google/blog/opening-the-datasets-behind-our-ai-weather-models/" target="_blank" rel="noopener noreferrer">Opening the datasets behind our AI weather models</a></h2>
+  <p class="card-summary">Google DeepMind has released two foundational datasets, SatWeave and PARDIG, that provide hourly satellite imagery and high‑resolution precipitation data for weather, hydrology, and climate modeling. These datasets enable developers to build more accurate and real‑time forecasting applications, such as solar power and wildfire monitoring.</p>
+  <p class="insight"><strong>How to use:</strong> Explore integrating SatWeave and PARDIG into your organization’s data pipelines to enhance predictive analytics for environmental and operational risk. Evaluate their APIs and data formats this week to assess compatibility with your current data ingestion tools. Leveraging these datasets could improve decision‑making in areas like energy management and disaster preparedness, directly benefiting your IT infrastructure and analytics platforms.</p>
+  <div class="card-footer">
+    <span class="pub-date">10 Nov 2026</span>
+    <a href="breakdowns/opening-the-datasets-behind-our-ai-weather-models.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Product Launch</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
       <span class="score-num">6/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://research.google/blog/using-wearables-to-enable-cardiovascular-kidney-metabolic-ckm-risk-profiling-for-personalized-coaching/" target="_blank" rel="noopener noreferrer">Using wearables to enable cardiovascular-kidney-metabolic (CKM) risk profiling for personalized coaching</a></h2>
-  <p class="card-summary">Google AI researchers have released a new machine‑learning framework that transforms passive wearable data into a coachable &quot;health age&quot; metric, allowing users to simulate personalized habit changes and predict cardiovascular‑kidney‑metabolic outcomes. The model blends heart rate, step count, sleep, and activity data with optional biomarkers to forecast health improvements over a 12‑week horizon.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor how this framework could inform future health‑monitoring integrations with employee wellness programs. Consider evaluating whether existing wearable APIs (e.g., Google Fit, Apple HealthKit) can expose the required data streams for internal pilot testing.</p>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/ggml-org/llama-cpp-v1" target="_blank" rel="noopener noreferrer">llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem</a></h2>
+  <p class="card-summary">Hugging Face has released llama.cpp v1.0.0, a lightweight, cross-platform C/C++ library that enables running multi‑modal large language models on a wide spectrum of hardware, from consumer machines to enterprise servers. The update emphasizes a stable API, robust CI, and expanded backend support, positioning llama.cpp as a foundational tool for building private AI solutions.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor the new llama.cpp release for potential use in internal AI pilots that require on‑premise inference, especially if you need to keep data localized. Evaluate whether integrating llama.cpp into your existing DevOps pipelines could reduce dependence on cloud‑based LLMs and provide a more secure, cost‑effective model deployment path.</p>
   <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/using-wearables-to-enable-cardiovascular-kidney-metabolic-ckm-risk-profiling-for.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">13 Nov 2026</span>
+    <a href="breakdowns/llamacpp-v100-a-stronger-foundation-for-the-local-ai-ecosystem.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -822,19 +876,39 @@
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Security</span>
+      <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/11/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/" target="_blank" rel="noopener noreferrer">The unfolding Jensen Huang scandal: a timeline</a></h2>
-  <p class="card-summary">Nvidia CEO Jensen Huang’s alleged affairs have sparked a national security investigation into Megaspeed, a Singapore‑based AI infrastructure firm suspected of illicitly sharing Nvidia chips with China. The scandal has led to a board meeting aimed at potentially ousting Huang and has caused Nvidia’s stock to fall sharply.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor any changes in Nvidia’s export‑control policies or supply‑chain restrictions that could affect the AI hardware your organization relies on.</p>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/13/jensen-huang-didnt-show-confidence-in-his-successor-report-says/" target="_blank" rel="noopener noreferrer">Jensen Huang didn’t show confidence in his successor, report says</a></h2>
+  <p class="card-summary">Former Nvidia CEO Jensen Huang resigned after internal conflict and personal scandals, leaving CFO Collette Kress as interim CEO. The leadership shake‑up and potential shift in Nvidia’s credit‑based GPU financing could impact data center operators relying on Nvidia hardware for AI workloads.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Nvidia’s upcoming GPU releases and financing terms, as changes could affect your organization’s procurement strategy for AI acceleration. Review your current GPU vendor contracts and assess whether to negotiate similar credit terms or diversify your hardware portfolio to mitigate any sudden policy shifts. Pay special attention to any updates in Nvidia’s pricing or financing models that may surface over the next 30 days.</p>
   <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/the-unfolding-jensen-huang-scandal-a-timeline.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">13 Nov 2026</span>
+    <a href="breakdowns/jensen-huang-didnt-show-confidence-in-his-successor-report-says.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://status.claude.com/incidents/nn11wk485zfn" target="_blank" rel="noopener noreferrer">Elevated errors on claude.ai, Claude Code, and platform.claude.com</a></h2>
+  <p class="card-summary">Claude.ai, Claude Code, and platform.claude.com have reported elevated error rates, prompting a subscription-based notification service for incident updates. This indicates a temporary outage affecting the AI model&#x27;s availability.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Claude.ai’s status pages or set up alerts to stay informed of any disruptions that could impact downstream AI workflows. If your team relies on Claude for code generation or content creation, having real-time notifications helps avoid workflow stalls.</p>
+  <div class="card-footer">
+    <span class="pub-date">13 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
@@ -842,66 +916,6 @@
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">OpenAI</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://openai.com/index/children-first-declaration" target="_blank" rel="noopener noreferrer">Supporting research on AI and children’s safety</a></h2>
-  <p class="card-summary">OpenAI has pledged $2 million to support research on AI safety for children and signed a charter for Safer AI for Children at the Paris Peace Forum. The initiative aims to develop measurement tools and guidelines for age‑appropriate AI use, influencing future policy and product design.</p>
-  <p class="insight"><strong>How to use:</strong> While there is no immediate tool to implement, keep an eye on emerging AI safety frameworks that could shape compliance requirements for user‑access controls and content filtering in your organization. Evaluate your current policy settings for child‑targeted content and consider incorporating future age‑verification or parental‑control features as they become available.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/supporting-research-on-ai-and-childrens-safety.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/11/who-could-replace-jensen-huang-a-highly-unscientific-list-of-possible-successors/" target="_blank" rel="noopener noreferrer">Who could replace Jensen Huang? A highly unscientific list of possible successors</a></h2>
-  <p class="card-summary">TechCrunch reports speculation over Nvidia CEO Jensen Huang’s possible replacement, listing potential successors such as AMD’s Lisa Su, former Google CEO Eric Schmidt, Intel’s Lip‑Bu Tan, and others. The story highlights corporate leadership volatility in the AI chip industry but does not introduce new technology or tools directly affecting IT operations.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on Nvidia’s leadership changes as they could influence GPU supply and pricing, impacting cloud AI workloads you manage. Consider reviewing your GPU‑heavy applications for potential cost or availability adjustments in the next 30 days.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/who-could-replace-jensen-huang-a-highly-unscientific-list-of-possible-successors.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Microsoft</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://blogs.microsoft.com/blog/2026/11/12/scaling-ai-value-without-losing-control-lessons-from-frontier-firms/" target="_blank" rel="noopener noreferrer">Scaling AI value without losing control: Lessons from Frontier Firms</a></h2>
-  <p class="card-summary">Microsoft’s latest IDC‑commissioned study examines how large enterprises can extract maximum value from AI while maintaining control. The report highlights best practices and lessons learned from frontier firms across 28 industries.</p>
-  <p class="insight"><strong>How to use:</strong> Review the study to benchmark your own AI governance practices and identify potential gaps in control or oversight. Align these insights with your existing security and compliance frameworks to ensure scalable, responsible AI adoption.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/scaling-ai-value-without-losing-control-lessons-from-frontier-firms.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
       <span class="tag-pill">Tools</span>
     </div>
     <div class="news-score-area">
@@ -909,39 +923,21 @@
       <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://huggingface.co/blog/ibm-granite/llmon-an-llm-native-markup-language-now-in-granite" target="_blank" rel="noopener noreferrer">LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B</a></h2>
-  <p class="card-summary">Hugging Face has released LLMON, a markup language that structures input for large language models, alongside experimental Granite 4.1 LLMON‑trained models and a GitHub toolkit. The format aims to reduce prompt‑injection risk and improve instruction clarity, potentially benefiting developers building AI‑driven applications.</p>
-  <p class="insight"><strong>How to use:</strong> Evaluate LLMON for your internal AI workflows to see if structured prompts reduce injection risks and improve response consistency. If your teams are deploying LLMs for customer support or code generation, integrating LLMON could streamline prompt management and lower the need for manual JSON handling.</p>
+  <h2 class="card-title"><a href="https://openai.com/business/customer-stories/gondola" target="_blank" rel="noopener noreferrer">Gondola doubles revenue as its team builds more with Codex</a></h2>
+  <p class="card-summary">OpenAI’s Codex has enabled Gondola, a creative agency platform, to boost engineering output by 25% and lead engineer output by 50%, doubling revenue YoY without adding headcount. The story illustrates how AI‑driven prototyping can accelerate product development and reduce bugs, a model that IT teams can emulate.
+</p>
+  <p class="insight"><strong>How to use:</strong> Consider evaluating Codex or similar AI coding assistants to prototype internal tools faster, reducing engineer time on low‑impact tasks. This could free capacity for security or compliance projects and lower bug rates in your own service pipelines. Look at your existing development workflow in Freshservice and MDM scripting to spot opportunities for AI‑augmented rapid prototyping.
+</p>
   <div class="card-footer">
     <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/llmon-an-llm-native-markup-language-now-in-granite-41-3b-and-8b.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/gondola-doubles-revenue-as-its-team-builds-more-with-codex.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">MIT Tech Review</span>
-      <span class="tag-pill">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">5/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/12/1148483/nvidia-chip-tracking/" target="_blank" rel="noopener noreferrer">Nvidia privately confirmed it could track chips to fight smuggling, even as industry publicly questioned feasibility</a></h2>
-  <p class="card-summary">Nvidia has confirmed privately that it could implement chip‑tracking technology required by the Chip Security Act, countering industry doubts about feasibility. This confirms a potential regulatory compliance path for chip manufacturers.</p>
-  <p class="insight"><strong>How to use:</strong> Watch for any future Nvidia API or tooling that could integrate chip‑tracking or provide audit logs of chip movement, as it could influence compliance reporting for hardware security. Keep an eye on the Act’s implementation status and any vendor announcements that may affect your supply‑chain security tools.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/nvidia-privately-confirmed-it-could-track-chips-to-fight-smuggling-even-as-indus.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
+      <span class="source-name">TechCrunch</span>
       <span class="tag-pill">Product Launch</span>
     </div>
     <div class="news-score-area">
@@ -949,112 +945,14 @@
       <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/startup-fights-ai-bioweapons-with-ai/" target="_blank" rel="noopener noreferrer">A Startup Wants to Fight AI Bioweapons With AI</a></h2>
-  <p class="card-summary">Radical Numerics unveiled Omnii Defense, an AI-powered edge model that can flag natural and synthetic pathogens using a laptop and USB gene sequencer. The tool predicts pathogenicity and AI-origin likelihood, aiming to aid researchers and public health officials in low-connectivity environments.</p>
-  <p class="insight"><strong>How to use:</strong> Note the release of Omnii Defense as a potential future threat detection asset. While it doesn’t directly impact your current IT stack, staying informed about AI-based biosecurity tools can help you anticipate new compliance or security requirements that may arise as enterprises adopt similar AI diagnostics.</p>
-  <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/a-startup-wants-to-fight-ai-bioweapons-with-ai.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Hugging Face</span>
-      <span class="tag-pill">Tools</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://huggingface.co/blog/3d-lora-finetuning" target="_blank" rel="noopener noreferrer">The Definitive Fine-Tuning Guide for 3D Generation Models</a></h2>
-  <p class="card-summary">Hugging Face has released a detailed fine‑tuning guide for the TRELLIS.2 3D generation model, providing scripts and container support for both local and HF Jobs environments. The guide focuses on using LoRA adapters to adapt the model to specific tasks, such as improving footwear geometry with the GSO dataset.</p>
-  <p class="insight"><strong>How to use:</strong> This article is mainly informational for developers interested in 3D asset generation; it does not directly impact the IT engineer’s current toolset.</p>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/12/muse-can-now-place-calls-to-u-s-businesses-if-you-pay/" target="_blank" rel="noopener noreferrer">Muse can now place calls to US businesses — if you pay</a></h2>
+  <p class="card-summary">Meta’s consumer AI agent Muse now allows paid subscribers to place phone calls to U.S. businesses, expanding its task‑automation capabilities. This feature is part of a broader trend of AI agents entering call‑center interactions, potentially affecting how customer service is delivered.
+</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on how this development might influence enterprise call routing and voice‑assistant integrations. While it currently targets consumers, the technology could later be adapted for internal support tools, impacting your voice‑interface strategy.
+</p>
   <div class="card-footer">
     <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/the-definitive-fine-tuning-guide-for-3d-generation-models.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/alex-karp-said-hes-a-progressive-ok-heres-some-other-stuff-hes-said-recently/" target="_blank" rel="noopener noreferrer">Alex Karp Said He’s a ‘Progressive.’ OK! Here’s Some Other Stuff He’s Said Recently</a></h2>
-  <p class="card-summary">Palantir CEO Alex Karp has reiterated his self‑described progressive stance, emphasizing the company’s role in anti‑war efforts while simultaneously supplying advanced data tools to military operations worldwide. The comments highlight a tension between the firm’s political messaging and its strategic partnerships with defense contractors.</p>
-  <p class="insight"><strong>How to use:</strong> Keep Palantir’s product integrations under review, especially any that feed into defense or intelligence workflows, to ensure compliance with internal policy and risk tolerance.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/alex-karp-said-hes-a-progressive-ok-heres-some-other-stuff-hes-said-recently.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/silicon-valley-is-still-defending-jensen-huang/" target="_blank" rel="noopener noreferrer">Silicon Valley Is Still Defending Jensen Huang</a></h2>
-  <p class="card-summary">Nvidia CEO Jensen Huang resigned amid allegations of personal misconduct involving a former employee and a suspected intelligence asset. The news has shocked Silicon Valley, with the company&#x27;s leadership and board scrambling to address potential reputational and operational impacts.</p>
-  
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/silicon-valley-is-still-defending-jensen-huang.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/uncanny-valley-podcast-jensen-huang-is-out-will-nvidias-rivals-cash-in/" target="_blank" rel="noopener noreferrer">Jensen Huang Is Out. Will Nvidia’s Rivals Cash In?</a></h2>
-  <p class="card-summary">Nvidia cofounder Jensen Huang resigned after allegations of an affair with a Chinese intelligence asset and other misconduct. The leadership change could shift competitive dynamics in the AI chip market.</p>
-  
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/jensen-huang-is-out-will-nvidias-rivals-cash-in.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://news.cornell.edu/stories/2026/11/data-centers-need-power-lower-income-rural-residents-pay-price" target="_blank" rel="noopener noreferrer">Data centers need power – lower income, rural residents pay the price</a></h2>
-  <p class="card-summary">Cornell researchers published a study showing that data center growth is driving up U.S. energy prices and shifting the cost burden disproportionately onto lower‑income and rural residents. The report highlights that AI‑driven data centers could consume up to 17% of U.S. electricity by 2030, raising concerns about infrastructure strain and cost distribution.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on how data center energy demands evolve, as this could influence your organization’s cloud consumption costs and vendor negotiations. In the next 30 days, review your cloud providers’ sustainability reports and consider engaging them on renewable energy commitments to mitigate potential cost spikes.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/data-centers-need-power-lower-income-rural-residents-pay-the-price.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/muse-can-now-place-calls-to-us-businesses-if-you-pay.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -1069,12 +967,52 @@
       <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/11/nvidias-stock-drops-as-board-reportedly-preps-to-oust-ceo-jensen-huang/" target="_blank" rel="noopener noreferrer">Nvidia’s stock drops as board reportedly preps to oust CEO Jensen Huang</a></h2>
-  <p class="card-summary">Nvidia is reportedly preparing to oust CEO Jensen Huang amid a series of personal scandals, leading to a significant drop in its stock price. The move highlights potential instability at a key AI hardware provider, though it does not directly affect current IT tooling.</p>
-  
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/13/israels-vcs-see-opportunity-for-challengers-in-nvidias-turmoil/" target="_blank" rel="noopener noreferrer">Israel’s VCs see opportunity for challengers in Nvidia’s turmoil</a></h2>
+  <p class="card-summary">Nvidia’s CEO resignation has sparked concern in Israel, where the company’s GPUs drive much of the local AI industry. The uncertainty may open opportunities for competitors but is unlikely to derail demand for Nvidia hardware.</p>
+  <p class="insight"><strong>How to use:</strong> None. The news does not impact the reader’s current IT stack or tools.</p>
   <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/nvidias-stock-drops-as-board-reportedly-preps-to-oust-ceo-jensen-huang.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">13 Nov 2026</span>
+    <a href="breakdowns/israels-vcs-see-opportunity-for-challengers-in-nvidias-turmoil.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/google-deepmind-staff-escalate-their-union-fight/" target="_blank" rel="noopener noreferrer">Google DeepMind Staff Tap the UK Government to Escalate Their Unionization Fight</a></h2>
+  <p class="card-summary">Google DeepMind staff in the UK have petitioned the UK government to intervene in their unionization efforts, aiming to secure a ballot for approximately 1,000 employees. The move follows internal tensions over ethical concerns and government contracts, with DeepMind maintaining its stance of openness to dialogue.</p>
+  <p class="insight"><strong>How to use:</strong> No immediate action is required from IT infrastructure teams.</p>
+  <div class="card-footer">
+    <span class="pub-date">12 Nov 2026</span>
+    <a href="breakdowns/google-deepmind-staff-tap-the-uk-government-to-escalate-their-unionization-fight.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/black-roles-are-disappearing-in-hollywood-this-startup-is-using-ai-microdramas-to-fight-back/" target="_blank" rel="noopener noreferrer">This Startup Is Betting on AI Microdramas to Get More Black Stories in Hollywood</a></h2>
+  <p class="card-summary">Media company Mansa has released an entirely AI-generated microdrama series called ‘They Left Us to Die’, aiming to showcase black stories using AI. The project sparked backlash for eliminating human roles and raised questions about AI’s impact on representation.</p>
+  <p class="insight"><strong>How to use:</strong> Not relevant to the IT engineer’s responsibilities.</p>
+  <div class="card-footer">
+    <span class="pub-date">13 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
@@ -1086,35 +1024,15 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
+      <span class="score-num">1/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://twitter.com/watcherguru/status/2120645607866188008" target="_blank" rel="noopener noreferrer">Nvidia prepares to fire CEO Jensen Huang, WSJ reports</a></h2>
-  <p class="card-summary">Nvidia is reportedly preparing to terminate CEO Jensen Huang, according to a WSJ report. This executive shake‑up is a high‑profile business event but has no direct bearing on IT operations.</p>
+  <h2 class="card-title"><a href="https://www.science.org/doi/10.1126/science.132.3436.1291" target="_blank" rel="noopener noreferrer">Doomsday: Friday, 13 November, A.D. 2026 (1960)</a></h2>
+  <p class="card-summary">A 1960 Science article titled &quot;Doomsday: Friday, 13 November, A.D. 2026&quot; was discussed on Hacker News, generating moderate interest among readers.</p>
   
   <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/nvidia-prepares-to-fire-ceo-jensen-huang-wsj-reports.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.nytimes.com/2026/11/11/technology/jensen-huang-nvidia-affair.html" target="_blank" rel="noopener noreferrer">Jensen Huang said to have had relationship with executive who reports to him</a></h2>
-  <p class="card-summary">Jensen Huang of Nvidia allegedly had a personal relationship with an executive who reports directly to him, as reported by the New York Times. The story focuses on corporate governance and personal conduct rather than any technology or product change.</p>
-  <p class="insight"><strong>How to use:</strong> No direct implications for IT infrastructure or security tools.</p>
-  <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/jensen-huang-said-to-have-had-relationship-with-executive-who-reports-to-him.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">13 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
@@ -1126,121 +1044,26 @@
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/12/1148444/the-download-cop31-climate-talks-cognitive-immortality/" target="_blank" rel="noopener noreferrer">The Download: COP31’s climate challenge and the quest for immortality</a></h2>
-  <p class="card-summary">The MIT Tech Review newsletter covers the UN climate talks at COP31, highlighting the global focus on climate change negotiations. It provides context on the delegates, lobbyists, and journalists attending in Antalya, Turkey.</p>
-  
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/the-download-cop31s-climate-challenge-and-the-quest-for-immortality.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">Microsoft</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://blogs.microsoft.com/blog/2026/11/12/from-ai-ambition-to-business-impact/" target="_blank" rel="noopener noreferrer">From AI ambition to business impact</a></h2>
-  <p class="card-summary">Microsoft’s blog post discusses how enterprises are moving from AI demonstrations to tangible business integration. It highlights the shift in executive focus toward practical AI deployment rather than just showcasing technology.</p>
-  <p class="insight"><strong>How to use:</strong> Check your organization’s current AI pilot projects for alignment with business outcomes; assess whether the initiatives have clear KPIs and ROI metrics. If not, revisit the strategy in the next quarter to ensure AI initiatives translate into measurable value.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/11/jensen-huang-accused-of-having-another-affair-with-a-nvidia-exec/" target="_blank" rel="noopener noreferrer">Jensen Huang accused of having another affair — with an Nvidia exec</a></h2>
-  <p class="card-summary">Nvidia CEO Jensen Huang is under scrutiny amid allegations of a second affair with a senior employee, prompting a board investigation and potential congressional subpoenas.</p>
-  <p class="insight"><strong>How to use:</strong> None</p>
-  <div class="card-footer">
-    <span class="pub-date">11 Nov 2026</span>
-    <a href="breakdowns/jensen-huang-accused-of-having-another-affair-with-an-nvidia-exec.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Consulting</span>
-      <span class="source-name">MIT Sloan</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">1/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://sloanreview.mit.edu/article/lessons-from-techs-diversity-disclosures/" target="_blank" rel="noopener noreferrer">Lessons From Tech’s Diversity Disclosures</a></h2>
-  <p class="card-summary">A MIT Sloan article discusses how increased transparency in diversity disclosures can trigger backlash if companies cannot deliver on their commitments. It highlights the risk of negative reactions from stakeholders when visibility outpaces capability.</p>
-  <p class="insight"><strong>How to use:</strong> No immediate action required; it is general context on transparency management.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/lessons-from-techs-diversity-disclosures.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">1/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/jensen-huang-colette-kress-replacement-powerful-women-in-tech/" target="_blank" rel="noopener noreferrer">Jensen Huang Didn’t Name His Own Replacement as One of Tech’s Most Powerful Women</a></h2>
-  <p class="card-summary">The article reports that Nvidia’s new interim CEO, Colette Kress, was omitted from Jensen Huang’s list of powerful women in tech. It discusses leadership dynamics in Silicon Valley but offers no direct implications for IT infrastructure or security.</p>
-  <p class="insight"><strong>How to use:</strong> No actionable steps for IT engineers; the piece provides general industry context rather than tool or policy changes.</p>
-  <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    <a href="breakdowns/jensen-huang-didnt-name-his-own-replacement-as-one-of-techs-most-powerful-women.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
       <span class="score-num">0/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.smithsonianmag.com/smart-news/astronomers-found-a-mysterious-object-orbiting-far-beyond-pluto-it-could-be-a-new-dwarf-planet-hidden-in-our-solar-system-180989857/" target="_blank" rel="noopener noreferrer">Dwarf planet candidate appears which takes roughly 280 years to orbit our sun</a></h2>
-  <p class="card-summary">Astronomers have identified a potential new dwarf planet, 2026 ED138, orbiting the sun every 280 years. The discovery was made using data from the Vera C. Rubin Observatory and historical photographic plates.</p>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/13/1148498/silicon-valley-claims-to-know-the-future-so-why-did-it-get-the-midterms-so-wrong/" target="_blank" rel="noopener noreferrer">Silicon Valley claims to know the future. So why did it get the midterms so wrong?</a></h2>
+  <p class="card-summary">The article critiques Silicon Valley leaders for overpromising future predictions, focusing on figures like Sam Altman and Elon Musk.</p>
   
   <div class="card-footer">
-    <span class="pub-date">12 Nov 2026</span>
-    
+    <span class="pub-date">13 Nov 2026</span>
+    <a href="breakdowns/silicon-valley-claims-to-know-the-future-so-why-did-it-get-the-midterms-so-wrong.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-13</div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.17304v1" target="_blank" rel="noopener noreferrer">Where LLM Agents Get Stuck Debugging Databases: Access More Than Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.17280v1" target="_blank" rel="noopener noreferrer">Synthesis Smuggling: Maliciously Hiding Inferred Personal Attributes in LLM Outputs</a><a class="archive-title" href="https://arxiv.org/abs/2611.16693v1" target="_blank" rel="noopener noreferrer">MobileProbe: Adaptive Security Evaluation of Mobile Agents via Trajectory-Aware Injection</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-11</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.11929v1" target="_blank" rel="noopener noreferrer">Can LLM Agents Organize Their Own Memory?</a></div>
@@ -1384,16 +1207,16 @@
   <div class="archive-date">2026-10-09</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.12463v1" target="_blank" rel="noopener noreferrer">From Reactive Containment to Proactive Assurance: Lessons from OpenAI, Anthropic, and Google Agent Security Incidents</a><a class="archive-title" href="https://arxiv.org/abs/2610.12415v1" target="_blank" rel="noopener noreferrer">ORCAGen: Orchestrating Context-Aware Malware Deception with RAG-Guided Generative AI</a><a class="archive-title" href="https://arxiv.org/abs/2610.12338v1" target="_blank" rel="noopener noreferrer">VFold: Symmetry-Aware Cross-Layer Value Cache Compression</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-08</div>
-  <div class="archive-count">2 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.10062v1" target="_blank" rel="noopener noreferrer">Loud Failures, Quiet Failures: Fault Detection and Recovery in Tool-Using Language Model Agents</a><a class="archive-title" href="https://arxiv.org/abs/2610.09906v1" target="_blank" rel="noopener noreferrer">Constrained-Action AI Remediation for SIEM/XDR via a NeMo-Guardrails Proxy</a></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-13</div>
+  <div class="archive-count">14 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://openai.com/business/customer-stories/amplitude" target="_blank" rel="noopener noreferrer">How Amplitude ships product improvements in 1–2 days with OpenAI</a><a class="archive-title" href="https://openai.com/business/customer-stories/holidays-extras-codex" target="_blank" rel="noopener noreferrer">Holiday Extras is rethinking what it can build with Codex</a><a class="archive-title" href="https://deepmind.google/blog/opening-the-datasets-behind-our-ai-weather-models/" target="_blank" rel="noopener noreferrer">Opening the datasets behind our AI weather models</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-12</div>
   <div class="archive-count">31 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/jiostar-vijay-seshadri" target="_blank" rel="noopener noreferrer">JioStar’s chief architect on AI discovery at 500M-user scale</a><a class="archive-title" href="https://research.google/blog/using-wearables-to-enable-cardiovascular-kidney-metabolic-ckm-risk-profiling-for-personalized-coaching/" target="_blank" rel="noopener noreferrer">Using wearables to enable cardiovascular-kidney-metabolic (CKM) risk profiling for personalized coaching</a><a class="archive-title" href="https://techcrunch.com/2026/11/11/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/" target="_blank" rel="noopener noreferrer">The unfolding Jensen Huang scandal: a timeline</a></div>
@@ -1537,11 +1360,6 @@
   <div class="archive-date">2026-10-15</div>
   <div class="archive-count">16 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/sentinelone" target="_blank" rel="noopener noreferrer">SentinelOne cuts malware analysis from weeks to hours</a><a class="archive-title" href="https://openai.com/index/amp-beyond-coding" target="_blank" rel="noopener noreferrer">Amp puts AI agents to work beyond code with OpenAI models</a><a class="archive-title" href="https://techcrunch.com/2026/10/15/anthropic-is-letting-metr-researchers-look-under-the-hood-with-employee-level-access/" target="_blank" rel="noopener noreferrer">Anthropic is letting METR researchers look under the hood with employee-level access</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-14</div>
-  <div class="archive-count">16 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/10/14/apate-sends-ai-agents-undercover-to-get-scammed-so-they-can-gather-fraud-intelligence/" target="_blank" rel="noopener noreferrer">Apate sends AI agents undercover to get scammed so they can gather fraud intelligence</a><a class="archive-title" href="https://techcrunch.com/2026/10/14/youtube-music-launches-new-labels-as-ai-generated-music-floods-streaming-platforms/" target="_blank" rel="noopener noreferrer">YouTube Music launches new labels as AI-generated music floods streaming platforms</a><a class="archive-title" href="https://techcrunch.com/2026/10/14/deezer-will-soon-let-you-filter-out-ai-generated-music/" target="_blank" rel="noopener noreferrer">Deezer will soon let you filter out AI-generated music</a></div>
 </div></div>
   </div>
 </main>
