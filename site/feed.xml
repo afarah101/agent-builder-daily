@@ -5,48 +5,77 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 13 Nov 2026 16:58:41 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 13 Nov 2026 23:31:07 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</title>
-    <link>https://arxiv.org/abs/2611.15835v1</link>
-    <guid>https://arxiv.org/abs/2611.15835v1</guid>
-    <pubDate>Wed, 11 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</title>
-    <link>https://arxiv.org/abs/2611.15700v1</link>
-    <guid>https://arxiv.org/abs/2611.15700v1</guid>
-    <pubDate>Wed, 11 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>AskALCF is a self‑improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates.</p><p><strong>IT Breakdown:</strong> If you manage cloud or HPC support, here is what to do:
-1. Deploy a similar log‑analysis pipeline to track support interactions.
-2. Use its failure attribution to target knowledge‑base or retrieval updates.
-3. Periodically train the system with expert edits to keep accuracy high.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</title>
-    <link>https://arxiv.org/abs/2611.17097v1</link>
-    <guid>https://arxiv.org/abs/2611.17097v1</guid>
+    <title>Where LLM Agents Get Stuck Debugging Databases: Access More Than Reasoning</title>
+    <link>https://arxiv.org/abs/2611.17304v1</link>
+    <guid>https://arxiv.org/abs/2611.17304v1</guid>
     <pubDate>Thu, 12 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research solves the problem of huge memory costs and power use when serving large LLMs by replacing replicated HBM with an optical broadcast system that streams weights from a central server to many accelerators. They built the Optical Broadcast Memory (OBM) architecture that eliminates the need for petabytes of on‑node memory while matching or beating throughput and energy metrics of HBM systems. The result is a more scalable, energy‑efficient way to serve very large, MoE‑enabled language models across tens of thousands of GPUs.</p><p><strong>IT Breakdown:</strong> If you manage a large GPU cluster, here is what to do: 1) evaluate if your workloads use the same large LLM weights across many nodes; 2) if yes, consider integrating an optical broadcast backbone to share weights centrally; 3) monitor memory bandwidth and power usage – a shift to OBM should reduce both significantly.</p>]]></description>
+    <description><![CDATA[<p>Large‑language‑model coding agents often fail to debug database issues because they lack real‑time access to production state such as lock views and deadlock logs. The study analysed Claude Code fixing eight incidents and showed that missing production data caused repeated misdiagnoses and extra deploys. A new forensics layer could give these agents the needed state without breaking security controls.</p><p><strong>IT Breakdown:</strong> If you manage cloud infra that uses LLM agents for debugging, first check if your agents have a secure API to fetch live lock views and deadlock reports. Second, enable a production replay harness so the agent can run in read‑only mode with the current state. Third, monitor for repeated deploy‑and‑observe cycles – if they appear, add the forensics layer before relying on the agent for live fixes.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>Synthesis Smuggling: Maliciously Hiding Inferred Personal Attributes in LLM Outputs</title>
+    <link>https://arxiv.org/abs/2611.17280v1</link>
+    <guid>https://arxiv.org/abs/2611.17280v1</guid>
+    <pubDate>Thu, 12 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This research shows how a malicious language model can hide personal details in its outputs, turning normal messages into covert channels for attackers. It demonstrates the technique by training models to infer gender and age from conversations and embedding that info in invisible characters or word choices. The result is a stealthy way to leak user data without direct communication with the attacker.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>MobileProbe: Adaptive Security Evaluation of Mobile Agents via Trajectory-Aware Injection</title>
+    <link>https://arxiv.org/abs/2611.16693v1</link>
+    <guid>https://arxiv.org/abs/2611.16693v1</guid>
+    <pubDate>Thu, 12 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>MobileProbe is an automated testing tool that finds hidden security risks in mobile app‑automation agents by injecting malicious content during their task execution. It builds a trajectory‑aware framework that automatically discovers vulnerable points, crafts adaptive payloads, and tests 83 real‑world scenarios across 12 apps, beating existing methods in finding attacks. This work is relevant for anyone deploying or managing mobile automation – it offers a practical auditing tool to spot and fix security holes before launch.</p><p><strong>IT Breakdown:</strong> If you manage mobile automation agents, use MobileProbe to run automated penetration tests: 1. Integrate MobileProbe into your CI pipeline to scan new agent builds. 2. Review the identified attack paths and harden those UI surfaces. 3. Re‑run tests after changes to confirm vulnerabilities are mitigated.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>CrossPloit: A Benchmark for Cross-Version PoC Migration in Python Web Applications</title>
+    <link>https://arxiv.org/abs/2611.16588v1</link>
+    <guid>https://arxiv.org/abs/2611.16588v1</guid>
+    <pubDate>Thu, 12 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Many vulnerability databases miss older releases of Python web applications, leaving them mistakenly marked as safe. CrossPloit builds a benchmark of 127 real-world cases, proving that 149 earlier versions were in fact vulnerable and that a specialised migration approach can validate over half of these cases. This shows that your vulnerability scanning and patching pipelines may need to be checked for hidden exposure.</p><p><strong>IT Breakdown:</strong> If you manage Python web apps, first cross‑check your affected‑version lists against the CrossPloit findings; then run a cross‑version PoC migration on any version flagged as missing to confirm exposure; finally, integrate the benchmark’s validation step into your CI pipeline to catch silent vulnerabilities.</p>]]></description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>PACER: GPU Excursion Management for ML Workloads</title>
+    <link>https://arxiv.org/abs/2611.17206v1</link>
+    <guid>https://arxiv.org/abs/2611.17206v1</guid>
+    <pubDate>Thu, 12 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>GPU workloads for LLMs suffer from power overshoot spikes that cause throttling and inconsistent performance. The authors built hardware and firmware controls that smooth these power peaks, boosting performance by 3‑12 % over existing GPU power‑management solutions. This can directly improve the reliability and speed of your GPU‑based ML services.</p><p><strong>IT Breakdown:</strong> If you manage GPU‑based ML workloads, 1) audit your GPU power‑management logs for transient power spikes; 2) upgrade to firmware that includes fine‑grained power‑management to dampen spikes; 3) monitor performance gains to ensure 3‑12 % improvement is realised.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] Windows 0-day dropped by disgruntled researcher hands hackers System rights</title>
     <link>https://arstechnica.com/security/2026/11/windows-0-day-dropped-by-disgruntled-researcher-hands-hackers-system-rights/</link>
     <guid>https://arstechnica.com/security/2026/11/windows-0-day-dropped-by-disgruntled-researcher-hands-hackers-system-rights/</guid>
-    <pubDate>Fri, 13 Nov 2026 16:58:41 +0000</pubDate>
+    <pubDate>Fri, 13 Nov 2026 23:31:07 +0000</pubDate>
     <description><![CDATA[<p>A disgruntled researcher, Nightmare Eclipse, has released SignDrop, a Windows zero‑day that allows local users to gain full System privileges by exploiting the Common Log File System and Windows Defender. The flaw turns a security mitigation introduced in October 2025 into a privilege‑escalation vector.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Big tech is here to let us down</title>
+    <link>https://blog.jsweeting.me/big-tech-is-here-to-let-us-down</link>
+    <guid>https://blog.jsweeting.me/big-tech-is-here-to-let-us-down</guid>
+    <pubDate>Fri, 13 Nov 2026 23:31:07 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft’s recent outage of Outlook, Teams, and Copilot caused widespread disruption across businesses, schools, and government institutions. The incident highlights the vulnerability of relying on Microsoft’s services for critical operations.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Microsoft 365 Crawls Back to Life After a 24-Hour Outage</title>
+    <link>https://www.wired.com/story/microsoft-365-crawls-back-to-life-after-a-24-hour-outage/</link>
+    <guid>https://www.wired.com/story/microsoft-365-crawls-back-to-life-after-a-24-hour-outage/</guid>
+    <pubDate>Fri, 13 Nov 2026 23:31:07 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft 365 experienced a 24‑hour global outage caused by a network capacity upgrade issue, not a cyberattack. The incident highlighted the critical reliance on cloud services and the potential cascading effects on enterprise operations.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Introducing ChatGPT Wallet</title>
     <link>https://openai.com/index/introducing-chatgpt-wallet</link>
     <guid>https://openai.com/index/introducing-chatgpt-wallet</guid>
-    <pubDate>Fri, 13 Nov 2026 16:58:41 +0000</pubDate>
+    <pubDate>Fri, 13 Nov 2026 23:31:07 +0000</pubDate>
     <description><![CDATA[<p>OpenAI’s new ChatGPT Wallet lets agents pay on behalf of users without exposing card details, using a secure token and biometric approval. The service partners with major payment networks and will initially launch for ChatGPT Pro subscribers in the U.S.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -54,24 +83,8 @@
     <title>[News] ElevenLabs’ new app combines meeting note-taking and dictation for teams</title>
     <link>https://techcrunch.com/2026/11/13/elevenlabs-new-app-combines-meeting-note-taking-and-dictation-for-teams/</link>
     <guid>https://techcrunch.com/2026/11/13/elevenlabs-new-app-combines-meeting-note-taking-and-dictation-for-teams/</guid>
-    <pubDate>Fri, 13 Nov 2026 16:58:41 +0000</pubDate>
+    <pubDate>Fri, 13 Nov 2026 23:31:07 +0000</pubDate>
     <description><![CDATA[<p>ElevenLabs unveiled ElevenAI, an experimental app that merges meeting note-taking, dictation, and agent-driven follow‑up actions for teams. The preview tool integrates with existing productivity suites, offering multilingual transcription and AI‑powered insights across meetings.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] How Amplitude ships product improvements in 1–2 days with OpenAI</title>
-    <link>https://openai.com/business/customer-stories/amplitude</link>
-    <guid>https://openai.com/business/customer-stories/amplitude</guid>
-    <pubDate>Fri, 13 Nov 2026 16:58:41 +0000</pubDate>
-    <description><![CDATA[<p>Amplitude’s new AI-driven product agent, Wave, leverages OpenAI models to identify, plan, and ship product improvements in 1–2 days, dramatically accelerating iteration cycles. The tool reduces coding time by integrating with coding agents like Codex and lowers model costs through targeted model use.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] Holiday Extras is rethinking what it can build with Codex</title>
-    <link>https://openai.com/business/customer-stories/holidays-extras-codex</link>
-    <guid>https://openai.com/business/customer-stories/holidays-extras-codex</guid>
-    <pubDate>Fri, 13 Nov 2026 16:58:41 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI’s Codex has helped Holiday Extras accelerate app development, cutting rebuild time from six months to two weeks, boosting open‑to‑book conversion by 32.5% and cutting error rates in half. The company’s use of Codex demonstrates how generative AI can speed feature delivery and improve customer‑centric design across iOS and Android platforms.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
