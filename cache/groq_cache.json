@@ -84,6 +84,24 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Memory in LLM agents can cause mistakes by following bad lessons, and this paper introduces WikiTrace, a system that links each lesson to its original evidence so agents can verify and correct them. The result is better performance and less error on new tasks.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
   },
+  "0addfe86c502e8a6489f0cb02dd04e844bc17f028847be798281e1b7b44b8675": {
+   "call_site": "case_study.summary",
+   "created_at": 1794588806.3396955,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin.\",\"it_breakdown\":\"If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy.\"}"
+  },
+  "0ba15267713d141cb1b020c3aa0c6f8df7a0354f8ea68bfa7ed8e209e85db314": {
+   "call_site": "news.classify",
+   "created_at": 1794588965.8740919,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"A disgruntled researcher, Nightmare Eclipse, has released SignDrop, a Windows zero‑day that allows local users to gain full System privileges by exploiting the Common Log File System and Windows Defender. The flaw turns a security mitigation introduced in October 2025 into a privilege‑escalation vector.\",\n  \"enterprise_use\": \"1. Go to your endpoint protection dashboard this week and verify that Windows Defender is fully patched to the latest cumulative update. 2. If you run Windows machines that use custom logging or have non‑default Defender settings, run a quick audit of CLFS containers and symbolic link configurations to ensure no legacy paths remain. 3. Your MDM platform and endpoint security tools (e.g., CrowdStrike, Azure AD, JumpCloud) should enforce least‑privilege logging and monitor Defender activity logs for abnormal file creation events.\",\n  \"relevance_score\": 10,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Security\"\n}"
+  },
+  "0c125787379ed15cd004702712705302b8c9565c330ffa340cbc713692c5871e": {
+   "call_site": "case_study.summary",
+   "created_at": 1794588809.795659,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"AskALCF is a self‑improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates.\",\"it_breakdown\":\"If you manage cloud or HPC support, here is what to do:\\n1. Deploy a similar log‑analysis pipeline to track support interactions.\\n2. Use its failure attribution to target knowledge‑base or retrieval updates.\\n3. Periodically train the system with expert edits to keep accuracy high.\"}"
+  },
   "0cd234e809141db04856de0db9930e7f2e55fb4568c1bdca611850539538e3ea": {
    "call_site": "news.classify",
    "created_at": 1794405400.6632898,
@@ -119,6 +137,12 @@
    "created_at": 1794351775.3371477,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 4, \"ai_maturity\": 3, \"monetisation_potential\": 2, \"total_score\": 9, \"score_reasoning\":\"The paper presents a specialized self‑driving laboratory testbed focused on chemical formulation. While it involves closed‑loop automation and AI decision‑making, the domain is highly niche and not directly applicable to the infrastructure, SaaS, or endpoint management concerns of UK IT engineers. The system is experimentally demonstrated but not released for commercial use, and there is no clear path to a 90‑day service or product. Thus impact, maturity, and monetisation potential are very low.\", \"relevance_tag\":\"lab-automation\", \"gemini_eval_status\":\"pending\", \"low_signal\": true}"
+  },
+  "110977327721653945ff503f9aa7361494143e33d8de29359d9a5ea2a47f6641": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794588803.3913252,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 4, \"ai_maturity\": 6, \"monetisation_potential\": 3, \"total_score\": 13, \"score_reasoning\": \"The paper focuses on automated negotiation agents for freight brokering—a niche market. It does not directly impact everyday IT infrastructure, DevOps, or cloud services. While the authors implemented nine negotiation architectures and LLMs, the work is largely experimental and not a ready-to-deploy system. There is no clear path for IT engineers to use or sell this technology within 90 days, as it requires domain-specific integration and further validation.\", \"relevance_tag\": \"automation\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
   },
   "118c40b3670cf9a0516b1a9f0dd347e5e884f3829e2f070a7bed30c2cf348c97": {
    "call_site": "news.classify",
@@ -252,6 +276,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Apple has enabled SSH keys to be stored and used solely within the macOS Secure Enclave, ensuring the private key never leaves the chip and requires Touch ID for each authentication. This offers a hardware‑backed solution that protects keys from filesystem compromise, appealing to engineers who manage SSH access across servers.\",\n  \"enterprise_use\": \"S1: Immediately review your macOS devices to enable Secure Enclave SSH for any critical servers you manage. S2: Without this, your keys are still exposed to filesystem attacks; enabling the feature locks them to the hardware and requires biometric approval for each use. S3: This is most relevant for engineers who rely on macOS for SSH operations and want an extra security layer.\",\n  \"relevance_score\": 7,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Product Launch\"\n}"
   },
+  "23fc24695d65dd73a724ba77c56f185a8b04ee5e772d8fed27aced4d86566df0": {
+   "call_site": "news.classify",
+   "created_at": 1794588955.0813265,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"The article discusses how AI-generated content is eroding trust in literary works, leading to increased instances of deceptive publishing practices. It highlights concerns about authenticity and the potential for AI to mislead readers about authorship.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
+  },
   "243a93b770e68eec31c68b897c5b6eb2bf8ea16c013dd29d9f78242e387ffa67": {
    "call_site": "news.classify",
    "created_at": 1794405380.2021148,
@@ -354,6 +384,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Amplitude has introduced a new AI-driven product agent called Wave that leverages OpenAI models to recommend features, auto-generate code, and measure impact, enabling rapid product iterations. This tool can accelerate development cycles by reducing the time from idea to deployment to 1–2 days.\",\n  \"enterprise_use\": \"Monitor Amplitude’s Wave deployment and evaluate how its rapid iteration capabilities could integrate with your existing development workflows. Incorporating this tool could reduce your build cycle time, freeing resources for more complex security and infrastructure tasks.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Product Launch\"\n}"
   },
+  "2cbf17d1a54501c98ef3346203e6ef38ec99c9b5c82783ed9c679f4d5ddd700c": {
+   "call_site": "news.classify",
+   "created_at": 1794588894.315008,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"Jensen Huang, CEO of Nvidia, was interviewed at SIGGRAPH 2024, with a focus on his narrative control and corporate strategy. The article details his interactions with reporters and his public persona, emphasizing his desire to shape Nvidia’s story.\",\"enterprise_use\":\"No direct action required for IT infrastructure or AI tools. The piece offers context on Nvidia’s leadership but does not impact daily operations.\",\"relevance_score\":3,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
+  },
   "2cc7dc4ce78b1e88e3a866242e7a58be60a5ef110983526a3e949cc3473555d6": {
    "call_site": "news.classify",
    "created_at": 1794064724.709853,
@@ -383,6 +419,12 @@
    "created_at": 1794579563.4168894,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 20, \"ai_maturity\": 10, \"monetisation_potential\": 20, \"total_score\": 50, \"score_reasoning\": \"The paper addresses a real-world challenge faced by IT engineers—debugging database concurrency issues with LLM agents. It highlights practical limitations and proposes a forensic layer that could be implemented within existing security frameworks, offering a tangible service for infrastructure teams. While the agent itself is still in experimental use, the concepts are mature enough to be prototyped and deployed, and the proposed forensic layer presents clear monetisation opportunities within 90 days.\", \"relevance_tag\": \"database_debugging, llm_agents, forensic_layer\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
+  },
+  "2e32cda382970a4c6ae5e3b937e9a5d836b42dea6ef05a3b4657701dcb4ce55d": {
+   "call_site": "news.classify",
+   "created_at": 1794588888.0416915,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"OpenAI has introduced a ChatGPT Wallet that lets AI agents shop and checkout on behalf of users, using secure payment tokens and biometric approvals. The feature is initially limited to U.S. ChatGPT Pro subscribers with valid cards and may expand to more retailers and control settings later.\",\n  \"enterprise_use\": \"Monitor how OpenAI’s tokenized payment approach could inform your own secure payment integrations. In the next 30 days, evaluate whether your internal payment gateway can adopt similar tokenization to reduce exposure of card data, especially if you support AI-driven workflows.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Tools\"\n}"
   },
   "2eb309d54c7ee184f7f6a159ee368065b4ba05941ea37ad8b128aa8f78d238cb": {
    "call_site": "case_study.score_papers",
@@ -504,6 +546,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\n  \"summary\": \"Nvidia’s CEO resignation has sparked concern in Israel, where the company’s GPUs drive much of the local AI industry. The uncertainty may open opportunities for competitors but is unlikely to derail demand for Nvidia hardware.\",\n  \"enterprise_use\": \"None. The news does not impact the reader’s current IT stack or tools.\",\n  \"relevance_score\": 4,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
   },
+  "3d5ccd04a3fec8cfbd02a9b34c648a55414508a09536730138c3b01739e2c6a7": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794588809.1323333,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 10, \"ai_maturity\": 10, \"monetisation_potential\": 15, \"total_score\": 35, \"score_reasoning\": \"The system addresses HPC user support, a niche but relevant domain for IT engineers managing high-performance resources. The approach is concrete but still experimental, with no public deployment yet, scoring modestly on maturity. It offers a deployable pipeline that could be packaged as a service for HPC centers, giving some monetisation potential.\", \"relevance_tag\": \"HPC support automation\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
+  },
   "3ff00049bb8899f35c83fd13102cf7d53f8529b38cf8ac16619aba2a2db33ab9": {
    "call_site": "case_study.summary",
    "created_at": 1794443231.9775004,
@@ -593,6 +641,12 @@
    "created_at": 1794579627.8980594,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"GPU workloads for LLMs suffer from power overshoot spikes that cause throttling and inconsistent performance. The authors built hardware and firmware controls that smooth these power peaks, boosting performance by 3‑12 % over existing GPU power‑management solutions. This can directly improve the reliability and speed of your GPU‑based ML services.\",\"it_breakdown\":\"If you manage GPU‑based ML workloads, 1) audit your GPU power‑management logs for transient power spikes; 2) upgrade to firmware that includes fine‑grained power‑management to dampen spikes; 3) monitor performance gains to ensure 3‑12 % improvement is realised.\"}"
+  },
+  "4e3e6fae3ffbacc652fd773e9364293f223527a7d3a84ac0f78c7d8ed4cdba6f": {
+   "call_site": "case_study.summary",
+   "created_at": 1794588804.9543738,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"This study shows that negotiation bots trained in isolation can fail when faced with many live rivals and changing supply/demand. They built nine rule‑based, search, optimisation, imitation‑learning, reinforcement‑learning and LLM negotiators and tested them in a multi‑agent, scarcity‑varying market. The best agents were optimisation and imitation‑learning ones; LLMs performed poorly.\",\"it_breakdown\":\"If you manage a cloud‑based matching platform, benchmark your negotiation logic against a multi‑agent tournament: run each policy against all others, vary supply/demand, and analyse match rates and payoffs. If your system uses simple rule‑based or isolated‑trained bots, check for drop‑offs when demand shifts. This flags a risk: if your org uses LLMs for negotiation, they may underperform against specialised optimisation agents.\"}"
   },
   "4e580df643c1edf2743c61904977604ad85febda9d5e3b03b30ad0bed432689f": {
    "call_site": "case_study.summary",
@@ -774,6 +828,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Mozilla Firefox has introduced new fingerprinting protections that reduce the amount of user-identifying data exposed to third‑party scripts, enhancing privacy for its 25‑million‑plus user base. The update is backed by research that identifies the most critical browser features for tracking and applies practical mitigations.\",\"enterprise_use\":\"Keep an eye on Firefox’s privacy updates as they may influence web‑access patterns for internal tools that rely on browser telemetry. Evaluate whether your intranet or SaaS applications need to adjust to the altered fingerprinting behavior within the next 30 days.\",\"relevance_score\":3,\"relevance_signal\":\"low\",\"category\":\"Security\"}"
   },
+  "642c7bf28bb54320fc0325ac1c9fe30f6b9a21f41f443f90c130fc593837381b": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794588806.8188953,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 3, \"ai_maturity\": 5, \"monetisation_potential\": 2, \"total_score\": 10, \"score_reasoning\": \"Paper presents a novel self-distillation technique for visual-language models, which is an advanced research topic. It lacks direct applicability to IT infrastructure, DevOps, or security tooling. The method is implemented and tested on synthetic tasks, indicating some maturity, but no released code or system for operational use. Monetisation prospects are negligible for IT engineers in the next 90 days.\", \"relevance_tag\": \"AI research\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
+  },
   "64403edb42682fdfb30eece921dc1da2aecd10ba6e9386b5c823988ebe47e03f": {
    "call_site": "news.classify",
    "created_at": 1794579809.6871607,
@@ -935,6 +995,12 @@
    "created_at": 1794239026.5896373,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 5, \"ai_maturity\": 7, \"monetisation_potential\": 3, \"total_score\": 15, \"score_reasoning\":\"The paper presents a specialized technique for non-autoregressive decision models, focusing on option order sensitivity. While it includes released checkpoints and a trainer, it is highly niche, offers limited practical value to mainstream IT infrastructure or automation workflows, and lacks clear deployment or monetisation pathways.\", \"relevance_tag\":\"Niche NLP technique\", \"gemini_eval_status\":\"pending\", \"low_signal\": true}"
+  },
+  "79f346bbaa5f7db620ca1769d0d84fa5c18a02e444d8c3f9dbb641e14a3c4806": {
+   "call_site": "news.classify",
+   "created_at": 1794588890.318806,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"ElevenLabs unveiled ElevenAI, an experimental app that merges meeting note-taking, dictation, and agent-driven follow‑up actions for teams. The preview tool integrates with existing productivity suites, offering multilingual transcription and AI‑powered insights across meetings.\",\"enterprise_use\":\"S1: Sign up for early access to ElevenAI and test its integration with your existing Google Workspace or Microsoft 365 environments this week. S2: Failure to evaluate could mean missing a streamlined, AI‑driven note‑taking solution that reduces manual transcription and accelerates post‑meeting workflows. S3: This directly impacts your team’s collaboration tools, potentially eliminating the need for separate notetaking licenses and enhancing cross‑app productivity.\",\"relevance_score\":8,\"relevance_signal\":\"high\",\"category\":\"Tools\"}"
   },
   "7a266663238f131ef986f0d43355324728aff49c1c8d1502c83780864543f1de": {
    "call_site": "news.classify",
@@ -1152,6 +1218,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"ArchSpace is a public platform that records, reviews and references large‑language‑model (LLM) architecture experiments, using scaling laws to predict how small tests will perform at larger scales. It builds a community‑driven database of model designs, training recipes and baseline performance data. The result is a more reliable way to gauge resource needs and cost before expensive large‑scale training.\",\"it_breakdown\":\"If you manage cloud infrastructure, use ArchSpace to forecast compute and storage requirements: 1) enter your planned model size into the scaling‑law tool; 2) compare the predicted loss and compute cost against your budget; 3) adjust model architecture or scale to stay within resource limits.\"}"
   },
+  "8d4f63eaaa3f9505a63a1e73659caedfd67608f22e51ca4f48b84f123d41fb86": {
+   "call_site": "case_study.summary",
+   "created_at": 1794588807.3574157,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"Not relevant to IT infrastructure work.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work.\"}"
+  },
   "8d9474853b5d060ded4396e24efb00dd545fd19aa49b3eb5a2e24aa08d0950d4": {
    "call_site": "case_study.score_papers",
    "created_at": 1794443252.8362322,
@@ -1175,6 +1247,12 @@
    "created_at": 1794351776.8535037,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"The paper tackles indirect prompt injection in LLM agents that call external tools. It introduces a lightweight runtime audit that builds an intent graph from the user’s objective and the available tools, then checks each tool call against that graph in microseconds, flagging suspicious calls for a reasoning guardian. The prototype showed no successful attacks so far, but end‑to‑end validation is still pending.\",\"it_breakdown\":\"Not directly applicable to IT infrastructure work\"}"
+  },
+  "8ef47a0997dc00c6a2a336e0df99405e60318243dc262c65bfe104efbde8d5ca": {
+   "call_site": "news.classify",
+   "created_at": 1794588932.7719944,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"summary\":\"The U.S. Producer Price Index for October rose 6.5% year‑over‑year, the highest increase since late 2022, but still slightly below analyst expectations.\",\"enterprise_use\":\"Not applicable to IT stack management.\",\"relevance_score\":0,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
   },
   "8f6365b3f7142eb9d661d87f8716d9021541ba8b2cbdfbab7942762488001b39": {
    "call_site": "news.classify",
@@ -1254,11 +1332,23 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 2, \"ai_maturity\": 3, \"monetisation_potential\": 1, \"total_score\": 6, \"score_reasoning\": \"The paper focuses on a domain-specific framework for simulating Islamic jurisprudence using FSAs and LLMs. It offers no direct application to infrastructure management, SSO, cloud, or endpoint tooling. The system is described as a research prototype with no evidence of production deployment or commercial tooling. Its potential to be monetised within 90 days is negligible.\", \"relevance_tag\": \"domain_specific_nlp\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
   },
+  "96dfda307592d7ab51ff64973d6cc1ec610249d8657a7334ad4c31becadc3bfa": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794588802.6661608,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 3, \"ai_maturity\": 4, \"monetisation_potential\": 2, \"total_score\": 9, \"score_reasoning\": \"The paper addresses a theoretical RL framework for one-sided verifiability, with no direct applicability to current IT infrastructure, software engineering, or deployment pipelines. It appears to be a novel research idea without released code or a production system, and offers no actionable or marketable product within 90 days. Thus, all scores are minimal.\", \"relevance_tag\": \"low_relevance\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
+  },
   "977c9040d6312ac05a3d2ca19396c094e790d7da58e806156a4f0580e4ab75ce": {
    "call_site": "case_study.summary",
    "created_at": 1794321526.9054506,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"SVApshot is an automated system that uses LLMs to generate and fix SystemVerilog assertions for RTL modules, creating a snapshot of current behaviour that acts as a regression suite. It solves the problem of ensuring AI‑written or AI‑modified RTL stays functionally correct, and the experiments show it detects bugs and improves coverage across complex modules.\",\"it_breakdown\":\"If you manage RTL verification, use SVApshot to auto‑generate assertions for your modules, then run its automated repair cycle to catch any AI‑or human‑introduced faults. Check your existing assertion set for duplicate coverage and let SVApshot expand it. If you rely on formal verification, integrate SVApshot into your CI pipeline to provide continuous regression checks on AI‑modified code.\"}"
+  },
+  "98bf293979ee0c794865bc72222ddfa977663944868186512798d4f04bae54e3": {
+   "call_site": "news.classify",
+   "created_at": 1794588887.0773637,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"OpenAI’s new ChatGPT Wallet lets agents pay on behalf of users without exposing card details, using a secure token and biometric approval. The service partners with major payment networks and will initially launch for ChatGPT Pro subscribers in the U.S.\",\n  \"enterprise_use\": \"S1: Review your organization’s payment integration plans to determine if your e‑commerce or SaaS platforms need to accept ChatGPT Wallet tokens or adapt to agent‑initiated transactions. S2: Failure to support this new payment method could limit user adoption of AI‑powered purchasing workflows, while early integration positions your business as a forward‑looking partner. S3: PayPal, Stripe, or your own payment gateway configurations are most affected, as they must handle tokenized payments and agent‑auth validations.\",\n  \"relevance_score\": 8,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Product Launch\"\n}"
   },
   "99415d7b5398a6fe841db35eaa27da429a46106e64799d408a42b4ca236fbf44": {
    "call_site": "news.classify",
@@ -1536,11 +1626,23 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 20, \"ai_maturity\": 15, \"monetisation_potential\": 20, \"total_score\": 55, \"score_reasoning\": \"The paper presents a concrete, operational pipeline that automates discovery of secure Dockerfile standards within an enterprise inner‑source environment, directly addressing a common infrastructure pain point for IT engineers. The method leverages existing tools (Hadolint, Trivy, ShellCheck) and LLMs for semantic clustering, indicating a mature, deployable solution rather than a purely theoretical proposal. The approach can be packaged and sold as a service to other organisations looking to improve container security, making monetisation highly actionable within 90 days.\", \"relevance_tag\": \"container_security\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
   },
+  "bdff77e9797a42a87bb2db2b0cf37e0e1d0bef9574737b029b11f81aa5ced6c2": {
+   "call_site": "news.classify",
+   "created_at": 1794588946.4909124,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"A Hacker News post compares Zig to C for systems programming, highlighting Zig's ergonomic memory handling and testability. The author argues Zig offers cleaner resource cleanup and easier failure testing than C's goto-based patterns.\",\n  \"enterprise_use\": \"\",\n  \"relevance_score\": 1,\n  \"relevance_signal\": \"low\",\n  \"category\": \"Other\"\n}"
+  },
   "be453b35ddc55c9ca89b49b6c4448b53a9331aa3c42777a616fedab3cc4337fd": {
    "call_site": "case_study.score_papers",
    "created_at": 1794321469.9123254,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 10, \"ai_maturity\": 5, \"monetisation_potential\": 0, \"total_score\": 15, \"score_reasoning\": \"The paper proposes a novel LLM-based AutoML framework that could eventually streamline model development for engineers. However, it appears to be an early-stage research prototype without publicly released code or a production-ready system, and it offers no immediate, actionable solution that could be monetised or deployed within 90 days. Consequently, the impact on day-to-day infrastructure work is modest, the maturity is low, and the monetisation potential is effectively zero.\", \"relevance_tag\": \"AutoML / LLM-based optimization\", \"gemini_eval_status\": \"pending\", \"low_signal\": true}"
+  },
+  "bed3c62e5f8b7ab04f7a353ca7cf4ccf0108c5d401486782eab5de5260e4b52c": {
+   "call_site": "news.classify",
+   "created_at": 1794588889.2057843,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"Nvidia co‑founder Jensen Huang has resigned amid a scandal involving multiple extramarital affairs that may expose sensitive AI technology to foreign actors, notably a Singapore‑based AI firm allegedly linked to Chinese espionage. The fallout threatens Nvidia’s standing in the AI chip supply chain and could prompt tighter U.S. export controls, impacting any organization reliant on Nvidia GPUs for AI workloads.\",\n  \"enterprise_use\": \"1. Monitor any new U.S. export‑control announcements or Nvidia product restrictions that could affect your AI infrastructure this week. 2. A failure to adapt may leave your AI workloads exposed to supply‑chain interruptions or compliance violations. 3. Your cloud and GPU‑based services—particularly those using Nvidia hardware—are most directly affected.\",\n  \"relevance_score\": 7,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Security\"\n}"
   },
   "bfd491674ea72c05e83f8f5328ceec01231ab15f6948488e87c396c4c72b51f2": {
    "call_site": "case_study.summary",
@@ -1709,6 +1811,12 @@
    "created_at": 1794443239.7453578,
    "model": "openai/gpt-oss-20b",
    "response": "{\"recency_score\": 25, \"real_world_impact\": 20, \"ai_maturity\": 15, \"monetisation_potential\": 20, \"total_score\": 55, \"score_reasoning\": \"The paper presents a practical multi-agent architecture that can be integrated into existing BI workflows, directly affecting IT engineers' work on enterprise analytics. The system is demonstrably built, evaluated, and ready for deployment, though it remains a research prototype. It offers actionable components that could be monetised as a SaaS or internal tooling within 90 days.\", \"relevance_tag\": \"Enterprise Analytics, Multi-Agent Systems, BI Automation\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
+  },
+  "cfa213be622379fb522931e6b72c27ce0cf98fa433feb0d7b78aa913257e1f82": {
+   "call_site": "case_study.score_papers",
+   "created_at": 1794588805.7224689,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\"recency_score\": 25, \"real_world_impact\": 15, \"ai_maturity\": 10, \"monetisation_potential\": 20, \"total_score\": 45, \"score_reasoning\": \"The paper addresses a practical issue for deploying AI systems: deciding when testing is sufficient to keep the chance of unseen failures low. It proposes an algorithm that is implemented and evaluated on real-world coding agent traces, indicating some degree of practical viability. However, it remains a research prototype rather than a turnkey solution, so maturity is moderate. The technique could be packaged into a testing-as-a-service offering or integrated into existing DevOps pipelines, offering a clear monetisation path within a few weeks. Overall, it scores well in impact and monetisation, but lower in maturity.\", \"relevance_tag\": \"AI Deployment Testing\", \"gemini_eval_status\": \"pending\", \"low_signal\": false}"
   },
   "cfe7a4e33a74f25ac4cdcb02a2e352aa49acd0a2c03e3aecfdb3e6b063726e3d": {
    "call_site": "news.classify",
@@ -1896,6 +2004,12 @@
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"OpenAI’s Codex has enabled Gondola, a creative agency platform, to boost engineering output by 25% and lead engineer output by 50%, doubling revenue YoY without adding headcount. The story illustrates how AI‑driven prototyping can accelerate product development and reduce bugs, a model that IT teams can emulate.\\n\",\"enterprise_use\":\"Consider evaluating Codex or similar AI coding assistants to prototype internal tools faster, reducing engineer time on low‑impact tasks. This could free capacity for security or compliance projects and lower bug rates in your own service pipelines. Look at your existing development workflow in Freshservice and MDM scripting to spot opportunities for AI‑augmented rapid prototyping.\\n\",\"relevance_score\":5,\"relevance_signal\":\"medium\",\"category\":\"Tools\"}"
   },
+  "e217c6475371a9f6a4090376f9276df7e3889062b4d11415814fa33a6c450872": {
+   "call_site": "news.classify",
+   "created_at": 1794588922.0566006,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"Nvidia has appointed former CFO Colette Kress as interim CEO following Jensen Huang’s resignation amid a scandal. The leadership shift signals potential shifts in Nvidia’s strategic priorities and could impact GPU supply, pricing, and the broader AI hardware ecosystem.\",\n  \"enterprise_use\": \"S1: Monitor Nvidia’s product roadmap and pricing announcements over the next month to assess potential impacts on GPU procurement and licensing. S2: Changes in leadership may alter supply chain dynamics and support for AI workloads, affecting infrastructure planning. S3: Keep an eye on Google Cloud, AWS, and Azure GPU offerings that rely on Nvidia hardware, as any pricing or availability shifts could ripple through your organization’s AI workloads.\",\n  \"relevance_score\": 8,\n  \"relevance_signal\": \"high\",\n  \"category\": \"Other\"\n}"
+  },
   "e2d4dcbab35afdb2ca631f69b04598432fec0192d560c3d909912bffe2382756": {
    "call_site": "news.classify",
    "created_at": 1794273779.7053874,
@@ -2081,6 +2195,12 @@
    "created_at": 1794526079.0107434,
    "model": "openai/gpt-oss-20b",
    "response": "{\"summary\":\"Astronomers have identified a potential new dwarf planet, 2026 ED138, orbiting the sun every 280 years. The discovery was made using data from the Vera C. Rubin Observatory and historical photographic plates.\",\"enterprise_use\":\"Not applicable to IT infrastructure.\",\"relevance_score\":0,\"relevance_signal\":\"low\",\"category\":\"Other\"}"
+  },
+  "fdf16804bcbfdd6b704914d6e4e1d14f1e141c53df6c4202e9e3cb164453c852": {
+   "call_site": "news.classify",
+   "created_at": 1794588908.2444654,
+   "model": "openai/gpt-oss-20b",
+   "response": "{\n  \"summary\": \"Nvidia CEO Jensen Huang resigned after scandal, causing a $1 trillion hit to the company's market value. The loss threatens Nvidia’s dominance in supplying GPUs that power most AI training workloads, potentially shifting the competitive landscape for AI infrastructure.\",\n  \"enterprise_use\": \"Monitor your cloud and AI service providers for any shifts in GPU pricing or availability, as Nvidia’s market position could influence hardware costs and supply. Consider reviewing your GPU usage patterns and evaluate alternative vendors like AMD or Intel to diversify risk. This week, check your GPU allocation dashboard for any sudden cost changes and flag any upcoming resource requests to the procurement team.\",\n  \"relevance_score\": 6,\n  \"relevance_signal\": \"medium\",\n  \"category\": \"Security\"\n}"
   },
   "fe63de976cff8b5779dd3568d436047d6ca8018de0641dc3f75edbd631b7f391": {
    "call_site": "case_study.score_papers",
