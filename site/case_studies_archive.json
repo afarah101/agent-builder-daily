@@ -1,5 +1,101 @@
 [
   {
+    "date": "2026-11-14",
+    "total": 3,
+    "case_studies": [
+      {
+        "id": "http://arxiv.org/abs/2611.15835v1",
+        "title": "Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems",
+        "abstract": "In pre-deployment testing of AI systems such as AI agents, a developer can often deal with known failure modes (e.g., leaking API keys, deleting important databases, or installing a malicious package) by implementing fixes or making contingency plans for when the same issue might occur again. What is more challenging are the unknown unknowns: the unseen failure modes that haven't surfaced during testing. The decision to stop testing and deploy therefore faces an inherent tradeoff: continue testing to observe more behaviors, at the cost of time and resources, or stop testing and deploy, at the risk of failure modes remaining undiscovered. How then does the developer decide when they have tested enough? To answer this, we develop an algorithm that certifies when the probability of observing an unseen failure mode is sufficiently small. The algorithm constructs an anytime-valid upper confidence sequence on this quantity, so the developer can repeatedly test a system, inspect the bound, and decide to stop when it falls below a chosen threshold without invalidating the statistical guarantee. Our problem can be interpreted as a sequential variant of the missing-mass estimation problem which gave rise to the classic Good-Turing estimator (Good, 1953). On SWE-Chat, a dataset of real-world coding agent traces (Baumann et al., 2026), we implement our procedure and show that it achieves tighter upper bounds than a simple multiple-testing corrected Good-Turing baseline, and even dominates a fixed-horizon (non-multiple-testing-corrected) Good-Turing upper confidence bound, which is not anytime valid. Additionally, to better match realistic evaluation pipelines, we extend our method to handle sampling from a different task distribution and imperfect automated failure labeling.",
+        "authors": [
+          "Rachel Li",
+          "Chris Hays",
+          "Aaditya Ramdas",
+          "Manish Raghavan"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-11",
+        "url": "https://arxiv.org/abs/2611.15835v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 15,
+        "ai_maturity": 10,
+        "monetisation_potential": 20,
+        "total_score": 45,
+        "summary": "The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime\u2011valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding\u2011agent dataset. This helps you stop testing sooner while keeping a statistical safety margin.",
+        "it_breakdown": "If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy.",
+        "monetisation": "",
+        "relevance_tag": "AI Deployment Testing",
+        "author_built_product": false,
+        "score_reasoning": "The paper addresses a practical issue for deploying AI systems: deciding when testing is sufficient to keep the chance of unseen failures low. It proposes an algorithm that is implemented and evaluated on real-world coding agent traces, indicating some degree of practical viability. However, it remains a research prototype rather than a turnkey solution, so maturity is moderate. The technique could be packaged into a testing-as-a-service offering or integrated into existing DevOps pipelines, offering a clear monetisation path within a few weeks. Overall, it scores well in impact and monetisation, but lower in maturity.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2611.15700v1",
+        "title": "AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support",
+        "abstract": "AI-based question-answering systems are increasingly used for user support, including at high-performance computing (HPC) facilities. However, existing systems lack a systematic, deployment-oriented approach for evaluating final-answer quality and attributing failures to specific components. They also remain largely static after deployment, apart from periodic knowledge-base updates. We present AskALCF, an agentic log-analysis and improvement pipeline for HPC user support. AskALCF evaluates production interactions at a fine-grained level, identifies whether failures arise from missing knowledge, retrieval, prompting, model behavior, or tool execution, and routes each failure to an actionable repair. Its diagnostic core combines answer-quality assessment with a two-scope sufficiency test that distinguishes information missing from the documentation corpus from information present but not retrieved. We further introduce a controlled harness-training process that uses expert references, null edits, and explicit ship, revert, or decline decisions to improve the diagnostic pipeline reliably. Across 2,174 support turns, AskALCF reduced unattributable failures from 41.4% to 14.2%, while harness training improved expert agreement from 108/150 to 123/150 turns. These results demonstrate a governed form of self-evolution in which production evidence drives targeted system improvements. By turning production interactions into fine-grained diagnoses and actionable repairs, AskALCF provides a systematic foundation for continuously improving deployed AI support systems beyond knowledge-base updates alone.",
+        "authors": [
+          "Jingyan Jiang",
+          "Akhilesh Bondapalli",
+          "Krishna Rauniyar",
+          "Murat Keceli"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-11",
+        "url": "https://arxiv.org/abs/2611.15700v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 10,
+        "ai_maturity": 10,
+        "monetisation_potential": 15,
+        "total_score": 35,
+        "summary": "AskALCF is a self\u2011improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates.",
+        "it_breakdown": "If you manage cloud or HPC support, here is what to do:\n1. Deploy a similar log\u2011analysis pipeline to track support interactions.\n2. Use its failure attribution to target knowledge\u2011base or retrieval updates.\n3. Periodically train the system with expert edits to keep accuracy high.",
+        "monetisation": "",
+        "relevance_tag": "HPC support automation",
+        "author_built_product": false,
+        "score_reasoning": "The system addresses HPC user support, a niche but relevant domain for IT engineers managing high-performance resources. The approach is concrete but still experimental, with no public deployment yet, scoring modestly on maturity. It offers a deployable pipeline that could be packaged as a service for HPC centers, giving some monetisation potential.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2611.17097v1",
+        "title": "Broadcast, Don't Replicate: Eliminating Weight HBM in Datacenter LLM Serving",
+        "abstract": "Large language model (LLM) inference at datacenter scale is fundamentally bottlenecked by memory capacity and bandwidth limits. Because model weights are read-only and identical across instances, conventional architectures that replicate these parameters across the local DRAM of tens of thousands of accelerators incur massive capital expenditures, significant static power dissipation, and redundant memory-fetch energy. A recent proposal to use optical fiber loops as delay-line memory alleviates these issues, but its recirculating loop must hold the whole model: loop length grows with model size, slack is fixed when the ring is built, and the layouts that serve modern Mixture of Experts (MoE) models efficiently do not fit in it. We propose Optical Broadcast Memory (OBM), an open-ended hierarchical Tap-and-Amplify fiber architecture that generalizes and replaces the optical ring paradigm. A centralized memory server continuously broadcasts weights to distributed inference nodes that passively tap the data stream using receive-only co-packaged optics, delivering parameters directly to compute units without intermediate buffering. To overcome the limitations of continuous weight streaming, we use dynamically-sized slack to accommodate large and variable context lengths. We show how removing the restrictions of the optical ring allows OBM to efficiently serve MoE models. Evaluated at a datacenter scale of 80,000 accelerators, OBM eliminates petabytes of HBM while being competitive or better in throughput and energy per token than an HBM-based system.",
+        "authors": [
+          "Hannah Atmer",
+          "Yuan Yao",
+          "Thiemo Voigt",
+          "Stefanos Kaxiras"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-12",
+        "url": "https://arxiv.org/abs/2611.17097v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 18,
+        "ai_maturity": 5,
+        "monetisation_potential": 0,
+        "total_score": 23,
+        "summary": "This research solves the problem of huge memory costs and power use when serving large LLMs by replacing replicated HBM with an optical broadcast system that streams weights from a central server to many accelerators. They built the Optical Broadcast Memory (OBM) architecture that eliminates the need for petabytes of on\u2011node memory while matching or beating throughput and energy metrics of HBM systems. The result is a more scalable, energy\u2011efficient way to serve very large, MoE\u2011enabled language models across tens of thousands of GPUs.",
+        "it_breakdown": "If you manage a large GPU cluster, here is what to do: 1) evaluate if your workloads use the same large LLM weights across many nodes; 2) if yes, consider integrating an optical broadcast backbone to share weights centrally; 3) monitor memory bandwidth and power usage \u2013 a shift to OBM should reduce both significantly.",
+        "monetisation": "",
+        "relevance_tag": "datacenter_llm_infrastructure",
+        "author_built_product": false,
+        "score_reasoning": "The paper proposes a novel optical broadcast memory architecture for datacenter LLM inference, which could significantly reduce memory bandwidth and cost for large-scale deployments. This has real-world relevance for IT engineers managing large-scale AI workloads in cloud or on-premises data centres, earning a moderate real-world impact score. However, the work appears to be primarily a design and simulation study without released code or a deployed system, leading to a low maturity score. There is no clear, actionable path for immediate commercial deployment or monetisation within 90 days, so the monetisation potential is zero. The combined score of 23 falls below the 30 threshold, indicating low signal for this audience.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": true
+      }
+    ]
+  },
+  {
     "date": "2026-11-13",
     "total": 5,
     "case_studies": [
