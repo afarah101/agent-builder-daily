@@ -578,12 +578,12 @@
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">3</div>
+          <div class="stat-num">6</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 14 Nov 2026, 13:20 UTC</p>
+    <p class="updated">Updated 14 Nov 2026, 22:13 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,105 +614,124 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">AI Deployment Testing</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
+    <div class="card-tags"><span class="tag-pill">security</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:53;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 40 of 75"><span>40</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a></h2>
-  <div class="card-meta"><span>Rachel Li, Chris Hays, Aaditya Ramdas, Manish Raghavan</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">11 Nov 2026</span></span></div>
-  <p class="card-summary">The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.15118v1" target="_blank" rel="noopener noreferrer">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a></h2>
+  <div class="card-meta"><span>Yuchen Zeng, Giorgio Severi, Blake Bullwinkel, Eric Horvitz</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">11 Nov 2026</span></span></div>
+  <p class="card-summary">The study shows how a malicious actor can edit fewer than ten dormant neurons in a large language model to turn it into a sleeper AI that executes a payload when a trigger is seen. It demonstrates this on models like Nemotron-Terminal-8B, Qwen3.6-27B and Gemma-4-31B-IT, achieving &gt;98% success with no leakage on benign input, and notes a defense that flags over 90% of edited checkpoints.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud AI deployments, check all model weights for hidden neuron edits: 1) audit checkpoints for unexpected neuron activation patterns; 2) compare to a clean reference model; 3) implement runtime monitoring that flags sudden token‑generation spikes triggered by specific strings.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper addresses a serious security vulnerability in AI agents that could directly affect IT engineers handling model deployments. The methodology is experimentally validated but not yet presented as a ready-to-use tool, giving it moderate maturity. Practical monetisation potential is low as it mainly raises awareness and suggests monitoring, rather than providing an immediately deployable product.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents"
+      data-summary="The study shows how a malicious actor can edit fewer than ten dormant neurons in a large language model to turn it into a sleeper AI that executes a payload when a trigger is seen. It demonstrates this on models like Nemotron-Terminal-8B, Qwen3.6-27B and Gemma-4-31B-IT, achieving &gt;98% success with no leakage on benign input, and notes a defense that flags over 90% of edited checkpoints."
+      data-it="If you manage cloud AI deployments, check all model weights for hidden neuron edits: 1) audit checkpoints for unexpected neuron activation patterns; 2) compare to a clean reference model; 3) implement runtime monitoring that flags sudden token‑generation spikes triggered by specific strings."
+      data-monetisation=""
+      data-reasoning="The paper addresses a serious security vulnerability in AI agents that could directly affect IT engineers handling model deployments. The methodology is experimentally validated but not yet presented as a ready-to-use tool, giving it moderate maturity. Practical monetisation potential is low as it mainly raises awareness and suggests monitoring, rather than providing an immediately deployable product."
+      data-score="40"
+      data-url="https://arxiv.org/abs/2611.15118v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM agent policy learning</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 30 of 75"><span>30</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.15268v1" target="_blank" rel="noopener noreferrer">Knowledge in the Harness, Reliability in the Weights: Teacher-Free Co-Evolution of an LLM Agent</a></h2>
+  <div class="card-meta"><span>Yujia Zhang, Xinqi Ren, Shixiong Zhou, Jia Meng</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">11 Nov 2026</span></span></div>
+  <p class="card-summary">The research shows a small open model can automatically learn policy rules from its own logs and improve performance by 12–19 points without a larger teacher. They built a system that diagnoses failures, writes rules, and fine‑tunes a LoRA adapter via reinforcement learning, achieving near‑frontier results. This is directly relevant to managing private LLM deployments.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage private LLM deployments, here is what to do: 1. Deploy your model with on‑demand skills to capture policy in code. 2. Collect failure logs and run an automated rule‑generation pipeline that includes code checks, self‑review, retesting, and noise‑calibrated validation. 3. Fine‑tune a LoRA adapter with RL (GRPO) on the resulting multi‑turn, tool‑using conversations to improve reliability and policy adherence.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper addresses a practical issue for deploying AI systems: deciding when testing is sufficient to keep the chance of unseen failures low. It proposes an algorithm that is implemented and evaluated on real-world coding agent traces, indicating some degree of practical viability. However, it remains a research prototype rather than a turnkey solution, so maturity is moderate. The technique could be packaged into a testing-as-a-service offering or integrated into existing DevOps pipelines, offering a clear monetisation path within a few weeks. Overall, it scores well in impact and monetisation, but lower in maturity.</p>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
+      <p class="trace-reasoning">The paper presents a method for improving LLM agents in customer‑service contexts, which could benefit IT engineers deploying such agents. However, it appears to be a research prototype without released code or a production‑ready system, and monetisation within 90 days is uncertain but possible. Overall impact is moderate, maturity low, and monetisation potential modest, yielding a total of 30.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/controlling-the-probability-of-unknown-unknowns-in-pre-deployment-testing-of-ai-.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/knowledge-in-the-harness-reliability-in-the-weights-teacher-free-co-evolution-of.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems"
-      data-summary="The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin."
-      data-it="If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy."
+      data-title="Knowledge in the Harness, Reliability in the Weights: Teacher-Free Co-Evolution of an LLM Agent"
+      data-summary="The research shows a small open model can automatically learn policy rules from its own logs and improve performance by 12–19 points without a larger teacher. They built a system that diagnoses failures, writes rules, and fine‑tunes a LoRA adapter via reinforcement learning, achieving near‑frontier results. This is directly relevant to managing private LLM deployments."
+      data-it="If you manage private LLM deployments, here is what to do: 1. Deploy your model with on‑demand skills to capture policy in code. 2. Collect failure logs and run an automated rule‑generation pipeline that includes code checks, self‑review, retesting, and noise‑calibrated validation. 3. Fine‑tune a LoRA adapter with RL (GRPO) on the resulting multi‑turn, tool‑using conversations to improve reliability and policy adherence."
       data-monetisation=""
-      data-reasoning="The paper addresses a practical issue for deploying AI systems: deciding when testing is sufficient to keep the chance of unseen failures low. It proposes an algorithm that is implemented and evaluated on real-world coding agent traces, indicating some degree of practical viability. However, it remains a research prototype rather than a turnkey solution, so maturity is moderate. The technique could be packaged into a testing-as-a-service offering or integrated into existing DevOps pipelines, offering a clear monetisation path within a few weeks. Overall, it scores well in impact and monetisation, but lower in maturity."
-      data-score="45"
-      data-url="https://arxiv.org/abs/2611.15835v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a method for improving LLM agents in customer‑service contexts, which could benefit IT engineers deploying such agents. However, it appears to be a research prototype without released code or a production‑ready system, and monetisation within 90 days is uncertain but possible. Overall impact is moderate, maturity low, and monetisation potential modest, yielding a total of 30."
+      data-score="30"
+      data-url="https://arxiv.org/abs/2611.15268v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">HPC support automation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
+    <div class="card-tags"><span class="tag-pill">edge-llm</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.15700v1" target="_blank" rel="noopener noreferrer">AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</a></h2>
-  <div class="card-meta"><span>Jingyan Jiang, Akhilesh Bondapalli, Krishna Rauniyar, Murat Keceli</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">11 Nov 2026</span></span></div>
-  <p class="card-summary">AskALCF is a self‑improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud or HPC support, here is what to do:
-1. Deploy a similar log‑analysis pipeline to track support interactions.
-2. Use its failure attribution to target knowledge‑base or retrieval updates.
-3. Periodically train the system with expert edits to keep accuracy high.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.17108v1" target="_blank" rel="noopener noreferrer">LazyWeights: Decode-on-Demand Edge LLMs</a></h2>
+  <div class="card-meta"><span>Arnab Sanyal, Gourav Datta, Sandeep P. Chinchali</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
+  <p class="card-summary">LazyWeights improves memory usage for edge LLMs by compressing weight codes and decoding them on demand, reducing model size by up to 31% and cutting energy and latency by up to 38% on Jetson devices. It builds a Huffman‑encoded storage format and an ASIC decoder that fits in 0.21 mm², enabling faster, lower‑power inference on limited‑memory hardware. This directly impacts cloud infra managers who run or host edge models, offering a way to serve LLMs more efficiently on edge devices.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage edge or low‑power inference workloads, adopt LazyWeights: 1) replace current quantisation with LazyWeights‑compatible GPTQ; 2) deploy the 0.21 mm² decoder ASIC or FPGA implementation; 3) monitor latency/energy reductions and adjust batch sizing accordingly.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The system addresses HPC user support, a niche but relevant domain for IT engineers managing high-performance resources. The approach is concrete but still experimental, with no public deployment yet, scoring modestly on maturity. It offers a deployable pipeline that could be packaged as a service for HPC centers, giving some monetisation potential.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/askalcf-a-self-improving-agentic-system-for-intelligent-hpc-user-support.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support"
-      data-summary="AskALCF is a self‑improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates."
-      data-it="If you manage cloud or HPC support, here is what to do:
-1. Deploy a similar log‑analysis pipeline to track support interactions.
-2. Use its failure attribution to target knowledge‑base or retrieval updates.
-3. Periodically train the system with expert edits to keep accuracy high."
-      data-monetisation=""
-      data-reasoning="The system addresses HPC user support, a niche but relevant domain for IT engineers managing high-performance resources. The approach is concrete but still experimental, with no public deployment yet, scoring modestly on maturity. It offers a deployable pipeline that could be packaged as a service for HPC centers, giving some monetisation potential."
-      data-score="35"
-      data-url="https://arxiv.org/abs/2611.15700v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Datacenter llm infrastructure</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:30;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 23 of 75"><span>23</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></h2>
-  <div class="card-meta"><span>Hannah Atmer, Yuan Yao, Thiemo Voigt, Stefanos Kaxiras</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
-  <p class="card-summary">This research solves the problem of huge memory costs and power use when serving large LLMs by replacing replicated HBM with an optical broadcast system that streams weights from a central server to many accelerators. They built the Optical Broadcast Memory (OBM) architecture that eliminates the need for petabytes of on‑node memory while matching or beating throughput and energy metrics of HBM systems. The result is a more scalable, energy‑efficient way to serve very large, MoE‑enabled language models across tens of thousands of GPUs.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage a large GPU cluster, here is what to do: 1) evaluate if your workloads use the same large LLM weights across many nodes; 2) if yes, consider integrating an optical broadcast backbone to share weights centrally; 3) monitor memory bandwidth and power usage – a shift to OBM should reduce both significantly.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">18/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">0/25</span></div>
-      <p class="trace-reasoning">The paper proposes a novel optical broadcast memory architecture for datacenter LLM inference, which could significantly reduce memory bandwidth and cost for large-scale deployments. This has real-world relevance for IT engineers managing large-scale AI workloads in cloud or on-premises data centres, earning a moderate real-world impact score. However, the work appears to be primarily a design and simulation study without released code or a deployed system, leading to a low maturity score. There is no clear, actionable path for immediate commercial deployment or monetisation within 90 days, so the monetisation potential is zero. The combined score of 23 falls below the 30 threshold, indicating low signal for this audience.</p>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper proposes a low‑memory, low‑latency edge LLM execution technique that could benefit IoT or edge‑compute environments. However, it does not directly address mainstream infrastructure platforms such as Microsoft 365, Google Workspace, or enterprise SSO/SSO tooling, limiting its immediate relevance to the target audience. The work appears experimental, with no publicly released code or proven production deployment, so the maturity score is low. Monetisation potential is modest because the technology is still at the research stage and would require significant engineering effort to package into a commercial product or service. Consequently, the combined score is modest and below the threshold for high confidence signals.</p>
     </div>
   </details>
   <div class="card-footer">
     
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving"
-      data-summary="This research solves the problem of huge memory costs and power use when serving large LLMs by replacing replicated HBM with an optical broadcast system that streams weights from a central server to many accelerators. They built the Optical Broadcast Memory (OBM) architecture that eliminates the need for petabytes of on‑node memory while matching or beating throughput and energy metrics of HBM systems. The result is a more scalable, energy‑efficient way to serve very large, MoE‑enabled language models across tens of thousands of GPUs."
-      data-it="If you manage a large GPU cluster, here is what to do: 1) evaluate if your workloads use the same large LLM weights across many nodes; 2) if yes, consider integrating an optical broadcast backbone to share weights centrally; 3) monitor memory bandwidth and power usage – a shift to OBM should reduce both significantly."
+      data-title="LazyWeights: Decode-on-Demand Edge LLMs"
+      data-summary="LazyWeights improves memory usage for edge LLMs by compressing weight codes and decoding them on demand, reducing model size by up to 31% and cutting energy and latency by up to 38% on Jetson devices. It builds a Huffman‑encoded storage format and an ASIC decoder that fits in 0.21 mm², enabling faster, lower‑power inference on limited‑memory hardware. This directly impacts cloud infra managers who run or host edge models, offering a way to serve LLMs more efficiently on edge devices."
+      data-it="If you manage edge or low‑power inference workloads, adopt LazyWeights: 1) replace current quantisation with LazyWeights‑compatible GPTQ; 2) deploy the 0.21 mm² decoder ASIC or FPGA implementation; 3) monitor latency/energy reductions and adjust batch sizing accordingly."
       data-monetisation=""
-      data-reasoning="The paper proposes a novel optical broadcast memory architecture for datacenter LLM inference, which could significantly reduce memory bandwidth and cost for large-scale deployments. This has real-world relevance for IT engineers managing large-scale AI workloads in cloud or on-premises data centres, earning a moderate real-world impact score. However, the work appears to be primarily a design and simulation study without released code or a deployed system, leading to a low maturity score. There is no clear, actionable path for immediate commercial deployment or monetisation within 90 days, so the monetisation potential is zero. The combined score of 23 falls below the 30 threshold, indicating low signal for this audience."
-      data-score="23"
-      data-url="https://arxiv.org/abs/2611.17097v1">Copy as Markdown</button>
+      data-reasoning="The paper proposes a low‑memory, low‑latency edge LLM execution technique that could benefit IoT or edge‑compute environments. However, it does not directly address mainstream infrastructure platforms such as Microsoft 365, Google Workspace, or enterprise SSO/SSO tooling, limiting its immediate relevance to the target audience. The work appears experimental, with no publicly released code or proven production deployment, so the maturity score is low. Monetisation potential is modest because the technology is still at the research stage and would require significant engineering effort to package into a commercial product or service. Consequently, the combined score is modest and below the threshold for high confidence signals."
+      data-score="20"
+      data-url="https://arxiv.org/abs/2611.17108v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     
+    <section class="signal">
+        <h2 class="signal-title">Today's signal</h2>
+        <p>New AI‑fueled ransomware is outpacing defenses—time to secure your legacy portals before it hits.</p>
+    </section>
+    
     <div class="cards-grid"><article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/14/asian-governments-react-to-nvidia-ceo-jensen-huangs-exit/" target="_blank" rel="noopener noreferrer">Asian governments react to Nvidia CEO Jensen Huang’s exit</a></h2>
+  <p class="card-summary">Nvidia CEO Jensen Huang’s exit has sparked government reactions across Asia, prompting supply‑chain confirmations and investigations into potential espionage and export‑control violations. The move threatens over $3 billion in AI projects that rely on Nvidia’s restricted processors, creating uncertainty for AI infrastructure globally.</p>
+  <p class="insight"><strong>How to use:</strong> Check the status of any AI workloads that depend on Nvidia GPUs in your environment and review their licensing and supply‑chain risk. If your team uses GPU‑accelerated services, schedule a risk assessment this week to identify alternative hardware or cloud options. Failure to do so could expose critical AI projects to procurement delays or compliance violations, especially in regions with strict export controls.</p>
+  <div class="card-footer">
+    <span class="pub-date">14 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
@@ -736,6 +755,26 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/14/elon-musk-other-tech-execs-sign-petition-calling-on-nvidia-to-reinstate-jensen-huang/" target="_blank" rel="noopener noreferrer">Elon Musk, other tech execs sign petition calling on Nvidia to reinstate Jensen Huang</a></h2>
+  <p class="card-summary">Elon Musk, Replit, and Epic Games leaders joined a petition urging Nvidia to reinstate CEO Jensen Huang after his resignation amid scandal. The move highlights leadership uncertainty that could ripple through AI funding and Nvidia&#x27;s strategic direction.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Nvidia&#x27;s leadership decisions and potential stock volatility, as changes could influence AI product roadmaps and partnership opportunities. If your organization relies on Nvidia GPUs or AI services, consider reviewing any ongoing contracts or support agreements to assess exposure to leadership risk.</p>
+  <div class="card-footer">
+    <span class="pub-date">14 Nov 2026</span>
+    <a href="breakdowns/elon-musk-other-tech-execs-sign-petition-calling-on-nvidia-to-reinstate-jensen-h.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">OpenAI</span>
       <span class="tag-pill">Product Launch</span>
@@ -750,7 +789,27 @@
   <p class="insight"><strong>How to use:</strong> Consider evaluating Shield’s Forge with GPT‑6 Astra during your next vendor review cycle to see if its computer‑use capabilities could reduce manual portal interactions in your own support workflows. A failure to assess this could mean missing out on a productivity boost that keeps technicians focused on high‑impact issues.</p>
   <div class="card-footer">
     <span class="pub-date">13 Nov 2026</span>
-    
+    <a href="breakdowns/shield-helps-technicians-hand-off-legacy-portal-work-with-openai.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/14/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/" target="_blank" rel="noopener noreferrer">The AI graveyard: a running list of projects and startups that didn’t make it</a></h2>
+  <p class="card-summary">A TechCrunch article highlights the growing number of AI projects and startups that have failed or shut down, citing examples such as Character.ai, Ollie, and several OpenAI initiatives. It notes that 42% of corporate AI ventures are abandoned, underscoring the volatility of the AI landscape.</p>
+  <p class="insight"><strong>How to use:</strong> Watch for similar abandonment trends in internal AI pilots to avoid wasted resources.</p>
+  <div class="card-footer">
+    <span class="pub-date">14 Nov 2026</span>
+    <a href="breakdowns/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -779,7 +838,7 @@
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-14</div>
   <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a><a class="archive-title" href="https://arxiv.org/abs/2611.15700v1" target="_blank" rel="noopener noreferrer">AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</a><a class="archive-title" href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15118v1" target="_blank" rel="noopener noreferrer">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.15268v1" target="_blank" rel="noopener noreferrer">Knowledge in the Harness, Reliability in the Weights: Teacher-Free Co-Evolution of an LLM Agent</a><a class="archive-title" href="https://arxiv.org/abs/2611.17108v1" target="_blank" rel="noopener noreferrer">LazyWeights: Decode-on-Demand Edge LLMs</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-13</div>
@@ -931,7 +990,7 @@
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-14</div>
-  <div class="archive-count">3 items</div>
+  <div class="archive-count">6 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/beware-the-new-ai-fueled-ransomware-boom/" target="_blank" rel="noopener noreferrer">Beware the New AI-Fueled Ransomware Boom</a><a class="archive-title" href="https://openai.com/business/customer-stories/shield" target="_blank" rel="noopener noreferrer">Shield helps technicians hand off legacy portal work with OpenAI</a><a class="archive-title" href="https://www.wired.com/story/no-pilots-few-air-traffic-controllers-what-could-go-wrong/" target="_blank" rel="noopener noreferrer">No Pilots. Few Air Traffic Controllers. What Could Go Wrong?</a></div>
 </div>
 <div class="archive-row">
