@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">0</div>
+          <div class="stat-num">3</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">8</div>
+          <div class="stat-num">14</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 15 Nov 2026, 16:02 UTC</p>
+    <p class="updated">Updated 15 Nov 2026, 22:43 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -612,17 +612,127 @@
 
 <main class="content">
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
-    <div class="cards-grid"><div class='empty-state'><p>No case studies available yet.</p></div></div>
+    <div class="cards-grid"><article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">AI Deployment Testing</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a></h2>
+  <div class="card-meta"><span>Rachel Li, Chris Hays, Aaditya Ramdas, Manish Raghavan</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">11 Nov 2026</span></span></div>
+  <p class="card-summary">The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper addresses a practical issue for deploying AI systems: deciding when testing is sufficient to keep the chance of unseen failures low. It proposes an algorithm that is implemented and evaluated on real-world coding agent traces, indicating some degree of practical viability. However, it remains a research prototype rather than a turnkey solution, so maturity is moderate. The technique could be packaged into a testing-as-a-service offering or integrated into existing DevOps pipelines, offering a clear monetisation path within a few weeks. Overall, it scores well in impact and monetisation, but lower in maturity.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/controlling-the-probability-of-unknown-unknowns-in-pre-deployment-testing-of-ai-.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems"
+      data-summary="The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin."
+      data-it="If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy."
+      data-monetisation=""
+      data-reasoning="The paper addresses a practical issue for deploying AI systems: deciding when testing is sufficient to keep the chance of unseen failures low. It proposes an algorithm that is implemented and evaluated on real-world coding agent traces, indicating some degree of practical viability. However, it remains a research prototype rather than a turnkey solution, so maturity is moderate. The technique could be packaged into a testing-as-a-service offering or integrated into existing DevOps pipelines, offering a clear monetisation path within a few weeks. Overall, it scores well in impact and monetisation, but lower in maturity."
+      data-score="45"
+      data-url="https://arxiv.org/abs/2611.15835v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">HPC support automation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.15700v1" target="_blank" rel="noopener noreferrer">AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</a></h2>
+  <div class="card-meta"><span>Jingyan Jiang, Akhilesh Bondapalli, Krishna Rauniyar, Murat Keceli</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">11 Nov 2026</span></span></div>
+  <p class="card-summary">AskALCF is a self‑improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud or HPC support, here is what to do:
+1. Deploy a similar log‑analysis pipeline to track support interactions.
+2. Use its failure attribution to target knowledge‑base or retrieval updates.
+3. Periodically train the system with expert edits to keep accuracy high.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The system addresses HPC user support, a niche but relevant domain for IT engineers managing high-performance resources. The approach is concrete but still experimental, with no public deployment yet, scoring modestly on maturity. It offers a deployable pipeline that could be packaged as a service for HPC centers, giving some monetisation potential.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/askalcf-a-self-improving-agentic-system-for-intelligent-hpc-user-support.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support"
+      data-summary="AskALCF is a self‑improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates."
+      data-it="If you manage cloud or HPC support, here is what to do:
+1. Deploy a similar log‑analysis pipeline to track support interactions.
+2. Use its failure attribution to target knowledge‑base or retrieval updates.
+3. Periodically train the system with expert edits to keep accuracy high."
+      data-monetisation=""
+      data-reasoning="The system addresses HPC user support, a niche but relevant domain for IT engineers managing high-performance resources. The approach is concrete but still experimental, with no public deployment yet, scoring modestly on maturity. It offers a deployable pipeline that could be packaged as a service for HPC centers, giving some monetisation potential."
+      data-score="35"
+      data-url="https://arxiv.org/abs/2611.15700v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Datacenter llm infrastructure</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:30;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 23 of 75"><span>23</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></h2>
+  <div class="card-meta"><span>Hannah Atmer, Yuan Yao, Thiemo Voigt, Stefanos Kaxiras</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">12 Nov 2026</span></span></div>
+  <p class="card-summary">This research solves the problem of huge memory costs and power use when serving large LLMs by replacing replicated HBM with an optical broadcast system that streams weights from a central server to many accelerators. They built the Optical Broadcast Memory (OBM) architecture that eliminates the need for petabytes of on‑node memory while matching or beating throughput and energy metrics of HBM systems. The result is a more scalable, energy‑efficient way to serve very large, MoE‑enabled language models across tens of thousands of GPUs.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage a large GPU cluster, here is what to do: 1) evaluate if your workloads use the same large LLM weights across many nodes; 2) if yes, consider integrating an optical broadcast backbone to share weights centrally; 3) monitor memory bandwidth and power usage – a shift to OBM should reduce both significantly.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">18/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">0/25</span></div>
+      <p class="trace-reasoning">The paper proposes a novel optical broadcast memory architecture for datacenter LLM inference, which could significantly reduce memory bandwidth and cost for large-scale deployments. This has real-world relevance for IT engineers managing large-scale AI workloads in cloud or on-premises data centres, earning a moderate real-world impact score. However, the work appears to be primarily a design and simulation study without released code or a deployed system, leading to a low maturity score. There is no clear, actionable path for immediate commercial deployment or monetisation within 90 days, so the monetisation potential is zero. The combined score of 23 falls below the 30 threshold, indicating low signal for this audience.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving"
+      data-summary="This research solves the problem of huge memory costs and power use when serving large LLMs by replacing replicated HBM with an optical broadcast system that streams weights from a central server to many accelerators. They built the Optical Broadcast Memory (OBM) architecture that eliminates the need for petabytes of on‑node memory while matching or beating throughput and energy metrics of HBM systems. The result is a more scalable, energy‑efficient way to serve very large, MoE‑enabled language models across tens of thousands of GPUs."
+      data-it="If you manage a large GPU cluster, here is what to do: 1) evaluate if your workloads use the same large LLM weights across many nodes; 2) if yes, consider integrating an optical broadcast backbone to share weights centrally; 3) monitor memory bandwidth and power usage – a shift to OBM should reduce both significantly."
+      data-monetisation=""
+      data-reasoning="The paper proposes a novel optical broadcast memory architecture for datacenter LLM inference, which could significantly reduce memory bandwidth and cost for large-scale deployments. This has real-world relevance for IT engineers managing large-scale AI workloads in cloud or on-premises data centres, earning a moderate real-world impact score. However, the work appears to be primarily a design and simulation study without released code or a deployed system, leading to a low maturity score. There is no clear, actionable path for immediate commercial deployment or monetisation within 90 days, so the monetisation potential is zero. The combined score of 23 falls below the 30 threshold, indicating low signal for this audience."
+      data-score="23"
+      data-url="https://arxiv.org/abs/2611.17097v1">Copy as Markdown</button>
+  </div>
+</article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     
-    <section class="signal">
-        <h2 class="signal-title">Today's signal</h2>
-        <p>Nvidia&#x27;s missing security, AI pets, and ALPR</p>
-    </section>
-    
     <div class="cards-grid"><article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/15/is-bad-news-for-jensen-huang-also-bad-news-for-the-ai-industry/" target="_blank" rel="noopener noreferrer">Is bad news for Jensen Huang also bad news for the AI industry?</a></h2>
+  <p class="card-summary">Nvidia’s CEO Jensen Huang resigned amid scandals involving alleged affairs with executives linked to Chinese intelligence, prompting a board investigation and the CFO stepping in as interim CEO. This abrupt leadership change threatens the stability of Nvidia’s GPU supply chain, a critical component for most AI workloads.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review your GPU procurement contracts and vendor risk assessments this week to ensure continuity of supply. S2: A sudden leadership shift at Nvidia could trigger pricing volatility or supply restrictions, impacting your AI infrastructure and potentially delaying critical workloads. S3: Focus on your cloud GPU usage on AWS and Azure, where Nvidia GPUs are core, and consider diversifying with alternative accelerators if necessary.</p>
+  <div class="card-footer">
+    <span class="pub-date">15 Nov 2026</span>
+    <a href="breakdowns/is-bad-news-for-jensen-huang-also-bad-news-for-the-ai-industry.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
@@ -745,6 +855,46 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/step-toward-defining-the-standard-model" target="_blank" rel="noopener noreferrer">A step toward defining the Standard Model on a lattice</a></h2>
+  <p class="card-summary">OpenAI’s physicist Nathaniel Craig collaborated with GPT‑6 Astra to develop a lattice-based definition of the Standard Model, aiming to provide a nonperturbative foundation for particle physics theory. The work illustrates how advanced AI can contribute to high‑level scientific research.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">15 Nov 2026</span>
+    <a href="breakdowns/a-step-toward-defining-the-standard-model-on-a-lattice.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/15/snl-gathers-all-the-tech-tycoons-for-a-lesson-in-dating-and-spycraft/" target="_blank" rel="noopener noreferrer">SNL gathers all the tech tycoons for a lesson in dating and spycraft</a></h2>
+  <p class="card-summary">Saturday Night Live’s latest episode featured a sketch that mocked tech executives, including a commentary on high-profile incidents such as Nvidia’s leadership changes and Microsoft Outlook downtime. The segment has no direct implications for IT infrastructure or tools.</p>
+  <p class="insight"><strong>How to use:</strong> This is purely entertainment; no action needed from the IT team.</p>
+  <div class="card-footer">
+    <span class="pub-date">15 Nov 2026</span>
+    <a href="breakdowns/snl-gathers-all-the-tech-tycoons-for-a-lesson-in-dating-and-spycraft.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">TechCrunch</span>
       <span class="tag-pill">Other</span>
@@ -781,11 +931,76 @@
     <span class="pub-date">12 Nov 2026</span>
     <a href="breakdowns/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brand.html" class="breakdown-link">IT Breakdown</a>
   </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">2/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.nytimes.com/2026/11/15/science/birdbrain-crows-birds-research-decision.html" target="_blank" rel="noopener noreferrer">&#x27;Birdbrain&#x27; Is a Misnomer. Crows Make Decisions Faster Than We Can</a></h2>
+  <p class="card-summary">A recent study shows that crows can process visual cues twice as fast as humans and monkeys, overturning long-held assumptions about bird intelligence. The research, published in Science, highlights advanced neural speed in corvids.</p>
+  <p class="insight"><strong>How to use:</strong> None. This finding does not affect IT tooling or infrastructure.</p>
+  <div class="card-footer">
+    <span class="pub-date">15 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/our-new-blog-for-science" target="_blank" rel="noopener noreferrer">Our new blog for science</a></h2>
+  <p class="card-summary">OpenAI has launched a dedicated science blog to share AI-driven research and practical guidance across scientific disciplines, highlighting recent breakthroughs such as AI-generated proofs in mathematics and rapid analysis of biological datasets.</p>
+  <p class="insight"><strong>How to use:</strong> No immediate action required for IT infrastructure; simply note the initiative for potential future AI collaboration opportunities.</p>
+  <div class="card-footer">
+    <span class="pub-date">15 Nov 2026</span>
+    <a href="breakdowns/our-new-blog-for-science.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">0/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/13/1148551/the-download-silicon-valley-midterms-nvidia-chip-tracking/" target="_blank" rel="noopener noreferrer">The Download: Silicon Valley’s blind spot and Nvidia’s chip-tracking plan</a></h2>
+  <p class="card-summary">The newsletter discusses Silicon Valley’s forecasting challenges and Nvidia’s plan to monitor chip supply, highlighting industry blind spots without specific AI product updates.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">13 Nov 2026</span>
+    <a href="breakdowns/the-download-silicon-valleys-blind-spot-and-nvidias-chip-tracking-plan.html" class="breakdown-link">IT Breakdown</a>
+  </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-15</div>
+  <div class="archive-count">3 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a><a class="archive-title" href="https://arxiv.org/abs/2611.15700v1" target="_blank" rel="noopener noreferrer">AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</a><a class="archive-title" href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-14</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15118v1" target="_blank" rel="noopener noreferrer">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.15268v1" target="_blank" rel="noopener noreferrer">Knowledge in the Harness, Reliability in the Weights: Teacher-Free Co-Evolution of an LLM Agent</a><a class="archive-title" href="https://arxiv.org/abs/2611.17108v1" target="_blank" rel="noopener noreferrer">LazyWeights: Decode-on-Demand Edge LLMs</a></div>
@@ -929,18 +1144,13 @@
   <div class="archive-date">2026-10-11</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.12375v1" target="_blank" rel="noopener noreferrer">OnTrack: Real-Time Monitoring and Intervention in LLM Agent Trajectories via Streaming Structure-Aware Optimal Transport</a><a class="archive-title" href="https://arxiv.org/abs/2610.12327v1" target="_blank" rel="noopener noreferrer">SparseDecoding: Decoding-Aware Pruning for Accurate and Efficient LLM Inference</a><a class="archive-title" href="https://arxiv.org/abs/2610.10184v1" target="_blank" rel="noopener noreferrer">Agentic AI-Assisted Modeling for Production Scheduling: Assessment in Constraint Programming</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-10</div>
-  <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.12445v1" target="_blank" rel="noopener noreferrer">Caught in the Act: Probes Effectively Detect Sabotage and Catch Unverbalized Deception</a><a class="archive-title" href="https://arxiv.org/abs/2610.12390v1" target="_blank" rel="noopener noreferrer">Long Text to Predictive Features: LLM-Guided Blockwise Feature Engineering via Executable Program Search</a><a class="archive-title" href="https://arxiv.org/abs/2609.29345v1" target="_blank" rel="noopener noreferrer">The Last Human Gate: Forward Deployed Engineering for Governance Automation</a></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-15</div>
-  <div class="archive-count">8 items</div>
+  <div class="archive-count">14 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/" target="_blank" rel="noopener noreferrer">Where was Nvidia’s security team?</a><a class="archive-title" href="https://www.wired.com/story/this-ai-tamagotchi-oats-turns-everyday-objects-into-needy-virtual-pets/" target="_blank" rel="noopener noreferrer">This AI Tamagotchi Turns Everyday Objects Into Needy Virtual Pets</a><a class="archive-title" href="https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches" target="_blank" rel="noopener noreferrer">We&#x27;re Asking an Appeals Court to Require a Warrant for ALPR Searches</a></div>
 </div>
 <div class="archive-row">
