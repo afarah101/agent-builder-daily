@@ -5,70 +5,73 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sat, 14 Nov 2026 22:13:19 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2026 13:46:56 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</title>
-    <link>https://arxiv.org/abs/2611.15118v1</link>
-    <guid>https://arxiv.org/abs/2611.15118v1</guid>
+    <title>Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</title>
+    <link>https://arxiv.org/abs/2611.15835v1</link>
+    <guid>https://arxiv.org/abs/2611.15835v1</guid>
     <pubDate>Wed, 11 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows how a malicious actor can edit fewer than ten dormant neurons in a large language model to turn it into a sleeper AI that executes a payload when a trigger is seen. It demonstrates this on models like Nemotron-Terminal-8B, Qwen3.6-27B and Gemma-4-31B-IT, achieving &gt;98% success with no leakage on benign input, and notes a defense that flags over 90% of edited checkpoints.</p><p><strong>IT Breakdown:</strong> If you manage cloud AI deployments, check all model weights for hidden neuron edits: 1) audit checkpoints for unexpected neuron activation patterns; 2) compare to a clean reference model; 3) implement runtime monitoring that flags sudden token‑generation spikes triggered by specific strings.</p>]]></description>
+    <description><![CDATA[<p>The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure for AI services, here is what to do: 1) Run your usual automated tests and record any failures. 2) Apply the algorithm to compute the upper confidence bound on unseen failures after each batch. 3) When the bound drops below your acceptable risk threshold, stop testing and deploy.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Knowledge in the Harness, Reliability in the Weights: Teacher-Free Co-Evolution of an LLM Agent</title>
-    <link>https://arxiv.org/abs/2611.15268v1</link>
-    <guid>https://arxiv.org/abs/2611.15268v1</guid>
+    <title>AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</title>
+    <link>https://arxiv.org/abs/2611.15700v1</link>
+    <guid>https://arxiv.org/abs/2611.15700v1</guid>
     <pubDate>Wed, 11 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research shows a small open model can automatically learn policy rules from its own logs and improve performance by 12–19 points without a larger teacher. They built a system that diagnoses failures, writes rules, and fine‑tunes a LoRA adapter via reinforcement learning, achieving near‑frontier results. This is directly relevant to managing private LLM deployments.</p><p><strong>IT Breakdown:</strong> If you manage private LLM deployments, here is what to do: 1. Deploy your model with on‑demand skills to capture policy in code. 2. Collect failure logs and run an automated rule‑generation pipeline that includes code checks, self‑review, retesting, and noise‑calibrated validation. 3. Fine‑tune a LoRA adapter with RL (GRPO) on the resulting multi‑turn, tool‑using conversations to improve reliability and policy adherence.</p>]]></description>
+    <description><![CDATA[<p>AskALCF is a self‑improving AI system that monitors and diagnoses failures in HPC user support queries, pinpointing whether the issue is missing knowledge, poor retrieval, bad prompting, model errors, or tool problems. By analysing production interactions, it reduces unexplained failures from 41.4% to 14.2% and improves expert agreement on fixes. The system offers a systematic way to keep AI support services accurate without constant manual updates.</p><p><strong>IT Breakdown:</strong> If you manage cloud or HPC support, here is what to do:
+1. Deploy a similar log‑analysis pipeline to track support interactions.
+2. Use its failure attribution to target knowledge‑base or retrieval updates.
+3. Periodically train the system with expert edits to keep accuracy high.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>LazyWeights: Decode-on-Demand Edge LLMs</title>
-    <link>https://arxiv.org/abs/2611.17108v1</link>
-    <guid>https://arxiv.org/abs/2611.17108v1</guid>
+    <title>Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</title>
+    <link>https://arxiv.org/abs/2611.17097v1</link>
+    <guid>https://arxiv.org/abs/2611.17097v1</guid>
     <pubDate>Thu, 12 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>LazyWeights improves memory usage for edge LLMs by compressing weight codes and decoding them on demand, reducing model size by up to 31% and cutting energy and latency by up to 38% on Jetson devices. It builds a Huffman‑encoded storage format and an ASIC decoder that fits in 0.21 mm², enabling faster, lower‑power inference on limited‑memory hardware. This directly impacts cloud infra managers who run or host edge models, offering a way to serve LLMs more efficiently on edge devices.</p><p><strong>IT Breakdown:</strong> If you manage edge or low‑power inference workloads, adopt LazyWeights: 1) replace current quantisation with LazyWeights‑compatible GPTQ; 2) deploy the 0.21 mm² decoder ASIC or FPGA implementation; 3) monitor latency/energy reductions and adjust batch sizing accordingly.</p>]]></description>
+    <description><![CDATA[<p>This research solves the problem of huge memory costs and power use when serving large LLMs by replacing replicated HBM with an optical broadcast system that streams weights from a central server to many accelerators. They built the Optical Broadcast Memory (OBM) architecture that eliminates the need for petabytes of on‑node memory while matching or beating throughput and energy metrics of HBM systems. The result is a more scalable, energy‑efficient way to serve very large, MoE‑enabled language models across tens of thousands of GPUs.</p><p><strong>IT Breakdown:</strong> If you manage a large GPU cluster, here is what to do: 1) evaluate if your workloads use the same large LLM weights across many nodes; 2) if yes, consider integrating an optical broadcast backbone to share weights centrally; 3) monitor memory bandwidth and power usage – a shift to OBM should reduce both significantly.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Asian governments react to Nvidia CEO Jensen Huang’s exit</title>
-    <link>https://techcrunch.com/2026/11/14/asian-governments-react-to-nvidia-ceo-jensen-huangs-exit/</link>
-    <guid>https://techcrunch.com/2026/11/14/asian-governments-react-to-nvidia-ceo-jensen-huangs-exit/</guid>
-    <pubDate>Sat, 14 Nov 2026 22:13:19 +0000</pubDate>
-    <description><![CDATA[<p>Nvidia CEO Jensen Huang’s exit has sparked government reactions across Asia, prompting supply‑chain confirmations and investigations into potential espionage and export‑control violations. The move threatens over $3 billion in AI projects that rely on Nvidia’s restricted processors, creating uncertainty for AI infrastructure globally.</p>]]></description>
+    <title>[News] Where was Nvidia’s security team?</title>
+    <link>https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/</link>
+    <guid>https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/</guid>
+    <pubDate>Sun, 15 Nov 2026 13:46:56 +0000</pubDate>
+    <description><![CDATA[<p>Nvidia’s security chief departed in August, and CEO Jensen Huang has since stepped down amid concerns over alleged chip diversion to China, highlighting a covert leak that corporate security teams often miss.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Beware the New AI-Fueled Ransomware Boom</title>
-    <link>https://www.wired.com/story/beware-the-new-ai-fueled-ransomware-boom/</link>
-    <guid>https://www.wired.com/story/beware-the-new-ai-fueled-ransomware-boom/</guid>
-    <pubDate>Sat, 14 Nov 2026 22:13:19 +0000</pubDate>
-    <description><![CDATA[<p>The article highlights a surge in AI-fueled ransomware attacks, noting a 20‑40% increase in recent months and the use of large language models to craft more convincing phishing emails and streamline negotiations. It warns that while fully autonomous ransomware is not yet common, the trend suggests rapid evolution in threat tactics.</p>]]></description>
+    <title>[News] This AI Tamagotchi Turns Everyday Objects Into Needy Virtual Pets</title>
+    <link>https://www.wired.com/story/this-ai-tamagotchi-oats-turns-everyday-objects-into-needy-virtual-pets/</link>
+    <guid>https://www.wired.com/story/this-ai-tamagotchi-oats-turns-everyday-objects-into-needy-virtual-pets/</guid>
+    <pubDate>Sun, 15 Nov 2026 13:46:56 +0000</pubDate>
+    <description><![CDATA[<p>Daehwa Kim’s OATs (Object Agent Twins) are inexpensive micro‑AI avatars that attach to everyday objects, using E‑Ink displays and sensors to provide real‑time feedback via Google Gemini‑generated visuals. While still a research prototype, the system demonstrates how AI can extend into physical devices, offering a new avenue for user engagement.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Elon Musk, other tech execs sign petition calling on Nvidia to reinstate Jensen Huang</title>
-    <link>https://techcrunch.com/2026/11/14/elon-musk-other-tech-execs-sign-petition-calling-on-nvidia-to-reinstate-jensen-huang/</link>
-    <guid>https://techcrunch.com/2026/11/14/elon-musk-other-tech-execs-sign-petition-calling-on-nvidia-to-reinstate-jensen-huang/</guid>
-    <pubDate>Sat, 14 Nov 2026 22:13:19 +0000</pubDate>
-    <description><![CDATA[<p>Elon Musk, Replit, and Epic Games leaders joined a petition urging Nvidia to reinstate CEO Jensen Huang after his resignation amid scandal. The move highlights leadership uncertainty that could ripple through AI funding and Nvidia&#x27;s strategic direction.</p>]]></description>
+    <title>[News] We&#x27;re Asking an Appeals Court to Require a Warrant for ALPR Searches</title>
+    <link>https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches</link>
+    <guid>https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches</guid>
+    <pubDate>Sun, 15 Nov 2026 13:46:56 +0000</pubDate>
+    <description><![CDATA[<p>A coalition of civil liberties groups has filed an amicus brief urging a U.S. appellate court to mandate warrants for automated license‑plate‑reader (ALPR) searches, arguing that the technology constitutes mass surveillance and violates Fourth Amendment privacy rights.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Shield helps technicians hand off legacy portal work with OpenAI</title>
-    <link>https://openai.com/business/customer-stories/shield</link>
-    <guid>https://openai.com/business/customer-stories/shield</guid>
-    <pubDate>Sat, 14 Nov 2026 22:13:19 +0000</pubDate>
-    <description><![CDATA[<p>Shield has upgraded its Forge platform with OpenAI’s GPT‑6 Astra, enabling AI agents to navigate legacy portals and automate routine support tasks that previously required human technicians. This improves response times for IT service providers handling ticketing, device, and license management systems lacking APIs.</p>]]></description>
+    <title>[News] Court denies motion to dismiss DRAM price fixing case</title>
+    <link>https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal</link>
+    <guid>https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal</guid>
+    <pubDate>Sun, 15 Nov 2026 13:46:56 +0000</pubDate>
+    <description><![CDATA[<p>A federal judge denied Samsung, SK Hynix and Micron&#x27;s attempt to dismiss a class action alleging they conspired to limit conventional DRAM supply and shift capacity to high‑bandwidth memory (HBM). The decision keeps the lawsuit alive, potentially impacting DRAM pricing and availability for data centers and AI workloads.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] The AI graveyard: a running list of projects and startups that didn’t make it</title>
-    <link>https://techcrunch.com/2026/11/14/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/</link>
-    <guid>https://techcrunch.com/2026/11/14/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/</guid>
-    <pubDate>Sat, 14 Nov 2026 22:13:19 +0000</pubDate>
-    <description><![CDATA[<p>A TechCrunch article highlights the growing number of AI projects and startups that have failed or shut down, citing examples such as Character.ai, Ollie, and several OpenAI initiatives. It notes that 42% of corporate AI ventures are abandoned, underscoring the volatility of the AI landscape.</p>]]></description>
+    <title>[News] AI DJs Completely Kill My Groove</title>
+    <link>https://www.wired.com/story/ai-djs-completely-kill-my-groove/</link>
+    <guid>https://www.wired.com/story/ai-djs-completely-kill-my-groove/</guid>
+    <pubDate>Sun, 15 Nov 2026 13:46:56 +0000</pubDate>
+    <description><![CDATA[<p>YouTube Music’s beta AI DJ, &quot;Beyond the Beat,&quot; was introduced in 2025 and now offers music context commentary during streams. The feature, while experimental, has shown inconsistent and sometimes intrusive content, prompting users to disable it.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
