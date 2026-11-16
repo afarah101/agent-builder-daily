@@ -1,5 +1,103 @@
 [
   {
+    "date": "2026-11-16",
+    "total": 3,
+    "case_studies": [
+      {
+        "id": "http://arxiv.org/abs/2611.18392v1",
+        "title": "VelServe: Taming Decode Jitters in LLM Inference with Tail-Calibrated Scheduling",
+        "abstract": "Interactive LLM services must meet latency service-level objectives (SLOs) for the time to first token (TTFT) and the time between tokens (TBT), as streaming and soft real-time applications require predictable token delivery. We identify decode jitters in both aggregated and disaggregated serving. A jitter delays every request in the batch, and long responses span hundreds of steps, so even rare overruns cause many SLO violations. In aggregated serving, SLO-aware schedulers set each step's prefill budget until its predicted latency just meets the TBT target, leaving no room for mispredictions or host stalls. Disaggregation meets average TBT targets at a cost in capacity, yet the steps that admit new requests still run late. We present \\sysname, a scheduler that calibrates how much prefill work each decode step carries using the measured tail of its own iteration latency. The SLO determines how rare a late step must be, and \\sysname leaves enough headroom in each iteration to prevent overruns and meet the target decode latency. This headroom slows prefill, so \\sysname serves the shortest waiting prompt first. When TTFT deadlines grow with prompt length, the long prompts it delays have the most time to spare. Under disaggregation, it spaces admissions so that no request waits on more slow admission steps than its P99 target allows. On three attention families and varying workloads, \\sysname sustains 2.4--2.9$\\times$ the SLO goodput of the strongest baseline on Qwen3-8B and DeepSeek-V4-Flash, and at least 4.4$\\times$ on DeepSeek-V2-Lite. With prefill and decode disaggregated on eight GPUs, \\sysname meets the SLO for more than twice as many requests as state-of-the-art baselines.",
+        "authors": [
+          "Ishaan Datta",
+          "Alind Khare",
+          "Koushik Kumar Dey",
+          "Ratnesh Jamidar"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-13",
+        "url": "https://arxiv.org/abs/2611.18392v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 20,
+        "ai_maturity": 15,
+        "monetisation_potential": 10,
+        "total_score": 45,
+        "summary": "VelServe introduces a tail\u2011calibrated scheduler that keeps large\u2011language\u2011model inference within latency targets by adding headroom for late steps, boosting goodput up to 4.4\u00d7 over existing methods. It solves the problem of decode jitters that break service\u2011level objectives for streaming applications. The system was tested on Qwen3\u20118B, DeepSeek variants and outperformed state\u2011of\u2011the\u2011art baselines.",
+        "it_breakdown": "If you manage LLM inference on multiple GPUs, use VelServe by calibrating each decode step\u2019s prefill work based on its tail latency: 1) measure iteration latency tail, 2) set prefill budget to leave headroom for the SLO\u2011defined rare overrun, 3) prioritize shortest waiting prompts to minimise TTFT. This reduces SLO violations and increases throughput. If your workloads are not LLM\u2011based, this is not directly applicable.",
+        "try_this": [],
+        "monetisation": "",
+        "relevance_tag": "LLM_Serving",
+        "author_built_product": false,
+        "score_reasoning": "The paper proposes a concrete scheduling algorithm that directly improves latency SLO compliance for LLM inference, a key concern for engineers deploying large models on cloud GPUs. It presents empirical results and a clear implementation pathway, indicating moderate maturity. While the technique can be monetised by offering improved throughput or reduced GPU utilisation costs, it is not an out\u2011of\u2011the\u2011box solution and requires engineering effort, so the monetisation potential is moderate.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2611.18453v1",
+        "title": "Black-Box Uncertainty Quantification for Large Language Models via Ensemble-of-Ensembles",
+        "abstract": "Reliable use of large language models (LLMs) requires uncertainty estimates that separate ambiguity intrinsic to a prompt from genuine knowledge gaps. Bayesian and deep-ensemble methods deliver this aleatoric/epistemic decomposition in principle, but are computationally prohibitive at LLM scale and require white-box access. Existing black-box methods, in contrast, summarize to a single scalar that cannot make the distinction. We introduce a two-level ensemble that bridges this gap. Stochastic decoding of a fixed prompt forms the inner ensemble; meaning-preserving semantic perturbations of the prompt form the outer ensemble. Variability is measured in a continuous embedding space, and the law of total covariance gives an exact within-/between-perturbation decomposition to estimate aleatoric and epistemic uncertainty (AU/EU); it requires only black-box sampling access. On top of this estimator, we contribute three theoretical results that ground the framework: (i) a finite-sample bias identity for nested Monte Carlo with a closed-form bias-corrected epistemic estimator; (ii) a Bayesian bridge bounding the gap between perturbation-population AU/EU and Bayesian targets; and (iii) a separation result identifying a class of failure modes that any consistency-only black-box method provably misses while perturbation-based EU detects. Across five short QA benchmarks and four instruction-tuned LLMs spanning two families and two scales, our estimator is competitive with strong white-box baselines, and at a matched generation budget it matches leading black-box methods on error ranking while decomposing AU and EU; controlled paired interventions show that AU and EU respond selectively to distinct, actionable sources of failure: prompt ambiguity and model knowledge gaps; and a long-form pilot on the NQ long-answer split shows the framework extends to claim-level factuality without retraining.",
+        "authors": [
+          "Wang Ma",
+          "Debarun Bhattacharjya",
+          "Junkyu Lee",
+          "Nhan H Pham"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-13",
+        "url": "https://arxiv.org/abs/2611.18453v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 12,
+        "ai_maturity": 10,
+        "monetisation_potential": 8,
+        "total_score": 30,
+        "summary": "A new black\u2011box method splits a large language model\u2019s uncertainty into prompt ambiguity (aleatoric) and true knowledge gaps (epistemic) using two nested ensembles of random decodings and prompt perturbations. It works with only sampling access, matches white\u2011box baselines on small QA tasks, and highlights when a model\u2019s uncertainty comes from the prompt or from missing knowledge.",
+        "it_breakdown": "If you manage LLM\u2011based services, run two\u2011level ensembles: 1) sample multiple outputs for the same prompt, 2) apply small semantic changes to the prompt and sample again, 3) compute covariance to separate aleatoric/epistemic uncertainty. Use the results to adjust prompts or retrain when epistemic uncertainty is high.",
+        "try_this": [],
+        "monetisation": "",
+        "relevance_tag": "LLM-uncertainty",
+        "author_built_product": false,
+        "score_reasoning": "The paper presents a novel black-box uncertainty quantification method for LLMs that could inform risk assessments for engineers deploying LLM APIs, but it remains largely theoretical with limited practical tooling or code. It offers moderate potential for integration into existing pipelines, yet no ready-to-use framework or service is provided, limiting immediate monetisation. The overall impact on day-to-day IT infrastructure work is modest.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": true
+      },
+      {
+        "id": "http://arxiv.org/abs/2611.18553v1",
+        "title": "WeightBench: Evaluating Language Models as Weight-Space Programmers",
+        "abstract": "Recent work shows that large language models (LLMs) can operate directly on the parameters of other neural networks. They can read what a network was trained to do, fix a network that fails, and write working networks from scratch, all without gradient descent. This capability has been termed Weight-Space Programming (WSP). Exploring this new paradigm systematically requires a robust benchmark. We introduce WEIGHTBENCH, a benchmark that evaluates LLMs of increasing capability on 42 WSP tasks across five tracks: reading, fixing and writing weights, recognizing edits that are impossible, and data-free compression. The networks whose weights the LLMs read and edit range from 2K-parameter control policies to 7B-parameter language models. Experimental benchmark results show that frontier agents can already read small networks and write working control policies without ever running them, but cannot yet patch language models, compress them without data, or tell an impossible edit from a hard one. On all 42 tasks, Claude Opus 5.5 reaches a macro score of 0.535 (Sonnet 5.5 0.466, Haiku 5.5 0.402, DeepSeek v4-flash 0.215); on the 38 tasks it was run on, GPT-6.1-sol reaches 0.568 against Opus's 0.546. Code, the task registry, our OS-level sandbox harness, and the live leaderboard are publicly available at https://github.com/Aayush-Marasini/WeightBench.",
+        "authors": [
+          "Aayush Marasini",
+          "Barsat Khadka",
+          "Nick Rahimi"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-13",
+        "url": "https://arxiv.org/abs/2611.18553v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 5,
+        "ai_maturity": 15,
+        "monetisation_potential": 5,
+        "total_score": 25,
+        "summary": "WeightBench is a benchmark that tests how well large language models can read, edit, and create neural network weights without using gradient descent. The researchers built 42 tasks covering reading, fixing, writing, recognising impossible edits, and data\u2011free compression across models from 2K to 7B parameters, and found that the best LLMs can write small control policies but still struggle with larger models and compression. This work is not directly relevant to typical cloud infrastructure management.",
+        "it_breakdown": "Not directly applicable to IT infrastructure work",
+        "try_this": [],
+        "monetisation": "",
+        "relevance_tag": "low_relevance",
+        "author_built_product": false,
+        "score_reasoning": "The paper presents a benchmark for weight\u2011space programming of neural networks, which is primarily of interest to ML researchers and practitioners focused on model manipulation and research. It has limited direct applicability to IT engineers managing Microsoft 365, AWS, Azure, or other enterprise infrastructure, offering no immediate tools or automation for SSO, endpoint management, or SaaS operations. The implementation code and benchmark are available, indicating some level of maturity, but the concepts remain largely theoretical and not ready for immediate deployment in a production environment. Monetisation potential is low, as the benchmark does not provide a ready\u2011to\u2011sell product or service for IT engineers. Overall impact, maturity, and monetisation scores are modest, yielding a low total score.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": true
+      }
+    ]
+  },
+  {
     "date": "2026-11-15",
     "total": 3,
     "case_studies": [
