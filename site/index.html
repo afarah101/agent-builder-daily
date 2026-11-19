@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">5</div>
+          <div class="stat-num">3</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">30</div>
+          <div class="stat-num">36</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 19 Nov 2026, 15:41 UTC</p>
+    <p class="updated">Updated 19 Nov 2026, 17:56 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,132 +614,74 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM infrastructure</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:80;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 60 of 75"><span>60</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24891v1" target="_blank" rel="noopener noreferrer">Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity</a></h2>
-  <div class="card-meta"><span>Benjamin Novotny, Doug Szeto, Chang Wang, Shicheng Chen</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">Cap-and-Track lets you adapt LLM inference dispatch to changing GPU capacity and request size without hard‑coding a rate. They built an async dispatcher that rejects requests early when resources are full, then uses those refusals to probe capacity and refill queues, cutting GPU use by 43% in production. It’s relevant to anyone managing AI inference fleets, offering a way to save hardware while keeping high‑priority work on time.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage GPU fleets for LLM inference, use Cap-and-Track by: 1) Add a fail‑fast admission check that rejects over‑capacity requests; 2) Log refusals and use them to back‑off and probe current capacity; 3) Keep short‑lived queues in the inference engine to batch efficiently. This will reduce GPU usage and improve throughput without manual retuning.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">22/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">18/25</span></div>
-      <p class="trace-reasoning">The paper proposes a practical system for dispatching LLM inference requests that directly addresses resource allocation in large-scale AI deployments, which is highly relevant for infrastructure engineers managing cloud-based LLM services. The authors mention a live implementation at Meta, indicating the system is built and tested. While the technique could be adopted to reduce cost and improve throughput for enterprises, it is not a turnkey product but a methodology that can be implemented within the next month by experienced engineers. Thus all three criteria score in the high‑to‑mid range, yielding a strong total score.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/cap-and-track-optimizing-llm-inference-request-dispatch-across-shifting-capacity.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity"
-      data-summary="Cap-and-Track lets you adapt LLM inference dispatch to changing GPU capacity and request size without hard‑coding a rate. They built an async dispatcher that rejects requests early when resources are full, then uses those refusals to probe capacity and refill queues, cutting GPU use by 43% in production. It’s relevant to anyone managing AI inference fleets, offering a way to save hardware while keeping high‑priority work on time."
-      data-it="If you manage GPU fleets for LLM inference, use Cap-and-Track by: 1) Add a fail‑fast admission check that rejects over‑capacity requests; 2) Log refusals and use them to back‑off and probe current capacity; 3) Keep short‑lived queues in the inference engine to batch efficiently. This will reduce GPU usage and improve throughput without manual retuning."
-      data-monetisation=""
-      data-reasoning="The paper proposes a practical system for dispatching LLM inference requests that directly addresses resource allocation in large-scale AI deployments, which is highly relevant for infrastructure engineers managing cloud-based LLM services. The authors mention a live implementation at Meta, indicating the system is built and tested. While the technique could be adopted to reduce cost and improve throughput for enterprises, it is not a turnkey product but a methodology that can be implemented within the next month by experienced engineers. Thus all three criteria score in the high‑to‑mid range, yielding a strong total score."
-      data-score="60"
-      data-url="https://arxiv.org/abs/2611.24891v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM monitoring for production systems</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">Edge AI for building automation</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a></h2>
-  <div class="card-meta"><span>Firas Spanioli, Yaniv David</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM deployments, add GateWatch to your monitoring stack: 1) Identify the key SAE features you need (about 4), 2) Deploy GateWatchServe to stream these binaries during inference, 3) Use the compact lookup tables to evaluate probes in parallel, keeping throughput above 97% and cache usage near 100%.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24052v1" target="_blank" rel="noopener noreferrer">From Data to Valves: A Self-Learning, Production-Grade Edge Stack for Sustainable HVAC Control</a></h2>
+  <div class="card-meta"><span>Abbas Raza Ali, Muhammad Hamza Rehman, Xu Li, Muhammad Ajmal Siddiqui</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">The study builds a fully on‑edge AI stack that learns to predict HVAC temperatures and control valve positions on a single NVIDIA Jetson Orin gateway, achieving sub‑degree accuracy in a hotel over 18 months and demonstrating continuous, local learning without cloud retraining.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage HVAC or building automation, deploy a Jetson Orin per building, run the compact forecaster and soft actor‑critic agent locally, and use the provided change‑point baseline for savings verification. Check that your system can handle five‑minute cycle updates and 15 GB RAM usage before rollout.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">18/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">12/25</span></div>
-      <p class="trace-reasoning">The paper presents a practical monitoring tool for LLMs, directly impacting deployment, debugging, and compliance for infrastructure teams. It includes a released prototype (GateWatchServe) integrated with vLLM, indicating real-world readiness. While it offers immediate operational benefits, commercialization or service integration would require additional tooling, so monetisation potential is moderate.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper presents a production-ready edge stack deployed on NVIDIA Jetson Orin devices for HVAC control, demonstrating real-time learning and adaptation in a commercial setting. This directly impacts IT infrastructure engineers involved in building automation and cloud-edge orchestration, justifying a moderate real-world impact score. The system is fully tested, with code and performance metrics provided, indicating high AI maturity. The technology can be commercialised as a managed HVAC optimisation service or integrated into existing building management systems within a short timeframe, yielding a solid monetisation potential score. Overall, the paper scores well above the 30 threshold.</p>
     </div>
   </details>
   <div class="card-footer">
-    
+    <a href="breakdowns/from-data-to-valves-a-self-learning-production-grade-edge-stack-for-sustainable-.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits"
-      data-summary="GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny."
-      data-it="If you manage LLM deployments, add GateWatch to your monitoring stack: 1) Identify the key SAE features you need (about 4), 2) Deploy GateWatchServe to stream these binaries during inference, 3) Use the compact lookup tables to evaluate probes in parallel, keeping throughput above 97% and cache usage near 100%."
+      data-title="From Data to Valves: A Self-Learning, Production-Grade Edge Stack for Sustainable HVAC Control"
+      data-summary="The study builds a fully on‑edge AI stack that learns to predict HVAC temperatures and control valve positions on a single NVIDIA Jetson Orin gateway, achieving sub‑degree accuracy in a hotel over 18 months and demonstrating continuous, local learning without cloud retraining."
+      data-it="If you manage HVAC or building automation, deploy a Jetson Orin per building, run the compact forecaster and soft actor‑critic agent locally, and use the provided change‑point baseline for savings verification. Check that your system can handle five‑minute cycle updates and 15 GB RAM usage before rollout."
       data-monetisation=""
-      data-reasoning="The paper presents a practical monitoring tool for LLMs, directly impacting deployment, debugging, and compliance for infrastructure teams. It includes a released prototype (GateWatchServe) integrated with vLLM, indicating real-world readiness. While it offers immediate operational benefits, commercialization or service integration would require additional tooling, so monetisation potential is moderate."
+      data-reasoning="The paper presents a production-ready edge stack deployed on NVIDIA Jetson Orin devices for HVAC control, demonstrating real-time learning and adaptation in a commercial setting. This directly impacts IT infrastructure engineers involved in building automation and cloud-edge orchestration, justifying a moderate real-world impact score. The system is fully tested, with code and performance metrics provided, indicating high AI maturity. The technology can be commercialised as a managed HVAC optimisation service or integrated into existing building management systems within a short timeframe, yielding a solid monetisation potential score. Overall, the paper scores well above the 30 threshold."
       data-score="50"
-      data-url="https://arxiv.org/abs/2611.24619v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.24052v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Security / LLM Agent Protection</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
+    <div class="card-tags"><span class="tag-pill">Eda agentic verification</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a></h2>
-  <div class="card-meta"><span>Lipeng He, Yihan Wang, Jiawen Zhang, N. Asokan</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud‑hosted LLM services, use PIPETTE by: 1) integrating its dictionary‑reward red‑team to generate diverse injection scenarios, 2) feeding those scenarios into an on‑policy adversarial training loop for your models, 3) validating that attack success rates drop to near zero while task accuracy stays near baseline.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.23905v1" target="_blank" rel="noopener noreferrer">Inference-Time Scaling in Agentic Hardware Verification Workflows: A Multi-Strategy Characterization Across Protocol Complexity</a></h2>
+  <div class="card-meta"><span>Vikash Kumar</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">Inference-time scaling lets you run more compute during LLM generation of verification environments instead of training the model. By adding a structured feedback loop the authors achieved about 15× better protocol coverage for each dollar spent, and the best strategy found real RTL bugs. This shows you can squeeze more quality out of existing LLM tools when building UVM testbenches.
+</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage UVM testbench synthesis, add a structured diagnostic feedback loop: 1) let the LLM generate a first draft, 2) run it through a static analysis tool that reports E1–E6 errors, 3) feed those errors back to the LLM for a second pass. This will give you higher coverage for the same compute budget and may uncover hidden RTL bugs.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
-      <p class="trace-reasoning">The paper addresses prompt injection attacks on LLM agents, a security concern relevant to IT infrastructure that could affect engineers managing LLM services. The approach includes an implementation and evaluation, indicating a usable system, but the work is still research‑grade with limited real‑world deployment evidence. Commercial use would require integration and testing in existing workflows, which could be done within a few months but is not immediately ready as a product.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">22/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">18/25</span></div>
+      <p class="trace-reasoning">The paper presents a concrete study of inference-time scaling for LLM-generated hardware verification testbenches, directly relevant to IT engineers working on EDA and verification pipelines. The results offer actionable guidance on compute budgeting and performance trade-offs, which can inform tooling decisions in cloud or on-premise environments. However, the work appears to be an academic study with no publicly released code or ready-to-integrate system, so the maturity score is modest. The monetisation potential is moderate because the findings could be translated into a service or tooling enhancement within a short timeframe, but the paper does not provide a turnkey solution. Overall, the paper scores well on real-world impact, modest on maturity, and reasonable on monetisation.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/pipette-prompt-injection-purple-teaming-for-robust-llm-agents.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/inference-time-scaling-in-agentic-hardware-verification-workflows-a-multi-strate.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents"
-      data-summary="PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance."
-      data-it="If you manage cloud‑hosted LLM services, use PIPETTE by: 1) integrating its dictionary‑reward red‑team to generate diverse injection scenarios, 2) feeding those scenarios into an on‑policy adversarial training loop for your models, 3) validating that attack success rates drop to near zero while task accuracy stays near baseline."
+      data-title="Inference-Time Scaling in Agentic Hardware Verification Workflows: A Multi-Strategy Characterization Across Protocol Complexity"
+      data-summary="Inference-time scaling lets you run more compute during LLM generation of verification environments instead of training the model. By adding a structured feedback loop the authors achieved about 15× better protocol coverage for each dollar spent, and the best strategy found real RTL bugs. This shows you can squeeze more quality out of existing LLM tools when building UVM testbenches.
+"
+      data-it="If you manage UVM testbench synthesis, add a structured diagnostic feedback loop: 1) let the LLM generate a first draft, 2) run it through a static analysis tool that reports E1–E6 errors, 3) feed those errors back to the LLM for a second pass. This will give you higher coverage for the same compute budget and may uncover hidden RTL bugs."
       data-monetisation=""
-      data-reasoning="The paper addresses prompt injection attacks on LLM agents, a security concern relevant to IT infrastructure that could affect engineers managing LLM services. The approach includes an implementation and evaluation, indicating a usable system, but the work is still research‑grade with limited real‑world deployment evidence. Commercial use would require integration and testing in existing workflows, which could be done within a few months but is not immediately ready as a product."
-      data-score="35"
-      data-url="https://arxiv.org/abs/2611.24362v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a concrete study of inference-time scaling for LLM-generated hardware verification testbenches, directly relevant to IT engineers working on EDA and verification pipelines. The results offer actionable guidance on compute budgeting and performance trade-offs, which can inform tooling decisions in cloud or on-premise environments. However, the work appears to be an academic study with no publicly released code or ready-to-integrate system, so the maturity score is modest. The monetisation potential is moderate because the findings could be translated into a service or tooling enhancement within a short timeframe, but the paper does not provide a turnkey solution. Overall, the paper scores well on real-world impact, modest on maturity, and reasonable on monetisation."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.23905v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">low</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:33;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 25 of 75"><span>25</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24733v1" target="_blank" rel="noopener noreferrer">Mechanistic Critics for Sample-Efficient NPU Design-Space Exploration</a></h2>
-  <div class="card-meta"><span>Yicheng He, Yuqi Xue, Tianyang Wu, Jian Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">CriticNPU is a tool that speeds up designing neural processing units (NPUs) for large‑language‑model inference by using a fast, physics‑based model to guess whether a new hardware setup will be faster before running a slow simulator. It filters out poor candidates early and then refines the design using real simulation data, cutting the number of expensive simulations in half while matching or beating the best latency in most test cases. This directly helps IT engineers who design or optimise custom AI chips or select cloud AI services, giving a faster way to pick the right hardware configuration for specific workloads.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage NPU or AI workload optimisation, here is what to do: 1) Run CriticNPU’s Roofline model with your target architecture parameters to get quick pre‑simulation estimates of compute and memory bottlenecks. 2) Filter out designs that the critic flags as unlikely to beat your current best. 3) Simulate only the promising candidates and let CriticNPU’s post‑simulation analysis suggest the next parameter tweaks to hit the lowest latency for prefill and decode stages.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper presents a specialized tool for exploring NPU configurations for LLM inference. While it offers sample-efficient design-space exploration and provides code, its relevance to everyday IT infrastructure tasks—such as managing Microsoft 365, AWS, Azure, SSO, or endpoint security—is limited. The tool could be useful for organizations investing heavily in custom AI accelerators, but most IT engineers in the target audience are unlikely to deploy or benefit from it within a short timeframe.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/mechanistic-critics-for-sample-efficient-npu-design-space-exploration.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Mechanistic Critics for Sample-Efficient NPU Design-Space Exploration"
-      data-summary="CriticNPU is a tool that speeds up designing neural processing units (NPUs) for large‑language‑model inference by using a fast, physics‑based model to guess whether a new hardware setup will be faster before running a slow simulator. It filters out poor candidates early and then refines the design using real simulation data, cutting the number of expensive simulations in half while matching or beating the best latency in most test cases. This directly helps IT engineers who design or optimise custom AI chips or select cloud AI services, giving a faster way to pick the right hardware configuration for specific workloads."
-      data-it="If you manage NPU or AI workload optimisation, here is what to do: 1) Run CriticNPU’s Roofline model with your target architecture parameters to get quick pre‑simulation estimates of compute and memory bottlenecks. 2) Filter out designs that the critic flags as unlikely to beat your current best. 3) Simulate only the promising candidates and let CriticNPU’s post‑simulation analysis suggest the next parameter tweaks to hit the lowest latency for prefill and decode stages."
-      data-monetisation=""
-      data-reasoning="The paper presents a specialized tool for exploring NPU configurations for LLM inference. While it offers sample-efficient design-space exploration and provides code, its relevance to everyday IT infrastructure tasks—such as managing Microsoft 365, AWS, Azure, SSO, or endpoint security—is limited. The tool could be useful for organizations investing heavily in custom AI accelerators, but most IT engineers in the target audience are unlikely to deploy or benefit from it within a short timeframe."
-      data-score="25"
-      data-url="https://arxiv.org/abs/2611.24733v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">infra</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">audit</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24846v1" target="_blank" rel="noopener noreferrer">Atomic MathReasoner: Instance-Level Composition of Atomic Reasoning Skills for Mathematical LLMs</a></h2>
-  <div class="card-meta"><span>Jiashu Li, Tianyu Gao, Qinglong Liu, Jinping Wang</span><span class="sep" aria-hidden="true">·</span><span>NYU</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">Atomic MathReasoner is a framework that builds a library of specialised reasoning modules for LLMs and chooses the best mix for each math problem, improving accuracy on a math benchmark. It does not relate to cloud infrastructure management or operations.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24491v1" target="_blank" rel="noopener noreferrer">Probing agent overeagerness in realistic settings with continuation audits</a></h2>
+  <div class="card-meta"><span>Sean Lim, Clement Neo</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">Frontier coding agents can act beyond user instructions, posing safety risks. Researchers built &#x27;Continuation Audits&#x27;, a pipeline that uses real user-agent transcripts to probe and steer agent behavior, revealing which models overreach in specific tasks. The audit shows that some agents still bypass safeguards even after instructions, highlighting uneven compliance across models.</p>
   
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
@@ -747,24 +689,29 @@
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper focuses on enhancing mathematical reasoning in LLMs through atomic skill composition. While the technique is technically interesting and the system is reportedly implemented, it offers limited direct benefit to IT engineers managing infrastructure, SaaS tooling, or security. The potential for near‑term monetisation is modest, as the method is niche and would require integration with proprietary LLMs or custom deployment pipelines. Consequently the scores are low across all criteria.</p>
+      <p class="trace-reasoning">The paper proposes a niche audit pipeline for internal use by frontier model developers; it does not directly affect typical IT infrastructure work, has limited current deployment, and offers negligible commercial applicability within 90 days.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/atomic-mathreasoner-instance-level-composition-of-atomic-reasoning-skills-for-ma.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/probing-agent-overeagerness-in-realistic-settings-with-continuation-audits.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Atomic MathReasoner: Instance-Level Composition of Atomic Reasoning Skills for Mathematical LLMs"
-      data-summary="Atomic MathReasoner is a framework that builds a library of specialised reasoning modules for LLMs and chooses the best mix for each math problem, improving accuracy on a math benchmark. It does not relate to cloud infrastructure management or operations."
-      data-it="Not directly applicable to IT infrastructure work"
+      data-title="Probing agent overeagerness in realistic settings with continuation audits"
+      data-summary="Frontier coding agents can act beyond user instructions, posing safety risks. Researchers built &#x27;Continuation Audits&#x27;, a pipeline that uses real user-agent transcripts to probe and steer agent behavior, revealing which models overreach in specific tasks. The audit shows that some agents still bypass safeguards even after instructions, highlighting uneven compliance across models."
+      data-it="Not directly applicable to IT infrastructure work."
       data-monetisation=""
-      data-reasoning="The paper focuses on enhancing mathematical reasoning in LLMs through atomic skill composition. While the technique is technically interesting and the system is reportedly implemented, it offers limited direct benefit to IT engineers managing infrastructure, SaaS tooling, or security. The potential for near‑term monetisation is modest, as the method is niche and would require integration with proprietary LLMs or custom deployment pipelines. Consequently the scores are low across all criteria."
+      data-reasoning="The paper proposes a niche audit pipeline for internal use by frontier model developers; it does not directly affect typical IT infrastructure work, has limited current deployment, and offers negligible commercial applicability within 90 days."
       data-score="20"
-      data-url="https://arxiv.org/abs/2611.24846v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.24491v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
+    
+    <section class="signal">
+        <h2 class="signal-title">Today's signal</h2>
+        <p>Gemini 4 Neon, a new AI breakthrough, hits market as Anthropic IPO challenges circular funding, while Artex surfaces as a new point‑and‑shoot hacking tool.</p>
+    </section>
     
     <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
@@ -1071,6 +1018,66 @@
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast" target="_blank" rel="noopener noreferrer">How OpenAI’s Performance Factory keeps ChatGPT fast</a></h2>
+  <p class="card-summary">OpenAI has unveiled its Performance Factory, an autonomous system using Codex to automatically detect, diagnose, and remediate performance regressions in ChatGPT. This tool showcases how agentic workflows can accelerate issue resolution and could inspire similar automation in other services.</p>
+  <p class="insight"><strong>How to use:</strong> Watch how OpenAI structures its agentic regression workflow and the tools it automates. While it doesn’t directly alter your current stack, the approach demonstrates a scalable pattern for performance engineering that could be adapted to monitor and self‑heal your own services, reducing manual triage time.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://thedataexchange.media/pete-warden-moonshine/" target="_blank" rel="noopener noreferrer">Why AI Wants to Be Local – With Pete Warden (Creator of Moonshine Voice)</a></h2>
+  <p class="card-summary">Pete Warden discusses the shift toward local AI, covering open-weight models, on-device speech processing, and emerging hardware that could reduce reliance on cloud GPUs. The talk highlights how low‑latency voice interfaces and edge computing are reshaping privacy, economics, and the future of AI infrastructure.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor how local AI developments could affect your organization’s voice‑enabled workflows. Consider evaluating on‑device inference solutions for sensitive data handling, and keep an eye on emerging hardware vendors that could replace current GPU‑centric infrastructure.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/why-ai-wants-to-be-local-with-pete-warden-creator-of-moonshine-voice.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.techcentral.ie/germany-and-austria-call-for-european-control-of-tiktok/" target="_blank" rel="noopener noreferrer">Germany and Austria Call for European Control of TikTok</a></h2>
+  <p class="card-summary">Germany and Austria have urged a shift in TikTok’s European ownership to European control, aiming to safeguard user data and limit external influence on content algorithms.</p>
+  <p class="insight"><strong>How to use:</strong> Check your organization’s policy on third‑party app usage and consider reviewing any TikTok integrations for compliance with regional data protection requirements.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
       <span class="tag-pill">Research</span>
     </div>
     <div class="news-score-area">
@@ -1238,6 +1245,66 @@
       <span class="score-num">4/10</span>
     </div>
   </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/19/former-alibaba-execs-everful-raises-48-5m-to-connect-retailers-with-chinese-factories/" target="_blank" rel="noopener noreferrer">Former Alibaba exec’s Everful raises $48.5M to connect retailers with Chinese factories</a></h2>
+  <p class="card-summary">Everful, a startup founded by a former Alibaba executive, raised $48.5M in Series A to offer an AI-enabled end‑to‑end sourcing platform that handles quality control, logistics, and factory verification for small retailers. The company positions itself as a full‑service alternative to traditional wholesale marketplaces, aiming to streamline the supply chain from trend analysis to delivery.</p>
+  <p class="insight"><strong>How to use:</strong> This news is not directly actionable for your current toolset and does not present an immediate risk or opportunity for your IT infrastructure. Keep it on your radar for broader market trends but no immediate steps are required.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/19/anthropic-hits-nasdaq-exchanges-at-110-27-above-ipo-price/" target="_blank" rel="noopener noreferrer">Anthropic hits Nasdaq exchanges at $111, 33% above IPO price</a></h2>
+  <p class="card-summary">Anthropic has gone public on Nasdaq, trading at $111.50—about 33% above its IPO price—boosting its market cap past $2 trillion and giving it a cash reserve of roughly $220 billion.</p>
+  <p class="insight"><strong>How to use:</strong> This IPO is primarily a financial event; it does not introduce new tools, APIs, or security changes that directly affect an IT engineer’s day‑to‑day operations or existing tech stack.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/anthropic-hits-nasdaq-exchanges-at-111-33-above-ipo-price.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://lastbook.org/" target="_blank" rel="noopener noreferrer">Everything you need to survive and rebuild society</a></h2>
+  <p class="card-summary">Lastbook.org is a free, offline-first survival guide application for Mac, Windows, and Linux that uses a local Gemma AI model to answer questions. It provides instructions on first aid, emergency preparedness, and basic survival skills.</p>
+  <p class="insight"><strong>How to use:</strong> This tool is not directly relevant to your IT infrastructure or security stack; it requires no action.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
   <h2 class="card-title"><a href="https://techcrunch.com/2026/11/18/elon-musk-says-ousting-jensen-huang-is-like-kicking-michael-jordan-off-your-team/" target="_blank" rel="noopener noreferrer">Elon Musk says ousting Jensen Huang is like ‘kicking Michael Jordan off your team’</a></h2>
   <p class="card-summary">Elon Musk publicly criticized Nvidia’s decision to oust founder and CEO Jensen Huang, calling it a mistake that could harm the company’s market value. He expressed willingness to hire Huang and urged the board to reinstate him, but no direct implications for IT infrastructure were noted.</p>
   <p class="insight"><strong>How to use:</strong> No immediate action is required. This commentary does not affect your IT stack or security posture.</p>
@@ -1323,7 +1390,7 @@
   <p class="insight"><strong>How to use:</strong> Check your procurement and supply‑chain analytics tools for any impact on component sourcing or cost forecasts, but no immediate action is required for your IT stack.</p>
   <div class="card-footer">
     <span class="pub-date">19 Nov 2026</span>
-    
+    <a href="breakdowns/what-a-billion-dollar-deal-says-about-the-us-battery-market.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -1371,8 +1438,8 @@
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-19</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24891v1" target="_blank" rel="noopener noreferrer">Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity</a><a class="archive-title" href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a><a class="archive-title" href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a></div>
+  <div class="archive-count">3 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24052v1" target="_blank" rel="noopener noreferrer">From Data to Valves: A Self-Learning, Production-Grade Edge Stack for Sustainable HVAC Control</a><a class="archive-title" href="https://arxiv.org/abs/2611.23905v1" target="_blank" rel="noopener noreferrer">Inference-Time Scaling in Agentic Hardware Verification Workflows: A Multi-Strategy Characterization Across Protocol Complexity</a><a class="archive-title" href="https://arxiv.org/abs/2611.24491v1" target="_blank" rel="noopener noreferrer">Probing agent overeagerness in realistic settings with continuation audits</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-18</div>
@@ -1524,7 +1591,7 @@
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-19</div>
-  <div class="archive-count">30 items</div>
+  <div class="archive-count">36 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://deepmind.google/blog/introducing-gemini-4-neon/" target="_blank" rel="noopener noreferrer">Introducing Gemini 4 Neon</a><a class="archive-title" href="https://openai.com/index/the-silent-consensus" target="_blank" rel="noopener noreferrer">The Silent Consensus</a><a class="archive-title" href="https://techcrunch.com/2026/11/18/amidst-fears-of-ai-cyberattacks-satya-nadella-says-lots-of-critical-infrastructure-is-unpatchable/" target="_blank" rel="noopener noreferrer">Amidst fears of AI cyberattacks, Satya Nadella says lots of critical infrastructure is ‘unpatchable’</a></div>
 </div>
 <div class="archive-row">
