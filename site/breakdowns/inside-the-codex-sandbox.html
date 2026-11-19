@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inside the Codex sandbox - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Inside the Codex sandbox</h1>
+  <p class="meta-line">OpenAI · 18 Nov 202 · Generated 19 Nov 2026, 15:38</p>
+  <a href="https://openai.com/index/inside-the-codex-sandbox" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>OpenAI has released a new sandbox for its Codex agent that restricts filesystem and network access during command execution. The sandbox is controlled through permission profiles that can be tailored to specific use cases, allowing enterprises to limit Codex to only the directories and network endpoints that are absolutely required. This feature is significant for enterprise IT teams because it directly addresses the risk of unintended data exposure or malicious modification of critical system files by an AI agent that can execute arbitrary code. The sandbox can be enforced across macOS, Linux, and Windows endpoints, and is compatible with popular MDM solutions such as JumpCloud, Microsoft Intune, and VMware Workspace ONE. By integrating the sandbox into existing endpoint security and MDM policies, organizations can maintain tighter control over AI workloads while still leveraging Codex for productivity, code generation, or automation tasks. Vendors that will be impacted include AI platform providers, MDM and endpoint protection vendors, and cloud service providers that host Codex workloads. The broader industry implication is a shift toward more granular AI security controls, encouraging other AI vendors to adopt similar sandboxing or permission frameworks. This move also signals to regulators that AI providers are taking proactive steps to mitigate data leakage and system compromise, which may influence future compliance requirements around AI usage in regulated environments. Enterprises that adopt the sandbox early will gain a competitive advantage in safely integrating AI into their development pipelines, while those that delay risk exposing sensitive data or violating internal security policies.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all endpoints where Codex or similar AI agents are deployed.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Map current filesystem permissions and network access controls for those endpoints.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify critical directories (e.g., /etc, /var, C:\Windows) and network services that must remain protected.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Review existing MDM and endpoint protection policies for compatibility with sandbox configuration.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify potential data loss risk: calculate the number of sensitive files that could be accessed if Codex had unrestricted access.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Estimate cost savings from reduced incident response effort (e.g., average $X per breach).</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present a compliance gap analysis: show how sandboxing satisfies GDPR data minimization and breach notification requirements.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Include a pilot ROI: 30‑day deployment with expected reduction in security alerts by Y%.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI Codex with sandbox permission profiles.  
+   - JumpCloud MDM for macOS, Linux, and Windows policy enforcement.  
+   - Microsoft Intune for Windows endpoint management.  
+   - VMware Workspace ONE for cross‑platform policy rollout.  
+   - SentinelOne or CrowdStrike for runtime protection that can monitor sandbox activity.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Misconfigured profiles could lock out legitimate operations or leave gaps that Codex can exploit.  
+   - Compliance: Failure to restrict network access may violate UK GDPR data transfer controls if Codex communicates with external services.  
+   - Operational: Over‑restriction may degrade developer productivity or cause build failures.  
+   - Vendor lock‑in: Relying on OpenAI’s sandbox may limit future migration to alternative AI platforms.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy a baseline sandbox profile that disables all network access and restricts file writes to a single “/codex_work” directory on Linux and “C:\CodexWork” on Windows. Apply this profile to a pilot group of 10 developers within 30 days. Monitor for policy violations and adjust as needed.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months, integrate sandbox policy management into the CI/CD pipeline. Automate profile updates based on project requirements, and implement audit logging that feeds into SIEM for continuous monitoring. Conduct quarterly reviews to align sandbox settings with evolving compliance mandates and to evaluate new OpenAI features. Expand sandbox use to other AI agents (e.g., GPT‑4 code assistants) and coordinate with vendor roadmaps to ensure consistent security posture across all AI workloads.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 19 Nov 2026, 15:38</p>
+</main>
+</body>
+</html>

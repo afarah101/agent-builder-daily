@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">1</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">15</div>
+          <div class="stat-num">30</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 19 Nov 2026, 00:14 UTC</p>
+    <p class="updated">Updated 19 Nov 2026, 15:41 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,42 +614,157 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Malware triage llm</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:70;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 53 of 75"><span>53</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM infrastructure</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:80;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 60 of 75"><span>60</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.21331v1" target="_blank" rel="noopener noreferrer">TRIAGE-CPG: A Cross-Model Study of Budgeted Static Malware Triage with Large Language Models</a></h2>
-  <div class="card-meta"><span>Paul-Andrei Sava, Alexander Küchler, Daniel Kowatsch, Bernhard Grill</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">16 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that large language models can triage unknown Windows binaries by analysing only a small set of functions, achieving up to 85% balanced accuracy while flagging most malware and clearing most benign samples. They built a fixed pipeline (TRIAGE-CPG) that selects seed functions, expands evidence under a budget, and outputs a verdict with a behavioural report. This research is not directly relevant to routine cloud infrastructure management.</p>
-  
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24891v1" target="_blank" rel="noopener noreferrer">Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity</a></h2>
+  <div class="card-meta"><span>Benjamin Novotny, Doug Szeto, Chang Wang, Shicheng Chen</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">Cap-and-Track lets you adapt LLM inference dispatch to changing GPU capacity and request size without hard‑coding a rate. They built an async dispatcher that rejects requests early when resources are full, then uses those refusals to probe capacity and refill queues, cutting GPU use by 43% in production. It’s relevant to anyone managing AI inference fleets, offering a way to save hardware while keeping high‑priority work on time.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage GPU fleets for LLM inference, use Cap-and-Track by: 1) Add a fail‑fast admission check that rejects over‑capacity requests; 2) Log refusals and use them to back‑off and probe current capacity; 3) Keep short‑lived queues in the inference engine to batch efficiently. This will reduce GPU usage and improve throughput without manual retuning.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">22/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">18/25</span></div>
-      <p class="trace-reasoning">The paper proposes a practical pipeline for malware triage using LLMs, directly impacting how security engineers assess binaries. It includes an implemented system (TRIAGE-CPG) and evaluates real models on a sizeable dataset, indicating deployable maturity. The approach could be adopted quickly as a service or integrated into existing SOC workflows, offering tangible monetisation potential for IT infrastructure teams.</p>
+      <p class="trace-reasoning">The paper proposes a practical system for dispatching LLM inference requests that directly addresses resource allocation in large-scale AI deployments, which is highly relevant for infrastructure engineers managing cloud-based LLM services. The authors mention a live implementation at Meta, indicating the system is built and tested. While the technique could be adopted to reduce cost and improve throughput for enterprises, it is not a turnkey product but a methodology that can be implemented within the next month by experienced engineers. Thus all three criteria score in the high‑to‑mid range, yielding a strong total score.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/triage-cpg-a-cross-model-study-of-budgeted-static-malware-triage-with-large-lang.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/cap-and-track-optimizing-llm-inference-request-dispatch-across-shifting-capacity.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="TRIAGE-CPG: A Cross-Model Study of Budgeted Static Malware Triage with Large Language Models"
-      data-summary="The study shows that large language models can triage unknown Windows binaries by analysing only a small set of functions, achieving up to 85% balanced accuracy while flagging most malware and clearing most benign samples. They built a fixed pipeline (TRIAGE-CPG) that selects seed functions, expands evidence under a budget, and outputs a verdict with a behavioural report. This research is not directly relevant to routine cloud infrastructure management."
+      data-title="Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity"
+      data-summary="Cap-and-Track lets you adapt LLM inference dispatch to changing GPU capacity and request size without hard‑coding a rate. They built an async dispatcher that rejects requests early when resources are full, then uses those refusals to probe capacity and refill queues, cutting GPU use by 43% in production. It’s relevant to anyone managing AI inference fleets, offering a way to save hardware while keeping high‑priority work on time."
+      data-it="If you manage GPU fleets for LLM inference, use Cap-and-Track by: 1) Add a fail‑fast admission check that rejects over‑capacity requests; 2) Log refusals and use them to back‑off and probe current capacity; 3) Keep short‑lived queues in the inference engine to batch efficiently. This will reduce GPU usage and improve throughput without manual retuning."
+      data-monetisation=""
+      data-reasoning="The paper proposes a practical system for dispatching LLM inference requests that directly addresses resource allocation in large-scale AI deployments, which is highly relevant for infrastructure engineers managing cloud-based LLM services. The authors mention a live implementation at Meta, indicating the system is built and tested. While the technique could be adopted to reduce cost and improve throughput for enterprises, it is not a turnkey product but a methodology that can be implemented within the next month by experienced engineers. Thus all three criteria score in the high‑to‑mid range, yielding a strong total score."
+      data-score="60"
+      data-url="https://arxiv.org/abs/2611.24891v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM monitoring for production systems</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a></h2>
+  <div class="card-meta"><span>Firas Spanioli, Yaniv David</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM deployments, add GateWatch to your monitoring stack: 1) Identify the key SAE features you need (about 4), 2) Deploy GateWatchServe to stream these binaries during inference, 3) Use the compact lookup tables to evaluate probes in parallel, keeping throughput above 97% and cache usage near 100%.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">18/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">12/25</span></div>
+      <p class="trace-reasoning">The paper presents a practical monitoring tool for LLMs, directly impacting deployment, debugging, and compliance for infrastructure teams. It includes a released prototype (GateWatchServe) integrated with vLLM, indicating real-world readiness. While it offers immediate operational benefits, commercialization or service integration would require additional tooling, so monetisation potential is moderate.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits"
+      data-summary="GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny."
+      data-it="If you manage LLM deployments, add GateWatch to your monitoring stack: 1) Identify the key SAE features you need (about 4), 2) Deploy GateWatchServe to stream these binaries during inference, 3) Use the compact lookup tables to evaluate probes in parallel, keeping throughput above 97% and cache usage near 100%."
+      data-monetisation=""
+      data-reasoning="The paper presents a practical monitoring tool for LLMs, directly impacting deployment, debugging, and compliance for infrastructure teams. It includes a released prototype (GateWatchServe) integrated with vLLM, indicating real-world readiness. While it offers immediate operational benefits, commercialization or service integration would require additional tooling, so monetisation potential is moderate."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.24619v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Security / LLM Agent Protection</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a></h2>
+  <div class="card-meta"><span>Lipeng He, Yihan Wang, Jiawen Zhang, N. Asokan</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud‑hosted LLM services, use PIPETTE by: 1) integrating its dictionary‑reward red‑team to generate diverse injection scenarios, 2) feeding those scenarios into an on‑policy adversarial training loop for your models, 3) validating that attack success rates drop to near zero while task accuracy stays near baseline.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
+      <p class="trace-reasoning">The paper addresses prompt injection attacks on LLM agents, a security concern relevant to IT infrastructure that could affect engineers managing LLM services. The approach includes an implementation and evaluation, indicating a usable system, but the work is still research‑grade with limited real‑world deployment evidence. Commercial use would require integration and testing in existing workflows, which could be done within a few months but is not immediately ready as a product.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/pipette-prompt-injection-purple-teaming-for-robust-llm-agents.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents"
+      data-summary="PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance."
+      data-it="If you manage cloud‑hosted LLM services, use PIPETTE by: 1) integrating its dictionary‑reward red‑team to generate diverse injection scenarios, 2) feeding those scenarios into an on‑policy adversarial training loop for your models, 3) validating that attack success rates drop to near zero while task accuracy stays near baseline."
+      data-monetisation=""
+      data-reasoning="The paper addresses prompt injection attacks on LLM agents, a security concern relevant to IT infrastructure that could affect engineers managing LLM services. The approach includes an implementation and evaluation, indicating a usable system, but the work is still research‑grade with limited real‑world deployment evidence. Commercial use would require integration and testing in existing workflows, which could be done within a few months but is not immediately ready as a product."
+      data-score="35"
+      data-url="https://arxiv.org/abs/2611.24362v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">low</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:33;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 25 of 75"><span>25</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24733v1" target="_blank" rel="noopener noreferrer">Mechanistic Critics for Sample-Efficient NPU Design-Space Exploration</a></h2>
+  <div class="card-meta"><span>Yicheng He, Yuqi Xue, Tianyang Wu, Jian Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">CriticNPU is a tool that speeds up designing neural processing units (NPUs) for large‑language‑model inference by using a fast, physics‑based model to guess whether a new hardware setup will be faster before running a slow simulator. It filters out poor candidates early and then refines the design using real simulation data, cutting the number of expensive simulations in half while matching or beating the best latency in most test cases. This directly helps IT engineers who design or optimise custom AI chips or select cloud AI services, giving a faster way to pick the right hardware configuration for specific workloads.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage NPU or AI workload optimisation, here is what to do: 1) Run CriticNPU’s Roofline model with your target architecture parameters to get quick pre‑simulation estimates of compute and memory bottlenecks. 2) Filter out designs that the critic flags as unlikely to beat your current best. 3) Simulate only the promising candidates and let CriticNPU’s post‑simulation analysis suggest the next parameter tweaks to hit the lowest latency for prefill and decode stages.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper presents a specialized tool for exploring NPU configurations for LLM inference. While it offers sample-efficient design-space exploration and provides code, its relevance to everyday IT infrastructure tasks—such as managing Microsoft 365, AWS, Azure, SSO, or endpoint security—is limited. The tool could be useful for organizations investing heavily in custom AI accelerators, but most IT engineers in the target audience are unlikely to deploy or benefit from it within a short timeframe.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/mechanistic-critics-for-sample-efficient-npu-design-space-exploration.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Mechanistic Critics for Sample-Efficient NPU Design-Space Exploration"
+      data-summary="CriticNPU is a tool that speeds up designing neural processing units (NPUs) for large‑language‑model inference by using a fast, physics‑based model to guess whether a new hardware setup will be faster before running a slow simulator. It filters out poor candidates early and then refines the design using real simulation data, cutting the number of expensive simulations in half while matching or beating the best latency in most test cases. This directly helps IT engineers who design or optimise custom AI chips or select cloud AI services, giving a faster way to pick the right hardware configuration for specific workloads."
+      data-it="If you manage NPU or AI workload optimisation, here is what to do: 1) Run CriticNPU’s Roofline model with your target architecture parameters to get quick pre‑simulation estimates of compute and memory bottlenecks. 2) Filter out designs that the critic flags as unlikely to beat your current best. 3) Simulate only the promising candidates and let CriticNPU’s post‑simulation analysis suggest the next parameter tweaks to hit the lowest latency for prefill and decode stages."
+      data-monetisation=""
+      data-reasoning="The paper presents a specialized tool for exploring NPU configurations for LLM inference. While it offers sample-efficient design-space exploration and provides code, its relevance to everyday IT infrastructure tasks—such as managing Microsoft 365, AWS, Azure, SSO, or endpoint security—is limited. The tool could be useful for organizations investing heavily in custom AI accelerators, but most IT engineers in the target audience are unlikely to deploy or benefit from it within a short timeframe."
+      data-score="25"
+      data-url="https://arxiv.org/abs/2611.24733v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">infra</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24846v1" target="_blank" rel="noopener noreferrer">Atomic MathReasoner: Instance-Level Composition of Atomic Reasoning Skills for Mathematical LLMs</a></h2>
+  <div class="card-meta"><span>Jiashu Li, Tianyu Gao, Qinglong Liu, Jinping Wang</span><span class="sep" aria-hidden="true">·</span><span>NYU</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
+  <p class="card-summary">Atomic MathReasoner is a framework that builds a library of specialised reasoning modules for LLMs and chooses the best mix for each math problem, improving accuracy on a math benchmark. It does not relate to cloud infrastructure management or operations.</p>
+  
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper focuses on enhancing mathematical reasoning in LLMs through atomic skill composition. While the technique is technically interesting and the system is reportedly implemented, it offers limited direct benefit to IT engineers managing infrastructure, SaaS tooling, or security. The potential for near‑term monetisation is modest, as the method is niche and would require integration with proprietary LLMs or custom deployment pipelines. Consequently the scores are low across all criteria.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/atomic-mathreasoner-instance-level-composition-of-atomic-reasoning-skills-for-ma.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Atomic MathReasoner: Instance-Level Composition of Atomic Reasoning Skills for Mathematical LLMs"
+      data-summary="Atomic MathReasoner is a framework that builds a library of specialised reasoning modules for LLMs and chooses the best mix for each math problem, improving accuracy on a math benchmark. It does not relate to cloud infrastructure management or operations."
       data-it="Not directly applicable to IT infrastructure work"
       data-monetisation=""
-      data-reasoning="The paper proposes a practical pipeline for malware triage using LLMs, directly impacting how security engineers assess binaries. It includes an implemented system (TRIAGE-CPG) and evaluates real models on a sizeable dataset, indicating deployable maturity. The approach could be adopted quickly as a service or integrated into existing SOC workflows, offering tangible monetisation potential for IT infrastructure teams."
-      data-score="53"
-      data-url="https://arxiv.org/abs/2611.21331v1">Copy as Markdown</button>
+      data-reasoning="The paper focuses on enhancing mathematical reasoning in LLMs through atomic skill composition. While the technique is technically interesting and the system is reportedly implemented, it offers limited direct benefit to IT engineers managing infrastructure, SaaS tooling, or security. The potential for near‑term monetisation is modest, as the method is niche and would require integration with proprietary LLMs or custom deployment pipelines. Consequently the scores are low across all criteria."
+      data-score="20"
+      data-url="https://arxiv.org/abs/2611.24846v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
-    
-    <section class="signal">
-        <h2 class="signal-title">Today's signal</h2>
-        <p>Gemini 4 Neon launches, silent AI consensus spreads, yet Nadella warns critical infrastructure remains largely unpatchable amid rising cyberattack fears.</p>
-    </section>
     
     <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
@@ -669,6 +784,46 @@
   <div class="card-footer">
     <span class="pub-date">18 Nov 2026</span>
     <a href="breakdowns/introducing-gemini-4-neon.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">10/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/artex-ai-hacking-tools/" target="_blank" rel="noopener noreferrer">Artex Is Criminals’ New Favorite ‘Point-and-Shoot’ AI Hacking Tool</a></h2>
+  <p class="card-summary">Artex, an open‑source AI hacking framework released on GitHub in July, enables cybercriminals to autonomously conduct reconnaissance, exploitation, and lateral movement at speeds far exceeding human operators. The tool, which leverages LLMs and existing penetration testing utilities, has already been used in real‑world attacks against companies, government agencies, and banks.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Within this week, run a scan of your organization’s network for signs of Artex‑style activity by enabling threat‑intel feeds that detect abnormal LLM‑driven reconnaissance patterns in your SIEM and endpoint protection platforms. S2: Failing to do so risks attackers completing multi‑stage exploits in hours, potentially compromising privileged accounts or exfiltrating data before detection. S3: The most affected tools are your endpoint security (CrowdStrike), SSO (Okta), and MDM (JumpCloud) – all should be checked for anomalous access patterns.</p>
+  <div class="card-footer">
+    <span class="pub-date">18 Nov 2026</span>
+    <a href="breakdowns/artex-is-criminals-new-favorite-point-and-shoot-ai-hacking-tool.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">9/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/19/anthropics-ipo-puts-ais-circular-financing-boom-to-the-test/" target="_blank" rel="noopener noreferrer">Anthropic’s IPO puts AI’s circular financing boom to the test</a></h2>
+  <p class="card-summary">Anthropic’s IPO today raises billions, with Amazon and Google leading investors and major cloud partners like Microsoft, Nvidia, and AMD positioned to benefit. The deal ties funding to compute supply, potentially reshaping pricing and resource allocation for AI workloads on public clouds.</p>
+  <p class="insight"><strong>How to use:</strong> Go to your cloud vendor dashboards this week and review current AI compute pricing tiers and any announced cost‑optimization programs that may be influenced by Anthropic’s new capital structure. Ignoring these shifts could mean missing opportunities to negotiate better rates for large‑scale model training or inference workloads. The most affected tools are your cloud platforms (AWS, Azure, Google Cloud) and any MDM or SSO services that rely on these infrastructures.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/anthropics-ipo-puts-ais-circular-financing-boom-to-the-test.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -708,7 +863,27 @@
   <p class="insight"><strong>How to use:</strong> S1: Review your organization’s patch management process and prioritize critical firmware updates, especially for IoT and legacy devices. S2: An overreliance on delayed or unavailable patches exposes you to rapid AI‑driven attacks that can cripple services. S3: Your MDM and endpoint security tools (JumpCloud, CrowdStrike, Cloudflare) should be configured to monitor firmware changes and flag anomalous activity in real time.</p>
   <div class="card-footer">
     <span class="pub-date">18 Nov 2026</span>
-    
+    <a href="breakdowns/amidst-fears-of-ai-cyberattacks-satya-nadella-says-lots-of-critical-infrastructu.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/18/microsoft-ceo-satya-nadella-explains-why-he-asked-60k-employees-to-quit/" target="_blank" rel="noopener noreferrer">Microsoft CEO Satya Nadella explains why he asked 60K employees to quit</a></h2>
+  <p class="card-summary">Microsoft CEO Satya Nadella announced a strategic buyout program for 60,000 employees, positioning AI as a core driver of all work and reshaping roles into AI management rather than traditional engineering. The move signals a broader industry shift toward AI-first organizational structures, impacting how enterprises plan workforce and technology integration.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Monitor Microsoft 365’s evolving AI capabilities and assess how internal teams could transition to AI‑enabled roles. S2: Inaction risks missing out on early adoption of AI tools that streamline workflows and reduce manual coding, potentially falling behind competitors who re‑engineer their services. S3: Your Google Workspace and MDM stack should be evaluated for AI integration points, as Microsoft’s shift may influence broader SaaS ecosystem standards.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/microsoft-ceo-satya-nadella-explains-why-he-asked-60k-employees-to-quit.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -728,7 +903,7 @@
   <p class="insight"><strong>How to use:</strong> S1: Evaluate Hugging Face’s predictor API or model and test it against your own GPU scheduling pipeline this week. S2: Inaction risks continued inefficient GPU utilization, leading to higher cloud costs and delayed model deliveries. S3: This directly impacts your use of shared GPU clusters in AWS or Azure for AI experiments.</p>
   <div class="card-footer">
     <span class="pub-date">18 Nov 2026</span>
-    
+    <a href="breakdowns/why-your-fine-tuning-job-takes-longer-than-the-flops-say.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -754,6 +929,106 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/inside-the-codex-sandbox" target="_blank" rel="noopener noreferrer">Inside the Codex sandbox</a></h2>
+  <p class="card-summary">OpenAI has introduced a sandbox for its Codex agent that limits filesystem and network access during command execution. The sandbox is configurable via permission profiles, allowing enterprises to tailor access per use case while mitigating the risk of unintended data exposure.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Within your current environment, review the Codex sandbox permission profiles and configure them to restrict network access and limit file modifications to only necessary directories. S2: Failure to apply these restrictions could allow Codex to exfiltrate sensitive data or modify critical system files, increasing security risk. S3: This directly impacts your endpoint security and MDM policies, as the sandbox settings can be enforced on macOS, Linux, and Windows devices managed by JumpCloud or your chosen MDM platform.</p>
+  <div class="card-footer">
+    <span class="pub-date">18 Nov 2026</span>
+    <a href="breakdowns/inside-the-codex-sandbox.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/managing-frontier-ai-risk" target="_blank" rel="noopener noreferrer">Managing frontier AI risk: From training to deployment</a></h2>
+  <p class="card-summary">OpenAI has announced new safety protocols that pause internal training and delay releases of frontier models, such as GPT‑6.1 Astra, until comprehensive safety reviews are completed. These measures include enhanced monitoring, sandboxing, and alignment evidence to mitigate risks before models reach external deployment.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review the OpenAI API usage policies and verify that your applications are using the latest approved endpoints with the new safety checks enabled. S2: Failure to comply could expose your organization to unvalidated AI behavior that might breach compliance or data‑privacy regulations. S3: The most impacted tool is the external deployment layer of your AI workloads, especially if you rely on OpenAI’s Codex or GPT models for automated code generation or data analysis.</p>
+  <div class="card-footer">
+    <span class="pub-date">18 Nov 2026</span>
+    <a href="breakdowns/managing-frontier-ai-risk-from-training-to-deployment.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/ibm-research/time-series-powered-streamhouse" target="_blank" rel="noopener noreferrer">Time-Series Models in the Streamhouse: A New Frontier and Use Cases</a></h2>
+  <p class="card-summary">IBM and Confluent have released time‑series foundation models that run natively in Confluent Cloud and on‑premises Flink pipelines, enabling real‑time forecasting, anomaly detection, and semantic intelligence via SQL. These models can be leveraged for mission‑critical use cases such as production monitoring, retail inventory alerts, and payment fraud detection without GPU requirements.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review your Confluent or Flink deployment within the next 30 days to evaluate adding the new IBM time‑series models as a built‑in function. S2: Failing to adopt these models could delay your teams’ ability to react to anomalies in real time, increasing risk of production downtime or financial fraud. S3: This directly impacts your data‑pipeline tooling and can enhance the analytics layer feeding into your endpoint security and access‑management dashboards.</p>
+  <div class="card-footer">
+    <span class="pub-date">18 Nov 2026</span>
+    <a href="breakdowns/time-series-models-in-the-streamhouse-a-new-frontier-and-use-cases.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/anthropics-record-breaking-ipo-highlights-the-ai-giants-worst-enemy-itself/" target="_blank" rel="noopener noreferrer">Anthropic’s Record-Breaking IPO Highlights the AI Giant’s Worst Enemy—Itself</a></h2>
+  <p class="card-summary">Anthropic has just completed the largest IPO in history, raising $200 billion and pledging $900 billion to build data centers for Claude. The announcement underscores the company’s heavy investment in AI infrastructure and its focus on safety, raising questions about the pace and cost of future model releases.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Anthropic’s public filings and pricing for Claude API access to evaluate cost implications for your organization’s AI workloads. Keep an eye on their safety announcements, as any tightening of model availability could affect integration plans with Google Workspace or JumpCloud. Consider reviewing your current AI strategy to ensure flexibility in case Anthropic’s expansion slows or its models become restricted.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/anthropics-record-breaking-ipo-highlights-the-ai-giants-worst-enemyitself.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.php.net/releases/8.6/en.php" target="_blank" rel="noopener noreferrer">What&#x27;s New in PHP 8.6</a></h2>
+  <p class="card-summary">PHP 8.6 introduces several new language features such as Partial Function Application, a Duration class for precise time handling, a Polling API for scalable I/O, and a clamp() function. These changes aim to make PHP code more expressive, type-safe, and efficient for modern applications.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor your PHP-based web services for potential performance gains by refactoring blocking calls to use the new Polling API. Consider testing the Duration class in your timeout and retry logic to reduce latency and improve reliability.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="source-name">MIT Tech Review</span>
       <span class="tag-pill">Other</span>
@@ -768,7 +1043,27 @@
   <p class="insight"><strong>How to use:</strong> Keep an eye on how AI is being embedded into consumer and enterprise products—this could signal shifts in user expectations and new integration points for your IT stack. Monitor emerging AI-driven features in the tools you manage to anticipate future support or security needs.</p>
   <div class="card-footer">
     <span class="pub-date">18 Nov 2026</span>
-    
+    <a href="breakdowns/the-ai-hype-index-ai-is-everywhere.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Google DeepMind</span>
+      <span class="tag-pill">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://deepmind.google/blog/genie-4-is-now-available/" target="_blank" rel="noopener noreferrer">Genie 4 is now available</a></h2>
+  <p class="card-summary">Google DeepMind has released Genie 4, a next‑generation interactive world model that can be edited in real time and paired with native audio. The update also expands earlier Genie 3 features and adds a conversational agent that stitches together Gemini models for immersive experiences.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Google AI Ultra subscription availability and consider pilot testing Genie 4 for internal prototyping of training simulations or user onboarding environments. Keeping an eye on its integration with Gemini could reveal new automation hooks for IT documentation or help desks.</p>
+  <div class="card-footer">
+    <span class="pub-date">18 Nov 2026</span>
+    <a href="breakdowns/genie-4-is-now-available.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -854,6 +1149,26 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/inside-nvidias-first-all-hands-without-jensen-huang-as-ceo/" target="_blank" rel="noopener noreferrer">Inside Nvidia’s First Post-Jensen All-Hands: Pay Raises and More Equity</a></h2>
+  <p class="card-summary">Nvidia’s interim CEO announced early pay raises and equity for staff following Jensen Huang’s resignation amid controversy. The leadership shift signals potential volatility for the company that drives much of the AI hardware market.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on Nvidia’s stock and supply‑chain announcements over the next month; a leadership change could influence GPU pricing and availability, which may impact AI workloads on your cloud platforms.</p>
+  <div class="card-footer">
+    <span class="pub-date">18 Nov 2026</span>
+    <a href="breakdowns/inside-nvidias-first-post-jensen-all-hands-pay-raises-and-more-equity.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">Anthropic</span>
       <span class="tag-pill">Other</span>
@@ -869,6 +1184,46 @@
   <div class="card-footer">
     <span class="pub-date">19 Nov 2026</span>
     <a href="breakdowns/anthropic-prices-initial-public-offering.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/19/1148979/the-download-liver-kept-alive-sila-battery-deal-ai-hype/" target="_blank" rel="noopener noreferrer">The Download: a living liver, a billion-dollar battery deal, and AI hype</a></h2>
+  <p class="card-summary">Researchers in Australia have maintained a human liver alive on artificial life support for seven weeks, a record in organ preservation. The development is a biomedical breakthrough but does not directly involve AI or IT infrastructure.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/the-download-a-living-liver-a-billion-dollar-battery-deal-and-ai-hype.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://element.io/blog/how-the-european-commission-rolled-out-matrix-to-more-than-40-000-staff/" target="_blank" rel="noopener noreferrer">How the European Commission rolled out Matrix to more than 40k staff</a></h2>
+  <p class="card-summary">The European Commission has expanded its use of the Matrix protocol, deploying Element Server Suite Pro to over 40,000 staff laptops by September 2026. This sovereign, open‑protocol communication platform is integrated with EU Login and hosted on selected sovereign clouds, emphasizing data ownership, resilience, and vendor diversity.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor the Matrix protocol’s adoption trends as it could influence future enterprise messaging or collaboration choices, especially if your organization considers open‑standard solutions for secure internal communications.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/how-the-european-commission-rolled-out-matrix-to-more-than-40k-staff.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -950,14 +1305,74 @@
     <span class="pub-date">17 Nov 2026</span>
     <a href="breakdowns/can-ai-help-build-a-healthier-future.html" class="breakdown-link">IT Breakdown</a>
   </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/19/1148922/sila-panasonic-battery-deal/" target="_blank" rel="noopener noreferrer">What a billion-dollar deal says about the US battery market</a></h2>
+  <p class="card-summary">Sila Technologies has secured a partnership with Panasonic Energy to supply silicon‑carbon anode material for next‑generation batteries. The deal could enable smaller, lighter batteries and signals renewed investor confidence in the US battery sector.</p>
+  <p class="insight"><strong>How to use:</strong> Check your procurement and supply‑chain analytics tools for any impact on component sourcing or cost forecasts, but no immediate action is required for your IT stack.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Infrastructure</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html" target="_blank" rel="noopener noreferrer">SSD prices will start going down the second half of next year</a></h2>
+  <p class="card-summary">The article forecasts that SSD prices will begin to decline in the second half of 2027, while hard drive prices will remain high until 2028. This trend reflects ongoing NAND supply constraints and existing capacity commitments from major manufacturers like Seagate and Western Digital.</p>
+  <p class="insight"><strong>How to use:</strong> Check your current storage inventory and budget plans. Consider delaying non‑critical SSD purchases until prices fall, but keep an eye on enterprise drive contracts. Monitoring these price signals can help avoid over‑paying for storage during the next 12‑18 months.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    <a href="breakdowns/ssd-prices-will-start-going-down-the-second-half-of-next-year.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/moe-expert-streaming" target="_blank" rel="noopener noreferrer">180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers</a></h2>
+  <p class="card-summary">Hugging Face’s Strata inference engine enables massive 180B‑parameter MoE models to run on GPUs with limited memory by streaming non‑hot experts from RAM or disk. This approach allows developers to deploy large language models locally, reducing reliance on cloud inference services.</p>
+  <p class="insight"><strong>How to use:</strong> This innovation may not require immediate action, but IT engineers could experiment with Strata on high‑memory workstations to evaluate on‑premise inference for sensitive data or latency‑critical workloads. If your organization plans to host large models, consider testing Strata in a sandbox to benchmark performance versus cloud options.</p>
+  <div class="card-footer">
+    <span class="pub-date">18 Nov 2026</span>
+    <a href="breakdowns/180b-parameters-32gb-of-ram-pushing-moe-inference-to-the-limit-with-transformers.html" class="breakdown-link">IT Breakdown</a>
+  </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-19</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.21331v1" target="_blank" rel="noopener noreferrer">TRIAGE-CPG: A Cross-Model Study of Budgeted Static Malware Triage with Large Language Models</a></div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24891v1" target="_blank" rel="noopener noreferrer">Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity</a><a class="archive-title" href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a><a class="archive-title" href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-18</div>
@@ -1109,7 +1524,7 @@
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-19</div>
-  <div class="archive-count">15 items</div>
+  <div class="archive-count">30 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://deepmind.google/blog/introducing-gemini-4-neon/" target="_blank" rel="noopener noreferrer">Introducing Gemini 4 Neon</a><a class="archive-title" href="https://openai.com/index/the-silent-consensus" target="_blank" rel="noopener noreferrer">The Silent Consensus</a><a class="archive-title" href="https://techcrunch.com/2026/11/18/amidst-fears-of-ai-cyberattacks-satya-nadella-says-lots-of-critical-infrastructure-is-unpatchable/" target="_blank" rel="noopener noreferrer">Amidst fears of AI cyberattacks, Satya Nadella says lots of critical infrastructure is ‘unpatchable’</a></div>
 </div>
 <div class="archive-row">
