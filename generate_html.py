@@ -77,7 +77,7 @@ def score_ring(score, max_score=75):
         return ""
     pct = int((score / max_score) * 100)
     level = "high" if pct >= 70 else "mid" if pct >= 40 else "low"
-    legend = "AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact."
+    legend = "Scout score: a 0-75 metric for technical novelty, market maturity and business impact."
     return (f'<div class="score-ring ring-{level}" style="--pct:{pct};" title="{legend}" role="img" '
             f'aria-label="Scout score {score} of {max_score}"><span>{score}</span></div>')
 
@@ -129,7 +129,7 @@ def render_case_studies(data, slug_map):
         meta_html = '<span class="sep" aria-hidden="true">·</span>'.join(f"<span>{m}</span>" for m in meta)
 
         slug = cs_slugs.get(title)
-        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
+        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT breakdown</a>' if slug else ""
         total = cs.get("total_score", 0)
 
         cards.append(f"""<article class="card cs-card">
@@ -174,7 +174,7 @@ def render_news(data, slug_map):
         title = esc(item.get("title", ""))
 
         slug = news_slugs.get(title)
-        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
+        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT breakdown</a>' if slug else ""
 
         cards.append(f"""<article class="card news-card">
   <div class="card-header">
@@ -235,7 +235,7 @@ def generate_rss(cs_data, news_data):
     <link>{url}</link>
     <guid>{url}</guid>
     <pubDate>{pub_rfc}</pubDate>
-    <description><![CDATA[<p>{summary}</p><p><strong>IT Breakdown:</strong> {it_breakdown}</p>]]></description>
+    <description><![CDATA[<p>{summary}</p><p><strong>IT breakdown:</strong> {it_breakdown}</p>]]></description>
     <category>Case Study</category>
   </item>""")
 
@@ -261,7 +261,7 @@ def generate_rss(cs_data, news_data):
     rss = f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Scout Daily — AI Intelligence Feed</title>
+    <title>Scout Daily</title>
     <link>{base_url}</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
@@ -393,7 +393,7 @@ def generate_html():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scout — AI Intelligence Feed</title>
+  <title>Scout Daily</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -544,7 +544,7 @@ def generate_html():
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 7px 14px;
+      padding: 6px 14px;
       font: inherit;
       font-size: var(--fs-sm);
       color: var(--text);
@@ -690,7 +690,7 @@ def generate_html():
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       font-size: var(--fs-sm);
       color: var(--text-secondary);
     }
@@ -897,7 +897,7 @@ def generate_html():
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 5px 10px;
+      padding: 6px 10px;
       font: inherit;
       font-size: var(--fs-sm);
       color: var(--text);
@@ -912,7 +912,7 @@ def generate_html():
       color: var(--accent-ink);
       border: none;
       border-radius: 4px;
-      padding: 5px 14px;
+      padding: 6px 14px;
       font: inherit;
       font-size: var(--fs-sm);
       font-weight: 600;
@@ -941,7 +941,7 @@ def generate_html():
       .email-input { flex: 1; width: auto; min-width: 0; min-height: var(--tap); font-size: 16px; }
       .email-btn { min-height: var(--tap); padding: 0 18px; }
       .content { padding: 24px 16px 48px; }
-      .card { padding: 18px; }
+      .card { padding: 16px; }
       .card-title a { display: block; min-height: var(--tap); }
       .trace-toggle, .breakdown-link, .md-export-btn { min-height: var(--tap); }
       .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
@@ -965,21 +965,21 @@ def generate_html():
       <div class="header-stats">
         <div class="stat">
           <div class="stat-num">""" + str(cs_count) + """</div>
-          <div class="stat-label">Case Studies</div>
+          <div class="stat-label">Case studies</div>
         </div>
         <div class="stat">
           <div class="stat-num">""" + str(news_count) + """</div>
-          <div class="stat-label">News Items</div>
+          <div class="stat-label">News items</div>
         </div>
       </div>
     </div>
     <p class="updated">Updated """ + generated_at + """</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
-            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false" onclick="showTab('industry-news',this)">Industry News</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false" onclick="showTab('archive-cs',this)">Archive: Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false" onclick="showTab('archive-news',this)">Archive: News</button>
+            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case studies</button>
+            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false" onclick="showTab('industry-news',this)">Industry news</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false" onclick="showTab('archive-cs',this)">Archive: studies</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false" onclick="showTab('archive-news',this)">Archive: news</button>
         </div>
         <label class="visually-hidden" for="scout-search">Search stories</label>
         <input type="search" id="scout-search" class="search" placeholder="Search stories" oninput="filterCards(this.value)" />
@@ -1015,7 +1015,7 @@ def generate_html():
 
 <footer>
   <span>Scout · LangGraph + Groq + arXiv</span>
-  <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
+  <span>Case studies from the last 4 months, news from the last 4–8 weeks</span>
 </footer>
 
 <script src="js/subscribe.js"></script>

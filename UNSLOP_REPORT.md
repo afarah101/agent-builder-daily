@@ -87,3 +87,84 @@ Surface value changes (diff shows them): `transition: all 0.15s` → `transition
 - [ ] `site/dashboard.html:639`, `:765` (Warning): `p.title` and `p.hallucination_detail` go into `innerHTML` without escaping. Escape them.
 - [ ] `site/dashboard.html:856`: confirm "first 5 papers per run" in the pipeline code, or remove the number.
 - [ ] `audit/fixes/test_subscribe.js`: to drop the "!" in "Subscribed!", change the test first.
+
+---
+
+# Run 2: dashboard fixes and `generate_html.py`
+
+Target: `site/dashboard.html` (3 bug fixes) and `generate_html.py` (visible strings only) with `--surface`.
+Verdict: light on `generate_html.py`. Most copy is already plain.
+
+## Dashboard fixes
+
+- **Escaping.** A new helper `escapeHtml()` now wraps every data value that goes into `innerHTML`: `p.title`, `p.hallucination_detail`, top-paper title (escaped after truncation), `p.relevance_tag`, `p.total_score`, `d.date`, `d.total`, the short dates. No scraped URL goes into an `href` on this page. The only links are fixed `console.groq.com` and `cloud.langfuse.com`, so a URL filter was not needed.
+- **`dist-section`.** Commit `ca200ba` renamed the target in the JS from `pipeline-lower` to `dist-section` but left the markup as `id="pipeline-lower"`. The markup now has `id="dist-section"`. Its inline grid moved to a `.dist-grid` class, because the JS sets `style.display = ''` and that would clear an inline `display:grid`. The scoring logic did not change.
+- **CSS selector.** `.stat-label {` was added in `cef73b9` and lost in `d0eaaf5`, where a stray `/* ── Responsive ── */` comment took its place. The selector is back. Before the fix, the parser rejected the whole stylesheet (jsdom: "Could not parse CSS stylesheet").
+
+jsdom test, with title, tag and detail set to `<img src=x onerror=alert(1)>`:
+
+| Check | `main` | `b2b5b42` | Branch |
+|---|---|---|---|
+| Console errors | 2 | 2 | 0 |
+| `.dist-row` | 0 | 0 | 4 |
+| `.top-paper` | 0 | 0 | 2 |
+| `<img>` elements | 2 | 2 | 0 |
+| `&lt;img` in output | no | no | yes |
+| `.stat-label` font-size | none | none | 9px |
+
+## Counts
+
+| Rule | Before | After | Kept |
+|---|---|---|---|
+| `site/index.html` U6 status string | 1 | 0 | |
+| `site/index.html` unslop 13 em dash | 9 | 8 | 8 |
+| `site/index.html` U17 gradient or glow | 1 | 1 | 1 |
+| `site/index.html` U18 off-scale spacing | 2 | 0 | |
+| `site/index.html` U18 off-scale spacing (read) | 3 | 0 | |
+| `site/index.html` U19 extra-heavy weight | 1 | 1 | 1 |
+| `generate_html.py` unslop 17 title case (read) | 10 | 1 | 1 |
+| **`site/index.html` counter total** | **14** | **10** | |
+| **`site/dashboard.html` counter total** | **4** | **4** | **4** |
+
+"Before" is the committed `site/index.html`. "After" is `site/index.html` from `generate_html.py` on this branch, run in a scratch copy with the same data. With the `b2b5b42` script, the same scratch copy gives 14.
+
+## Rewritten
+
+```
+generate_html.py
+"AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." → "Scout score: a 0-75 metric for technical novelty, market maturity and business impact." (unslop 17)
+"IT Breakdown" → "IT breakdown" (unslop 17, 2 card links)
+"IT Breakdown:" → "IT breakdown:" (unslop 17, RSS item)
+"Scout Daily — AI Intelligence Feed" → "Scout Daily" (unslop 13, unslop 27, RSS title)
+"Scout — AI Intelligence Feed" → "Scout Daily" (unslop 13, unslop 27, page title)
+"Case Studies" → "Case studies" (unslop 17, header stat)
+"News Items" → "News items" (unslop 17, header stat)
+"Case Studies" → "Case studies" (unslop 17, tab)
+"Industry News" → "Industry news" (unslop 17, tab)
+"Archive: Studies" → "Archive: studies" (unslop 17, tab)
+"Archive: News" → "Archive: news" (unslop 17, tab)
+"Case Studies: last 4 months · News: last 4–8 weeks" → "Case studies from the last 4 months, news from the last 4–8 weeks" (U6)
+```
+
+Surface value changes: `padding: 7px 14px` → `6px 14px` (search), `5px 10px` → `6px 10px` (email input), `5px 14px` → `6px 14px` (email button), `margin-bottom: 18px` → `16px` (card meta), mobile `.card { padding: 18px }` → `16px` (U18).
+
+## Kept on purpose
+
+- U19 `.brand` `font-weight: 800`: the Scout Daily wordmark. The page loads Syne only at `wght@800`.
+- U17 `.score-ring` `conic-gradient`: it draws the score value. It is data, not decoration.
+- unslop 13: 8 em dashes at `site/index.html:622`, `:637`, `:782` and other lines are inside scraped or model-written summaries. They are data.
+- "View Technical Reasoning": `tests/test_frontend.py:52` checks the exact string.
+- "Scout · LangGraph + Groq + arXiv" footer credit: the owner decides whether to show the stack.
+- `.brand-cursor` blink: it runs 3 times only and stops under `prefers-reduced-motion`.
+- Relevance dots and status badges: they render from `relevance_signal` and `eval_status()`.
+- Search placeholder "Search stories": the label is visually hidden, so the placeholder is the only visible cue.
+
+## Tasks
+
+- [x] Run 1 tasks for `site/dashboard.html:461`, `:773`, `:639`/`:765`: fixed in this run.
+- [ ] `site/index.html`: not regenerated in the repo. The next pipeline run writes it from the new `generate_html.py`.
+- [ ] Summaries with em dashes: the text comes from the scout or model output. Change the prompt if they must go.
+- [ ] `tests/test_frontend.py:52`: change the test first to make "View Technical Reasoning" sentence case.
+- [ ] `site/news.html`: it says "under the Industry News tab". The tab is now "Industry news". Change the case to match.
+- [ ] `site/dashboard.html` `renderGroq`: `fmt()` values from `groq_token_stats.json` are not escaped. The pipeline writes this file, so the risk is low (Info).
+- [ ] `tests/test_news_memory.py`, `tests/test_news_same_day.py`: not run here. `feedparser` needs `sgmllib3k`, which does not build in this container.
