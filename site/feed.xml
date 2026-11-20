@@ -5,53 +5,53 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 20 Nov 2026 15:17:39 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Nov 2026 23:58:03 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)</title>
-    <link>https://arxiv.org/abs/2611.26553v1</link>
-    <guid>https://arxiv.org/abs/2611.26553v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>ROGUE‑AI builds a test framework that re‑creates real incidents involving LLM agents, such as accidental file deletion or payment fraud, and shows that the agents reproduce the harm 89% of the time. The system identifies hidden hazards—like shared databases—and demonstrates that simple post‑output warnings about the danger cut damage significantly. This research highlights that even well‑behaving agents can cause serious infrastructure harm if they act on unsafe instructions, so it is relevant to cloud‑infrastructure managers.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that uses LLM‑based agents, step 1: replicate any past incidents with ROGUE‑AI or a similar tool to see if your agents can reproduce the harm. Step 2: identify shared resources (e.g., databases, file shares) that the agents might access. Step 3: add a post‑tool‑output warning that names the hazard and its consequence before executing any action to reduce damage.</p>]]></description>
+    <title>GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</title>
+    <link>https://arxiv.org/abs/2611.24619v1</link>
+    <guid>https://arxiv.org/abs/2611.24619v1</guid>
+    <pubDate>Wed, 18 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny.</p><p><strong>IT Breakdown:</strong> If you manage LLM deployments, add GateWatch to your monitoring stack: 1) Identify the key SAE features you need (about 4), 2) Deploy GateWatchServe to stream these binaries during inference, 3) Use the compact lookup tables to evaluate probes in parallel, keeping throughput above 97% and cache usage near 100%.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs</title>
-    <link>https://arxiv.org/abs/2611.26363v1</link>
-    <guid>https://arxiv.org/abs/2611.26363v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>HiSA removes part of the dot product in the feature dimension of RoPE attention, keeping only about a third of the calculations while matching or improving model performance. The authors built a static, parameter‑free rule that sparsifies hidden‑dimension interactions, trained LLMs from scratch, and extended the method to FlashAttention‑3 for faster inference and lower memory use.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Monitor memory usage of your LLM inference services; 2) Evaluate adopting HiSA to cut per‑token attention cost by ~66%, reducing GPU memory footprint and speeding up response times; 3) Test the HiSA implementation with FlashAttention‑3 in your deployment pipeline to confirm performance gains.</p>]]></description>
+    <title>PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</title>
+    <link>https://arxiv.org/abs/2611.24362v1</link>
+    <guid>https://arxiv.org/abs/2611.24362v1</guid>
+    <pubDate>Wed, 18 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted LLM services, use PIPETTE by: 1) integrating its dictionary‑reward red‑team to generate diverse injection scenarios, 2) feeding those scenarios into an on‑policy adversarial training loop for your models, 3) validating that attack success rates drop to near zero while task accuracy stays near baseline.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads</title>
-    <link>https://arxiv.org/abs/2611.25905v1</link>
-    <guid>https://arxiv.org/abs/2611.25905v1</guid>
+    <title>MaskPE: One Mask, Two Roles: Weight Placement and MAC Gating in Systolic Arrays</title>
+    <link>https://arxiv.org/abs/2611.26432v1</link>
+    <guid>https://arxiv.org/abs/2611.26432v1</guid>
     <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research tackles the problem of reliably validating and scaling large language model (LLM) deployments for agentic workloads. The team built an end‑to‑end evaluation pipeline that uses replayed real‑world traces and synthetic tests to benchmark token load, concurrency and throughput, proving that captured traces can accurately simulate live workloads while revealing hidden code‑coverage gaps. The result is a set of open‑source tools and a trace dataset that enable teams to more confidently deploy and tune large, mixed‑expert models.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference infrastructure, use the pipeline: 1) capture real user sessions as traces; 2) replay those traces to generate per‑session token loads that stay within 1.2× of the real workload; 3) run the same workload on live and synthetic data to expose code‑coverage gaps and adjust concurrency settings to reach optimal throughput.</p>]]></description>
+    <description><![CDATA[<p>MaskPE tackles the gap between weight pruning and energy savings in systolic arrays by routing non‑zero weights to processing elements and clock‑gating zero‑weights, cutting compressed weight storage by 34.9% and reducing execution energy by up to 14.4% at 50% sparsity.</p><p><strong>IT Breakdown:</strong> If you manage a systolic‑array‑based inference engine, step 1: add a mask‑driven preload stage to send only non‑zero weights to the relevant PEs; step 2: enable clock‑gating on registers in PEs that receive zero‑weights; step 3: validate with RTL to ensure no stall or accuracy loss.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes</title>
-    <link>https://arxiv.org/abs/2611.26480v1</link>
-    <guid>https://arxiv.org/abs/2611.26480v1</guid>
+    <title>Training Vision Models for LLM-Driven Weight-Space Programming</title>
+    <link>https://arxiv.org/abs/2611.26408v1</link>
+    <guid>https://arxiv.org/abs/2611.26408v1</guid>
     <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows that LLM agents on serverless runtimes keep an entire virtual environment reserved for each conversation, even while waiting for model responses, causing resource waste. The authors built a simulation and benchmarks on Amazon Bedrock AgentCore, revealing that 1,000 concurrent chats reserve 1,000 environments, leading to early exhaustion of available environments. They suggest that closing environments promptly and allowing multiple conversations per environment can dramatically improve efficiency.</p><p><strong>IT Breakdown:</strong> If you manage a serverless LLM agent platform, first ensure your clients close environments immediately after a conversation ends. Second, modify your runtime to allow a single environment to handle multiple parallel conversations, reducing the number of reserved environments by an order of magnitude. This will free up capacity and lower operational costs.</p>]]></description>
+    <description><![CDATA[<p>This research shows that training vision models to be ready for direct weight edits by large language models can improve editing success, but it is not directly relevant to managing cloud infrastructure.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Aggron: Aggressive Compression of Agentic KV Caches during Head-of-Line Stalls in the Request Queue</title>
-    <link>https://arxiv.org/abs/2611.26435v1</link>
-    <guid>https://arxiv.org/abs/2611.26435v1</guid>
+    <title>Sightline: Calibrated Data-Flow Summaries for LLM-Integrated Applications</title>
+    <link>https://arxiv.org/abs/2611.26221v1</link>
+    <guid>https://arxiv.org/abs/2611.26221v1</guid>
     <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Aggron tackles the problem of limited KV cache capacity for large language model agents by compressing the cache aggressively and selectively during head‑of‑line stalls. It builds a new serving system that queues summarisation tasks separately, using idle compute from stalled requests, and predicts when summarisation can finish before the main request resumes. The result is a 27‑31% drop in 99th‑percentile latency and a 34‑40% boost in throughput at high load.</p><p><strong>IT Breakdown:</strong> If you manage LLM agent infrastructure, here is what to do: 1) add a summarisation queue that runs on idle compute from stalled requests; 2) implement selective compression of KV cache sections; 3) predict summarisation completion before the main request resumes and only trigger summarisation then.</p>]]></description>
+    <description><![CDATA[<p>Sightline creates accurate data‑flow summaries for applications that call large language models, solving the problem of over‑tainting by showing which prompt placeholders actually influence LLM outputs. It uses a single forward pass and a small calibration set to prune over 40% of false flows while missing only about 1% of real ones. The result is a leaner, more precise flow analysis for LLM‑integrated code.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑integrated services, here is what to do: step 1, run a small calibration set to determine the acceptable miss rate α; step 2, integrate Sightline to analyse each model call and prune unnecessary taints; step 3, review the pruned flow reports to reduce false positives in your security checks.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] These tech outages are giving Y2K, AI agent style</title>
     <link>https://techcrunch.com/2026/11/19/these-tech-outages-are-giving-y2k-ai-agent-style/</link>
     <guid>https://techcrunch.com/2026/11/19/these-tech-outages-are-giving-y2k-ai-agent-style/</guid>
-    <pubDate>Fri, 20 Nov 2026 15:17:39 +0000</pubDate>
+    <pubDate>Fri, 20 Nov 2026 23:58:03 +0000</pubDate>
     <description><![CDATA[<p>A spate of technical outages at major U.S. firms—including Microsoft, Apple Pay, and the FAA—has spurred speculation that AI‑driven vulnerability discovery is accelerating failure rates. Experts warn that AI tools are surfacing hidden flaws so rapidly that patching cycles are destabilizing critical services.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -59,32 +59,32 @@
     <title>[News] Apple may be developing its own AI agent that runs your Mac</title>
     <link>https://techcrunch.com/2026/11/19/apple-may-be-developing-its-own-ai-agent-that-runs-your-mac/</link>
     <guid>https://techcrunch.com/2026/11/19/apple-may-be-developing-its-own-ai-agent-that-runs-your-mac/</guid>
-    <pubDate>Fri, 20 Nov 2026 15:17:39 +0000</pubDate>
+    <pubDate>Fri, 20 Nov 2026 23:58:03 +0000</pubDate>
     <description><![CDATA[<p>Apple is reportedly developing an AI agent that can autonomously use macOS apps, browse the web, and execute code, signaling a shift toward integrated computer assistants on Mac devices. The company is also tightening controls to prevent third‑party agents from gaining full system access, a move that will affect macOS security policies and endpoint management.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Researcher plants 2m canaries into the AI supply chain. A privacy disaster surfaced.</title>
+    <link>https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate/</link>
+    <guid>https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate/</guid>
+    <pubDate>Fri, 20 Nov 2026 23:58:03 +0000</pubDate>
+    <description><![CDATA[<p>Researchers embedded 2 million digital canaries into requests flowing through AI routers such as OpenRouter and Vercel, uncovering that sensitive data like AWS keys and private URLs can be leaked across the AI supply chain. The study reveals that many AI services act as unverified intermediaries, exposing organizations to prompt theft, security breaches, and privacy violations.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Jensen Huang’s ‘Lying’ Alarmed Nvidia Board Ahead of His Resignation</title>
+    <link>https://www.wired.com/story/jensen-huangs-lying-alarmed-nvidia-board-ahead-of-his-resignation/</link>
+    <guid>https://www.wired.com/story/jensen-huangs-lying-alarmed-nvidia-board-ahead-of-his-resignation/</guid>
+    <pubDate>Fri, 20 Nov 2026 23:58:03 +0000</pubDate>
+    <description><![CDATA[<p>Nvidia’s CEO Jensen Huang was forced to resign after the board discovered he had lied about multiple extramarital affairs, one involving a suspected Chinese intelligence asset. The scandal raises serious concerns about corporate governance and potential security risks for a company that supplies critical AI hardware.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Deploying Daybreak Red</title>
     <link>https://openai.com/business/learn/deploying-daybreak-red</link>
     <guid>https://openai.com/business/learn/deploying-daybreak-red</guid>
-    <pubDate>Fri, 20 Nov 2026 15:17:39 +0000</pubDate>
+    <pubDate>Fri, 20 Nov 2026 23:58:03 +0000</pubDate>
     <description><![CDATA[<p>OpenAI has released a guide for deploying Daybreak Red, a reference architecture for supervised security investigations. The documentation details isolation, safety controls, environment configuration, and monitoring for these investigations.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] Man hired by Russia spied on Silicon Valley tech and defense company, feds say</title>
-    <link>https://arstechnica.com/security/2026/11/man-charged-with-spying-on-silicon-valley-tech-and-defense-company-for-russia/</link>
-    <guid>https://arstechnica.com/security/2026/11/man-charged-with-spying-on-silicon-valley-tech-and-defense-company-for-russia/</guid>
-    <pubDate>Fri, 20 Nov 2026 15:17:39 +0000</pubDate>
-    <description><![CDATA[<p>A Russian national was indicted for spying on employees of a Silicon Valley tech company, allegedly photographing workers and tracking them in public spaces. The investigation highlights ongoing threats to employee privacy and corporate security for firms involved in sensitive defense projects.</p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost</title>
-    <link>https://huggingface.co/blog/harness-adapters-at-scale</link>
-    <guid>https://huggingface.co/blog/harness-adapters-at-scale</guid>
-    <pubDate>Fri, 20 Nov 2026 15:17:39 +0000</pubDate>
-    <description><![CDATA[<p>Hugging Face releases harness adapters that let users fine‑tune large language models with reinforcement learning inside specific agent harnesses, boosting performance and cutting token usage. The adapters are available as reusable LoRA models and can be deployed via the Hugging Face Hub and Docker images for Pi, OpenCode, and Hermes Agent harnesses.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
