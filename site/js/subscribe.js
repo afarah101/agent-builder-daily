@@ -26,7 +26,7 @@ function submitEmail(e) {
   })
     .then(() => {
       clearTimeout(timer);
-      btn.textContent = 'Subscribed! ✅';
+      btn.textContent = 'Subscribed!';
       input.value = '';
     })
     .catch(() => {

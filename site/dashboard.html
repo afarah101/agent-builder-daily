@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scout Daily — Pipeline Monitor</title>
+  <title>Scout Daily pipeline monitor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -84,7 +84,7 @@
       padding: 4px 10px;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: border-color 0.15s ease-out;
     }
     .refresh-btn:hover { border-color: var(--accent); }
 
@@ -368,16 +368,6 @@
     }
     .langfuse-link:hover { text-decoration: underline; }
 
-    /* ── Health indicator ── */
-    .health-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
-
     /* ── Stat row ── */
     .stat-row {
       display: flex;
@@ -504,7 +494,7 @@
   </div>
   <div class="header-right">
     <div class="updated-label" id="updated-label">Loading…</div>
-    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+    <button class="refresh-btn" onclick="loadAll()">Refresh</button>
   </div>
 </div>
 
@@ -517,17 +507,14 @@
       <div class="card">
         <div class="card-label">Pass</div>
         <div class="card-value" style="color:var(--green)" id="qc-pass-count">—</div>
-        <div class="card-sub">Gemini Verified</div>
       </div>
       <div class="card">
         <div class="card-label">Fail</div>
         <div class="card-value" style="color:var(--red)" id="qc-fail-count">—</div>
-        <div class="card-sub">Flagged / Hallucination</div>
       </div>
       <div class="card">
         <div class="card-label">Pending</div>
         <div class="card-value" style="color:var(--amber)" id="qc-pending-count">—</div>
-        <div class="card-sub">Evaluating</div>
       </div>
     </div>
     <div id="qc-fail-section" style="display:none">
@@ -543,7 +530,7 @@
       <div class="card"><div class="skeleton"></div><div class="skeleton" style="width:60%"></div></div>
       <div class="card"><div class="skeleton"></div><div class="skeleton" style="width:60%"></div></div>
     </div>
-    <p class="note" id="groq-note">Loading live token data… <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a></p>
+    <p class="note" id="groq-note">Loading token data… <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a></p>
   </section>
 
   <!-- SECTION 2: PIPELINE HEALTH -->
@@ -574,7 +561,7 @@
 
   <!-- SECTION 4: TREND OVER TIME -->
   <section>
-    <div class="section-title">Trend — Last 7 Days</div>
+    <div class="section-title">Last 7 days</div>
     <div class="card" id="trend-section">
       <div class="skeleton" style="height:120px"></div>
     </div>
@@ -585,17 +572,17 @@
     <div class="section-title">Langfuse Observability</div>
     <div id="langfuse-section">
       <div class="stat-grid" id="langfuse-grid">
-        <div class="stat-card"><div class="stat-label">TOTAL TRACES (7 DAYS)</div><div class="stat-num" id="lf-traces">—</div></div>
-        <div class="stat-card"><div class="stat-label">AVG LATENCY P50</div><div class="stat-num" id="lf-p50">—</div></div>
-        <div class="stat-card"><div class="stat-label">AVG LATENCY P95</div><div class="stat-num" id="lf-p95">—</div></div>
-        <div class="stat-card"><div class="stat-label">INPUT TOKENS (7 DAYS)</div><div class="stat-num" id="lf-input-tokens">—</div></div>
-        <div class="stat-card"><div class="stat-label">OUTPUT TOKENS (7 DAYS)</div><div class="stat-num" id="lf-output-tokens">—</div></div>
-        <div class="stat-card"><div class="stat-label">AVG QUALITY SCORE</div><div class="stat-num" id="lf-avg-score">—</div></div>
-        <div class="stat-card"><div class="stat-label">SCORES ANNOTATED</div><div class="stat-num" id="lf-score-count">—</div></div>
-        <div class="stat-card"><div class="stat-label">SNAPSHOT AGE</div><div class="stat-num" id="lf-snapshot-age">—</div></div>
+        <div class="stat-card"><div class="stat-label">Total traces (7 days)</div><div class="stat-num" id="lf-traces">—</div></div>
+        <div class="stat-card"><div class="stat-label">Avg latency p50</div><div class="stat-num" id="lf-p50">—</div></div>
+        <div class="stat-card"><div class="stat-label">Avg latency p95</div><div class="stat-num" id="lf-p95">—</div></div>
+        <div class="stat-card"><div class="stat-label">Input tokens (7 days)</div><div class="stat-num" id="lf-input-tokens">—</div></div>
+        <div class="stat-card"><div class="stat-label">Output tokens (7 days)</div><div class="stat-num" id="lf-output-tokens">—</div></div>
+        <div class="stat-card"><div class="stat-label">Avg quality score</div><div class="stat-num" id="lf-avg-score">—</div></div>
+        <div class="stat-card"><div class="stat-label">Scores annotated</div><div class="stat-num" id="lf-score-count">—</div></div>
+        <div class="stat-card"><div class="stat-label">Snapshot age</div><div class="stat-num" id="lf-snapshot-age">—</div></div>
       </div>
       <div id="langfuse-placeholder-msg" style="display:none;color:var(--text-muted);font-size:13px;font-family:'JetBrains Mono',monospace;padding:8px 0;">
-        Langfuse snapshot not yet generated — will appear after next pipeline run.
+        No Langfuse snapshot yet. It appears after the next pipeline run.
         <a href="https://cloud.langfuse.com" target="_blank" style="color:var(--accent);margin-left:8px;">Open Langfuse →</a>
       </div>
     </div>
@@ -675,7 +662,7 @@
       return `<div class="card">
         <div class="card-label">${label}</div>
         <div class="card-value">${fmt(total)}</div>
-        <div class="card-sub">${isLive ? 'live' : 'no data yet'} · ${fmt(calls)} calls · ${fmt(slot.prompt_tokens||0)} prompt / ${fmt(slot.completion_tokens||0)} completion</div>
+        <div class="card-sub">${fmt(calls)} calls, ${fmt(slot.prompt_tokens||0)} prompt / ${fmt(slot.completion_tokens||0)} completion</div>
         <div class="progress-wrap">
           <div class="progress-track">
             <div class="progress-fill" style="width:${kPct}%;background:${kColor}"></div>
@@ -694,8 +681,8 @@
     const note = document.getElementById('groq-note');
     if (note) {
       note.innerHTML = isLive
-        ? `Live from <code>resp.usage</code> · avg ${fmt(avgTpc)} tokens/call${misses ? ` · ⚠ ${misses} usage-miss(es)` : ''} · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`
-        : `No token stats yet — will populate after next pipeline run · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`;
+        ? `Avg ${fmt(avgTpc)} tokens/call.${misses ? ` ${misses} usage misses.` : ''} <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`
+        : `No token stats yet. They appear after the next pipeline run. <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`;
     }
   }
 
@@ -750,7 +737,6 @@
       <div class="card">
         <div class="card-label">Papers Scored</div>
         <div class="card-value">${fmt(scored)}</div>
-        <div class="card-sub">successfully evaluated</div>
       </div>
       <div class="card">
         <div class="card-label">JSON Errors</div>
@@ -830,7 +816,7 @@
         <div class="stat-row">
           <span class="stat-row-label">Total score</span>
           <span class="stat-row-val" style="color:${healthColor}">
-            <span class="health-dot" style="background:${healthColor}"></span>${avgTotal}/100
+            ${avgTotal}/100
           </span>
         </div>
         <div class="stat-row">
@@ -903,12 +889,12 @@
       <div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start">
         <div>
           <div class="bar-chart">${bars}</div>
-          <div class="note" style="margin-top:8px">Bar height = papers scored. Colour: purple ≥50 avg, amber &lt;50 avg.</div>
+          <div class="note" style="margin-top:8px">Purple: avg score ≥50. Amber: below 50.</div>
         </div>
         <div style="min-width:140px">
           <div class="card-label" style="margin-bottom:10px">Avg Score / Day</div>
           ${days.map((d, i) => `
-            <div class="stat-row" style="padding:5px 0">
+            <div class="stat-row" style="padding:4px 0">
               <span class="stat-row-label" style="font-family:'JetBrains Mono',monospace;font-size:11px">${(d.date||'').slice(5)}</span>
               <span class="stat-row-val" style="color:${colorForScore(avgScores[i])};font-size:12px">${avgScores[i]||'—'}</span>
             </div>`).join('')}
