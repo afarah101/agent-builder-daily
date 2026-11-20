@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">4</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">7</div>
+          <div class="stat-num">16</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 20 Nov 2026, 00:32 UTC</p>
+    <p class="updated">Updated 20 Nov 2026, 15:17 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,132 +614,157 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM infrastructure</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">Security, Agentic Systems, Audit</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-high" style="--pct:80;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 60 of 75"><span>60</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24891v1" target="_blank" rel="noopener noreferrer">Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity</a></h2>
-  <div class="card-meta"><span>Benjamin Novotny, Doug Szeto, Chang Wang, Shicheng Chen</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">Cap-and-Track lets you adapt LLM inference dispatch to changing GPU capacity and request size without hard‑coding a rate. They built an async dispatcher that rejects requests early when resources are full, then uses those refusals to probe capacity and refill queues, cutting GPU use by 43% in production. It’s relevant to anyone managing AI inference fleets, offering a way to save hardware while keeping high‑priority work on time.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage GPU fleets for LLM inference, use Cap-and-Track by: 1) Add a fail‑fast admission check that rejects over‑capacity requests; 2) Log refusals and use them to back‑off and probe current capacity; 3) Keep short‑lived queues in the inference engine to batch efficiently. This will reduce GPU usage and improve throughput without manual retuning.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.26553v1" target="_blank" rel="noopener noreferrer">Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)</a></h2>
+  <div class="card-meta"><span>Mengxiao Wang, Mahbub Alam, Kalyan Nakka, Nitesh Saxena</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">19 Nov 2026</span></span></div>
+  <p class="card-summary">ROGUE‑AI builds a test framework that re‑creates real incidents involving LLM agents, such as accidental file deletion or payment fraud, and shows that the agents reproduce the harm 89% of the time. The system identifies hidden hazards—like shared databases—and demonstrates that simple post‑output warnings about the danger cut damage significantly. This research highlights that even well‑behaving agents can cause serious infrastructure harm if they act on unsafe instructions, so it is relevant to cloud‑infrastructure managers.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure that uses LLM‑based agents, step 1: replicate any past incidents with ROGUE‑AI or a similar tool to see if your agents can reproduce the harm. Step 2: identify shared resources (e.g., databases, file shares) that the agents might access. Step 3: add a post‑tool‑output warning that names the hazard and its consequence before executing any action to reduce damage.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">22/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">18/25</span></div>
-      <p class="trace-reasoning">The paper proposes a practical system for dispatching LLM inference requests that directly addresses resource allocation in large-scale AI deployments, which is highly relevant for infrastructure engineers managing cloud-based LLM services. The authors mention a live implementation at Meta, indicating the system is built and tested. While the technique could be adopted to reduce cost and improve throughput for enterprises, it is not a turnkey product but a methodology that can be implemented within the next month by experienced engineers. Thus all three criteria score in the high‑to‑mid range, yielding a strong total score.</p>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper presents a practical, testable framework (ROGUE-AI) that allows IT engineers to reproduce agentic security incidents and validate safeguards. It is built, contains code, and can be deployed immediately. The framework can be marketed as an audit or security testing service for SaaS and cloud environments, directly benefiting IT infrastructure teams.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/cap-and-track-optimizing-llm-inference-request-dispatch-across-shifting-capacity.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/replication-of-agentic-security-events-audit-and-investigation-rogue-ai.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity"
-      data-summary="Cap-and-Track lets you adapt LLM inference dispatch to changing GPU capacity and request size without hard‑coding a rate. They built an async dispatcher that rejects requests early when resources are full, then uses those refusals to probe capacity and refill queues, cutting GPU use by 43% in production. It’s relevant to anyone managing AI inference fleets, offering a way to save hardware while keeping high‑priority work on time."
-      data-it="If you manage GPU fleets for LLM inference, use Cap-and-Track by: 1) Add a fail‑fast admission check that rejects over‑capacity requests; 2) Log refusals and use them to back‑off and probe current capacity; 3) Keep short‑lived queues in the inference engine to batch efficiently. This will reduce GPU usage and improve throughput without manual retuning."
+      data-title="Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)"
+      data-summary="ROGUE‑AI builds a test framework that re‑creates real incidents involving LLM agents, such as accidental file deletion or payment fraud, and shows that the agents reproduce the harm 89% of the time. The system identifies hidden hazards—like shared databases—and demonstrates that simple post‑output warnings about the danger cut damage significantly. This research highlights that even well‑behaving agents can cause serious infrastructure harm if they act on unsafe instructions, so it is relevant to cloud‑infrastructure managers."
+      data-it="If you manage cloud infrastructure that uses LLM‑based agents, step 1: replicate any past incidents with ROGUE‑AI or a similar tool to see if your agents can reproduce the harm. Step 2: identify shared resources (e.g., databases, file shares) that the agents might access. Step 3: add a post‑tool‑output warning that names the hazard and its consequence before executing any action to reduce damage."
       data-monetisation=""
-      data-reasoning="The paper proposes a practical system for dispatching LLM inference requests that directly addresses resource allocation in large-scale AI deployments, which is highly relevant for infrastructure engineers managing cloud-based LLM services. The authors mention a live implementation at Meta, indicating the system is built and tested. While the technique could be adopted to reduce cost and improve throughput for enterprises, it is not a turnkey product but a methodology that can be implemented within the next month by experienced engineers. Thus all three criteria score in the high‑to‑mid range, yielding a strong total score."
+      data-reasoning="The paper presents a practical, testable framework (ROGUE-AI) that allows IT engineers to reproduce agentic security incidents and validate safeguards. It is built, contains code, and can be deployed immediately. The framework can be marketed as an audit or security testing service for SaaS and cloud environments, directly benefiting IT infrastructure teams."
       data-score="60"
-      data-url="https://arxiv.org/abs/2611.24891v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.26553v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM monitoring for production systems</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM performance optimization, cloud AI deployment</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:77;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 58 of 75"><span>58</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.26363v1" target="_blank" rel="noopener noreferrer">HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs</a></h2>
+  <div class="card-meta"><span>Ambroise Borbely, Mathieu Salzmann, Olivier Verscheure</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">19 Nov 2026</span></span></div>
+  <p class="card-summary">HiSA removes part of the dot product in the feature dimension of RoPE attention, keeping only about a third of the calculations while matching or improving model performance. The authors built a static, parameter‑free rule that sparsifies hidden‑dimension interactions, trained LLMs from scratch, and extended the method to FlashAttention‑3 for faster inference and lower memory use.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) Monitor memory usage of your LLM inference services; 2) Evaluate adopting HiSA to cut per‑token attention cost by ~66%, reducing GPU memory footprint and speeding up response times; 3) Test the HiSA implementation with FlashAttention‑3 in your deployment pipeline to confirm performance gains.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">18/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper presents a concrete optimization (HiSA) that reduces LLM inference time and memory usage by a third, directly benefiting IT engineers managing LLM deployments on cloud infrastructure. Code is released and models trained, indicating practical readiness. The technique can be packaged as a performance‑boosting service or integrated into existing MLOps pipelines, offering clear monetisation potential within a short time frame.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs"
+      data-summary="HiSA removes part of the dot product in the feature dimension of RoPE attention, keeping only about a third of the calculations while matching or improving model performance. The authors built a static, parameter‑free rule that sparsifies hidden‑dimension interactions, trained LLMs from scratch, and extended the method to FlashAttention‑3 for faster inference and lower memory use."
+      data-it="If you manage cloud infrastructure, here is what to do: 1) Monitor memory usage of your LLM inference services; 2) Evaluate adopting HiSA to cut per‑token attention cost by ~66%, reducing GPU memory footprint and speeding up response times; 3) Test the HiSA implementation with FlashAttention‑3 in your deployment pipeline to confirm performance gains."
+      data-monetisation=""
+      data-reasoning="The paper presents a concrete optimization (HiSA) that reduces LLM inference time and memory usage by a third, directly benefiting IT engineers managing LLM deployments on cloud infrastructure. Code is released and models trained, indicating practical readiness. The technique can be packaged as a performance‑boosting service or integrated into existing MLOps pipelines, offering clear monetisation potential within a short time frame."
+      data-score="58"
+      data-url="https://arxiv.org/abs/2611.26363v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM deployment &amp; validation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:74;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 56 of 75"><span>56</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.25905v1" target="_blank" rel="noopener noreferrer">Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads</a></h2>
+  <div class="card-meta"><span>Shai Gretz, Alon Halfon, Yoav Katz, Lena Dankin</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">19 Nov 2026</span></span></div>
+  <p class="card-summary">The research tackles the problem of reliably validating and scaling large language model (LLM) deployments for agentic workloads. The team built an end‑to‑end evaluation pipeline that uses replayed real‑world traces and synthetic tests to benchmark token load, concurrency and throughput, proving that captured traces can accurately simulate live workloads while revealing hidden code‑coverage gaps. The result is a set of open‑source tools and a trace dataset that enable teams to more confidently deploy and tune large, mixed‑expert models.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference infrastructure, use the pipeline: 1) capture real user sessions as traces; 2) replay those traces to generate per‑session token loads that stay within 1.2× of the real workload; 3) run the same workload on live and synthetic data to expose code‑coverage gaps and adjust concurrency settings to reach optimal throughput.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">18/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">18/25</span></div>
+      <p class="trace-reasoning">The paper introduces a practical end-to-end validation pipeline for agentic LLM serving, directly impacting how IT engineers deploy and manage LLM workloads. The authors provide open-source tooling and a trace dataset, indicating a working system rather than a theoretical proposal, which justifies the high AI maturity score. The methods and data are actionable and could be packaged as a service or integrated into existing MLOps workflows, supporting a solid monetisation potential. Overall, the work has significant relevance to infrastructure, automation, and cloud deployment of LLMs.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads"
+      data-summary="The research tackles the problem of reliably validating and scaling large language model (LLM) deployments for agentic workloads. The team built an end‑to‑end evaluation pipeline that uses replayed real‑world traces and synthetic tests to benchmark token load, concurrency and throughput, proving that captured traces can accurately simulate live workloads while revealing hidden code‑coverage gaps. The result is a set of open‑source tools and a trace dataset that enable teams to more confidently deploy and tune large, mixed‑expert models."
+      data-it="If you manage LLM inference infrastructure, use the pipeline: 1) capture real user sessions as traces; 2) replay those traces to generate per‑session token loads that stay within 1.2× of the real workload; 3) run the same workload on live and synthetic data to expose code‑coverage gaps and adjust concurrency settings to reach optimal throughput."
+      data-monetisation=""
+      data-reasoning="The paper introduces a practical end-to-end validation pipeline for agentic LLM serving, directly impacting how IT engineers deploy and manage LLM workloads. The authors provide open-source tooling and a trace dataset, indicating a working system rather than a theoretical proposal, which justifies the high AI maturity score. The methods and data are actionable and could be packaged as a service or integrated into existing MLOps workflows, supporting a solid monetisation potential. Overall, the work has significant relevance to infrastructure, automation, and cloud deployment of LLMs."
+      data-score="56"
+      data-url="https://arxiv.org/abs/2611.25905v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Cloud infrastructure</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a></h2>
-  <div class="card-meta"><span>Firas Spanioli, Yaniv David</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM deployments, add GateWatch to your monitoring stack: 1) Identify the key SAE features you need (about 4), 2) Deploy GateWatchServe to stream these binaries during inference, 3) Use the compact lookup tables to evaluate probes in parallel, keeping throughput above 97% and cache usage near 100%.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.26480v1" target="_blank" rel="noopener noreferrer">Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes</a></h2>
+  <div class="card-meta"><span>Mekhala Hithyshini Sreenivasa</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">19 Nov 2026</span></span></div>
+  <p class="card-summary">The study shows that LLM agents on serverless runtimes keep an entire virtual environment reserved for each conversation, even while waiting for model responses, causing resource waste. The authors built a simulation and benchmarks on Amazon Bedrock AgentCore, revealing that 1,000 concurrent chats reserve 1,000 environments, leading to early exhaustion of available environments. They suggest that closing environments promptly and allowing multiple conversations per environment can dramatically improve efficiency.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage a serverless LLM agent platform, first ensure your clients close environments immediately after a conversation ends. Second, modify your runtime to allow a single environment to handle multiple parallel conversations, reducing the number of reserved environments by an order of magnitude. This will free up capacity and lower operational costs.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">18/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">12/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper addresses a practical infrastructure inefficiency in serverless LLM agent runtimes that directly impacts resource utilization for IT engineers managing cloud services. It presents measurable findings and concrete fixes, indicating that the work is beyond theoretical and has already been validated in experiments, giving it moderate AI maturity. The actionable insights (e.g., environment sharing or explicit closing) provide a clear path for cost optimisation and can be implemented by engineers or offered as a service within 90 days, resulting in a high monetisation potential.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/held-while-waiting-what-llm-agent-sessions-reserve-on-serverless-and-agent-runti.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes"
+      data-summary="The study shows that LLM agents on serverless runtimes keep an entire virtual environment reserved for each conversation, even while waiting for model responses, causing resource waste. The authors built a simulation and benchmarks on Amazon Bedrock AgentCore, revealing that 1,000 concurrent chats reserve 1,000 environments, leading to early exhaustion of available environments. They suggest that closing environments promptly and allowing multiple conversations per environment can dramatically improve efficiency."
+      data-it="If you manage a serverless LLM agent platform, first ensure your clients close environments immediately after a conversation ends. Second, modify your runtime to allow a single environment to handle multiple parallel conversations, reducing the number of reserved environments by an order of magnitude. This will free up capacity and lower operational costs."
+      data-monetisation=""
+      data-reasoning="The paper addresses a practical infrastructure inefficiency in serverless LLM agent runtimes that directly impacts resource utilization for IT engineers managing cloud services. It presents measurable findings and concrete fixes, indicating that the work is beyond theoretical and has already been validated in experiments, giving it moderate AI maturity. The actionable insights (e.g., environment sharing or explicit closing) provide a clear path for cost optimisation and can be implemented by engineers or offered as a service within 90 days, resulting in a high monetisation potential."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.26480v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM serving optimization</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.26435v1" target="_blank" rel="noopener noreferrer">Aggron: Aggressive Compression of Agentic KV Caches during Head-of-Line Stalls in the Request Queue</a></h2>
+  <div class="card-meta"><span>Rishabh Ravi, Tony Hong, Chen Wang, Yue Zhu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">19 Nov 2026</span></span></div>
+  <p class="card-summary">Aggron tackles the problem of limited KV cache capacity for large language model agents by compressing the cache aggressively and selectively during head‑of‑line stalls. It builds a new serving system that queues summarisation tasks separately, using idle compute from stalled requests, and predicts when summarisation can finish before the main request resumes. The result is a 27‑31% drop in 99th‑percentile latency and a 34‑40% boost in throughput at high load.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM agent infrastructure, here is what to do: 1) add a summarisation queue that runs on idle compute from stalled requests; 2) implement selective compression of KV cache sections; 3) predict summarisation completion before the main request resumes and only trigger summarisation then.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">18/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">12/25</span></div>
-      <p class="trace-reasoning">The paper presents a practical monitoring tool for LLMs, directly impacting deployment, debugging, and compliance for infrastructure teams. It includes a released prototype (GateWatchServe) integrated with vLLM, indicating real-world readiness. While it offers immediate operational benefits, commercialization or service integration would require additional tooling, so monetisation potential is moderate.</p>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper presents a concrete system (Aggron) that directly improves LLM agent serving by reducing latency and increasing throughput, which is highly relevant to IT engineers managing LLM deployments. The solution appears to be a working prototype with published results, indicating a certain level of maturity, though it may not yet be fully productionized. The approach offers actionable insights that could be adopted or sold as a service within 90 days to optimize cloud-based LLM workloads.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/gatewatch-low-overhead-llm-monitoring-with-boolean-circuits.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/aggron-aggressive-compression-of-agentic-kv-caches-during-head-of-line-stalls-in.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits"
-      data-summary="GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny."
-      data-it="If you manage LLM deployments, add GateWatch to your monitoring stack: 1) Identify the key SAE features you need (about 4), 2) Deploy GateWatchServe to stream these binaries during inference, 3) Use the compact lookup tables to evaluate probes in parallel, keeping throughput above 97% and cache usage near 100%."
+      data-title="Aggron: Aggressive Compression of Agentic KV Caches during Head-of-Line Stalls in the Request Queue"
+      data-summary="Aggron tackles the problem of limited KV cache capacity for large language model agents by compressing the cache aggressively and selectively during head‑of‑line stalls. It builds a new serving system that queues summarisation tasks separately, using idle compute from stalled requests, and predicts when summarisation can finish before the main request resumes. The result is a 27‑31% drop in 99th‑percentile latency and a 34‑40% boost in throughput at high load."
+      data-it="If you manage LLM agent infrastructure, here is what to do: 1) add a summarisation queue that runs on idle compute from stalled requests; 2) implement selective compression of KV cache sections; 3) predict summarisation completion before the main request resumes and only trigger summarisation then."
       data-monetisation=""
-      data-reasoning="The paper presents a practical monitoring tool for LLMs, directly impacting deployment, debugging, and compliance for infrastructure teams. It includes a released prototype (GateWatchServe) integrated with vLLM, indicating real-world readiness. While it offers immediate operational benefits, commercialization or service integration would require additional tooling, so monetisation potential is moderate."
+      data-reasoning="The paper presents a concrete system (Aggron) that directly improves LLM agent serving by reducing latency and increasing throughput, which is highly relevant to IT engineers managing LLM deployments. The solution appears to be a working prototype with published results, indicating a certain level of maturity, though it may not yet be fully productionized. The approach offers actionable insights that could be adopted or sold as a service within 90 days to optimize cloud-based LLM workloads."
       data-score="50"
-      data-url="https://arxiv.org/abs/2611.24619v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Security / LLM Agent Protection</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a></h2>
-  <div class="card-meta"><span>Lipeng He, Yihan Wang, Jiawen Zhang, N. Asokan</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud‑hosted LLM services, use PIPETTE by: 1) integrating its dictionary‑reward red‑team to generate diverse injection scenarios, 2) feeding those scenarios into an on‑policy adversarial training loop for your models, 3) validating that attack success rates drop to near zero while task accuracy stays near baseline.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
-      <p class="trace-reasoning">The paper addresses prompt injection attacks on LLM agents, a security concern relevant to IT infrastructure that could affect engineers managing LLM services. The approach includes an implementation and evaluation, indicating a usable system, but the work is still research‑grade with limited real‑world deployment evidence. Commercial use would require integration and testing in existing workflows, which could be done within a few months but is not immediately ready as a product.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/pipette-prompt-injection-purple-teaming-for-robust-llm-agents.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents"
-      data-summary="PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance."
-      data-it="If you manage cloud‑hosted LLM services, use PIPETTE by: 1) integrating its dictionary‑reward red‑team to generate diverse injection scenarios, 2) feeding those scenarios into an on‑policy adversarial training loop for your models, 3) validating that attack success rates drop to near zero while task accuracy stays near baseline."
-      data-monetisation=""
-      data-reasoning="The paper addresses prompt injection attacks on LLM agents, a security concern relevant to IT infrastructure that could affect engineers managing LLM services. The approach includes an implementation and evaluation, indicating a usable system, but the work is still research‑grade with limited real‑world deployment evidence. Commercial use would require integration and testing in existing workflows, which could be done within a few months but is not immediately ready as a product."
-      data-score="35"
-      data-url="https://arxiv.org/abs/2611.24362v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">low</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:33;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 25 of 75"><span>25</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.24733v1" target="_blank" rel="noopener noreferrer">Mechanistic Critics for Sample-Efficient NPU Design-Space Exploration</a></h2>
-  <div class="card-meta"><span>Yicheng He, Yuqi Xue, Tianyang Wu, Jian Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">18 Nov 2026</span></span></div>
-  <p class="card-summary">CriticNPU is a tool that speeds up designing neural processing units (NPUs) for large‑language‑model inference by using a fast, physics‑based model to guess whether a new hardware setup will be faster before running a slow simulator. It filters out poor candidates early and then refines the design using real simulation data, cutting the number of expensive simulations in half while matching or beating the best latency in most test cases. This directly helps IT engineers who design or optimise custom AI chips or select cloud AI services, giving a faster way to pick the right hardware configuration for specific workloads.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage NPU or AI workload optimisation, here is what to do: 1) Run CriticNPU’s Roofline model with your target architecture parameters to get quick pre‑simulation estimates of compute and memory bottlenecks. 2) Filter out designs that the critic flags as unlikely to beat your current best. 3) Simulate only the promising candidates and let CriticNPU’s post‑simulation analysis suggest the next parameter tweaks to hit the lowest latency for prefill and decode stages.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper presents a specialized tool for exploring NPU configurations for LLM inference. While it offers sample-efficient design-space exploration and provides code, its relevance to everyday IT infrastructure tasks—such as managing Microsoft 365, AWS, Azure, SSO, or endpoint security—is limited. The tool could be useful for organizations investing heavily in custom AI accelerators, but most IT engineers in the target audience are unlikely to deploy or benefit from it within a short timeframe.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    <a href="breakdowns/mechanistic-critics-for-sample-efficient-npu-design-space-exploration.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Mechanistic Critics for Sample-Efficient NPU Design-Space Exploration"
-      data-summary="CriticNPU is a tool that speeds up designing neural processing units (NPUs) for large‑language‑model inference by using a fast, physics‑based model to guess whether a new hardware setup will be faster before running a slow simulator. It filters out poor candidates early and then refines the design using real simulation data, cutting the number of expensive simulations in half while matching or beating the best latency in most test cases. This directly helps IT engineers who design or optimise custom AI chips or select cloud AI services, giving a faster way to pick the right hardware configuration for specific workloads."
-      data-it="If you manage NPU or AI workload optimisation, here is what to do: 1) Run CriticNPU’s Roofline model with your target architecture parameters to get quick pre‑simulation estimates of compute and memory bottlenecks. 2) Filter out designs that the critic flags as unlikely to beat your current best. 3) Simulate only the promising candidates and let CriticNPU’s post‑simulation analysis suggest the next parameter tweaks to hit the lowest latency for prefill and decode stages."
-      data-monetisation=""
-      data-reasoning="The paper presents a specialized tool for exploring NPU configurations for LLM inference. While it offers sample-efficient design-space exploration and provides code, its relevance to everyday IT infrastructure tasks—such as managing Microsoft 365, AWS, Azure, SSO, or endpoint security—is limited. The tool could be useful for organizations investing heavily in custom AI accelerators, but most IT engineers in the target audience are unlikely to deploy or benefit from it within a short timeframe."
-      data-score="25"
-      data-url="https://arxiv.org/abs/2611.24733v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.26435v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
-    
-    <section class="signal">
-        <h2 class="signal-title">Today's signal</h2>
-        <p>Y2K‑style outages, rogue AI agents, and a Russian spy on Silicon Valley tech—IT consultants, you’ll need to brace for tomorrow’s security nightmare.</p>
-    </section>
     
     <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
@@ -764,6 +789,26 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">9/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/19/apple-may-be-developing-its-own-ai-agent-that-runs-your-mac/" target="_blank" rel="noopener noreferrer">Apple may be developing its own AI agent that runs your Mac</a></h2>
+  <p class="card-summary">Apple is reportedly developing an AI agent that can autonomously use macOS apps, browse the web, and execute code, signaling a shift toward integrated computer assistants on Mac devices. The company is also tightening controls to prevent third‑party agents from gaining full system access, a move that will affect macOS security policies and endpoint management.</p>
+  <p class="insight"><strong>How to use:</strong> Go to your MDM and endpoint security dashboards this week to review the upcoming macOS 27.3 control changes—especially the new warning prompts for granting full agent access. Failing to update your policies could expose Macs to unverified AI agents that might bypass existing security layers, while early adoption of the controls will keep your environment compliant with Apple’s stricter access model.</p>
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">OpenAI</span>
       <span class="tag-pill">Security</span>
@@ -780,7 +825,7 @@ S2: Failing to consider this framework could mean missing an opportunity to auto
 S3: Your JumpCloud or Freshservice tooling could integrate with this isolated environment to streamline ticket creation and user access during investigations.</p>
   <div class="card-footer">
     <span class="pub-date">19 Nov 2026</span>
-    
+    <a href="breakdowns/deploying-daybreak-red.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -801,6 +846,66 @@ S3: Your JumpCloud or Freshservice tooling could integrate with this isolated en
   <div class="card-footer">
     <span class="pub-date">19 Nov 2026</span>
     <a href="breakdowns/man-hired-by-russia-spied-on-silicon-valley-tech-and-defense-company-feds-say.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/harness-adapters-at-scale" target="_blank" rel="noopener noreferrer">Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost</a></h2>
+  <p class="card-summary">Hugging Face releases harness adapters that let users fine‑tune large language models with reinforcement learning inside specific agent harnesses, boosting performance and cutting token usage. The adapters are available as reusable LoRA models and can be deployed via the Hugging Face Hub and Docker images for Pi, OpenCode, and Hermes Agent harnesses.</p>
+  <p class="insight"><strong>How to use:</strong> Review the Hugging Face adapter repository to determine if your internal AI tools (e.g., custom code‑analysis bots or data‑analysis pipelines) could benefit from a lightweight LoRA fine‑tuning that reduces token consumption. If you already use a Hugging Face model in any of your CI/CD or monitoring workflows, test the super‑adapter on a small sample task this week to benchmark efficiency gains.</p>
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    <a href="breakdowns/introducing-harness-adapters-adapt-your-favorite-model-to-your-harness-to-improv.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://architectlabs.com/blog/frostbite" target="_blank" rel="noopener noreferrer">Frostbite: A new CPU architecture discovered, designed and verified by AI</a></h2>
+  <p class="card-summary">Redwood AI unveiled Frostbite, a fully AI-designed general‑purpose CPU that promises a 4.59x performance‑per‑watt boost over current silicon cores. The architecture leverages interaction nets to achieve unprecedented efficiency through local, dependency‑explicit computation.</p>
+  <p class="insight"><strong>How to use:</strong> Review the Frostbite whitepaper and benchmark results to assess potential impact on future data‑center hardware procurement. Consider engaging with Redwood AI or similar research partners to explore whether AI‑co‑designed CPUs could reduce power or cooling costs for your cloud workloads. Keep an eye on any commercial availability timelines, as a shift in CPU design may affect vendor lock‑in and the relevance of existing hardware optimization scripts.</p>
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    <a href="breakdowns/frostbite-a-new-cpu-architecture-discovered-designed-and-verified-by-ai.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Anthropic</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.anthropic.com/news/ipo-close" target="_blank" rel="noopener noreferrer">Anthropic announces closing of initial public offering, including full exercise of underwriters’ option to purchase additional shares, and closing of concurrent private placement</a></h2>
+  <p class="card-summary">Anthropic has completed a $119.5 billion IPO, listing its Class A shares under ANT on Nasdaq. The deal also included a private placement to major tech firms, marking a significant capital raise for the AI company.</p>
+  <p class="insight"><strong>How to use:</strong> No immediate action required for your IT stack; monitor the company&#x27;s future product releases or partnerships that might influence AI tooling.</p>
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    <a href="breakdowns/anthropic-announces-closing-of-initial-public-offering-including-full-exercise-o.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -847,6 +952,46 @@ S3: Your JumpCloud or Freshservice tooling could integrate with this isolated en
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/muse-is-unleashing-a-world-of-pettiness-on-instagram/" target="_blank" rel="noopener noreferrer">Muse Is Unleashing a World of Pettiness on Instagram</a></h2>
+  <p class="card-summary">Meta’s AI assistant Muse now enables users to mass‑unfollow non‑reciprocal Instagram accounts with a single prompt, streamlining social media clean‑ups. The feature has sparked widespread use on Instagram, X, and Facebook, raising questions about automated social decisions.</p>
+  <p class="insight"><strong>How to use:</strong> Check your organization’s social media policy to ensure compliance with platform terms of service—especially regarding automated actions that could trigger account restrictions. Consider monitoring employee use of third‑party AI tools that interact with social media APIs to mitigate potential policy violations.</p>
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    <a href="breakdowns/muse-is-unleashing-a-world-of-pettiness-on-instagram.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/henrijs-dandzbergs-polemos-missiles-ai-warfare/" target="_blank" rel="noopener noreferrer">This 16-Year-Old Founded an AI Missile Startup. He’s Targeting ‘Cost per Kill’</a></h2>
+  <p class="card-summary">A 16‑year‑old founder, Henrijs Dandzbergs, has launched Polemos Industries, a Y Combinator‑backed startup aiming to create low‑cost, AI‑guided missiles that can be manufactured cheaply and resist jamming. The venture focuses on precision‑guided weaponry, targeting a reduction in the &quot;cost per kill&quot; through autonomous targeting.</p>
+  <p class="insight"><strong>How to use:</strong> None relevant to your IT infrastructure or workflow.</p>
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    <a href="breakdowns/this-16-year-old-founded-an-ai-missile-startup-hes-targeting-cost-per-kill.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
       <span class="source-name">TechCrunch</span>
       <span class="tag-pill">Product Launch</span>
     </div>
@@ -860,7 +1005,7 @@ S3: Your JumpCloud or Freshservice tooling could integrate with this isolated en
   <p class="insight"><strong>How to use:</strong> None relevant.</p>
   <div class="card-footer">
     <span class="pub-date">19 Nov 2026</span>
-    
+    <a href="breakdowns/metas-new-muse-charm-device-may-cost-300.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -882,14 +1027,74 @@ S3: Your JumpCloud or Freshservice tooling could integrate with this isolated en
     <span class="pub-date">19 Nov 2026</span>
     <a href="breakdowns/pancreatic-cancer-halted-by-virus-injection-in-three-patients.html" class="breakdown-link">IT Breakdown</a>
   </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://alpo.ge/remark.pdf" target="_blank" rel="noopener noreferrer">Anthropic employee claims general proof of the Riemann Hypothesis [pdf]</a></h2>
+  <p class="card-summary">An Anthropic employee has released a paper claiming a general proof of the Riemann Hypothesis, sparking debate on Hacker News.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    <a href="breakdowns/anthropic-employee-claims-general-proof-of-the-riemann-hypothesis-pdf.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">0/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://kottke.org/17/06/if-you-cant-explain-something-in-simple-terms-you-dont-understand-it" target="_blank" rel="noopener noreferrer">If you can&#x27;t explain something in simple terms, you don&#x27;t understand it (2017)</a></h2>
+  <p class="card-summary">This article reflects on Richard Feynman&#x27;s teaching philosophy, emphasizing the importance of being able to explain complex concepts simply as proof of understanding.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">20 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">0/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/business/learn/daybreak-blue-onboarding-demo" target="_blank" rel="noopener noreferrer">Get started with Daybreak Blue</a></h2>
+  <p class="card-summary">OpenAI has introduced Daybreak Blue, a new AI product, and released a walkthrough video to guide users through its onboarding process.</p>
+  <p class="insight"><strong>How to use:</strong> None – the product offers no direct impact on the IT engineer’s current toolset such as Google Workspace, JumpCloud, or MDM solutions.</p>
+  <div class="card-footer">
+    <span class="pub-date">19 Nov 2026</span>
+    
+  </div>
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-20</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24891v1" target="_blank" rel="noopener noreferrer">Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity</a><a class="archive-title" href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a><a class="archive-title" href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a></div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.26553v1" target="_blank" rel="noopener noreferrer">Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)</a><a class="archive-title" href="https://arxiv.org/abs/2611.26363v1" target="_blank" rel="noopener noreferrer">HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs</a><a class="archive-title" href="https://arxiv.org/abs/2611.25905v1" target="_blank" rel="noopener noreferrer">Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-19</div>
@@ -1041,7 +1246,7 @@ S3: Your JumpCloud or Freshservice tooling could integrate with this isolated en
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-20</div>
-  <div class="archive-count">7 items</div>
+  <div class="archive-count">16 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/19/these-tech-outages-are-giving-y2k-ai-agent-style/" target="_blank" rel="noopener noreferrer">These tech outages are giving Y2K, AI agent style</a><a class="archive-title" href="https://openai.com/business/learn/deploying-daybreak-red" target="_blank" rel="noopener noreferrer">Deploying Daybreak Red</a><a class="archive-title" href="https://arstechnica.com/security/2026/11/man-charged-with-spying-on-silicon-valley-tech-and-defense-company-for-russia/" target="_blank" rel="noopener noreferrer">Man hired by Russia spied on Silicon Valley tech and defense company, feds say</a></div>
 </div>
 <div class="archive-row">

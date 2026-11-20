@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes</h1>
+  <p class="meta-line">Mekhala Hithyshini Sreenivasa · Academic Institution · 2026-11-19 · Generated 20 Nov 2026, 15:15</p>
+  <a href="https://arxiv.org/abs/2611.26480v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study by Mekhala Hithyshini Sreenivasa investigates the resource consumption patterns of large language model (LLM) agents deployed on serverless and agent runtimes, specifically Amazon Bedrock AgentCore. The authors built a simulation that mimics real-world usage of LLM agents, where each user conversation is mapped to a distinct virtual environment (VE). They measured the number of VEs that remain active while the agent is idle, waiting for model inference or user input. The key finding is that each conversation reserves a full VE for the entire duration of the session, even when the agent is not actively processing. In a benchmark with 1,000 concurrent chats, the system reserved 1,000 VEs, exhausting the pool of available environments and forcing new sessions to wait or fail. This behavior leads to significant resource waste, higher costs, and reduced scalability. The authors recommend two mitigations: (1) closing or recycling VEs immediately after a conversation ends, and (2) allowing multiple concurrent conversations to share a single VE, thereby reducing the number of active environments. For enterprise IT, this study highlights a hidden cost vector in LLM agent deployments that can erode the expected elasticity of serverless platforms. It also underscores the need for fine-grained resource management policies and monitoring. Real-world implications include higher cloud spend, potential SLA violations due to environment exhaustion, and a need to redesign agent lifecycle management. Enterprises that rely on LLM agents for customer support, internal tooling, or automation should audit their current agent runtime configurations, implement environment recycling, and consider multi-session sharing to achieve cost savings and improved scalability.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM agent deployments across serverless platforms (AWS Lambda, Bedrock AgentCore, Azure Functions, GCP Cloud Functions).</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure average session duration, idle time, and number of active VEs per session using CloudWatch or equivalent logs.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify the maximum concurrent sessions supported before environment exhaustion occurs.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Assess cost per VE per hour and compare against actual usage patterns.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">5 Verify compliance with UK GDPR: ensure that session data is not retained longer than necessary and that environment cleanup aligns with data minimization principles.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a business case showing cost savings from VE recycling: e.g., if average idle time is 30 minutes and each VE costs $0.05/hr, 1,000 sessions could save $1,500/month.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Benchmark a pilot where multiple conversations share a VE: record throughput, latency, and cost per request.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Present metrics: VE utilization %, cost per session, average idle time, and projected savings.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">Align with enterprise cost optimization goals and cloud cost governance frameworks.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- AWS Lambda with custom runtime hooks for environment teardown.
+   - Bedrock AgentCore configuration for session pooling.
+   - Terraform or AWS CloudFormation for declarative lifecycle management.
+   - Datadog or New Relic for real-time VE utilization monitoring.
+   - AWS Cost Explorer for detailed cost attribution per VE.
+   - Azure Durable Functions for session orchestration (if using Azure).</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: premature environment teardown may interrupt in-flight requests; ensure graceful shutdown logic.
+   - Compliance: improper data retention in VEs could violate UK GDPR; implement data purge on teardown.
+   - Operational: increased complexity in session routing may lead to higher latency; monitor for SLA impact.
+   - Vendor lock‑in: custom lifecycle logic may tie you to a specific cloud provider’s tooling.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Add a Lambda layer that triggers a cleanup script at the end of each session.
+   - Configure CloudWatch alarms to alert when VE count exceeds a threshold.
+   - Run a 2‑week pilot with 10% of traffic to validate the cleanup logic and measure cost impact.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Design a multi‑session VE sharing architecture: implement a session queue that assigns idle VEs to new conversations.
+   - Integrate with an orchestrator (e.g., AWS Step Functions) to manage session lifecycle and resource allocation.
+   - Conduct a 6‑month cost‑benefit analysis, iterating on VE sizing and pooling strategies.
+   - Expand to other cloud providers, ensuring cross‑platform consistency and compliance alignment.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 20 Nov 2026, 15:15</p>
+</main>
+</body>
+</html>
