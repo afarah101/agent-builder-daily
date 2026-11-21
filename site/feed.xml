@@ -5,61 +5,61 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sat, 21 Nov 2026 14:32:24 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Nov 2026 16:35:18 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)</title>
-    <link>https://arxiv.org/abs/2611.26553v1</link>
-    <guid>https://arxiv.org/abs/2611.26553v1</guid>
+    <title>Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes</title>
+    <link>https://arxiv.org/abs/2611.26480v1</link>
+    <guid>https://arxiv.org/abs/2611.26480v1</guid>
     <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>ROGUE‑AI builds a test framework that re‑creates real incidents involving LLM agents, such as accidental file deletion or payment fraud, and shows that the agents reproduce the harm 89% of the time. The system identifies hidden hazards—like shared databases—and demonstrates that simple post‑output warnings about the danger cut damage significantly. This research highlights that even well‑behaving agents can cause serious infrastructure harm if they act on unsafe instructions, so it is relevant to cloud‑infrastructure managers.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that uses LLM‑based agents, step 1: replicate any past incidents with ROGUE‑AI or a similar tool to see if your agents can reproduce the harm. Step 2: identify shared resources (e.g., databases, file shares) that the agents might access. Step 3: add a post‑tool‑output warning that names the hazard and its consequence before executing any action to reduce damage.</p>]]></description>
+    <description><![CDATA[<p>The study shows that LLM agents on serverless runtimes keep an entire virtual environment reserved for each conversation, even while waiting for model responses, causing resource waste. The authors built a simulation and benchmarks on Amazon Bedrock AgentCore, revealing that 1,000 concurrent chats reserve 1,000 environments, leading to early exhaustion of available environments. They suggest that closing environments promptly and allowing multiple conversations per environment can dramatically improve efficiency.</p><p><strong>IT Breakdown:</strong> If you manage a serverless LLM agent platform, first ensure your clients close environments immediately after a conversation ends. Second, modify your runtime to allow a single environment to handle multiple parallel conversations, reducing the number of reserved environments by an order of magnitude. This will free up capacity and lower operational costs.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs</title>
-    <link>https://arxiv.org/abs/2611.26363v1</link>
-    <guid>https://arxiv.org/abs/2611.26363v1</guid>
+    <title>Aggron: Aggressive Compression of Agentic KV Caches during Head-of-Line Stalls in the Request Queue</title>
+    <link>https://arxiv.org/abs/2611.26435v1</link>
+    <guid>https://arxiv.org/abs/2611.26435v1</guid>
     <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>HiSA removes part of the dot product in the feature dimension of RoPE attention, keeping only about a third of the calculations while matching or improving model performance. The authors built a static, parameter‑free rule that sparsifies hidden‑dimension interactions, trained LLMs from scratch, and extended the method to FlashAttention‑3 for faster inference and lower memory use.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Monitor memory usage of your LLM inference services; 2) Evaluate adopting HiSA to cut per‑token attention cost by ~66%, reducing GPU memory footprint and speeding up response times; 3) Test the HiSA implementation with FlashAttention‑3 in your deployment pipeline to confirm performance gains.</p>]]></description>
+    <description><![CDATA[<p>Aggron tackles the problem of limited KV cache capacity for large language model agents by compressing the cache aggressively and selectively during head‑of‑line stalls. It builds a new serving system that queues summarisation tasks separately, using idle compute from stalled requests, and predicts when summarisation can finish before the main request resumes. The result is a 27‑31% drop in 99th‑percentile latency and a 34‑40% boost in throughput at high load.</p><p><strong>IT Breakdown:</strong> If you manage LLM agent infrastructure, here is what to do: 1) add a summarisation queue that runs on idle compute from stalled requests; 2) implement selective compression of KV cache sections; 3) predict summarisation completion before the main request resumes and only trigger summarisation then.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>How Much Should an Agent Remember? Deployment Lessons from Self-Distilled Memory for LLM Agents</title>
-    <link>https://arxiv.org/abs/2611.26361v1</link>
-    <guid>https://arxiv.org/abs/2611.26361v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research tackles how much memory an LLM agent should use for long‑horizon tasks by letting the agent learn from its own past actions. They built a pipeline that mines short lessons from each run, consolidates them into guidelines, and supplies these to the agent at inference, improving task completion by up to 16 points in strong models and 5 points in weaker ones. This is relevant for managing LLM‑based services that rely on agent memory optimisation.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑based agents, step 1: enable a self‑distilled memory pipeline that extracts lessons per episode; step 2: consolidate lessons into guidelines, tracking merge counts; step 3: test full guideline sets versus a selected subset and monitor task completion—strong models benefit from many guidelines, weaker models from a curated subset.</p>]]></description>
+    <title>ARISE: Practical Self-Evolving Memory for Accurate and Cost-Efficient Enterprise Agents</title>
+    <link>https://arxiv.org/abs/2611.23588v1</link>
+    <guid>https://arxiv.org/abs/2611.23588v1</guid>
+    <pubDate>Tue, 17 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>ARISE solves the problem of keeping enterprise LLM agents accurate while their environment changes, by letting the agent learn from its own failures without retraining the model. It builds a self‑evolving memory system that stores micro‑memories, consolidates them into macro rules, and only adopts changes that improve held‑out accuracy. The result is a 10‑plus‑point accuracy gain over baseline and a 4‑point improvement over GEPA across 14 enterprise domains, while cutting model calls by 4% and tokens by 5%.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads</title>
-    <link>https://arxiv.org/abs/2611.25905v1</link>
-    <guid>https://arxiv.org/abs/2611.25905v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research tackles the problem of reliably validating and scaling large language model (LLM) deployments for agentic workloads. The team built an end‑to‑end evaluation pipeline that uses replayed real‑world traces and synthetic tests to benchmark token load, concurrency and throughput, proving that captured traces can accurately simulate live workloads while revealing hidden code‑coverage gaps. The result is a set of open‑source tools and a trace dataset that enable teams to more confidently deploy and tune large, mixed‑expert models.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference infrastructure, use the pipeline: 1) capture real user sessions as traces; 2) replay those traces to generate per‑session token loads that stay within 1.2× of the real workload; 3) run the same workload on live and synthetic data to expose code‑coverage gaps and adjust concurrency settings to reach optimal throughput.</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>SoK: Assessing the Evolution of LLM Capability in Software Vulnerability Research</title>
-    <link>https://arxiv.org/abs/2611.26601v1</link>
-    <guid>https://arxiv.org/abs/2611.26601v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Large language model (LLM) agents can now find, confirm and fix software bugs without human help, and open‑weight models have reached similar levels of autonomy. The study built a framework that rates LLMs on an automation scale and used it to analyse 2026 vulnerability data, showing a doubling of disclosed bugs, many now critical. This shows that LLMs are already changing how vulnerabilities are discovered and patched, impacting IT infrastructure security practices.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, use the automation‑level framework: 1) assess your current security tooling against the reported LLM capabilities; 2) monitor vulnerability disclosures for LLM‑identified bugs; 3) update patch management to include rapid response to LLM‑patched vulnerabilities. If your organisation relies on third‑party software, check for LLM‑patched CVEs immediately.</p>]]></description>
+    <title>Clover-35B-A3B-Preview Technical Report</title>
+    <link>https://arxiv.org/abs/2611.24636v1</link>
+    <guid>https://arxiv.org/abs/2611.24636v1</guid>
+    <pubDate>Wed, 18 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Clover is a 35‑billion‑parameter diffusion LLM that uses a mixture‑of‑experts design to activate only 3 billion parameters at a time, giving it fast inference (≈680 t/s on a single GPU). It combines historical memory and current‑block attention to improve reasoning tasks, topping benchmarks like SWE‑bench and Terminal‑Bench. The key benefit is high quality, low‑latency generation with reduced GPU usage, but it is a research model, not a ready‑for‑production solution.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] The Outages Are Just Getting Started</title>
     <link>https://www.wired.com/story/brace-yourself-for-years-of-outage-chaos/</link>
     <guid>https://www.wired.com/story/brace-yourself-for-years-of-outage-chaos/</guid>
-    <pubDate>Sat, 21 Nov 2026 14:32:24 +0000</pubDate>
+    <pubDate>Sat, 21 Nov 2026 16:35:18 +0000</pubDate>
     <description><![CDATA[<p>Recent high-profile outages at Microsoft 365, Apple, and the NSA highlight how AI‑accelerated vulnerability discovery is stressing patch management workflows. The incidents underscore the need for IT teams to streamline and automate patch deployment to keep pace with rapid exploitation.</p>]]></description>
+    <category>Industry News</category>
+  </item>
+  <item>
+    <title>[News] Google Built a Giant ‘Mirror Dimension’ Internet to Test Its Chrome AI Agents</title>
+    <link>https://www.wired.com/story/google-built-a-giant-mirror-dimension-internet-to-test-its-chrome-ai-agents/</link>
+    <guid>https://www.wired.com/story/google-built-a-giant-mirror-dimension-internet-to-test-its-chrome-ai-agents/</guid>
+    <pubDate>Sat, 21 Nov 2026 16:35:18 +0000</pubDate>
+    <description><![CDATA[<p>Google Chrome has launched a fully controlled ‘Mirror Dimension’—an alternate‑universe internet—to train its Gemini‑powered browsing agents safely. The environment replicates real websites, including social media, shopping, and banking, and subjects agents to hidden prompt‑injection and other resilience tests.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] RCE in Gnupg</title>
     <link>https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html</link>
     <guid>https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html</guid>
-    <pubDate>Sat, 21 Nov 2026 14:32:24 +0000</pubDate>
+    <pubDate>Sat, 21 Nov 2026 16:35:18 +0000</pubDate>
     <description><![CDATA[<p>A critical remote code execution vulnerability (CVE-2026-129975) has been discovered in GPGME, the library used by GnuPG and related tools. A patch is released in version 2.3.1, and immediate update is strongly advised.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -67,7 +67,7 @@
     <title>[News] What’s With All These Outages?</title>
     <link>https://www.wired.com/story/uncanny-valley-podcast-whats-with-all-these-outages/</link>
     <guid>https://www.wired.com/story/uncanny-valley-podcast-whats-with-all-these-outages/</guid>
-    <pubDate>Sat, 21 Nov 2026 14:32:24 +0000</pubDate>
+    <pubDate>Sat, 21 Nov 2026 16:35:18 +0000</pubDate>
     <description><![CDATA[<p>Microsoft, FAA, Chase, United, NSA, and Apple all experienced outages this week, raising concerns about potential cyberattacks versus system failures. The discussion also touched on Anthropic’s IPO, Nvidia’s earnings, and new US AI chip regulations.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -75,17 +75,9 @@
     <title>[News] Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup</title>
     <link>https://huggingface.co/blog/inkling2mini</link>
     <guid>https://huggingface.co/blog/inkling2mini</guid>
-    <pubDate>Sat, 21 Nov 2026 14:32:24 +0000</pubDate>
+    <pubDate>Sat, 21 Nov 2026 16:35:18 +0000</pubDate>
     <description><![CDATA[<p>Hugging Face releases Inkling 2 Mini, a 26B parameter multimodal mixture-of-experts model optimized for local deployment with 1M-token context and image/text inputs. The model uses looped layers to boost effective depth while keeping memory footprint low, making it a candidate for on-prem AI workloads.
 </p>]]></description>
-    <category>Industry News</category>
-  </item>
-  <item>
-    <title>[News] ClawDOS – An AI coding agent for DOS</title>
-    <link>http://ricapar.net/ClawDOS/</link>
-    <guid>http://ricapar.net/ClawDOS/</guid>
-    <pubDate>Sat, 21 Nov 2026 14:32:24 +0000</pubDate>
-    <description><![CDATA[<p>ClawDOS is an AI coding agent that runs on vintage IBM PC hardware, leveraging the Claude API to generate, compile, and execute code within the constraints of a 4.77 MHz 8088 processor and DOS. The project demonstrates pushing modern AI capabilities onto obsolete hardware for experimental and nostalgic purposes.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
