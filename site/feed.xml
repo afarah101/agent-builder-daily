@@ -5,78 +5,78 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sat, 21 Nov 2026 23:02:49 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 22 Nov 2026 14:25:26 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)</title>
-    <link>https://arxiv.org/abs/2611.26553v1</link>
-    <guid>https://arxiv.org/abs/2611.26553v1</guid>
+    <title>Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes</title>
+    <link>https://arxiv.org/abs/2611.26480v1</link>
+    <guid>https://arxiv.org/abs/2611.26480v1</guid>
     <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>ROGUE‑AI builds a test framework that re‑creates real incidents involving LLM agents, such as accidental file deletion or payment fraud, and shows that the agents reproduce the harm 89% of the time. The system identifies hidden hazards—like shared databases—and demonstrates that simple post‑output warnings about the danger cut damage significantly. This research highlights that even well‑behaving agents can cause serious infrastructure harm if they act on unsafe instructions, so it is relevant to cloud‑infrastructure managers.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that uses LLM‑based agents, step 1: replicate any past incidents with ROGUE‑AI or a similar tool to see if your agents can reproduce the harm. Step 2: identify shared resources (e.g., databases, file shares) that the agents might access. Step 3: add a post‑tool‑output warning that names the hazard and its consequence before executing any action to reduce damage.</p>]]></description>
+    <description><![CDATA[<p>The study shows that LLM agents on serverless runtimes keep an entire virtual environment reserved for each conversation, even while waiting for model responses, causing resource waste. The authors built a simulation and benchmarks on Amazon Bedrock AgentCore, revealing that 1,000 concurrent chats reserve 1,000 environments, leading to early exhaustion of available environments. They suggest that closing environments promptly and allowing multiple conversations per environment can dramatically improve efficiency.</p><p><strong>IT Breakdown:</strong> If you manage a serverless LLM agent platform, first ensure your clients close environments immediately after a conversation ends. Second, modify your runtime to allow a single environment to handle multiple parallel conversations, reducing the number of reserved environments by an order of magnitude. This will free up capacity and lower operational costs.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs</title>
-    <link>https://arxiv.org/abs/2611.26363v1</link>
-    <guid>https://arxiv.org/abs/2611.26363v1</guid>
+    <title>Aggron: Aggressive Compression of Agentic KV Caches during Head-of-Line Stalls in the Request Queue</title>
+    <link>https://arxiv.org/abs/2611.26435v1</link>
+    <guid>https://arxiv.org/abs/2611.26435v1</guid>
     <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>HiSA removes part of the dot product in the feature dimension of RoPE attention, keeping only about a third of the calculations while matching or improving model performance. The authors built a static, parameter‑free rule that sparsifies hidden‑dimension interactions, trained LLMs from scratch, and extended the method to FlashAttention‑3 for faster inference and lower memory use.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, here is what to do: 1) Monitor memory usage of your LLM inference services; 2) Evaluate adopting HiSA to cut per‑token attention cost by ~66%, reducing GPU memory footprint and speeding up response times; 3) Test the HiSA implementation with FlashAttention‑3 in your deployment pipeline to confirm performance gains.</p>]]></description>
+    <description><![CDATA[<p>Aggron tackles the problem of limited KV cache capacity for large language model agents by compressing the cache aggressively and selectively during head‑of‑line stalls. It builds a new serving system that queues summarisation tasks separately, using idle compute from stalled requests, and predicts when summarisation can finish before the main request resumes. The result is a 27‑31% drop in 99th‑percentile latency and a 34‑40% boost in throughput at high load.</p><p><strong>IT Breakdown:</strong> If you manage LLM agent infrastructure, here is what to do: 1) add a summarisation queue that runs on idle compute from stalled requests; 2) implement selective compression of KV cache sections; 3) predict summarisation completion before the main request resumes and only trigger summarisation then.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads</title>
-    <link>https://arxiv.org/abs/2611.25905v1</link>
-    <guid>https://arxiv.org/abs/2611.25905v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The research tackles the problem of reliably validating and scaling large language model (LLM) deployments for agentic workloads. The team built an end‑to‑end evaluation pipeline that uses replayed real‑world traces and synthetic tests to benchmark token load, concurrency and throughput, proving that captured traces can accurately simulate live workloads while revealing hidden code‑coverage gaps. The result is a set of open‑source tools and a trace dataset that enable teams to more confidently deploy and tune large, mixed‑expert models.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference infrastructure, use the pipeline: 1) capture real user sessions as traces; 2) replay those traces to generate per‑session token loads that stay within 1.2× of the real workload; 3) run the same workload on live and synthetic data to expose code‑coverage gaps and adjust concurrency settings to reach optimal throughput.</p>]]></description>
+    <title>ARISE: Practical Self-Evolving Memory for Accurate and Cost-Efficient Enterprise Agents</title>
+    <link>https://arxiv.org/abs/2611.23588v1</link>
+    <guid>https://arxiv.org/abs/2611.23588v1</guid>
+    <pubDate>Tue, 17 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>ARISE solves the problem of keeping enterprise LLM agents accurate while their environment changes, by letting the agent learn from its own failures without retraining the model. It builds a self‑evolving memory system that stores micro‑memories, consolidates them into macro rules, and only adopts changes that improve held‑out accuracy. The result is a 10‑plus‑point accuracy gain over baseline and a 4‑point improvement over GEPA across 14 enterprise domains, while cutting model calls by 4% and tokens by 5%.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>SoK: Assessing the Evolution of LLM Capability in Software Vulnerability Research</title>
-    <link>https://arxiv.org/abs/2611.26601v1</link>
-    <guid>https://arxiv.org/abs/2611.26601v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Large language model (LLM) agents can now find, confirm and fix software bugs without human help, and open‑weight models have reached similar levels of autonomy. The study built a framework that rates LLMs on an automation scale and used it to analyse 2026 vulnerability data, showing a doubling of disclosed bugs, many now critical. This shows that LLMs are already changing how vulnerabilities are discovered and patched, impacting IT infrastructure security practices.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure, use the automation‑level framework: 1) assess your current security tooling against the reported LLM capabilities; 2) monitor vulnerability disclosures for LLM‑identified bugs; 3) update patch management to include rapid response to LLM‑patched vulnerabilities. If your organisation relies on third‑party software, check for LLM‑patched CVEs immediately.</p>]]></description>
+    <title>Clover-35B-A3B-Preview Technical Report</title>
+    <link>https://arxiv.org/abs/2611.24636v1</link>
+    <guid>https://arxiv.org/abs/2611.24636v1</guid>
+    <pubDate>Wed, 18 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Clover is a 35‑billion‑parameter diffusion LLM that uses a mixture‑of‑experts design to activate only 3 billion parameters at a time, giving it fast inference (≈680 t/s on a single GPU). It combines historical memory and current‑block attention to improve reasoning tasks, topping benchmarks like SWE‑bench and Terminal‑Bench. The key benefit is high quality, low‑latency generation with reduced GPU usage, but it is a research model, not a ready‑for‑production solution.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] The Outages Are Just Getting Started</title>
-    <link>https://www.wired.com/story/brace-yourself-for-years-of-outage-chaos/</link>
-    <guid>https://www.wired.com/story/brace-yourself-for-years-of-outage-chaos/</guid>
-    <pubDate>Sat, 21 Nov 2026 23:02:49 +0000</pubDate>
-    <description><![CDATA[<p>Recent high-profile outages at Microsoft 365, Apple, and the NSA highlight how AI‑accelerated vulnerability discovery is stressing patch management workflows. The incidents underscore the need for IT teams to streamline and automate patch deployment to keep pace with rapid exploitation.</p>]]></description>
+    <title>[News] Banks Have Had It Up to Here With Your AI Agent</title>
+    <link>https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/</link>
+    <guid>https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/</guid>
+    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
+    <description><![CDATA[<p>Wells Fargo is tightening its terms to flag the use of AI agents that act on customers&#x27; behalf, warning that such use is at the customers&#x27; own risk. The move echoes similar restrictions from JPMorgan, Bank of America, and others, as banks clamp down on third‑party automation that can expose sensitive data or facilitate unauthorized transactions.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Google Built a Giant ‘Mirror Dimension’ Internet to Test Its Chrome AI Agents</title>
-    <link>https://www.wired.com/story/google-built-a-giant-mirror-dimension-internet-to-test-its-chrome-ai-agents/</link>
-    <guid>https://www.wired.com/story/google-built-a-giant-mirror-dimension-internet-to-test-its-chrome-ai-agents/</guid>
-    <pubDate>Sat, 21 Nov 2026 23:02:49 +0000</pubDate>
-    <description><![CDATA[<p>Google Chrome has launched a fully controlled ‘Mirror Dimension’—an alternate‑universe internet—to train its Gemini‑powered browsing agents safely. The environment replicates real websites, including social media, shopping, and banking, and subjects agents to hidden prompt‑injection and other resilience tests.</p>]]></description>
+    <title>[News] Even the fastest AI clusters can be held back by their release pipelines</title>
+    <link>https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines</link>
+    <guid>https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines</guid>
+    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
+    <description><![CDATA[<p>VentureBeat reports that an automated firmware rollout halted itself after six days due to an unsafe unclean reboot rate in one zone, illustrating how even fast AI-enabled cluster updates can be stalled by release‑pipeline safeguards.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] RCE in Gnupg</title>
-    <link>https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html</link>
-    <guid>https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html</guid>
-    <pubDate>Sat, 21 Nov 2026 23:02:49 +0000</pubDate>
-    <description><![CDATA[<p>A critical remote code execution vulnerability (CVE-2026-129975) has been discovered in GPGME, the library used by GnuPG and related tools. A patch is released in version 2.3.1, and immediate update is strongly advised.</p>]]></description>
+    <title>[News] Anthropic’s IPO could deliver $156B to charity</title>
+    <link>https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/</link>
+    <guid>https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/</guid>
+    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
+    <description><![CDATA[<p>Anthropic’s IPO raised $156 billion earmarked for charitable causes, including a Public Benefit Fund and employee match donations. While the move highlights the company’s philanthropic commitments, it has no direct impact on an IT engineer’s daily stack or immediate actions.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI surveillance</title>
-    <link>https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/</link>
-    <guid>https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/</guid>
-    <pubDate>Sat, 21 Nov 2026 23:02:49 +0000</pubDate>
-    <description><![CDATA[<p>Signal has restricted screenshot functionality on Android and iOS to counter the risk of OS‑level AI agents harvesting screen data. The move reflects a growing concern that integrated AI could undermine privacy in secure messaging apps.</p>]]></description>
+    <title>[News] Uber blew through its AI budget, then dialed back context and reasoning in its AI coding tools</title>
+    <link>https://venturebeat.com/infrastructure/uber-blew-through-its-ai-budget-then-dialed-back-context-and-reasoning-in-its-ai-coding-tools</link>
+    <guid>https://venturebeat.com/infrastructure/uber-blew-through-its-ai-budget-then-dialed-back-context-and-reasoning-in-its-ai-coding-tools</guid>
+    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
+    <description><![CDATA[<p>Uber’s internal AI coding tool, Claude Code, now limits automatic token compaction to 400,000 tokens and defaults reasoning to medium, reducing context size for models with larger windows. These changes were made without engineer input, potentially affecting code assistance quality.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] A tale of two Nvidias</title>
-    <link>https://techcrunch.com/2026/11/21/a-tale-of-two-nvidias/</link>
-    <guid>https://techcrunch.com/2026/11/21/a-tale-of-two-nvidias/</guid>
-    <pubDate>Sat, 21 Nov 2026 23:02:49 +0000</pubDate>
-    <description><![CDATA[<p>Nvidia announced it will cease selling H200 AI chips in China amid tightening U.S. export controls, potentially cutting a significant portion of its business tied to Chinese and regional markets. This move reflects broader geopolitical pressure on AI hardware supply chains that could affect cloud and AI services providers worldwide.</p>]]></description>
+    <title>[News] 87% of the Anthropic power will come from gas and 11% from coal in 2028</title>
+    <link>https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/</link>
+    <guid>https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/</guid>
+    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
+    <description><![CDATA[<p>Anthropic’s upcoming data centers will rely almost entirely on fossil fuel power, with 87% gas and 11% coal projected for 2028. The report highlights a significant carbon footprint and a lack of renewable commitments in the U.S. data center portfolio.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
