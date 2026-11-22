@@ -5,45 +5,37 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sun, 22 Nov 2026 14:25:26 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 22 Nov 2026 23:31:15 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes</title>
-    <link>https://arxiv.org/abs/2611.26480v1</link>
-    <guid>https://arxiv.org/abs/2611.26480v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows that LLM agents on serverless runtimes keep an entire virtual environment reserved for each conversation, even while waiting for model responses, causing resource waste. The authors built a simulation and benchmarks on Amazon Bedrock AgentCore, revealing that 1,000 concurrent chats reserve 1,000 environments, leading to early exhaustion of available environments. They suggest that closing environments promptly and allowing multiple conversations per environment can dramatically improve efficiency.</p><p><strong>IT Breakdown:</strong> If you manage a serverless LLM agent platform, first ensure your clients close environments immediately after a conversation ends. Second, modify your runtime to allow a single environment to handle multiple parallel conversations, reducing the number of reserved environments by an order of magnitude. This will free up capacity and lower operational costs.</p>]]></description>
+    <title>Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</title>
+    <link>https://arxiv.org/abs/2608.25793v1</link>
+    <guid>https://arxiv.org/abs/2608.25793v1</guid>
+    <pubDate>Wed, 26 Aug 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>Many enterprise Dockerfiles contain security misconfigurations and outdated practices, with 99% showing at least one flaw. The authors built a six‑step automated pipeline that crawls GitLab, enriches each Dockerfile with security metrics, clusters them by LLM‑derived semantics, and finds internal reference implementations. Using these references can raise the average security score by 60% without writing new templates.</p><p><strong>IT Breakdown:</strong> If you manage Dockerfile repos, run a similar pipeline: 1) crawl your GitLab instance and run static checks (Hadolint, Trivy, ShellCheck) on all Dockerfiles; 2) cluster similar files using an LLM to generate semantic tags and HDBSCAN to group them; 3) for each cluster, identify the highest‑scoring Dockerfile and replace or copy it into your own projects to improve security and consistency.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Aggron: Aggressive Compression of Agentic KV Caches during Head-of-Line Stalls in the Request Queue</title>
-    <link>https://arxiv.org/abs/2611.26435v1</link>
-    <guid>https://arxiv.org/abs/2611.26435v1</guid>
-    <pubDate>Thu, 19 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Aggron tackles the problem of limited KV cache capacity for large language model agents by compressing the cache aggressively and selectively during head‑of‑line stalls. It builds a new serving system that queues summarisation tasks separately, using idle compute from stalled requests, and predicts when summarisation can finish before the main request resumes. The result is a 27‑31% drop in 99th‑percentile latency and a 34‑40% boost in throughput at high load.</p><p><strong>IT Breakdown:</strong> If you manage LLM agent infrastructure, here is what to do: 1) add a summarisation queue that runs on idle compute from stalled requests; 2) implement selective compression of KV cache sections; 3) predict summarisation completion before the main request resumes and only trigger summarisation then.</p>]]></description>
+    <title>BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</title>
+    <link>https://arxiv.org/abs/2609.20886v1</link>
+    <guid>https://arxiv.org/abs/2609.20886v1</guid>
+    <pubDate>Wed, 16 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>BI-Agent uses large language models and specialised data tools to automate the whole business intelligence process – from finding the right tables, transforming data, joining tables, to answering business questions. The authors built a benchmark (BI-Bench) from real dashboards and a tool‑augmented agent that improves accuracy by up to 40% over vanilla LLMs. This research is relevant if you manage BI workloads on cloud platforms, as it shows a way to reduce manual data prep and improve query accuracy.</p><p><strong>IT Breakdown:</strong> If you manage BI dashboards in Power BI or Tableau on the cloud, adopt a tool‑augmented agent approach: 1) integrate an LLM with data‑search, join, and transform tools; 2) train it on your own BI project logs using supervised fine‑tuning or reinforcement learning; 3) deploy the trained agent to automatically process user questions and return answers, cutting manual prep time by up to 40%.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>ARISE: Practical Self-Evolving Memory for Accurate and Cost-Efficient Enterprise Agents</title>
-    <link>https://arxiv.org/abs/2611.23588v1</link>
-    <guid>https://arxiv.org/abs/2611.23588v1</guid>
-    <pubDate>Tue, 17 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>ARISE solves the problem of keeping enterprise LLM agents accurate while their environment changes, by letting the agent learn from its own failures without retraining the model. It builds a self‑evolving memory system that stores micro‑memories, consolidates them into macro rules, and only adopts changes that improve held‑out accuracy. The result is a 10‑plus‑point accuracy gain over baseline and a 4‑point improvement over GEPA across 14 enterprise domains, while cutting model calls by 4% and tokens by 5%.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Clover-35B-A3B-Preview Technical Report</title>
-    <link>https://arxiv.org/abs/2611.24636v1</link>
-    <guid>https://arxiv.org/abs/2611.24636v1</guid>
-    <pubDate>Wed, 18 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Clover is a 35‑billion‑parameter diffusion LLM that uses a mixture‑of‑experts design to activate only 3 billion parameters at a time, giving it fast inference (≈680 t/s on a single GPU). It combines historical memory and current‑block attention to improve reasoning tasks, topping benchmarks like SWE‑bench and Terminal‑Bench. The key benefit is high quality, low‑latency generation with reduced GPU usage, but it is a research model, not a ready‑for‑production solution.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
+    <title>WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</title>
+    <link>https://arxiv.org/abs/2609.12171v1</link>
+    <guid>https://arxiv.org/abs/2609.12171v1</guid>
+    <pubDate>Thu, 10 Sep 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The paper tackles the lack of realistic, complex data for testing enterprise question‑answering systems. It builds an automated pipeline that creates synthetic email conversations, long‑ and short‑form queries, and accurate answers, then evaluates current models, finding performance below 80% and highlighting the need for better systems. The work is not directly relevant to managing cloud infrastructure.</p><p><strong>IT Breakdown:</strong> Not directly applicable to IT infrastructure work</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] Banks Have Had It Up to Here With Your AI Agent</title>
     <link>https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/</link>
     <guid>https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/</guid>
-    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
+    <pubDate>Sun, 22 Nov 2026 23:31:15 +0000</pubDate>
     <description><![CDATA[<p>Wells Fargo is tightening its terms to flag the use of AI agents that act on customers&#x27; behalf, warning that such use is at the customers&#x27; own risk. The move echoes similar restrictions from JPMorgan, Bank of America, and others, as banks clamp down on third‑party automation that can expose sensitive data or facilitate unauthorized transactions.</p>]]></description>
     <category>Industry News</category>
   </item>
@@ -51,32 +43,32 @@
     <title>[News] Even the fastest AI clusters can be held back by their release pipelines</title>
     <link>https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines</link>
     <guid>https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines</guid>
-    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
+    <pubDate>Sun, 22 Nov 2026 23:31:15 +0000</pubDate>
     <description><![CDATA[<p>VentureBeat reports that an automated firmware rollout halted itself after six days due to an unsafe unclean reboot rate in one zone, illustrating how even fast AI-enabled cluster updates can be stalled by release‑pipeline safeguards.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Anthropic’s IPO could deliver $156B to charity</title>
-    <link>https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/</link>
-    <guid>https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/</guid>
-    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
-    <description><![CDATA[<p>Anthropic’s IPO raised $156 billion earmarked for charitable causes, including a Public Benefit Fund and employee match donations. While the move highlights the company’s philanthropic commitments, it has no direct impact on an IT engineer’s daily stack or immediate actions.</p>]]></description>
+    <title>[News] Perplexity and Intelligence</title>
+    <link>https://openai.com/index/perplexity-and-intelligence/</link>
+    <guid>https://openai.com/index/perplexity-and-intelligence/</guid>
+    <pubDate>Sun, 22 Nov 2026 23:31:15 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI has published its internal perplexity metrics, advocating the use of perplexity as a standard for comparing AI model progress and guiding safety research. This transparency aims to benchmark future model development and foster shared safety standards across the industry.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Uber blew through its AI budget, then dialed back context and reasoning in its AI coding tools</title>
-    <link>https://venturebeat.com/infrastructure/uber-blew-through-its-ai-budget-then-dialed-back-context-and-reasoning-in-its-ai-coding-tools</link>
-    <guid>https://venturebeat.com/infrastructure/uber-blew-through-its-ai-budget-then-dialed-back-context-and-reasoning-in-its-ai-coding-tools</guid>
-    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
-    <description><![CDATA[<p>Uber’s internal AI coding tool, Claude Code, now limits automatic token compaction to 400,000 tokens and defaults reasoning to medium, reducing context size for models with larger windows. These changes were made without engineer input, potentially affecting code assistance quality.</p>]]></description>
+    <title>[News] Here are the top AI agents that can live in your text messages</title>
+    <link>https://techcrunch.com/2026/11/21/all-the-ai-agents-that-can-live-in-your-text-messages/</link>
+    <guid>https://techcrunch.com/2026/11/21/all-the-ai-agents-that-can-live-in-your-text-messages/</guid>
+    <pubDate>Sun, 22 Nov 2026 23:31:15 +0000</pubDate>
+    <description><![CDATA[<p>TechCrunch reports a wave of AI agents that can be accessed via text message, offering tasks like scheduling, reminders, and proactive suggestions. These agents—such as Instinct, Ask Proxy, Caddy, and Comma—integrate with existing calendars and messaging platforms without requiring a dedicated app.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] 87% of the Anthropic power will come from gas and 11% from coal in 2028</title>
-    <link>https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/</link>
-    <guid>https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/</guid>
-    <pubDate>Sun, 22 Nov 2026 14:25:26 +0000</pubDate>
-    <description><![CDATA[<p>Anthropic’s upcoming data centers will rely almost entirely on fossil fuel power, with 87% gas and 11% coal projected for 2028. The report highlights a significant carbon footprint and a lack of renewable commitments in the U.S. data center portfolio.</p>]]></description>
+    <title>[News] OpenAI’s chief scientist has thoughts on how to limit AI development</title>
+    <link>https://techcrunch.com/2026/11/22/openais-chief-scientist-has-thoughts-on-how-to-limit-ai-development/</link>
+    <guid>https://techcrunch.com/2026/11/22/openais-chief-scientist-has-thoughts-on-how-to-limit-ai-development/</guid>
+    <pubDate>Sun, 22 Nov 2026 23:31:15 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI’s chief scientist Jakub Pachocki has outlined a proposal to limit AI development speed using perplexity as a measurable benchmark. The idea is to set industry-wide safety standards that halt progress once models reach a predefined perplexity threshold.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>
