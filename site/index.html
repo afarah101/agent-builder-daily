@@ -574,16 +574,16 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">3</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">11</div>
+          <div class="stat-num">15</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 22 Nov 2026, 23:31 UTC</p>
+    <p class="updated">Updated 23 Nov 2026, 17:57 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
             <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
@@ -614,123 +614,248 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Container security</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:73;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 55 of 75"><span>55</span></div>
+    <div class="card-tags"><span class="tag-pill">security</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:62;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 47 of 75"><span>47</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2608.25793v1" target="_blank" rel="noopener noreferrer">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a></h2>
-  <div class="card-meta"><span>Jessica Hösl, Benedikt Hofmann, Patrick Stöckle</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">26 Aug 2026</span></span></div>
-  <p class="card-summary">Many enterprise Dockerfiles contain security misconfigurations and outdated practices, with 99% showing at least one flaw. The authors built a six‑step automated pipeline that crawls GitLab, enriches each Dockerfile with security metrics, clusters them by LLM‑derived semantics, and finds internal reference implementations. Using these references can raise the average security score by 60% without writing new templates.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage Dockerfile repos, run a similar pipeline: 1) crawl your GitLab instance and run static checks (Hadolint, Trivy, ShellCheck) on all Dockerfiles; 2) cluster similar files using an LLM to generate semantic tags and HDBSCAN to group them; 3) for each cluster, identify the highest‑scoring Dockerfile and replace or copy it into your own projects to improve security and consistency.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.27816v1" target="_blank" rel="noopener noreferrer">BinXSight: Fast Binary Program Summarization via Hierarchical Modular Decomposition</a></h2>
+  <div class="card-meta"><span>Zhijie Liu, Zhipeng Xue, Zhipeng Gao, Pengfei Jing</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">20 Nov 2026</span></span></div>
+  <p class="card-summary">BinXSight quickly turns a stripped binary with thousands of functions into a concise, readable summary in just under 30 seconds. It uses a new graph structure to capture all function interactions, then splits them into key modules and stitches those into a program‑level overview. The result is a 23‑47 % speed and accuracy gain over existing tools, enabling experts to spot malware behaviour almost instantly.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, use BinXSight to scan deployed binaries for hidden malware: 1) run BinXSight on each binary in your image registry, 2) review the generated summary for suspicious modules, 3) flag any binaries with anomalous behaviour for quarantine or further analysis.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">17/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper addresses a clear enterprise need—automated detection of Dockerfile security and quality issues using LLMs and clustering—directly affecting IT engineers who manage container pipelines. The methodology is concrete and includes a six-stage pipeline with existing tooling (Hadolint, ShellCheck, Trivy) and LLM-based semantic clustering, indicating a usable, deployable system rather than a theoretical proposal. A commercial offering could be built around the pipeline or integrated into existing CI/CD platforms within 90 days, providing clear monetisation potential.</p>
+      <p class="trace-reasoning">The paper presents a practical tool for program-level binary summarization, directly aiding security analysts and reverse engineers who work with infrastructure-related binaries. The approach uses LLMs and a novel graph representation, indicating a move toward deployable AI, though the abstract suggests a prototype rather than a production-ready system, hence a moderate maturity score. The methodology could be packaged as a commercial or internal tool for malware analysis and threat intelligence, giving it solid monetisation potential.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/closing-the-gap-automated-discovery-of-secure-dockerfile-reference-standards-via.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/binxsight-fast-binary-program-summarization-via-hierarchical-modular-decompositi.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source"
-      data-summary="Many enterprise Dockerfiles contain security misconfigurations and outdated practices, with 99% showing at least one flaw. The authors built a six‑step automated pipeline that crawls GitLab, enriches each Dockerfile with security metrics, clusters them by LLM‑derived semantics, and finds internal reference implementations. Using these references can raise the average security score by 60% without writing new templates."
-      data-it="If you manage Dockerfile repos, run a similar pipeline: 1) crawl your GitLab instance and run static checks (Hadolint, Trivy, ShellCheck) on all Dockerfiles; 2) cluster similar files using an LLM to generate semantic tags and HDBSCAN to group them; 3) for each cluster, identify the highest‑scoring Dockerfile and replace or copy it into your own projects to improve security and consistency."
+      data-title="BinXSight: Fast Binary Program Summarization via Hierarchical Modular Decomposition"
+      data-summary="BinXSight quickly turns a stripped binary with thousands of functions into a concise, readable summary in just under 30 seconds. It uses a new graph structure to capture all function interactions, then splits them into key modules and stitches those into a program‑level overview. The result is a 23‑47 % speed and accuracy gain over existing tools, enabling experts to spot malware behaviour almost instantly."
+      data-it="If you manage cloud infrastructure, use BinXSight to scan deployed binaries for hidden malware: 1) run BinXSight on each binary in your image registry, 2) review the generated summary for suspicious modules, 3) flag any binaries with anomalous behaviour for quarantine or further analysis."
       data-monetisation=""
-      data-reasoning="The paper addresses a clear enterprise need—automated detection of Dockerfile security and quality issues using LLMs and clustering—directly affecting IT engineers who manage container pipelines. The methodology is concrete and includes a six-stage pipeline with existing tooling (Hadolint, ShellCheck, Trivy) and LLM-based semantic clustering, indicating a usable, deployable system rather than a theoretical proposal. A commercial offering could be built around the pipeline or integrated into existing CI/CD platforms within 90 days, providing clear monetisation potential."
-      data-score="55"
-      data-url="https://arxiv.org/abs/2608.25793v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a practical tool for program-level binary summarization, directly aiding security analysts and reverse engineers who work with infrastructure-related binaries. The approach uses LLMs and a novel graph representation, indicating a move toward deployable AI, though the abstract suggests a prototype rather than a production-ready system, hence a moderate maturity score. The methodology could be packaged as a commercial or internal tool for malware analysis and threat intelligence, giving it solid monetisation potential."
+      data-score="47"
+      data-url="https://arxiv.org/abs/2611.27816v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">BI automation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM deployment security</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2609.20886v1" target="_blank" rel="noopener noreferrer">BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</a></h2>
-  <div class="card-meta"><span>Chuxuan Hu, Yeye He, Penny Zhou, Wee Hyong Tok</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">16 Sep 2026</span></span></div>
-  <p class="card-summary">BI-Agent uses large language models and specialised data tools to automate the whole business intelligence process – from finding the right tables, transforming data, joining tables, to answering business questions. The authors built a benchmark (BI-Bench) from real dashboards and a tool‑augmented agent that improves accuracy by up to 40% over vanilla LLMs. This research is relevant if you manage BI workloads on cloud platforms, as it shows a way to reduce manual data prep and improve query accuracy.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage BI dashboards in Power BI or Tableau on the cloud, adopt a tool‑augmented agent approach: 1) integrate an LLM with data‑search, join, and transform tools; 2) train it on your own BI project logs using supervised fine‑tuning or reinforcement learning; 3) deploy the trained agent to automatically process user questions and return answers, cutting manual prep time by up to 40%.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.27596v1" target="_blank" rel="noopener noreferrer">Isonomy: Isolating Every Request from Timing Side Channels at Nearly Full-Sharing Throughput in Multi-Instance LLM Prefill</a></h2>
+  <div class="card-meta"><span>Bowen Sun, Chaowei Xiao</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">20 Nov 2026</span></span></div>
+  <p class="card-summary">Isonomy blocks timing side‑channel leaks in LLM prefill caches by isolating each request while still allowing efficient key/value reuse across accounts. It builds a gateway on vLLM that masks cache‑hit timing, achieving near‑full throughput (up to 98% of unprotected sharing). The result is safer multi‑tenant LLM services without major performance loss.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage shared LLM deployments, enable Isonomy’s request‑isolation gateway: 1) integrate the Isonomy plugin into your vLLM stack; 2) configure explicit sharing groups per tenant; 3) verify that throughput stays above 95% on your workloads. If you already use account‑level cache isolation, add Isonomy to avoid timing leaks from shared cache hits.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
-      <p class="trace-reasoning">The paper presents a tool‑augmented system that automates end‑to‑end business intelligence workflows, which directly impacts IT engineers who manage BI platforms and data pipelines. The system has been implemented and evaluated, indicating a working prototype rather than a purely theoretical proposal. The approach is actionable and could be commercialised as a SaaS offering or integrated into existing BI tooling within a few weeks, warranting a moderate monetisation score.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">18/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">12/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper presents a practical mechanism to mitigate timing side‑channels in multi‑instance LLM deployments, directly affecting how IT engineers configure and secure LLM APIs, particularly in shared‑account scenarios. The solution is built on top of vLLM and includes empirical tests on commercial APIs, indicating a working system rather than a purely theoretical proposal. While not immediately available as a commercial product, the approach can be adopted or sold as a deployment service within a few weeks, especially in environments already using vLLM or similar serving stacks. Hence moderate impact, medium maturity, and actionable monetisation potential.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/bi-agent-and-bi-bench-towards-automating-end-to-end-business-intelligence.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/isonomy-isolating-every-request-from-timing-side-channels-at-nearly-full-sharing.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence"
-      data-summary="BI-Agent uses large language models and specialised data tools to automate the whole business intelligence process – from finding the right tables, transforming data, joining tables, to answering business questions. The authors built a benchmark (BI-Bench) from real dashboards and a tool‑augmented agent that improves accuracy by up to 40% over vanilla LLMs. This research is relevant if you manage BI workloads on cloud platforms, as it shows a way to reduce manual data prep and improve query accuracy."
-      data-it="If you manage BI dashboards in Power BI or Tableau on the cloud, adopt a tool‑augmented agent approach: 1) integrate an LLM with data‑search, join, and transform tools; 2) train it on your own BI project logs using supervised fine‑tuning or reinforcement learning; 3) deploy the trained agent to automatically process user questions and return answers, cutting manual prep time by up to 40%."
+      data-title="Isonomy: Isolating Every Request from Timing Side Channels at Nearly Full-Sharing Throughput in Multi-Instance LLM Prefill"
+      data-summary="Isonomy blocks timing side‑channel leaks in LLM prefill caches by isolating each request while still allowing efficient key/value reuse across accounts. It builds a gateway on vLLM that masks cache‑hit timing, achieving near‑full throughput (up to 98% of unprotected sharing). The result is safer multi‑tenant LLM services without major performance loss."
+      data-it="If you manage shared LLM deployments, enable Isonomy’s request‑isolation gateway: 1) integrate the Isonomy plugin into your vLLM stack; 2) configure explicit sharing groups per tenant; 3) verify that throughput stays above 95% on your workloads. If you already use account‑level cache isolation, add Isonomy to avoid timing leaks from shared cache hits."
       data-monetisation=""
-      data-reasoning="The paper presents a tool‑augmented system that automates end‑to‑end business intelligence workflows, which directly impacts IT engineers who manage BI platforms and data pipelines. The system has been implemented and evaluated, indicating a working prototype rather than a purely theoretical proposal. The approach is actionable and could be commercialised as a SaaS offering or integrated into existing BI tooling within a few weeks, warranting a moderate monetisation score."
-      data-score="50"
-      data-url="https://arxiv.org/abs/2609.20886v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a practical mechanism to mitigate timing side‑channels in multi‑instance LLM deployments, directly affecting how IT engineers configure and secure LLM APIs, particularly in shared‑account scenarios. The solution is built on top of vLLM and includes empirical tests on commercial APIs, indicating a working system rather than a purely theoretical proposal. While not immediately available as a commercial product, the approach can be adopted or sold as a deployment service within a few weeks, especially in environments already using vLLM or similar serving stacks. Hence moderate impact, medium maturity, and actionable monetisation potential."
+      data-score="45"
+      data-url="https://arxiv.org/abs/2611.27596v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">enterprise QA benchmarking</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-low" style="--pct:34;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 26 of 75"><span>26</span></div>
+    <div class="card-tags"><span class="tag-pill">Research comparative</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:33;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 25 of 75"><span>25</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2609.12171v1" target="_blank" rel="noopener noreferrer">WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</a></h2>
-  <div class="card-meta"><span>Amey Varhade, Ananya Sutradhar, Ravishankar Krishnaswamy, Navin Goyal</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">10 Sep 2026</span></span></div>
-  <p class="card-summary">The paper tackles the lack of realistic, complex data for testing enterprise question‑answering systems. It builds an automated pipeline that creates synthetic email conversations, long‑ and short‑form queries, and accurate answers, then evaluates current models, finding performance below 80% and highlighting the need for better systems. The work is not directly relevant to managing cloud infrastructure.</p>
-  
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.27721v1" target="_blank" rel="noopener noreferrer">Decision Models for Multilingual Emotion Classification: A Comparative Study Against LLMs and Encoders</a></h2>
+  <div class="card-meta"><span>Alessandro Piccolo, Francesco De Nicolò, Francesco Manco, Eufemia Lella</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">20 Nov 2026</span></span></div>
+  <p class="card-summary">Decision models can classify emotions in multiple languages with only one macro‑F1 point lower than a fine‑tuned encoder, and they are faster and give per‑option probabilities. They were tested against two fine‑tuned multilingual encoders and two LLMs on 10 social‑media datasets across five languages. The best zero‑shot systems matched a large LLM’s accuracy but ran five times faster and without any training data.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, consider deploying a decision model endpoint (e.g., OpenAI Decisions) for emotion analysis: step 1, choose a small model that gives per‑option probabilities; step 2, host it in a low‑latency container; step 3, monitor accuracy against your own labelled data to verify the ~1 macro‑F1 gap.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">8/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">8/25</span></div>
-      <p class="trace-reasoning">The paper presents an automated pipeline for generating synthetic enterprise QA datasets. While useful for research and benchmarking, it does not provide a ready-to-deploy tool or direct impact on day‑to‑day engineering tasks. The implementation exists, but it is primarily a research prototype without an open‑source release or production deployment, giving it a modest maturity score. Monetisation potential is limited; an IT engineer could use the dataset to train internal models, but this is not an off‑the‑shelf service and would require substantial effort to convert into a commercial offering within 90 days. Overall, the work is of niche relevance, yielding a low total score.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper presents comparative studies of decision models and LLMs for emotion classification, focusing on research methodology and performance metrics across languages. It offers limited direct applicability to IT engineers managing cloud, SaaS, or security infrastructure. While the discussed APIs could be invoked, the study does not provide actionable integration guidance, tooling, or deployment-ready solutions for typical IT workloads. The maturity level is moderate because the models are available via API, but the research nature and lack of implementation details reduce immediate usability. Monetisation potential is low as the work does not present a clear product or service that can be sold or deployed within 90 days. Overall, the impact on everyday IT infrastructure operations is marginal, leading to a low total score.</p>
     </div>
   </details>
   <div class="card-footer">
-    <a href="breakdowns/winsyn-an-automated-pipeline-for-realistic-enterprise-question-answering-evaluat.html" class="breakdown-link">IT Breakdown</a>
+    <a href="breakdowns/decision-models-for-multilingual-emotion-classification-a-comparative-study-agai.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation"
-      data-summary="The paper tackles the lack of realistic, complex data for testing enterprise question‑answering systems. It builds an automated pipeline that creates synthetic email conversations, long‑ and short‑form queries, and accurate answers, then evaluates current models, finding performance below 80% and highlighting the need for better systems. The work is not directly relevant to managing cloud infrastructure."
-      data-it="Not directly applicable to IT infrastructure work"
+      data-title="Decision Models for Multilingual Emotion Classification: A Comparative Study Against LLMs and Encoders"
+      data-summary="Decision models can classify emotions in multiple languages with only one macro‑F1 point lower than a fine‑tuned encoder, and they are faster and give per‑option probabilities. They were tested against two fine‑tuned multilingual encoders and two LLMs on 10 social‑media datasets across five languages. The best zero‑shot systems matched a large LLM’s accuracy but ran five times faster and without any training data."
+      data-it="If you manage cloud infrastructure, consider deploying a decision model endpoint (e.g., OpenAI Decisions) for emotion analysis: step 1, choose a small model that gives per‑option probabilities; step 2, host it in a low‑latency container; step 3, monitor accuracy against your own labelled data to verify the ~1 macro‑F1 gap."
       data-monetisation=""
-      data-reasoning="The paper presents an automated pipeline for generating synthetic enterprise QA datasets. While useful for research and benchmarking, it does not provide a ready-to-deploy tool or direct impact on day‑to‑day engineering tasks. The implementation exists, but it is primarily a research prototype without an open‑source release or production deployment, giving it a modest maturity score. Monetisation potential is limited; an IT engineer could use the dataset to train internal models, but this is not an off‑the‑shelf service and would require substantial effort to convert into a commercial offering within 90 days. Overall, the work is of niche relevance, yielding a low total score."
-      data-score="26"
-      data-url="https://arxiv.org/abs/2609.12171v1">Copy as Markdown</button>
+      data-reasoning="The paper presents comparative studies of decision models and LLMs for emotion classification, focusing on research methodology and performance metrics across languages. It offers limited direct applicability to IT engineers managing cloud, SaaS, or security infrastructure. While the discussed APIs could be invoked, the study does not provide actionable integration guidance, tooling, or deployment-ready solutions for typical IT workloads. The maturity level is moderate because the models are available via API, but the research nature and lack of implementation details reduce immediate usability. Monetisation potential is low as the work does not present a clear product or service that can be sold or deployed within 90 days. Overall, the impact on everyday IT infrastructure operations is marginal, leading to a low total score."
+      data-score="25"
+      data-url="https://arxiv.org/abs/2611.27721v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Entity matching and search</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.27910v1" target="_blank" rel="noopener noreferrer">Decision Columns as an Index: Interpretable Embeddings for Explainable Entity Matching and Search</a></h2>
+  <div class="card-meta"><span>Aadharsh Kannan, Robert Bruckner, Philip A. Bernstein</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">20 Nov 2026</span></span></div>
+  <p class="card-summary">This research tackles the lack of interpretability in dense embeddings used for entity matching and search. The authors created decision‑column embeddings where each dimension is a calibrated yes/no/unknown answer to a natural‑language question, enabling per‑question explanation of similarity. Results show comparable retrieval performance to dense embeddings while providing clear explanations and easy index extension.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) Identify key attributes that need auditability in your data matching workflows. 2) Map those attributes to natural‑language questions and generate decision columns using a lightweight model. 3) Store the resulting vectors in your index; you can add new questions without re‑encoding the whole corpus, and you gain transparent explanations for matches.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper presents a novel embedding approach for entity matching and search that offers interpretability. However, it is primarily a research prototype with no evidence of deployment in real IT infrastructure, limited applicability to existing SaaS or cloud environments, and no clear pathway for immediate monetisation or integration by UK IT engineers. The concepts may inspire future tools, but practical impact today is minimal.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/decision-columns-as-an-index-interpretable-embeddings-for-explainable-entity-mat.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="Decision Columns as an Index: Interpretable Embeddings for Explainable Entity Matching and Search"
+      data-summary="This research tackles the lack of interpretability in dense embeddings used for entity matching and search. The authors created decision‑column embeddings where each dimension is a calibrated yes/no/unknown answer to a natural‑language question, enabling per‑question explanation of similarity. Results show comparable retrieval performance to dense embeddings while providing clear explanations and easy index extension."
+      data-it="If you manage cloud infrastructure, here is what to do: 1) Identify key attributes that need auditability in your data matching workflows. 2) Map those attributes to natural‑language questions and generate decision columns using a lightweight model. 3) Store the resulting vectors in your index; you can add new questions without re‑encoding the whole corpus, and you gain transparent explanations for matches."
+      data-monetisation=""
+      data-reasoning="The paper presents a novel embedding approach for entity matching and search that offers interpretability. However, it is primarily a research prototype with no evidence of deployment in real IT infrastructure, limited applicability to existing SaaS or cloud environments, and no clear pathway for immediate monetisation or integration by UK IT engineers. The concepts may inspire future tools, but practical impact today is minimal."
+      data-score="20"
+      data-url="https://arxiv.org/abs/2611.27910v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM Fingerprinting</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.27831v1" target="_blank" rel="noopener noreferrer">DistDNA: Language Model Fingerprinting under Stochastic Decoding</a></h2>
+  <div class="card-meta"><span>Lifan Hu, Qian Yu, Zhaomin Wu, Bingsheng He</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">20 Nov 2026</span></span></div>
+  <p class="card-summary">DistDNA lets you recognise which exact LLM checkpoint you’re talking to, even when the model uses random decoding. It builds a fingerprint of each prompt’s response distribution and matches your instance to the closest known checkpoint using maximum mean discrepancy. The result is a 10‑point jump in identification accuracy over previous methods.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM deployments, first collect a few responses from each prompt at a few temperature/top‑p settings, store these as fingerprints, then use DistDNA’s MMD routine to match new outputs to the right checkpoint and detect if your model has been swapped or mis‑labelled.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper proposes a method for fingerprinting LLMs under stochastic decoding, which could help verify deployed models. However, its direct relevance to everyday IT infrastructure tasks is limited. The approach is experimentally validated but not released as a usable tool or service, and there is no clear path for rapid monetisation by an IT engineer.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/distdna-language-model-fingerprinting-under-stochastic-decoding.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
+      data-title="DistDNA: Language Model Fingerprinting under Stochastic Decoding"
+      data-summary="DistDNA lets you recognise which exact LLM checkpoint you’re talking to, even when the model uses random decoding. It builds a fingerprint of each prompt’s response distribution and matches your instance to the closest known checkpoint using maximum mean discrepancy. The result is a 10‑point jump in identification accuracy over previous methods."
+      data-it="If you manage LLM deployments, first collect a few responses from each prompt at a few temperature/top‑p settings, store these as fingerprints, then use DistDNA’s MMD routine to match new outputs to the right checkpoint and detect if your model has been swapped or mis‑labelled."
+      data-monetisation=""
+      data-reasoning="The paper proposes a method for fingerprinting LLMs under stochastic decoding, which could help verify deployed models. However, its direct relevance to everyday IT infrastructure tasks is limited. The approach is experimentally validated but not released as a usable tool or service, and there is no clear path for rapid monetisation by an IT engineer."
+      data-score="20"
+      data-url="https://arxiv.org/abs/2611.27831v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     
+    <section class="signal">
+        <h2 class="signal-title">Today's signal</h2>
+        <p>Amazon’s $7.5 B Decart buy and Trainium rollout signal a seismic shift—AI ops could be cheaper, faster, and far more complex than you think.</p>
+    </section>
+    
     <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Security</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Product Launch</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">7/10</span>
+      <span class="score-num">9/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/" target="_blank" rel="noopener noreferrer">Banks Have Had It Up to Here With Your AI Agent</a></h2>
-  <p class="card-summary">Wells Fargo is tightening its terms to flag the use of AI agents that act on customers&#x27; behalf, warning that such use is at the customers&#x27; own risk. The move echoes similar restrictions from JPMorgan, Bank of America, and others, as banks clamp down on third‑party automation that can expose sensitive data or facilitate unauthorized transactions.</p>
-  <p class="insight"><strong>How to use:</strong> S1: Review any automated workflows in your organization that involve third‑party AI agents accessing external services. S2: If employees use bots to interact with cloud services or APIs, ensure they are not granting credentials that could be exploited if the bot malfunctions. S3: Pay particular attention to any integrations with Google Workspace or MDM that rely on external automation, as these could inadvertently expose user data or violate corporate policies.</p>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips/" target="_blank" rel="noopener noreferrer">Amazon snaps up Decart’s AI optimization tech for $7.5B as it prepares to sell Trainium chips</a></h2>
+  <p class="card-summary">Amazon has acquired Israeli startup Decart for $7.5 B to integrate its Decart Optimization Stack (DOS), which streamlines AI workloads across Nvidia, Amazon Trainium, and Google hardware. This move aims to make Amazon’s Trainium chips more competitive by boosting compute efficiency for customers.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review your AWS infrastructure to assess if deploying Amazon Trainium chips with Decart’s DOS could reduce inference costs and improve performance. S2: Failing to adopt the optimization stack may keep you reliant on Nvidia GPUs, potentially incurring higher licensing and power expenses. S3: The most affected tool is your cloud platform—AWS—along with any AI inference workloads you run on GPU clusters.</p>
   <div class="card-footer">
-    <span class="pub-date">22 Nov 2026</span>
-    <a href="breakdowns/banks-have-had-it-up-to-here-with-your-ai-agent.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/amazon-snaps-up-decarts-ai-optimization-tech-for-75b-as-it-prepares-to-sell-trai.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">VentureBeat</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://ladybird.org/posts/alpha/" target="_blank" rel="noopener noreferrer">Ladybird Is Now in Alpha</a></h2>
+  <p class="card-summary">Ladybird, an experimental browser with a custom engine, has entered alpha and offers WebDriver and Firefox DevTools protocol support for automated testing. The project invites security researchers to find vulnerabilities and plans regular updates to refine performance.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review Ladybird’s WebDriver integration and Firefox DevTools protocol support in your current automated testing suite this week. S2: Failing to integrate a lightweight, open-source browser could leave gaps in your browser compatibility matrix, risking unnoticed issues in web applications. S3: The most affected tool is your automated testing platform, which can now include Ladybird as a target for faster iteration.</p>
+  <div class="card-footer">
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/ladybird-is-now-in-alpha.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/23/jensen-huang-isnt-out-of-the-woods-yet/" target="_blank" rel="noopener noreferrer">Jensen Huang isn’t out of the woods yet</a></h2>
+  <p class="card-summary">Nvidia CEO Jensen Huang has returned to the helm following a high-profile resignation amid personal controversies. The move underscores uncertainty surrounding Nvidia’s leadership, which could affect the stability of its AI infrastructure platform.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Monitor Nvidia’s leadership announcements and any policy or partnership changes via the Nvidia Developer portal this week. S2: Leadership instability may delay critical updates or support for GPUs that underpin many AI workloads; staying informed reduces downtime risk. S3: The GPU ecosystem (AWS, Azure, GCP) is most affected, so review your GPU‑based AI deployments for any pending maintenance or support notifications.</p>
+  <div class="card-footer">
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/jensen-huang-isnt-out-of-the-woods-yet.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/jensen-huang-is-back-as-nvidia-ceo/" target="_blank" rel="noopener noreferrer">Jensen Huang Is Back as Nvidia CEO</a></h2>
+  <p class="card-summary">Jensen Huang has been reinstated as Nvidia’s CEO after a brief resignation, a move that could influence the company’s AI hardware roadmap and investor confidence. This leadership change may affect the availability and pricing of Nvidia GPUs, which are critical to many AI workloads used across enterprise IT stacks.</p>
+  <p class="insight"><strong>How to use:</strong> 1. Monitor Nvidia’s product roadmap and pricing announcements over the next week for any shifts that could impact GPU procurement for AI workloads. 2. Evaluate whether your current GPU allocation in services like Google Cloud, Azure, or on-prem MDM platforms may need adjustment to maintain performance benchmarks. 3. Adjust any AI-related SSO or endpoint policies that rely on GPU-accelerated services to ensure continuity and cost control.</p>
+  <div class="card-footer">
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/jensen-huang-is-back-as-nvidia-ceo.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
       <span class="tag-pill">Product Launch</span>
     </div>
     <div class="news-score-area">
@@ -738,79 +863,79 @@
       <span class="score-num">7/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines" target="_blank" rel="noopener noreferrer">Even the fastest AI clusters can be held back by their release pipelines</a></h2>
-  <p class="card-summary">VentureBeat reports that an automated firmware rollout halted itself after six days due to an unsafe unclean reboot rate in one zone, illustrating how even fast AI-enabled cluster updates can be stalled by release‑pipeline safeguards.</p>
-  <p class="insight"><strong>How to use:</strong> Check your own firmware or software deployment pipelines this week for automated safety thresholds that can freeze updates—missing this could delay critical patches or expose devices to insecure states. Failure to monitor these thresholds could lead to prolonged downtime or security gaps. The most affected tool is your deployment automation platform, which should be configured to alert on unsafe reboot rates.</p>
+  <h2 class="card-title"><a href="https://www.wired.com/story/nvidia-is-powering-brain-computer-interfaces-now/" target="_blank" rel="noopener noreferrer">Nvidia Is Powering Brain-Computer Interfaces Now</a></h2>
+  <p class="card-summary">Nvidia’s AI chips and software are now powering Paradromics’ brain‑computer interface, enabling speech decoding on a small, edge‑based device. This partnership moves the technology from a large, power‑hungry cart to a compact box that could eventually fit in a phone.</p>
+  <p class="insight"><strong>How to use:</strong> S1: Review Nvidia’s Jetson and Holoscan offerings this week to assess potential integration with existing edge devices or IoT sensors your team manages. S2: Inaction means missing a chance to pilot low‑latency AI processing on edge hardware, which could streamline your own data‑processing pipelines and reduce cloud costs. S3: The most directly affected tool is your MDM/endpoint stack, where adding lightweight AI inference could enhance device security and user experience.</p>
   <div class="card-footer">
-    <span class="pub-date">21 Nov 2026</span>
-    <a href="breakdowns/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/nvidia-is-powering-brain-computer-interfaces-now.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Google AI</span>
       <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://openai.com/index/perplexity-and-intelligence/" target="_blank" rel="noopener noreferrer">Perplexity and Intelligence</a></h2>
-  <p class="card-summary">OpenAI has published its internal perplexity metrics, advocating the use of perplexity as a standard for comparing AI model progress and guiding safety research. This transparency aims to benchmark future model development and foster shared safety standards across the industry.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor OpenAI’s public perplexity releases for insight into how rapidly model capabilities are improving. This can inform your vendor selection and help justify investments in newer AI services that demonstrate lower perplexity, potentially enhancing your organization’s AI strategy.</p>
-  <div class="card-footer">
-    <span class="pub-date">22 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Tools</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/21/all-the-ai-agents-that-can-live-in-your-text-messages/" target="_blank" rel="noopener noreferrer">Here are the top AI agents that can live in your text messages</a></h2>
-  <p class="card-summary">TechCrunch reports a wave of AI agents that can be accessed via text message, offering tasks like scheduling, reminders, and proactive suggestions. These agents—such as Instinct, Ask Proxy, Caddy, and Comma—integrate with existing calendars and messaging platforms without requiring a dedicated app.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor these text‑based AI agents for potential integration with your existing calendar and ticketing systems; they could streamline routine requests and reduce manual ticket creation. Evaluate whether their API or webhook hooks can be paired with Freshservice or your MDM to automate common support workflows.</p>
-  <div class="card-footer">
-    <span class="pub-date">21 Nov 2026</span>
-    <a href="breakdowns/here-are-the-top-ai-agents-that-can-live-in-your-text-messages.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Regulation</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
       <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/22/openais-chief-scientist-has-thoughts-on-how-to-limit-ai-development/" target="_blank" rel="noopener noreferrer">OpenAI’s chief scientist has thoughts on how to limit AI development</a></h2>
-  <p class="card-summary">OpenAI’s chief scientist Jakub Pachocki has outlined a proposal to limit AI development speed using perplexity as a measurable benchmark. The idea is to set industry-wide safety standards that halt progress once models reach a predefined perplexity threshold.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor OpenAI’s public updates for any shifts in policy that could affect enterprise AI licensing terms or compliance requirements. Adjust your organization’s AI procurement strategy to account for potential future limits on model usage or performance guarantees.</p>
+  <h2 class="card-title"><a href="https://research.google/blog/supercharging-transformer-residual-connections/" target="_blank" rel="noopener noreferrer">Supercharging transformer residual connections</a></h2>
+  <p class="card-summary">Google Research has introduced DeepCrossAttention (DCA), an enhanced transformer residual connection that dynamically selects and routes features from previous layers. The technique promises up to three times faster training with minimal parameter growth, potentially boosting AI model performance across many applications.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Google AI’s research releases for any API or SDK updates that might expose DCA-enabled models. If your organization relies on custom transformer models, evaluate whether integrating DCA could accelerate training or inference workloads, potentially reducing cloud compute costs.</p>
   <div class="card-footer">
-    <span class="pub-date">22 Nov 2026</span>
-    <a href="breakdowns/openais-chief-scientist-has-thoughts-on-how-to-limit-ai-development.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">23 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">VentureBeat</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/livestream-will-anyone-keep-us-safe-from-ai/" target="_blank" rel="noopener noreferrer">Submit Your Questions: Will Anyone Keep You Safe From AI?</a></h2>
+  <p class="card-summary">A WIRED event is scheduled for December 2 to discuss AI safety and its potential impact on critical infrastructure and cyberattacks. The livestream will feature industry experts answering questions about how big tech is addressing these risks.</p>
+  <p class="insight"><strong>How to use:</strong> Watch the livestream or review the replay to understand the broader security implications of AI for your organization. Note that while no specific tools are mentioned, the discussion may highlight emerging threats that could affect your SSO, MDM, and endpoint security setups in the future.</p>
+  <div class="card-footer">
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/submit-your-questions-will-anyone-keep-you-safe-from-ai.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">OpenAI</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/perplexity-and-intelligence" target="_blank" rel="noopener noreferrer">Perplexity and Intelligence</a></h2>
+  <p class="card-summary">OpenAI has published internal perplexity metrics for its language models, highlighting how lower perplexity correlates with stronger AI capabilities. This transparency aims to set industry safety standards and benchmark progress across model developers.</p>
+  <p class="insight"><strong>How to use:</strong> Watch for upcoming API updates that may expose new metrics or performance thresholds. Understanding these benchmarks can help you evaluate whether your internal AI tools meet competitive standards and inform future procurement or integration decisions.</p>
+  <div class="card-footer">
+    <span class="pub-date">22 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Google DeepMind</span>
       <span class="tag-pill">Research</span>
     </div>
     <div class="news-score-area">
@@ -818,12 +943,52 @@
       <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://venturebeat.com/orchestration/your-ml-model-passed-every-test-heres-what-those-tests-might-have-missed" target="_blank" rel="noopener noreferrer">Your ML model passed every test. Here’s what those tests might have missed</a></h2>
-  <p class="card-summary">VentureBeat reports that many ML models excel in controlled tests but fail when deployed in real-world scenarios due to noisy data and label drift. The piece highlights a common gap in model validation practices, stressing the need for more robust, production‑ready testing frameworks.</p>
-  <p class="insight"><strong>How to use:</strong> Check your current ML pipelines to ensure they include real‑world data variability and drift detection. Ignoring these aspects can lead to silent performance degradation that may affect services users rely on, potentially increasing support tickets and compromising security if models misclassify sensitive data.</p>
+  <h2 class="card-title"><a href="https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/" target="_blank" rel="noopener noreferrer">Finding faster quantum algorithms with agents and formal verification</a></h2>
+  <p class="card-summary">Google DeepMind’s Gemini 4 agents, coupled with formal verification via Lean, have optimized key quantum algorithms, achieving up to 11.8× reductions in resource requirements for fusion and drug‑design simulations. The open‑source Lean library and verified solutions enable the broader research community to replicate and extend these quantum‑circuit optimizations.</p>
+  <p class="insight"><strong>How to use:</strong> Check the open‑source Lean library on GitHub to see if any of the optimized quantum circuits can be incorporated into your internal research or simulation pipelines. Missing this could mean continued reliance on less efficient algorithms and higher computational costs for future quantum‑enabled projects.</p>
   <div class="card-footer">
-    <span class="pub-date">22 Nov 2026</span>
-    <a href="breakdowns/your-ml-model-passed-every-test-heres-what-those-tests-might-have-missed.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">23 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/allenai/robotrack" target="_blank" rel="noopener noreferrer">RoboTrack: Point tracking for real-world robotic manipulation</a></h2>
+  <p class="card-summary">Hugging Face releases RoboTrack, a new benchmark and training suite for point tracking in robotic manipulation, along with two fine‑tuned models, RoboTracker and RoboTracker‑Warp. The system demonstrates that training on synthetic data improves real‑world tracking performance and can be applied to tasks such as pipette handling in wet labs.</p>
+  <p class="insight"><strong>How to use:</strong> None. This development is outside the scope of the IT engineer’s current toolset.</p>
+  <div class="card-footer">
+    <span class="pub-date">23 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="source-name">Hugging Face</span>
+      <span class="tag-pill">Research</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/agentic-evals" target="_blank" rel="noopener noreferrer">How to build and maintain an agentic evaluation</a></h2>
+  <p class="card-summary">Hugging Face publishes a guide on building and maintaining agentic AI evaluations, detailing steps, best practices, and the growing ecosystem of evaluation datasets on its hub. The article highlights new support for agentic abstractions and offers a framework to improve evaluation quality and transparency.</p>
+  <p class="insight"><strong>How to use:</strong> This guidance can help your team develop internal evaluation frameworks for AI-powered tools or services you integrate, ensuring they meet performance and compliance standards.</p>
+  <div class="card-footer">
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/how-to-build-and-maintain-an-agentic-evaluation.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -838,52 +1003,32 @@
       <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/" target="_blank" rel="noopener noreferrer">Anthropic’s IPO could deliver $156B to charity</a></h2>
-  <p class="card-summary">Anthropic’s IPO raised $156 billion earmarked for charitable causes, including a Public Benefit Fund and employee match donations. While the move highlights the company’s philanthropic commitments, it has no direct impact on an IT engineer’s daily stack or immediate actions.</p>
-  <p class="insight"><strong>How to use:</strong> No immediate action required. Monitor Anthropic’s future funding announcements for potential AI safety research grants that might influence vendor selection or research initiatives.</p>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/23/trump-reportedly-called-into-nvidia-board-meeting-to-advocate-for-huangs-return/" target="_blank" rel="noopener noreferrer">Trump reportedly called into Nvidia board meeting to advocate for Huang’s return</a></h2>
+  <p class="card-summary">Donald Trump reportedly joined an Nvidia board meeting and persuaded the board to reinstate Jensen Huang as CEO following his resignation amid scandal. Nvidia confirmed the decision, citing no national security risk.</p>
+  <p class="insight"><strong>How to use:</strong> Check your organization&#x27;s vendor risk assessments to ensure Nvidia’s leadership changes do not affect any existing contracts or compliance requirements.</p>
   <div class="card-footer">
-    <span class="pub-date">19 Nov 2026</span>
-    <a href="breakdowns/anthropics-ipo-could-deliver-156b-to-charity.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">23 Nov 2026</span>
+    <a href="breakdowns/trump-reportedly-called-into-nvidia-board-meeting-to-advocate-for-huangs-return.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">VentureBeat</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://venturebeat.com/infrastructure/uber-blew-through-its-ai-budget-then-dialed-back-context-and-reasoning-in-its-ai-coding-tools" target="_blank" rel="noopener noreferrer">Uber blew through its AI budget, then dialed back context and reasoning in its AI coding tools</a></h2>
-  <p class="card-summary">Uber’s internal AI coding tool, Claude Code, now limits automatic token compaction to 400,000 tokens and defaults reasoning to medium, reducing context size for models with larger windows. These changes were made without engineer input, potentially affecting code assistance quality.</p>
-  <p class="insight"><strong>How to use:</strong> No direct action is required for your stack. Keep an eye on how Uber’s adjustments might influence broader industry practices around token limits and default settings in AI development tools.</p>
-  <div class="card-footer">
-    <span class="pub-date">19 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
+      <span class="source-name">MIT Tech Review</span>
       <span class="tag-pill">Research</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/" target="_blank" rel="noopener noreferrer">87% of the Anthropic power will come from gas and 11% from coal in 2028</a></h2>
-  <p class="card-summary">Anthropic’s upcoming data centers will rely almost entirely on fossil fuel power, with 87% gas and 11% coal projected for 2028. The report highlights a significant carbon footprint and a lack of renewable commitments in the U.S. data center portfolio.</p>
-  <p class="insight"><strong>How to use:</strong> Check your organization’s power sourcing policies and consider advocating for renewable energy contracts or green‑energy offsets for any AI‑related workloads.</p>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/23/1149392/why-using-rocks-for-carbon-removal-could-eventually-reduce-crop-growth/" target="_blank" rel="noopener noreferrer">Why using rocks for carbon removal could eventually reduce crop growth</a></h2>
+  <p class="card-summary">Google and Microsoft are funding startups that spread crushed basalt and other alkaline rocks on farms to sequester carbon from the atmosphere.</p>
+  <p class="insight"><strong>How to use:</strong> This initiative has no immediate impact on the IT engineer’s current tools or security posture, and no actionable steps are required at this time.</p>
   <div class="card-footer">
-    <span class="pub-date">22 Nov 2026</span>
-    <a href="breakdowns/87-of-the-anthropic-power-will-come-from-gas-and-11-from-coal-in-2028.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">23 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
@@ -898,31 +1043,31 @@
       <span class="score-num">2/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.oreilly.com/radar/what-happened-to-silicon-valley/" target="_blank" rel="noopener noreferrer">What Happened to Silicon Valley?</a></h2>
-  <p class="card-summary">The article is a transcript of a lecture delivered on October 16, 2026, discussing the political economy of Silicon Valley and the historical evolution of the web. It contains no new product releases, security updates, or AI tooling relevant to IT infrastructure.</p>
-  <p class="insight"><strong>How to use:</strong> None – the content offers historical context but does not provide actionable information for managing Google Workspace, JumpCloud, or other IT tools.</p>
+  <h2 class="card-title"><a href="https://github.com/mikuta0407/win4wine" target="_blank" rel="noopener noreferrer">Win4wine – Run Windows Shell as the Linux Desktop on Wine</a></h2>
+  <p class="card-summary">Win4wine is an experimental project that runs the Windows XP shell as a Linux desktop shell using a patched Wine build. It integrates Windows UI elements with Linux applications, offering a Windows-like experience on Debian-based systems.</p>
+  <p class="insight"><strong>How to use:</strong> Check your own Linux environments for compatibility if you need to run legacy Windows applications, but this project is experimental and not suitable for production IT infrastructure.</p>
   <div class="card-footer">
-    <span class="pub-date">22 Nov 2026</span>
-    <a href="breakdowns/what-happened-to-silicon-valley.html" class="breakdown-link">IT Breakdown</a>
+    <span class="pub-date">23 Nov 2026</span>
+    
   </div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
+      <span class="tier-label">Consulting</span>
+      <span class="source-name">MIT Sloan</span>
       <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">0/10</span>
+      <span class="score-num">1/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.audubon.org/magazine/birds-of-gta-6-field-guide-vice-city-wildlife" target="_blank" rel="noopener noreferrer">The Birds of GTA 6: A Field Guide to Vice City and Leonida&#x27;s Wildlife</a></h2>
-  <p class="card-summary">The article is a casual, entertainment-focused post about the birdwatching aspects of Grand Theft Auto VI. It contains no information related to AI or IT infrastructure.</p>
+  <h2 class="card-title"><a href="https://sloanreview.mit.edu/article/the-trouble-with-continuous-personal-growth/" target="_blank" rel="noopener noreferrer">The Trouble With Continuous Personal Growth</a></h2>
+  <p class="card-summary">A reflective piece on how pandemic-era changes have reshaped traditional work assumptions, highlighting shifts in location, career paths, and skill development.</p>
   
   <div class="card-footer">
-    <span class="pub-date">22 Nov 2026</span>
+    <span class="pub-date">23 Nov 2026</span>
     
   </div>
 </article></div>
@@ -930,6 +1075,11 @@
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-23</div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.27816v1" target="_blank" rel="noopener noreferrer">BinXSight: Fast Binary Program Summarization via Hierarchical Modular Decomposition</a><a class="archive-title" href="https://arxiv.org/abs/2611.27596v1" target="_blank" rel="noopener noreferrer">Isonomy: Isolating Every Request from Timing Side Channels at Nearly Full-Sharing Throughput in Multi-Instance LLM Prefill</a><a class="archive-title" href="https://arxiv.org/abs/2611.27721v1" target="_blank" rel="noopener noreferrer">Decision Models for Multilingual Emotion Classification: A Comparative Study Against LLMs and Encoders</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-22</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2608.25793v1" target="_blank" rel="noopener noreferrer">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a><a class="archive-title" href="https://arxiv.org/abs/2609.20886v1" target="_blank" rel="noopener noreferrer">BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</a><a class="archive-title" href="https://arxiv.org/abs/2609.12171v1" target="_blank" rel="noopener noreferrer">WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</a></div>
@@ -1073,16 +1223,16 @@
   <div class="archive-date">2026-10-19</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.23787v1" target="_blank" rel="noopener noreferrer">DLite: History-free Speculative Decoding for Agentic AI</a><a class="archive-title" href="https://arxiv.org/abs/2610.23782v1" target="_blank" rel="noopener noreferrer">Enforcing Code Reasoning in Agentic Scaffold for More Effective Issue Resolution</a><a class="archive-title" href="https://arxiv.org/abs/2610.23342v1" target="_blank" rel="noopener noreferrer">Robust Function Calling for LLM Agents Under Interface Drift</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-17</div>
-  <div class="archive-count">2 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.22350v1" target="_blank" rel="noopener noreferrer">FDE-Gym: The Last Mile of AI Delivery</a><a class="archive-title" href="https://arxiv.org/abs/2610.22316v1" target="_blank" rel="noopener noreferrer">Learning to Steer LLM Agents and Multi-Agent Systems</a></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-23</div>
+  <div class="archive-count">15 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips/" target="_blank" rel="noopener noreferrer">Amazon snaps up Decart’s AI optimization tech for $7.5B as it prepares to sell Trainium chips</a><a class="archive-title" href="https://ladybird.org/posts/alpha/" target="_blank" rel="noopener noreferrer">Ladybird Is Now in Alpha</a><a class="archive-title" href="https://techcrunch.com/2026/11/23/jensen-huang-isnt-out-of-the-woods-yet/" target="_blank" rel="noopener noreferrer">Jensen Huang isn’t out of the woods yet</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-22</div>
   <div class="archive-count">11 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines" target="_blank" rel="noopener noreferrer">Even the fastest AI clusters can be held back by their release pipelines</a><a class="archive-title" href="https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/" target="_blank" rel="noopener noreferrer">Banks Have Had It Up to Here With Your AI Agent</a><a class="archive-title" href="https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/" target="_blank" rel="noopener noreferrer">Anthropic’s IPO could deliver $156B to charity</a></div>
@@ -1226,11 +1376,6 @@
   <div class="archive-date">2026-10-25</div>
   <div class="archive-count">23 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arstechnica.com/security/2026/10/disgraced-emudhra-drops-out-of-tls-business-following-certificate-debacle/" target="_blank" rel="noopener noreferrer">Disgraced eMudhra drops out of TLS business after using cert private key of 4</a><a class="archive-title" href="https://arstechnica.com/security/2026/10/php-maintainers-tell-web-devs-to-prepare-themselves-for-critical-security-patches/" target="_blank" rel="noopener noreferrer">PHP warns it plans to release 2 emergency patches imminently</a><a class="archive-title" href="https://huggingface.co/blog/ibm-granite/granite-speech-5" target="_blank" rel="noopener noreferrer">Granite Speech 5.0: Transcribe, Translate, and Attribute more Accurately and Faster</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-24</div>
-  <div class="archive-count">49 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://blogs.microsoft.com/blog/2026/10/12/microsoft-to-expand-azure-maia-system-to-multi-gigawatt-deployments/" target="_blank" rel="noopener noreferrer">Microsoft to expand Azure Maia system to multi-gigawatt deployments</a><a class="archive-title" href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener noreferrer">OpenAI and Poland’s NASK partner to advance AI safety and security</a><a class="archive-title" href="https://huggingface.co/blog/torch-neuronx-model-support" target="_blank" rel="noopener noreferrer">Does Your Model Run on AWS Trainium? Look It Up</a></div>
 </div></div>
   </div>
 </main>
