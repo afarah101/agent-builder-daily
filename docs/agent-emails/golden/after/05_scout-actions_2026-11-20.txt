@@ -1,0 +1,38 @@
+Subject: [Agent] Scout Actions · Fri 20 Nov · 2 items · Wait before Groq retry
+Date: 2026-11-20T19:30:11Z
+Format: H11 (BLUF) rewrite of before/05_scout-actions_2026-11-20.txt
+---
+TOP LINE
+One action: add a short wait before Scout Daily tries Groq again. Injection tests already exist, so drop that idea.
+
+1. Wait before a Groq retry
+Found: Cap-and-Track sends model work only when there is free space.
+Your link: Scout Daily — case_study_scout_langgraph.py:165 groq_complete. After a 429 (rate limit refusal) it tries key 2 at once, then stops the run.
+Do: ACT NOW — tokens: a lost run wastes the whole day's work.
+Test prompt: T1
+Source: https://github.com/afarah101/agent-builder-daily/blob/main/case_study_scout_langgraph.py (opened)
+[✓ YES 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=YES%201) [✗ NO 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=NO%201)
+
+2. Prompt-injection tests
+Found: PIPETTE tests agents against prompt injection (hidden orders in text).
+Your link: Scout Daily — judge.py:62 INJECTION_PATTERNS and tests/test_try_this.py.
+Do: DROP — time: the guard and tests exist.
+Test prompt: T2
+Source: https://github.com/afarah101/agent-builder-daily/blob/main/tests/test_try_this.py (opened)
+[✓ YES 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=YES%202) [✗ NO 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=NO%202)
+
+DETAIL
+T1 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, read-only. Open case_study_scout_langgraph.py, fix_news_scout.py and video_scout_agent.py. For each Groq call, give file:line and say if it waits before a retry after a 429 error. Change no file. PASS if each Groq call is listed with "waits: yes/no"; FAIL if one is missing.
+```
+
+T2 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, read-only. Run: python -m pytest tests/test_judge.py tests/test_try_this.py -q. Report the pass and fail count. Change no file. PASS if 0 tests fail; FAIL if 1 or more fail.
+```
+
+Dropped: injection plan for optomate-audit-agent. That repo is not in docs/PROJECTS.md (no push in 30 days).
+Skipped: Microsoft 365 patching tip. You use Google Workspace.
+Target: 0% of actions approved, last 7 days (target 30%) · 0/18.
+Paper pages blocked in this network: arXiv 2611.24891, 2611.24362. Summaries from Scout Daily.

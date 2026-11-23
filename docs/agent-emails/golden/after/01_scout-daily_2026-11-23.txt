@@ -1,0 +1,27 @@
+Subject: Scout Daily · Mon 23 Nov · 1 item · Hidden push errors
+Date: 2026-11-23T11:00:55Z
+Format: H11 (BLUF) rewrite of before/01_scout-daily_2026-11-23.txt
+---
+TOP LINE
+One item today. Make the Scout Daily push step report its errors. No other story links to your projects.
+
+1. Hidden push errors
+Found: A firmware rollout stopped itself on a safety limit. The stop got no attention for six days.
+Your link: Scout Daily — .github/workflows/scout-daily.yml lines 51–52. "|| true" (ignore any error) hides a failed commit or pull.
+Do: LATER — risk: a lost data push sends no alert. The fix is one small change.
+Test prompt: T1
+Source: https://github.com/afarah101/agent-builder-daily/blob/main/.github/workflows/scout-daily.yml (opened)
+[✓ YES 1](mailto:<owner-email>?subject=Re%3A%20Scout%20Daily%2023%20Nov&body=YES%201) [✗ NO 1](mailto:<owner-email>?subject=Re%3A%20Scout%20Daily%2023%20Nov&body=NO%201)
+
+DETAIL
+T1 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, work read-only on a new branch sandbox/silent-steps. Open every file in .github/workflows/. List each command that ends with "|| true" or has continue-on-error. For each one, give file:line, the failure it hides, and if any alert follows. Change no file. PASS if every such command is listed with file:line; FAIL if one is missing.
+```
+
+Dropped (no link to a project in docs/PROJECTS.md):
+- Dockerfile case study (arXiv 2608.25793): 0 Dockerfiles in all 8 projects (checked 23 Nov).
+- BI-Agent paper (50/75), WinSyn paper (26/75): no BI or Q&A project.
+- 5 quick hits: banks and AI agents, text-message agents, Perplexity, OpenAI limits, Anthropic IPO.
+News page: https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines (blocked in this network; summary from Scout Daily).
+Data as of 2026-11-22 23:28 UTC. 11 news items, 3 case studies. https://agent-builder-daily.vercel.app

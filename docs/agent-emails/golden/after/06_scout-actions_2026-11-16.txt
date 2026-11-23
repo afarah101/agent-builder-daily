@@ -1,0 +1,36 @@
+Subject: [Agent] Scout Actions · Mon 16 Nov · 2 items · Failure-cause tags
+Date: 2026-11-16T19:29:38Z
+Format: H11 (BLUF) rewrite of before/06_scout-actions_2026-11-16.txt
+---
+TOP LINE
+Two small spikes for Scout Daily. Start with the second Groq model. One model outage stops the run.
+
+1. Second Groq model
+Found: A news story says AI providers face supply risk.
+Your link: Scout Daily — case_study_scout_langgraph.py:165 groq_complete. It changes keys, not models. DUS App already falls back across models.
+Do: ACT NOW — risk: one model outage stops the daily email.
+Test prompt: T1
+Source: https://github.com/afarah101/dus-app/commit/ae8df29 (opened)
+[✓ YES 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=YES%201) [✗ NO 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=NO%201)
+
+2. Failure-cause tags
+Found: AskALCF sorts agent failures by cause.
+Your link: Scout Daily — judge.py:428 judge_fail score in Langfuse (trace log tool). It has no cause field.
+Do: LATER — time: faster fault finding.
+Test prompt: T2
+Source: https://github.com/afarah101/agent-builder-daily/blob/main/judge.py (opened)
+[✓ YES 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=YES%202) [✗ NO 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=NO%202)
+
+DETAIL
+T1 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, spike on a new branch spike/groq-model-fallback. In groq_complete (case_study_scout_langgraph.py), when both keys fail, try one second Groq model once. Add a unit test that fakes a model error. Run python -m pytest -q. PASS if all tests pass and the new test shows the second model is called; FAIL otherwise.
+```
+
+T2 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, spike on a new branch spike/failure-cause. In judge.py, add a cause field (retrieval, prompt, model, tool, none) to the judge_fail score metadata. Run python -m pytest tests/test_judge.py -q. PASS if all tests pass and the metadata holds cause; FAIL otherwise.
+```
+
+Dropped: test stop rule for optomate-audit-agent. That repo is not in docs/PROJECTS.md.
+Pages blocked in this network: arXiv 2611.15700, TechCrunch 15 Nov. Summaries from Scout Daily.

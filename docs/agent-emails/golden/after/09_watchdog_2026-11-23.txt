@@ -1,0 +1,40 @@
+Subject: [Agent] Watchdog · Mon 23 Nov · 2 problems · 86% healthy
+Date: 2026-11-23T12:20:01Z
+Format: H11 (BLUF) rewrite of before/09_watchdog_2026-11-23.txt
+---
+TOP LINE
+Fix the DUS database reads first. They cost money each day. Then check the Aurora build. Health: 86% OK (target 95%).
+
+1. DUS reads too high
+Found: DUS Health says reads stay far above the limit. Two fixes you approved did not start.
+Your link: DUS App — Firestore reads (app database reads): 1,199,625 in 24 h. The limit is 150,000.
+Do: ACT NOW — money: the Google bill stays high until reads drop.
+Test prompt: T1
+Source: https://mail.google.com/mail/u/0/#all/1a207b4a88e8f9c2 (opened)
+[✓ YES 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Watchdog&body=YES%201) [✗ NO 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Watchdog&body=NO%201)
+
+2. Aurora build check failed
+Found: CI (automatic build check) failed on the Call and WhatsApp button change.
+Your link: Aurora website — .github/workflows/ci.yml, job verify.
+Do: ACT NOW — risk: the new call buttons are not tested.
+Test prompt: T2
+Source: https://github.com/afarah101/Aurora-Electrical-Website/actions/runs/45084091155 (opened)
+[✓ YES 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Watchdog&body=YES%202) [✗ NO 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Watchdog&body=NO%202)
+
+DETAIL
+T1 · copy into Claude Code
+```text
+In afarah101/dus-app, read-only on a new branch sandbox/reads-audit. In functions/, find each Firestore read that runs on a schedule or a trigger. Give file:line, the collection, and how often it runs. Mark the reads that PR #13 did not change. Change no file. PASS if each read has file:line and a run rate; FAIL if one has none.
+```
+
+T2 · copy into Claude Code
+```text
+In afarah101/Aurora-Electrical-Website, read-only. Run: gh run view 45084091155 --log-failed. Name the failed step and the first error line. Check if app/layout.tsx imports next/font/google on the PR branch. Change nothing. PASS if the step and the first error are printed; FAIL if not.
+```
+
+Why the fixes did not start: Gmail search for Job done or Job blocked emails, last 3 days, found none. Open the Manager task's last run.
+| OK 12 | Not checked 2 | Problems 2 | · 12/14 checks OK.
+OK: Doorbell, Sales Researcher, DUS Health agent, Night Shift, Weekly Review, Market Research, Scout Actions, Manager, Scout Daily email, Morning brief email, understat-probe, agent emails present.
+Already reported 22 Nov, not worse: Validator has no finished run record. DUS Health Data workflow failed (run 45039593500).
+Not checked: Build Planner (no run record), Morning brief task (no run record). Paused agents: none.
+Follow-ups sent today: 3 (rows 2, 3, 4). Closed as DONE: none.
