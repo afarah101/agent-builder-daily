@@ -164,8 +164,15 @@ def test_page_structure(site):
                    '<button type="submit" class="email-btn">', '<span class="accent-word">'):
         assert needle in page, needle
     css = page.split("<style>")[1].split("</style>")[0]
-    assert "infinite" not in css and "background-clip: text" not in css
-    assert css.count("linear-gradient(") == 1  # the hero background only: no gradient on or under text
+    assert "infinite" not in css
+    assert not re.search(r"background-clip\s*:\s*text", css, re.I)  # -webkit- prefix included, any spacing
+    # no gradient of any type except the hero background (--g-hero, used by .hero) and the score chart (no text on it)
+    grad = re.compile(r"(?:repeating-)?(?:linear|radial|conic)-gradient\s*\(|-webkit-gradient\s*\(", re.I)
+    allowed = {":root": "--g-hero:", ".hero": "background: var(--g-hero)", ".score-ring": "conic-gradient("}
+    for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", re.sub(r"/\*.*?\*/", "", css, flags=re.S)):
+        for decl in body.split(";"):
+            if grad.search(decl) or "--g-hero" in decl:
+                assert allowed.get(sel.strip(), "\0") in decl, (sel.strip(), decl.strip())
     assert re.search(r"\.accent-word\s*\{\s*color:\s*var\(--c-accent\);\s*\}", css)
     assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
     assert not re.search(r"border-left:\s*[2-9]px", css)
@@ -438,6 +445,15 @@ def test_home_colour_tokens_meet_4_5_to_1(site):
     pairs = [(fg, bg) for fgs, bgs in zones.values() for fg in fgs for bg in bgs]
     for fg, bg in pairs:
         assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
+    # muted text is not in the tag-pills zone (4.35:1 on c-bg-alt), so no muted-text rule may hit a c-bg-alt element
+    style = re.sub(r"/\*.*?\*/", "", (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0], flags=re.S)
+    rules = [(sel, body) for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", style) if not sel.strip().startswith(":root")]
+    def uses(body, prop, tok):
+        return re.search(rf"(?<![\w-]){prop}\s*:[^;]*(var\(--{tok}\)|{tokens[tok]})", body, re.I)
+    on_alt = {c for sel, body in rules if uses(body, "background(?:-color)?", "c-bg-alt") for c in re.findall(r"\.([\w-]+)", sel)}
+    for sel, body in rules:
+        if uses(body, "color", "c-text-muted"):
+            assert not on_alt & set(re.findall(r"\.([\w-]+)", sel)), (sel.strip(), sorted(on_alt))
     # status badges: each colour on its own tint, rounded to 8-bit as the screen shows it
     css = (site / "site" / "index.html").read_text()
     pct = int(re.search(r"\.status-badge \{ background: color-mix\(in srgb, currentColor (\d+)%, var\(--c-bg\)\)", css).group(1))
