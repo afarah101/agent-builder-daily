@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to tell a cyberattack from a plain old outage - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">How to tell a cyberattack from a plain old outage</h1>
+  <p class="meta-line">Ars Technica · 19 Nov 202 · Generated 24 Nov 2026, 04:00</p>
+  <a href="https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Microsoft’s Exchange and several other critical services experienced widespread outages this week, raising questions about whether the incidents were caused by cyberattacks or operational failures. The outages began with a misconfiguration in Exchange Online that disrupted email delivery for a large portion of the Microsoft 365 tenant base. Similar disruptions were reported for SharePoint Online, Teams, and other cloud services that rely on the same underlying infrastructure. Cloudflare’s CEO later clarified that most of these incidents stem from the inherent complexity of modern cloud platforms rather than malicious intent, but the line between accidental misconfiguration and exploitation remains thin.</p><p>For enterprise IT teams, the events underscore the need for rigorous change management, continuous monitoring, and rapid incident response. The outages exposed gaps in visibility into configuration drift and the lack of automated rollback mechanisms for critical services. Vendors involved include Microsoft (Exchange, SharePoint, Teams, Azure AD), Cloudflare (CDN and security services), and any third‑party tools that integrate with these services (e.g., SSO, MDM, monitoring platforms). The broader industry implication is a shift toward treating operational reliability as a security issue: misconfigurations can create exploitable windows, and the cost of downtime is now measured in lost productivity and revenue rather than just service availability.</p><p>The incident also highlights the importance of shared responsibility models. While Microsoft maintains the underlying infrastructure, enterprises must ensure that their own configurations, access controls, and monitoring are correctly aligned. The lack of clear, actionable logs during the outage made it difficult for customers to determine whether the root cause was a benign error or a potential breach. As a result, many organizations are revisiting their incident response playbooks, tightening change approval processes, and investing in tools that provide real‑time visibility into configuration changes across the cloud stack. The industry is likely to see increased demand for solutions that combine configuration management, automated remediation, and threat detection to prevent similar outages from being misinterpreted or exploited.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit all recent changes to Exchange Online, SharePoint Online, and Teams configuration via the Microsoft 365 admin center audit logs.
+   - Verify that SSO (Azure AD) and MDM (Intune) policies have not been altered in a way that could affect service availability.
+   - Run a configuration drift assessment across all cloud services using Microsoft Cloud App Security or a third‑party tool.
+   - Review incident response logs to confirm that alerts were triggered and escalated appropriately.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Present a cost‑benefit analysis showing that proactive configuration monitoring can reduce downtime by up to 30% and lower incident response time by 50%.
+   - Use metrics such as Mean Time to Detect (MTTD) and Mean Time to Resolve (MTTR) before and after implementation.
+   - Highlight compliance impact: under UK GDPR, unplanned downtime can lead to data availability breaches, potentially incurring fines.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Microsoft Cloud App Security for continuous monitoring and automated remediation.
+   - Azure Policy and Azure Blueprints to enforce compliant configurations.
+   - Cloudflare Access and Cloudflare Spectrum for secure edge access and DDoS protection.
+   - Splunk or Elastic Stack for log aggregation and anomaly detection.
+   - ServiceNow or Jira Service Management for change management workflow integration.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Misconfigured policies can lock out legitimate users, creating a false sense of security.
+   - Compliance: Failure to maintain audit trails may violate UK GDPR data protection principles.
+   - Operational: Over‑automation may lead to unintended rollbacks or service disruptions if not properly tested.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy Azure Policy to enforce a baseline configuration for Exchange Online and SharePoint Online, and set alerts for any deviations within 30 days.
+   - Enable Microsoft 365 audit logs and configure alerts for critical changes to SSO and MDM settings.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over the next 6–12 months, implement a full configuration management lifecycle: version control for all cloud settings, automated rollback scripts, and a continuous compliance dashboard.
+   - Integrate threat intelligence feeds into the monitoring stack to correlate configuration changes with emerging attack patterns.
+   - Conduct quarterly tabletop exercises simulating outage scenarios to validate incident response readiness and refine playbooks.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 24 Nov 2026, 04:00</p>
+</main>
+</body>
+</html>
