@@ -504,7 +504,7 @@
   </div>
   <div class="header-right">
     <div class="updated-label" id="updated-label">Loading…</div>
-    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+    <button type="button" class="refresh-btn" id="refresh-btn">↻ Refresh</button>
   </div>
 </div>
 
@@ -607,6 +607,14 @@
   const DAILY_TOKEN_LIMIT = 500000;
   const TOKENS_PER_CALL   = 1200;
 
+  // Every ${} inside html`` is escaped unless it is itself html`` output (or an array of it): data never reaches innerHTML raw.
+  class SafeHtml { constructor(s) { this.s = s; } toString() { return this.s; } }
+  const escHtml = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  function html(strings, ...vals) {
+    const part = v => v instanceof SafeHtml ? v.s : Array.isArray(v) ? v.map(part).join('') : escHtml(v);
+    return new SafeHtml(strings.reduce((out, str, i) => out + str + (i < vals.length ? part(vals[i]) : ''), ''));
+  }
+
   function fmt(n) { return n === undefined || n === null ? '—' : n.toLocaleString(); }
   function avg(arr, key) {
     if (!arr.length) return 0;
@@ -631,7 +639,8 @@
     const failedPapers = [];
 
     allPapers.forEach(p => {
-      const status = p.gemini_eval_status || p.eval_verdict || 'pending';
+      // eval_verdict (the judge) first, then gemini_eval_status: the home page's rule
+      const status = [p.eval_verdict, p.gemini_eval_status].find(s => s === 'pass' || s === 'fail') || 'pending';
       verdicts[status] = (verdicts[status] || 0) + 1;
       if (status === 'fail') {
         failedPapers.push(p);
@@ -647,7 +656,7 @@
 
     if (failedPapers.length > 0) {
       failSection.style.display = 'block';
-      failList.innerHTML = failedPapers.map(p => `
+      failList.innerHTML = failedPapers.map(p => html`
         <div class="qc-fail-item">
           <div class="qc-fail-title">${p.title || 'Untitled'}</div>
           <div class="qc-fail-detail">${p.hallucination_detail || 'No detail provided.'}</div>
@@ -672,7 +681,7 @@
       const calls = slot.calls || 0;
       const kPct  = Math.min(100, Math.round((total / limit) * 100));
       const kColor = colorForPct(kPct);
-      return `<div class="card">
+      return html`<div class="card">
         <div class="card-label">${label}</div>
         <div class="card-value">${fmt(total)}</div>
         <div class="card-sub">${isLive ? 'live' : 'no data yet'} · ${fmt(calls)} calls · ${fmt(slot.prompt_tokens||0)} prompt / ${fmt(slot.completion_tokens||0)} completion</div>
@@ -694,8 +703,8 @@
     const note = document.getElementById('groq-note');
     if (note) {
       note.innerHTML = isLive
-        ? `Live from <code>resp.usage</code> · avg ${fmt(avgTpc)} tokens/call${misses ? ` · ⚠ ${misses} usage-miss(es)` : ''} · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`
-        : `No token stats yet — will populate after next pipeline run · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`;
+        ? html`Live from <code>resp.usage</code> · avg ${fmt(avgTpc)} tokens/call${misses ? ` · ⚠ ${misses} usage-miss(es)` : ''} · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`
+        : html`No token stats yet — will populate after next pipeline run · <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>`;
     }
   }
 
@@ -741,7 +750,7 @@
 
     const top3 = [...papers].sort((a, b) => (b.total_score || 0) - (a.total_score || 0)).slice(0, 3);
 
-    document.getElementById('pipeline-cards').innerHTML = `
+    document.getElementById('pipeline-cards').innerHTML = html`
       <div class="card">
         <div class="card-label">Papers Fetched</div>
         <div class="card-value">${fmt(fetched)}</div>
@@ -765,29 +774,30 @@
     `;
 
     const bucketLabels = ['0–25', '26–50', '51–75', '76–100'];
-    const distHtml = bucketLabels.map((lbl, i) => `
+    const distHtml = bucketLabels.map((lbl, i) => html`
       <div class="dist-row">
         <span class="dist-label">${lbl}</span>
         <div class="dist-track"><div class="dist-fill" style="width:${Math.round((buckets[i]/maxBucket)*100)}%"></div></div>
         <span class="dist-count">${buckets[i]}</span>
-      </div>`).join('');
+      </div>`);
 
     const topHtml = top3.length
-      ? top3.map((p, i) => `
+      ? top3.map((p, i) => html`
         <div class="top-paper">
           <div class="top-paper-left">
             <div class="top-paper-title">${['①','②','③'][i]} ${(p.title||'').substring(0,60)}${(p.title||'').length>60?'…':''}</div>
             <div class="top-paper-tag">${p.relevance_tag || 'Other'}</div>
           </div>
           <div class="top-paper-score" style="color:${colorForScore(p.total_score||0)}">${p.total_score||0}</div>
-        </div>`).join('')
-      : '<div class="empty">None scored yet.</div>';
+        </div>`)
+      : html`<div class="empty">None scored yet.</div>`;
 
+    const lower = document.getElementById('pipeline-lower');  // was 'dist-section', which the page never had
     if (!papers.length) {
-      document.getElementById('dist-section').style.display = 'none';
+      lower.style.display = 'none';
     } else {
-      document.getElementById('dist-section').style.display = '';
-      document.getElementById('dist-section').innerHTML = `
+      lower.style.display = 'grid';
+      lower.innerHTML = html`
         <div class="card">
           <div class="card-label" style="margin-bottom:14px">Score Distribution</div>
           ${distHtml}
@@ -824,7 +834,7 @@
     const healthColor = avgTotal >= 50 ? 'var(--green)' : avgTotal >= 30 ? 'var(--amber)' : 'var(--red)';
     const healthLabel = avgTotal >= 50 ? 'Healthy' : avgTotal >= 30 ? 'Below target' : 'Poor';
 
-    document.getElementById('quality-section').innerHTML = `
+    document.getElementById('quality-section').innerHTML = html`
       <div class="card">
         <div class="card-label" style="margin-bottom:14px">Average Scores</div>
         <div class="stat-row">
@@ -857,14 +867,14 @@
           <span class="stat-row-val" style="color:${flagged>0?'var(--red)':'var(--green)'}">${flagged}</span>
         </div>
         <div style="margin-top:16px">
-          ${['pass','fail','pending'].map(v => `
+          ${['pass','fail','pending'].map(v => html`
             <div class="verdict-row">
               <span class="verdict-label" style="color:${v==='pass'?'var(--green)':v==='fail'?'var(--red)':'var(--amber)'}">${v}</span>
               <div class="verdict-track">
                 <div class="verdict-fill ${v}" style="width:${Math.round((verdicts[v]/totalV)*100)}%"></div>
               </div>
               <span class="verdict-count">${verdicts[v]}</span>
-            </div>`).join('')}
+            </div>`)}
         </div>
         <div class="note" style="margin-top:14px">
           Gemini evaluates first 5 papers per run. Rest are marked pending.
@@ -887,19 +897,19 @@
       const papers = d.case_studies || [];
       const avgScore = papers.length ? Math.round(papers.reduce((s,p) => s + (p.total_score||0), 0) / papers.length) : 0;
       const dateShort = (d.date || '').slice(5); // MM-DD
-      return `<div class="bar-col">
+      return html`<div class="bar-col">
         <span class="bar-num">${d.total||0}</span>
         <div class="bar-fill" style="height:${Math.max(4, pct)}%;background:${avgScore>=50?'var(--accent)':'var(--amber)'}" title="${d.date}: ${d.total} papers, avg score ${avgScore}"></div>
         <span class="bar-date">${dateShort}</span>
       </div>`;
-    }).join('');
+    });
 
     const avgScores = days.map(d => {
       const papers = d.case_studies || [];
       return papers.length ? Math.round(papers.reduce((s,p) => s + (p.total_score||0), 0) / papers.length) : 0;
     });
 
-    document.getElementById('trend-section').innerHTML = `
+    document.getElementById('trend-section').innerHTML = html`
       <div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start">
         <div>
           <div class="bar-chart">${bars}</div>
@@ -907,11 +917,11 @@
         </div>
         <div style="min-width:140px">
           <div class="card-label" style="margin-bottom:10px">Avg Score / Day</div>
-          ${days.map((d, i) => `
+          ${days.map((d, i) => html`
             <div class="stat-row" style="padding:5px 0">
               <span class="stat-row-label" style="font-family:'JetBrains Mono',monospace;font-size:11px">${(d.date||'').slice(5)}</span>
               <span class="stat-row-val" style="color:${colorForScore(avgScores[i])};font-size:12px">${avgScores[i]||'—'}</span>
-            </div>`).join('')}
+            </div>`)}
         </div>
       </div>
     `;
@@ -999,6 +1009,7 @@
     }
   }
 
+  document.getElementById('refresh-btn').addEventListener('click', () => loadAll());
   loadAll();
   loadLangfuse();
   loadGroqStats();
