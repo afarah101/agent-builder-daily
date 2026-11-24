@@ -459,7 +459,9 @@ def generate_html():
       --c-border-dark: #333333;
       --c-hero-bottom: #292929;
       --g-hero: linear-gradient(#000, var(--c-hero-bottom));
-      --g-accent: linear-gradient(45deg, #22d3ee, #818cf8);
+      --c-accent-start: #22d3ee;
+      --c-accent-end: #818cf8;
+      --g-accent: linear-gradient(45deg, var(--c-accent-start), var(--c-accent-end));
 
       --radius-sm: 6px;
       --radius: 8px;
