@@ -659,7 +659,7 @@ def generate_html():
       margin: -64px auto 0;
       padding: 32px 32px 64px;
       background: var(--c-bg);
-      border-radius: var(--radius-panel);
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
     }
 
     .toolbar {
@@ -670,6 +670,10 @@ def generate_html():
       gap: 16px;
       border-bottom: 1px solid var(--c-border);
       margin-bottom: 32px;
+      position: sticky;  /* tabs and search stay in view, as the old header did */
+      top: 0;
+      z-index: 1;
+      background: var(--c-bg);
     }
 
     /* Tabs */
@@ -987,7 +991,7 @@ def generate_html():
       .email-input { min-height: var(--tap); }
       .email-btn { min-height: var(--tap); padding: 0 18px; }
       .content { width: 100%; padding: 24px 16px 48px; }
-      .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); position: static; }
       .tab { flex: 1 1 40%; min-height: var(--tap); padding: 10px 12px; }
       .search { width: 100%; min-height: var(--tap); font-size: var(--fs-body); }
       .card { padding: 18px; }
