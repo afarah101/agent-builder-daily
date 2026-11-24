@@ -60,6 +60,15 @@ def test_news_card_has_one_source_link_in_the_title():
     assert "High relevance" in html  # relevance in words, not colour alone
 
 
+def test_news_card_has_one_meta_line_with_the_source():
+    html = gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1", "source": "Ars Technica",
+                                     "pub_date": "2026-11-24"}]}, {"news": {}})
+    assert html.count('class="card-meta"') == 1
+    assert ('<div class="card-meta"><span>Ars Technica</span><span class="sep" aria-hidden="true">•</span>'
+            '<span>2026-11-24</span></div>') in html
+    assert html.count("Ars Technica") == 1 and html.count("2026-11-24") == 1  # no duplicate source or date span
+
+
 # ---------- score ring: out of 75, no ring above 75 ----------
 
 def test_score_ring_caps_at_75():
@@ -161,13 +170,34 @@ def test_page_structure(site):
     for needle in ('<h1 class="brand">', "<main", "<header", 'role="tablist"', 'role="tab"', 'aria-selected="true"',
                    'role="tabpanel"', '<label class="visually-hidden" for="scout-search">',
                    '<label class="visually-hidden" for="email-input">', ":focus-visible", "prefers-reduced-motion",
-                   '<button type="submit" class="email-btn">'):
+                   '<button type="submit" class="email-btn">', '<span class="accent-word">'):
         assert needle in page, needle
     css = page.split("<style>")[1].split("</style>")[0]
-    assert "infinite" not in css and "background-clip: text" not in css
+    assert "infinite" not in css
+    assert not re.search(r"background-clip\s*:\s*text", css, re.I)  # -webkit- prefix included, any spacing
+    # no gradient of any type except the hero background (--g-hero, used by .hero) and the score chart (no text on it)
+    grad = re.compile(r"(?:repeating-)?(?:linear|radial|conic)-gradient\s*\(|-webkit-gradient\s*\(", re.I)
+    allowed = {":root": "--g-hero:", ".hero": "background: var(--g-hero)", ".score-ring": "conic-gradient("}
+    for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", re.sub(r"/\*.*?\*/", "", css, flags=re.S)):
+        for decl in body.split(";"):
+            if grad.search(decl) or "--g-hero" in decl:
+                assert allowed.get(sel.strip(), "\0") in decl, (sel.strip(), decl.strip())
+    assert re.search(r"\.accent-word\s*\{\s*color:\s*var\(--c-accent\);\s*\}", css)
     assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
     assert not re.search(r"border-left:\s*[2-9]px", css)
     assert not re.search(r"[\U0001F300-\U0001FAFF☀-➿]", page)  # no emoji as icons
+
+
+def test_lead_story_grid(site):
+    gh.generate_html()
+    css = (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0]
+    mid = re.search(r"@media \(min-width: 641px\) \{(.*?)\n    \}", css, re.S).group(1)
+    wide = re.search(r"@media \(min-width: 1025px\) \{(.*?)\n    \}", css, re.S).group(1)
+    assert re.search(r"\.cards-grid\s*\{\s*grid-template-columns:\s*repeat\(2,", mid)
+    assert re.search(r"\.cards-grid > \.card:first-child\s*\{\s*grid-column:\s*span 2;", mid)
+    assert re.search(r"\.cards-grid\s*\{\s*grid-template-columns:\s*repeat\(4,", wide)
+    assert re.search(r"\.cards-grid > \.card:first-child\s*\{\s*grid-row:\s*span 2;", wide)
+    assert re.search(r"\.cards-grid > \.card:first-child \.card-title\s*\{\s*font-size:\s*var\(--fs-h3\);", wide)
 
 
 # ---------- the two retired pages redirect to the current site ----------
@@ -428,10 +458,30 @@ def test_home_colour_tokens_meet_4_5_to_1(site):
     gh.generate_html()
     root = (site / "site" / "index.html").read_text().split(":root {")[1].split("}")[0]
     tokens = dict(re.findall(r"--([\w-]+):\s*(#[0-9a-fA-F]{6})", root))
-    for fg in ("text", "text-secondary", "text-muted", "accent", "warn", "danger"):
-        for bg in ("bg", "surface", "surface2"):
-            assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
-    assert _ratio(tokens["accent-ink"], tokens["accent"]) >= 4.5
+    assert tokens["c-accent"] == "#22d3ee"
+    # every text colour of a zone on every background of that zone
+    zones = {"white panel": (("c-text", "c-text-muted", "c-good", "c-warn", "c-bad"), ("c-bg",)),
+             "dark hero": (("c-bg", "c-on-dark-muted", "c-accent"), ("c-surface-dark", "c-surface-dark-2", "c-hero-bottom")),
+             "tag pills": (("c-text",), ("c-bg-alt",))}
+    pairs = [(fg, bg) for fgs, bgs in zones.values() for fg in fgs for bg in bgs]
+    for fg, bg in pairs:
+        assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
+    # muted text is not in the tag-pills zone (4.35:1 on c-bg-alt), so no muted-text rule may hit a c-bg-alt element
+    style = re.sub(r"/\*.*?\*/", "", (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0], flags=re.S)
+    rules = [(sel, body) for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", style) if not sel.strip().startswith(":root")]
+    def uses(body, prop, tok):
+        return re.search(rf"(?<![\w-]){prop}\s*:[^;]*(var\(--{tok}\)|{tokens[tok]})", body, re.I)
+    on_alt = {c for sel, body in rules if uses(body, "background(?:-color)?", "c-bg-alt") for c in re.findall(r"\.([\w-]+)", sel)}
+    for sel, body in rules:
+        if uses(body, "color", "c-text-muted"):
+            assert not on_alt & set(re.findall(r"\.([\w-]+)", sel)), (sel.strip(), sorted(on_alt))
+    # status badges: each colour on its own tint, rounded to 8-bit as the screen shows it
+    css = (site / "site" / "index.html").read_text()
+    pct = int(re.search(r"\.status-badge \{ background: color-mix\(in srgb, currentColor (\d+)%, var\(--c-bg\)\)", css).group(1))
+    for fg in ("c-good", "c-warn", "c-bad"):
+        c, w = tokens[fg], tokens["c-bg"]
+        tint = "#" + "".join("%02x" % round(int(c[i:i + 2], 16) * pct / 100 + int(w[i:i + 2], 16) * (1 - pct / 100)) for i in (1, 3, 5))
+        assert _ratio(c, tint) >= 4.5, (fg, tint, round(_ratio(c, tint), 3))
 
 
 def test_hostile_build_has_no_injected_markup(site):
@@ -534,3 +584,12 @@ def test_subscribe_errors_and_timeout_show_the_error(tmp_path, mode):
 def test_dashboard_counts_a_passed_item_as_passed(tmp_path):
     r = run_node(tmp_path, DASH_HARNESS, DASHBOARD, "Paper", json.dumps({"eval_verdict": "pass", "gemini_eval_status": "pending"}))
     assert (r["text"]["qc-pass-count"], r["text"]["qc-fail-count"], r["text"]["qc-pending-count"]) == ("1", "0", "0")
+
+
+def test_non_lead_cards_clamp_summary_and_insight_to_3_lines(site):
+    gh.generate_html()
+    css = (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0]
+    rule = re.search(r"\.cards-grid > \.card:not\(:first-child\) \.card-summary,\s*"
+                     r"\.cards-grid > \.card:not\(:first-child\) \.insight\s*\{([^}]*)\}", css)
+    assert rule, "clamp rule missing"
+    assert re.search(r"-webkit-line-clamp:\s*3;", rule.group(1)) and "overflow: hidden" in rule.group(1)
