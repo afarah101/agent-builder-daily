@@ -179,6 +179,70 @@ def safe_url(url):
     return url if isinstance(url, str) and url.startswith(("https://", "http://")) else SITE_URL
 
 
+# ---------- H11 BLUF block (House rule H11, checked by evals/email_check.py) ----------
+# (project name in docs/PROJECTS.md, repo, keyword pattern, file or metric it changes). An item with no match is dropped.
+H11_PROJECTS = (
+    ("Scout Daily", "afarah101/agent-builder-daily", r"\b(groq|llama|langgraph|langfuse|llm judge|rate limit|github actions|prompt injection|agent eval)",
+     "the scout pipeline (orchestrator.py, judge.py)"),
+    ("DUS App", "afarah101/dus-app", r"\b(firestore|firebase|expo|react native|push notification|crashlytics)", "Firestore reads and app releases"),
+    ("Aurora website", "afarah101/Aurora-Electrical-Website", r"\b(next\.js|vercel|core web vitals|google business profile|local seo|tradesperson|electrician)",
+     "site build and lead capture"),
+    ("Football Twin", "afarah101/football-twin", r"\b(football|soccer|premier league|understat|expected goals)", "player data and Claim Check"),
+    ("Optomate lead signals", "afarah101/optomate-lead-signals", r"\b(sales lead|lead scoring|hvac|plumbing|duckdb)", "lead ranking"),
+)
+H11_MAX_ITEMS = 3
+
+
+def _h11_link(item):
+    text = f"{item.get('title', '')} {item.get('summary', '')}".lower()
+    for name, repo, pattern, target in H11_PROJECTS:
+        if re.search(pattern, text):
+            return name, repo, target
+    return None
+
+
+def _first_words(text, n=22):
+    words = two_sentences(text).split()
+    return " ".join(words[:n]) + ("…" if len(words) > n else "")
+
+
+def h11_items(news, case, radar):
+    """Up to 3 items that link to a named project. Security stories are ACT NOW; the rest are LATER (test on a branch)."""
+    picked, seen = [], set()
+    for it in [*news[:6], *([case] if case else []), *radar]:
+        link = _h11_link(it) if isinstance(it, dict) else None
+        key = (it or {}).get("url") or (it or {}).get("title")
+        if not link or key in seen:
+            continue
+        seen.add(key)
+        name, repo, target = link
+        security = (it.get("category") or "").lower() == "security"
+        do = ("ACT NOW — risk: a security story that touches this project." if security
+              else "LATER — time: test it on a branch before any change.")
+        slug = re.sub(r"[^a-z0-9]+", "-", (it.get("title") or "item").lower()).strip("-")[:30]
+        prompt = (f"In {repo}, spike on a new branch spike/{slug}. Read-only: find the files that {target} uses and list "
+                  f"what \"{(it.get('title') or '')[:80]}\" would change, with file:line. Change no file. "
+                  f"PASS if 3 or more file:line places are listed; FAIL if fewer.")
+        picked.append({"title": it.get("title", ""), "found": _first_words(it.get("summary")), "project": name,
+                       "target": target, "do": do, "source": safe_url(it.get("url")), "prompt": prompt[:600]})
+        if len(picked) == H11_MAX_ITEMS:
+            break
+    return picked
+
+
+def _mailto(n, word, date):
+    from urllib.parse import quote
+    to = clean_header(os.getenv("REPORT_EMAIL") or os.getenv("GMAIL_USER") or "")
+    return f"mailto:{quote(to)}?subject={quote(f'Re: Scout Daily {date}')}&body={quote(f'{word} {n}')}"
+
+
+def h11_top_line(items):
+    if not items:
+        return "No action today. No story links to your projects. Read the digest below DETAIL if you have time."
+    first = items[0]
+    return f"{len(items)} item(s) link to your projects. Start with item 1: {first['project']}. Reply YES or NO per item."
+
+
 # ---------- render ----------
 
 def build_email(data, now):
@@ -196,7 +260,10 @@ def build_email(data, now):
         f"Research Radar: {len(radar)} paper(s)" + (f", led by {radar[0]['title']} ({_score(radar[0], 'total_score'):.0f}/75)" if radar else ""),
         f"Quick Hits: {len(hits)} more stories" + (f" from {', '.join(sources[:3])}" if sources else ""),
     ]
+    h11 = h11_items(news, case, radar)
     sections = {
+        "h11": h11,
+        "top_line": h11_top_line(h11),
         "greeting": teaser(top, case, radar, hits),
         "bullets": bullets,
         "signal": top,
@@ -263,6 +330,7 @@ def render_html(date, s):
 <tr><td bgcolor="{C["surface2"]}" style="background:{C["surface2"]};padding:24px;">
 <div style="font:700 24px {FONT};color:{C["text"]};">Scout Daily</div>
 <div style="font:13px {FONT};color:{C["text2"]};margin-top:4px;">{_e(date)} · {_link(SITE_URL, "agent-builder-daily.vercel.app")}</div></td></tr>
+{h11_html(date, s)}
 {_block("Good morning", _p(_e(s["greeting"])))}
 {_block("In today's Scout", f"<ul {ul}>{bullets}</ul>")}
 {_block("The Signal", _p(_link(sig.get("url"), sig.get("title")), size=16) + _p(_e(sig.get("summary")), C["text2"], 14)
@@ -275,9 +343,36 @@ def render_html(date, s):
 </table></td></tr></table></body></html>"""
 
 
+def h11_text(date, s):
+    """TOP LINE and items above DETAIL; the copy-box Test prompts go just below DETAIL (evals/email_check.py)."""
+    lines = ["TOP LINE", s["top_line"], ""]
+    for i, it in enumerate(s["h11"], 1):
+        lines += [f"{i}. {it['title']}", f"Found: {it['found']}", f"Your link: {it['project']} — {it['target']}.",
+                  f"Do: {it['do']}", f"Test prompt: T{i}", f"Source: {it['source']}",
+                  f"[YES {i}]({_mailto(i, 'YES', date)}) [NO {i}]({_mailto(i, 'NO', date)})", ""]
+    lines += ["DETAIL", ""]
+    for i, it in enumerate(s["h11"], 1):
+        lines += [f"T{i} · copy into Claude Code", "```text", it["prompt"], "```", ""]
+    return lines
+
+
+def h11_html(date, s):
+    items = "".join(
+        _p(f"<b>{i}. {_e(it['title'])}</b>", size=15)
+        + _p(f"<b>Found:</b> {_e(it['found'])}<br><b>Your link:</b> {_e(it['project'])} — {_e(it['target'])}.<br>"
+             f"<b>Do:</b> {_e(it['do'])}<br><b>Source:</b> {_link(it['source'], it['source'])}", C["text2"], 14)
+        + f'<pre style="white-space:pre-wrap;margin:0 0 10px;padding:10px;background:{C["bg"]};color:{C["text"]};'
+          f'font:12px/1.4 Menlo,Consolas,monospace;border:1px solid {C["border"]};">{_e(it["prompt"])}</pre>'
+        + _p(f'<a href="{_e(_mailto(i, "YES", date))}" style="color:{C["green"]};text-decoration:none;">✓ YES {i}</a>'
+             f' &nbsp; <a href="{_e(_mailto(i, "NO", date))}" style="color:{C["muted"]};text-decoration:none;">✗ NO {i}</a>', size=14)
+        for i, it in enumerate(s["h11"], 1))
+    return _block("Top line", _p(_e(s["top_line"])) + items)
+
+
 def render_text(date, s):
     sig = s["signal"]
-    lines = [f"SCOUT DAILY — {date}", SITE_URL, "", "Good morning", s["greeting"], "", "IN TODAY'S SCOUT"]
+    lines = [f"SCOUT DAILY — {date}", SITE_URL, ""] + h11_text(date, s)
+    lines += ["Good morning", s["greeting"], "", "IN TODAY'S SCOUT"]
     lines += [f"- {b}" for b in s["bullets"]]
     lines += ["", "THE SIGNAL", sig.get("title", ""), sig.get("summary", "")]
     lines += [f"- {h}: {t}" if h else f"- {t}" for h, t in s["signal_points"]]
