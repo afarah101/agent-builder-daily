@@ -431,10 +431,11 @@ def test_home_colour_tokens_meet_4_5_to_1(site):
     root = (site / "site" / "index.html").read_text().split(":root {")[1].split("}")[0]
     tokens = dict(re.findall(r"--([\w-]+):\s*(#[0-9a-fA-F]{6})", root))
     assert tokens["c-accent"] == "#22d3ee"
-    pairs = [(fg, "c-bg") for fg in ("c-text", "c-text-muted", "c-good", "c-warn", "c-bad")]  # white panel
-    pairs += [(fg, bg) for fg in ("c-bg", "c-on-dark-muted") for bg in ("c-surface-dark", "c-surface-dark-2", "c-hero-bottom")]  # dark hero
-    pairs += [("c-accent", bg) for bg in ("c-surface-dark", "c-hero-bottom")]  # key words on the hero
-    pairs += [("c-text", "c-bg-alt")]  # tag pills
+    # every text colour of a zone on every background of that zone
+    zones = {"white panel": (("c-text", "c-text-muted", "c-good", "c-warn", "c-bad"), ("c-bg",)),
+             "dark hero": (("c-bg", "c-on-dark-muted", "c-accent"), ("c-surface-dark", "c-surface-dark-2", "c-hero-bottom")),
+             "tag pills": (("c-text",), ("c-bg-alt",))}
+    pairs = [(fg, bg) for fgs, bgs in zones.values() for fg in fgs for bg in bgs]
     for fg, bg in pairs:
         assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
     # status badges: each colour on its own tint, rounded to 8-bit as the screen shows it
