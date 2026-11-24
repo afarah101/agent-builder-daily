@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premise Recovery in Software Design: What Does This Decision Rest On? - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Premise Recovery in Software Design: What Does This Decision Rest On?</h1>
+  <p class="meta-line">Priyabanta Sandulua, Islam Mesabaha, Sebastian J. Vollmer · Academic Institution · 2026-11-16 · Generated 17 Nov 2026, 15:51</p>
+  <a href="https://arxiv.org/abs/2611.21367v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study by Sandulua, Mesabaha, and Vollmer addresses a critical gap in architectural governance: the loss of traceability when an architecture decision record (ADR) is reversed or rolled back. Traditional ADR repositories rely on explicit citations or manual linking, which often fail to capture implicit dependencies that arise from shared assumptions, design patterns, or cascading effects. The authors developed an automated premise recovery system that leverages large language models (LLMs) to infer which earlier ADRs a given ADR depends on, even when the dependency is not textually referenced. Their approach achieved an F1 score of 0.756 on a curated dataset of ADRs, outperforming baseline word‑overlap methods that missed many implicit links. The system parses the natural language of ADRs, extracts semantic cues, and constructs a dependency graph that surfaces hidden architectural relationships.</p><p>For enterprise IT, this capability is significant because it directly supports risk mitigation during refactoring, rollback, or incremental deployment. Cloud infrastructure managers routinely perform rolling updates or deprecate services; without a clear view of hidden dependencies, a seemingly isolated change can cascade into outages or security gaps. By automatically recovering premises, the tool provides a safety net that aligns with compliance frameworks (e.g., ISO 27001, NIST) and regulatory requirements such as UK GDPR, where unintended data flows must be documented and controlled.</p><p>Real‑world implications include more accurate impact analysis, faster rollback decisions, and a stronger audit trail for governance. The system can be integrated into continuous integration/continuous delivery (CI/CD) pipelines to flag potential dependency violations before code merges. It also aids in capacity planning and cost optimization by revealing which services are tightly coupled, allowing architects to decouple or consolidate resources. In regulated environments, the automated premise map can serve as evidence during audits, demonstrating that architectural changes were evaluated against all relevant dependencies.</p><p>Overall, the study provides a concrete, LLM‑driven method to surface hidden ADR links, enhancing operational resilience, compliance readiness, and strategic decision‑making in complex, cloud‑native enterprises.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all ADRs in your repository, noting version history and any manual links.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Run a static text analysis to identify ADRs lacking explicit dependency annotations.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Map current rollback or rollback‑like processes to determine where hidden dependencies could cause failures.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Assess the volume of ADRs and the complexity of language used (technical jargon, acronyms) to gauge LLM suitability.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify potential downtime reduction: estimate average rollback time without premise recovery versus with the tool (e.g., 30% faster).</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Calculate risk mitigation cost savings: model the cost of a single unplanned outage (e.g., £500k) and multiply by expected reduction in incidents.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Include compliance impact: demonstrate how premise mapping supports GDPR data flow documentation, potentially avoiding fines.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Prepare a ROI chart showing initial implementation cost (e.g., £20k for pilot) versus projected annual savings (e.g., £150k).</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI GPT‑4 or Azure OpenAI Service for LLM inference.
+   - GitHub Copilot for code‑level ADR extraction.
+   - Atlassian Confluence with ADR plugin for repository integration.
+   - Azure DevOps or GitLab CI for pipeline embedding.
+   - Elastic Stack (Elasticsearch, Kibana) for storing and visualizing the dependency graph.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: LLM hallucinations leading to false dependencies; mitigate with human review thresholds.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Ensure LLM processing complies with UK GDPR; avoid sending personal data to external services or use on‑prem LLMs.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Integration complexity with legacy ADR tools; plan phased rollout.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Security: Protect LLM API keys and data; use Azure Key Vault or HashiCorp Vault.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Deploy a pilot on the 10 most critical ADRs in your cloud services stack.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Use the LLM to generate premise lists and manually validate them within 2 weeks.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Publish the validated premise graph in Confluence and update rollback playbooks accordingly.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Scale the premise recovery system to cover the entire ADR repository over 6–12 months.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Automate premise checks in every merge request via CI/CD integration.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Expand the model to support multi‑language ADRs and incorporate domain ontologies for higher precision.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">4 Establish a governance board to review premise changes quarterly and align with compliance audits.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 17 Nov 2026, 15:51</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,37 @@
+Subject: Scout Daily · Fri 20 Nov · 2 items · Wait before Groq retry
+Date: 2026-11-20T11:00:57Z
+Format: H11 (BLUF) rewrite of before/02_scout-daily_2026-11-20.txt
+---
+TOP LINE
+One action: add a short wait before Scout Daily tries Groq again. The injection guard already exists.
+
+1. Wait before a Groq retry
+Found: Cap-and-Track sends model work only when there is free space. It cut GPU use by 43%.
+Your link: Scout Daily — case_study_scout_langgraph.py:165 groq_complete. On a 429 (rate limit refusal) it tries key 2 at once, then stops.
+Do: LATER — tokens: a short wait can save a lost run. It costs no money.
+Test prompt: T1
+Source: https://github.com/afarah101/agent-builder-daily/blob/main/case_study_scout_langgraph.py (opened)
+[✓ YES 1](mailto:<owner-email>?subject=Re%3A%20Scout%20Daily%2020%20Nov&body=YES%201) [✗ NO 1](mailto:<owner-email>?subject=Re%3A%20Scout%20Daily%2020%20Nov&body=NO%201)
+
+2. Prompt-injection guard
+Found: PIPETTE trains agents to resist prompt injection (hidden orders in text).
+Your link: Scout Daily — judge.py:62 INJECTION_PATTERNS holds suspect items now.
+Do: DROP — time: the guard and its tests exist. No new work.
+Test prompt: T2
+Source: https://github.com/afarah101/agent-builder-daily/blob/main/judge.py (opened)
+[✓ YES 2](mailto:<owner-email>?subject=Re%3A%20Scout%20Daily%2020%20Nov&body=YES%202) [✗ NO 2](mailto:<owner-email>?subject=Re%3A%20Scout%20Daily%2020%20Nov&body=NO%202)
+
+DETAIL
+T1 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, read-only. Open case_study_scout_langgraph.py, fix_news_scout.py and video_scout_agent.py. For each Groq call, give file:line and say if it waits before a retry after a 429 error. Change no file. PASS if each Groq call is listed with "waits: yes/no"; FAIL if one is missing.
+```
+
+T2 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, read-only. Run: python -m pytest tests/test_judge.py tests/test_try_this.py -q. Report the pass and fail count. Change no file. PASS if 0 tests fail; FAIL if 1 or more fail.
+```
+
+Dropped (no project link): Microsoft 365 patch tip (you use Google Workspace), GateWatch paper, NPU design paper, 5 quick hits.
+Paper pages: https://arxiv.org/abs/2611.24891v1 and https://arxiv.org/abs/2611.24362v1 (blocked in this network; summaries from Scout Daily).
+Data as of 2026-11-20 00:29 UTC. 7 news items, 4 case studies.

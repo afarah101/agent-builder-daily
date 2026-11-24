@@ -1,0 +1,37 @@
+Subject: [Agent] Scout Actions · Fri 20 Nov · Prompt-injection tests for Scout
+Date: 2026-11-20T19:30:11Z
+Gmail-Thread: 1a1fa7014ec44ef4
+---
+SCOUT ACTIONS - Fri 20 Nov
+
+STATUS: items 3 | sources opened 0 | sources not opened 4
+
+SUMMARY
+Target: 0% of actions approved, last 7 days (target 30%) · 0/18
+Top: add prompt-injection tests to Scout Daily. It reads untrusted web text.
+
+1. Prompt-injection tests for Scout Daily
+Why: Scout Daily feeds web text to llama-3.1-8b-instant. Injection can change the digest.
+Do: Write 10 injected sample articles as test fixtures · Effort: S
+Sources: PIPETTE paper https://www.google.com/url?q=https://arxiv.org/abs/2611.24362v1&source=gmail&ust=1795289411530000&sa=E (source not opened)
+
+2. Handle Groq rate limits with backoff
+Why: Scout Daily has one Groq model. A refused call should retry, not stop the run.
+Do: Find every Groq call; list which have no retry · Effort: S
+Sources: Cap-and-Track paper https://www.google.com/url?q=https://arxiv.org/abs/2611.24891v1&source=gmail&ust=1795289411530000&sa=E (source not opened)
+
+3. Injection test plan for audit agent
+Why: optomate-audit-agent audits agents. Injection is a test class it should cover.
+Do: List attack types the audit agent should try · Effort: S
+Sources: PIPETTE paper https://www.google.com/url?q=https://arxiv.org/abs/2611.24362v1&source=gmail&ust=1795289411530000&sa=E (source not opened)
+
+AMBIGUITIES
+Web fetch permission was not answered. 0 of 4 pages opened: PIPETTE, Cap-and-Track, GateWatch, TechCrunch outages. All items use the Scout Daily text only. Item 2 is my inference from the Cap-and-Track summary. Target line: no YES replies found in the 6 threads from the last 7 days (18 actions offered, includes 1 TEST email). Skipped: Microsoft 365 patching tip (Lime uses Google Workspace, not confirmed otherwise).
+
+QUESTIONS FOR AHMED
+Allow web fetch for https://www.google.com/url?q=http://arxiv.org&source=gmail&ust=1795289411530000&sa=E and https://www.google.com/url?q=http://techcrunch.com&source=gmail&ust=1795289411530000&sa=E in this routine? Fetch failed again today. suggest: yes
+
+ACTIONS - Reply YES + number (e.g. YES 2)
+A1 | afarah101/agent-builder-daily | On a branch, add 10 injected sample articles as fixtures and a script that runs them through the summary step; report which change the output | S
+A2 | afarah101/agent-builder-daily | On a branch, list every Groq call without retry; add exponential backoff on rate-limit errors; do not touch workflow files | S
+A3 | none | Write a one-page plan of prompt-injection attack types for optomate-audit-agent tests; no code | S

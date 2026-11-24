@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Show HN: Zero C# – C# without a runtime or GC - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Show HN: Zero C# – C# without a runtime or GC</h1>
+  <p class="meta-line">Hacker News · 21 Nov 202 · Generated 21 Nov 2026, 23:00</p>
+  <a href="https://onurgumus.github.io/zero-csharp/index.html" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Zero C# is a fork of the bflat compiler that compiles C# source code directly into native binaries that run without the .NET runtime or garbage collector. The binaries are only a few kilobytes in size and can target Windows, Linux, macOS, WebAssembly, and even legacy DOS environments. The tool replaces the usual CLR and GC with calls to the host operating system’s C library, eliminating the need for a managed runtime layer. This development is significant for enterprise IT because it allows C# developers to produce ultra‑small, self‑contained executables that can be deployed to constrained environments such as IoT devices, edge nodes, or legacy systems that cannot host the full .NET stack. It also reduces the attack surface and memory footprint, which is attractive for security‑critical workloads and for environments where licensing costs for the .NET runtime are a concern. Vendors such as Microsoft, Red Hat, and VMware are already integrating bflat into their toolchains, and the Zero C# fork extends this support to additional platforms. The broader industry implication is a shift toward native, language‑agnostic binaries that can be built from high‑level languages without the overhead of a virtual machine. This trend could accelerate adoption of C# in domains traditionally dominated by C/C++ or Rust, and it may influence how enterprises approach application packaging, deployment, and compliance. The ability to produce WebAssembly binaries also opens new avenues for running C# in browsers or serverless functions with minimal runtime dependencies. For IT teams, this means re‑evaluating build pipelines, dependency management, and security controls for a new class of lightweight binaries that bypass the usual .NET runtime checks and updates.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory current C# deployments and identify components that run on the full .NET runtime.
+   - Measure binary size, memory usage, and startup latency of existing applications.
+   - Assess the presence of legacy or constrained devices that could benefit from native binaries.
+   - Verify licensing models for the .NET runtime and evaluate cost implications of removing it.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit analysis comparing current runtime licensing fees versus savings from smaller binaries and reduced memory consumption.
+   - Benchmark startup time and memory footprint of a sample application compiled with Zero C# versus standard .NET.
+   - Quantify potential security gains by reducing the runtime attack surface.
+   - Present a phased rollout plan with ROI projections over 12 months.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Zero C# (fork of bflat) – the core compiler.
+   - Visual Studio Code or Rider with bflat integration for development.
+   - Docker or Podman for containerizing native binaries.
+   - GitHub Actions or Azure Pipelines for CI/CD integration.
+   - Static analysis tools (SonarQube, CodeQL) adapted for native binaries.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Compatibility: Some .NET APIs (e.g., reflection, async/await) may not be supported in native mode.
+   - Security: Removing the runtime eliminates built‑in memory safety checks; ensure code is audited for buffer overflows.
+   - Compliance: Under UK GDPR, data handling must still be audited; ensure that native binaries do not bypass audit logging.
+   - Operational: Lack of runtime diagnostics (profilers, debuggers) may increase troubleshooting effort.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Compile a non‑critical utility (e.g., a health‑check script) with Zero C# and deploy it to a test server to validate build, packaging, and execution.
+   - Measure size reduction and startup time; document results for stakeholder review.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate Zero C# into the CI/CD pipeline for all new C# services targeting edge or IoT deployments.
+   - Develop a library of common runtime abstractions to ease migration of existing codebases.
+   - Conduct a security hardening program focused on native binaries, including fuzzing and static analysis.
+   - Explore packaging native binaries as OCI images for Kubernetes deployments, aligning with micro‑service architecture goals.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 21 Nov 2026, 23:00</p>
+</main>
+</body>
+</html>

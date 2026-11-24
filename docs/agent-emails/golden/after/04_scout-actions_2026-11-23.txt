@@ -1,0 +1,38 @@
+Subject: [Agent] Scout Actions · Mon 23 Nov · 2 items · Hidden push errors
+Date: 2026-11-23T19:30:10Z
+Format: H11 (BLUF) rewrite of before/04_scout-actions_2026-11-23.txt
+---
+TOP LINE
+One action: make the Scout Daily push step report its errors. Scout Daily did not stop. It sends on weekdays only.
+
+1. Hidden push errors
+Found: A firmware rollout stopped itself on a safety limit. Nobody saw it for six days.
+Your link: Scout Daily — .github/workflows/scout-daily.yml lines 51–52. "|| true" (ignore any error) hides a failed push.
+Do: ACT NOW — risk: lost data gives no alert. One small change.
+Test prompt: T1
+Source: https://github.com/afarah101/agent-builder-daily/blob/main/.github/workflows/scout-daily.yml (opened)
+[✓ YES 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=YES%201) [✗ NO 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=NO%201)
+
+2. Dockerfile scan
+Found: A paper says 99% of company Dockerfiles (container build files) have a flaw.
+Your link: all 8 projects in PROJECTS.md, Scout Daily included — Dockerfile count is 0.
+Do: DROP — time: there is nothing to fix.
+Test prompt: T2
+Source: https://github.com/afarah101/agent-builder-daily/blob/agent/email-rebuild/docs/PROJECTS.md (opened)
+[✓ YES 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=YES%202) [✗ NO 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Scout%20Actions&body=NO%202)
+
+DETAIL
+T1 · copy into Claude Code
+```text
+In afarah101/agent-builder-daily, work read-only on a new branch sandbox/silent-steps. Open every file in .github/workflows/. List each command that ends with "|| true" or has continue-on-error. For each one, give file:line, the failure it hides, and if any alert follows. Change no file. PASS if every such command is listed with file:line; FAIL if one is missing.
+```
+
+T2 · copy into Claude Code
+```text
+Read-only. For each repo in docs/PROJECTS.md of afarah101/agent-builder-daily, shallow-clone the default branch to /tmp and search for Dockerfile*, *.dockerfile, docker-compose*, compose.yml. Print the repo name and the count. Change nothing. PASS if 8 repos are listed with a count; FAIL if one is missing.
+```
+
+Why "did not stop": .github/workflows/daily-email.yml sends at 10:50 UTC, Monday to Friday. Emails arrived Fri 20 Nov and Mon 23 Nov.
+Target: 0% of actions approved, last 7 days (target 30%) · 0/15.
+Dropped: BI-Agent, WinSyn, quick hits (no project link).
+Pages blocked in this network: VentureBeat, arXiv 2608.25793. Summaries from Scout Daily.

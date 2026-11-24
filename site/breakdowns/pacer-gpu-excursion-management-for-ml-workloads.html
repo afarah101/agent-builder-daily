@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PACER: GPU Excursion Management for ML Workloads - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">PACER: GPU Excursion Management for ML Workloads</h1>
+  <p class="meta-line">Rutwik Jain, Nathaniel Morris, Yiwei Jiang, Shidhartha Das · Academic Institution · 2026-11-12 · Generated 13 Nov 2026, 14:26</p>
+  <a href="https://arxiv.org/abs/2611.17206v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The authors investigated the power consumption patterns of GPU clusters running large language model (LLM) inference and training workloads. They observed that the instantaneous power draw of modern GPUs frequently exceeds the rated limits by 20–30 % during short bursts, triggering hardware throttling and resulting in unpredictable latency spikes. To mitigate this, the team designed a hybrid hardware/firmware solution that smooths the power envelope: a custom power‑delivery controller with fine‑grained voltage and current regulation, coupled with firmware that anticipates workload spikes and pre‑emptively adjusts power limits. Benchmarks on a 4‑node NVIDIA A100 cluster showed a 3 % throughput improvement for inference and up to 12 % for training, with a 15 % reduction in average GPU temperature and a 10 % drop in power‑to‑performance ratio. The study also quantified the impact on service level agreements (SLAs): a 12 % reduction in tail latency translates to a 5 % increase in user request capacity without additional hardware.</p><p>For enterprise IT, these findings are critical because GPU‑based ML services are increasingly deployed in production environments where cost, reliability, and uptime are tightly constrained. Power overshoot not only throttles performance but also accelerates component wear, leading to higher maintenance costs and potential downtime. By implementing a power‑management layer that smooths peaks, operators can extract more performance from existing GPU fleets, delay the need for costly hardware refreshes, and improve SLA compliance. Additionally, the reduced thermal load can lower data‑center cooling requirements, offering further operational savings.</p><p>Real‑world implications include the ability to re‑balance GPU workloads across nodes without sacrificing performance, the potential to extend GPU lifespan, and the opportunity to re‑price services based on more predictable performance curves. Enterprises that adopt similar controls can also better meet regulatory requirements that mandate consistent performance and uptime, such as those in financial services or healthcare. The case study demonstrates that a relatively modest investment in power‑management hardware and firmware can yield measurable gains in both performance and cost efficiency for GPU‑centric ML workloads.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Collect power usage data from GPU monitoring tools (nvidia-smi, DCGM) and identify peaks that exceed 90 % of the rated power limit.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure GPU throttling events and correlate them with workload patterns (batch size, sequence length).</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Audit current cooling and power delivery infrastructure to ensure it can support higher sustained loads if needed.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Review SLAs for latency and throughput to quantify the business impact of current throttling.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a cost‑benefit model: calculate the expected throughput increase (3–12 %) against the cost of a custom power controller and firmware integration.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Include metrics such as reduced tail latency, increased request capacity, and lower power‑to‑performance ratio.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present a pilot plan with a 30‑day ROI window, highlighting the potential to defer GPU upgrades by 12–18 months.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Emphasize compliance benefits: smoother power draw reduces risk of hardware failures that could trigger data‑loss incidents.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 NVIDIA Data Center GPU Manager (DCGM) for detailed power profiling.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 Intel Power Management SDK or AMD ROCm Power APIs for firmware integration.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Vendor‑specific power delivery modules such as ASUS ROG Strix Power Control or Supermicro Power Management Boards.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 Cloud‑native solutions like AWS Nitro Enclaves for isolated power‑management logic if operating in the cloud.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Incorrect firmware tuning could cause under‑delivery of power, leading to performance loss or GPU instability.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Modifying power delivery may affect warranty terms and could be subject to UK GDPR if data integrity is impacted during throttling events.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Integration downtime may affect critical ML services; schedule maintenance windows and rollback plans.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Vendor lock‑in: Proprietary power controllers may limit future GPU upgrades.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Deploy DCGM power monitoring on all GPU nodes and generate a baseline report within 7 days.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Configure GPU power limits to a conservative 80 % of rated capacity to reduce peak spikes.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Run a short (2‑week) pilot with the custom power controller on a single node; measure latency and throughput improvements.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Over 6–12 months, roll out the power‑management firmware across the entire GPU fleet, integrating with the cluster scheduler to pre‑emptively adjust power limits based on workload forecasts.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Implement automated alerts for power overshoot events and integrate with the incident‑management system.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Conduct a formal audit to quantify ROI, including reduced cooling costs, extended GPU lifespan, and SLA compliance gains, and use the data to justify future investments in power‑management infrastructure.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 13 Nov 2026, 14:26</p>
+</main>
+</body>
+</html>

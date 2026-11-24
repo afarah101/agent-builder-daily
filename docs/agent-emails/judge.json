@@ -1,0 +1,189 @@
+{
+ "judge": {
+  "model": "sonnet (Agent tool, fresh context, read only judge/pairs.txt)",
+  "rubric": "Can Ahmed decide in 60 s?",
+  "order": "random, seed 20261123; 'Format:'/'Date:'/'Note:' header lines removed from both versions"
+ },
+ "raw_verdicts": [
+  {
+   "pair": "P01",
+   "winner": "B",
+   "confidence": 5,
+   "reason": "B states the single decision, why, risk, and a YES/NO plus test prompt. A is a generic news digest with no clear action tied to Ahmed's projects."
+  },
+  {
+   "pair": "P02",
+   "winner": "B",
+   "confidence": 1,
+   "reason": "Both are flawed. B is the raw digest and its main action is a Microsoft 365 tip that doesn't apply to Ahmed. A is actionable with YES/NO but clearly structured; A wins on decisiveness.",
+   "_note": "corrected below"
+  },
+  {
+   "pair": "P03",
+   "winner": "A",
+   "confidence": 5,
+   "reason": "A gives one choice, a project link, the cost caveat, a test prompt and YES/NO buttons. B is a generic digest with a vague 'create test project' action."
+  },
+  {
+   "pair": "P04",
+   "winner": "A",
+   "confidence": 4,
+   "reason": "A gives a clear ACT NOW item with project link, YES/NO buttons and an explicit DROP. B is vague, guesses, and asks for odd web-fetch permission with mangled URLs."
+  },
+  {
+   "pair": "P05",
+   "winner": "B",
+   "confidence": 4,
+   "reason": "B has one ACT NOW and one DROP, with YES/NO links and test prompts, and it checked existing guards. A offers three unverified items and a web-fetch question."
+  },
+  {
+   "pair": "P06",
+   "winner": "B",
+   "confidence": 4,
+   "reason": "B checks code, notes DUS already falls back, prioritises ACT NOW vs LATER, and has YES/NO links with test prompts. A is unverified, with sources not opened."
+  },
+  {
+   "pair": "P07",
+   "winner": "A",
+   "confidence": 4,
+   "reason": "A leads with 'no choice needed' and the one need (reconnect Gmail), with clear Do labels. B has an odd subject line and buries the Gmail need, though it names the YES 1 option."
+  },
+  {
+   "pair": "P08",
+   "winner": "A",
+   "confidence": 5,
+   "reason": "A leads with the one choice (delete 2 rows to release the DUS fix), why (money) and how, with YES/NO. B buries the key action under a job-started headline."
+  },
+  {
+   "pair": "P09",
+   "winner": "A",
+   "confidence": 4,
+   "reason": "A has two prioritised items with ACT NOW, money and risk, YES/NO links and test prompts. B is long, with the DUS item as a non-actionable 'Check' and a single action."
+  },
+  {
+   "pair": "P10",
+   "winner": "A",
+   "confidence": 4,
+   "reason": "A says up front that no choice is needed and that the DataForSEO login works again. B reports a stale auth error and an action to fix a login that already works."
+  }
+ ],
+ "answer_key": {
+  "P01": {
+   "file": "01_scout-daily_2026-11-23.txt",
+   "after_is": "B"
+  },
+  "P02": {
+   "file": "02_scout-daily_2026-11-20.txt",
+   "after_is": "A"
+  },
+  "P03": {
+   "file": "03_scout-daily_2026-11-19.txt",
+   "after_is": "A"
+  },
+  "P04": {
+   "file": "04_scout-actions_2026-11-23.txt",
+   "after_is": "A"
+  },
+  "P05": {
+   "file": "05_scout-actions_2026-11-20.txt",
+   "after_is": "B"
+  },
+  "P06": {
+   "file": "06_scout-actions_2026-11-16.txt",
+   "after_is": "B"
+  },
+  "P07": {
+   "file": "07_manager_2026-11-23-pm.txt",
+   "after_is": "A"
+  },
+  "P08": {
+   "file": "08_manager_2026-11-23-am.txt",
+   "after_is": "A"
+  },
+  "P09": {
+   "file": "09_watchdog_2026-11-23.txt",
+   "after_is": "A"
+  },
+  "P10": {
+   "file": "10_validator_2026-11-23.txt",
+   "after_is": "A"
+  }
+ },
+ "scoring": [
+  {
+   "pair": "P01",
+   "file": "01_scout-daily_2026-11-23.txt",
+   "after_label": "B",
+   "judge_winner": "B",
+   "after_won": true
+  },
+  {
+   "pair": "P02",
+   "file": "02_scout-daily_2026-11-20.txt",
+   "after_label": "A",
+   "judge_winner": "B",
+   "after_won": false
+  },
+  {
+   "pair": "P03",
+   "file": "03_scout-daily_2026-11-19.txt",
+   "after_label": "A",
+   "judge_winner": "A",
+   "after_won": true
+  },
+  {
+   "pair": "P04",
+   "file": "04_scout-actions_2026-11-23.txt",
+   "after_label": "A",
+   "judge_winner": "A",
+   "after_won": true
+  },
+  {
+   "pair": "P05",
+   "file": "05_scout-actions_2026-11-20.txt",
+   "after_label": "B",
+   "judge_winner": "B",
+   "after_won": true
+  },
+  {
+   "pair": "P06",
+   "file": "06_scout-actions_2026-11-16.txt",
+   "after_label": "B",
+   "judge_winner": "B",
+   "after_won": true
+  },
+  {
+   "pair": "P07",
+   "file": "07_manager_2026-11-23-pm.txt",
+   "after_label": "A",
+   "judge_winner": "A",
+   "after_won": true
+  },
+  {
+   "pair": "P08",
+   "file": "08_manager_2026-11-23-am.txt",
+   "after_label": "A",
+   "judge_winner": "A",
+   "after_won": true
+  },
+  {
+   "pair": "P09",
+   "file": "09_watchdog_2026-11-23.txt",
+   "after_label": "A",
+   "judge_winner": "A",
+   "after_won": true
+  },
+  {
+   "pair": "P10",
+   "file": "10_validator_2026-11-23.txt",
+   "after_label": "A",
+   "judge_winner": "A",
+   "after_won": true
+  }
+ ],
+ "after_wins": 9,
+ "of": 10,
+ "threshold": 8,
+ "pass": true,
+ "note": "P02: the judge's winner field says B (BEFORE) but its reason says A (AFTER) wins, and its _note says 'corrected below' with no correction. Scored on the winner field as a loss."
+}

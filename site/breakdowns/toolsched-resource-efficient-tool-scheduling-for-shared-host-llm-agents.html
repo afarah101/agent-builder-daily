@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToolSched: Resource-Efficient Tool Scheduling for Shared-Host LLM Agents - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">ToolSched: Resource-Efficient Tool Scheduling for Shared-Host LLM Agents</h1>
+  <p class="meta-line">Shucheng Zou, Yuhao Gu, Long Chen, Zhongchun Zheng · Academic Institution · 2026-11-03 · Generated 04 Nov 2026, 14:10</p>
+  <a href="https://arxiv.org/abs/2611.05269v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>ToolSched is a lightweight multi‑core process controller designed to mitigate resource contention among local large language model (LLM) agents that share a single host. The study deployed ToolSched on a production cluster running several LLM agents that execute shell commands on demand. Each agent first estimates its CPU, memory, and I/O requirements before dispatching a command. ToolSched’s MCP (Multi‑Core Processor) server receives these estimates, queries the host’s real‑time resource state, and schedules the command on an appropriate core or time slice. The evaluation compared three configurations: (1) no scheduling (agents run commands immediately), (2) a naive round‑robin scheduler, and (3) ToolSched. Across a mixed workload of 200 concurrent agents, ToolSched increased overall CPU utilisation by 148% and throughput (commands processed per minute) by 29% relative to the naive baseline. Memory fragmentation was reduced by 22%, and average response latency dropped from 1.8 s to 1.2 s. The study also measured the overhead of the estimation step; it added less than 5 ms per command, negligible compared to typical LLM inference times. For enterprise IT, these gains translate into higher density of LLM services per server, lower hardware cost per inference, and more predictable service levels. The real‑world implication is that organisations running multiple LLM agents on shared infrastructure—such as internal knowledge assistants, code generation bots, or customer‑support chatbots—can adopt ToolSched to avoid CPU starvation and I/O bottlenecks without redesigning their agent code. The approach is vendor‑agnostic and can be integrated with existing orchestration tools like Kubernetes or Docker Swarm by exposing the MCP as a sidecar service. The study demonstrates that a lightweight, estimation‑based scheduler can deliver measurable performance improvements in a production setting, making it a compelling option for IT teams managing shared LLM workloads.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM agents running on shared hosts and capture their current CPU, memory, and I/O utilisation profiles.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure baseline throughput and latency for each agent under peak load.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify hosts that consistently hit &gt;80 % CPU utilisation or exhibit high context‑switch rates.</div></div>
+<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Audit existing scheduling mechanisms (e.g., default OS scheduler, container orchestrator) for fairness and resource isolation.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify the expected uplift: use ToolSched’s reported 148 % CPU utilisation and 29 % throughput gains to estimate cost savings per host.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Build a ROI model: calculate additional inference capacity per dollar of existing hardware versus the cost of deploying ToolSched (open‑source or commercial license).</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present a pilot plan: 3‑month trial on 2 production hosts with clear success metrics (CPU utilisation &gt;120 %, latency &lt;10 % of baseline).</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Include a risk mitigation section: fallback to original scheduler if performance degrades.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 ToolSched (open‑source implementation available on GitHub).</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 Kubernetes with custom scheduler plugin (e.g., KubeScheduler extender) for containerised agents.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Docker Swarm with resource constraints and placement preferences.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 Prometheus + Grafana for real‑time monitoring of agent metrics.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">5 cAdvisor for container resource profiling.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Incorrect resource estimation by agents can lead to over‑commitment; implement validation checks.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Ensure that any data processed by LLM agents complies with UK GDPR; ToolSched itself does not handle data but its scheduling may affect processing time.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Increased complexity in agent code to provide estimates; provide clear SDK or API.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Security: Exposing MCP as a network service may introduce attack surface; secure with TLS and mutual authentication.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Deploy ToolSched on a single non‑critical host and run a 1‑week benchmark against the current scheduler.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Configure agents to send a static resource estimate (e.g., 2 CPU, 1 GB RAM) and observe immediate scheduling.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Use Prometheus alerts to verify that CPU utilisation rises above 100 % without exceeding host capacity.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Roll out ToolSched across all LLM hosts in a phased manner, integrating with the existing CI/CD pipeline.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Develop a centralised MCP service that aggregates estimates from all agents and exposes a REST API for scheduling decisions.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Automate resource estimation using machine‑learning models trained on historical agent workloads.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">4 Align the scheduling strategy with capacity‑planning models to enable dynamic scaling of LLM services.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">5 Conduct periodic audits to validate that the scheduling policy continues to meet SLA targets and adjust thresholds as workloads evolve.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 04 Nov 2026, 14:10</p>
+</main>
+</body>
+</html>

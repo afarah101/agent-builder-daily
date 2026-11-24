@@ -1,0 +1,36 @@
+Subject: [Agent] Scout Actions · Mon 16 Nov · Failure-cause tags for agents
+Date: 2026-11-16T19:29:38Z
+Gmail-Thread: 1a1e5d620662f7fc
+---
+Scout Actions — Mon 16 Nov 2026
+
+STATUS: items 3 | sources opened 0 | not opened 3
+
+SUMMARY
+Top: tag every failure with a cause in Scout Daily. It shows which part of the agent breaks. Source not opened.
+
+1. Failure-cause tags for agents
+Why: AskALCF sorts failures by cause. Scout Daily needs the same in Langfuse.
+Do: Add cause tag to failed runs in Langfuse · Effort: S
+Sources: AskALCF paper https://www.google.com/url?q=https://arxiv.org/abs/2611.15700v1&source=gmail&ust=1794943777890000&sa=E (source not opened)
+
+2. Anytime stopping bound for agent tests
+Why: Tells optomate-audit-agent when enough tests are done.
+Do: Write a one-page plan for a test stop rule · Effort: M
+Sources: Unknown-unknowns paper https://www.google.com/url?q=https://arxiv.org/abs/2611.15835v1&source=gmail&ust=1794943777890000&sa=E (source not opened)
+
+3. Add LLM provider fallback
+Why: Scout Daily uses one Groq model. One outage stops the daily run.
+Do: Add a second model fallback on a branch · Effort: S
+Sources: TechCrunch on Nvidia https://www.google.com/url?q=https://techcrunch.com/2026/11/15/is-bad-news-for-jensen-huang-also-bad-news-for-the-ai-industry/&source=gmail&ust=1794943777890000&sa=E (source not opened)
+
+AMBIGUITIES
+The web fetch tool was not approved. I could not open 3 sources. All 3 items use only the Scout Daily text. Item 3 is an inference from the Nvidia summary.
+
+QUESTIONS FOR AHMED
+Allow web fetch for https://www.google.com/url?q=http://arxiv.org&source=gmail&ust=1794943777890000&sa=E and https://www.google.com/url?q=http://techcrunch.com&source=gmail&ust=1794943777890000&sa=E in this task? suggest: yes
+
+ACTIONS — Reply YES + number (e.g. YES 2)
+A1 | afarah101/agent-builder-daily | Add a failure-cause tag (retrieval, prompt, model, tool, none) to Langfuse traces on a branch | S
+A2 | afarah101/optomate-audit-agent | Write a one-page plan: stop rule for agent tests using a confidence bound | M
+A3 | afarah101/agent-builder-daily | Add a fallback Groq model when the main call fails, on a branch | S

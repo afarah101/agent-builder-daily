@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Managing frontier AI risk: From training to deployment - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Managing frontier AI risk: From training to deployment</h1>
+  <p class="meta-line">OpenAI · 18 Nov 202 · Generated 19 Nov 2026, 15:38</p>
+  <a href="https://openai.com/index/managing-frontier-ai-risk" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>OpenAI has instituted a new safety framework that pauses all internal training of frontier models, including the upcoming GPT‑6.1 Astra, and delays public releases until a comprehensive safety review is complete. The framework introduces enhanced monitoring, sandboxing, and alignment evidence requirements before a model can be deployed externally. For enterprise IT teams, this change means that any application currently leveraging OpenAI’s Codex or GPT‑based services must verify that it is calling the latest approved API endpoints with the new safety checks activated. Failure to do so could expose the organization to unvalidated AI behavior that may violate compliance or data‑privacy regulations, such as the UK GDPR. The most directly impacted component is the external deployment layer of AI workloads, especially those that automate code generation or data analysis. Vendors involved include OpenAI for the models and API, and any third‑party platforms that integrate these models (e.g., Microsoft Azure OpenAI Service, AWS Bedrock). The broader industry implication is a shift toward stricter governance of AI model lifecycle management. Companies will need to incorporate safety review checkpoints into their CI/CD pipelines, adopt more robust monitoring solutions, and potentially re‑architect workloads to accommodate sandboxed environments. This move also signals to regulators that AI vendors are taking proactive steps to mitigate high‑risk outputs, which may influence future regulatory frameworks and compliance expectations across the sector.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all services that consume OpenAI APIs, noting endpoint versions and safety flag usage.  
+   - Run a compliance scan to confirm that data sent to OpenAI does not contain PII that would be exposed if the model behaves unpredictably.  
+   - Verify that your CI/CD pipeline includes a step to test for the new safety check headers and that logs capture sandboxing status.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify risk exposure: calculate potential data breach cost (e.g., £3,000 per record under GDPR) against the probability of unvalidated AI output.  
+   - Present a cost‑benefit analysis: additional monitoring tooling (~£15,000 annually) versus potential regulatory fines (~£500,000).  
+   - Use metrics such as mean time to detection (MTTD) for unsafe outputs before and after implementation.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI API with safety‑enabled endpoints.  
+   - Azure OpenAI Service or AWS Bedrock for managed deployment with built‑in compliance controls.  
+   - Datadog or Splunk for real‑time monitoring of API calls and sandbox status.  
+   - Microsoft Purview or Collibra for data classification and GDPR mapping.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: failure to route traffic through the safety‑enabled endpoint can bypass monitoring.  
+   - Compliance: improper handling of PII in prompts may trigger GDPR Article 83 fines.  
+   - Operational: increased latency due to sandboxing could affect SLAs for real‑time services.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Update all API calls to include the new safety header (`x-openai-safety-enabled: true`) and deploy a simple log aggregation rule to flag any calls that miss this header.  
+   - Complete within 30 days by modifying the existing API wrapper and adding a unit test.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, embed a formal AI safety review process into the software development lifecycle.  
+   - Deploy a dedicated AI governance board that reviews model updates, monitors sandbox metrics, and maintains an audit trail.  
+   - Integrate automated alignment evidence checks into the model training pipeline, ensuring that any new frontier model undergoes a mandatory safety audit before external release.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 19 Nov 2026, 15:38</p>
+</main>
+</body>
+</html>

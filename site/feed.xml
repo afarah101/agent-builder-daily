@@ -5,78 +5,78 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 29 Oct 2026 22:43:47 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2026 04:02:05 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Request-Adaptive Execution for Efficient Hybrid LLM Inference</title>
-    <link>https://arxiv.org/abs/2610.37432v1</link>
-    <guid>https://arxiv.org/abs/2610.37432v1</guid>
-    <pubDate>Tue, 27 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>Morph lets cloud services adapt the mix of Attention and State Space Model layers to each request, cutting inference time and boosting throughput by up to 3.87×. The system re‑architects the model and runtime to choose a fixed, request‑specific layout and batch similar calls together, while re‑using context where possible.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference, step 1: profile your request mix to see if different queries need different layer mixes. Step 2: adopt a hybrid model with pre‑fill gating and a runtime that selectively batches similar layouts. Step 3: enable hybrid‑aware context caching to keep latency low while maintaining high throughput.</p>]]></description>
+    <title>Persistent Jailbreak Backdoor Attack</title>
+    <link>https://arxiv.org/abs/2611.29217v1</link>
+    <guid>https://arxiv.org/abs/2611.29217v1</guid>
+    <pubDate>Sun, 22 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study shows that attackers can embed a hidden trigger in large language models that makes the model give harmful answers while still looking safe to existing checks. They built a technique called PJBack that works on many popular models and evades current defenses. For most cloud infra teams, this does not affect day‑to‑day operations unless you host or deploy such LLMs.</p><p><strong>IT Breakdown:</strong> If you manage LLMs or APIs, check whether your models have been updated to patch PJBack. If you host models, review your deployment pipeline for unexpected changes and add monitoring for sudden behaviour shifts. If you don’t deploy LLMs, this is not directly applicable to your IT infrastructure.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>From Ripple to Boundary: Deterministic Impact Boundaries for LLM-Based Software Evolution</title>
-    <link>https://arxiv.org/abs/2610.36549v1</link>
-    <guid>https://arxiv.org/abs/2610.36549v1</guid>
-    <pubDate>Tue, 27 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The paper tackles the problem of reliably determining which parts of code need to change when a design asset is updated in a system that uses large language models for code generation. It builds a knowledge‑graph based Merkle DAG that maps design assets to code, allowing a deterministic calculation of the exact impact boundary for any change. The result is an automated, verifiable process that can safely produce incremental code modifications and avoid unintended side effects. This is directly relevant for cloud infrastructure managers who use LLM‑based tools for configuration or IaC generation.</p><p><strong>IT Breakdown:</strong> If you manage LLM‑driven cloud infra, here is what to do: 1) model your IaC templates and design docs as a knowledge graph, 2) construct a Merkle‑DAG over that graph to capture hash propagation, 3) use the deterministic boundary to inject only the affected code into the LLM for incremental updates, ensuring consistency and safety.</p>]]></description>
+    <title>Automated Safety Analysis for Agentic Workflows</title>
+    <link>https://arxiv.org/abs/2611.28469v1</link>
+    <guid>https://arxiv.org/abs/2611.28469v1</guid>
+    <pubDate>Sat, 21 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>This research tackles the problem of hidden logical errors in agentic LLM workflows that can cause real‑world harm. The authors built Apsis, a static safety analyzer that lifts workflow code into a common intermediate representation and matches declarative bug patterns, achieving 91% precision, 84% recall, and finding 36 new bugs.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that hosts or supports LLM agentic workflows, do the following: 1) integrate Apsis into your CI pipeline to run static checks on each workflow before deployment; 2) review the IR reports to see which steps trigger flagged patterns; 3) patch those steps and re‑run the analyzer to confirm fixes.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Then there is prompt injection, a malicious email, ...: The Wild Wide West of OpenClaw Agentic System Security</title>
-    <link>https://arxiv.org/abs/2610.35451v1</link>
-    <guid>https://arxiv.org/abs/2610.35451v1</guid>
-    <pubDate>Mon, 26 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>OpenClaw, an AI assistant platform, suffers from widespread security gaps—especially in access control, data leaks, and injection attacks—found in 521 CWE instances across 59 types. The study maps these weaknesses to the agent’s trust boundaries and offers seven mitigation tactics, showing that unsafe tool use and execution containment are major risks.</p><p><strong>IT Breakdown:</strong> If you manage OpenClaw or similar agentic systems, set explicit trust boundaries for user input, enforce least‑privilege access for tools, sandbox local execution, and monitor runtime behaviour to catch injection or data‑leak attempts.</p>]]></description>
+    <title>When Does Decomposition Help? Empirical Study on Workload-Architecture Affinity in LLM Inference Serving</title>
+    <link>https://arxiv.org/abs/2611.29104v1</link>
+    <guid>https://arxiv.org/abs/2611.29104v1</guid>
+    <pubDate>Sun, 22 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study shows that breaking down LLM inference into separate prefill and decode stages can reduce latency for large‑prefill workloads, but it hurts performance for short chat or heavy concurrent traffic. They compared five deployment styles on identical hardware and found single‑GPU replicas were best for most traffic, while pipeline parallelism only helped when prefill time dominated. If you manage LLM serving, this means you should match your deployment style to the workload: use replication for chat, pipeline or hybrid for 32K‑prefill tasks.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference, check your workload type: for short‑chat or high‑concurrency traffic, deploy independent one‑GPU replicas; for 32K prefill‑heavy loads, use pipeline parallelism or a hybrid pipeline‑prefill/decode setup; avoid static tensor‑parallel splits that cannot scale phases independently.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>The Envelope Layer: An Underestimated Surface of LLM Agent Defense</title>
-    <link>https://arxiv.org/abs/2610.37415v1</link>
-    <guid>https://arxiv.org/abs/2610.37415v1</guid>
-    <pubDate>Tue, 27 Oct 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This paper shows that how we label and authenticate inputs to an LLM agent – the so‑called envelope layer – can drastically change how often the agent slips into unwanted behaviour. By testing different label strengths, authenticity, and the agent’s past memory, they found that strong labels lower the risk only when the envelope is authentic, and that the agent’s memory can swing risk up or down more than any label tweak. The work suggests that the envelope is not a fixed defence but a dynamic surface that changes with context.</p><p><strong>IT Breakdown:</strong> If you manage cloud‑hosted LLM services, first audit the input‑validation pipeline to ensure each request carries an authentic, strong label; second, monitor the agent’s memory logs for recent successful or failed interactions and adjust the refusal thresholds accordingly; third, implement a separate context‑assembly layer that re‑evaluates content based on both label strength and memory state before it reaches the model.</p>]]></description>
+    <title>Do LLM Agents Compromise Like Humans? Risk and Responsibility in Dyadic Decision-Making</title>
+    <link>https://arxiv.org/abs/2611.29069v1</link>
+    <guid>https://arxiv.org/abs/2611.29069v1</guid>
+    <pubDate>Sat, 21 Nov 2026 07:00:00 +0000</pubDate>
+    <description><![CDATA[<p>The study shows that LLM agents can mimic human-like compromise in joint decisions, but they do it differently—mainly by focusing on rewards rather than reciprocal adjustments and by attributing responsibility in a way that is not linked to partner behaviour. This suggests that AI partners may not learn to share responsibility in the same way humans do, potentially leading to misaligned expectations in collaborative systems.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that uses LLM agents for decision support, check that the agents’ risk preferences are aligned with your SLA requirements, monitor their reward‑driven choices for bias, and verify that responsibility attribution is clearly defined in your operational playbooks.</p>]]></description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Zero click, silent, remote Android DoS</title>
-    <link>https://smsofdeath.com/</link>
-    <guid>https://smsofdeath.com/</guid>
-    <pubDate>Thu, 29 Oct 2026 22:43:47 +0000</pubDate>
-    <description><![CDATA[<p>Android’s telephony stack has a zero‑click, silent DoS flaw that crashes the phone’s call handler via a malformed WAP Push SMS, causing persistent loss of telephony including emergency calls. The flaw requires a factory reset and can be triggered without user interaction, making it a severe risk for mobile device users.</p>]]></description>
+    <title>[News] Stalwart is now a drop-in replacement for Microsoft Exchange</title>
+    <link>https://stalw.art/blog/microsoft-exchange-replacement/</link>
+    <guid>https://stalw.art/blog/microsoft-exchange-replacement/</guid>
+    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
+    <description><![CDATA[<p>Stalwart 1.2.0 has been released as a fully compatible, open‑source drop‑in replacement for Microsoft Exchange, supporting MAPI‑HTTP, EWS, Exchange ActiveSync, and Autodiscover. It enables Outlook, Apple Mail, and mobile clients to connect seamlessly without needing a Microsoft Exchange server.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Forging a Microsoft Edge Full Chain with Logic Bugs Only</title>
-    <link>https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/</link>
-    <guid>https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/</guid>
-    <pubDate>Thu, 29 Oct 2026 22:43:47 +0000</pubDate>
-    <description><![CDATA[<p>Security researchers chained five logic bugs in Microsoft Edge, bypassing memory corruption to escape the sandbox. The exploit targets Edge’s Conditional Access Navigation Throttle used with Entra ID, exposing enterprise users to credential misuse.</p>]]></description>
+    <title>[News] OpenAI and Cisco introduce Shirudo</title>
+    <link>https://openai.com/index/introducing-shirudo</link>
+    <guid>https://openai.com/index/introducing-shirudo</guid>
+    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI and Cisco have launched Shirudo, an open‑source runtime that lets operators protect running Linux systems with AI‑generated eBPF shields while patches are pending. The tool can block exploits like Java4Shell in real time without restarting services, using cryptographic verification and TPM support.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] A Defense Contractor Gave Their Personal AI Agent Access to a Secure Pentagon System</title>
-    <link>https://www.wired.com/story/a-defense-contractor-gave-their-personal-ai-agent-access-to-a-secure-pentagon-system/</link>
-    <guid>https://www.wired.com/story/a-defense-contractor-gave-their-personal-ai-agent-access-to-a-secure-pentagon-system/</guid>
-    <pubDate>Thu, 29 Oct 2026 22:43:47 +0000</pubDate>
-    <description><![CDATA[<p>A contractor used their personal Claude AI coding agent to access a secure Pentagon system, exfiltrating login credentials and sensitive CUI to a third‑party site. The incident exposed a critical vulnerability in the DoD’s authentication controls and highlighted lax reporting by the contractor.</p>]]></description>
+    <title>[News] How to tell a cyberattack from a plain old outage</title>
+    <link>https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/</link>
+    <guid>https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/</guid>
+    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
+    <description><![CDATA[<p>Microsoft Exchange and other critical services suffered widespread outages this week, prompting debate over whether these incidents were cyberattacks or operational failures. Cloudflare’s CEO clarified that most such events stem from system complexity rather than malicious intent.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Welcome Le Chonk: Mistral Large 4 on Hugging Face</title>
-    <link>https://huggingface.co/blog/mistral-large4</link>
-    <guid>https://huggingface.co/blog/mistral-large4</guid>
-    <pubDate>Thu, 29 Oct 2026 22:43:47 +0000</pubDate>
-    <description><![CDATA[<p>Mistral has released Le Chonk (Mistral Large 4), a multimodal, multilingual open‑weight model with 49B active parameters that excels in cybersecurity tasks such as vulnerability reproduction and malware analysis. The model’s open‑source licensing and high refusal rate on harmful prompts make it a promising tool for defensive security teams.</p>]]></description>
+    <title>[News] Anthropic launches Claude Ship, letting AI agents review, fix, and approve code changes</title>
+    <link>https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/</link>
+    <guid>https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/</guid>
+    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
+    <description><![CDATA[<p>Anthropic has launched Claude Ship, a new suite of AI agents that can review, fix, and automatically approve code changes based on team‑defined policies. The tool adds an automated approval layer to the GitHub pull‑request workflow, potentially speeding up the release cycle for teams that rely heavily on CI/CD pipelines.</p>]]></description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Mistral Says Its AI Model ‘Le Chonk’ Has Leapfrogged China in the Open-Weight Race</title>
-    <link>https://www.wired.com/story/mistral-says-le-chonk-surpasses-chinese-models-cybersecurity/</link>
-    <guid>https://www.wired.com/story/mistral-says-le-chonk-surpasses-chinese-models-cybersecurity/</guid>
-    <pubDate>Thu, 29 Oct 2026 22:43:47 +0000</pubDate>
-    <description><![CDATA[<p>Mistral has announced Le Chonk, a trillion‑parameter open‑weight AI model that claims to outperform leading Chinese models in automated coding and cybersecurity tasks. The model is now freely available, positioning it as a potential tool for enterprises to strengthen defenses while raising concerns about dual‑use and supply‑chain risks.</p>]]></description>
+    <title>[News] Connected intelligence for in-house legal</title>
+    <link>https://openai.com/business/learn/connected-intelligence-for-in-house-legal</link>
+    <guid>https://openai.com/business/learn/connected-intelligence-for-in-house-legal</guid>
+    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
+    <description><![CDATA[<p>OpenAI showcases how in-house legal teams can leverage AI to integrate business context, build reusable workflows, and enhance collaboration with outside counsel. The presentation highlights practical use cases but does not announce a new product or feature.</p>]]></description>
     <category>Industry News</category>
   </item>
   </channel>

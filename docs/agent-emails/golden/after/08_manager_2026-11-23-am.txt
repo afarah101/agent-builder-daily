@@ -1,0 +1,39 @@
+Subject: [Agent] Manager · Mon 23 Nov AM · Release the DUS read fix
+Date: 2026-11-23T12:43:41Z
+Format: H11 (BLUF) rewrite of before/08_manager_2026-11-23-am.txt
+---
+TOP LINE
+One choice: release the blocked DUS read fix. Delete 2 Follow-ups rows. Reads cost money each day.
+
+1. DUS read fix is blocked
+Found: Your 3 YES replies wait. The duplicate guard (stops repeat jobs) holds them.
+Your link: DUS App — Firestore reads (app database reads): 1,199,625 in 24 h. The limit is 150,000.
+Do: ACT NOW — money: the Google bill stays high until reads drop.
+Test prompt: T1
+Source: https://mail.google.com/mail/u/0/#all/1a207b4a88e8f9c2 (opened)
+[✓ YES 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Manager&body=YES%201) [✗ NO 1](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Manager&body=NO%201)
+
+2. Aurora build check job
+Found: CI (automatic build check) failed on the Call and WhatsApp button change.
+Your link: Aurora website — .github/workflows/ci.yml, job verify.
+Do: LATER — risk is low: the job runs read-only. Wait for its result.
+Test prompt: T2
+Source: https://github.com/afarah101/Aurora-Electrical-Website/actions/runs/45084091155 (opened)
+[✓ YES 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Manager&body=YES%202) [✗ NO 2](mailto:<owner-email>?subject=Re%3A%20%5BAgent%5D%20Manager&body=NO%202)
+
+DETAIL
+T1 · copy into Claude Code
+```text
+In afarah101/dus-app, read-only on a new branch sandbox/reads-audit. In functions/, find each Firestore read that runs on a schedule or a trigger. Give file:line, the collection, and how often it runs. Mark the reads that PR #13 did not change. Change no file. PASS if each read has file:line and a run rate; FAIL if one has none.
+```
+
+T2 · copy into Claude Code
+```text
+In afarah101/Aurora-Electrical-Website, read-only. Run: gh run view 45084091155 --log-failed. Name the failed step and the first error line. Check if app/layout.tsx imports next/font/google on the PR branch. Change nothing. PASS if the step and the first error are printed; FAIL if not.
+```
+
+To release item 1: in the Follow-ups tab, delete rows "job:dus-firestore-reads" and "job:dus-health-workflow-fail". The next Manager run then starts it.
+Job: auto-aurora-ci-fail · started 12:43 · investigate only · auto · read-only. Source: Watchdog, Mon 23 Nov, line A1.
+DUS Health A1 was not auto-started. You replied YES, so it follows the reply path. The guard blocks it.
+Gmail labels: reconnect Gmail with label rights. agent-done and agent-auto do not exist.
+No result email yet for the two jobs started earlier today.

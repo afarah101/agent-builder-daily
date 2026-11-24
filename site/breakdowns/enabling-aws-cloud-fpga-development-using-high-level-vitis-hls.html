@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</h1>
+  <p class="meta-line">David Rostcheck · Academic Institution · 2026-11-04 · Generated 05 Nov 2026, 14:31</p>
+  <a href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>The study by David Rostcheck demonstrates a complete end‑to‑end pipeline that enables developers to write machine‑learning models in PyTorch, automatically translate them into Vitis High‑Level Synthesis (HLS) C code, compile that into an Amazon EC2 F2 FPGA image, and execute the resulting design on AWS cloud FPGAs. The authors validate the workflow by deploying a TinyBERT encoder layer on an F2 instance, measuring inference latency and throughput. While the prototype confirms that the conversion chain is functional, the observed performance on the FPGA is currently inferior to equivalent CPU or GPU executions, highlighting the need for further optimisation of the HLS generation and resource utilisation. For enterprise IT, this research is significant because it removes a major barrier to adopting FPGA acceleration in the cloud: the lack of a seamless, high‑level development workflow. By leveraging familiar Python/ML frameworks and AWS infrastructure, organisations can prototype and evaluate FPGA‑based acceleration without deep hardware expertise. The real‑world implications include the potential to offload inference workloads to FPGAs for cost‑effective, low‑latency processing, particularly in data‑center environments where power and thermal budgets are critical. However, the current performance gap indicates that enterprises must invest in optimisation, profiling, and possibly custom kernel development to realise tangible benefits. The case study also underscores the importance of integrating FPGA workloads into existing DevOps pipelines, monitoring, and governance frameworks, setting the stage for future work that could bring competitive performance parity with GPUs while maintaining the flexibility of cloud‑based FPGA resources.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory existing ML inference workloads: batch size, latency requirements, and current CPU/GPU utilisation.
+   - Profile current PyTorch models for compute‑heavy kernels that could benefit from hardware acceleration.
+   - Assess AWS account capacity for EC2 F2 instances, including cost, region availability, and network bandwidth to data sources.
+   - Verify compliance requirements (e.g., UK GDPR) for data residency on AWS F2 instances.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: compare current CPU/GPU inference cost per inference against projected FPGA cost (instance hourly rate, data transfer, and potential optimisation savings).
+   - Include performance metrics: target latency reduction (e.g., 30% lower than GPU), throughput increase, and power consumption per inference.
+   - Highlight risk mitigation: demonstrate that the pipeline can be rolled back to CPU/GPU if FPGA optimisation stalls.
+   - Present a phased pilot: 3‑month proof of concept with measurable KPIs.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Xilinx Vitis HLS for C/C++ synthesis.
+   - Xilinx SDAccel or Vitis AI for model conversion.
+   - AWS F2 EC2 instances (e.g., f2.2xlarge) and associated AMIs.
+   - AWS CloudFormation or Terraform for infrastructure as code.
+   - NVIDIA TensorRT or Intel OpenVINO for baseline GPU/CPU comparison.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: limited optimisation of HLS-generated kernels leading to sub‑optimal performance; potential resource fragmentation on F2 instances.
+   - Compliance: ensuring that model weights and training data remain within UK GDPR‑approved regions; encryption of data at rest and in transit.
+   - Operational: lack of mature monitoring for FPGA utilisation; potential vendor lock‑in to Xilinx tooling.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a simple PyTorch model (e.g., ResNet‑18) through the existing conversion pipeline to an F2 instance and benchmark inference latency versus a GPU baseline. This can be completed in &lt;30 days and provides immediate visibility into the current performance gap.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, establish a dedicated FPGA optimisation team to refine HLS code, explore custom kernel libraries, and integrate profiling tools (e.g., Xilinx SDx Analyzer). Parallelly, implement continuous integration pipelines that automatically trigger FPGA builds on code commits, ensuring rapid iteration. The goal is to achieve performance parity with GPUs while reducing inference cost and power consumption, thereby enabling large‑scale deployment of ML inference workloads on AWS F2 FPGAs.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 05 Nov 2026, 14:31</p>
+</main>
+</body>
+</html>

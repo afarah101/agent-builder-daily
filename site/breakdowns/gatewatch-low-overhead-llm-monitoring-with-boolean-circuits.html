@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</h1>
+  <p class="meta-line">Firas Spanioli, Yaniv David · Academic Institution · 2026-11-18 · Generated 20 Nov 2026, 00:32</p>
+  <a href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>GateWatch is a lightweight monitoring framework for large language models (LLMs) that translates a handful of critical runtime features into Boolean logic. The authors evaluated the approach on Gemma‑2‑9B, a 9‑billion‑parameter open‑source model, by instrumenting the model with a set of probes that capture token‑level statistics, attention patterns, and memory usage. Instead of collecting full activation tensors, GateWatch encodes each probe’s output as a single bit, then applies a small Boolean circuit to detect anomalous behavior such as out‑of‑distribution inputs, excessive memory consumption, or policy violations. The study measured memory overhead, latency, and detection accuracy. GateWatch reduced memory usage by 99.98% compared to traditional tensor‑dumping methods and added less than 1 ms of latency per inference when running hundreds of probes. Detection accuracy was within 2–3 % of a heavier baseline that logged full activations. For enterprise IT, this means that large‑scale LLM deployments can be continuously monitored without impacting throughput or requiring expensive GPU memory. The real‑world implications are significant: organizations can detect model drift, policy breaches, or resource spikes in near real‑time, enabling rapid incident response and compliance reporting. GateWatch’s minimal footprint also allows it to run on edge devices or within existing inference pipelines without additional infrastructure, making it a practical solution for regulated environments where data residency and auditability are critical.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all LLM workloads: model size, inference frequency, GPU/CPU allocation, and current monitoring tools.
+   - Measure baseline memory usage and latency for each model using standard profiling (e.g., nvidia-smi, torch.profiler).
+   - Identify compliance requirements (UK GDPR, HIPAA) that mandate audit trails or data minimization.
+   - Assess existing alerting and logging infrastructure for capacity to ingest additional metrics.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify savings: GateWatch reduces memory overhead by ~99.98%; calculate cost per GB of GPU memory avoided.
+   - Benchmark latency: &lt;1 ms per probe; compare to current monitoring latency (often &gt;10 ms).
+   - ROI: Faster detection of policy violations reduces incident response time; estimate cost of a single breach incident versus GateWatch implementation.
+   - Present a phased pilot: 30‑day proof of concept on a non‑critical model, with metrics on memory, latency, and detection accuracy.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- GateWatch open‑source repository (GitHub) for integration.
+   - NVIDIA Nsight Systems or AMD Radeon™ GPU Profiler for baseline profiling.
+   - Prometheus + Grafana for metric collection and alerting.
+   - OpenTelemetry for standardized telemetry export.
+   - Vendor‑specific model serving platforms (e.g., NVIDIA Triton Inference Server, Hugging Face Inference API) that support custom hooks for probe injection.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Probe insertion may interfere with model execution if not properly isolated; ensure thread‑safe implementation.
+   - Compliance: Even minimal data collection must be documented; verify that Boolean outputs do not inadvertently expose sensitive input content.
+   - Operational: Over‑aggressive probing could still add latency; monitor for performance regressions during load testing.
+   - Security: Ensure probes cannot be tampered with; implement integrity checks on the monitoring code.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy GateWatch on a single inference endpoint for a 1‑billion‑parameter model.
+   - Configure a basic Boolean rule set (e.g., memory threshold, token repetition) and expose metrics to Prometheus.
+   - Validate that latency remains below 5 ms and that alerts trigger on a synthetic anomaly within 30 days.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Scale GateWatch across all production LLM endpoints, integrating with the enterprise observability stack.
+   - Develop a policy library of Boolean rules for different compliance domains (data leakage, bias, safety).
+   - Automate rule updates via CI/CD pipelines, ensuring that new model versions inherit monitoring configurations.
+   - Conduct periodic audit reviews to align monitoring outputs with evolving regulatory requirements, maintaining a documented audit trail for UK GDPR.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 20 Nov 2026, 00:32</p>
+</main>
+</body>
+</html>
