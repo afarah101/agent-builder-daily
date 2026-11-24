@@ -462,7 +462,7 @@ def clean_secret(s):
 def build_message(subject, html_body, text_body, sender, recipient, header_png=None):
     msg = MIMEMultipart("alternative")
     if header_png:  # multipart/related: the alternative parts plus the inline header the HTML shows as cid:
-        alt, msg = msg, MIMEMultipart("related")
+        alt, msg = msg, MIMEMultipart("related", type="multipart/alternative")  # RFC 2387 type parameter
         msg.attach(alt)
         img = MIMEImage(header_png, "png")
         img.add_header("Content-ID", f"<{HEADER_CID}>")
@@ -532,6 +532,10 @@ def main(argv=None, now=None, sleep=time.sleep, send=smtp_send, header=None):
 
     if args.dry_run:
         os.makedirs(os.path.dirname(PREVIEW), exist_ok=True)
+        if png:  # a browser cannot resolve cid:, so the preview shows the PNG saved beside it
+            with open(os.path.join(os.path.dirname(PREVIEW), "header.png"), "wb") as f:
+                f.write(png)
+            html_body = html_body.replace(f"cid:{HEADER_CID}", "header.png")
         with open(PREVIEW, "w", encoding="utf-8") as f:
             f.write(html_body)
         if not stale:

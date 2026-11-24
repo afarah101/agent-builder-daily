@@ -21,13 +21,14 @@ KICKER_MAX = 24
 _DANGLING = {"a", "an", "and", "as", "at", "but", "by", "for", "from", "her", "his", "in", "into", "its", "of", "on",
              "or", "our", "than", "that", "the", "their", "this", "to", "with", "your"}
 
-# Reads every [data-slot]: computed colour, the first opaque background behind it, and its rendered line count.
+# Reads every [data-slot]: computed colour, the first opaque background behind it, its rendered line count and width.
 _MEASURE = """() => [...document.querySelectorAll('[data-slot]')].map(el => {
   const cs = getComputedStyle(el);
   let node = el, bg = null;
   while (node && !bg) { const c = getComputedStyle(node).backgroundColor; if (c !== 'rgba(0, 0, 0, 0)') bg = c; node = node.parentElement; }
   return {slot: el.dataset.slot, color: cs.color, bg: bg || 'rgb(255, 255, 255)',
-          lines: Math.round(el.getBoundingClientRect().height / parseFloat(cs.lineHeight))};
+          lines: Math.round(el.getBoundingClientRect().height / parseFloat(cs.lineHeight)),
+          scroll: el.scrollWidth, client: el.clientWidth};
 })"""
 
 
@@ -80,8 +81,7 @@ def words(top, complete=groq_json):
 def fill(kicker, title, date):
     page = TEMPLATE.read_text(encoding="utf-8")
     for slot, value in (("kicker", kicker), ("title", title), ("date", date)):
-        # &num; so a "#" plus digits in a headline is text, not a colour, to colour_gate.
-        page = page.replace("{{" + slot + "}}", html.escape(value).replace("#", "&num;"))
+        page = page.replace("{{" + slot + "}}", html.escape(value))  # colour_gate scans CSS only, so text stays as typed
     return page.replace("{{logo}}", LOGO)
 
 

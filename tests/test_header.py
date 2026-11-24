@@ -18,7 +18,7 @@ from header import render_header as rh  # noqa: E402
 TOP = {"title": "Stalwart is now a drop-in replacement for Microsoft Exchange", "category": "Product Launch",
        "summary": "An open-source mail server.", "url": "https://example.com/a", "source": "Example"}
 GOOD = [{"slot": "kicker", "color": "rgb(148, 163, 184)", "bg": "rgb(15, 17, 23)", "lines": 1},
-        {"slot": "title", "color": "rgb(241, 245, 249)", "bg": "rgb(15, 17, 23)", "lines": 2},
+        {"slot": "title", "color": "rgb(241, 245, 249)", "bg": "rgb(15, 17, 23)", "lines": 2, "scroll": 1040, "client": 1040},
         {"slot": "date", "color": "rgb(148, 163, 184)", "bg": "rgb(15, 17, 23)", "lines": 1},
         {"slot": "logo", "color": "rgb(0, 255, 136)", "bg": "rgb(15, 17, 23)", "lines": 1}]
 
@@ -82,6 +82,63 @@ def test_colour_gate_passes_the_filled_template_and_fails_off_brand():
     assert gates.colour_gate(page + "<p style='color:rgb(1,2,3)'>")
 
 
+def test_colour_gate_scans_css_only_and_fails_named_colours():
+    assert gates.colour_gate(rh.fill("Red alert", "White House bans #ff0000 tan lines", "d")) == []  # text, not CSS
+    page = rh.fill("Email", "A title", "d")
+    assert gates.colour_gate(page.replace("color: var(--text);", "color: red;")) == ["non-brand colour keyword red"]
+    assert gates.colour_gate(page + "<p style=\"background:White\">") == ["non-brand colour keyword white"]
+    assert gates.colour_gate(page + "<p style='white-space:nowrap' class='red'>") == []  # a property, a class
+    assert gates.colour_gate(page + "<style>/* red */ p{border-color:transparent}</style>") == [
+        "non-brand colour keyword transparent"]
+    assert len(gates.NAMED) == 150  # 148 CSS named colours + transparent + currentcolor
+
+
+def test_width_gate():
+    assert gates.width_gate(GOOD) == []
+    assert gates.width_gate([{**GOOD[1], "scroll": 1500}]) == ["title overflows its box (1500px in 1040px)"]
+    assert gates.width_gate([{**GOOD[1], "scroll": None}]) == ["title width unreadable (None, 1040)"]
+
+
+def chromium(fn):
+    """Run fn(page) in headless Chromium; skip where Playwright or its browser is not installed."""
+    pytest.importorskip("playwright")
+    from playwright.sync_api import sync_playwright
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                return fn(browser.new_page())
+            finally:
+                browser.close()
+    except Exception as e:
+        if "Executable doesn't exist" in str(e):
+            pytest.skip(f"no headless Chromium: {e}")
+        raise
+
+
+def test_fill_text_renders_as_typed():
+    page_html = rh.fill("It's", "OpenAI's #100 AT&T", "Tue 24 Nov 2026")
+
+    def texts(page):
+        page.set_content(page_html)
+        return page.evaluate("() => Object.fromEntries([...document.querySelectorAll('[data-slot]')]"
+                             ".map(el => [el.dataset.slot, el.textContent]))")
+    assert chromium(texts) == {"kicker": "It's", "title": "OpenAI's #100 AT&T", "date": "Tue 24 Nov 2026",
+                               "logo": "Scout Daily"}
+    assert gates.check_html(page_html, "OpenAI's #100 AT&T") == []
+
+
+def test_real_render_wraps_a_long_word_and_the_width_gate_catches_overflow():
+    page_html = rh.fill("Test", "W" * 60, "Tue 24 Nov 2026")
+    try:
+        _, fixed = rh.render(page_html)
+        _, broken = rh.render(page_html.replace(" overflow-wrap: anywhere;", ""))
+    except Exception as e:
+        pytest.skip(f"no headless Chromium: {e}")
+    assert gates.width_gate(fixed) == []
+    assert gates.width_gate(broken)[0].startswith("title overflows its box")
+
+
 def test_contrast_gate():
     assert round(gates.contrast("#000000", "#ffffff"), 1) == 21.0
     assert gates.contrast_gate(GOOD) == []
@@ -143,7 +200,7 @@ def test_html_has_one_cid_image_only_with_a_header():
 
 def test_message_carries_the_inline_png():
     msg = message_from_bytes(de.build_message("s", "<img src='cid:scout-header'>", "t", "a@x", "b@x", png()).as_bytes())
-    assert msg.get_content_type() == "multipart/related"
+    assert msg.get_content_type() == "multipart/related" and msg.get_param("type") == "multipart/alternative"
     alt, img = msg.get_payload()
     assert alt.get_content_type() == "multipart/alternative"
     assert img.get_content_type() == "image/png" and img["Content-ID"] == "<scout-header>"
@@ -165,6 +222,15 @@ def test_main_sends_with_or_without_the_header(monkeypatch, tmp_path, header_png
     html_body, kw = sent[0]
     assert html_body.count("cid:") == (1 if header_png else 0)
     assert kw == ({"header_png": header_png} if header_png else {})
+
+
+def test_dry_run_preview_shows_the_saved_header_png(monkeypatch, tmp_path):
+    monkeypatch.setattr(de, "PREVIEW", str(tmp_path / "preview.html"))
+    monkeypatch.setattr(de, "load_data", lambda: DATA)
+    assert de.main(["--dry-run"], now=NOW, header=lambda top, date: png()) == "preview"
+    assert (tmp_path / "header.png").read_bytes() == png()
+    preview = (tmp_path / "preview.html").read_text(encoding="utf-8")
+    assert 'src="header.png"' in preview and "cid:" not in preview
 
 
 def test_main_logs_why_a_custom_sender_gets_no_header(monkeypatch, tmp_path, capsys):

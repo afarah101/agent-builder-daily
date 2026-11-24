@@ -9,6 +9,23 @@ SIZE, MAX_BYTES = (1200, 630), 300 * 1024
 
 _HEX = re.compile(r"#[0-9a-fA-F]{3,8}\b")
 _FUNC = re.compile(r"\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(", re.I)
+# CSS Color 4 named colours plus transparent/currentcolor. None is a brand hex, so any of them fails.
+NAMED = set("""aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown
+burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod
+darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen
+darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue
+firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod gray green greenyellow grey honeydew
+hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan
+lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray
+lightslategrey lightsteelblue lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue mediumorchid
+mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream
+mistyrose moccasin navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod palegreen
+paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue purple rebeccapurple red rosybrown royalblue
+saddlebrown salmon sandybrown seagreen seashell sienna silver skyblue slateblue slategray slategrey snow springgreen
+steelblue tan teal thistle tomato turquoise violet wheat white whitesmoke yellow yellowgreen transparent currentcolor""".split())
+_WORD = re.compile(r"(?<![-\w.#])[a-z]+(?![-\w])", re.I)  # a bare word: not part of white-space, .class or --var
+_CSS = re.compile(r"<style[^>]*>(.*?)</style>|\bstyle\s*=\s*(\"[^\"]*\"|'[^']*')", re.I | re.S)
+_COMMENT = re.compile(r"/\*.*?\*/", re.S)
 _PNG_SIG = b"\x89PNG\r\n\x1a\n"
 
 
@@ -19,10 +36,12 @@ def title_gate(title):
 
 
 def colour_gate(page_html):
-    """Every colour in the final HTML is a brand hex. shortcut: named colours (e.g. 'red') are not detected;
-    the template uses none, so add a check if one ever appears."""
-    out = [f"non-brand colour {h}" for h in sorted({h.lower() for h in _HEX.findall(page_html)} - BRAND)]
-    return out + [f"colour function {f}..) is not a brand hex" for f in sorted(set(_FUNC.findall(page_html)))]
+    """Every colour in the final HTML's CSS (<style> blocks and style attributes) is a brand hex. Text content is
+    never scanned, so a "#100" or "red" in a headline is not a colour."""
+    css = _COMMENT.sub(" ", "\n".join(a or b for a, b in _CSS.findall(page_html)))
+    out = [f"non-brand colour {h}" for h in sorted({h.lower() for h in _HEX.findall(css)} - BRAND)]
+    out += [f"non-brand colour keyword {w}" for w in sorted({w.lower() for w in _WORD.findall(css)} & NAMED)]
+    return out + [f"colour function {f}..) is not a brand hex" for f in sorted(set(_FUNC.findall(css)))]
 
 
 def _rgb(colour):
@@ -69,6 +88,17 @@ def lines_gate(measured):
     return [f"title wraps to {n} lines (max {TITLE_LINES})"] if n > TITLE_LINES else []
 
 
+def width_gate(measured):
+    """The title fits its box: Chromium's scrollWidth <= clientWidth."""
+    title = [m for m in measured if m["slot"] == "title"]
+    if not title:
+        return []  # lines_gate already reports a missing title
+    s, c = title[0].get("scroll"), title[0].get("client")
+    if not isinstance(s, int) or not isinstance(c, int):
+        return [f"title width unreadable ({s!r}, {c!r})"]
+    return [f"title overflows its box ({s}px in {c}px)"] if s > c else []
+
+
 def png_gate(png):
     if png[:8] != _PNG_SIG or png[12:16] != b"IHDR":
         return ["output is not a PNG"]
@@ -88,4 +118,4 @@ def check_html(page_html, title):
 
 def check_render(measured, png):
     """Gates that run on the render."""
-    return lines_gate(measured) + contrast_gate(measured) + png_gate(png)
+    return lines_gate(measured) + width_gate(measured) + contrast_gate(measured) + png_gate(png)
