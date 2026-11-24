@@ -210,12 +210,13 @@ def render_news(data, slug_map):
 
         slug = news_slugs.get(item.get("title", ""))  # slug_map is keyed by the raw title
         breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
+        meta = [esc(v) for v in (item.get('source', ''), item.get('pub_date', '')) if v]
+        meta_html = '<span class="sep" aria-hidden="true">•</span>'.join(f"<span>{m}</span>" for m in meta)
 
         cards.append(f"""<article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       {tier_label(item.get("tier", "news"))}
-      <span class="source-name">{esc(item.get('source',''))}</span>
       {tag_pill(item.get("category", "Other"))}
     </div>
     <div class="news-score-area">
@@ -224,12 +225,10 @@ def render_news(data, slug_map):
     </div>
   </div>
   <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
+  <div class="card-meta">{meta_html}</div>
   <p class="card-summary">{esc(item.get('summary',''))}</p>
   {signal_html(item.get('enterprise_use',''))}
-  <div class="card-footer">
-    <span class="pub-date">{esc(item.get('pub_date', ''))}</span>
-    {breakdown_link}
-  </div>
+  {f'<div class="card-footer">{breakdown_link}</div>' if breakdown_link else ""}
 </article>""")
     return "\n".join(cards)
 
@@ -677,10 +676,18 @@ def generate_html():
     }
 
     /* Tabs */
-    .tabs { display: flex; flex-wrap: wrap; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 8px;
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-pill);
+    }
 
     .tab {
-      padding: 12px 16px;
+      padding: 8px 16px;
       font: inherit;
       font-size: var(--fs-small);
       font-weight: 600;
@@ -688,14 +695,13 @@ def generate_html():
       cursor: pointer;
       border: none;
       background: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      transition: color 0.15s, border-color 0.15s;
+      border-radius: var(--radius-pill);
+      transition: color 0.15s, background-color 0.15s;
       white-space: nowrap;
     }
 
     .tab:hover { color: var(--c-text); }
-    .tab.active { color: var(--c-text); border-bottom-color: var(--c-text); }
+    .tab.active { color: var(--c-bg); background: var(--c-surface-dark); }
 
     .search {
       background: var(--c-bg);
@@ -719,8 +725,20 @@ def generate_html():
     /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(500px, 100%), 1fr));
+      grid-template-columns: minmax(0, 1fr);
       gap: 24px;
+    }
+
+    /* Lead story + grid: the first card spans 2 columns (and 2 rows above 1024px) */
+    @media (min-width: 641px) {
+      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cards-grid > .card:first-child { grid-column: span 2; }
+    }
+
+    @media (min-width: 1025px) {
+      .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .cards-grid > .card:first-child { grid-row: span 2; }
+      .cards-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
     }
 
     .card {
@@ -741,7 +759,7 @@ def generate_html():
 
     .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: wrap; flex-grow: 1; }
 
-    .tag-pill, .status-badge { padding: 4px 10px; border-radius: var(--radius-pill); }
+    .tag-pill, .status-badge { padding: 4px 8px; border-radius: var(--radius-sm); }
 
     .tag-pill { color: var(--c-text); background: var(--c-bg-alt); }
     .status-badge { background: color-mix(in srgb, currentColor 6%, var(--c-bg)); }  /* 8% put pending at 4.49:1 */
@@ -820,7 +838,7 @@ def generate_html():
 
     /* Card content */
     .card-title {
-      font-size: var(--fs-h3);
+      font-size: var(--fs-lead);
       font-weight: 700;
       line-height: var(--lh-h3);
       margin-bottom: 12px;

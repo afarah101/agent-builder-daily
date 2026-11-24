@@ -60,6 +60,15 @@ def test_news_card_has_one_source_link_in_the_title():
     assert "High relevance" in html  # relevance in words, not colour alone
 
 
+def test_news_card_has_one_meta_line_with_the_source():
+    html = gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1", "source": "Ars Technica",
+                                     "pub_date": "2026-11-24"}]}, {"news": {}})
+    assert html.count('class="card-meta"') == 1
+    assert ('<div class="card-meta"><span>Ars Technica</span><span class="sep" aria-hidden="true">•</span>'
+            '<span>2026-11-24</span></div>') in html
+    assert html.count("Ars Technica") == 1 and html.count("2026-11-24") == 1  # no duplicate source or date span
+
+
 # ---------- score ring: out of 75, no ring above 75 ----------
 
 def test_score_ring_caps_at_75():
@@ -177,6 +186,18 @@ def test_page_structure(site):
     assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
     assert not re.search(r"border-left:\s*[2-9]px", css)
     assert not re.search(r"[\U0001F300-\U0001FAFF☀-➿]", page)  # no emoji as icons
+
+
+def test_lead_story_grid(site):
+    gh.generate_html()
+    css = (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0]
+    mid = re.search(r"@media \(min-width: 641px\) \{(.*?)\n    \}", css, re.S).group(1)
+    wide = re.search(r"@media \(min-width: 1025px\) \{(.*?)\n    \}", css, re.S).group(1)
+    assert re.search(r"\.cards-grid\s*\{\s*grid-template-columns:\s*repeat\(2,", mid)
+    assert re.search(r"\.cards-grid > \.card:first-child\s*\{\s*grid-column:\s*span 2;", mid)
+    assert re.search(r"\.cards-grid\s*\{\s*grid-template-columns:\s*repeat\(4,", wide)
+    assert re.search(r"\.cards-grid > \.card:first-child\s*\{\s*grid-row:\s*span 2;", wide)
+    assert re.search(r"\.cards-grid > \.card:first-child \.card-title\s*\{\s*font-size:\s*var\(--fs-h3\);", wide)
 
 
 # ---------- the two retired pages redirect to the current site ----------
