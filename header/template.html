@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- Scout Daily email header, 1200x630. render_header.py fills the {{slots}}; gates.py checks the result. -->
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@500;600;800&display=block" rel="stylesheet">
+<style>
+  /* Brand tokens: generate_html.py :root. Use only these. */
+  :root {
+    --bg: #0f1117;
+    --border: #2d3148;
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --accent: #00ff88;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: var(--bg); }
+  /* Every element a layer: absolute positions, no flow. */
+  .story  { position: absolute; left: 80px; bottom: 200px; width: 1040px; }  /* sits on the rule, 1 or 2 title lines */
+  .kicker { margin-bottom: 24px; font: 600 26px/1 Inter, sans-serif; letter-spacing: 3px; text-transform: uppercase; color: var(--text-secondary); }
+  /* Legibility: the image shows at about 31% on a phone, so 56px bold reads as about 17px. */
+  .title  { font: 800 56px/1.12 Inter, sans-serif; letter-spacing: -1px; color: var(--text); }
+  .rule   { position: absolute; left: 80px; right: 80px; top: 470px; border-top: 2px solid var(--border); }
+  .date   { position: absolute; left: 80px; top: 516px; font: 500 26px/1 Inter, sans-serif; color: var(--text-secondary); }
+  /* The one accent element: the site wordmark (generate_html.py .brand-name + .brand-cursor). */
+  .logo   { position: absolute; right: 80px; top: 508px; display: flex; align-items: center;
+            font: 800 40px/1 Syne, sans-serif; letter-spacing: -1px; color: var(--accent); }
+  .cursor { display: inline-block; width: 0.2em; height: 0.8em; margin-left: 4px; border-radius: 2px; background: var(--accent); }
+</style>
+</head>
+<body>
+  <div class="story">
+    <div class="kicker" data-slot="kicker">{{kicker}}</div>
+    <div class="title" data-slot="title">{{title}}</div>
+  </div>
+  <div class="rule"></div>
+  <div class="date" data-slot="date">{{date}}</div>
+  <div class="logo" data-slot="logo">{{logo}}</div>
+</body>
+</html>

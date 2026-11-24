@@ -15,6 +15,7 @@ import time
 import unicodedata
 from datetime import datetime, timedelta, timezone
 from email.header import Header
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from zoneinfo import ZoneInfo
@@ -245,7 +246,7 @@ def h11_top_line(items):
 
 # ---------- render ----------
 
-def build_email(data, now):
+def build_email(data, now, header=False):
     news, papers = data["news"], data["papers"]
     case = case_of_the_day(data.get("cs_days"), now.astimezone(LONDON).date())
     shown = case and (case.get("url") or case.get("title"))  # Radar skips the paper already shown as Case study of the day
@@ -275,7 +276,7 @@ def build_email(data, now):
         "footer": f"{len(news)} news items, {len(papers)} case studies. Data as of {data['newest']:%Y-%m-%d %H:%M} UTC.",
     }
     subject = f"Scout Daily — {date} — {top.get('title', 'no top story')}"
-    return subject, render_html(date, sections), render_text(date, sections), sections
+    return subject, render_html(date, sections, header), render_text(date, sections), sections
 
 
 def _e(s):
@@ -296,7 +297,20 @@ def _p(text, color=None, size=15):
     return f'<p style="margin:0 0 10px;font:{size}px/1.5 {FONT};color:{color or C["text"]};">{text}</p>'
 
 
-def render_html(date, s):
+HEADER_CID = "scout-header"  # header/render_header.py PNG, attached by build_message
+
+
+def _header_png(top, date):
+    """The header PNG, or None. Never raises: the email always goes out, with or without it."""
+    try:
+        from header.render_header import email_header
+        return email_header(top, date)
+    except Exception as e:
+        print(f"[HEADER] No header: {type(e).__name__}: {e}")
+        return None
+
+
+def render_html(date, s, header=False):
     sig = s["signal"]
     radar = "".join(
         _p(_link(c.get("url"), c.get("title")) + f' <span style="color:{C["green"]};">{_score(c, "total_score"):.0f}/75</span>')
@@ -327,6 +341,7 @@ def render_html(date, s):
 <body style="margin:0;padding:0;background:{C["bg"]};" bgcolor="{C["bg"]}">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="{C["bg"]}" style="background:{C["bg"]};"><tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border:1px solid {C["border"]};border-radius:8px;">
+{f'<tr><td style="padding:0;line-height:0;font-size:0;"><img src="cid:{HEADER_CID}" width="600" alt="{_e(sig.get("title"))}" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:8px 8px 0 0;"></td></tr>' if header else ""}
 <tr><td bgcolor="{C["surface2"]}" style="background:{C["surface2"]};padding:24px;">
 <div style="font:700 24px {FONT};color:{C["text"]};">Scout Daily</div>
 <div style="font:13px {FONT};color:{C["text2"]};margin-top:4px;">{_e(date)} · {_link(SITE_URL, "agent-builder-daily.vercel.app")}</div></td></tr>
@@ -443,32 +458,44 @@ def clean_secret(s):
     return "".join(c for c in stripped if unicodedata.category(c) != "Cf")
 
 
-def build_message(subject, html_body, text_body, sender, recipient):
+def build_message(subject, html_body, text_body, sender, recipient, header_png=None):
     msg = MIMEMultipart("alternative")
+    if header_png:  # multipart/related: the alternative parts plus the inline header the HTML shows as cid:
+        alt, msg = msg, MIMEMultipart("related")
+        msg.attach(alt)
+        img = MIMEImage(header_png, "png")
+        img.add_header("Content-ID", f"<{HEADER_CID}>")
+        img.add_header("Content-Disposition", "inline", filename="header.png")
     msg["From"], msg["To"] = sender, recipient
     # Explicit, rather than compat32's implicit fallback. An explicit charset also RFC 2047-encodes a
     # pure-ASCII subject (=?utf-8?q?...?=) instead of leaving it literal: one code path for every subject,
     # so the encoding cannot differ between a quiet day and a day with an em dash in the headline.
     msg["Subject"] = Header(clean_header(subject), "utf-8")
-    msg.attach(MIMEText(text_body, "plain", "utf-8"))
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
+    body = alt if header_png else msg
+    body.attach(MIMEText(text_body, "plain", "utf-8"))
+    body.attach(MIMEText(html_body, "html", "utf-8"))
+    if header_png:
+        msg.attach(img)
     return msg
 
 
-def smtp_send(subject, html_body, text_body, *, smtp_factory=smtplib.SMTP_SSL, host="smtp.gmail.com", port=465):
+def smtp_send(subject, html_body, text_body, *, smtp_factory=smtplib.SMTP_SSL, host="smtp.gmail.com", port=465,
+              header_png=None):
     """smtp_factory/host/port are seams for the tests; the defaults are the production path."""
     user, password = clean_secret(os.getenv("GMAIL_USER")), clean_secret(os.getenv("GMAIL_APP_PASSWORD"))
     recipient = clean_secret(os.getenv("REPORT_EMAIL")) or user
     if not user or not password:
         raise RuntimeError("GMAIL_USER / GMAIL_APP_PASSWORD not set")
-    msg = build_message(subject, html_body, text_body, user, recipient)
+    msg = build_message(subject, html_body, text_body, user, recipient, header_png)
     with smtp_factory(host, port) as server:
         server.login(user, password)
         refused = server.send_message(msg)
     return f"accepted by {host} for {recipient}; refused={refused or 'none'}"
 
 
-def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
+def main(argv=None, now=None, sleep=time.sleep, send=smtp_send, header=None):
+    # Tests pass a fake send; they get no header (no Groq, no Chromium) unless they pass one.
+    header = header or (_header_png if send is smtp_send else lambda top, date: None)
     args = argparse.ArgumentParser(description=__doc__)
     args.add_argument("--dry-run", action="store_true", help="write email/preview.html, send nothing")
     args.add_argument("--force", action="store_true", help="ignore the weekday and 11:00 rules (still once per day)")
@@ -493,10 +520,12 @@ def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
     data = load_data()
     why = stale_reason(data, now)
     stale = why is not None
+    png = None
     if stale:
         subject, html_body, text_body = build_stale(data, now, why)
     else:
-        subject, html_body, text_body, sections = build_email(data, now)
+        png = header(data["news"][0], now.strftime("%a %d %b %Y"))  # news[0] is build_email's top story
+        subject, html_body, text_body, sections = build_email(data, now, header=png is not None)
     print(f"[EMAIL] Subject: {clean_header(subject)}")  # what build_message will actually send
 
     if args.dry_run:
@@ -509,7 +538,7 @@ def main(argv=None, now=None, sleep=time.sleep, send=smtp_send):
         print(f"[EMAIL] Dry run: wrote {PREVIEW}, nothing sent.")
         return "stale_preview" if stale else "preview"
 
-    print(f"[EMAIL] SMTP: {send(subject, html_body, text_body)}")
+    print(f"[EMAIL] SMTP: {send(subject, html_body, text_body, **({'header_png': png} if png else {}))}")
     os.makedirs(os.path.dirname(LAST_SENT), exist_ok=True)
     with open(LAST_SENT, "w") as f:
         f.write(today + "\n")
