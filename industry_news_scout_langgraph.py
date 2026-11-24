@@ -40,8 +40,11 @@ MAX_ITEMS = 25
 MAX_PER_SOURCE = 3
 MIN_SNIPPET = 300   # shorter RSS/scrape snippets get the full article fetched
 SOURCE_CAP = 3000   # characters of article text kept as source_text
+# Feed gives headlines only (no article text), so its items skip the LLM summary and the judge and are saved under "headlines".
+HEADLINE_SOURCE = "McKinsey"
 EIGHT_WEEKS_AGO = datetime.now() - timedelta(weeks=8)
 FOUR_WEEKS_AGO = datetime.now() - timedelta(weeks=4)
+TWO_WEEKS_AGO = datetime.now() - timedelta(weeks=2)
 
 RSS_SOURCES = [
     {"url": "https://openai.com/news/rss.xml", "name": "OpenAI", "tier": "ai_labs", "window": "4w"},
@@ -52,6 +55,8 @@ RSS_SOURCES = [
     {"url": "https://huggingface.co/blog/feed.xml", "name": "Hugging Face", "tier": "ai_labs", "window": "4w"},
     {"url": "https://sloanreview.mit.edu/feed/", "name": "MIT Sloan", "tier": "consulting", "window": "8w"},
     {"url": "https://hbr.org/rss/topic/ai", "name": "Harvard Business Review", "tier": "consulting", "window": "8w"},
+    # mckinsey.com has no reachable feed (times out), so Google News scoped to the site. Links stay news.google.com redirects.
+    {"url": "https://news.google.com/rss/search?q=site:mckinsey.com+(AI+OR+%22artificial+intelligence%22+OR+%22gen+AI%22+OR+agentic)&hl=en-GB&gl=GB&ceid=GB:en", "name": "McKinsey", "tier": "consulting", "window": "2w"},
     {"url": "https://techcrunch.com/category/artificial-intelligence/feed/", "name": "TechCrunch", "tier": "news", "window": "4w"},
     {"url": "https://feeds.feedburner.com/venturebeat/SZYF", "name": "VentureBeat", "tier": "news", "window": "4w"},
     {"url": "https://www.technologyreview.com/feed/", "name": "MIT Tech Review", "tier": "news", "window": "4w"},
@@ -170,7 +175,7 @@ def is_recent(s, window):
     dt = parse_date(s)
     if not dt:
         return False
-    cutoff = EIGHT_WEEKS_AGO if window == "8w" else FOUR_WEEKS_AGO
+    cutoff = {"8w": EIGHT_WEEKS_AGO, "2w": TWO_WEEKS_AGO}.get(window, FOUR_WEEKS_AGO)
     return dt >= cutoff
 
 def format_date(s):
@@ -317,7 +322,7 @@ def fetch_news(state):
         with open(archive_path) as f:
             archive = json.load(f)
         for entry in archive:
-            for item in entry.get("news", []):
+            for item in entry.get("news", []) + entry.get("headlines", []):
                 uid = item.get("id") or item.get("url", "")
                 if uid:
                     seen.add(uid.strip())
@@ -325,7 +330,7 @@ def fetch_news(state):
         if "archive" not in f.name:
             try:
                 data = json.load(open(f))
-                for item in data.get("news", []):
+                for item in data.get("news", []) + data.get("headlines", []):
                     uid = item.get("id") or item.get("url", "")
                     if uid:
                         seen.add(uid.strip())
@@ -342,6 +347,8 @@ def fetch_news(state):
                 if not is_recent(pub, source["window"]):
                     continue
                 title = entry.get("title", "").strip()
+                if source["name"] == HEADLINE_SOURCE:
+                    title = title.removesuffix(" - McKinsey & Company").strip()
                 url = entry.get("link", "")
                 uid = url or title
                 if uid in seen or not title:
@@ -502,6 +509,8 @@ Content: {content}
             text = groq_complete([{"role": "user", "content": classify_prompt}], max_tokens=400,
                                  validate=_parse_classify_output, call_site="news.classify")
             g = _parse_classify_output(text)
+            if source == HEADLINE_SOURCE:  # keep the score, drop text written from the headline alone
+                g["summary"] = g["enterprise_use"] = ""
             classified.append({
                 **article,
                 "summary": g.get("summary", ""),
@@ -522,7 +531,11 @@ Content: {content}
 def save_and_archive(state):
     print("[DEBUG] Saving...")
     failed = [x for x in state["classified_news"] if x.get("classify_failed")]
-    kept, held, results = quality_checks.gate([x for x in state["classified_news"] if not x.get("classify_failed")])
+    ok = [x for x in state["classified_news"] if not x.get("classify_failed")]
+    # Headline items have no summary, so the summary-based quality checks and the judge cannot apply to them.
+    headlines = [x for x in ok if x.get("source") == HEADLINE_SOURCE]
+    print(f"[HEADLINES] {len(headlines)} {HEADLINE_SOURCE} headline items, judge skipped")
+    kept, held, results = quality_checks.gate([x for x in ok if x.get("source") != HEADLINE_SOURCE])
     summary = quality_checks.summarize(results)
     if failed:  # count classify failures like score_failed: a failed check in the quality report
         summary["total"] += len(failed)
@@ -543,11 +556,12 @@ def save_and_archive(state):
         except:
             pass
     today = datetime.now().strftime("%Y-%m-%d")
-    daily = []
+    daily, daily_h = [], []
     if os.path.exists(state["output_file"]):
         try:
             with open(state["output_file"], encoding="utf-8") as f:
-                daily = json.load(f).get("news", [])
+                day = json.load(f)
+            daily, daily_h = day.get("news", []), day.get("headlines", [])
         except Exception:
             pass
     # Same-day reruns add to today's items, never replace them (daily file and archive entry both count).
@@ -566,23 +580,28 @@ def save_and_archive(state):
     merged = unseen(daily + entry.get("news", []))
     added = unseen(state["classified_news"])
     merged += added
-    if added:
+    merged_h = unseen(daily_h + entry.get("headlines", []))
+    added_h = unseen(headlines)
+    merged_h = sorted(merged_h + added_h, key=lambda x: x.get("relevance_score", 0), reverse=True)
+    if added or added_h:
         output = {
             "timestamp": datetime.now().isoformat(),
             "filter": "last_4_to_8_weeks",
             "total_fetched": len(state["raw_articles"]),
             "total_classified": len(merged),
             "news": merged,
+            "headlines": merged_h,
         }
         with open(state["output_file"], "w", encoding="utf-8") as f:
             json.dump(output, f, indent=2, ensure_ascii=False)
         archive = [e for e in archive if e.get("date") != today]
-        archive.insert(0, {"date": today, "total": len(merged), "news": merged})
+        archive.insert(0, {"date": today, "total": len(merged), "news": merged, "headlines": merged_h})
         archive = archive[:60]
         with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
             json.dump(archive, f, indent=2, ensure_ascii=False)
-        print(f"Saved {len(added)} new news items ({len(merged)} today).")
-        generate_daily_hook(merged)
+        print(f"Saved {len(added)} new news items ({len(merged)} today), {len(added_h)} new headlines ({len(merged_h)} today).")
+        if added:
+            generate_daily_hook(merged)
     else:
         print("No new news items; today's news left unchanged.")
     try:

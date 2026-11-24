@@ -68,7 +68,7 @@ def load_data():
         print(f"[EMAIL] Scout data missing or malformed: {e!r}")
         return {"news": [], "papers": [], "newest": None, "reason": "a data file is missing or empty, or malformed"}
     return {"news": news, "papers": papers, "cs_days": cs_days, "newest": max(stamps), "reason": None,
-            "creators": load_creators()}
+            "creators": load_creators(), "headlines": news_day.get("headlines", [])[:3]}
 
 
 def load_creators():
@@ -272,6 +272,7 @@ def build_email(data, now):
         "creators": creator_watch(data.get("creators"), now),
         "radar": radar,
         "hits": hits,
+        "headlines": data.get("headlines", []),
         "footer": f"{len(news)} news items, {len(papers)} case studies. Data as of {data['newest']:%Y-%m-%d %H:%M} UTC.",
     }
     subject = f"Scout Daily — {date} — {top.get('title', 'no top story')}"
@@ -322,6 +323,9 @@ def render_html(date, s):
         + (_p(f"<b>Key idea:</b> {_e(c.get('key_idea'))}", C["text2"], 14) if c.get("key_idea") else "")
         for c in s["creators"])
     creator_block = _block("Creator Watch", creators) if creators else ""
+    headlines = "".join(f'<li style="margin:0 0 8px;">{_link(n.get("url"), n.get("title"))} '
+                        f'<span style="color:{C["muted"]};">· {_e(n.get("pub_date"))}</span></li>' for n in s["headlines"])
+    headline_block = _block("From McKinsey", f"<ul {ul}>{headlines}</ul>") if headlines else ""
     return f"""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"></head>
 <body style="margin:0;padding:0;background:{C["bg"]};" bgcolor="{C["bg"]}">
@@ -339,6 +343,7 @@ def render_html(date, s):
 {case_block}{creator_block}
 {_block("Research Radar", radar)}
 {_block("Quick Hits", f"<ul {ul}>{hits}</ul>")}
+{headline_block}
 <tr><td bgcolor="{C["bg"]}" style="background:{C["bg"]};padding:16px 24px;font:12px {FONT};color:{C["muted"]};">{_e(s["footer"])}</td></tr>
 </table></td></tr></table></body></html>"""
 
@@ -395,6 +400,9 @@ def render_text(date, s):
     lines += [f"- {c.get('title')} ({_score(c, 'total_score'):.0f}/75)\n  {c.get('summary', '')}\n  {safe_url(c.get('url'))}"
               for c in s["radar"]] or ["- No papers passed today's checks."]
     lines += ["", "QUICK HITS"] + [f"- {n.get('title')} — {safe_url(n.get('url'))}" for n in s["hits"]]
+    if s["headlines"]:
+        lines += ["", "FROM MCKINSEY"] + [f"- {n.get('title')} ({n.get('pub_date')}) — {safe_url(n.get('url'))}"
+                                          for n in s["headlines"]]
     lines += ["", s["footer"]]
     return "\n".join(lines)
 

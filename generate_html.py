@@ -233,6 +233,15 @@ def render_news(data, slug_map):
 </article>""")
     return "\n".join(cards)
 
+def render_headlines(items):
+    if not items:
+        return ""
+    rows = "".join(
+        f'<p><a class="archive-title" href="{esc(safe_url(i.get("url")))}" target="_blank" rel="noopener noreferrer">{esc(i.get("title", ""))}</a> '
+        f'<span class="pub-date">{esc(i.get("pub_date", ""))}</span></p>'
+        for i in items[:3])
+    return f'<section class="signal">\n        <h2 class="signal-title">From McKinsey</h2>\n        {rows}\n    </section>'
+
 def render_archive(archive, kind="cs"):
     if not archive:
         return "<div class='empty-state'><p>No archive yet.</p></div>"
@@ -375,9 +384,9 @@ def generate_html():
     path_news = Path(NEWS_DIR)
     all_news_files = [f for f in path_news.glob("news_*.json") if "archive" not in f.name]
     news_archive = load_json(ARCHIVE_NEWS_FILE)
-    active_news = []
+    active_news, active_headlines = [], []
     archived_files = []
-    
+
     sorted_news = sorted(all_news_files)
     for i, f in enumerate(sorted_news):
         date_str = f.stem.replace("news_", "")
@@ -391,6 +400,7 @@ def generate_html():
             data = load_json(str(f))
             if data and "news" in data:
                 active_news.extend(data["news"])
+                active_headlines.extend(data.get("headlines", []))
                 
     with open(ARCHIVE_NEWS_FILE, 'w') as f_out:
         json.dump(news_archive, f_out, indent=2)
@@ -404,6 +414,9 @@ def generate_html():
     if not active_news and news_archive:
         active_news = news_archive[0].get("news", [])
         print(f"Fallback: Loaded {len(active_news)} news items from archive.")
+    if not active_headlines and news_archive:
+        active_headlines = news_archive[0].get("headlines", [])
+    active_headlines.sort(key=lambda x: by_score(x, "relevance_score"), reverse=True)
     news_data = {"news": active_news}
 
     # --- Metadata ---
@@ -1040,7 +1053,7 @@ def generate_html():
         <h2 class="signal-title">Today\'s signal</h2>
         <p>{esc(daily_hook)}</p>
     </section>
-    ''' if daily_hook else "") + """
+    ''' if daily_hook else "") + render_headlines(active_headlines) + """
     <div class="cards-grid">""" + render_news(news_data, slug_map) + """</div>
   </div>
 
