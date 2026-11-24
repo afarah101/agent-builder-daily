@@ -180,28 +180,44 @@ def safe_url(url):
 
 
 # ---------- H11 BLUF block (House rule H11, checked by evals/email_check.py) ----------
-# (project name in docs/PROJECTS.md, repo, keyword pattern, file or metric it changes). An item with no match is dropped.
-H11_PROJECTS = (
-    ("Scout Daily", "afarah101/agent-builder-daily", r"\b(groq|llama|langgraph|langfuse|llm judge|rate limit|github actions|prompt injection|agent eval)",
-     "the scout pipeline (orchestrator.py, judge.py)"),
-    ("DUS App", "afarah101/dus-app", r"\b(firestore|firebase|expo|react native|push notification|crashlytics)", "Firestore reads and app releases"),
-    ("Aurora website", "afarah101/Aurora-Electrical-Website", r"\b(next\.js|vercel|core web vitals|google business profile|local seo|tradesperson|electrician)",
-     "site build and lead capture"),
-    ("Football Twin", "afarah101/football-twin", r"\b(football|soccer|premier league|understat|expected goals)", "player data and Claim Check"),
-    ("Optomate lead signals", "afarah101/optomate-lead-signals", r"\b(sales lead|lead scoring|hvac|plumbing|duckdb)", "lead ranking"),
+# Rules: (project name in docs/PROJECTS.md, repo, keyword pattern, file or metric it changes, why). First match wins, so
+# the most specific rules come first. An item with no match is dropped (House rule H11).
+SD = ("Scout Daily", "afarah101/agent-builder-daily")
+H11_RULES = (
+    ("Aurora website", "afarah101/Aurora-Electrical-Website", r"third-party script|compromised cdn|served malware|malicious (code|script)|magecart",
+     "external scripts loaded by app/layout.tsx", "risk: a bad third-party script can reach site visitors"),
+    (*SD, r"jailbreak|backdoor|prompt[- ]injection|hijack|poison",
+     "judge.py INJECTION_PATTERNS (the unsafe-text guard)", "risk: hostile text in a story can pass the judge"),
+    (*SD, r"agentic workflow|agent workflows?|langgraph|static (safety )?analy|workflow bugs?",
+     "orchestrator.py and the LangGraph scouts", "risk: a hidden logic bug can stop or skew the daily run"),
+    (*SD, r"inference serving|rate.?limit|\bgroq\b|llama|prefill|token budget|ai budget|context and reasoning|reasoning effort",
+     "groq_complete in case_study_scout_langgraph.py (model calls)", "tokens: fewer wasted Groq calls per run"),
+    (*SD, r"code review|review, fix|ai coding tool|claude code|claude ship|pull request|github actions|release pipeline",
+     ".github/workflows/ (build and email jobs)", "time: an agent can check each PR before you merge"),
+    (*SD, r"langfuse|observability|llm judge|llm-as-a-judge|\bevals?\b",
+     "judge.py scores in Langfuse (trace log tool)", "time: faster fault finding in the daily run"),
+    ("DUS App", "afarah101/dus-app", r"firestore|firebase|\bexpo\b|react native|push notification|crashlytics|app store|mobile app",
+     "Firestore reads and app releases", "money: the Firestore bill is 8x the limit"),
+    ("Aurora website", "afarah101/Aurora-Electrical-Website",
+     r"next\.js|vercel|core web vitals|google business|local seo|tradespe|electrician|small business website",
+     "site build and lead capture (app/, content/site.md)", "money: more calls and WhatsApp leads"),
+    ("Football Twin", "afarah101/football-twin", r"football|soccer|premier league|understat|expected goals|sports data",
+     "player data and Claim Check", "time: better data for the twin model"),
+    ("Optomate lead signals", "afarah101/optomate-lead-signals", r"sales lead|lead gen|lead scoring|duckdb|(hvac|plumbing) (contractor|business|compan)",
+     "lead ranking (src/ranking)", "money: better leads for Optomate"),
 )
 H11_MAX_ITEMS = 3
 
 
 def _h11_link(item):
     text = f"{item.get('title', '')} {item.get('summary', '')}".lower()
-    for name, repo, pattern, target in H11_PROJECTS:
+    for name, repo, pattern, target, why in H11_RULES:
         if re.search(pattern, text):
-            return name, repo, target
+            return name, repo, target, why
     return None
 
 
-def _first_words(text, n=22):
+def _first_words(text, n=14):
     words = two_sentences(text).split()
     return " ".join(words[:n]) + ("…" if len(words) > n else "")
 
@@ -215,15 +231,14 @@ def h11_items(news, case, radar):
         if not link or key in seen:
             continue
         seen.add(key)
-        name, repo, target = link
+        name, repo, target, why = link
         security = (it.get("category") or "").lower() == "security"
-        do = ("ACT NOW — risk: a security story that touches this project." if security
-              else "LATER — time: test it on a branch before any change.")
+        do = f"{'ACT NOW' if security else 'LATER'} — {why}."
         slug = re.sub(r"[^a-z0-9]+", "-", (it.get("title") or "item").lower()).strip("-")[:30]
         prompt = (f"In {repo}, spike on a new branch spike/{slug}. Read-only: find the files that {target} uses and list "
                   f"what \"{(it.get('title') or '')[:80]}\" would change, with file:line. Change no file. "
                   f"PASS if 3 or more file:line places are listed; FAIL if fewer.")
-        picked.append({"title": it.get("title", ""), "found": _first_words(it.get("summary")), "project": name,
+        picked.append({"title": _first_words(it.get("title"), 9), "found": _first_words(it.get("summary")), "project": name,
                        "target": target, "do": do, "source": safe_url(it.get("url")), "prompt": prompt[:600]})
         if len(picked) == H11_MAX_ITEMS:
             break
@@ -240,7 +255,7 @@ def h11_top_line(items):
     if not items:
         return "No action today. No story links to your projects. Read the digest below DETAIL if you have time."
     first = items[0]
-    return f"{len(items)} item(s) link to your projects. Start with item 1: {first['project']}. Reply YES or NO per item."
+    return f"{len(items)} item(s) for your projects. Start with item 1 ({first['project']})."
 
 
 # ---------- render ----------
