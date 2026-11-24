@@ -161,10 +161,12 @@ def test_page_structure(site):
     for needle in ('<h1 class="brand">', "<main", "<header", 'role="tablist"', 'role="tab"', 'aria-selected="true"',
                    'role="tabpanel"', '<label class="visually-hidden" for="scout-search">',
                    '<label class="visually-hidden" for="email-input">', ":focus-visible", "prefers-reduced-motion",
-                   '<button type="submit" class="email-btn">'):
+                   '<button type="submit" class="email-btn">', '<span class="accent-word">'):
         assert needle in page, needle
     css = page.split("<style>")[1].split("</style>")[0]
     assert "infinite" not in css and "background-clip: text" not in css
+    assert css.count("linear-gradient(") == 1  # the hero background only: no gradient on or under text
+    assert re.search(r"\.accent-word\s*\{\s*color:\s*var\(--c-accent\);\s*\}", css)
     assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
     assert not re.search(r"border-left:\s*[2-9]px", css)
     assert not re.search(r"[\U0001F300-\U0001FAFF☀-➿]", page)  # no emoji as icons
@@ -428,12 +430,20 @@ def test_home_colour_tokens_meet_4_5_to_1(site):
     gh.generate_html()
     root = (site / "site" / "index.html").read_text().split(":root {")[1].split("}")[0]
     tokens = dict(re.findall(r"--([\w-]+):\s*(#[0-9a-fA-F]{6})", root))
+    assert tokens["c-accent"] == "#22d3ee"
     pairs = [(fg, "c-bg") for fg in ("c-text", "c-text-muted", "c-good", "c-warn", "c-bad")]  # white panel
     pairs += [(fg, bg) for fg in ("c-bg", "c-on-dark-muted") for bg in ("c-surface-dark", "c-surface-dark-2", "c-hero-bottom")]  # dark hero
-    pairs += [(fg, bg) for fg in ("c-accent-start", "c-accent-end") for bg in ("c-surface-dark", "c-hero-bottom")]  # accent stops
+    pairs += [("c-accent", bg) for bg in ("c-surface-dark", "c-hero-bottom")]  # key words on the hero
     pairs += [("c-text", "c-bg-alt")]  # tag pills
     for fg, bg in pairs:
         assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
+    # status badges: each colour on its own tint, rounded to 8-bit as the screen shows it
+    css = (site / "site" / "index.html").read_text()
+    pct = int(re.search(r"\.status-badge \{ background: color-mix\(in srgb, currentColor (\d+)%, var\(--c-bg\)\)", css).group(1))
+    for fg in ("c-good", "c-warn", "c-bad"):
+        c, w = tokens[fg], tokens["c-bg"]
+        tint = "#" + "".join("%02x" % round(int(c[i:i + 2], 16) * pct / 100 + int(w[i:i + 2], 16) * (1 - pct / 100)) for i in (1, 3, 5))
+        assert _ratio(c, tint) >= 4.5, (fg, tint, round(_ratio(c, tint), 3))
 
 
 def test_hostile_build_has_no_injected_markup(site):

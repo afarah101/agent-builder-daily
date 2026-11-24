@@ -459,9 +459,7 @@ def generate_html():
       --c-border-dark: #333333;
       --c-hero-bottom: #292929;
       --g-hero: linear-gradient(#000, var(--c-hero-bottom));
-      --c-accent-start: #22d3ee;
-      --c-accent-end: #818cf8;
-      --g-accent: linear-gradient(45deg, var(--c-accent-start), var(--c-accent-end));
+      --c-accent: #22d3ee;
 
       --radius-sm: 6px;
       --radius: 8px;
@@ -547,7 +545,7 @@ def generate_html():
       display: inline-block;
       width: 0.2em;
       height: 0.8em;
-      background: var(--g-accent);
+      background: var(--c-accent);
       margin-left: 4px;
       animation: blink 1s 3;
       border-radius: var(--radius-sm);
@@ -586,8 +584,8 @@ def generate_html():
       text-wrap: balance;
     }
 
-    /* The accent gradient sits under the key words: tests/test_frontend.py bans gradient-clipped text */
-    .text-gradient { background: var(--g-accent) 0 95% / 100% 0.08em no-repeat; }
+    /* Key words: one solid colour, never a gradient */
+    .accent-word { color: var(--c-accent); }
 
     .updated {
       font-size: var(--fs-small);
@@ -742,7 +740,7 @@ def generate_html():
     .tag-pill, .status-badge { padding: 4px 10px; border-radius: var(--radius-pill); }
 
     .tag-pill { color: var(--c-text); background: var(--c-bg-alt); }
-    .status-badge { background: color-mix(in srgb, currentColor 8%, var(--c-bg)); }
+    .status-badge { background: color-mix(in srgb, currentColor 6%, var(--c-bg)); }  /* 8% put pending at 4.49:1 */
     .status-pass { color: var(--c-good); }
     .status-fail { color: var(--c-bad); }
     .status-pending { color: var(--c-warn); }
@@ -1029,7 +1027,7 @@ def generate_html():
         </div>
       </div>
     </div>
-    <p class="hero-title">AI agent case studies and news, <span class="text-gradient">scored every day</span>.</p>
+    <p class="hero-title">AI agent case studies and news, <span class="accent-word">scored every day</span>.</p>
     <p class="updated">Updated """ + generated_at + """</p>
 """ + generate_email_capture() + """
   </div>
