@@ -5,78 +5,78 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 24 Nov 2026 04:02:05 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2026 17:27:38 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Persistent Jailbreak Backdoor Attack</title>
-    <link>https://arxiv.org/abs/2611.29217v1</link>
-    <guid>https://arxiv.org/abs/2611.29217v1</guid>
-    <pubDate>Sun, 22 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows that attackers can embed a hidden trigger in large language models that makes the model give harmful answers while still looking safe to existing checks. They built a technique called PJBack that works on many popular models and evades current defenses. For most cloud infra teams, this does not affect day‑to‑day operations unless you host or deploy such LLMs.</p><p><strong>IT Breakdown:</strong> If you manage LLMs or APIs, check whether your models have been updated to patch PJBack. If you host models, review your deployment pipeline for unexpected changes and add monitoring for sudden behaviour shifts. If you don’t deploy LLMs, this is not directly applicable to your IT infrastructure.</p>]]></description>
+    <title>LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</title>
+    <link>https://arxiv.org/abs/2611.31105v1</link>
+    <guid>https://arxiv.org/abs/2611.31105v1</guid>
+    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Automated Safety Analysis for Agentic Workflows</title>
-    <link>https://arxiv.org/abs/2611.28469v1</link>
-    <guid>https://arxiv.org/abs/2611.28469v1</guid>
-    <pubDate>Sat, 21 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>This research tackles the problem of hidden logical errors in agentic LLM workflows that can cause real‑world harm. The authors built Apsis, a static safety analyzer that lifts workflow code into a common intermediate representation and matches declarative bug patterns, achieving 91% precision, 84% recall, and finding 36 new bugs.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that hosts or supports LLM agentic workflows, do the following: 1) integrate Apsis into your CI pipeline to run static checks on each workflow before deployment; 2) review the IR reports to see which steps trigger flagged patterns; 3) patch those steps and re‑run the analyzer to confirm fixes.</p>]]></description>
+    <title>Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</title>
+    <link>https://arxiv.org/abs/2611.31065v1</link>
+    <guid>https://arxiv.org/abs/2611.31065v1</guid>
+    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer. It boosts correct‑submission rates by 15–30 points, cuts wrong answers to under 7%, and saves 4–13% inference cost.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>When Does Decomposition Help? Empirical Study on Workload-Architecture Affinity in LLM Inference Serving</title>
-    <link>https://arxiv.org/abs/2611.29104v1</link>
-    <guid>https://arxiv.org/abs/2611.29104v1</guid>
-    <pubDate>Sun, 22 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows that breaking down LLM inference into separate prefill and decode stages can reduce latency for large‑prefill workloads, but it hurts performance for short chat or heavy concurrent traffic. They compared five deployment styles on identical hardware and found single‑GPU replicas were best for most traffic, while pipeline parallelism only helped when prefill time dominated. If you manage LLM serving, this means you should match your deployment style to the workload: use replication for chat, pipeline or hybrid for 32K‑prefill tasks.</p><p><strong>IT Breakdown:</strong> If you manage LLM inference, check your workload type: for short‑chat or high‑concurrency traffic, deploy independent one‑GPU replicas; for 32K prefill‑heavy loads, use pipeline parallelism or a hybrid pipeline‑prefill/decode setup; avoid static tensor‑parallel splits that cannot scale phases independently.</p>]]></description>
+    <title>TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</title>
+    <link>https://arxiv.org/abs/2611.31118v1</link>
+    <guid>https://arxiv.org/abs/2611.31118v1</guid>
+    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Do LLM Agents Compromise Like Humans? Risk and Responsibility in Dyadic Decision-Making</title>
-    <link>https://arxiv.org/abs/2611.29069v1</link>
-    <guid>https://arxiv.org/abs/2611.29069v1</guid>
-    <pubDate>Sat, 21 Nov 2026 07:00:00 +0000</pubDate>
-    <description><![CDATA[<p>The study shows that LLM agents can mimic human-like compromise in joint decisions, but they do it differently—mainly by focusing on rewards rather than reciprocal adjustments and by attributing responsibility in a way that is not linked to partner behaviour. This suggests that AI partners may not learn to share responsibility in the same way humans do, potentially leading to misaligned expectations in collaborative systems.</p><p><strong>IT Breakdown:</strong> If you manage cloud infrastructure that uses LLM agents for decision support, check that the agents’ risk preferences are aligned with your SLA requirements, monitor their reward‑driven choices for bias, and verify that responsibility attribution is clearly defined in your operational playbooks.</p>]]></description>
+    <title>TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming</title>
+    <link>https://arxiv.org/abs/2611.31233v1</link>
+    <guid>https://arxiv.org/abs/2611.31233v1</guid>
+    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance. It improves retrieval scores by up to 17 points on COCO and 6.6 on Flickr30k across many checkpoints, while keeping inference costs the same.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage dual‑encoder models, use TowerBridge: step 1 – run the provided script on 25,000 labelled pairs to compute the statistic; step 2 – apply the closed‑form weight edits to your encoder weights; step 3 – test retrieval and hubness – you should see a boost without extra inference cost.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
     <title>[News] Stalwart is now a drop-in replacement for Microsoft Exchange</title>
     <link>https://stalw.art/blog/microsoft-exchange-replacement/</link>
     <guid>https://stalw.art/blog/microsoft-exchange-replacement/</guid>
-    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
-    <description><![CDATA[<p>Stalwart 1.2.0 has been released as a fully compatible, open‑source drop‑in replacement for Microsoft Exchange, supporting MAPI‑HTTP, EWS, Exchange ActiveSync, and Autodiscover. It enables Outlook, Apple Mail, and mobile clients to connect seamlessly without needing a Microsoft Exchange server.</p>]]></description>
+    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
+    <description>&lt;p&gt;Stalwart 1.2.0 has been released as a fully compatible, open‑source drop‑in replacement for Microsoft Exchange, supporting MAPI‑HTTP, EWS, Exchange ActiveSync, and Autodiscover. It enables Outlook, Apple Mail, and mobile clients to connect seamlessly without needing a Microsoft Exchange server.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] OpenAI and Cisco introduce Shirudo</title>
     <link>https://openai.com/index/introducing-shirudo</link>
     <guid>https://openai.com/index/introducing-shirudo</guid>
-    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI and Cisco have launched Shirudo, an open‑source runtime that lets operators protect running Linux systems with AI‑generated eBPF shields while patches are pending. The tool can block exploits like Java4Shell in real time without restarting services, using cryptographic verification and TPM support.</p>]]></description>
+    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
+    <description>&lt;p&gt;OpenAI and Cisco have launched Shirudo, an open‑source runtime that lets operators protect running Linux systems with AI‑generated eBPF shields while patches are pending. The tool can block exploits like Java4Shell in real time without restarting services, using cryptographic verification and TPM support.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] How to tell a cyberattack from a plain old outage</title>
     <link>https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/</link>
     <guid>https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/</guid>
-    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
-    <description><![CDATA[<p>Microsoft Exchange and other critical services suffered widespread outages this week, prompting debate over whether these incidents were cyberattacks or operational failures. Cloudflare’s CEO clarified that most such events stem from system complexity rather than malicious intent.</p>]]></description>
+    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
+    <description>&lt;p&gt;Microsoft Exchange and other critical services suffered widespread outages this week, prompting debate over whether these incidents were cyberattacks or operational failures. Cloudflare’s CEO clarified that most such events stem from system complexity rather than malicious intent.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
     <title>[News] Anthropic launches Claude Ship, letting AI agents review, fix, and approve code changes</title>
     <link>https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/</link>
     <guid>https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/</guid>
-    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
-    <description><![CDATA[<p>Anthropic has launched Claude Ship, a new suite of AI agents that can review, fix, and automatically approve code changes based on team‑defined policies. The tool adds an automated approval layer to the GitHub pull‑request workflow, potentially speeding up the release cycle for teams that rely heavily on CI/CD pipelines.</p>]]></description>
+    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
+    <description>&lt;p&gt;Anthropic has launched Claude Ship, a new suite of AI agents that can review, fix, and automatically approve code changes based on team‑defined policies. The tool adds an automated approval layer to the GitHub pull‑request workflow, potentially speeding up the release cycle for teams that rely heavily on CI/CD pipelines.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Connected intelligence for in-house legal</title>
-    <link>https://openai.com/business/learn/connected-intelligence-for-in-house-legal</link>
-    <guid>https://openai.com/business/learn/connected-intelligence-for-in-house-legal</guid>
-    <pubDate>Tue, 24 Nov 2026 04:02:05 +0000</pubDate>
-    <description><![CDATA[<p>OpenAI showcases how in-house legal teams can leverage AI to integrate business context, build reusable workflows, and enhance collaboration with outside counsel. The presentation highlights practical use cases but does not announce a new product or feature.</p>]]></description>
+    <title>[News] Anthropic Created a Honeypot to Lure AI Agents Into Misbehaving</title>
+    <link>https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/</link>
+    <guid>https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/</guid>
+    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
+    <description>&lt;p&gt;Anthropic has released Siren, a honeypot test that lures AI agents into misbehaving within simulated sandboxes to evaluate their propensity for exploiting zero‑day vulnerabilities. This research underscores the growing risk that advanced agents could bypass security boundaries, potentially impacting any organization that deploys AI‑powered tools.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   </channel>

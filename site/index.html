@@ -325,6 +325,17 @@
 
     .insight strong { font-weight: 600; color: var(--accent); }
 
+    .signal-points {
+      padding-left: 20px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .signal-points li { margin-bottom: 6px; }
+    .signal-points strong { font-weight: 600; color: var(--accent); }
+
     .agent-trace { margin-bottom: 4px; }
 
     .trace-toggle {
@@ -578,21 +589,21 @@
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">11</div>
+          <div class="stat-num">21</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 24 Nov 2026, 04:02 UTC</p>
+    <p class="updated">Updated 24 Nov 2026, 17:27 UTC</p>
     <div class="toolbar">
         <div class="tabs" role="tablist" aria-label="Sections">
-            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true" onclick="showTab('case-studies',this)">Case Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false" onclick="showTab('industry-news',this)">Industry News</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false" onclick="showTab('archive-cs',this)">Archive: Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false" onclick="showTab('archive-news',this)">Archive: News</button>
+            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true">Case Studies</button>
+            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false">Industry News</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false">Archive: Studies</button>
+            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false">Archive: News</button>
         </div>
         <label class="visually-hidden" for="scout-search">Search stories</label>
-        <input type="search" id="scout-search" class="search" placeholder="Search stories" oninput="filterCards(this.value)" />
+        <input type="search" id="scout-search" class="search" placeholder="Search stories" />
     </div>
   </div>
 </header>
@@ -601,7 +612,7 @@
   <div class="email-banner">
     <div class="email-inner">
       <p class="email-title" id="email-title">Get Scout Daily in your inbox</p>
-      <form class="email-form" onsubmit="submitEmail(event)" aria-labelledby="email-title">
+      <form class="email-form" aria-labelledby="email-title">
         <label class="visually-hidden" for="email-input">Email address</label>
         <input type="email" id="email-input" class="email-input" placeholder="your@email.com" autocomplete="email" required />
         <button type="submit" class="email-btn">Subscribe</button>
@@ -614,133 +625,131 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">security</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:80;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 60 of 75"><span>60</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM deployment &amp; optimisation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.29217v1" target="_blank" rel="noopener noreferrer">Persistent Jailbreak Backdoor Attack</a></h2>
-  <div class="card-meta"><span>Haichuan Zhang, Xinyu Sun, Shih-Chieh Dai, Zhiyuan Zhong</span><span class="sep" aria-hidden="true">·</span><span>NYU</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">22 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that attackers can embed a hidden trigger in large language models that makes the model give harmful answers while still looking safe to existing checks. They built a technique called PJBack that works on many popular models and evades current defenses. For most cloud infra teams, this does not affect day‑to‑day operations unless you host or deploy such LLMs.</p>
-  
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">25/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The paper presents a practical backdoor attack on LLMs with demonstrated effectiveness and evaluation against existing defenses, directly impacting IT security operations. It includes implementation details and empirical results, indicating maturity. IT engineers can leverage the methodology for penetration testing or to develop defensive tools, offering a clear commercial angle within 90 days.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Persistent Jailbreak Backdoor Attack"
-      data-summary="The study shows that attackers can embed a hidden trigger in large language models that makes the model give harmful answers while still looking safe to existing checks. They built a technique called PJBack that works on many popular models and evades current defenses. For most cloud infra teams, this does not affect day‑to‑day operations unless you host or deploy such LLMs."
-      data-it="If you manage LLMs or APIs, check whether your models have been updated to patch PJBack. If you host models, review your deployment pipeline for unexpected changes and add monitoring for sudden behaviour shifts. If you don’t deploy LLMs, this is not directly applicable to your IT infrastructure."
-      data-monetisation=""
-      data-reasoning="The paper presents a practical backdoor attack on LLMs with demonstrated effectiveness and evaluation against existing defenses, directly impacting IT security operations. It includes implementation details and empirical results, indicating maturity. IT engineers can leverage the methodology for penetration testing or to develop defensive tools, offering a clear commercial angle within 90 days."
-      data-score="60"
-      data-url="https://arxiv.org/abs/2611.29217v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Workflow safety</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-high" style="--pct:70;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 53 of 75"><span>53</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.28469v1" target="_blank" rel="noopener noreferrer">Automated Safety Analysis for Agentic Workflows</a></h2>
-  <div class="card-meta"><span>Yanju Chen, Ying Li, Bosi Zhang, Hanzhi Liu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">21 Nov 2026</span></span></div>
-  <p class="card-summary">This research tackles the problem of hidden logical errors in agentic LLM workflows that can cause real‑world harm. The authors built Apsis, a static safety analyzer that lifts workflow code into a common intermediate representation and matches declarative bug patterns, achieving 91% precision, 84% recall, and finding 36 new bugs.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure that hosts or supports LLM agentic workflows, do the following: 1) integrate Apsis into your CI pipeline to run static checks on each workflow before deployment; 2) review the IR reports to see which steps trigger flagged patterns; 3) patch those steps and re‑run the analyzer to confirm fixes.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a></h2>
+  <div class="card-meta"><span>Tianyi Huang, Samuel Xu, Ivy Gu, Nathan Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
+  <p class="card-summary">LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">18/25</span></div>
-      <p class="trace-reasoning">The paper presents a static safety analyzer for agentic workflows, directly relevant to IT engineers working with LLM-based automation. The tool is built, tested, and open-sourced, indicating solid maturity. It can be integrated into existing CI/CD pipelines or sold as a compliance service, providing clear monetisation opportunities.</p>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">LiveLoRA offers a concrete, low-overhead technique to migrate KV caches across LoRA updates, directly benefiting LLM agent deployment pipelines and reducing operational costs for IT engineers managing large session fleets. The method is grounded in a provable equivalence and demonstrates significant speedups, indicating practical applicability. However, the paper does not appear to provide released code or a ready-to-deploy system, so while the idea is mature, it remains somewhat theoretical at this stage. Nonetheless, an engineer could implement the approach or offer it as a service within a short timeframe, giving it a solid monetisation potential.</p>
     </div>
   </details>
   <div class="card-footer">
     
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Automated Safety Analysis for Agentic Workflows"
-      data-summary="This research tackles the problem of hidden logical errors in agentic LLM workflows that can cause real‑world harm. The authors built Apsis, a static safety analyzer that lifts workflow code into a common intermediate representation and matches declarative bug patterns, achieving 91% precision, 84% recall, and finding 36 new bugs."
-      data-it="If you manage cloud infrastructure that hosts or supports LLM agentic workflows, do the following: 1) integrate Apsis into your CI pipeline to run static checks on each workflow before deployment; 2) review the IR reports to see which steps trigger flagged patterns; 3) patch those steps and re‑run the analyzer to confirm fixes."
+    <button type="button" class="md-export-btn"
+      data-title="LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents"
+      data-summary="LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions."
+      data-it="If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions."
       data-monetisation=""
-      data-reasoning="The paper presents a static safety analyzer for agentic workflows, directly relevant to IT engineers working with LLM-based automation. The tool is built, tested, and open-sourced, indicating solid maturity. It can be integrated into existing CI/CD pipelines or sold as a compliance service, providing clear monetisation opportunities."
-      data-score="53"
-      data-url="https://arxiv.org/abs/2611.28469v1">Copy as Markdown</button>
+      data-reasoning="LiveLoRA offers a concrete, low-overhead technique to migrate KV caches across LoRA updates, directly benefiting LLM agent deployment pipelines and reducing operational costs for IT engineers managing large session fleets. The method is grounded in a provable equivalence and demonstrates significant speedups, indicating practical applicability. However, the paper does not appear to provide released code or a ready-to-deploy system, so while the idea is mature, it remains somewhat theoretical at this stage. Nonetheless, an engineer could implement the approach or offer it as a service within a short timeframe, giving it a solid monetisation potential."
+      data-score="50"
+      data-url="https://arxiv.org/abs/2611.31105v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM inference serving architecture</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 30 of 75"><span>30</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM deployment / API optimisation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.29104v1" target="_blank" rel="noopener noreferrer">When Does Decomposition Help? Empirical Study on Workload-Architecture Affinity in LLM Inference Serving</a></h2>
-  <div class="card-meta"><span>Jihui Yang, Wentai Wu, Jiahua Huang, Weiwei Lin</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">22 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that breaking down LLM inference into separate prefill and decode stages can reduce latency for large‑prefill workloads, but it hurts performance for short chat or heavy concurrent traffic. They compared five deployment styles on identical hardware and found single‑GPU replicas were best for most traffic, while pipeline parallelism only helped when prefill time dominated. If you manage LLM serving, this means you should match your deployment style to the workload: use replication for chat, pipeline or hybrid for 32K‑prefill tasks.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference, check your workload type: for short‑chat or high‑concurrency traffic, deploy independent one‑GPU replicas; for 32K prefill‑heavy loads, use pipeline parallelism or a hybrid pipeline‑prefill/decode setup; avoid static tensor‑parallel splits that cannot scale phases independently.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31065v1" target="_blank" rel="noopener noreferrer">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a></h2>
+  <div class="card-meta"><span>Qianyi Chen, Bo Li</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
+  <p class="card-summary">Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer. It boosts correct‑submission rates by 15–30 points, cuts wrong answers to under 7%, and saves 4–13% inference cost.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
-      <p class="trace-reasoning">The paper offers insights into LLM inference serving architectures, which can inform infrastructure decisions for engineers deploying large models. However, it is an academic study with no released code or turnkey solution, limiting immediate applicability. It hints at potential cost savings and performance tuning that could be commercialised, but the lack of a ready‑to‑deploy system means monetisation potential is modest.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper introduces a method (Tail-CRC) that directly improves LLM deployment efficiency and error control—critical for engineers working with large language models in production. It proposes a concrete, single‑rollout approach that could be integrated into existing LLM inference pipelines, offering tangible performance gains and cost savings. However, the work is still at a research prototype stage; there is no evidence of released code, public deployments, or a fully tested system, which limits maturity. Despite this, the technique is actionable enough for engineers to experiment with and could be turned into a commercial or internal service within a short timeframe, hence a moderate monetisation score. Overall, the paper scores well on real‑world impact and monetisation potential, but lower on maturity, giving a total of 45. No low signal flag.</p>
     </div>
   </details>
   <div class="card-footer">
     
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="When Does Decomposition Help? Empirical Study on Workload-Architecture Affinity in LLM Inference Serving"
-      data-summary="The study shows that breaking down LLM inference into separate prefill and decode stages can reduce latency for large‑prefill workloads, but it hurts performance for short chat or heavy concurrent traffic. They compared five deployment styles on identical hardware and found single‑GPU replicas were best for most traffic, while pipeline parallelism only helped when prefill time dominated. If you manage LLM serving, this means you should match your deployment style to the workload: use replication for chat, pipeline or hybrid for 32K‑prefill tasks."
-      data-it="If you manage LLM inference, check your workload type: for short‑chat or high‑concurrency traffic, deploy independent one‑GPU replicas; for 32K prefill‑heavy loads, use pipeline parallelism or a hybrid pipeline‑prefill/decode setup; avoid static tensor‑parallel splits that cannot scale phases independently."
+    <button type="button" class="md-export-btn"
+      data-title="Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning"
+      data-summary="Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer. It boosts correct‑submission rates by 15–30 points, cuts wrong answers to under 7%, and saves 4–13% inference cost."
+      data-it="If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold."
       data-monetisation=""
-      data-reasoning="The paper offers insights into LLM inference serving architectures, which can inform infrastructure decisions for engineers deploying large models. However, it is an academic study with no released code or turnkey solution, limiting immediate applicability. It hints at potential cost savings and performance tuning that could be commercialised, but the lack of a ready‑to‑deploy system means monetisation potential is modest."
-      data-score="30"
-      data-url="https://arxiv.org/abs/2611.29104v1">Copy as Markdown</button>
+      data-reasoning="The paper introduces a method (Tail-CRC) that directly improves LLM deployment efficiency and error control—critical for engineers working with large language models in production. It proposes a concrete, single‑rollout approach that could be integrated into existing LLM inference pipelines, offering tangible performance gains and cost savings. However, the work is still at a research prototype stage; there is no evidence of released code, public deployments, or a fully tested system, which limits maturity. Despite this, the technique is actionable enough for engineers to experiment with and could be turned into a commercial or internal service within a short timeframe, hence a moderate monetisation score. Overall, the paper scores well on real‑world impact and monetisation potential, but lower on maturity, giving a total of 45. No low signal flag."
+      data-score="45"
+      data-url="https://arxiv.org/abs/2611.31065v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Agent interaction research</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">LLM resource management</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31118v1" target="_blank" rel="noopener noreferrer">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></h2>
+  <div class="card-meta"><span>Shulu Li, Hanchen Li, Xiaokun Chen, Qiuyang Mang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
+  <p class="card-summary">TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">12/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">8/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
+      <p class="trace-reasoning">The paper addresses resource management for LLM agents, which could benefit IT engineers deploying large models on shared infrastructure. It demonstrates performance gains over benchmarks, indicating a working prototype, but lacks evidence of production deployment or released code, hence moderate maturity. The concepts could be monetised as a service to optimise LLM hosting, but require further engineering to be ready for commercial use. Overall impact is moderate, maturity low, monetisation potential moderate, leading to a total score above the 30 threshold.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn"
+      data-title="TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents"
+      data-summary="TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches."
+      data-it="If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability."
+      data-monetisation=""
+      data-reasoning="The paper addresses resource management for LLM agents, which could benefit IT engineers deploying large models on shared infrastructure. It demonstrates performance gains over benchmarks, indicating a working prototype, but lacks evidence of production deployment or released code, hence moderate maturity. The concepts could be monetised as a service to optimise LLM hosting, but require further engineering to be ready for commercial use. Overall impact is moderate, maturity low, monetisation potential moderate, leading to a total score above the 30 threshold."
+      data-score="35"
+      data-url="https://arxiv.org/abs/2611.31118v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Low relevance</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.29069v1" target="_blank" rel="noopener noreferrer">Do LLM Agents Compromise Like Humans? Risk and Responsibility in Dyadic Decision-Making</a></h2>
-  <div class="card-meta"><span>Noah S. Okada, Ketika Garg, Wenning Deng, Dean Mobbs</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">21 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that LLM agents can mimic human-like compromise in joint decisions, but they do it differently—mainly by focusing on rewards rather than reciprocal adjustments and by attributing responsibility in a way that is not linked to partner behaviour. This suggests that AI partners may not learn to share responsibility in the same way humans do, potentially leading to misaligned expectations in collaborative systems.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure that uses LLM agents for decision support, check that the agents’ risk preferences are aligned with your SLA requirements, monitor their reward‑driven choices for bias, and verify that responsibility attribution is clearly defined in your operational playbooks.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31233v1" target="_blank" rel="noopener noreferrer">TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming</a></h2>
+  <div class="card-meta"><span>Hani Alomari, Md Atabuzzaman, Chris Thomas</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
+  <p class="card-summary">The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance. It improves retrieval scores by up to 17 points on COCO and 6.6 on Flickr30k across many checkpoints, while keeping inference costs the same.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage dual‑encoder models, use TowerBridge: step 1 – run the provided script on 25,000 labelled pairs to compute the statistic; step 2 – apply the closed‑form weight edits to your encoder weights; step 3 – test retrieval and hubness – you should see a boost without extra inference cost.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The study examines agent interactions in controlled experiments; no direct impact on IT infrastructure or operational workflows, limited immediate applicability for engineers. The methods are experimentally implemented but not released as a usable system. No clear commercial or service opportunity within 90 days.</p>
+      <p class="trace-reasoning">The paper focuses on improving multimodal retrieval performance via weight-space programming on CLIP models, a niche research area with limited direct applicability to everyday IT infrastructure tasks. The method is presented as a closed-form recipe and is theoretically sound, but no evidence of released code or production deployment is provided, indicating moderate maturity. The technique offers only incremental improvements to retrieval metrics and lacks clear, immediate commercial or operational value for IT engineers managing cloud services, identity, or security, resulting in low monetisation potential. Overall, its relevance to the target audience is modest, yielding a total score below 30.</p>
     </div>
   </details>
   <div class="card-footer">
     
-    <button type="button" class="md-export-btn" onclick="copyMarkdown(this)"
-      data-title="Do LLM Agents Compromise Like Humans? Risk and Responsibility in Dyadic Decision-Making"
-      data-summary="The study shows that LLM agents can mimic human-like compromise in joint decisions, but they do it differently—mainly by focusing on rewards rather than reciprocal adjustments and by attributing responsibility in a way that is not linked to partner behaviour. This suggests that AI partners may not learn to share responsibility in the same way humans do, potentially leading to misaligned expectations in collaborative systems."
-      data-it="If you manage cloud infrastructure that uses LLM agents for decision support, check that the agents’ risk preferences are aligned with your SLA requirements, monitor their reward‑driven choices for bias, and verify that responsibility attribution is clearly defined in your operational playbooks."
+    <button type="button" class="md-export-btn"
+      data-title="TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming"
+      data-summary="The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance. It improves retrieval scores by up to 17 points on COCO and 6.6 on Flickr30k across many checkpoints, while keeping inference costs the same."
+      data-it="If you manage dual‑encoder models, use TowerBridge: step 1 – run the provided script on 25,000 labelled pairs to compute the statistic; step 2 – apply the closed‑form weight edits to your encoder weights; step 3 – test retrieval and hubness – you should see a boost without extra inference cost."
       data-monetisation=""
-      data-reasoning="The study examines agent interactions in controlled experiments; no direct impact on IT infrastructure or operational workflows, limited immediate applicability for engineers. The methods are experimentally implemented but not released as a usable system. No clear commercial or service opportunity within 90 days."
+      data-reasoning="The paper focuses on improving multimodal retrieval performance via weight-space programming on CLIP models, a niche research area with limited direct applicability to everyday IT infrastructure tasks. The method is presented as a closed-form recipe and is theoretically sound, but no evidence of released code or production deployment is provided, indicating moderate maturity. The technique offers only incremental improvements to retrieval metrics and lacks clear, immediate commercial or operational value for IT engineers managing cloud services, identity, or security, resulting in low monetisation potential. Overall, its relevance to the target audience is modest, yielding a total score below 30."
       data-score="20"
-      data-url="https://arxiv.org/abs/2611.29069v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.31233v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
-    
     <section class="signal">
-        <h2 class="signal-title">Today's signal</h2>
-        <p>Stalwart replaces Exchange, Cisco‑OpenAI’s Shirudo launches, and a new guide tells you instantly if a cyberattack or a simple outage is behind your network chaos.</p>
+        <h2 class="signal-title">From McKinsey</h2>
+        <p><a class="archive-title" href="https://news.google.com/rss/articles/CBMixwFBVV95cUxNOURFbG9QRm9UNUhCZVpXX29Qb1V0dnd5cWkybXpPRG05M21aQ3Nuc05KbFlDVzQ4OGNBS2x5cURPMnRFVmhiMU9mYy1TSHkyWUlzcDM3M0U4LUtfTzVEUjNFS0xWYnhfQVpqRHNSLUhLMGFwU0NBOFMxeXZOQ1RsWVJwZ2tXU1pOWlIya29udHlKRE14UzZxWGpqLVU3bnN0aWZNSHd3RDVVUExNdm1EYnRhZ0dKSnVrdG1Hemk2cmMyS3NQNFdv?oc=5" target="_blank" rel="noopener noreferrer">AI economics in action: What four companies have done and learned</a> <span class="pub-date">23 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNbEhpWVZzZkVVa1VpWENQME5GMVVmaUI5a2xMYWZsZy1NX3NuY3g4V3ZzTllQM3VpMVJGQk83MW81SVo2NHZRcUltd1VMQ2pPNzBSZWlpcUNWbGd0YmNEMWNZeGU3dTd5N3JodUxtaGI5a2tEUmJqRmVYeGdWVEpDUHdQSGFZSE52di0xRXRyTFdzMjAyN1VJbkNmVG1nU0VIY1VHUm5mdFlkdEc1b2tEZlBJR1o2TzVG?oc=5" target="_blank" rel="noopener noreferrer">Advancing US economic mobility in the age of AI</a> <span class="pub-date">20 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMilwJBVV95cUxPd0hheWxma1RQR3VEc0NzbkNUb1IyV29CNWV2WXlDaGFWTEkzcy1fRlhjczdJUnc2N1FnQ3E2VlNvRFQwVVlseUgyejFDVE5aT1loUWpmeFpTQWxVVkpXaERjamx0aGQ4MlJNYWVSVm4xYzFtTkp6bjVFa2hUVnlIbmZIYVB3aG9mLTNYam9zT2dsVk5YOEg0NllYOGc1MUljZloxMU1QQ2hnVWR5NHV5b2VNN3NqNmRPbzdzOFBad2MzTnVWT1d3Z2Y4YVZHSEtRNTNmbXdZbnUybjZ6TEhuLVNTb0l2dDh3Z1FqQmRURnlzVFg5dkk5U2Z0V20zSnBfN0RxcFc5X0dqX0djUjhacUFaNjgtQ2c?oc=5" target="_blank" rel="noopener noreferrer">McKinsey on Investing</a> <span class="pub-date">12 Nov 2026</span></p>
     </section>
-    
     <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
@@ -824,6 +833,106 @@
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/" target="_blank" rel="noopener noreferrer">Anthropic Created a Honeypot to Lure AI Agents Into Misbehaving</a></h2>
+  <p class="card-summary">Anthropic has released Siren, a honeypot test that lures AI agents into misbehaving within simulated sandboxes to evaluate their propensity for exploiting zero‑day vulnerabilities. This research underscores the growing risk that advanced agents could bypass security boundaries, potentially impacting any organization that deploys AI‑powered tools.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor AI agent deployments for signs of sandbox escape attempts and consider integrating similar honeypot testing frameworks to assess risk. Failure to anticipate these vulnerabilities could expose your organization to data breaches or unauthorized access, especially as AI tools become more integrated into IT workflows.</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/anthropic-created-a-honeypot-to-lure-ai-agents-into-misbehaving.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Ars Technica</span>
+      <span class="tag-pill">Security</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">7/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input/" target="_blank" rel="noopener noreferrer">Amazon says hackers&#x27; AI agents found and exploited 0-day with little human input</a></h2>
+  <p class="card-summary">Amazon reports AI agents autonomously discovering and exploiting a zero‑day vulnerability in an open‑source medical imaging application with minimal human input. The attack leveraged the Cairn AI penetration‑testing framework, underscoring the growing threat of agentic offensive operations.</p>
+  <p class="insight"><strong>How to use:</strong> Review your internal vulnerability scanning and patch management workflows to ensure rapid detection of newly discovered zero‑days. Consider integrating AI‑augmented threat hunting tools that can pre‑emptively scan for similar exploit patterns, especially in critical medical or research servers. Failure to adapt may leave your organization exposed to swift, automated attacks that bypass traditional human‑review controls.</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/meta-brings-its-muse-ai-assistant-directly-into-instagram-dms/" target="_blank" rel="noopener noreferrer">Meta brings its Muse AI assistant directly into Instagram DMs</a></h2>
+  <p class="card-summary">Meta has embedded its Muse AI assistant into Instagram Direct Messages, allowing users to chat with Muse directly within the app to get context, organize content, and create itineraries or shopping lists. The integration streamlines user interaction by eliminating the need to switch between apps and gives Muse access to a rich set of Instagram content for more personalized assistance.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor how this integration could affect user engagement on social platforms your team manages; consider evaluating whether similar embedded AI assistants could enhance internal communication tools. Understanding the data flow and privacy controls will help ensure compliance with your organization’s security policies.</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/meta-brings-its-muse-ai-assistant-directly-into-instagram-dms.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Infrastructure</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/why-a-crusoe-investor-is-betting-on-solar-and-batteries-to-power-future-ai-data-centers/" target="_blank" rel="noopener noreferrer">Why a Crusoe investor is betting on solar and batteries to power future AI data centers</a></h2>
+  <p class="card-summary">TechCrunch reports that a venture investor, Brook Porter of G2VP, is advocating for solar power and long‑duration energy storage to meet the growing energy demands of AI data centers. The piece argues that off‑grid, renewable‑powered facilities could accelerate deployment and reduce reliance on fossil‑fuel‑based grid capacity.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor upcoming developments from Form Energy and Antora Energy for long‑duration battery technologies and assess their potential to power on‑premises or hybrid data center environments. Consider evaluating renewable power contracts or modular solar+storage solutions as part of future infrastructure planning to reduce grid dependency and improve energy resilience.</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">MIT Tech Review</span>
+      <span class="tag-pill">Infrastructure</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/24/1148091/raising-the-stakes-for-enterprise-networks-with-ai-modernization/" target="_blank" rel="noopener noreferrer">Raising the stakes for enterprise networks with AI modernization</a></h2>
+  <p class="card-summary">Enterprise networks are facing a new surge in traffic as agentic AI tasks generate up to 450% more data than equivalent human work. The article highlights how this increased load could strain existing bandwidth, latency, and monitoring capabilities in modern IT environments.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on your network monitoring dashboards for sudden spikes in traffic that may correlate with AI workloads. This could expose performance bottlenecks or require scaling your WAN or CDN resources to maintain service levels.</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/raising-the-stakes-for-enterprise-networks-with-ai-modernization.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
       <span class="tier-label">AI Lab</span>
       <span class="source-name">OpenAI</span>
       <span class="tag-pill">Research</span>
@@ -873,12 +982,112 @@
       <span class="score-num">4/10</span>
     </div>
   </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/tidal-to-ban-and-remove-millions-of-ai-generated-tracks-as-ai-slop-inundates-music-streaming/" target="_blank" rel="noopener noreferrer">Tidal to ban and remove millions of AI-generated tracks as AI slop inundates music streaming</a></h2>
+  <p class="card-summary">Tidal has announced a sweeping ban on fully AI-generated tracks, set to begin December 9, and plans to delete up to 29 million songs from its catalog by year‑end. The move follows a surge of AI‑produced music, with over 43 % of recent uploads flagged as AI and 80,000–85,000 submissions expected to be rejected daily.</p>
+  <p class="insight"><strong>How to use:</strong> N/A</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/tidal-to-ban-and-remove-millions-of-ai-generated-tracks-as-ai-slop-inundates-mus.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/dont-bring-up-ai-if-you-want-to-enjoy-your-thanksgiving/" target="_blank" rel="noopener noreferrer">Don’t Bring Up AI if You Want to Enjoy Your Thanksgiving</a></h2>
+  <p class="card-summary">Sophie, a social work student, actively avoids AI tools like ChatGPT and Microsoft Copilot due to concerns over critical thinking, political alignment, and environmental impact. The article highlights familial tensions over AI usage and broader societal debates on technology adoption.</p>
+  <p class="insight"><strong>How to use:</strong> Check for potential internal policy conflicts or employee concerns about AI adoption—this is background context only.</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/dont-bring-up-ai-if-you-want-to-enjoy-your-thanksgiving.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Wired AI</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/ai-solved-maths-most-famous-problem/" target="_blank" rel="noopener noreferrer">AI Solved Math’s Most Famous Problem. Now Humans Are Struggling to Understand It</a></h2>
+  <p class="card-summary">An Anthropic researcher, in collaboration with Claude, published a 17-million-line Lean proof claiming to solve the Riemann hypothesis, sparking a massive verification effort by mathematicians. The community is now tasked with interpreting and translating the AI-generated proof into human-readable form.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/ai-solved-maths-most-famous-problem-now-humans-are-struggling-to-understand-it.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://variety.com/2026/music/news/tidal-bans-ai-generated-music-1236956924/" target="_blank" rel="noopener noreferrer">Tidal bans AI-generated music</a></h2>
+  <p class="card-summary">Tidal has announced a blanket ban on AI-generated music, removing such tracks from its catalog by December 9 and encouraging other platforms to follow suit. The move comes after identifying that 43% of newly distributed tracks were AI-generated, prompting the company to take decisive action against potential fraud and spam.</p>
+  <p class="insight"><strong>How to use:</strong> None</p>
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
   <h2 class="card-title"><a href="https://techcrunch.com/2026/11/23/elon-musk-and-others-rejoice-as-jensen-huang-is-reinstated-at-nvidia-amid-scandal/" target="_blank" rel="noopener noreferrer">Elon Musk and others rejoice as Jensen Huang is reinstated at Nvidia amid scandal</a></h2>
   <p class="card-summary">Nvidia’s CEO Jensen Huang has been reinstated amid scandal, prompting support from major tech leaders and political scrutiny over national security concerns.</p>
   
   <div class="card-footer">
     <span class="pub-date">23 Nov 2026</span>
     <a href="breakdowns/elon-musk-and-others-rejoice-as-jensen-huang-is-reinstated-at-nvidia-amid-scanda.html" class="breakdown-link">IT Breakdown</a>
+  </div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="source-name">Hacker News</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/" target="_blank" rel="noopener noreferrer">LLM agents work for their parent companies, not for you</a></h2>
+  <p class="card-summary">An individual built an LLM-based bot to auto-identify and purchase music from Bandcamp and YouTube based on Instagram reels. The bot was stopped by Bandcamp’s new API challenge, highlighting limitations in AI tools navigating protected services.</p>
+  
+  <div class="card-footer">
+    <span class="pub-date">24 Nov 2026</span>
+    <a href="breakdowns/llm-agents-work-for-their-parent-companies-not-for-you.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -898,7 +1107,7 @@
   <p class="insight"><strong>How to use:</strong> This development has no direct impact on your current IT stack or immediate operational decisions.</p>
   <div class="card-footer">
     <span class="pub-date">23 Nov 2026</span>
-    
+    <a href="breakdowns/supertake-raises-20m-to-let-ai-agents-turn-your-market-predictions-into-stock-po.html" class="breakdown-link">IT Breakdown</a>
   </div>
 </article>
 <article class="card news-card">
@@ -967,7 +1176,7 @@
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-24</div>
   <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.29217v1" target="_blank" rel="noopener noreferrer">Persistent Jailbreak Backdoor Attack</a><a class="archive-title" href="https://arxiv.org/abs/2611.28469v1" target="_blank" rel="noopener noreferrer">Automated Safety Analysis for Agentic Workflows</a><a class="archive-title" href="https://arxiv.org/abs/2611.29104v1" target="_blank" rel="noopener noreferrer">When Does Decomposition Help? Empirical Study on Workload-Architecture Affinity in LLM Inference Serving</a></div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.31065v1" target="_blank" rel="noopener noreferrer">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.31118v1" target="_blank" rel="noopener noreferrer">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-22</div>
@@ -1119,7 +1328,7 @@
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-24</div>
-  <div class="archive-count">11 items</div>
+  <div class="archive-count">21 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://stalw.art/blog/microsoft-exchange-replacement/" target="_blank" rel="noopener noreferrer">Stalwart is now a drop-in replacement for Microsoft Exchange</a><a class="archive-title" href="https://openai.com/index/introducing-shirudo" target="_blank" rel="noopener noreferrer">OpenAI and Cisco introduce Shirudo</a><a class="archive-title" href="https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/" target="_blank" rel="noopener noreferrer">How to tell a cyberattack from a plain old outage</a></div>
 </div>
 <div class="archive-row">
@@ -1277,6 +1486,12 @@
 
 <script src="js/subscribe.js"></script>
 <script>
+  // Handlers are attached here, not as on*= attributes, so the page carries no inline event handlers
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.getAttribute('aria-controls'), t)));
+  document.getElementById('scout-search').addEventListener('input', e => filterCards(e.target.value));
+  document.querySelector('.email-form').addEventListener('submit', e => submitEmail(e));
+  document.addEventListener('click', e => { const b = e.target.closest('.md-export-btn'); if (b) copyMarkdown(b); });
+
   function showTab(id, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });

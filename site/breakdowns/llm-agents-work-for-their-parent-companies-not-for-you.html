@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM agents work for their parent companies, not for you - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">LLM agents work for their parent companies, not for you</h1>
+  <p class="meta-line">Hacker News · 24 Nov 202 · Generated 24 Nov 2026, 17:26</p>
+  <a href="https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>An engineer created an LLM‑driven bot that monitored Instagram reels for music references, automatically queried Bandcamp and YouTube for the tracks, and placed purchase orders when a match was found. The bot leveraged open‑source LLM frameworks (e.g., OpenAI GPT‑4, Llama‑2) and a custom web‑scraping pipeline to extract metadata from social media posts. Bandcamp detected the automated traffic and, in response, introduced a new API challenge that required human‑verified authentication tokens. The bot was immediately throttled, and the developer was forced to halt operations.</p><p>For enterprise IT teams, this incident illustrates the growing friction between AI automation and protected web services. Many internal automation workflows rely on third‑party APIs that enforce rate limits, CAPTCHAs, or OAuth flows. An LLM‑based agent that treats external services as unguarded data sources can trigger abuse detection, leading to service disruption, legal exposure, or IP bans. The incident also underscores that LLMs, while powerful, are not inherently compliant with external platform policies; they can inadvertently violate terms of service or data‑use agreements.</p><p>Key vendors and technologies involved include:
+- OpenAI GPT‑4 and other LLM providers
+- Bandcamp’s public API and newly introduced challenge‑based authentication
+- Web‑scraping libraries (BeautifulSoup, Selenium) and automation frameworks (Playwright)
+- Cloud hosting platforms (AWS Lambda, Azure Functions) that host the bot</p><p>Industry implications are significant. As enterprises adopt LLM agents for data extraction, content curation, or automated purchasing, they must anticipate that target services will enforce stricter controls. This will drive a shift toward official API usage, stricter rate‑limiting policies, and the need for robust authentication mechanisms. Enterprises will also need to monitor compliance with platform terms and data‑protection regulations, as automated scraping can breach GDPR or other privacy laws if personal data is involved.</p><p>Overall, the incident serves as a cautionary tale: LLM agents can act autonomously, but they must be designed with explicit respect for external service boundaries and legal constraints. Failure to do so can result in immediate operational shutdown and reputational risk.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all external services accessed by internal automation or LLM agents (e.g., e‑commerce APIs, media platforms, data feeds).
+   - Verify each service’s API terms of service, rate limits, and authentication requirements.
+   - Audit current LLM deployments for data‑source handling, token usage, and error‑handling logic.
+   - Map data flows to identify any personal data or copyrighted content that could trigger GDPR or licensing concerns.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the cost of downtime from automated service blocks (e.g., lost sales, SLA penalties).
+   - Benchmark API call volumes against provider limits; calculate the risk of throttling.
+   - Present ROI of implementing compliant API gateways versus the cost of repeated disruptions.
+   - Include metrics such as mean time to recovery (MTTR) before and after mitigation, and reduction in support tickets related to API failures.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- API management platforms: Kong, Apigee, or AWS API Gateway for enforcing rate limits and authentication.
+   - LLM orchestration: LangChain, Claude’s OpenAI integration, or Hugging Face Inference API with built‑in policy enforcement.
+   - Monitoring: Datadog, Prometheus, or New Relic to track API latency, error rates, and usage patterns.
+   - Compliance tooling: OneTrust or TrustArc for GDPR mapping and data‑subject request handling.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Unhandled authentication failures, lack of retry logic, or ignoring CAPTCHAs can trigger service bans.
+   - Compliance: Scraping personal data from social media without consent violates UK GDPR; automated purchases may breach consumer protection laws.
+   - Operational: Over‑reliance on a single external service can create a single point of failure; lack of fallback mechanisms increases MTTR.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Implement a simple rate‑limit guard in the bot that checks the service’s documented limits and backs off when thresholds are approached.
+   - Add a mandatory OAuth flow for all API calls, ensuring that tokens are refreshed automatically and logged.
+   - Deploy a basic alerting rule in the monitoring stack to notify the ops team when error rates exceed 5%.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Migrate all LLM‑driven agents to use official APIs with proper authentication, caching, and retry strategies.
+   - Build a policy engine that enforces platform terms of service and GDPR constraints before any data is fetched or processed.
+   - Establish a governance board to review new LLM projects, ensuring they comply with external service policies and internal security standards.
+   - Conduct regular penetration and compliance testing on LLM pipelines to detect policy violations early.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 24 Nov 2026, 17:26</p>
+</main>
+</body>
+</html>
