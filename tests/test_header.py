@@ -39,6 +39,7 @@ def test_cut_stops_at_a_word_boundary():
     assert rh.cut("Missed billing costs two hundred thousand", 20) == "Missed billing costs"
     assert rh.cut("a" * 30, 10) == "a" * 10
     assert rh.cut("short", 60) == "short"
+    assert rh.cut("Amazon buys Decart's tech for $7.5B as it sells chips", 40) == "Amazon buys Decart's tech for $7.5B"
 
 
 def test_words_uses_groq_json():
@@ -69,11 +70,14 @@ def test_title_gate():
 def test_lines_gate():
     assert gates.lines_gate(GOOD) == []
     assert gates.lines_gate([{**GOOD[1], "lines": 3}]) == ["title wraps to 3 lines (max 2)"]
+    assert gates.lines_gate([{**GOOD[1], "lines": None}]) == ["title line count unreadable (None)"]
+    assert gates.lines_gate([{**GOOD[1], "lines": float("nan")}]) == ["title line count unreadable (nan)"]
 
 
 def test_colour_gate_passes_the_filled_template_and_fails_off_brand():
     page = rh.fill("Email", "A title", "Tue 24 Nov 2026")
     assert gates.colour_gate(page) == []
+    assert gates.colour_gate(rh.fill("Lists", "The top #100 AI tools", "d")) == []  # a '#' in the text is not a colour
     assert gates.colour_gate(page.replace("#00ff88", "#ff0000")) == ["non-brand colour #ff0000"]
     assert gates.colour_gate(page + "<p style='color:rgb(1,2,3)'>")
 
@@ -161,3 +165,10 @@ def test_main_sends_with_or_without_the_header(monkeypatch, tmp_path, header_png
     html_body, kw = sent[0]
     assert html_body.count("cid:") == (1 if header_png else 0)
     assert kw == ({"header_png": header_png} if header_png else {})
+
+
+def test_main_logs_why_a_custom_sender_gets_no_header(monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr(de, "LAST_SENT", str(tmp_path / "last_sent.txt"))
+    monkeypatch.setattr(de, "load_data", lambda: DATA)
+    assert de.main(["--force"], now=NOW, sleep=lambda s: None, send=lambda *a, **kw: "ok") == "sent"
+    assert "[HEADER] No header: custom sender" in capsys.readouterr().out

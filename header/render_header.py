@@ -18,6 +18,8 @@ TEMPLATE = HERE / "template.html"
 MODEL = "openai/gpt-oss-20b"  # the Groq model Scout Daily uses (industry_news_scout_langgraph.py groq_complete)
 LOGO = 'Scout Daily<span class="cursor"></span>'  # the site wordmark; the repo has no logo file
 KICKER_MAX = 24
+_DANGLING = {"a", "an", "and", "as", "at", "but", "by", "for", "from", "her", "his", "in", "into", "its", "of", "on",
+             "or", "our", "than", "that", "the", "their", "this", "to", "with", "your"}
 
 # Reads every [data-slot]: computed colour, the first opaque background behind it, and its rendered line count.
 _MEASURE = """() => [...document.querySelectorAll('[data-slot]')].map(el => {
@@ -35,7 +37,10 @@ def cut(text, limit):
     if len(text) <= limit:
         return text
     head = text[:limit + 1].rsplit(" ", 1)[0]
-    return (head if len(head) <= limit else text[:limit]).rstrip(" ,;:-–—")
+    words_ = (head if len(head) <= limit else text[:limit]).rstrip(" ,;:-–—").split(" ")
+    while len(words_) > 1 and words_[-1].lower() in _DANGLING:  # "...for $7.5B as" -> "...for $7.5B"
+        words_.pop()
+    return " ".join(words_).rstrip(" ,;:-–—")
 
 
 def _fallback(top):
@@ -75,7 +80,8 @@ def words(top, complete=groq_json):
 def fill(kicker, title, date):
     page = TEMPLATE.read_text(encoding="utf-8")
     for slot, value in (("kicker", kicker), ("title", title), ("date", date)):
-        page = page.replace("{{" + slot + "}}", html.escape(value))
+        # &num; so a "#" plus digits in a headline is text, not a colour, to colour_gate.
+        page = page.replace("{{" + slot + "}}", html.escape(value).replace("#", "&num;"))
     return page.replace("{{logo}}", LOGO)
 
 

@@ -64,6 +64,8 @@ def lines_gate(measured):
     if not title:
         return ["title not found in the render"]
     n = title[0]["lines"]
+    if not isinstance(n, (int, float)) or not n >= 1:  # None or NaN when the line height is not a number
+        return [f"title line count unreadable ({n!r})"]
     return [f"title wraps to {n} lines (max {TITLE_LINES})"] if n > TITLE_LINES else []
 
 

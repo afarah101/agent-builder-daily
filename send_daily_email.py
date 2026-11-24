@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Scout Daily email: Mon-Fri at 11:00 London, built from committed Scout data. No LLM calls.
+"""Scout Daily email: Mon-Fri at 11:00 London, built from committed Scout data.
+The only LLM call is one Groq call for the header image words (header/); --dry-run makes it too.
 
 Usage: python send_daily_email.py [--dry-run] [--force]
 """
@@ -495,7 +496,8 @@ def smtp_send(subject, html_body, text_body, *, smtp_factory=smtplib.SMTP_SSL, h
 
 def main(argv=None, now=None, sleep=time.sleep, send=smtp_send, header=None):
     # Tests pass a fake send; they get no header (no Groq, no Chromium) unless they pass one.
-    header = header or (_header_png if send is smtp_send else lambda top, date: None)
+    header = header or (_header_png if send is smtp_send else
+                        lambda top, date: print("[HEADER] No header: custom sender, pass header= to render one."))
     args = argparse.ArgumentParser(description=__doc__)
     args.add_argument("--dry-run", action="store_true", help="write email/preview.html, send nothing")
     args.add_argument("--force", action="store_true", help="ignore the weekday and 11:00 rules (still once per day)")

@@ -25,7 +25,7 @@ jobs:
       - name: Install header renderer
         continue-on-error: true  # a failed install only drops the header; the email still goes out
         run: |
-          pip install groq==0.37.1 playwright==1.64.1
+          pip install $(grep -E '^(groq|playwright)==' requirements.txt)  # pins live in requirements.txt only
           python -m playwright install --with-deps chromium-headless-shell
 
       - name: Send daily email
