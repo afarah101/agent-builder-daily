@@ -428,10 +428,11 @@ def test_home_colour_tokens_meet_4_5_to_1(site):
     gh.generate_html()
     root = (site / "site" / "index.html").read_text().split(":root {")[1].split("}")[0]
     tokens = dict(re.findall(r"--([\w-]+):\s*(#[0-9a-fA-F]{6})", root))
-    for fg in ("text", "text-secondary", "text-muted", "accent", "warn", "danger"):
-        for bg in ("bg", "surface", "surface2"):
-            assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
-    assert _ratio(tokens["accent-ink"], tokens["accent"]) >= 4.5
+    pairs = [(fg, "c-bg") for fg in ("c-text", "c-text-muted", "c-good", "c-warn", "c-bad")]  # white panel
+    pairs += [(fg, bg) for fg in ("c-bg", "c-on-dark-muted") for bg in ("c-surface-dark", "c-surface-dark-2")]  # dark hero
+    pairs += [("c-text", "c-bg-alt")]  # tag pills
+    for fg, bg in pairs:
+        assert _ratio(tokens[fg], tokens[bg]) >= 4.5, (fg, bg, round(_ratio(tokens[fg], tokens[bg]), 2))
 
 
 def test_hostile_build_has_no_injected_markup(site):
