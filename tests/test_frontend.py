@@ -584,3 +584,12 @@ def test_subscribe_errors_and_timeout_show_the_error(tmp_path, mode):
 def test_dashboard_counts_a_passed_item_as_passed(tmp_path):
     r = run_node(tmp_path, DASH_HARNESS, DASHBOARD, "Paper", json.dumps({"eval_verdict": "pass", "gemini_eval_status": "pending"}))
     assert (r["text"]["qc-pass-count"], r["text"]["qc-fail-count"], r["text"]["qc-pending-count"]) == ("1", "0", "0")
+
+
+def test_non_lead_cards_clamp_summary_and_insight_to_3_lines(site):
+    gh.generate_html()
+    css = (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0]
+    rule = re.search(r"\.cards-grid > \.card:not\(:first-child\) \.card-summary,\s*"
+                     r"\.cards-grid > \.card:not\(:first-child\) \.insight\s*\{([^}]*)\}", css)
+    assert rule, "clamp rule missing"
+    assert re.search(r"-webkit-line-clamp:\s*3;", rule.group(1)) and "overflow: hidden" in rule.group(1)

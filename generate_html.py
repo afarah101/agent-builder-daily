@@ -739,6 +739,16 @@ def generate_html():
       .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .cards-grid > .card:first-child { grid-row: span 2; }
       .cards-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
+      /* No empty cell: widen the last card(s) to fill the row */
+      .cards-grid > .card:first-child:last-child,
+      .cards-grid > .card:first-child:nth-last-child(2),
+      .cards-grid > .card:first-child:nth-last-child(2) + .card { grid-column: 1 / -1; grid-row: auto; }
+      .cards-grid > .card:first-child:nth-last-child(3) ~ .card,
+      .cards-grid > .card:first-child:nth-last-child(4) ~ .card:last-child,
+      .cards-grid > .card:nth-child(4n+6):nth-last-child(2),
+      .cards-grid > .card:nth-child(4n+7):last-child,
+      .cards-grid > .card:nth-child(4n+8):last-child { grid-column: span 2; }
+      .cards-grid > .card:nth-child(4n+6):last-child { grid-column: 1 / -1; }
     }
 
     .card {
@@ -879,6 +889,16 @@ def generate_html():
     }
 
     .insight strong, .signal-points strong { font-weight: 700; }
+
+    /* Every card except the lead: summary and "How to apply" show 3 lines */
+    .cards-grid > .card:not(:first-child) .card-summary,
+    .cards-grid > .card:not(:first-child) .insight {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      overflow: hidden;
+    }
 
     .signal-points { padding-left: 20px; }
     .signal-points li { margin-bottom: 6px; }
