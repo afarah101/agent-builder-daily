@@ -167,6 +167,11 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
     except Exception as e:
         log(f"could not load stories: {e}")
         items = []
+    if not dry_run and not os.environ.get("HF_TOKEN"):
+        # checked once, before any Groq call, so a missing token wastes no API calls
+        log("HF_TOKEN is not set: add HF_TOKEN under Settings > Secrets and variables > Actions. "
+            "No images generated, 0 API calls")
+        return 0
     made = 0
     for item in items:
         slug = slugify(item.get("title", ""))
