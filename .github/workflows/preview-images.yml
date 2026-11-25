@@ -1,0 +1,62 @@
+name: preview-images
+
+# Manual only. Builds a preview of the page WITH AI images on branch preview/ai-images.
+# PREVIEW ONLY: never merge preview/ai-images. Delete the branch after review.
+on:
+  workflow_dispatch:
+
+jobs:
+  preview:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/ai-images
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate AI images
+        env:
+          IMAGE_GEN_ENABLED: 'true'
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          if [ -z "$HF_TOKEN" ]; then echo "HF_TOKEN secret is missing: add HF_TOKEN under Settings > Secrets and variables > Actions"; fi
+          python generate_images.py
+
+      - name: Generate page
+        env:
+          PYTHONIOENCODING: utf-8
+        run: python generate_html.py
+
+      - name: List generated images (slug, KB, provider)
+        run: |
+          python - <<'EOF'
+          import json, pathlib
+          d = pathlib.Path("site/images")
+          alts = json.loads((d / "alt.json").read_text()) if (d / "alt.json").exists() else {}
+          files = sorted(d.glob("*.webp"))
+          print(f"{len(files)} image(s)")
+          for f in files:
+              print(f"IMAGE {f.stem} | {f.stat().st_size / 1024:.1f} KB | provider {alts.get(f.stem, {}).get('provider', 'unknown')}")
+          EOF
+
+      - name: Push preview branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B preview/ai-images
+          git add site/images/ site/index.html
+          git commit -m "PREVIEW ONLY - do not merge" || echo "nothing to commit"
+          git push --force origin preview/ai-images
