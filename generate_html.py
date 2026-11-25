@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from send_daily_email import signal_points  # the email's S1/S2/S3 parser, so site and email agree
+from generate_images import image_figure  # <figure> only when site/images/<slug>.webp exists
 
 CASE_STUDIES_DIR = "case_studies"
 NEWS_DIR = "data/news"
@@ -168,7 +169,7 @@ def render_case_studies(data, slug_map):
         total = cs.get("total_score", 0)
 
         cards.append(f"""<article class="card cs-card">
-  <div class="card-header">
+  {image_figure(cs.get("title", "Untitled"))}<div class="card-header">
     <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}{status_badge(eval_status(cs))}</div>
     {score_ring(total)}
   </div>
@@ -214,7 +215,7 @@ def render_news(data, slug_map):
         meta_html = '<span class="sep" aria-hidden="true">•</span>'.join(f"<span>{m}</span>" for m in meta)
 
         cards.append(f"""<article class="card news-card">
-  <div class="card-header">
+  {image_figure(item.get("title", ""))}<div class="card-header">
     <div class="card-tags">
       {tier_label(item.get("tier", "news"))}
       {tag_pill(item.get("category", "Other"))}
@@ -758,6 +759,10 @@ def generate_html():
       padding: 24px;
       min-width: 0;
     }
+
+    .card-figure { margin: 0 0 16px; }
+    .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
+    .card-figure figcaption { margin-top: 4px; font-size: var(--fs-label); line-height: var(--lh-label); color: var(--c-text-muted); }
 
     .card-header {
       display: flex;
