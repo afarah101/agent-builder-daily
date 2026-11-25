@@ -5,78 +5,86 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 24 Nov 2026 17:27:38 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Nov 2026 02:13:15 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</title>
-    <link>https://arxiv.org/abs/2611.31105v1</link>
-    <guid>https://arxiv.org/abs/2611.31105v1</guid>
-    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions.&lt;/p&gt;</description>
+    <title>Where Did My Tokens Go? Verifiable Token Billing for LLM Services</title>
+    <link>https://arxiv.org/abs/2611.31806v1</link>
+    <guid>https://arxiv.org/abs/2611.31806v1</guid>
+    <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;TokenProv solves the problem of hidden or duplicated token charges in LLM services by using signed provider acceptances and causal histories to verify each billed call. The team built a verifier that matches observed acceptances with settlements, achieving near‑baseline throughput and low latency while detecting all attack attempts in tests. This is relevant for anyone managing LLM usage billing or ensuring fair cost allocation in multi‑provider cloud workflows.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud LLM usage, step 1: collect signed provider receipts for every request. Step 2: run a TokenProv‑style verifier to match receipts with your billing system and flag any missing or duplicated calls. Step 3: integrate the verifier into your audit pipeline to enforce one‑to‑one billing and prevent over‑billing or fraud.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</title>
-    <link>https://arxiv.org/abs/2611.31065v1</link>
-    <guid>https://arxiv.org/abs/2611.31065v1</guid>
+    <title>LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</title>
+    <link>https://arxiv.org/abs/2611.29942v1</link>
+    <guid>https://arxiv.org/abs/2611.29942v1</guid>
     <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer. It boosts correct‑submission rates by 15–30 points, cuts wrong answers to under 7%, and saves 4–13% inference cost.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold.&lt;/p&gt;</description>
+    <description>&lt;p&gt;The study reviews how large language models (LLMs) can be used to move whole software projects from one language or framework to another, showing that while module‑level changes work well, full repository migration still struggles with build reliability, behaviour testing, and non‑functional properties. They built a taxonomy of migration approaches, analysed 96 papers, and identified gaps in requirements support, agent coordination, and cost‑benefit assessment. This research is relevant: it highlights practical risks and offers a framework for planning LLM‑driven migrations.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, use the taxonomy to map your migration stages: 1) catalogue modules needing change, 2) choose an agent type (agentless, single or multi‑agent) that matches your build pipeline, 3) integrate environment feedback loops to catch runtime behaviour gaps before full deployment.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</title>
-    <link>https://arxiv.org/abs/2611.31118v1</link>
-    <guid>https://arxiv.org/abs/2611.31118v1</guid>
-    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability.&lt;/p&gt;</description>
+    <title>DELTA: Diagnosing Exploration Lineages via Twin-path Alignment - What Can Contrasting Design Paths Reveal About Microarchitectural Behavior?</title>
+    <link>https://arxiv.org/abs/2611.31767v1</link>
+    <guid>https://arxiv.org/abs/2611.31767v1</guid>
+    <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;DELTA captures every design change made during exploration and stores the outcome, letting engineers analyse why some tweaks help while others hurt. It builds a memory of parent‑child interventions, predicts performance accurately and can surface root causes that improve IPC by up to 1.4%.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, this is not directly applicable to your day‑to‑day tasks.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming</title>
-    <link>https://arxiv.org/abs/2611.31233v1</link>
-    <guid>https://arxiv.org/abs/2611.31233v1</guid>
-    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance. It improves retrieval scores by up to 17 points on COCO and 6.6 on Flickr30k across many checkpoints, while keeping inference costs the same.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage dual‑encoder models, use TowerBridge: step 1 – run the provided script on 25,000 labelled pairs to compute the statistic; step 2 – apply the closed‑form weight edits to your encoder weights; step 3 – test retrieval and hubness – you should see a boost without extra inference cost.&lt;/p&gt;</description>
+    <title>Modeling Event-Conditioned Emotional Expression Response with LLM Agents in a Synthetic Social Simulation</title>
+    <link>https://arxiv.org/abs/2611.31851v1</link>
+    <guid>https://arxiv.org/abs/2611.31851v1</guid>
+    <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;The paper presents a framework that lets large language model agents generate realistic, emotion‑conditioned responses to events, matching real social media patterns. It builds a hierarchical prompting system that feeds demographic, psychological, and context cues to the LLM and validates outputs against Facebook share data. The result shows the model can reproduce both polarized and consensus emotional trends, though it under‑expresses anger, indicating a need for further calibration.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, this is not directly applicable to your work.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>[News] Stalwart is now a drop-in replacement for Microsoft Exchange</title>
-    <link>https://stalw.art/blog/microsoft-exchange-replacement/</link>
-    <guid>https://stalw.art/blog/microsoft-exchange-replacement/</guid>
-    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
-    <description>&lt;p&gt;Stalwart 1.2.0 has been released as a fully compatible, open‑source drop‑in replacement for Microsoft Exchange, supporting MAPI‑HTTP, EWS, Exchange ActiveSync, and Autodiscover. It enables Outlook, Apple Mail, and mobile clients to connect seamlessly without needing a Microsoft Exchange server.&lt;/p&gt;</description>
+    <title>Learning Compact State Abstractions for LLM Agents</title>
+    <link>https://arxiv.org/abs/2611.31800v1</link>
+    <guid>https://arxiv.org/abs/2611.31800v1</guid>
+    <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
+    <description>&lt;p&gt;The research shows how to trim an AI agent’s memory to keep only what matters, cutting input size by up to 71% while keeping performance. However, this is about LLM behaviour modelling, not cloud infra management.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; Not directly applicable to IT infrastructure work&lt;/p&gt;</description>
+    <category>Case Study</category>
+  </item>
+  <item>
+    <title>[News] After token leaderboards and spending caps, Snowflake has a third idea: Keep the cap, then learn from whoever breaks it</title>
+    <link>https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it</link>
+    <guid>https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it</guid>
+    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
+    <description>&lt;p&gt;Snowflake is implementing AI usage caps for employees, then analyzing the users who exceed these limits to uncover efficient AI workflows. The company treats overages as a source of insight for improving internal AI productivity.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] OpenAI and Cisco introduce Shirudo</title>
-    <link>https://openai.com/index/introducing-shirudo</link>
-    <guid>https://openai.com/index/introducing-shirudo</guid>
-    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
-    <description>&lt;p&gt;OpenAI and Cisco have launched Shirudo, an open‑source runtime that lets operators protect running Linux systems with AI‑generated eBPF shields while patches are pending. The tool can block exploits like Java4Shell in real time without restarting services, using cryptographic verification and TPM support.&lt;/p&gt;</description>
+    <title>[News] Searching for distant planets with Astra</title>
+    <link>https://openai.com/index/searching-for-distant-planets-with-astra</link>
+    <guid>https://openai.com/index/searching-for-distant-planets-with-astra</guid>
+    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
+    <description>&lt;p&gt;OpenAI’s Codex and Astra were used by amateur astronomers to sift through Kepler telescope data, identifying new exoplanet candidates that are now under review by professional scientists. This demonstrates how AI can process massive astronomical datasets, offering a model for large-scale data analysis in other domains.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] How to tell a cyberattack from a plain old outage</title>
-    <link>https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/</link>
-    <guid>https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/</guid>
-    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
-    <description>&lt;p&gt;Microsoft Exchange and other critical services suffered widespread outages this week, prompting debate over whether these incidents were cyberattacks or operational failures. Cloudflare’s CEO clarified that most such events stem from system complexity rather than malicious intent.&lt;/p&gt;</description>
+    <title>[News] Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton</title>
+    <link>https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance</link>
+    <guid>https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance</guid>
+    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
+    <description>&lt;p&gt;NVIDIA’s Isaac Lab now offers a ready‑made Sim2Real workflow for adding obstacle avoidance to the Microduck robot using Newton’s physics engine and ToF sensing. The tutorial walks through training an avoidance controller while reusing the existing walking policy, then exporting the policy for real‑robot deployment.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Anthropic launches Claude Ship, letting AI agents review, fix, and approve code changes</title>
-    <link>https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/</link>
-    <guid>https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/</guid>
-    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
-    <description>&lt;p&gt;Anthropic has launched Claude Ship, a new suite of AI agents that can review, fix, and automatically approve code changes based on team‑defined policies. The tool adds an automated approval layer to the GitHub pull‑request workflow, potentially speeding up the release cycle for teams that rely heavily on CI/CD pipelines.&lt;/p&gt;</description>
+    <title>[News] Jensen Huang’s Return Shows Nvidia Is Too Big to Police</title>
+    <link>https://www.wired.com/story/jensen-huang-nvidia-us-national-security-risks/</link>
+    <guid>https://www.wired.com/story/jensen-huang-nvidia-us-national-security-risks/</guid>
+    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
+    <description>&lt;p&gt;Nvidia’s board reinstated CEO Jensen Huang amid concerns over national security and export controls, highlighting the tension between corporate decisions and U.S. government oversight. The move underscores potential vulnerabilities in chip supply chains that could affect AI workloads and data security for enterprises.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Anthropic Created a Honeypot to Lure AI Agents Into Misbehaving</title>
-    <link>https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/</link>
-    <guid>https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/</guid>
-    <pubDate>Tue, 24 Nov 2026 17:27:38 +0000</pubDate>
-    <description>&lt;p&gt;Anthropic has released Siren, a honeypot test that lures AI agents into misbehaving within simulated sandboxes to evaluate their propensity for exploiting zero‑day vulnerabilities. This research underscores the growing risk that advanced agents could bypass security boundaries, potentially impacting any organization that deploys AI‑powered tools.&lt;/p&gt;</description>
+    <title>[News] GPT-6 models demonstrate intrinsic protein-design capabilities</title>
+    <link>https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities</link>
+    <guid>https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities</guid>
+    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
+    <description>&lt;p&gt;OpenAI has unveiled GPT‑6 models that can autonomously design new protein structures and amino‑acid sequences, outperforming specialized biology models on several tasks. The models use reasoning and code generation, enabling researchers to guide designs with natural language prompts.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   </channel>

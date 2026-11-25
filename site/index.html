@@ -4,41 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scout — AI Intelligence Feed</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #22263a;
-      --border: #2d3148;
-      --text: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --text-muted: #8592a8;
-      --accent: #00ff88;
-      --accent-ink: #0f1117;
-      --accent-tint: rgba(0, 255, 136, 0.1);
-      --warn: #fbbf24;
-      --danger: #f87171;
-      --fs-xs: 12px;
-      --fs-sm: 13px;
+      /* Tokens from scout-daily-tokens.css (24 Nov 2026) */
+      --font: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+
+      --fs-hero: 72px;  --lh-hero: 1.08;  --ls-hero: -1.8px;
+      --fs-h2: 48px;    --lh-h2: 1;       --ls-h2: -1.2px;
+      --fs-h3: 30px;    --lh-h3: 1.375;
+      --fs-lead: 21px;  --lh-lead: 1.625;
+      --fs-body: 16px;  --lh-body: 24px;
+      --fs-small: 14px; --lh-small: 20px;
+      --fs-label: 12px; --lh-label: 16px; --ls-label: 0.6px;
+
+      --c-text: #171717;
+      --c-text-muted: #737373;
+      --c-bg: #ffffff;
+      --c-bg-alt: #f5f5f5;
+      --c-surface-dark: #171717;
+      --c-surface-dark-2: #212121;
+      --c-border: #e5e5e5;
+      --c-border-dark: #333333;
+      --c-hero-bottom: #292929;
+      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
+      --c-accent: #22d3ee;
+
+      --radius-sm: 6px;
       --radius: 8px;
+      --radius-card: 12px;
+      --radius-lg: 16px;
+      --radius-panel: 28.8px;
+      --radius-pill: 9999px;
+
+      --content-max: 1152px;
+      --reading-max: 672px;
+      --gap: 8px;
+      --section-pad: 80px;
+
+      /* Added for Scout, not in the token file */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;           /* pass / high score: 5.0:1 on white */
+      --c-warn: #b45309;           /* pending / mid score: 5.0:1 on white */
+      --c-bad: #b91c1c;            /* fail / low score: 6.5:1 on white */
+      --fs-hero-mobile: 44px;
       --tap: 44px;
     }
 
+    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
       min-height: 100vh;
     }
 
-    ::selection { background: var(--accent); color: var(--accent-ink); }
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    ::selection { background: var(--c-text); color: var(--c-bg); }
+    :focus-visible { outline: 2px solid var(--c-text); outline-offset: 2px; }
+    .hero :focus-visible { outline-color: var(--c-bg); }
 
     .visually-hidden {
       position: absolute;
@@ -49,18 +78,15 @@
       white-space: nowrap;
     }
 
-    /* Header */
-    .header {
-      border-bottom: 1px solid var(--border);
-      padding: 32px 0 0;
-      position: sticky;
-      top: 0;
-      background: var(--bg);
-      z-index: 100;
+    /* Hero */
+    .hero {
+      background: var(--g-hero);
+      color: var(--c-bg);
+      padding: 24px 0 calc(64px + var(--section-pad));
     }
 
     .header-inner {
-      max-width: 1200px;
+      max-width: var(--content-max);
       margin: 0 auto;
       padding: 0 32px;
     }
@@ -69,7 +95,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
       flex-wrap: wrap;
       gap: 16px;
     }
@@ -77,23 +102,21 @@
     .brand {
       display: flex;
       align-items: center;
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(32px, 9vw, 48px);
-      font-weight: 800;
-      letter-spacing: -1px;
+      font-size: var(--fs-lead);
+      font-weight: 700;
       line-height: 1;
     }
 
-    .brand-name { color: var(--accent); white-space: nowrap; }
+    .brand-name { white-space: nowrap; }
 
     .brand-cursor {
       display: inline-block;
       width: 0.2em;
       height: 0.8em;
-      background: var(--accent);
+      background: var(--c-accent);
       margin-left: 4px;
       animation: blink 1s 3;
-      border-radius: 2px;
+      border-radius: var(--radius-sm);
     }
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -103,23 +126,108 @@
     .stat { text-align: right; }
 
     .stat-num {
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--accent);
+      font-size: var(--fs-h3);
+      font-weight: 700;
       line-height: 1;
       font-variant-numeric: tabular-nums;
     }
 
-    .stat-label {
-      font-size: var(--fs-xs);
-      color: var(--text-muted);
-      margin-top: 4px;
+    .stat-label, .tag-pill, .status-badge, .signal-title {
+      font-size: var(--fs-label);
+      line-height: var(--lh-label);
+      letter-spacing: var(--ls-label);
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
+    .stat-label { color: var(--c-on-dark-muted); margin-top: 4px; }
+
+    .hero-title {
+      max-width: 900px;
+      margin: var(--section-pad) 0 16px;
+      font-size: var(--fs-hero);
+      line-height: var(--lh-hero);
+      letter-spacing: var(--ls-hero);
+      font-weight: 700;
+      text-wrap: balance;
+    }
+
+    /* Key words: one solid colour, never a gradient */
+    .accent-word { color: var(--c-accent); }
+
     .updated {
-      font-size: var(--fs-xs);
-      color: var(--text-muted);
-      margin-bottom: 20px;
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-on-dark-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Email capture, inside the hero */
+    .email-banner {
+      max-width: var(--reading-max);
+      background: var(--c-surface-dark-2);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius-card);
+      padding: 20px;
+    }
+
+    .email-inner { display: flex; flex-direction: column; gap: 12px; }
+
+    .email-title { font-size: var(--fs-body); font-weight: 600; }
+
+    .email-form { display: flex; gap: var(--gap); }
+
+    .email-input {
+      flex: 1;
+      min-width: 0;
+      background: var(--c-surface-dark);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font: inherit;
+      color: var(--c-bg);
+      transition: border-color 0.15s;
+    }
+
+    .email-input::placeholder { color: var(--c-on-dark-muted); }
+    .email-input:focus { border-color: var(--c-bg); }
+
+    .email-confirm { font-size: var(--fs-small); color: var(--c-on-dark-muted); }
+
+    /* Buttons: flat, no shadow */
+    .email-btn, .breakdown-link, .md-export-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font: inherit;
+      font-weight: 600;
+      line-height: 1;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      white-space: nowrap;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .email-btn { padding: 10px 20px; font-size: var(--fs-body); background: var(--c-bg); color: var(--c-text); }
+    .email-btn:hover { background: var(--c-border); }
+
+    .breakdown-link, .md-export-btn { padding: 8px 14px; font-size: var(--fs-small); }
+    .breakdown-link { background: var(--c-surface-dark); color: var(--c-bg); }
+    .breakdown-link:hover { background: var(--c-border-dark); }
+    .md-export-btn { background: var(--c-bg); color: var(--c-text); border-color: var(--c-border); }
+    .md-export-btn:hover { border-color: var(--c-text); }
+    .md-export-btn.copied { color: var(--c-good); border-color: var(--c-good); }
+
+    /* White panel: overlaps the hero bottom by 64px */
+    .content {
+      position: relative;
+      width: min(var(--content-max), calc(100% - 32px));
+      margin: -64px auto 0;
+      padding: 32px 32px 64px;
+      background: var(--c-bg);
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
     }
 
     .toolbar {
@@ -128,49 +236,57 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 16px;
+      border-bottom: 1px solid var(--c-border);
+      margin-bottom: 32px;
+      position: sticky;  /* tabs and search stay in view, as the old header did */
+      top: 0;
+      z-index: 1;
+      background: var(--c-bg);
     }
 
     /* Tabs */
-    .tabs { display: flex; flex-wrap: wrap; gap: 0; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 8px;
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-pill);
+    }
 
     .tab {
-      padding: 10px 20px;
+      padding: 8px 16px;
       font: inherit;
-      font-size: var(--fs-sm);
-      font-weight: 500;
-      color: var(--text-muted);
+      font-size: var(--fs-small);
+      font-weight: 600;
+      color: var(--c-text-muted);
       cursor: pointer;
       border: none;
       background: none;
-      border-bottom: 2px solid transparent;
-      transition: color 0.15s, border-color 0.15s;
+      border-radius: var(--radius-pill);
+      transition: color 0.15s, background-color 0.15s;
       white-space: nowrap;
     }
 
-    .tab:hover { color: var(--text); }
-    .tab.active { color: var(--text); border-bottom-color: var(--accent); }
+    .tab:hover { color: var(--c-text); }
+    .tab.active { color: var(--c-bg); background: var(--c-surface-dark); }
 
     .search {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 7px 14px;
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      padding: 8px 14px;
+      margin-bottom: 8px;
       font: inherit;
-      font-size: var(--fs-sm);
-      color: var(--text);
-      width: 220px;
+      font-size: var(--fs-small);
+      color: var(--c-text);
+      width: 240px;
       transition: border-color 0.15s;
     }
 
-    .search::placeholder, .email-input::placeholder { color: var(--text-muted); }
-    .search:focus { border-color: var(--accent); }
-
-    /* Content */
-    .content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 32px 32px 64px;
-    }
+    .search::placeholder { color: var(--c-text-muted); }
+    .search:focus { border-color: var(--c-text); }
 
     .panel { display: none; }
     .panel.active { display: block; }
@@ -178,14 +294,36 @@
     /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(540px, 100%), 1fr));
-      gap: 20px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    /* Lead story + grid: the first card spans 2 columns (and 2 rows above 1024px) */
+    @media (min-width: 641px) {
+      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cards-grid > .card:first-child { grid-column: span 2; }
+    }
+
+    @media (min-width: 1025px) {
+      .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .cards-grid > .card:first-child { grid-row: span 2; }
+      .cards-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
+      /* No empty cell: widen the last card(s) to fill the row */
+      .cards-grid > .card:first-child:last-child,
+      .cards-grid > .card:first-child:nth-last-child(2),
+      .cards-grid > .card:first-child:nth-last-child(2) + .card { grid-column: 1 / -1; grid-row: auto; }
+      .cards-grid > .card:first-child:nth-last-child(3) ~ .card,
+      .cards-grid > .card:first-child:nth-last-child(4) ~ .card:last-child,
+      .cards-grid > .card:nth-child(4n+6):nth-last-child(2),
+      .cards-grid > .card:nth-child(4n+7):last-child,
+      .cards-grid > .card:nth-child(4n+8):last-child { grid-column: span 2; }
+      .cards-grid > .card:nth-child(4n+6):last-child { grid-column: 1 / -1; }
     }
 
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
       padding: 24px;
       min-width: 0;
     }
@@ -198,34 +336,30 @@
       margin-bottom: 14px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-grow: 1; }
+    .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: wrap; flex-grow: 1; }
 
-    .tag-pill, .status-badge {
-      font-size: var(--fs-xs);
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 4px;
-      line-height: 1.5;
-    }
+    .tag-pill, .status-badge { padding: 4px 8px; border-radius: var(--radius-sm); }
 
-    .tag-pill { color: var(--text-secondary); background: var(--surface2); }
-    .status-pass { color: var(--accent); background: var(--accent-tint); }
-    .status-fail { color: var(--danger); background: rgba(248, 113, 113, 0.1); }
-    .status-pending { color: var(--warn); background: rgba(251, 191, 36, 0.1); }
+    .tag-pill { color: var(--c-text); background: var(--c-bg-alt); }
+    .status-badge { background: color-mix(in srgb, currentColor 6%, var(--c-bg)); }  /* 8% put pending at 4.49:1 */
+    .status-pass { color: var(--c-good); }
+    .status-fail { color: var(--c-bad); }
+    .status-pending { color: var(--c-warn); }
 
     .tier-label, .source-name {
-      font-size: var(--fs-xs);
+      font-size: var(--fs-label);
+      line-height: var(--lh-label);
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--c-text-muted);
     }
 
     /* Score ring: out of 75 */
     .score-ring {
-      --ring: var(--danger);
+      --ring: var(--c-bad);
       width: 48px;
       height: 48px;
-      border-radius: 50%;
-      background: conic-gradient(var(--ring) calc(var(--pct) * 1%), var(--surface2) 0);
+      border-radius: var(--radius-pill);
+      background: conic-gradient(var(--ring) calc(var(--pct) * 1%), var(--c-border) 0);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -233,23 +367,23 @@
       position: relative;
     }
 
-    .ring-high { --ring: var(--accent); }
-    .ring-mid { --ring: var(--warn); }
+    .ring-high { --ring: var(--c-good); }
+    .ring-mid { --ring: var(--c-warn); }
 
     .score-ring::before {
       content: '';
       position: absolute;
       width: 38px;
       height: 38px;
-      background: var(--surface);
-      border-radius: 50%;
+      background: var(--c-bg);
+      border-radius: var(--radius-pill);
     }
 
     .score-ring span {
       position: relative;
-      font-size: var(--fs-xs);
+      font-size: var(--fs-label);
       font-weight: 700;
-      color: var(--text);
+      color: var(--c-text);
       font-variant-numeric: tabular-nums;
     }
 
@@ -264,18 +398,18 @@
     .rel-dot {
       width: 10px;
       height: 10px;
-      border-radius: 50%;
+      border-radius: var(--radius-pill);
       flex-shrink: 0;
-      background: var(--text-muted);
+      background: var(--c-text-muted);
     }
 
-    .rel-high { background: var(--accent); }
-    .rel-medium { background: var(--warn); }
-    .rel-low { background: var(--danger); }
+    .rel-high { background: var(--c-good); }
+    .rel-medium { background: var(--c-warn); }
+    .rel-low { background: var(--c-bad); }
 
     .rel-word, .score-num {
-      font-size: var(--fs-xs);
-      color: var(--text-secondary);
+      font-size: var(--fs-label);
+      color: var(--c-text-muted);
       white-space: nowrap;
     }
 
@@ -283,76 +417,78 @@
 
     /* Card content */
     .card-title {
-      font-family: 'Georgia', serif;
-      font-size: clamp(1.25rem, 1rem + 1.2vw, 1.6rem);
+      font-size: var(--fs-lead);
       font-weight: 700;
-      line-height: 1.3;
+      line-height: var(--lh-h3);
       margin-bottom: 12px;
       overflow-wrap: anywhere;
       text-wrap: balance;
     }
 
-    .card-title a { color: #ffffff; text-decoration: none; }
-    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--accent); }
+    .card-title a { color: var(--c-text); text-decoration: none; }
+    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--c-text-muted); }
 
     .card-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--gap);
       flex-wrap: wrap;
       margin-bottom: 18px;
-      font-size: var(--fs-sm);
-      color: var(--text-secondary);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
     }
 
-    .card-meta > span:first-child { color: var(--accent); font-weight: 600; }
-    .pub-date { font-size: var(--fs-xs); color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .sep { color: var(--text-muted); }
+    .card-meta > span:first-child { color: var(--c-text); font-weight: 600; }
+    .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .sep { color: var(--c-text-muted); }
 
     .card-summary {
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--text-secondary);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      color: var(--c-text-muted);
       margin-bottom: 16px;
     }
 
-    .insight {
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--text);
+    .insight, .signal-points {
+      font-size: var(--fs-small);
+      line-height: var(--lh-body);
+      color: var(--c-text);
       margin-bottom: 16px;
     }
 
-    .insight strong { font-weight: 600; color: var(--accent); }
+    .insight strong, .signal-points strong { font-weight: 700; }
 
-    .signal-points {
-      padding-left: 20px;
-      margin-bottom: 16px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--text);
+    /* Every card except the lead: summary and "How to apply" show 3 lines */
+    .cards-grid > .card:not(:first-child) .card-summary,
+    .cards-grid > .card:not(:first-child) .insight {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      overflow: hidden;
     }
 
+    .signal-points { padding-left: 20px; }
     .signal-points li { margin-bottom: 6px; }
-    .signal-points strong { font-weight: 600; color: var(--accent); }
 
     .agent-trace { margin-bottom: 4px; }
 
     .trace-toggle {
       display: inline-flex;
       align-items: center;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      font-size: var(--fs-sm);
+      border: 1px solid var(--c-border);
+      color: var(--c-text-muted);
+      font-size: var(--fs-small);
       padding: 6px 12px;
-      border-radius: 6px;
+      border-radius: var(--radius);
       cursor: pointer;
       transition: color 0.15s, border-color 0.15s;
       list-style: none;
     }
 
     .trace-toggle::-webkit-details-marker { display: none; }
-    .trace-toggle:hover, .agent-trace[open] .trace-toggle { color: var(--text); border-color: var(--accent); }
+    .trace-toggle:hover, .agent-trace[open] .trace-toggle { color: var(--c-text); border-color: var(--c-text); }
 
     .trace-body { padding: 12px 0 4px; }
 
@@ -360,23 +496,23 @@
       display: flex;
       justify-content: space-between;
       padding: 4px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--c-border);
       margin-bottom: 4px;
     }
 
-    .trace-label { font-size: var(--fs-xs); color: var(--text-muted); }
+    .trace-label { font-size: var(--fs-label); color: var(--c-text-muted); }
 
     .trace-val {
-      font-size: var(--fs-xs);
-      color: var(--accent);
+      font-size: var(--fs-label);
+      color: var(--c-text);
       font-weight: 600;
       font-variant-numeric: tabular-nums;
     }
 
     .trace-reasoning {
-      font-size: var(--fs-sm);
-      line-height: 1.6;
-      color: var(--text-secondary);
+      font-size: var(--fs-small);
+      line-height: var(--lh-body);
+      color: var(--c-text-muted);
       margin-top: 10px;
       font-style: italic;
     }
@@ -387,61 +523,30 @@
       align-items: center;
       margin-top: 16px;
       padding-top: 14px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--c-border);
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .breakdown-link, .md-export-btn {
-      display: inline-flex;
-      align-items: center;
-      font: inherit;
-      font-size: var(--fs-sm);
-      font-weight: 600;
-      white-space: nowrap;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-
-    .breakdown-link {
-      color: var(--accent);
-      text-decoration: none;
-      background: var(--accent-tint);
-      border: 1px solid rgba(0, 255, 136, 0.2);
-    }
-
-    .breakdown-link:hover { background: rgba(0, 255, 136, 0.16); border-color: rgba(0, 255, 136, 0.35); }
-
-    .md-export-btn {
-      color: var(--text-secondary);
-      background: none;
-      border: 1px solid var(--border);
-      cursor: pointer;
-    }
-
-    .md-export-btn:hover { color: var(--text); border-color: var(--text-muted); }
-    .md-export-btn.copied { color: var(--accent); border-color: var(--accent); }
-
     /* Today's signal */
     .signal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
       padding: 16px 20px;
       margin-bottom: 24px;
     }
 
-    .signal-title { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
-    .signal p { font-size: 15px; color: var(--text); }
+    .signal-title { color: var(--c-text); margin-bottom: var(--gap); }
+    .signal p { font-size: var(--fs-body); color: var(--c-text); }
 
     /* Archive */
-    .archive-list { display: flex; flex-direction: column; gap: 8px; }
+    .archive-list { display: flex; flex-direction: column; gap: var(--gap); }
 
     .archive-row {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
       padding: 14px 20px;
       display: grid;
       grid-template-columns: 110px 80px minmax(0, 1fr);
@@ -449,124 +554,63 @@
       align-items: start;
     }
 
-    .archive-date, .archive-count { font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
-    .archive-date { color: var(--accent); }
-    .archive-count { color: var(--text-muted); }
+    .archive-date, .archive-count { font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+    .archive-date { color: var(--c-text); font-weight: 600; }
+    .archive-count { color: var(--c-text-muted); }
 
     .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 
     .archive-title {
-      font-size: var(--fs-sm);
-      color: var(--text-secondary);
+      font-size: var(--fs-small);
+      color: var(--c-text);
       text-decoration: none;
       overflow-wrap: anywhere;
     }
 
-    .archive-title:hover { color: var(--text); text-decoration: underline; }
+    .archive-title:hover { text-decoration: underline; }
 
     .empty-state {
       text-align: center;
       padding: 64px 32px;
-      color: var(--text-muted);
-      font-size: 14px;
+      color: var(--c-text-muted);
+      font-size: var(--fs-small);
     }
 
     footer {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--c-border);
       padding: 20px 32px;
-      max-width: 1200px;
+      max-width: var(--content-max);
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: var(--gap);
     }
 
-    footer span { font-size: var(--fs-xs); color: var(--text-muted); }
-
-    /* Email capture */
-    .email-banner {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 8px 32px;
-    }
-
-    .email-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .email-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .email-form {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .email-input {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 5px 10px;
-      font: inherit;
-      font-size: var(--fs-sm);
-      color: var(--text);
-      width: 200px;
-      transition: border-color 0.15s;
-    }
-
-    .email-input:focus { border-color: var(--accent); }
-
-    .email-btn {
-      background: var(--accent);
-      color: var(--accent-ink);
-      border: none;
-      border-radius: 4px;
-      padding: 5px 14px;
-      font: inherit;
-      font-size: var(--fs-sm);
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.15s;
-      white-space: nowrap;
-    }
-
-    .email-btn:hover { opacity: 0.9; }
-
-    .email-confirm { font-size: var(--fs-sm); color: var(--accent); }
+    footer span { font-size: var(--fs-label); color: var(--c-text-muted); }
 
     @media (max-width: 700px) {
-      .header { position: static; padding-top: 20px; }
+      .hero { padding-bottom: calc(64px + 48px); }
       .header-inner { padding: 0 16px; }
-      .header-top { margin-bottom: 12px; }
-      .updated { margin-bottom: 12px; }
-      .toolbar { flex-direction: column; align-items: stretch; gap: 8px; padding-bottom: 8px; }
-      .tabs { flex-wrap: wrap; }
-      .tab { flex: 1 1 40%; min-height: var(--tap); padding: 10px 12px; }
-      .search { width: 100%; min-height: var(--tap); font-size: 16px; }
-      .email-banner { padding: 12px 16px; }
-      .email-inner { flex-direction: column; align-items: stretch; gap: 8px; }
-      .email-title { text-align: center; }
-      .email-form { width: 100%; }
-      .email-input { flex: 1; width: auto; min-width: 0; min-height: var(--tap); font-size: 16px; }
+      .header-stats { gap: 20px; }
+      .hero-title { margin-top: 48px; }
+      .email-input { min-height: var(--tap); }
       .email-btn { min-height: var(--tap); padding: 0 18px; }
-      .content { padding: 24px 16px 48px; }
+      .content { width: 100%; padding: 24px 16px 48px; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); position: static; }
+      .tab { flex: 1 1 40%; min-height: var(--tap); padding: 10px 12px; }
+      .search { width: 100%; min-height: var(--tap); font-size: var(--fs-body); }
       .card { padding: 18px; }
+      .card-title { font-size: var(--fs-lead); }
       .card-title a { display: block; min-height: var(--tap); }
       .trace-toggle, .breakdown-link, .md-export-btn { min-height: var(--tap); }
       .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
       .archive-title { display: flex; align-items: center; min-height: var(--tap); }
+    }
+
+    @media (max-width: 639px) {
+      .hero-title { font-size: var(--fs-hero-mobile); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -577,7 +621,7 @@
 </head>
 <body>
 
-<header class="header">
+<header class="header hero">
   <div class="header-inner">
     <div class="header-top">
       <h1 class="brand">
@@ -585,29 +629,17 @@
       </h1>
       <div class="header-stats">
         <div class="stat">
-          <div class="stat-num">4</div>
+          <div class="stat-num">5</div>
           <div class="stat-label">Case Studies</div>
         </div>
         <div class="stat">
-          <div class="stat-num">21</div>
+          <div class="stat-num">12</div>
           <div class="stat-label">News Items</div>
         </div>
       </div>
     </div>
-    <p class="updated">Updated 24 Nov 2026, 17:27 UTC</p>
-    <div class="toolbar">
-        <div class="tabs" role="tablist" aria-label="Sections">
-            <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true">Case Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false">Industry News</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false">Archive: Studies</button>
-            <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false">Archive: News</button>
-        </div>
-        <label class="visually-hidden" for="scout-search">Search stories</label>
-        <input type="search" id="scout-search" class="search" placeholder="Search stories" />
-    </div>
-  </div>
-</header>
-
+    <p class="hero-title">AI agent case studies and news, <span class="accent-word">scored every day</span>.</p>
+    <p class="updated">Updated 25 Nov 2026, 02:13 UTC</p>
 
   <div class="email-banner">
     <div class="email-inner">
@@ -620,127 +652,169 @@
       <span class="email-confirm" id="email-confirm" role="status"></span>
     </div>
   </div>
+  </div>
+</header>
 
 <main class="content">
+  <div class="toolbar">
+      <div class="tabs" role="tablist" aria-label="Sections">
+          <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true">Case Studies</button>
+          <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false">Industry News</button>
+          <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false">Archive: Studies</button>
+          <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false">Archive: News</button>
+      </div>
+      <label class="visually-hidden" for="scout-search">Search stories</label>
+      <input type="search" id="scout-search" class="search" placeholder="Search stories" />
+  </div>
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM deployment &amp; optimisation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:66;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 50 of 75"><span>50</span></div>
+    <div class="card-tags"><span class="tag-pill">cloud billing &amp; compliance</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-high" style="--pct:86;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 65 of 75"><span>65</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a></h2>
-  <div class="card-meta"><span>Tianyi Huang, Samuel Xu, Ivy Gu, Nathan Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
-  <p class="card-summary">LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31806v1" target="_blank" rel="noopener noreferrer">Where Did My Tokens Go? Verifiable Token Billing for LLM Services</a></h2>
+  <div class="card-meta"><span>Jiayuan Du, Yebo Feng, Lin Zhang, Konglin Zhu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">24 Nov 2026</span></span></div>
+  <p class="card-summary">TokenProv solves the problem of hidden or duplicated token charges in LLM services by using signed provider acceptances and causal histories to verify each billed call. The team built a verifier that matches observed acceptances with settlements, achieving near‑baseline throughput and low latency while detecting all attack attempts in tests. This is relevant for anyone managing LLM usage billing or ensuring fair cost allocation in multi‑provider cloud workflows.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud LLM usage, step 1: collect signed provider receipts for every request. Step 2: run a TokenProv‑style verifier to match receipts with your billing system and flag any missing or duplicated calls. Step 3: integrate the verifier into your audit pipeline to enforce one‑to‑one billing and prevent over‑billing or fraud.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">23/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">22/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">20/25</span></div>
+      <p class="trace-reasoning">The paper addresses a practical issue—verifiable token billing—for LLM services that directly impacts IT engineers managing cloud SaaS billing. The solution is built, benchmarked, and demonstrates near‑line‑rate performance, indicating production readiness. It offers a clear, deployable workflow that can be integrated into existing billing systems or sold as a compliance service. The monetisation potential is substantial, though it requires specific billing platform integration, justifying a score of 20.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    
+    <button type="button" class="md-export-btn"
+      data-title="Where Did My Tokens Go? Verifiable Token Billing for LLM Services"
+      data-summary="TokenProv solves the problem of hidden or duplicated token charges in LLM services by using signed provider acceptances and causal histories to verify each billed call. The team built a verifier that matches observed acceptances with settlements, achieving near‑baseline throughput and low latency while detecting all attack attempts in tests. This is relevant for anyone managing LLM usage billing or ensuring fair cost allocation in multi‑provider cloud workflows."
+      data-it="If you manage cloud LLM usage, step 1: collect signed provider receipts for every request. Step 2: run a TokenProv‑style verifier to match receipts with your billing system and flag any missing or duplicated calls. Step 3: integrate the verifier into your audit pipeline to enforce one‑to‑one billing and prevent over‑billing or fraud."
+      data-monetisation=""
+      data-reasoning="The paper addresses a practical issue—verifiable token billing—for LLM services that directly impacts IT engineers managing cloud SaaS billing. The solution is built, benchmarked, and demonstrates near‑line‑rate performance, indicating production readiness. It offers a clear, deployable workflow that can be integrated into existing billing systems or sold as a compliance service. The monetisation potential is substantial, though it requires specific billing platform integration, justifying a score of 20."
+      data-score="65"
+      data-url="https://arxiv.org/abs/2611.31806v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Software migration</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 30 of 75"><span>30</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.29942v1" target="_blank" rel="noopener noreferrer">LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</a></h2>
+  <div class="card-meta"><span>Yanan Zhang, Shengqi Liu, Tao Zhang, Yidi Liu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
+  <p class="card-summary">The study reviews how large language models (LLMs) can be used to move whole software projects from one language or framework to another, showing that while module‑level changes work well, full repository migration still struggles with build reliability, behaviour testing, and non‑functional properties. They built a taxonomy of migration approaches, analysed 96 papers, and identified gaps in requirements support, agent coordination, and cost‑benefit assessment. This research is relevant: it highlights practical risks and offers a framework for planning LLM‑driven migrations.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, use the taxonomy to map your migration stages: 1) catalogue modules needing change, 2) choose an agent type (agentless, single or multi‑agent) that matches your build pipeline, 3) integrate environment feedback loops to catch runtime behaviour gaps before full deployment.</p>
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
+      <p class="trace-reasoning">The paper discusses LLM-assisted migration which is relevant to software engineering and deployment, giving moderate real-world impact. However, as a survey without a concrete implementation, the maturity is low, and monetisation potential is speculative but possible. The total score is 30, not below 30, so low_signal is false.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/llm-assisted-software-migration-from-module-level-transformation-to-repository-l.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn"
+      data-title="LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration"
+      data-summary="The study reviews how large language models (LLMs) can be used to move whole software projects from one language or framework to another, showing that while module‑level changes work well, full repository migration still struggles with build reliability, behaviour testing, and non‑functional properties. They built a taxonomy of migration approaches, analysed 96 papers, and identified gaps in requirements support, agent coordination, and cost‑benefit assessment. This research is relevant: it highlights practical risks and offers a framework for planning LLM‑driven migrations."
+      data-it="If you manage cloud infrastructure, use the taxonomy to map your migration stages: 1) catalogue modules needing change, 2) choose an agent type (agentless, single or multi‑agent) that matches your build pipeline, 3) integrate environment feedback loops to catch runtime behaviour gaps before full deployment."
+      data-monetisation=""
+      data-reasoning="The paper discusses LLM-assisted migration which is relevant to software engineering and deployment, giving moderate real-world impact. However, as a survey without a concrete implementation, the maturity is low, and monetisation potential is speculative but possible. The total score is 30, not below 30, so low_signal is false."
+      data-score="30"
+      data-url="https://arxiv.org/abs/2611.29942v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">microarchitecture simulation</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:30;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 23 of 75"><span>23</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31767v1" target="_blank" rel="noopener noreferrer">DELTA: Diagnosing Exploration Lineages via Twin-path Alignment - What Can Contrasting Design Paths Reveal About Microarchitectural Behavior?</a></h2>
+  <div class="card-meta"><span>Kaushal Mhapsekar, Darsh Asher, Bita Aslrousta, Amna Hassan</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">24 Nov 2026</span></span></div>
+  <p class="card-summary">DELTA captures every design change made during exploration and stores the outcome, letting engineers analyse why some tweaks help while others hurt. It builds a memory of parent‑child interventions, predicts performance accurately and can surface root causes that improve IPC by up to 1.4%.</p>
+  
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">15/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">LiveLoRA offers a concrete, low-overhead technique to migrate KV caches across LoRA updates, directly benefiting LLM agent deployment pipelines and reducing operational costs for IT engineers managing large session fleets. The method is grounded in a provable equivalence and demonstrates significant speedups, indicating practical applicability. However, the paper does not appear to provide released code or a ready-to-deploy system, so while the idea is mature, it remains somewhat theoretical at this stage. Nonetheless, an engineer could implement the approach or offer it as a service within a short timeframe, giving it a solid monetisation potential.</p>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">3/25</span></div>
+      <p class="trace-reasoning">The paper presents a niche simulation-based analysis tool for microarchitectural design, which is far removed from the day‑to‑day infrastructure concerns of UK IT engineers. While the method is demonstrably usable (released code, simulation results) and shows some predictive capability, it offers little immediate practical utility or commercial viability for the target audience. Thus the overall impact, maturity, and monetisation potential are all low, resulting in a total score below the 30 threshold.</p>
     </div>
   </details>
   <div class="card-footer">
-    
+    <a href="breakdowns/delta-diagnosing-exploration-lineages-via-twin-path-alignment-what-can-contrasti.html" class="breakdown-link">IT Breakdown</a>
     <button type="button" class="md-export-btn"
-      data-title="LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents"
-      data-summary="LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions."
-      data-it="If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions."
+      data-title="DELTA: Diagnosing Exploration Lineages via Twin-path Alignment - What Can Contrasting Design Paths Reveal About Microarchitectural Behavior?"
+      data-summary="DELTA captures every design change made during exploration and stores the outcome, letting engineers analyse why some tweaks help while others hurt. It builds a memory of parent‑child interventions, predicts performance accurately and can surface root causes that improve IPC by up to 1.4%."
+      data-it="If you manage cloud infrastructure, this is not directly applicable to your day‑to‑day tasks."
       data-monetisation=""
-      data-reasoning="LiveLoRA offers a concrete, low-overhead technique to migrate KV caches across LoRA updates, directly benefiting LLM agent deployment pipelines and reducing operational costs for IT engineers managing large session fleets. The method is grounded in a provable equivalence and demonstrates significant speedups, indicating practical applicability. However, the paper does not appear to provide released code or a ready-to-deploy system, so while the idea is mature, it remains somewhat theoretical at this stage. Nonetheless, an engineer could implement the approach or offer it as a service within a short timeframe, giving it a solid monetisation potential."
-      data-score="50"
-      data-url="https://arxiv.org/abs/2611.31105v1">Copy as Markdown</button>
+      data-reasoning="The paper presents a niche simulation-based analysis tool for microarchitectural design, which is far removed from the day‑to‑day infrastructure concerns of UK IT engineers. While the method is demonstrably usable (released code, simulation results) and shows some predictive capability, it offers little immediate practical utility or commercial viability for the target audience. Thus the overall impact, maturity, and monetisation potential are all low, resulting in a total score below the 30 threshold."
+      data-score="23"
+      data-url="https://arxiv.org/abs/2611.31767v1">Copy as Markdown</button>
   </div>
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM deployment / API optimisation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:60;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 45 of 75"><span>45</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31065v1" target="_blank" rel="noopener noreferrer">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a></h2>
-  <div class="card-meta"><span>Qianyi Chen, Bo Li</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
-  <p class="card-summary">Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer. It boosts correct‑submission rates by 15–30 points, cuts wrong answers to under 7%, and saves 4–13% inference cost.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The paper introduces a method (Tail-CRC) that directly improves LLM deployment efficiency and error control—critical for engineers working with large language models in production. It proposes a concrete, single‑rollout approach that could be integrated into existing LLM inference pipelines, offering tangible performance gains and cost savings. However, the work is still at a research prototype stage; there is no evidence of released code, public deployments, or a fully tested system, which limits maturity. Despite this, the technique is actionable enough for engineers to experiment with and could be turned into a commercial or internal service within a short timeframe, hence a moderate monetisation score. Overall, the paper scores well on real‑world impact and monetisation potential, but lower on maturity, giving a total of 45. No low signal flag.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    
-    <button type="button" class="md-export-btn"
-      data-title="Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning"
-      data-summary="Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer. It boosts correct‑submission rates by 15–30 points, cuts wrong answers to under 7%, and saves 4–13% inference cost."
-      data-it="If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold."
-      data-monetisation=""
-      data-reasoning="The paper introduces a method (Tail-CRC) that directly improves LLM deployment efficiency and error control—critical for engineers working with large language models in production. It proposes a concrete, single‑rollout approach that could be integrated into existing LLM inference pipelines, offering tangible performance gains and cost savings. However, the work is still at a research prototype stage; there is no evidence of released code, public deployments, or a fully tested system, which limits maturity. Despite this, the technique is actionable enough for engineers to experiment with and could be turned into a commercial or internal service within a short timeframe, hence a moderate monetisation score. Overall, the paper scores well on real‑world impact and monetisation potential, but lower on maturity, giving a total of 45. No low signal flag."
-      data-score="45"
-      data-url="https://arxiv.org/abs/2611.31065v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM resource management</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:46;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 35 of 75"><span>35</span></div>
-  </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31118v1" target="_blank" rel="noopener noreferrer">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></h2>
-  <div class="card-meta"><span>Shulu Li, Hanchen Li, Xiaokun Chen, Qiuyang Mang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
-  <p class="card-summary">TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability.</p>
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">12/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">8/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The paper addresses resource management for LLM agents, which could benefit IT engineers deploying large models on shared infrastructure. It demonstrates performance gains over benchmarks, indicating a working prototype, but lacks evidence of production deployment or released code, hence moderate maturity. The concepts could be monetised as a service to optimise LLM hosting, but require further engineering to be ready for commercial use. Overall impact is moderate, maturity low, monetisation potential moderate, leading to a total score above the 30 threshold.</p>
-    </div>
-  </details>
-  <div class="card-footer">
-    
-    <button type="button" class="md-export-btn"
-      data-title="TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents"
-      data-summary="TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches."
-      data-it="If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability."
-      data-monetisation=""
-      data-reasoning="The paper addresses resource management for LLM agents, which could benefit IT engineers deploying large models on shared infrastructure. It demonstrates performance gains over benchmarks, indicating a working prototype, but lacks evidence of production deployment or released code, hence moderate maturity. The concepts could be monetised as a service to optimise LLM hosting, but require further engineering to be ready for commercial use. Overall impact is moderate, maturity low, monetisation potential moderate, leading to a total score above the 30 threshold."
-      data-score="35"
-      data-url="https://arxiv.org/abs/2611.31118v1">Copy as Markdown</button>
-  </div>
-</article>
-<article class="card cs-card">
-  <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Low relevance</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="card-tags"><span class="tag-pill">academic simulation</span><span class="status-badge status-pass">Verified</span></div>
     <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31233v1" target="_blank" rel="noopener noreferrer">TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming</a></h2>
-  <div class="card-meta"><span>Hani Alomari, Md Atabuzzaman, Chris Thomas</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
-  <p class="card-summary">The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance. It improves retrieval scores by up to 17 points on COCO and 6.6 on Flickr30k across many checkpoints, while keeping inference costs the same.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage dual‑encoder models, use TowerBridge: step 1 – run the provided script on 25,000 labelled pairs to compute the statistic; step 2 – apply the closed‑form weight edits to your encoder weights; step 3 – test retrieval and hubness – you should see a boost without extra inference cost.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31851v1" target="_blank" rel="noopener noreferrer">Modeling Event-Conditioned Emotional Expression Response with LLM Agents in a Synthetic Social Simulation</a></h2>
+  <div class="card-meta"><span>Rebecca Marigliano, Peter Carragher, Kathleen M. Carley</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">24 Nov 2026</span></span></div>
+  <p class="card-summary">The paper presents a framework that lets large language model agents generate realistic, emotion‑conditioned responses to events, matching real social media patterns. It builds a hierarchical prompting system that feeds demographic, psychological, and context cues to the LLM and validates outputs against Facebook share data. The result shows the model can reproduce both polarized and consensus emotional trends, though it under‑expresses anger, indicating a need for further calibration.</p>
+  
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
       <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
       <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
-      <p class="trace-reasoning">The paper focuses on improving multimodal retrieval performance via weight-space programming on CLIP models, a niche research area with limited direct applicability to everyday IT infrastructure tasks. The method is presented as a closed-form recipe and is theoretically sound, but no evidence of released code or production deployment is provided, indicating moderate maturity. The technique offers only incremental improvements to retrieval metrics and lacks clear, immediate commercial or operational value for IT engineers managing cloud services, identity, or security, resulting in low monetisation potential. Overall, its relevance to the target audience is modest, yielding a total score below 30.</p>
+      <p class="trace-reasoning">The paper focuses on emotional modeling in agent-based simulations, which is largely academic and not directly applicable to day‑to‑day IT infrastructure management or automation. While it uses LLMs, the work is a research prototype with no released code or production deployment, limiting its immediate utility for IT engineers. The monetisation potential is minimal because the methodology is too specialized for general SaaS or security tooling, and no clear commercial product or service emerges that could be offered within 90 days.</p>
+    </div>
+  </details>
+  <div class="card-footer">
+    <a href="breakdowns/modeling-event-conditioned-emotional-expression-response-with-llm-agents-in-a-sy.html" class="breakdown-link">IT Breakdown</a>
+    <button type="button" class="md-export-btn"
+      data-title="Modeling Event-Conditioned Emotional Expression Response with LLM Agents in a Synthetic Social Simulation"
+      data-summary="The paper presents a framework that lets large language model agents generate realistic, emotion‑conditioned responses to events, matching real social media patterns. It builds a hierarchical prompting system that feeds demographic, psychological, and context cues to the LLM and validates outputs against Facebook share data. The result shows the model can reproduce both polarized and consensus emotional trends, though it under‑expresses anger, indicating a need for further calibration."
+      data-it="If you manage cloud infrastructure, this is not directly applicable to your work."
+      data-monetisation=""
+      data-reasoning="The paper focuses on emotional modeling in agent-based simulations, which is largely academic and not directly applicable to day‑to‑day IT infrastructure management or automation. While it uses LLMs, the work is a research prototype with no released code or production deployment, limiting its immediate utility for IT engineers. The monetisation potential is minimal because the methodology is too specialized for general SaaS or security tooling, and no clear commercial product or service emerges that could be offered within 90 days."
+      data-score="20"
+      data-url="https://arxiv.org/abs/2611.31851v1">Copy as Markdown</button>
+  </div>
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">low</span><span class="status-badge status-pass">Verified</span></div>
+    <div class="score-ring ring-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 20 of 75"><span>20</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.31800v1" target="_blank" rel="noopener noreferrer">Learning Compact State Abstractions for LLM Agents</a></h2>
+  <div class="card-meta"><span>Yaswanth Chittepu, Raghavendra Addanki, Anup Rao, Branislav Kveton</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">24 Nov 2026</span></span></div>
+  <p class="card-summary">The research shows how to trim an AI agent’s memory to keep only what matters, cutting input size by up to 71% while keeping performance. However, this is about LLM behaviour modelling, not cloud infra management.</p>
+  
+  <details class="agent-trace">
+    <summary class="trace-toggle">View Technical Reasoning</summary>
+    <div class="trace-body">
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper proposes a technique for reducing state in LLM agents, but its direct applicability to existing IT infrastructure (Microsoft 365, AWS, etc.) is minimal. The approach appears to be in prototype stage with no released production-ready system, and there is no clear path for immediate monetisation or service offering within 90 days for IT engineers.</p>
     </div>
   </details>
   <div class="card-footer">
     
     <button type="button" class="md-export-btn"
-      data-title="TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming"
-      data-summary="The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance. It improves retrieval scores by up to 17 points on COCO and 6.6 on Flickr30k across many checkpoints, while keeping inference costs the same."
-      data-it="If you manage dual‑encoder models, use TowerBridge: step 1 – run the provided script on 25,000 labelled pairs to compute the statistic; step 2 – apply the closed‑form weight edits to your encoder weights; step 3 – test retrieval and hubness – you should see a boost without extra inference cost."
+      data-title="Learning Compact State Abstractions for LLM Agents"
+      data-summary="The research shows how to trim an AI agent’s memory to keep only what matters, cutting input size by up to 71% while keeping performance. However, this is about LLM behaviour modelling, not cloud infra management."
+      data-it="Not directly applicable to IT infrastructure work"
       data-monetisation=""
-      data-reasoning="The paper focuses on improving multimodal retrieval performance via weight-space programming on CLIP models, a niche research area with limited direct applicability to everyday IT infrastructure tasks. The method is presented as a closed-form recipe and is theoretically sound, but no evidence of released code or production deployment is provided, indicating moderate maturity. The technique offers only incremental improvements to retrieval metrics and lacks clear, immediate commercial or operational value for IT engineers managing cloud services, identity, or security, resulting in low monetisation potential. Overall, its relevance to the target audience is modest, yielding a total score below 30."
+      data-reasoning="The paper proposes a technique for reducing state in LLM agents, but its direct applicability to existing IT infrastructure (Microsoft 365, AWS, etc.) is minimal. The approach appears to be in prototype stage with no released production-ready system, and there is no clear path for immediate monetisation or service offering within 90 days for IT engineers."
       data-score="20"
-      data-url="https://arxiv.org/abs/2611.31233v1">Copy as Markdown</button>
+      data-url="https://arxiv.org/abs/2611.31800v1">Copy as Markdown</button>
   </div>
 </article></div>
   </div>
@@ -748,73 +822,12 @@
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
     <section class="signal">
         <h2 class="signal-title">From McKinsey</h2>
-        <p><a class="archive-title" href="https://news.google.com/rss/articles/CBMixwFBVV95cUxNOURFbG9QRm9UNUhCZVpXX29Qb1V0dnd5cWkybXpPRG05M21aQ3Nuc05KbFlDVzQ4OGNBS2x5cURPMnRFVmhiMU9mYy1TSHkyWUlzcDM3M0U4LUtfTzVEUjNFS0xWYnhfQVpqRHNSLUhLMGFwU0NBOFMxeXZOQ1RsWVJwZ2tXU1pOWlIya29udHlKRE14UzZxWGpqLVU3bnN0aWZNSHd3RDVVUExNdm1EYnRhZ0dKSnVrdG1Hemk2cmMyS3NQNFdv?oc=5" target="_blank" rel="noopener noreferrer">AI economics in action: What four companies have done and learned</a> <span class="pub-date">23 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNbEhpWVZzZkVVa1VpWENQME5GMVVmaUI5a2xMYWZsZy1NX3NuY3g4V3ZzTllQM3VpMVJGQk83MW81SVo2NHZRcUltd1VMQ2pPNzBSZWlpcUNWbGd0YmNEMWNZeGU3dTd5N3JodUxtaGI5a2tEUmJqRmVYeGdWVEpDUHdQSGFZSE52di0xRXRyTFdzMjAyN1VJbkNmVG1nU0VIY1VHUm5mdFlkdEc1b2tEZlBJR1o2TzVG?oc=5" target="_blank" rel="noopener noreferrer">Advancing US economic mobility in the age of AI</a> <span class="pub-date">20 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMilwJBVV95cUxPd0hheWxma1RQR3VEc0NzbkNUb1IyV29CNWV2WXlDaGFWTEkzcy1fRlhjczdJUnc2N1FnQ3E2VlNvRFQwVVlseUgyejFDVE5aT1loUWpmeFpTQWxVVkpXaERjamx0aGQ4MlJNYWVSVm4xYzFtTkp6bjVFa2hUVnlIbmZIYVB3aG9mLTNYam9zT2dsVk5YOEg0NllYOGc1MUljZloxMU1QQ2hnVWR5NHV5b2VNN3NqNmRPbzdzOFBad2MzTnVWT1d3Z2Y4YVZHSEtRNTNmbXdZbnUybjZ6TEhuLVNTb0l2dDh3Z1FqQmRURnlzVFg5dkk5U2Z0V20zSnBfN0RxcFc5X0dqX0djUjhacUFaNjgtQ2c?oc=5" target="_blank" rel="noopener noreferrer">McKinsey on Investing</a> <span class="pub-date">12 Nov 2026</span></p>
+        <p><a class="archive-title" href="https://news.google.com/rss/articles/CBMi8gFBVV95cUxQY3E1a0lKUzY5cVkweXJuR0NqQzVOWVc0bHJtTEp5RDRDMzk5MUpMSWluRkxDNUJla29FcE9HMFlCNXF0aERFRWk4eUxnRGNmWEZ0OXYzUlQ2Q3h6SjhVOFdXQWFpQzNubXZtNFE1b3JFYVhHU05Qdlg4ZGVSWWU5NlJrUklzZkFLWllOYXl6MmIwZzBFdDB6a0ZXMmRoaHA1MDNTQnJQdWkxb0tsMTNoQjM1UVVHVXJnZWdfXzdzWFp0c3hvMmhZUkRRQ2t5WlUtRHI2UTdSNmhxT3RuSEJzTDdzQ0hNWWRNRDdsZWM3LVhzZw?oc=5" target="_blank" rel="noopener noreferrer">Navigating the AI infrastructure mismatch: Equinix CEO Adaire Fox-Martin</a> <span class="pub-date">16 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMirAFBVV95cUxNYVJfN2xnTEdHR0RqR3p3aGdtQlJ2d2t3aG1xcHB5SXk2RUlodEhRWXhFSEQ4dDdZV0dHU2Q2ZG9yWWROTDdvclFudno3RE5EY1k4cWcyVHByZ0swcmNERURMTWF0ZkkxUktxZjY3c0dNWEpzbHBEUC1EQm11bUFURVdwN05qa2lZeW8wcE5rOE1DZU9LV2NfdDMyQnF6UVdDbzFXMHlwWDNUMUxQ?oc=5" target="_blank" rel="noopener noreferrer">Beyond the demo: Open-source AI from QuantumBlack Labs</a> <span class="pub-date">23 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxPRXZSWmxUMU9LUUg0YWtEN1RJS1JOZUlrOVhVdEpHaDlTOUoxSGF3YWpMYXpEUTIwRVJob1E4eFB6VmV3TGFJbW91ZlUzbzVZX3NiVUtBaHFYbXoxZ0VacTZIUldNTVRyYWNmY1NRLUJjV1Z2OG5JbTI1RDZtRUNLaERVVmFJVk82cHRibUlLTDVVdWVKNFUxQ0lJRFV3aFM1bkZRZDFhTTBDeUNjR3Y2RkQycW5lU2hCTUJNbXlRQmo?oc=5" target="_blank" rel="noopener noreferrer">A century of innovation: Lessons from retail’s past, insights for its future</a> <span class="pub-date">24 Nov 2026</span></p>
     </section>
     <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">10/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://stalw.art/blog/microsoft-exchange-replacement/" target="_blank" rel="noopener noreferrer">Stalwart is now a drop-in replacement for Microsoft Exchange</a></h2>
-  <p class="card-summary">Stalwart 1.2.0 has been released as a fully compatible, open‑source drop‑in replacement for Microsoft Exchange, supporting MAPI‑HTTP, EWS, Exchange ActiveSync, and Autodiscover. It enables Outlook, Apple Mail, and mobile clients to connect seamlessly without needing a Microsoft Exchange server.</p>
-  <p class="insight"><strong>How to use:</strong> Go to your organization’s email infrastructure plan this week and assess whether Stalwart could replace your on‑prem Exchange servers, especially if you are running unsupported 2016/2019 editions. Inaction risks continued lack of security updates and potential legal exposure under the CLOUD Act. This change directly affects Microsoft 365 deployments and any SSO or MDM configurations tied to Exchange authentication.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    <a href="breakdowns/stalwart-is-now-a-drop-in-replacement-for-microsoft-exchange.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">9/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://openai.com/index/introducing-shirudo" target="_blank" rel="noopener noreferrer">OpenAI and Cisco introduce Shirudo</a></h2>
-  <p class="card-summary">OpenAI and Cisco have launched Shirudo, an open‑source runtime that lets operators protect running Linux systems with AI‑generated eBPF shields while patches are pending. The tool can block exploits like Java4Shell in real time without restarting services, using cryptographic verification and TPM support.</p>
-  <p class="insight"><strong>How to use:</strong> Go to your Linux servers this week and experiment with Shirudo’s eBPF shields to protect critical services such as Elasticsearch or other Java applications. Failing to adopt this runtime risks exposing vulnerable code paths during patch delays, potentially leading to data breaches or downtime. The most immediate impact will be on your Linux infrastructure and endpoint security stack, where Shirudo can be integrated to provide live, programmable protection.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    <a href="breakdowns/openai-and-cisco-introduce-shirudo.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Ars Technica</span>
-      <span class="tag-pill">Security</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">9/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/" target="_blank" rel="noopener noreferrer">How to tell a cyberattack from a plain old outage</a></h2>
-  <p class="card-summary">Microsoft Exchange and other critical services suffered widespread outages this week, prompting debate over whether these incidents were cyberattacks or operational failures. Cloudflare’s CEO clarified that most such events stem from system complexity rather than malicious intent.</p>
-  <p class="insight"><strong>How to use:</strong> Go to your Microsoft 365 admin center and review the recent outage logs for Exchange and SharePoint to confirm no suspicious activity; this week you should also verify that your SSO and MDM systems are not impacted by similar configuration errors. Failing to do so could leave you unaware of accidental misconfigurations that might be exploited later. The most affected tools here are Microsoft 365 and Cloudflare’s security services, which are central to your IT stack.</p>
-  <div class="card-footer">
-    <span class="pub-date">19 Nov 2026</span>
-    <a href="breakdowns/how-to-tell-a-cyberattack-from-a-plain-old-outage.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
       <span class="tag-pill">Product Launch</span>
     </div>
     <div class="news-score-area">
@@ -822,159 +835,118 @@
       <span class="score-num">8/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/" target="_blank" rel="noopener noreferrer">Anthropic launches Claude Ship, letting AI agents review, fix, and approve code changes</a></h2>
-  <p class="card-summary">Anthropic has launched Claude Ship, a new suite of AI agents that can review, fix, and automatically approve code changes based on team‑defined policies. The tool adds an automated approval layer to the GitHub pull‑request workflow, potentially speeding up the release cycle for teams that rely heavily on CI/CD pipelines.</p>
-  <p class="insight"><strong>How to use:</strong> Go to your GitHub repository settings and enable the new Claude Ship integration this week to start observing the PR Steward and Claude Approvals agents in observe‑only mode. Failure to adopt this early could leave your teams stuck with manual code‑review bottlenecks as AI‑generated code volumes grow. The most affected tools are your GitHub CI/CD pipelines and any existing code‑review tooling you use.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    
-  </div>
+  <h2 class="card-title"><a href="https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it" target="_blank" rel="noopener noreferrer">After token leaderboards and spending caps, Snowflake has a third idea: Keep the cap, then learn from whoever breaks it</a></h2>
+  <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">Snowflake is implementing AI usage caps for employees, then analyzing the users who exceed these limits to uncover efficient AI workflows. The company treats overages as a source of insight for improving internal AI productivity.</p>
+  <ul class="signal-points"><li><strong>Do this week:</strong> Review your team&#x27;s AI usage policies in Snowflake and identify any current caps or limits that could impact data engineering workloads.</li><li><strong>Risk if ignored:</strong> Failure to monitor these caps may result in hidden bottlenecks or undocumented best practices being lost, potentially reducing overall productivity.</li><li><strong>Tools affected:</strong> This is most relevant to your Snowflake integration for data analytics and your Azure or AWS data pipelines.</li></ul>
+  
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Security</span>
+      <span class="tier-label">AI Lab</span>
+      <span class="tag-pill">Tools</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
       <span class="score-num">7/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/" target="_blank" rel="noopener noreferrer">Anthropic Created a Honeypot to Lure AI Agents Into Misbehaving</a></h2>
-  <p class="card-summary">Anthropic has released Siren, a honeypot test that lures AI agents into misbehaving within simulated sandboxes to evaluate their propensity for exploiting zero‑day vulnerabilities. This research underscores the growing risk that advanced agents could bypass security boundaries, potentially impacting any organization that deploys AI‑powered tools.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor AI agent deployments for signs of sandbox escape attempts and consider integrating similar honeypot testing frameworks to assess risk. Failure to anticipate these vulnerabilities could expose your organization to data breaches or unauthorized access, especially as AI tools become more integrated into IT workflows.</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/anthropic-created-a-honeypot-to-lure-ai-agents-into-misbehaving.html" class="breakdown-link">IT Breakdown</a>
+  <h2 class="card-title"><a href="https://openai.com/index/searching-for-distant-planets-with-astra" target="_blank" rel="noopener noreferrer">Searching for distant planets with Astra</a></h2>
+  <div class="card-meta"><span>OpenAI</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">OpenAI’s Codex and Astra were used by amateur astronomers to sift through Kepler telescope data, identifying new exoplanet candidates that are now under review by professional scientists. This demonstrates how AI can process massive astronomical datasets, offering a model for large-scale data analysis in other domains.</p>
+  <p class="insight"><strong>How to use:</strong> 1. Evaluate how your organization’s data pipelines could be augmented with OpenAI’s Codex or similar generative models to automate complex search and analysis tasks this week. 2. Failure to adopt AI-driven automation may leave your team lagging behind competitors who can extract insights from data at scale, increasing operational risk and missing revenue opportunities. 3. Start by exploring Codex within your existing cloud infrastructure—e.g., test it against a subset of your internal logs or user behavior datasets to benchmark performance gains.</p>
+  <div class="card-footer"><a href="breakdowns/searching-for-distant-planets-with-astra.html" class="breakdown-link">IT Breakdown</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
   </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance" target="_blank" rel="noopener noreferrer">Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton</a></h2>
+  <div class="card-meta"><span>Hugging Face</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">NVIDIA’s Isaac Lab now offers a ready‑made Sim2Real workflow for adding obstacle avoidance to the Microduck robot using Newton’s physics engine and ToF sensing. The tutorial walks through training an avoidance controller while reusing the existing walking policy, then exporting the policy for real‑robot deployment.</p>
+  <p class="insight"><strong>How to use:</strong> Watch for opportunities to apply Isaac Lab’s simulation training to other robotics projects you support. The workflow demonstrates how to keep core policies unchanged while adding new behavior, which could reduce the time and cost of on‑site testing for your device fleet. Evaluate whether your current SSO and endpoint security tooling can integrate with the new simulation environments to streamline onboarding of robot‑related users.</p>
+  <div class="card-footer"><a href="breakdowns/microduck-obstacle-avoidance-a-sim2real-workflow-with-isaac-lab-and-newton.html" class="breakdown-link">IT Breakdown</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">Ars Technica</span>
       <span class="tag-pill">Security</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
-      <span class="score-num">7/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input/" target="_blank" rel="noopener noreferrer">Amazon says hackers&#x27; AI agents found and exploited 0-day with little human input</a></h2>
-  <p class="card-summary">Amazon reports AI agents autonomously discovering and exploiting a zero‑day vulnerability in an open‑source medical imaging application with minimal human input. The attack leveraged the Cairn AI penetration‑testing framework, underscoring the growing threat of agentic offensive operations.</p>
-  <p class="insight"><strong>How to use:</strong> Review your internal vulnerability scanning and patch management workflows to ensure rapid detection of newly discovered zero‑days. Consider integrating AI‑augmented threat hunting tools that can pre‑emptively scan for similar exploit patterns, especially in critical medical or research servers. Failure to adapt may leave your organization exposed to swift, automated attacks that bypass traditional human‑review controls.</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-    <div class="news-score-area">
       <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/meta-brings-its-muse-ai-assistant-directly-into-instagram-dms/" target="_blank" rel="noopener noreferrer">Meta brings its Muse AI assistant directly into Instagram DMs</a></h2>
-  <p class="card-summary">Meta has embedded its Muse AI assistant into Instagram Direct Messages, allowing users to chat with Muse directly within the app to get context, organize content, and create itineraries or shopping lists. The integration streamlines user interaction by eliminating the need to switch between apps and gives Muse access to a rich set of Instagram content for more personalized assistance.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor how this integration could affect user engagement on social platforms your team manages; consider evaluating whether similar embedded AI assistants could enhance internal communication tools. Understanding the data flow and privacy controls will help ensure compliance with your organization’s security policies.</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/meta-brings-its-muse-ai-assistant-directly-into-instagram-dms.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Infrastructure</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/why-a-crusoe-investor-is-betting-on-solar-and-batteries-to-power-future-ai-data-centers/" target="_blank" rel="noopener noreferrer">Why a Crusoe investor is betting on solar and batteries to power future AI data centers</a></h2>
-  <p class="card-summary">TechCrunch reports that a venture investor, Brook Porter of G2VP, is advocating for solar power and long‑duration energy storage to meet the growing energy demands of AI data centers. The piece argues that off‑grid, renewable‑powered facilities could accelerate deployment and reduce reliance on fossil‑fuel‑based grid capacity.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor upcoming developments from Form Energy and Antora Energy for long‑duration battery technologies and assess their potential to power on‑premises or hybrid data center environments. Consider evaluating renewable power contracts or modular solar+storage solutions as part of future infrastructure planning to reduce grid dependency and improve energy resilience.</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">MIT Tech Review</span>
-      <span class="tag-pill">Infrastructure</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/24/1148091/raising-the-stakes-for-enterprise-networks-with-ai-modernization/" target="_blank" rel="noopener noreferrer">Raising the stakes for enterprise networks with AI modernization</a></h2>
-  <p class="card-summary">Enterprise networks are facing a new surge in traffic as agentic AI tasks generate up to 450% more data than equivalent human work. The article highlights how this increased load could strain existing bandwidth, latency, and monitoring capabilities in modern IT environments.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on your network monitoring dashboards for sudden spikes in traffic that may correlate with AI workloads. This could expose performance bottlenecks or require scaling your WAN or CDN resources to maintain service levels.</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/raising-the-stakes-for-enterprise-networks-with-ai-modernization.html" class="breakdown-link">IT Breakdown</a>
-  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/jensen-huang-nvidia-us-national-security-risks/" target="_blank" rel="noopener noreferrer">Jensen Huang’s Return Shows Nvidia Is Too Big to Police</a></h2>
+  <div class="card-meta"><span>Wired AI</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">Nvidia’s board reinstated CEO Jensen Huang amid concerns over national security and export controls, highlighting the tension between corporate decisions and U.S. government oversight. The move underscores potential vulnerabilities in chip supply chains that could affect AI workloads and data security for enterprises.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor Nvidia’s supply‑chain updates and any new export‑control regulations that could impact your cloud or AI service usage. If you rely on Nvidia GPUs for workloads, verify your contracts for compliance clauses and consider alternative accelerators. Keep an eye on the Department of Commerce’s export‑control guidance, as changes may necessitate adjustments in your procurement or deployment strategies.</p>
+  <div class="card-footer"><a href="breakdowns/jensen-huangs-return-shows-nvidia-is-too-big-to-police.html" class="breakdown-link">IT Breakdown</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill">Research</span>
+      <span class="tag-pill">Model Release</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://openai.com/business/learn/connected-intelligence-for-in-house-legal" target="_blank" rel="noopener noreferrer">Connected intelligence for in-house legal</a></h2>
-  <p class="card-summary">OpenAI showcases how in-house legal teams can leverage AI to integrate business context, build reusable workflows, and enhance collaboration with outside counsel. The presentation highlights practical use cases but does not announce a new product or feature.</p>
-  <p class="insight"><strong>How to use:</strong> Observe the discussed use cases for potential applicability to your internal process automation. Evaluate whether a similar AI‑driven workflow could streamline ticket handling or knowledge base updates in Freshservice.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    
-  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities" target="_blank" rel="noopener noreferrer">GPT-6 models demonstrate intrinsic protein-design capabilities</a></h2>
+  <div class="card-meta"><span>OpenAI</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">OpenAI has unveiled GPT‑6 models that can autonomously design new protein structures and amino‑acid sequences, outperforming specialized biology models on several tasks. The models use reasoning and code generation, enabling researchers to guide designs with natural language prompts.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on OpenAI’s API documentation for any upcoming support of GPT‑6 in protein-design applications, as this could streamline R&amp;D workflows in biotech or pharmaceutical divisions. Monitoring these capabilities will help you assess future integration into internal data pipelines or collaboration with external scientific partners.</p>
+  <div class="card-footer"><a href="breakdowns/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities.html" class="breakdown-link">IT Breakdown</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">AI Lab</span>
-      <span class="source-name">OpenAI</span>
-      <span class="tag-pill">Product Launch</span>
+      <span class="tag-pill">Tools</span>
     </div>
     <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://openai.com/business/customer-stories/richpanel-ai-customer-support" target="_blank" rel="noopener noreferrer">Richpanel helps companies automate 50% of support in 30 days</a></h2>
-  <p class="card-summary">Richpanel has launched an AI-driven support automation platform that claims to automate 50% of customer support within 30 days using OpenAI&#x27;s GPT‑6 series models. The system includes an AI manager—Boss AI—that writes procedures and integrates with existing tools, aiming to replace or augment traditional support workflows.</p>
-  <p class="insight"><strong>How to use:</strong> Watch Richpanel’s AI support framework as a potential integration point for your existing help desk solution, such as Freshservice or JumpCloud. If your team handles high-volume support tickets, evaluating this platform could reduce response times and free up human agents for more complex issues.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    <a href="breakdowns/richpanel-helps-companies-automate-50-of-support-in-30-days.html" class="breakdown-link">IT Breakdown</a>
-  </div>
+  <h2 class="card-title"><a href="https://openai.com/business/customer-stories/intentful-dots" target="_blank" rel="noopener noreferrer">How Intentful uses dots to make more time for growth</a></h2>
+  <div class="card-meta"><span>OpenAI</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">Intentful, a marketing AI firm, leveraged OpenAI’s ‘dot’ assistant to automate research, pricing, and proposal drafting, dramatically cutting time from days to hours. The dot, named Aria, pulls data from web sitemaps, sales records in HubSpot, and Google Drive templates, streamlining content creation for its tourism clients.</p>
+  <p class="insight"><strong>How to use:</strong> Check how your organization’s existing AI assistants or chat‑bot integrations could automate repetitive research or proposal tasks. Evaluate whether adding an AI‑powered assistant that pulls data from your internal systems (e.g., SSO, MDM, or cloud storage) would reduce manual effort and improve consistency. Monitor for opportunities to embed such assistants in your IT workflow to speed up ticket triage or documentation generation.</p>
+  <div class="card-footer"><a href="breakdowns/how-intentful-uses-dots-to-make-more-time-for-growth.html" class="breakdown-link">IT Breakdown</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">4/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/in-all-hands-meeting-jensen-huang-thanks-white-house-and-says-hes-in-therapy/" target="_blank" rel="noopener noreferrer">In all-hands meeting, Jensen Huang thanks White House and says he’s in therapy</a></h2>
+  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">Nvidia CEO Jensen Huang held an all‑hands meeting where he apologized for violating the company&#x27;s code of conduct and discussed his personal issues and the political support that facilitated his return. He emphasized that the code remains in force and that mitigating circumstances will be considered.</p>
+  
+  
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
       <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
@@ -982,159 +954,67 @@
       <span class="score-num">4/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/tidal-to-ban-and-remove-millions-of-ai-generated-tracks-as-ai-slop-inundates-music-streaming/" target="_blank" rel="noopener noreferrer">Tidal to ban and remove millions of AI-generated tracks as AI slop inundates music streaming</a></h2>
-  <p class="card-summary">Tidal has announced a sweeping ban on fully AI-generated tracks, set to begin December 9, and plans to delete up to 29 million songs from its catalog by year‑end. The move follows a surge of AI‑produced music, with over 43 % of recent uploads flagged as AI and 80,000–85,000 submissions expected to be rejected daily.</p>
+  <h2 class="card-title"><a href="https://www.wired.com/story/jensen-huang-apologizes-to-nvidia-employees-in-first-all-hands-since-his-return/" target="_blank" rel="noopener noreferrer">Jensen Huang Apologizes to Nvidia Employees in First All-Hands Since His Return</a></h2>
+  <div class="card-meta"><span>Wired AI</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">Nvidia CEO Jensen Huang apologized to employees during his first all‑hands meeting since returning, admitting personal mistakes and outlining steps to address his conduct. The incident highlights leadership accountability but does not directly affect IT infrastructure or tools.</p>
+  <p class="insight"><strong>How to use:</strong> None at this time. The event is unrelated to your day‑to‑day IT stack and does not require immediate action.</p>
+  
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/jensen-huang-still-thinks-a-succession-plan-creates-unnecessary-hierarchy/" target="_blank" rel="noopener noreferrer">Jensen Huang still thinks a succession plan creates unnecessary hierarchy</a></h2>
+  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">Nvidia CEO Jensen Huang reiterated that the company does not need a succession plan, emphasizing a flat organizational structure during an all-hands meeting. His comments follow recent leadership turmoil and aim to maintain a streamlined hierarchy.</p>
+  <p class="insight"><strong>How to use:</strong> Check your organization’s succession planning and hierarchy structure to ensure it aligns with your strategic goals; avoid unnecessary layers that could impede agility.</p>
+  <div class="card-footer"><a href="breakdowns/jensen-huang-still-thinks-a-succession-plan-creates-unnecessary-hierarchy.html" class="breakdown-link">IT Breakdown</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Model Release</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">2/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities/" target="_blank" rel="noopener noreferrer">GPT-6 models demonstrate intrinsic protein-design capabilities</a></h2>
+  <div class="card-meta"><span>Hacker News</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">OpenAI’s GPT‑6 models can design new proteins using only general‑purpose reasoning and coding, eliminating the need for specialized biology models. The breakthrough enables rapid prototyping of therapeutic antibodies and other protein‑based solutions with fewer expert inputs.</p>
   <p class="insight"><strong>How to use:</strong> N/A</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/tidal-to-ban-and-remove-millions-of-ai-generated-tracks-as-ai-slop-inundates-mus.html" class="breakdown-link">IT Breakdown</a>
-  </div>
+  <div class="card-footer"><a href="breakdowns/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities.html" class="breakdown-link">IT Breakdown</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
+      <span class="tier-label">Consulting</span>
       <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
+      <span class="score-num">1/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/dont-bring-up-ai-if-you-want-to-enjoy-your-thanksgiving/" target="_blank" rel="noopener noreferrer">Don’t Bring Up AI if You Want to Enjoy Your Thanksgiving</a></h2>
-  <p class="card-summary">Sophie, a social work student, actively avoids AI tools like ChatGPT and Microsoft Copilot due to concerns over critical thinking, political alignment, and environmental impact. The article highlights familial tensions over AI usage and broader societal debates on technology adoption.</p>
-  <p class="insight"><strong>How to use:</strong> Check for potential internal policy conflicts or employee concerns about AI adoption—this is background context only.</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/dont-bring-up-ai-if-you-want-to-enjoy-your-thanksgiving.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Wired AI</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/ai-solved-maths-most-famous-problem/" target="_blank" rel="noopener noreferrer">AI Solved Math’s Most Famous Problem. Now Humans Are Struggling to Understand It</a></h2>
-  <p class="card-summary">An Anthropic researcher, in collaboration with Claude, published a 17-million-line Lean proof claiming to solve the Riemann hypothesis, sparking a massive verification effort by mathematicians. The community is now tasked with interpreting and translating the AI-generated proof into human-readable form.</p>
+  <h2 class="card-title"><a href="https://sloanreview.mit.edu/article/four-habits-of-tech-savvy-leaders/" target="_blank" rel="noopener noreferrer">Four Habits of Tech-Savvy Leaders</a></h2>
+  <div class="card-meta"><span>MIT Sloan</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">An MIT Sloan article outlines four habits that tech-savvy leaders adopt to navigate rapid technological change. The piece discusses the emotional response to new tech, the swift training of workforce, the unexpected infrastructure demands, and the ongoing debate around these developments.</p>
   
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/ai-solved-maths-most-famous-problem-now-humans-are-struggling-to-understand-it.html" class="breakdown-link">IT Breakdown</a>
-  </div>
+  <div class="card-footer"><a href="breakdowns/four-habits-of-tech-savvy-leaders.html" class="breakdown-link">IT Breakdown</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://variety.com/2026/music/news/tidal-bans-ai-generated-music-1236956924/" target="_blank" rel="noopener noreferrer">Tidal bans AI-generated music</a></h2>
-  <p class="card-summary">Tidal has announced a blanket ban on AI-generated music, removing such tracks from its catalog by December 9 and encouraging other platforms to follow suit. The move comes after identifying that 43% of newly distributed tracks were AI-generated, prompting the company to take decisive action against potential fraud and spam.</p>
-  <p class="insight"><strong>How to use:</strong> None</p>
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">4/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/23/elon-musk-and-others-rejoice-as-jensen-huang-is-reinstated-at-nvidia-amid-scandal/" target="_blank" rel="noopener noreferrer">Elon Musk and others rejoice as Jensen Huang is reinstated at Nvidia amid scandal</a></h2>
-  <p class="card-summary">Nvidia’s CEO Jensen Huang has been reinstated amid scandal, prompting support from major tech leaders and political scrutiny over national security concerns.</p>
-  
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    <a href="breakdowns/elon-musk-and-others-rejoice-as-jensen-huang-is-reinstated-at-nvidia-amid-scanda.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/" target="_blank" rel="noopener noreferrer">LLM agents work for their parent companies, not for you</a></h2>
-  <p class="card-summary">An individual built an LLM-based bot to auto-identify and purchase music from Bandcamp and YouTube based on Instagram reels. The bot was stopped by Bandcamp’s new API challenge, highlighting limitations in AI tools navigating protected services.</p>
-  
-  <div class="card-footer">
-    <span class="pub-date">24 Nov 2026</span>
-    <a href="breakdowns/llm-agents-work-for-their-parent-companies-not-for-you.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">TechCrunch</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/23/supertake-raises-20m-to-let-ai-agents-turn-your-market-predictions-into-stock-portfolios/" target="_blank" rel="noopener noreferrer">Supertake raises $20M to let AI agents turn your market predictions into stock portfolios</a></h2>
-  <p class="card-summary">Supertake, an AI investing startup, has secured $20M in seed funding to expand its platform that turns users’ market predictions into automated investment portfolios. The company leverages frontier AI models and trading agents, partnering with brokerages like Coinbase and Robinhood to democratize AI-driven investing.</p>
-  <p class="insight"><strong>How to use:</strong> This development has no direct impact on your current IT stack or immediate operational decisions.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    <a href="breakdowns/supertake-raises-20m-to-let-ai-agents-turn-your-market-predictions-into-stock-po.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">VentureBeat</span>
-      <span class="tag-pill">Research</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">3/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://venturebeat.com/orchestration/claude-fable-5-2-cost-three-times-as-much-as-opus-5-5-for-nearly-the-same-results-in-a-venturebeat-bug-fixing-test" target="_blank" rel="noopener noreferrer">Claude Fable 5.2 cost three times as much as Opus 5.5 for nearly the same results in a VentureBeat bug-fixing test</a></h2>
-  <p class="card-summary">Anthropic’s Claude Fable 5.2 achieved similar bug‑fixing results to Opus 5.5 in a VentureBeat pilot test but at roughly three times the cost. The test suggests higher-priced models do not guarantee better performance for certain debugging workloads.</p>
-  <p class="insight"><strong>How to use:</strong> Check your internal cost‑benefit calculations when selecting AI models for code‑review or debugging tasks. If your team uses Anthropic or similar models, consider benchmarking newer, cheaper variants before scaling production deployments.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
       <span class="tag-pill">Research</span>
     </div>
     <div class="news-score-area">
@@ -1142,38 +1022,21 @@
       <span class="score-num">1/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://github.com/anthropics/formal-math/tree/main/vp-vnp" target="_blank" rel="noopener noreferrer">VP ≠ VNP over Every Field</a></h2>
-  <p class="card-summary">Researchers announced a theoretical result that VP is not equal to VNP over any field, proved using an internal Claude AI model and a Lean 4 formalization. No human verification has taken place, and the work is not maintained or publicly supported.</p>
-  <p class="insight"><strong>How to use:</strong> Check whether your organization’s AI‑assisted development or formal verification tools might inadvertently rely on unverified proofs. Consider adding a policy to require human audit or external validation before integrating AI‑generated formal proofs into critical systems.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    <a href="breakdowns/vp-vnp-over-every-field.html" class="breakdown-link">IT Breakdown</a>
-  </div>
-</article>
-<article class="card news-card">
-  <div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="source-name">Hacker News</span>
-      <span class="tag-pill">Other</span>
-    </div>
-    <div class="news-score-area">
-      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
-      <span class="score-num">0/10</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.bored.com/" target="_blank" rel="noopener noreferrer">Bored.com: Fun, interesting and cool websites to explore when bored</a></h2>
-  <p class="card-summary">The Hacker News post links to Bored.com, a collection of fun websites. It contains no direct AI or IT infrastructure content relevant to the engineer&#x27;s stack.</p>
-  <p class="insight"><strong>How to use:</strong> None.</p>
-  <div class="card-footer">
-    <span class="pub-date">23 Nov 2026</span>
-    <a href="breakdowns/boredcom-fun-interesting-and-cool-websites-to-explore-when-bored.html" class="breakdown-link">IT Breakdown</a>
-  </div>
+  <h2 class="card-title"><a href="https://www.ed.ac.uk/news/heart-attack-and-stroke-risk-detectable-decades-in-advance" target="_blank" rel="noopener noreferrer">Heart attack and stroke risk detectable decades in advance</a></h2>
+  <div class="card-meta"><span>Hacker News</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">Scientists have discovered that patterns in cardiovascular risk factors, including blood pressure, diabetes, and kidney function, can predict heart attacks and strokes up to a decade before they occur. The study analyzed data from over 100,000 people across multiple countries and identified early biomarkers that could improve risk assessment.</p>
+  <p class="insight"><strong>How to use:</strong> This research has no direct implication for IT infrastructure or the tools the engineer manages.</p>
+  
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-25</div>
+  <div class="archive-count">5 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.31806v1" target="_blank" rel="noopener noreferrer">Where Did My Tokens Go? Verifiable Token Billing for LLM Services</a><a class="archive-title" href="https://arxiv.org/abs/2611.29942v1" target="_blank" rel="noopener noreferrer">LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</a><a class="archive-title" href="https://arxiv.org/abs/2611.31767v1" target="_blank" rel="noopener noreferrer">DELTA: Diagnosing Exploration Lineages via Twin-path Alignment - What Can Contrasting Design Paths Reveal About Microarchitectural Behavior?</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-24</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.31065v1" target="_blank" rel="noopener noreferrer">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.31118v1" target="_blank" rel="noopener noreferrer">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></div>
@@ -1317,16 +1180,16 @@
   <div class="archive-date">2026-10-20</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.25659v1" target="_blank" rel="noopener noreferrer">Beyond Leaderboards: A Method for Application-Specific Capability Profiling of Large Language Models</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-19</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.23787v1" target="_blank" rel="noopener noreferrer">DLite: History-free Speculative Decoding for Agentic AI</a><a class="archive-title" href="https://arxiv.org/abs/2610.23782v1" target="_blank" rel="noopener noreferrer">Enforcing Code Reasoning in Agentic Scaffold for More Effective Issue Resolution</a><a class="archive-title" href="https://arxiv.org/abs/2610.23342v1" target="_blank" rel="noopener noreferrer">Robust Function Calling for LLM Agents Under Interface Drift</a></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
+  <div class="archive-date">2026-11-25</div>
+  <div class="archive-count">12 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it" target="_blank" rel="noopener noreferrer">After token leaderboards and spending caps, Snowflake has a third idea: Keep the cap, then learn from whoever breaks it</a><a class="archive-title" href="https://openai.com/index/searching-for-distant-planets-with-astra" target="_blank" rel="noopener noreferrer">Searching for distant planets with Astra</a><a class="archive-title" href="https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance" target="_blank" rel="noopener noreferrer">Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton</a></div>
+</div>
+<div class="archive-row">
   <div class="archive-date">2026-11-24</div>
   <div class="archive-count">21 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://stalw.art/blog/microsoft-exchange-replacement/" target="_blank" rel="noopener noreferrer">Stalwart is now a drop-in replacement for Microsoft Exchange</a><a class="archive-title" href="https://openai.com/index/introducing-shirudo" target="_blank" rel="noopener noreferrer">OpenAI and Cisco introduce Shirudo</a><a class="archive-title" href="https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/" target="_blank" rel="noopener noreferrer">How to tell a cyberattack from a plain old outage</a></div>
@@ -1470,11 +1333,6 @@
   <div class="archive-date">2026-10-27</div>
   <div class="archive-count">46 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arstechnica.com/security/2026/10/hackers-obtain-counterfeit-tls-certificates-for-google-and-other-large-services/" target="_blank" rel="noopener noreferrer">Hackers obtain counterfeit TLS certificates for Google and other large services</a><a class="archive-title" href="https://www.wired.com/story/kernel-panic-the-php-meltdown-shows-how-ai-makes-bugs-more-exploitable/" target="_blank" rel="noopener noreferrer">The PHP Meltdown Shows How AI Makes Bugs More Exploitable</a><a class="archive-title" href="https://www.wired.com/story/ai-agents-are-medias-new-favorite-audience/" target="_blank" rel="noopener noreferrer">AI Agents Are Media’s New Favorite Audience</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-26</div>
-  <div class="archive-count">28 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arstechnica.com/security/2026/10/targeted-ads-delivered-0-click-exploits-to-install-mercenary-malware/" target="_blank" rel="noopener noreferrer">Targeted ads delivered 0-click exploits to install mercenary malware</a><a class="archive-title" href="https://arstechnica.com/security/2026/10/recently-fixed-plex-media-vulnerabilities-are-being-exploited-to-install-malware/" target="_blank" rel="noopener noreferrer">PSA: Patch your Plex media server before someone hacks it</a><a class="archive-title" href="https://arstechnica.com/security/2026/10/openai-models-hacked-a-crypto-wallet-and-breached-more-websites/" target="_blank" rel="noopener noreferrer">OpenAI models hacked a crypto wallet and breached more websites</a></div>
 </div></div>
   </div>
 </main>
