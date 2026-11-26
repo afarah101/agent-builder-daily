@@ -1,5 +1,68 @@
 [
   {
+    "date": "2026-11-26",
+    "total": 2,
+    "case_studies": [
+      {
+        "id": "http://arxiv.org/abs/2611.33111v1",
+        "title": "Draft Calibration for Speculative Decoding: Accelerating LLM Serving by Matching Draft and Target Distributions",
+        "abstract": "Speculative decoding accelerates large language model (LLM) inference by employing a lightweight draft model to propose draft tokens and allowing the target model to verify the new tokens in parallel to improve inference-time compute utilization. The speedup relies on the acceptance probability of draft tokens in target verification, which is directly related to the gap $\\|p-q\\|_1$ between the target distribution $p$ and the draft distribution $q$. In this paper, we study draft calibration of speculative decoding to improve the speedup of speculative decoding, where we employ post-hoc methods to calibrate the draft distribution to mitigate the distribution gap. We observe that though current community open-source draft models may learn the top candidate token correctly, they are generally underconfident compared to the target model, suggesting a consistent distribution mismatch. To mitigate the effect of this mismatch on the acceptance rate of the draft models, we try various post-hoc calibration methods, including standard temperature scaling and token-wise calibration. Our results suggest that a standard temperature scaling applied to the draft distribution improves the acceptance length by up to approximately 10\\% with almost no additional cost across different tasks. Throughput analysis further verifies that this improvement in serving efficiency. Analysis of more general calibration methods reveals further potential room for improvement.",
+        "authors": [
+          "Yuxing Liu",
+          "Wei Zuo",
+          "Walid Krichene",
+          "Tong Zhang"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-24",
+        "url": "https://arxiv.org/abs/2611.33111v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 20,
+        "ai_maturity": 5,
+        "monetisation_potential": 15,
+        "total_score": 40,
+        "summary": "Speculative decoding speeds up LLM inference by letting a lightweight draft model propose tokens, but it stalls when the draft\u2019s probability distribution mismatches the main model. The authors calibrated the draft with simple temperature scaling, boosting token acceptance by about 10% and improving throughput. This directly benefits any infra team running LLM services.",
+        "it_breakdown": "If you manage LLM inference, 1) apply a temperature scaling step to your draft model before serving; 2) monitor acceptance rates and adjust the temperature until you hit a ~10% lift; 3) measure throughput to confirm the expected speed\u2011up.",
+        "monetisation": "",
+        "relevance_tag": "LLM serving optimisation",
+        "author_built_product": false,
+        "score_reasoning": "The paper discusses speculative decoding, a technique directly applicable to LLM serving infrastructure, offering measurable speedup that IT engineers could deploy. However, the work appears to be at a research stage with no released code or demonstrated production deployment, limiting immediate usability. The calibration methods proposed are actionable and could be adopted within 90 days, providing tangible monetisation potential for engineers managing LLM workloads.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": false
+      },
+      {
+        "id": "http://arxiv.org/abs/2611.33080v1",
+        "title": "Shifter Quantization: Compact Representations for Native Integer Computation",
+        "abstract": "Groupwise quantization is used in LLM quantization to improve accuracy at low bit widths, but grouping weights keeps standard integer MMA from spanning the full dot product for efficient GPU inference. We develop a new quantization method, Shifter Quantization (SQ), that reconstructs native-width integer operands by appending and shifting shared bits. To further extend the efficiency, we develop a special variant of SQ, Shifter Integer (SHI), to use INT4 kernels. We show that SQ and SHI formats perform better than standard groupwise quantization in quality, as measured by projection error and KL divergence, and in inference speed, as measured during decoding and prefill. For low precision like 2-bit quantization, SQ2 and SHI2 achieve 2.71-3.77x the 4,096-token prefill throughput of llama.cpp on a Q2_K checkpoint and reduce WikiText-2 KL by 6.6-7.8%. For mid precision like 4-bit quantization, SQ4 achieves 1.43-2.47x the prefill throughput of NInfer's groupwise-integer baselines across the tested models and prompt lengths, with 24-40% lower KL than the NInfer baselines. For high precision like 8-bit quantization, SQ8 achieves 27.4% higher batch-one prefill throughput and 72.7% lower KL than vLLM's online FP8.",
+        "authors": [
+          "Yufeng Huang"
+        ],
+        "institution": "Academic Institution",
+        "pub_date": "2026-11-24",
+        "url": "https://arxiv.org/abs/2611.33080v1",
+        "recency_score": 25,
+        "source_type": "arxiv",
+        "real_world_impact": 20,
+        "ai_maturity": 5,
+        "monetisation_potential": 15,
+        "total_score": 40,
+        "summary": "Shifter Quantization (SQ) and its SHI variant let you run low\u2011bit integer matrix\u2011multiply (up to INT4) for LLMs with less accuracy loss and faster inference, especially during prefill. They reconstruct full\u2011width operands by appending shared bits, yielding up to 3.8\u00d7 faster 2\u2011bit prefill and 27% faster 8\u2011bit batch throughput while cutting KL divergence significantly. This can improve your GPU utilisation and reduce compute costs for large\u2011scale LLM inference.",
+        "it_breakdown": "If you manage GPU inference for LLMs, 1) benchmark your current quantisation against SQ/SHI for your model size, 2) switch to SQ\u2011based INT4 kernels for 4\u2011bit workloads, 3) use SQ2 for 2\u2011bit when you need very fast prefill throughput.",
+        "monetisation": "",
+        "relevance_tag": "LLM_inference_optimisation",
+        "author_built_product": false,
+        "score_reasoning": "The paper presents a practical quantization technique that could directly improve inference speed for LLM deployments on GPUs, relevant to IT engineers managing AI workloads. However, the abstract does not mention released code or a production-ready system, indicating limited maturity. The method is actionable for engineers and could be adopted or sold as a performance optimization service within a few weeks, justifying a moderate monetisation score.",
+        "gemini_eval_status": "pending",
+        "eval_verdict": "pass",
+        "eval_flagged": false,
+        "low_signal": false
+      }
+    ]
+  },
+  {
     "date": "2026-11-25",
     "total": 1,
     "case_studies": [
