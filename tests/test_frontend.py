@@ -202,7 +202,7 @@ def test_lead_story_grid(site):
 def test_retired_pages_redirect(name):
     page = (ROOT / "site" / name).read_text()
     assert '<meta http-equiv="refresh" content="0; url=/">' in page and '<a href="/">' in page
-    assert "background: #0f1117" in page and "Agent Builder Daily" not in page
+    assert "background: #000000" in page and "Agent Builder Daily" not in page
     assert len(page) < 2000
 
 
@@ -253,7 +253,7 @@ def test_https_source_link_is_noopener():
 def test_breakdown_page_uses_f2_tokens():
     page = breakdown()
     css = page.split("<style>")[1].split("</style>")[0]
-    assert "--text-muted:#8592a8" in css and "--accent:#00ff88" in css and "#6366f1" not in css
+    assert "--c-text-muted:#a3a3a3" in css and "--c-accent:#10b981" in css and "#6366f1" not in css
     assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
     assert ".brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap)" in css
     assert "--tap:44px" in css and "background-clip" not in css and not re.search(r"border-left:\s*[2-9]px", css)
@@ -262,7 +262,7 @@ def test_breakdown_page_uses_f2_tokens():
 
 def test_old_page_restyled_keeps_its_text():
     new = gb.restyle_page(OLD_PAGE)
-    assert new and "--text-muted:#8592a8" in new and "#6366f1" not in new and 'class="badge"' not in new
+    assert new and "--c-text-muted:#a3a3a3" in new and "#6366f1" not in new and 'class="badge"' not in new
     assert '<h1 class="page-title">Edge AI &amp; robots</h1>' in new
     assert '<p class="meta-line">Ars Technica · 2026-10-01 · Generated 01 Oct 2026, 09:00</p>' in new
     assert '<p>Latency (&lt;10 ms) and throughput (&gt;1 TB/day).</p><p>Second para.</p>' in new
@@ -282,7 +282,7 @@ def test_restyle_leaves_unknown_pages_alone(tmp_path):
 def test_every_committed_breakdown_page_has_the_new_style():
     pages = sorted((ROOT / "site" / "breakdowns").glob("*.html"))
     assert pages
-    stale = [p.name for p in pages if "--text-muted:#8592a8" not in p.read_text() or "#6366f1" in p.read_text()]
+    stale = [p.name for p in pages if "--c-text-muted:#a3a3a3" not in p.read_text() or "#6366f1" in p.read_text()]
     assert stale == []
 
 
