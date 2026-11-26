@@ -43,6 +43,17 @@ jobs:
           PYTHONIOENCODING: utf-8
         run: python orchestrator.py
 
+      - name: Generate AI images
+        if: vars.IMAGE_GEN_ENABLED == 'true'
+        continue-on-error: true
+        env:
+          IMAGE_GEN_ENABLED: ${{ vars.IMAGE_GEN_ENABLED }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          PYTHONIOENCODING: utf-8
+        run: python generate_images.py && python generate_html.py
+
       - name: Commit and push
         run: |
           git config user.email "ahmed94farah@gmail.com"
