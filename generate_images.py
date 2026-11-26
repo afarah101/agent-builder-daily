@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""AI editorial images for the top Scout Daily cards. Off unless IMAGE_GEN_ENABLED is "true".
+"""AI editorial images for the top Daily Edge AI cards. Off unless IMAGE_GEN_ENABLED is "true".
 
 For the lead case study and the lead news item (one per tab), Groq writes a scene description from the title and summary,
 and FLUX.1-schnell (Apache-2.0) on Cloudflare Workers AI draws it in one house style. Each image is saved as site/images/<slug>.webp;

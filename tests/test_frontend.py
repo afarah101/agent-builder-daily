@@ -208,9 +208,9 @@ def test_retired_pages_redirect(name):
 
 # ---------- F2b: every breakdown field escaped, https-only source link, old pages restyled ----------
 
-OLD_PAGE = """<!DOCTYPE html><html lang="en"><head><title>Old - IT Breakdown - Scout Daily</title><style>
+OLD_PAGE = """<!DOCTYPE html><html lang="en"><head><title>Old - IT Breakdown - Daily Edge AI</title><style>
 :root{--accent:#6366f1;--text-muted:#64748b}.badge{font-size:10px}</style></head><body>
-<div class="topbar"><a href="../index.html" class="brand-link">Scout Daily</a><a href="../index.html" class="back-btn">← Back to feed</a></div>
+<div class="topbar"><a href="../index.html" class="brand-link">Daily Edge AI</a><a href="../index.html" class="back-btn">← Back to feed</a></div>
 <div class="page-wrap">
   <div class="badge">IT Engineer Breakdown</div>
   <h1 class="page-title">Edge AI & robots</h1>
@@ -223,7 +223,7 @@ OLD_PAGE = """<!DOCTYPE html><html lang="en"><head><title>Old - IT Breakdown - S
   <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Step one
    - Step two</div></div>
 <div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">Data residency.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 01 Oct 2026, 09:00</div>
+  <div class="generated-note">AI-generated breakdown · Daily Edge AI · 01 Oct 2026, 09:00</div>
 </div></body></html>"""
 
 
@@ -269,7 +269,7 @@ def test_old_page_restyled_keeps_its_text():
     assert '<h3 class="guide-label">Evaluate</h3><div class="guide-text">- Step one\n   - Step two</div>' in new
     assert '<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3>' in new
     assert 'href="https://example.test/story?a=1&amp;b=2" target="_blank" rel="noopener noreferrer"' in new
-    assert "AI-generated breakdown · Scout Daily · 01 Oct 2026, 09:00" in new
+    assert re.search(r"AI-generated breakdown · [^<]+ · 01 Oct 2026, 09:00", new)  # name comes from generate_breakdowns.py
 
 
 def test_restyle_leaves_unknown_pages_alone(tmp_path):
@@ -663,7 +663,7 @@ def test_name_is_daily_edge_ai_and_no_counters(site):
     assert '<meta property="og:title" content="Daily Edge AI' in page and 'og:site_name" content="Daily Edge AI"' in page
     assert '<span class="brand-name">Daily Edge <span class="accent-word">AI</span></span>' in page
     assert '<p class="hero-title">AI news and real case studies, every day.</p>' in page
-    assert "scout daily" not in page.lower() and "scored" not in page
+    assert not re.search(r"scout\s+daily", page, re.I) and "scored" not in page
     assert "stat-num" not in page and "News Items</div>" not in page and "Case Studies</div>" not in page
     assert not re.search(r"<title>Scout —|Scout · LangGraph", page)
 
@@ -691,7 +691,7 @@ def test_tap_targets_are_44px_at_every_width(site):
 
 def test_privacy_page_uses_the_new_name():
     page = (ROOT / "site" / "privacy.html").read_text()
-    assert "<title>Privacy: Daily Edge AI</title>" in page and "scout daily" not in page.lower()
+    assert "<title>Privacy: Daily Edge AI</title>" in page and not re.search(r"scout\s+daily", page, re.I)
     assert '<link rel="icon" href="favicon.svg"' in page and "min-height: 44px" in page
 
 
