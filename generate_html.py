@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import os, json, html as html_lib
+import os, re, json, html as html_lib
+from urllib.parse import urlparse
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -83,6 +84,80 @@ def by_score(item, field):
     score = item.get(field)
     return (score if isinstance(score, (int, float)) else 0, str(item.get("pub_date") or ""))
 
+# ---------- Honest content, checked at render time ----------
+YEAR_RE = re.compile(r"\b(20\d\d)\b")
+SENTENCE_END = re.compile(r"[.!?][\"'\u2019\u201d)\]]*(?=\s|$)")
+
+
+def domain_of(url):
+    host = urlparse(https_url(url) or "").hostname or ""
+    return host[4:] if host.startswith("www.") else host
+
+
+def source_matches(source, url):
+    """True when the source name and the URL's domain name the same outlet ("The Verge" ~ theverge.com)."""
+    name = re.sub(r"[^a-z0-9]", "", str(source or "").lower())
+    host = domain_of(url)
+    core = re.sub(r"[^a-z0-9]", "", host.rsplit(".", 2)[-2] if host.count(".") >= 1 else host)
+    return bool(name and core) and (core in name or name in core)
+
+
+def full_sentences(text):
+    """The text cut after its last full sentence; never ends on an ellipsis."""
+    text = str(text or "").strip()
+    if not text:
+        return text
+    trimmed = re.sub(r"\s*(\u2026|\.\.\.)\s*$", "", text)
+    if trimmed == text and SENTENCE_END.search(text[-3:] + " "):
+        return text
+    ends = [m.end() for m in SENTENCE_END.finditer(trimmed)]
+    return trimmed[:ends[-1]].strip() if ends else trimmed.rstrip(" ,;:-")
+
+
+DATE_FORMATS = ("%Y-%m-%d", "%d %b %Y", "%d %B %Y", "%a, %d %b %Y", "%b %d, %Y")
+
+
+def parse_date(value):
+    """The item's date as YYYY-MM-DD, or "" when no known format matches (an unknown date is never hidden)."""
+    text = str(value or "").strip()
+    for fmt in DATE_FORMATS:
+        for cut in (len(text), 10, 11, 16):
+            try:
+                return datetime.strptime(text[:cut].strip(), fmt).strftime("%Y-%m-%d")
+            except ValueError:
+                pass
+    return ""
+
+
+def honest(items, now, changes, kind):
+    """Items fit to show: no future date, no summary naming a later year; summaries end on a full sentence;
+    a news source that does not match its URL shows the domain. Every change is appended to changes."""
+    today, year = now.strftime("%Y-%m-%d"), now.year
+    kept = []
+    for item in items:
+        title = str(item.get("title", ""))
+        pub = parse_date(item.get("pub_date"))
+        if pub and pub > today:
+            changes.append((kind, title, "hidden", f"date {pub} is in the future"))
+            continue
+        later = [y for y in YEAR_RE.findall(str(item.get("summary") or "")) if int(y) > year]
+        if later:
+            changes.append((kind, title, "hidden", f"summary names {later[0]}, after {year}"))
+            continue
+        item = dict(item)
+        summary = full_sentences(item.get("summary"))
+        if summary != str(item.get("summary") or "").strip():
+            changes.append((kind, title, "summary cut", "cut to the last full sentence"))
+            item["summary"] = summary
+        if kind == "news" and item.get("source") and not source_matches(item["source"], item.get("url")):
+            dom = domain_of(item.get("url"))
+            if dom:
+                changes.append((kind, title, "source changed", f"{item['source']!r} does not match {dom}"))
+                item["source"] = dom
+        kept.append(item)
+    return kept
+
+
 def relevance_dot(signal):
     labels = {"high": "High", "medium": "Medium", "low": "Low"}
     word = labels.get(signal, esc(signal).capitalize())
@@ -102,8 +177,8 @@ def score_ring(score, max_score=75):
     pct = int((score / max_score) * 100)
     level = "high" if pct >= 70 else "mid" if pct >= 40 else "low"
     legend = "AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact."
-    return (f'<div class="score-ring ring-{level}" style="--pct:{pct};" title="{legend}" role="img" '
-            f'aria-label="Scout score {score} of {max_score}"><span>{score}</span></div>')
+    return (f'<span class="score-ring score-{level}" style="--pct:{pct};" title="{legend}" '
+            f'aria-label="Scout score {score} of {max_score}">{score}/{max_score}</span>')
 
 def tier_label(tier):
     labels = {"ai_labs": "AI Lab", "consulting": "Consulting", "news": "Press", "universities": "Academic"}
@@ -114,7 +189,7 @@ def eval_status(cs):
     return next((s for s in (cs.get("eval_verdict"), cs.get("gemini_eval_status")) if s in ("pass", "fail")), "pending")
 
 def status_badge(status):
-    level, text = {"pass": ("pass", "Verified"), "fail": ("fail", "Flagged")}.get(status, ("pending", "Evaluating"))
+    level, text = {"pass": ("pass", "AI-reviewed"), "fail": ("fail", "Flagged")}.get(status, ("pending", "Evaluating"))
     return f'<span class="status-badge status-{level}">{text}</span>'
 
 NOT_APPLICABLE = ("not applicable", "not directly applicable")
@@ -142,7 +217,7 @@ def render_case_studies(data, slug_map):
         return "<div class='empty-state'><p>No case studies available yet.</p></div>"
     cs_slugs = slug_map.get("case_studies", {})
     cards = []
-    for cs in data["case_studies"]:
+    for i, cs in enumerate(data["case_studies"]):
         authors = esc(", ".join(cs.get("authors", [])) or "Unknown authors")
         pub_raw = cs.get("pub_date", "")[:10]
         try:
@@ -165,11 +240,11 @@ def render_case_studies(data, slug_map):
         meta_html = '<span class="sep" aria-hidden="true">·</span>'.join(f"<span>{m}</span>" for m in meta)
 
         slug = cs_slugs.get(cs.get("title", "Untitled"))  # slug_map is keyed by the raw title
-        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
+        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">Read the breakdown →</a>' if slug else ""
         total = cs.get("total_score", 0)
 
         cards.append(f"""<article class="card cs-card">
-  {image_figure(cs.get("title", "Untitled"))}<div class="card-header">
+  {image_figure(cs.get("title", "Untitled")) if i == 0 else ""}<div class="card-header">
     <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}{status_badge(eval_status(cs))}</div>
     {score_ring(total)}
   </div>
@@ -186,17 +261,7 @@ def render_case_studies(data, slug_map):
       <p class="trace-reasoning">{esc(cs.get('score_reasoning',''))}</p>
     </div>
   </details>
-  <div class="card-footer">
-    {breakdown_link}
-    <button type="button" class="md-export-btn"
-      data-title="{title}"
-      data-summary="{esc(cs.get('summary',''))}"
-      data-it="{esc(cs.get('it_breakdown',''))}"
-      data-monetisation="{esc(cs.get('monetisation',''))}"
-      data-reasoning="{esc(cs.get('score_reasoning',''))}"
-      data-score="{esc(total)}"
-      data-url="{url}">Copy as Markdown</button>
-  </div>
+  {f'<div class="card-footer">{breakdown_link}</div>' if breakdown_link else ""}
 </article>""")
     return "\n".join(cards)
 
@@ -205,17 +270,17 @@ def render_news(data, slug_map):
         return "<div class='empty-state'><p>No news available yet.</p></div>"
     news_slugs = slug_map.get("news", {})
     cards = []
-    for item in data["news"]:
+    for i, item in enumerate(data["news"]):
         url = esc(safe_url(item.get("url", "#")))
         title = esc(item.get("title", ""))
 
         slug = news_slugs.get(item.get("title", ""))  # slug_map is keyed by the raw title
-        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">IT Breakdown</a>' if slug else ""
+        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">Read the breakdown →</a>' if slug else ""
         meta = [esc(v) for v in (item.get('source', ''), item.get('pub_date', '')) if v]
         meta_html = '<span class="sep" aria-hidden="true">•</span>'.join(f"<span>{m}</span>" for m in meta)
 
         cards.append(f"""<article class="card news-card">
-  {image_figure(item.get("title", ""))}<div class="card-header">
+  {image_figure(item.get("title", "")) if i == 0 else ""}<div class="card-header">
     <div class="card-tags">
       {tier_label(item.get("tier", "news"))}
       {tag_pill(item.get("category", "Other"))}
@@ -321,17 +386,20 @@ def generate_rss(cs_data, news_data):
     print("RSS feed generated -> site/feed.xml")
 
 
-def generate_email_capture():
-    return """
-  <div class="email-banner">
-    <div class="email-inner">
-      <p class="email-title" id="email-title">Get Scout Daily in your inbox</p>
-      <form class="email-form" aria-labelledby="email-title">
-        <label class="visually-hidden" for="email-input">Email address</label>
-        <input type="email" id="email-input" class="email-input" placeholder="your@email.com" autocomplete="email" required />
+def generate_email_capture(n=""):
+    """Sign-up block. n="" is the hero form that js/subscribe.js drives; n="-2" is the page-end copy, which the
+    page script forwards to the first form so subscribe.js stays unchanged."""
+    return f"""
+  <div class="email-banner{' email-banner-end' if n else ''}">
+    <div class="email-inner{n}">
+      <p class="email-title" id="email-title{n}">Get Scout Daily in your inbox</p>
+      <form class="email-form{n}" aria-labelledby="email-title{n}">
+        <label class="visually-hidden" for="email-input{n}">Email address</label>
+        <input type="email" id="email-input{n}" class="email-input" placeholder="your@email.com" autocomplete="email" required />
         <button type="submit" class="email-btn">Subscribe</button>
       </form>
-      <span class="email-confirm" id="email-confirm" role="status"></span>
+      <span class="email-confirm" id="email-confirm{n}" role="status"></span>
+      <a class="privacy-link" href="privacy.html">How we use your email</a>
     </div>
   </div>"""
 
@@ -378,6 +446,8 @@ def generate_html():
         print(f"Fallback: Loaded {len(active_cs)} case studies from archive.")
     active_cs = [cs for cs in active_cs if in_window(cs, cutoff)]
     active_cs.sort(key=lambda x: by_score(x, "total_score"), reverse=True)
+    changes = []  # what the honesty checks hid or changed, printed at the end
+    active_cs = honest(active_cs, now, changes, "case study")
     cs_data = {"case_studies": active_cs}
 
     # --- News Archiving & Loading ---
@@ -417,6 +487,7 @@ def generate_html():
     if not active_headlines and news_archive:
         active_headlines = news_archive[0].get("headlines", [])
     active_headlines.sort(key=lambda x: by_score(x, "relevance_score"), reverse=True)
+    active_news = honest(active_news, now, changes, "news")
     news_data = {"news": active_news}
 
     # --- Metadata ---
@@ -426,8 +497,6 @@ def generate_html():
     if hook_path.exists():
         with open(hook_path) as f:
             daily_hook = f.read().strip()
-    cs_count = len(active_cs)
-    news_count = len(active_news)
     generated_at = datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
 
     html = """<!DOCTYPE html>
@@ -435,11 +504,22 @@ def generate_html():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scout — AI Intelligence Feed</title>
+  <title>Scout Daily: AI agent case studies and news</title>
+  <meta name="description" content="AI agent case studies and news for IT engineers, scored every day.">
+  <meta property="og:site_name" content="Scout Daily">
+  <meta property="og:title" content="Scout Daily: AI agent case studies and news">
+  <meta property="og:description" content="AI agent case studies and news for IT engineers, scored every day.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agent-builder-daily.vercel.app/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&family=Geist+Mono:wght@400;700&display=swap">
   <style>
     :root {
       /* Tokens from scout-daily-tokens.css (24 Nov 2026) */
-      --font: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+      --font: "Geist", ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --ls-head: -0.02em;
 
       --fs-hero: 72px;  --lh-hero: 1.08;  --ls-hero: -1.8px;
       --fs-h2: 48px;    --lh-h2: 1;       --ls-h2: -1.2px;
@@ -481,10 +561,6 @@ def generate_html():
       --fs-hero-mobile: 44px;
       --tap: 44px;
     }
-
-    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
-    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -553,33 +629,28 @@ def generate_html():
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    .header-stats { display: flex; gap: 32px; }
+    /* Headlines: Geist 700, tight tracking */
+    .brand, .hero-title, .card-title, .email-title { font-weight: 700; letter-spacing: var(--ls-head); }
 
-    .stat { text-align: right; }
-
-    .stat-num {
-      font-size: var(--fs-h3);
-      font-weight: 700;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
+    /* Scores, tags and dates: Geist Mono */
+    .score-ring, .score-num, .tag-pill, .status-badge, .tier-label, .pub-date, .archive-date, .archive-count, .trace-val, .updated,
+    .news-card .card-meta > span:last-child:not(:first-child) {
+      font-family: var(--font-mono);
     }
 
-    .stat-label, .tag-pill, .status-badge, .signal-title {
+    .tag-pill, .status-badge, .signal-title {
       font-size: var(--fs-label);
       line-height: var(--lh-label);
       letter-spacing: var(--ls-label);
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
     }
-
-    .stat-label { color: var(--c-on-dark-muted); margin-top: 4px; }
 
     .hero-title {
       max-width: 900px;
       margin: var(--section-pad) 0 16px;
       font-size: var(--fs-hero);
       line-height: var(--lh-hero);
-      letter-spacing: var(--ls-hero);
       font-weight: 700;
       text-wrap: balance;
     }
@@ -596,6 +667,7 @@ def generate_html():
 
     /* Email capture, inside the hero */
     .email-banner {
+      color: var(--c-bg);  /* light text on the dark block, in the hero and at the page end */
       max-width: var(--reading-max);
       background: var(--c-surface-dark-2);
       border: 1px solid var(--c-border-dark);
@@ -605,7 +677,7 @@ def generate_html():
 
     .email-inner { display: flex; flex-direction: column; gap: 12px; }
 
-    .email-title { font-size: var(--fs-body); font-weight: 600; }
+    .email-title { font-size: var(--fs-body); font-weight: 700; }
 
     .email-form { display: flex; gap: var(--gap); }
 
@@ -627,12 +699,12 @@ def generate_html():
     .email-confirm { font-size: var(--fs-small); color: var(--c-on-dark-muted); }
 
     /* Buttons: flat, no shadow */
-    .email-btn, .breakdown-link, .md-export-btn {
+    .email-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font: inherit;
-      font-weight: 600;
+      font-weight: 700;
       line-height: 1;
       border: 1px solid transparent;
       border-radius: var(--radius);
@@ -645,12 +717,21 @@ def generate_html():
     .email-btn { padding: 10px 20px; font-size: var(--fs-body); background: var(--c-bg); color: var(--c-text); }
     .email-btn:hover { background: var(--c-border); }
 
-    .breakdown-link, .md-export-btn { padding: 8px 14px; font-size: var(--fs-small); }
-    .breakdown-link { background: var(--c-surface-dark); color: var(--c-bg); }
-    .breakdown-link:hover { background: var(--c-border-dark); }
-    .md-export-btn { background: var(--c-bg); color: var(--c-text); border-color: var(--c-border); }
-    .md-export-btn:hover { border-color: var(--c-text); }
-    .md-export-btn.copied { color: var(--c-good); border-color: var(--c-good); }
+    /* Text links, never filled */
+    .breakdown-link, .privacy-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: var(--c-text-muted);
+    }
+    .breakdown-link:hover { text-decoration-color: var(--c-text); }
+    .privacy-link { align-self: flex-start; font-weight: 400; color: var(--c-on-dark-muted); }
+    .email-banner-end { margin: 48px auto 0; }
 
     /* White panel: overlaps the hero bottom by 64px */
     .content {
@@ -679,19 +760,23 @@ def generate_html():
     /* Tabs */
     .tabs {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      min-width: 0;
+      max-width: 100%;
       gap: 4px;
       padding: 4px;
       margin-bottom: 8px;
-      border: 1px solid var(--c-border);
-      border-radius: var(--radius-pill);
     }
+
+    .tabs::-webkit-scrollbar { display: none; }
 
     .tab {
       padding: 8px 16px;
       font: inherit;
       font-size: var(--fs-small);
-      font-weight: 600;
+      font-weight: 700;
       color: var(--c-text-muted);
       cursor: pointer;
       border: none;
@@ -702,7 +787,7 @@ def generate_html():
     }
 
     .tab:hover { color: var(--c-text); }
-    .tab.active { color: var(--c-bg); background: var(--c-surface-dark); }
+    .tab.active { color: var(--c-text); box-shadow: inset 0 -2px 0 var(--c-text); border-radius: 0; }
 
     .search {
       background: var(--c-bg);
@@ -766,13 +851,15 @@ def generate_html():
 
     .card-header {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      flex-wrap: wrap;
+      gap: 8px 12px;
       margin-bottom: 14px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: wrap; flex-grow: 1; }
+    .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
+    .tag-pill, .status-badge, .tier-label { white-space: nowrap; flex-shrink: 0; }
 
     .tag-pill, .status-badge { padding: 4px 8px; border-radius: var(--radius-sm); }
 
@@ -785,50 +872,21 @@ def generate_html():
     .tier-label, .source-name {
       font-size: var(--fs-label);
       line-height: var(--lh-label);
-      font-weight: 600;
+      font-weight: 700;
       color: var(--c-text-muted);
     }
 
-    /* Score ring: out of 75 */
-    .score-ring {
-      --ring: var(--c-bad);
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-pill);
-      background: conic-gradient(var(--ring) calc(var(--pct) * 1%), var(--c-border) 0);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .ring-high { --ring: var(--c-good); }
-    .ring-mid { --ring: var(--c-warn); }
-
-    .score-ring::before {
-      content: '';
-      position: absolute;
-      width: 38px;
-      height: 38px;
-      background: var(--c-bg);
-      border-radius: var(--radius-pill);
-    }
-
-    .score-ring span {
-      position: relative;
-      font-size: var(--fs-label);
-      font-weight: 700;
-      color: var(--c-text);
-      font-variant-numeric: tabular-nums;
-    }
+    /* Score: "40/75" as text, coloured by level (all 4.5:1 or better on white) */
+    .score-ring { font-size: var(--fs-small); font-weight: 700; white-space: nowrap; color: var(--c-bad); font-variant-numeric: tabular-nums; }
+    .score-high { color: var(--c-good); }
+    .score-mid { color: var(--c-warn); }
 
     /* News relevance: a word beside the dot, never colour alone */
     .news-score-area {
       display: flex;
       align-items: center;
       gap: 6px;
-      flex-shrink: 0;
+      min-width: 0;
     }
 
     .rel-dot {
@@ -855,6 +913,7 @@ def generate_html():
     .card-title {
       font-size: var(--fs-lead);
       font-weight: 700;
+      letter-spacing: var(--ls-head);
       line-height: var(--lh-h3);
       margin-bottom: 12px;
       overflow-wrap: anywhere;
@@ -875,7 +934,7 @@ def generate_html():
       color: var(--c-text-muted);
     }
 
-    .card-meta > span:first-child { color: var(--c-text); font-weight: 600; }
+    .card-meta > span:first-child { color: var(--c-text); font-weight: 700; }
     .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
     .sep { color: var(--c-text-muted); }
 
@@ -941,7 +1000,7 @@ def generate_html():
     .trace-val {
       font-size: var(--fs-label);
       color: var(--c-text);
-      font-weight: 600;
+      font-weight: 700;
       font-variant-numeric: tabular-nums;
     }
 
@@ -991,7 +1050,7 @@ def generate_html():
     }
 
     .archive-date, .archive-count { font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
-    .archive-date { color: var(--c-text); font-weight: 600; }
+    .archive-date { color: var(--c-text); font-weight: 700; }
     .archive-count { color: var(--c-text-muted); }
 
     .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -1025,28 +1084,43 @@ def generate_html():
     }
 
     footer span { font-size: var(--fs-label); color: var(--c-text-muted); }
+    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); }
 
     @media (max-width: 700px) {
-      .hero { padding-bottom: calc(64px + 48px); }
+      .hero { padding: 12px 0 calc(32px + 12px); }
       .header-inner { padding: 0 16px; }
-      .header-stats { gap: 20px; }
-      .hero-title { margin-top: 48px; }
+      .hero-title { margin: 16px 0 8px; }
+      .updated { margin-bottom: 16px; }
+      .email-banner { padding: 16px; }
+      .email-inner { gap: 8px; }
+      .content { margin-top: -32px; }
       .email-input { min-height: var(--tap); }
       .email-btn { min-height: var(--tap); padding: 0 18px; }
       .content { width: 100%; padding: 24px 16px 48px; }
       .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); position: static; }
-      .tab { flex: 1 1 40%; min-height: var(--tap); padding: 10px 12px; }
+      .tab { flex: 0 0 auto; min-height: var(--tap); padding: 10px 12px; }
       .search { width: 100%; min-height: var(--tap); font-size: var(--fs-body); }
       .card { padding: 18px; }
       .card-title { font-size: var(--fs-lead); }
       .card-title a { display: block; min-height: var(--tap); }
-      .trace-toggle, .breakdown-link, .md-export-btn { min-height: var(--tap); }
+      .trace-toggle { min-height: var(--tap); }
       .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
       .archive-title { display: flex; align-items: center; min-height: var(--tap); }
     }
 
-    @media (max-width: 639px) {
-      .hero-title { font-size: var(--fs-hero-mobile); }
+    @media (max-width: 640px) {
+      .hero-title { font-size: 30px; line-height: 1.15; }
+      /* Phone cards: tag, title, source • date, 2-line summary, one link. Desktop keeps the full text. */
+      .card .insight, .card .signal-points, .card .agent-trace, .card .status-badge, .card .tier-label { display: none; }
+      .cards-grid > .card .card-summary {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+      }
+      .card-meta { margin-bottom: 8px; }
+      .card-footer { margin-top: 8px; padding-top: 4px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1063,16 +1137,6 @@ def generate_html():
       <h1 class="brand">
         <span class="brand-name">Scout Daily</span><span class="brand-cursor" aria-hidden="true"></span>
       </h1>
-      <div class="header-stats">
-        <div class="stat">
-          <div class="stat-num">""" + str(cs_count) + """</div>
-          <div class="stat-label">Case Studies</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">""" + str(news_count) + """</div>
-          <div class="stat-label">News Items</div>
-        </div>
-      </div>
     </div>
     <p class="hero-title">AI agent case studies and news, <span class="accent-word">scored every day</span>.</p>
     <p class="updated">Updated """ + generated_at + """</p>
@@ -1112,10 +1176,11 @@ def generate_html():
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list">""" + render_archive(news_archive, 'news') + """</div>
   </div>
+""" + generate_email_capture("-2") + """
 </main>
 
 <footer>
-  <span>Scout · LangGraph + Groq + arXiv</span>
+  <span>Scout Daily · LangGraph + Groq + arXiv · <a href="privacy.html">Privacy</a></span>
   <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
 </footer>
 
@@ -1125,7 +1190,16 @@ def generate_html():
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.getAttribute('aria-controls'), t)));
   document.getElementById('scout-search').addEventListener('input', e => filterCards(e.target.value));
   document.querySelector('.email-form').addEventListener('submit', e => submitEmail(e));
-  document.addEventListener('click', e => { const b = e.target.closest('.md-export-btn'); if (b) copyMarkdown(b); });
+  // The page-end form reuses submitEmail: copy its email into the hero form, submit, and mirror the status
+  const endForm = document.querySelector('.email-form-2');
+  if (endForm) endForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const top = document.getElementById('email-input'), end = document.getElementById('email-input-2');
+    const status = document.getElementById('email-confirm'), endStatus = document.getElementById('email-confirm-2');
+    top.value = end.value;
+    endStatus.textContent = 'Submitting…';
+    Promise.resolve(submitEmail(e)).then(() => { endStatus.textContent = status.textContent; if (!top.value) end.value = ''; });
+  });
 
   function showTab(id, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -1147,42 +1221,6 @@ def generate_html():
     });
   }
 
-  function copyMarkdown(btn) {
-    const title = btn.dataset.title;
-    const summary = btn.dataset.summary;
-    const it = btn.dataset.it;
-    const monetisation = btn.dataset.monetisation;
-    const reasoning = btn.dataset.reasoning;
-    const score = btn.dataset.score;
-    const url = btn.dataset.url;
-    const md = [
-      "# " + title,
-      "",
-      "**Score:** " + score + "/75",
-      "",
-      "## Summary",
-      summary,
-      "",
-      "## IT Engineer Breakdown",
-      it,
-      "",
-      "## Business Opportunity",
-      monetisation,
-      "",
-      "## Agent Reasoning",
-      reasoning,
-      "",
-      "**Source:** " + url,
-    ].join("\\n");
-    navigator.clipboard.writeText(md).then(() => {
-      btn.classList.add("copied");
-      btn.textContent = "Copied";
-      setTimeout(() => {
-        btn.classList.remove("copied");
-        btn.textContent = "Copy as Markdown";
-      }, 2000);
-    });
-  }
 </script>
 </body>
 </html>"""
@@ -1199,6 +1237,8 @@ def generate_html():
             print(f"Wrote -> {dst} (try_this removed)")
     if os.path.exists("site/groq_token_stats.json"):
         print("groq_token_stats.json already in site/ — no copy needed")
+    for kind, title, action, why in changes:
+        print(f"Content check: {kind} | {action} | {why} | {title}")
     print("HTML generated -> " + OUTPUT_FILE)
 
 if __name__ == "__main__":
