@@ -158,12 +158,6 @@ def honest(items, now, changes, kind):
     return kept
 
 
-def relevance_dot(signal):
-    labels = {"high": "High", "medium": "Medium", "low": "Low"}
-    word = labels.get(signal, esc(signal).capitalize())
-    level = signal if signal in labels else "none"
-    return f'<span class="rel-dot rel-{level}" aria-hidden="true"></span><span class="rel-word">{word} relevance</span>'
-
 def tag_pill(tag):
     tag = str(tag or "Other")
     if "_" in tag:  # raw snake_case from the scorer
@@ -171,7 +165,8 @@ def tag_pill(tag):
     return f'<span class="tag-pill">{esc(tag)}</span>'
 
 def score_ring(score, max_score=75):
-    """Ring out of 75. A legacy score above 75 (old 0-100 scale) gets no ring rather than a ring past full."""
+    """Not shown on the page (scores are hidden); kept because tests/test_phase0e.py checks the 0-75 scale.
+    A legacy score above 75 (old 0-100 scale) gets no ring rather than a ring past full."""
     if not isinstance(score, (int, float)) or not 0 <= score <= max_score:
         return ""
     pct = int((score / max_score) * 100)
@@ -187,10 +182,6 @@ def tier_label(tier):
 def eval_status(cs):
     """eval_verdict (the judge) first, then the Gemini field; anything not pass/fail is still pending."""
     return next((s for s in (cs.get("eval_verdict"), cs.get("gemini_eval_status")) if s in ("pass", "fail")), "pending")
-
-def status_badge(status):
-    level, text = {"pass": ("pass", "AI-reviewed"), "fail": ("fail", "Flagged")}.get(status, ("pending", "Evaluating"))
-    return f'<span class="status-badge status-{level}">{text}</span>'
 
 NOT_APPLICABLE = ("not applicable", "not directly applicable")
 
@@ -241,26 +232,15 @@ def render_case_studies(data, slug_map):
 
         slug = cs_slugs.get(cs.get("title", "Untitled"))  # slug_map is keyed by the raw title
         breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">Read the breakdown →</a>' if slug else ""
-        total = cs.get("total_score", 0)
 
         cards.append(f"""<article class="card cs-card">
   {image_figure(cs.get("title", "Untitled")) if i == 0 else ""}<div class="card-header">
-    <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}{status_badge(eval_status(cs))}</div>
-    {score_ring(total)}
+    <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}</div>
   </div>
   <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
   <div class="card-meta">{meta_html}</div>
   <p class="card-summary">{esc(cs.get('summary',''))}</p>
   {insight_html("How to apply:", cs.get('it_breakdown','') or cs.get('how_to_apply',''))}
-  <details class="agent-trace">
-    <summary class="trace-toggle">View Technical Reasoning</summary>
-    <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">{esc(cs.get('real_world_impact',0))}/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">{esc(cs.get('ai_maturity',0))}/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">{esc(cs.get('monetisation_potential',0))}/25</span></div>
-      <p class="trace-reasoning">{esc(cs.get('score_reasoning',''))}</p>
-    </div>
-  </details>
   {f'<div class="card-footer">{breakdown_link}</div>' if breakdown_link else ""}
 </article>""")
     return "\n".join(cards)
@@ -284,10 +264,6 @@ def render_news(data, slug_map):
     <div class="card-tags">
       {tier_label(item.get("tier", "news"))}
       {tag_pill(item.get("category", "Other"))}
-    </div>
-    <div class="news-score-area">
-      {relevance_dot(item.get("relevance_signal", "medium"))}
-      <span class="score-num">{esc(item.get('relevance_score',0))}/10</span>
     </div>
   </div>
   <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
@@ -370,7 +346,7 @@ def generate_rss(cs_data, news_data):
     rss = f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Scout Daily — AI Intelligence Feed</title>
+    <title>Daily Edge AI: AI news and real case studies</title>
     <link>{base_url}</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
@@ -392,7 +368,7 @@ def generate_email_capture(n=""):
     return f"""
   <div class="email-banner{' email-banner-end' if n else ''}">
     <div class="email-inner{n}">
-      <p class="email-title" id="email-title{n}">Get Scout Daily in your inbox</p>
+      <p class="email-title" id="email-title{n}">Get Daily Edge AI in your inbox</p>
       <form class="email-form{n}" aria-labelledby="email-title{n}">
         <label class="visually-hidden" for="email-input{n}">Email address</label>
         <input type="email" id="email-input{n}" class="email-input" placeholder="your@email.com" autocomplete="email" required />
@@ -504,16 +480,17 @@ def generate_html():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scout Daily: AI agent case studies and news</title>
-  <meta name="description" content="AI agent case studies and news for IT engineers, scored every day.">
-  <meta property="og:site_name" content="Scout Daily">
-  <meta property="og:title" content="Scout Daily: AI agent case studies and news">
-  <meta property="og:description" content="AI agent case studies and news for IT engineers, scored every day.">
+  <title>Daily Edge AI: AI news and real case studies</title>
+  <meta name="description" content="AI news and real case studies, every day.">
+  <meta property="og:site_name" content="Daily Edge AI">
+  <meta property="og:title" content="Daily Edge AI: AI news and real case studies">
+  <meta property="og:description" content="AI news and real case studies, every day.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://agent-builder-daily.vercel.app/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&family=Geist+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap">
   <style>
     :root {
       /* Tokens from scout-daily-tokens.css (24 Nov 2026) */
@@ -539,7 +516,9 @@ def generate_html():
       --c-border-dark: #333333;
       --c-hero-bottom: #292929;
       --g-hero: linear-gradient(#000, var(--c-hero-bottom));
-      --c-accent: #22d3ee;
+      --c-accent: #10b981;        /* emerald: 7.8:1 with #0a0a0a text; text use only on dark */
+      --c-accent-hover: #059669;
+      --c-on-accent: #0a0a0a;
 
       --radius-sm: 6px;
       --radius: 8px;
@@ -571,6 +550,7 @@ def generate_html():
       font-size: var(--fs-body);
       line-height: var(--lh-body);
       min-height: 100vh;
+      overflow-wrap: anywhere;  /* long words and URLs wrap at 360px */
     }
 
     ::selection { background: var(--c-text); color: var(--c-bg); }
@@ -607,38 +587,33 @@ def generate_html():
       gap: 16px;
     }
 
-    .brand {
-      display: flex;
+    .brand { font-size: var(--fs-lead); line-height: 1; }
+
+    /* Logo top-left, links home */
+    .brand-link {
+      display: inline-flex;
       align-items: center;
-      font-size: var(--fs-lead);
-      font-weight: 700;
-      line-height: 1;
+      gap: 10px;
+      min-height: var(--tap);
+      color: var(--c-bg);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: var(--ls-head);
     }
 
+    .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
     .brand-name { white-space: nowrap; }
 
-    .brand-cursor {
-      display: inline-block;
-      width: 0.2em;
-      height: 0.8em;
-      background: var(--c-accent);
-      margin-left: 4px;
-      animation: blink 1s 3;
-      border-radius: var(--radius-sm);
-    }
-
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
     /* Headlines: Geist 700, tight tracking */
-    .brand, .hero-title, .card-title, .email-title { font-weight: 700; letter-spacing: var(--ls-head); }
+    .hero-title, .card-title, .email-title { font-weight: 700; letter-spacing: var(--ls-head); }
 
-    /* Scores, tags and dates: Geist Mono */
-    .score-ring, .score-num, .tag-pill, .status-badge, .tier-label, .pub-date, .archive-date, .archive-count, .trace-val, .updated,
+    /* Tags and dates: Geist Mono */
+    .tag-pill, .tier-label, .pub-date, .archive-date, .archive-count, .updated,
     .news-card .card-meta > span:last-child:not(:first-child) {
       font-family: var(--font-mono);
     }
 
-    .tag-pill, .status-badge, .signal-title {
+    .tag-pill, .signal-title {
       font-size: var(--fs-label);
       line-height: var(--lh-label);
       letter-spacing: var(--ls-label);
@@ -687,6 +662,7 @@ def generate_html():
       background: var(--c-surface-dark);
       border: 1px solid var(--c-border-dark);
       border-radius: var(--radius);
+      min-height: var(--tap);
       padding: 10px 14px;
       font: inherit;
       color: var(--c-bg);
@@ -714,8 +690,9 @@ def generate_html():
       transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
 
-    .email-btn { padding: 10px 20px; font-size: var(--fs-body); background: var(--c-bg); color: var(--c-text); }
-    .email-btn:hover { background: var(--c-border); }
+    /* The one emerald CTA on each screen */
+    .email-btn { min-height: var(--tap); padding: 0 20px; font-size: var(--fs-body); background: var(--c-accent); color: var(--c-on-accent); }
+    .email-btn:hover { background: var(--c-accent-hover); }
 
     /* Text links, never filled */
     .breakdown-link, .privacy-link {
@@ -773,6 +750,7 @@ def generate_html():
     .tabs::-webkit-scrollbar { display: none; }
 
     .tab {
+      min-height: var(--tap);
       padding: 8px 16px;
       font: inherit;
       font-size: var(--fs-small);
@@ -793,6 +771,7 @@ def generate_html():
       background: var(--c-bg);
       border: 1px solid var(--c-border);
       border-radius: var(--radius);
+      min-height: var(--tap);
       padding: 8px 14px;
       margin-bottom: 8px;
       font: inherit;
@@ -859,15 +838,9 @@ def generate_html():
     }
 
     .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
-    .tag-pill, .status-badge, .tier-label { white-space: nowrap; flex-shrink: 0; }
+    .tag-pill, .tier-label { white-space: nowrap; flex-shrink: 0; }
 
-    .tag-pill, .status-badge { padding: 4px 8px; border-radius: var(--radius-sm); }
-
-    .tag-pill { color: var(--c-text); background: var(--c-bg-alt); }
-    .status-badge { background: color-mix(in srgb, currentColor 6%, var(--c-bg)); }  /* 8% put pending at 4.49:1 */
-    .status-pass { color: var(--c-good); }
-    .status-fail { color: var(--c-bad); }
-    .status-pending { color: var(--c-warn); }
+    .tag-pill { padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
 
     .tier-label, .source-name {
       font-size: var(--fs-label);
@@ -875,39 +848,6 @@ def generate_html():
       font-weight: 700;
       color: var(--c-text-muted);
     }
-
-    /* Score: "40/75" as text, coloured by level (all 4.5:1 or better on white) */
-    .score-ring { font-size: var(--fs-small); font-weight: 700; white-space: nowrap; color: var(--c-bad); font-variant-numeric: tabular-nums; }
-    .score-high { color: var(--c-good); }
-    .score-mid { color: var(--c-warn); }
-
-    /* News relevance: a word beside the dot, never colour alone */
-    .news-score-area {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-    }
-
-    .rel-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: var(--radius-pill);
-      flex-shrink: 0;
-      background: var(--c-text-muted);
-    }
-
-    .rel-high { background: var(--c-good); }
-    .rel-medium { background: var(--c-warn); }
-    .rel-low { background: var(--c-bad); }
-
-    .rel-word, .score-num {
-      font-size: var(--fs-label);
-      color: var(--c-text-muted);
-      white-space: nowrap;
-    }
-
-    .score-num { font-weight: 700; font-variant-numeric: tabular-nums; }
 
     /* Card content */
     .card-title {
@@ -920,7 +860,7 @@ def generate_html():
       text-wrap: balance;
     }
 
-    .card-title a { color: var(--c-text); text-decoration: none; }
+    .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
     .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--c-text-muted); }
 
     .card-meta {
@@ -967,51 +907,6 @@ def generate_html():
     .signal-points { padding-left: 20px; }
     .signal-points li { margin-bottom: 6px; }
 
-    .agent-trace { margin-bottom: 4px; }
-
-    .trace-toggle {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid var(--c-border);
-      color: var(--c-text-muted);
-      font-size: var(--fs-small);
-      padding: 6px 12px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
-      list-style: none;
-    }
-
-    .trace-toggle::-webkit-details-marker { display: none; }
-    .trace-toggle:hover, .agent-trace[open] .trace-toggle { color: var(--c-text); border-color: var(--c-text); }
-
-    .trace-body { padding: 12px 0 4px; }
-
-    .trace-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      border-bottom: 1px solid var(--c-border);
-      margin-bottom: 4px;
-    }
-
-    .trace-label { font-size: var(--fs-label); color: var(--c-text-muted); }
-
-    .trace-val {
-      font-size: var(--fs-label);
-      color: var(--c-text);
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .trace-reasoning {
-      font-size: var(--fs-small);
-      line-height: var(--lh-body);
-      color: var(--c-text-muted);
-      margin-top: 10px;
-      font-style: italic;
-    }
-
     /* Card footer */
     .card-footer {
       display: flex;
@@ -1056,6 +951,9 @@ def generate_html():
     .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 
     .archive-title {
+      display: flex;
+      align-items: center;
+      min-height: var(--tap);
       font-size: var(--fs-small);
       color: var(--c-text);
       text-decoration: none;
@@ -1094,24 +992,20 @@ def generate_html():
       .email-banner { padding: 16px; }
       .email-inner { gap: 8px; }
       .content { margin-top: -32px; }
-      .email-input { min-height: var(--tap); }
-      .email-btn { min-height: var(--tap); padding: 0 18px; }
+      .email-btn { padding: 0 18px; }
       .content { width: 100%; padding: 24px 16px 48px; }
       .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); position: static; }
-      .tab { flex: 0 0 auto; min-height: var(--tap); padding: 10px 12px; }
-      .search { width: 100%; min-height: var(--tap); font-size: var(--fs-body); }
+      .tab { flex: 0 0 auto; padding: 10px 12px; }
+      .search { width: 100%; font-size: var(--fs-body); }
       .card { padding: 18px; }
       .card-title { font-size: var(--fs-lead); }
-      .card-title a { display: block; min-height: var(--tap); }
-      .trace-toggle { min-height: var(--tap); }
       .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
-      .archive-title { display: flex; align-items: center; min-height: var(--tap); }
     }
 
     @media (max-width: 640px) {
       .hero-title { font-size: 30px; line-height: 1.15; }
       /* Phone cards: tag, title, source • date, 2-line summary, one link. Desktop keeps the full text. */
-      .card .insight, .card .signal-points, .card .agent-trace, .card .status-badge, .card .tier-label { display: none; }
+      .card .insight, .card .signal-points, .card .tier-label { display: none; }
       .cards-grid > .card .card-summary {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -1124,7 +1018,6 @@ def generate_html():
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .brand-cursor { animation: none; }
       * { transition: none !important; }
     }
   </style>
@@ -1135,10 +1028,10 @@ def generate_html():
   <div class="header-inner">
     <div class="header-top">
       <h1 class="brand">
-        <span class="brand-name">Scout Daily</span><span class="brand-cursor" aria-hidden="true"></span>
+        <a class="brand-link" href="./"><img class="brand-logo" src="logo.svg" width="28" height="22" alt=""><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
       </h1>
     </div>
-    <p class="hero-title">AI agent case studies and news, <span class="accent-word">scored every day</span>.</p>
+    <p class="hero-title">AI news and real case studies, every day.</p>
     <p class="updated">Updated """ + generated_at + """</p>
 """ + generate_email_capture() + """
   </div>
@@ -1180,7 +1073,7 @@ def generate_html():
 </main>
 
 <footer>
-  <span>Scout Daily · LangGraph + Groq + arXiv · <a href="privacy.html">Privacy</a></span>
+  <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="privacy.html">Privacy</a></span>
   <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
 </footer>
 

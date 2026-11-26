@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""AI editorial images for the top Scout Daily cards. Off unless IMAGE_GEN_ENABLED is "true".
+"""AI editorial images for the top Daily Edge AI cards. Off unless IMAGE_GEN_ENABLED is "true".
 
-For the top 5 case studies and top 5 news items, Groq writes a scene description from the title and summary,
-and FLUX.1-schnell (Apache-2.0) draws it in one house style. Each image is saved as site/images/<slug>.webp;
+For the lead case study and the lead news item (one per tab), Groq writes a scene description from the title and summary,
+and FLUX.1-schnell (Apache-2.0) on Cloudflare Workers AI draws it in one house style. Each image is saved as site/images/<slug>.webp;
 site/images/alt.json keeps the scene description (the alt text) and the date it was made.
-Never fails the pipeline: any error is logged and the card simply has no image.
+Never fails the pipeline: the first error is logged, the run stops (no more API calls) and cards keep no image.
 """
 import json
 import os
@@ -15,18 +15,20 @@ from pathlib import Path
 
 IMAGES_DIR = "site/images"
 ALT_FILE = "alt.json"
-MODEL = "black-forest-labs/FLUX.1-schnell"  # Apache-2.0. Never FLUX.1-dev.
+MODEL = "@cf/black-forest-labs/flux-1-schnell"  # Apache-2.0, on Cloudflare Workers AI. Never FLUX.1-dev.
+CF_URL = "https://api.cloudflare.com/client/v4/accounts/{account}/ai/run/{model}"
+CF_SECRETS = ("CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID")
 HOUSE_STYLE = "clean editorial 3D illustration, soft studio light, near-black and indigo #4f46e5 accents, minimal, no text"
-NEGATIVE = ("text, letters, numbers, digits, logos, people, person, face, hands, crowd, brand, words, watermark, "
-            "photo, photograph")
+RULES = ("no text, no letters, no numbers, no digits, no logos, no people, no faces, no hands, no brands, "
+         "no watermark, not a photograph")  # the model takes no negative prompt
 WIDTH, HEIGHT = 1200, 675
-GEN_HEIGHT = 672  # FLUX works in multiples of 16; the result is fitted to 1200x675
+STEPS = 4  # flux-1-schnell default; the model returns a square image, fitted to 1200x675
 QUALITY = 70
-TOP_N = 5
+TOP_N = 1  # lead story of each tab only: the page shows an image on the first card alone
 MAX_AGE_DAYS = 120  # 4 months, the site's window
 FALLBACK_ALT = "Abstract editorial illustration"
 
-api_calls = 0  # every Groq or Hugging Face request adds 1
+api_calls = 0  # every Groq or Cloudflare request adds 1
 
 
 def log(msg):
@@ -106,27 +108,33 @@ def describe_scene(item):
 
 
 def generate_image(scene, out_path):
-    """Draw the scene with FLUX.1-schnell and save it as WebP at quality 70. Returns the provider name."""
+    """Draw the scene with FLUX.1-schnell on Cloudflare Workers AI and save it as WebP at quality 70.
+    Returns the neurons the call used, as reported by Cloudflare, or "not reported"."""
     global api_calls
-    from huggingface_hub import InferenceClient
-    from PIL import ImageOps
-    token = os.environ.get("HF_TOKEN")
-    if not token:
-        raise RuntimeError("HF_TOKEN is not set")
-    provider = os.environ.get("HF_PROVIDER", "auto")
-    client = InferenceClient(provider=provider, api_key=token)
+    import base64, io
+    import requests
+    from PIL import Image, ImageOps
+    token, account = (os.environ.get(k) for k in CF_SECRETS)
+    if not token or not account:
+        raise RuntimeError("CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID is not set")
     api_calls += 1
-    image = client.text_to_image(f"{scene}. {HOUSE_STYLE}", model=MODEL, negative_prompt=NEGATIVE,
-                                 width=WIDTH, height=GEN_HEIGHT)
+    resp = requests.post(CF_URL.format(account=account, model=MODEL), headers={"Authorization": f"Bearer {token}"},
+                         json={"prompt": f"{scene}. {HOUSE_STYLE}, {RULES}"[:2048], "steps": STEPS}, timeout=120)
+    body = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+    if resp.status_code != 200 or not body.get("success"):
+        raise RuntimeError(f"Cloudflare HTTP {resp.status_code}: {body.get('errors') or resp.text[:200]}")
+    image = Image.open(io.BytesIO(base64.b64decode(body["result"]["image"])))
     image = ImageOps.fit(image.convert("RGB"), (WIDTH, HEIGHT))
     tmp = out_path.with_suffix(".tmp.webp")
     image.save(tmp, "WEBP", quality=QUALITY, method=6)
     tmp.replace(out_path)
-    return provider
+    usage = {k: v for k, v in resp.headers.items() if "neuron" in k.lower()}
+    usage.update({k: v for k, v in (body.get("result") or {}).items() if k != "image"})
+    return json.dumps(usage) if usage else "not reported"
 
 
 def top_items():
-    """Top 5 case studies and top 5 news items by the scores the page sorts by. Reads only: archives nothing."""
+    """The lead case study and the lead news item by the scores the page sorts by. Reads only: archives nothing."""
     import generate_html as gh
     cutoff = (datetime.now() - timedelta(days=gh.CASE_STUDY_WINDOW_DAYS)).strftime("%Y-%m-%d")
     studies = []
@@ -171,9 +179,10 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
     except Exception as e:
         log(f"could not load stories: {e}")
         items = []
-    if not dry_run and not os.environ.get("HF_TOKEN"):
-        # checked once, before any Groq call, so a missing token wastes no API calls
-        log("HF_TOKEN is not set: add HF_TOKEN under Settings > Secrets and variables > Actions. "
+    missing = [k for k in CF_SECRETS if not os.environ.get(k)]
+    if not dry_run and missing:
+        # checked once, before any Groq call, so a missing secret wastes no API calls
+        log(f"{', '.join(missing)} not set: add under Settings > Secrets and variables > Actions. "
             "No images generated, 0 API calls")
         return 0
     made = 0
@@ -190,12 +199,15 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
             continue
         try:
             scene = describe_scene(item)
-            provider = generate_image(scene, path)
-            alts[slug] = {"alt": scene, "created": today.strftime("%Y-%m-%d"), "model": MODEL, "provider": provider}
+            neurons = generate_image(scene, path)
+            alts[slug] = {"alt": scene, "created": today.strftime("%Y-%m-%d"), "model": MODEL,
+                          "provider": "cloudflare-workers-ai", "neurons": neurons}
             made += 1
-            log(f"generated {slug} ({path.stat().st_size // 1024} KB, provider {provider}): {scene}")
+            log(f"generated {slug} ({path.stat().st_size / 1024:.1f} KB, neurons {neurons}): {scene}")
         except Exception as e:
-            log(f"error for {slug}, card keeps no image: {type(e).__name__}: {e}")
+            # stop the whole run: no more Groq or Cloudflare calls after the first error
+            log(f"error for {slug}, stopping the run, cards keep no image: {type(e).__name__}: {e}")
+            break
     if not dry_run:
         try:
             with open(out / ALT_FILE, "w") as f:

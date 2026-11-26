@@ -1,4 +1,4 @@
-"""F2: front-end faults from the F1 audit. Status badge, card click, score cap, the 4-month window, escaping of
+"""F2: front-end faults from the F1 audit. No score display, card click, the 4-month window, escaping of
 AI-written text, page structure and the two retired pages. No network."""
 import json
 import re
@@ -27,16 +27,16 @@ def cards(*items):
     return gh.render_case_studies({"case_studies": list(items)}, {"case_studies": {}})
 
 
-# ---------- status badge: eval_verdict first, never "Evaluating" for a passed item ----------
+# ---------- no score or review label on cards: scoring stays in the pipeline, only the display is gone ----------
 
-@pytest.mark.parametrize("verdict, gemini, shown", [
-    ("pass", "pending", "AI-reviewed"), ("pass", None, "AI-reviewed"), (None, "pass", "AI-reviewed"),
-    ("fail", "pending", "Flagged"), ("pending", "pending", "Evaluating"), (None, None, "Evaluating")])
-def test_badge_reads_eval_verdict_first(verdict, gemini, shown):
-    html = cards(study(eval_verdict=verdict, gemini_eval_status=gemini))
-    assert f">{shown}</span>" in html
-    if "pass" in (verdict, gemini):
-        assert "Evaluating" not in html
+@pytest.mark.parametrize("verdict, gemini", [("pass", "pending"), ("fail", "pending"), (None, None)])
+def test_cards_show_no_score_or_review_label(verdict, gemini):
+    html = cards(study(eval_verdict=verdict, gemini_eval_status=gemini, total_score=40))
+    html += gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1", "relevance_signal": "high",
+                                      "relevance_score": 8}]}, {"news": {}})
+    for word in ("AI-reviewed", "Flagged", "Evaluating", "/75", "/25", "/10", "score", "relevance", "Technical Reasoning"):
+        assert word not in html, word
+    assert gh.eval_status(study(eval_verdict=verdict, gemini_eval_status=gemini)) in ("pass", "fail", "pending")
 
 
 # ---------- card click: only the title link opens the source ----------
@@ -48,8 +48,8 @@ def test_only_the_title_link_opens_the_source():
     links = re.findall(r'<a [^>]*href="https://arxiv.org/abs/1"', html)
     assert len(links) == 1
     assert re.search(r'<h2 class="card-title"><a href="https://arxiv.org/abs/1" target="_blank" rel="noopener noreferrer">', html)
-    # the reasoning toggle is a plain control, not inside a link; there is no copy button
-    assert '<summary class="trace-toggle">View Technical Reasoning</summary>' in html
+    # no score-reasoning toggle; there is no copy button
+    assert "trace-toggle" not in html
     assert "md-export-btn" not in html and "onclick" not in html
 
 
@@ -57,7 +57,7 @@ def test_news_card_has_one_source_link_in_the_title():
     html = gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1", "relevance_signal": "high",
                                      "relevance_score": 8}]}, {"news": {}})
     assert "window.open" not in html and len(re.findall(r'href="https://example.test/1"', html)) == 1
-    assert "High relevance" in html  # relevance in words, not colour alone
+    assert "relevance" not in html and "/10" not in html  # no relevance score on the card
 
 
 def test_news_card_has_one_meta_line_with_the_source():
@@ -69,15 +69,11 @@ def test_news_card_has_one_meta_line_with_the_source():
     assert html.count("Ars Technica") == 1 and html.count("2026-11-24") == 1  # no duplicate source or date span
 
 
-# ---------- score ring: out of 75, no ring above 75 ----------
+# ---------- score ring: never on a card ----------
 
-def test_score_ring_caps_at_75():
-    assert "--pct:100;" in gh.score_ring(75) and 'aria-label="Scout score 75 of 75"' in gh.score_ring(75)
-    assert gh.score_ring(0) and "--pct:0;" in gh.score_ring(0)
-    for legacy in (76, 90, 100, -1, None, "90"):
-        assert gh.score_ring(legacy) == ""
-    assert "score-ring" not in cards(study(total_score=90))
-    assert "score-ring" in cards(study(total_score=55))
+def test_score_ring_is_not_on_any_card():
+    for total in (0, 40, 55, 75, 90):
+        assert "score-ring" not in cards(study(total_score=total))
 
 
 # ---------- 4-month window applies to every item: evergreen no longer exempt ----------
@@ -177,7 +173,7 @@ def test_page_structure(site):
     assert not re.search(r"background-clip\s*:\s*text", css, re.I)  # -webkit- prefix included, any spacing
     # no gradient of any type except the hero background (--g-hero, used by .hero) and the score chart (no text on it)
     grad = re.compile(r"(?:repeating-)?(?:linear|radial|conic)-gradient\s*\(|-webkit-gradient\s*\(", re.I)
-    allowed = {":root": "--g-hero:", ".hero": "background: var(--g-hero)", ".score-ring": "conic-gradient("}
+    allowed = {":root": "--g-hero:", ".hero": "background: var(--g-hero)"}
     for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", re.sub(r"/\*.*?\*/", "", css, flags=re.S)):
         for decl in body.split(";"):
             if grad.search(decl) or "--g-hero" in decl:
@@ -206,15 +202,15 @@ def test_lead_story_grid(site):
 def test_retired_pages_redirect(name):
     page = (ROOT / "site" / name).read_text()
     assert '<meta http-equiv="refresh" content="0; url=/">' in page and '<a href="/">' in page
-    assert "background: #0f1117" in page and "Agent Builder Daily" not in page
+    assert "background: #000000" in page and "Agent Builder Daily" not in page
     assert len(page) < 2000
 
 
 # ---------- F2b: every breakdown field escaped, https-only source link, old pages restyled ----------
 
-OLD_PAGE = """<!DOCTYPE html><html lang="en"><head><title>Old - IT Breakdown - Scout Daily</title><style>
+OLD_PAGE = """<!DOCTYPE html><html lang="en"><head><title>Old - IT Breakdown - Daily Edge AI</title><style>
 :root{--accent:#6366f1;--text-muted:#64748b}.badge{font-size:10px}</style></head><body>
-<div class="topbar"><a href="../index.html" class="brand-link">Scout Daily</a><a href="../index.html" class="back-btn">← Back to feed</a></div>
+<div class="topbar"><a href="../index.html" class="brand-link">Daily Edge AI</a><a href="../index.html" class="back-btn">← Back to feed</a></div>
 <div class="page-wrap">
   <div class="badge">IT Engineer Breakdown</div>
   <h1 class="page-title">Edge AI & robots</h1>
@@ -227,7 +223,7 @@ OLD_PAGE = """<!DOCTYPE html><html lang="en"><head><title>Old - IT Breakdown - S
   <div class="guide-grid"><div class="guide-block"><div class="guide-label">EVALUATE</div><div class="guide-text">- Step one
    - Step two</div></div>
 <div class="guide-block red"><div class="guide-label">RISKS TO FLAG</div><div class="guide-text">Data residency.</div></div></div>
-  <div class="generated-note">AI-generated breakdown · Scout Daily · 01 Oct 2026, 09:00</div>
+  <div class="generated-note">AI-generated breakdown · Daily Edge AI · 01 Oct 2026, 09:00</div>
 </div></body></html>"""
 
 
@@ -257,23 +253,23 @@ def test_https_source_link_is_noopener():
 def test_breakdown_page_uses_f2_tokens():
     page = breakdown()
     css = page.split("<style>")[1].split("</style>")[0]
-    assert "--text-muted:#8592a8" in css and "--accent:#00ff88" in css and "#6366f1" not in css
+    assert "--c-text-muted:#a3a3a3" in css and "--c-accent:#10b981" in css and "#6366f1" not in css
     assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
-    assert ".brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap)" in css
+    assert ".brand-link,.back-link,.source-link,footer a{display:inline-flex;align-items:center;min-height:var(--tap)" in css
     assert "--tap:44px" in css and "background-clip" not in css and not re.search(r"border-left:\s*[2-9]px", css)
     assert "<main" in page and 'class="section-num"' not in page and 'class="badge"' not in page
 
 
 def test_old_page_restyled_keeps_its_text():
     new = gb.restyle_page(OLD_PAGE)
-    assert new and "--text-muted:#8592a8" in new and "#6366f1" not in new and 'class="badge"' not in new
+    assert new and "--c-text-muted:#a3a3a3" in new and "#6366f1" not in new and 'class="badge"' not in new
     assert '<h1 class="page-title">Edge AI &amp; robots</h1>' in new
     assert '<p class="meta-line">Ars Technica · 2026-10-01 · Generated 01 Oct 2026, 09:00</p>' in new
     assert '<p>Latency (&lt;10 ms) and throughput (&gt;1 TB/day).</p><p>Second para.</p>' in new
     assert '<h3 class="guide-label">Evaluate</h3><div class="guide-text">- Step one\n   - Step two</div>' in new
     assert '<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3>' in new
     assert 'href="https://example.test/story?a=1&amp;b=2" target="_blank" rel="noopener noreferrer"' in new
-    assert "AI-generated breakdown · Scout Daily · 01 Oct 2026, 09:00" in new
+    assert re.search(r"AI-generated breakdown · [^<]+ · 01 Oct 2026, 09:00", new)  # name comes from generate_breakdowns.py
 
 
 def test_restyle_leaves_unknown_pages_alone(tmp_path):
@@ -286,7 +282,7 @@ def test_restyle_leaves_unknown_pages_alone(tmp_path):
 def test_every_committed_breakdown_page_has_the_new_style():
     pages = sorted((ROOT / "site" / "breakdowns").glob("*.html"))
     assert pages
-    stale = [p.name for p in pages if "--text-muted:#8592a8" not in p.read_text() or "#6366f1" in p.read_text()]
+    stale = [p.name for p in pages if "--c-text-muted:#a3a3a3" not in p.read_text() or "#6366f1" in p.read_text()]
     assert stale == []
 
 
@@ -458,7 +454,11 @@ def test_home_colour_tokens_meet_4_5_to_1(site):
     gh.generate_html()
     root = (site / "site" / "index.html").read_text().split(":root {")[1].split("}")[0]
     tokens = dict(re.findall(r"--([\w-]+):\s*(#[0-9a-fA-F]{6})", root))
-    assert tokens["c-accent"] == "#22d3ee"
+    assert tokens["c-accent"] == "#10b981" and tokens["c-accent-hover"] == "#059669" and tokens["c-on-accent"] == "#0a0a0a"
+    assert "#22d3ee" not in (site / "site" / "index.html").read_text()
+    # text on the emerald button, at rest and on hover
+    for bg in ("c-accent", "c-accent-hover"):
+        assert _ratio(tokens["c-on-accent"], tokens[bg]) >= 4.5, bg
     # every text colour of a zone on every background of that zone
     zones = {"white panel": (("c-text", "c-text-muted", "c-good", "c-warn", "c-bad"), ("c-bg",)),
              "dark hero": (("c-bg", "c-on-dark-muted", "c-accent"), ("c-surface-dark", "c-surface-dark-2", "c-hero-bottom")),
@@ -475,13 +475,10 @@ def test_home_colour_tokens_meet_4_5_to_1(site):
     for sel, body in rules:
         if uses(body, "color", "c-text-muted"):
             assert not on_alt & set(re.findall(r"\.([\w-]+)", sel)), (sel.strip(), sorted(on_alt))
-    # status badges: each colour on its own tint, rounded to 8-bit as the screen shows it
-    css = (site / "site" / "index.html").read_text()
-    pct = int(re.search(r"\.status-badge \{ background: color-mix\(in srgb, currentColor (\d+)%, var\(--c-bg\)\)", css).group(1))
-    for fg in ("c-good", "c-warn", "c-bad"):
-        c, w = tokens[fg], tokens["c-bg"]
-        tint = "#" + "".join("%02x" % round(int(c[i:i + 2], 16) * pct / 100 + int(w[i:i + 2], 16) * (1 - pct / 100)) for i in (1, 3, 5))
-        assert _ratio(c, tint) >= 4.5, (fg, tint, round(_ratio(c, tint), 3))
+    # emerald is never a text colour on white (2.5:1): only on the dark hero and as the button fill
+    for sel, body in rules:
+        if uses(body, "color", "c-accent"):
+            assert sel.strip() == ".accent-word", sel.strip()
 
 
 def test_hostile_build_has_no_injected_markup(site):
@@ -500,7 +497,8 @@ def test_hostile_build_has_no_injected_markup(site):
     page = (site / "site" / "index.html").read_text()
     feed = (site / "site" / "feed.xml").read_text()
     tags, handlers = parsed(page)
-    assert tags.count("script") == 2 and "img" not in tags and handlers == []  # the page's own two scripts only
+    assert tags.count("script") == 2 and handlers == []  # the page's own two scripts only
+    assert tags.count("img") == 1 and page.count('<img class="brand-logo" src="logo.svg"') == 1  # the logo, nothing injected
     assert "javascript:" not in page.lower() and "javascript:" not in feed.lower() and "<script" not in feed and "<img" not in feed
 
 
@@ -659,13 +657,42 @@ def built_page(site, studies=None, news=None):
     return (site / "site" / "index.html").read_text()
 
 
-def test_name_is_scout_daily_and_no_counters(site):
+def test_name_is_daily_edge_ai_and_no_counters(site):
     page = built_page(site)
-    assert "<title>Scout Daily" in page
-    assert '<meta property="og:title" content="Scout Daily' in page and 'og:site_name" content="Scout Daily"' in page
-    assert '<span class="brand-name">Scout Daily</span>' in page
+    assert "<title>Daily Edge AI" in page
+    assert '<meta property="og:title" content="Daily Edge AI' in page and 'og:site_name" content="Daily Edge AI"' in page
+    assert '<span class="brand-name">Daily Edge <span class="accent-word">AI</span></span>' in page
+    assert '<p class="hero-title">AI news and real case studies, every day.</p>' in page
+    assert not re.search(r"scout\s+daily", page, re.I) and "scored" not in page
     assert "stat-num" not in page and "News Items</div>" not in page and "Case Studies</div>" not in page
     assert not re.search(r"<title>Scout —|Scout · LangGraph", page)
+
+
+def test_logo_links_home_and_is_the_favicon(site):
+    page = built_page(site)
+    assert re.search(r'<h1 class="brand">\s*<a class="brand-link" href="\./"><img class="brand-logo" src="logo\.svg" '
+                     r'width="28" height="22" alt="">', page)
+    assert '<link rel="icon" href="favicon.svg" type="image/svg+xml">' in page
+    assert "Geist:wght@400;600;700" in page and re.search(r"\.brand-link \{[^}]*font-weight: 600", page)
+    for name in ("logo.svg", "favicon.svg"):
+        svg = (ROOT / "site" / name).read_text()
+        assert 'viewBox="0 0 56 44"' in svg and svg.count('fill="#10b981"') == 2 and 'opacity=".5"' in svg
+
+
+def test_tap_targets_are_44px_at_every_width(site):
+    css = built_page(site).split("<style>")[1].split("</style>")[0]
+    base = re.sub(r"@media[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}", "", css)  # rules outside every media query
+    for sel in (".brand-link", ".email-input", ".email-btn", ".breakdown-link, .privacy-link", ".tab", ".search",
+                ".card-title a", ".archive-title", "footer a"):
+        bodies = re.findall(rf"(?:^|\n)\s*{re.escape(sel)} \{{([^}}]*)\}}", base)
+        assert any("min-height: var(--tap)" in body for body in bodies), sel
+    assert "--tap: 44px" in css and "overflow-wrap: anywhere" in css
+
+
+def test_privacy_page_uses_the_new_name():
+    page = (ROOT / "site" / "privacy.html").read_text()
+    assert "<title>Privacy: Daily Edge AI</title>" in page and not re.search(r"scout\s+daily", page, re.I)
+    assert '<link rel="icon" href="favicon.svg"' in page and "min-height: 44px" in page
 
 
 def test_fewer_choices_and_two_signups_with_privacy(site):
@@ -684,9 +711,10 @@ def test_breakdown_link_text():
     assert "IT Breakdown" not in html
 
 
-def test_score_reads_40_of_75_and_case_studies_use_the_grid(site):
-    assert ">40/75</span>" in gh.score_ring(40)
-    page = built_page(site)
+def test_no_score_on_the_page_and_case_studies_use_the_grid(site):
+    page = built_page(site, [study(total_score=40)], [{"title": "N", "url": "https://n.test", "relevance_score": 8}])
+    for word in ("/75", "/25", "/10", "AI-reviewed", "score-ring", "score-num", "status-badge"):
+        assert word not in page, word
     cs_panel = page.split('id="case-studies"')[1].split('id="industry-news"')[0]
     assert '<div class="cards-grid">' in cs_panel  # same lead + grid as Industry News
 
@@ -694,7 +722,7 @@ def test_score_reads_40_of_75_and_case_studies_use_the_grid(site):
 def test_tags_never_wrap_and_relevance_cannot_overflow(site):
     page = built_page(site)
     assert re.search(r"\.card-tags \{[^}]*flex-wrap: nowrap", page)
-    assert re.search(r"\.tag-pill, \.status-badge, \.tier-label \{[^}]*white-space: nowrap", page)
+    assert re.search(r"\.tag-pill, \.tier-label \{[^}]*white-space: nowrap", page)
     assert re.search(r"\.card-header \{[^}]*flex-wrap: wrap", page)  # the relevance wraps below, not out of the card
 
 
@@ -745,4 +773,4 @@ def test_honest_checks_run_on_the_built_page(site):
     assert "Kept paper" in live and "Tomorrow paper" not in live
     assert "<span>example.org</span>" in live and "Reuters" not in live
     assert "A real line.</p>" in live and "A cut" not in live
-    assert ">AI-reviewed</span>" in live and "Verified" not in page
+    assert "AI-reviewed" not in live and "Verified" not in page

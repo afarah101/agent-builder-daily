@@ -230,46 +230,60 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title} - IT Breakdown - Scout Daily</title>
+  <title>{title} — IT Breakdown — Daily Edge AI</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap">
   <style>
     *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
-    :root{{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}}
-    body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}}
-    ::selection{{background:var(--accent);color:var(--accent-ink)}}
-    :focus-visible{{outline:2px solid var(--accent);outline-offset:2px}}
-    .topbar{{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}}
-    .brand-link,.back-btn,.source-link{{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}}
-    .brand-link{{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}}
-    .back-btn{{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}}
-    .back-btn:hover{{color:var(--text)}}
-    .page-wrap{{max-width:860px;margin:0 auto;padding:48px 32px 96px}}
-    .page-title{{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}}
-    .meta-line{{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}}
-    .source-link{{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}}
-    .source-link:hover{{background:rgba(0,255,136,0.16)}}
-    .section-title{{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}}
-    .summary-body{{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}}
+    :root{{--font:"Geist",ui-sans-serif,system-ui,sans-serif;--font-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--ls-head:-0.02em;--c-bg:#000000;--c-surface:#171717;--c-border:#333333;--c-text:#ffffff;--c-text-2:#d4d4d4;--c-text-muted:#a3a3a3;--c-accent:#10b981;--c-accent-hover:#059669;--c-on-accent:#0a0a0a;--c-warn:#fbbf24;--c-bad:#f87171;--fs-body:16px;--lh-body:1.625;--fs-small:14px;--fs-label:12px;--radius:8px;--radius-card:12px;--tap:44px;--reading:65ch;--content-max:1152px}}
+    body{{background:var(--c-bg);color:var(--c-text);font-family:var(--font);font-size:var(--fs-body);line-height:var(--lh-body);min-height:100vh;overflow-wrap:anywhere}}
+    ::selection{{background:var(--c-accent);color:var(--c-on-accent)}}
+    :focus-visible{{outline:2px solid var(--c-accent);outline-offset:2px}}
+    a{{color:inherit}}
+    .site-header{{border-bottom:1px solid var(--c-border)}}
+    .header-inner,.page-wrap,footer{{max-width:var(--content-max);margin:0 auto;padding-left:32px;padding-right:32px}}
+    .header-inner{{display:flex;align-items:center;padding-top:12px;padding-bottom:12px}}
+    .brand-link,.back-link,.source-link,footer a{{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}}
+    .brand-link{{gap:10px;font-size:21px;line-height:1;font-weight:600;letter-spacing:var(--ls-head);color:var(--c-text)}}
+    .brand-logo{{display:block;width:28px;height:22px;flex-shrink:0;background:url(../logo.svg) center/contain no-repeat}}
+    .brand-name{{white-space:nowrap}}
+    .accent-word{{color:var(--c-accent)}}
+    .page-wrap{{padding-top:24px;padding-bottom:80px}}
+    .back-link{{gap:8px;padding-right:8px;font-size:var(--fs-body);font-weight:600;color:var(--c-accent);margin-bottom:24px}}
+    .back-link:hover{{color:var(--c-accent-hover)}}
+    .page-title{{max-width:var(--reading);font-size:clamp(28px,22px + 1.6vw,40px);line-height:1.15;font-weight:700;letter-spacing:var(--ls-head);text-wrap:balance;margin-bottom:12px}}
+    .meta-line{{font-family:var(--font-mono);font-size:var(--fs-small);line-height:20px;color:var(--c-text-muted);margin-bottom:24px}}
+    .source-link{{padding:0 20px;border-radius:var(--radius);background:var(--c-accent);color:var(--c-on-accent);font-weight:600;margin-bottom:48px}}
+    .source-link:hover{{background:var(--c-accent-hover)}}
+    .section-title{{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:var(--ls-head);margin-bottom:16px}}
+    .summary-body{{max-width:var(--reading);color:var(--c-text-2)}}
     .summary-body p{{margin-bottom:16px}}
-    .divider{{height:1px;background:var(--border);margin:40px 0}}
+    .divider{{height:1px;background:var(--c-border);margin:48px 0}}
     .guide-grid{{display:flex;flex-direction:column;gap:16px}}
-    .guide-block{{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}}
-    .guide-label{{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}}
-    .guide-block.green .guide-label{{color:var(--accent)}}
-    .guide-block.amber .guide-label{{color:var(--warn)}}
-    .guide-block.red .guide-label{{color:var(--danger)}}
-    .guide-text{{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}}
-    .generated-note{{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}}
-    @media(max-width:700px){{.page-wrap{{padding:32px 16px 64px}}.topbar{{padding:4px 16px;position:static}}}}
+    .guide-block{{max-width:calc(var(--reading) + 48px);background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-card);padding:20px 24px}}
+    .guide-label{{font-size:var(--fs-body);font-weight:700;margin-bottom:8px;color:var(--c-text)}}
+    .guide-block.green .guide-label{{color:var(--c-accent)}}
+    .guide-block.amber .guide-label{{color:var(--c-warn)}}
+    .guide-block.red .guide-label{{color:var(--c-bad)}}
+    .guide-text{{color:var(--c-text-2);white-space:pre-wrap}}
+    .generated-note{{margin-top:48px;font-family:var(--font-mono);font-size:var(--fs-label);color:var(--c-text-muted)}}
+    footer{{border-top:1px solid var(--c-border);padding-top:20px;padding-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}}
+    footer span{{font-size:var(--fs-label);color:var(--c-text-muted)}}
+    footer a{{padding:0 4px;color:var(--c-text);text-decoration:underline}}
+    footer a:hover{{color:var(--c-accent)}}
+    @media(max-width:700px){{.header-inner,.page-wrap,footer{{padding-left:16px;padding-right:16px}}.page-wrap{{padding-top:16px;padding-bottom:48px}}.guide-block{{padding:16px}}.divider{{margin:32px 0}}.source-link{{margin-bottom:32px}}}}
   </style>
 </head>
 <body>
-<header class="topbar">
-  <a href="../index.html" class="brand-link">Scout Daily</a>
-  <a href="../index.html" class="back-btn">← Back to feed</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand-link" href="../index.html"><span class="brand-logo" aria-hidden="true"></span><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
+  </div>
 </header>
 <main class="page-wrap">
+  <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">{title}</h1>
   <p class="meta-line">{meta_line} · Generated {generated_at}</p>
   {source_link_html(url)}
@@ -282,20 +296,25 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
     <h2 class="section-title">IT engineer application guide</h2>
     <div class="guide-grid">{guide_html}</div>
   </section>
-  <p class="generated-note">AI-generated breakdown · Scout Daily · {generated_at}</p>
+  <p class="generated-note">AI-generated breakdown · Daily Edge AI · {generated_at}</p>
 </main>
+<footer>
+  <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="../privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
+</footer>
 </body>
 </html>"""
 
 
+# Old and current page shapes: meta line and generated note as <div> or <p>, guide labels as <div> or <h3>.
 STORED = re.compile(
     r'<h1 class="page-title">(?P<title>.*?)</h1>.*?'
-    r'<div class="meta-line">(?P<meta>.*?)</div>.*?'
-    r'<a href="(?P<url>[^"]*)"[^>]*class="source-link">.*?'
-    r'<div class="summary-body">(?P<summary>.*?)</div>\s*<div class="divider">.*?'
-    r'<div class="guide-grid">(?P<guide>.*?)</div>\s*<div class="generated-note">', re.S)
+    r'<(?:div|p) class="meta-line">(?P<meta>.*?)</(?:div|p)>(?P<between>.*?)'
+    r'<div class="summary-body">(?P<summary>.*?)</div>\s*(?:</section>\s*)?<div class="divider">.*?'
+    r'<div class="guide-grid">(?P<guide>.*?)</div>\s*(?:</section>\s*)?<(?:div|p) class="generated-note">', re.S)
+SOURCE = re.compile(r'<a href="(?P<url>[^"]*)"[^>]*class="source-link">')
 STORED_BLOCK = re.compile(
-    r'<div class="guide-block(?: (?P<color>\w+))?"><div class="guide-label">(?P<label>.*?)</div>'
+    r'<div class="guide-block(?: (?P<color>\w+))?"><(?:div|h3) class="guide-label">(?P<label>.*?)</(?:div|h3)>'
     r'<div class="guide-text">(?P<text>.*?)</div></div>', re.S)
 
 
@@ -314,9 +333,11 @@ def restyle_page(old_html):
     blocks = list(STORED_BLOCK.finditer(m["guide"]))
     if not sep or len(blocks) != m["guide"].count('class="guide-block'):
         return None
+    source = SOURCE.search(m["between"])  # one page in the archive has no source link
     summary = summary_block_html(stored_text(p) for p in re.findall(r"<p>(.*?)</p>", m["summary"], re.S))
     guide = "\n".join(guide_block_html(stored_text(b["label"]), b["color"] or "", stored_text(b["text"])) for b in blocks)
-    return render_breakdown_page(stored_text(m["title"]), "", unescape(m["url"]), "", summary, guide, meta, generated_at)
+    url = unescape(source["url"]) if source else ""
+    return render_breakdown_page(stored_text(m["title"]), "", url, "", summary, guide, meta, generated_at)
 
 
 def restyle_existing_pages(directory=OUTPUT_DIR):

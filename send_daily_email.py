@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scout Daily email: Mon-Fri at 11:00 London, built from committed Scout data. No LLM calls.
+"""Daily Edge AI email: Mon-Fri at 11:00 London, built from committed Scout data. No LLM calls.
 
 Usage: python send_daily_email.py [--dry-run] [--force]
 """
@@ -31,7 +31,7 @@ CREATOR_MAX = 3
 
 # Site palette (generate_html.py :root). Dark backgrounds set on every cell so dark-mode clients don't invert them.
 C = {"bg": "#0f1117", "surface": "#1a1d27", "surface2": "#22263a", "border": "#2d2d2d", "text": "#f1f5f9",
-     "text2": "#94a3b8", "muted": "#64748b", "accent": "#6366f1", "green": "#00ff88"}
+     "text2": "#94a3b8", "muted": "#64748b", "accent": "#10b981", "green": "#00ff88"}
 FONT = "Inter, -apple-system, Segoe UI, Arial, sans-serif"
 
 
@@ -182,7 +182,7 @@ def safe_url(url):
 # ---------- H11 BLUF block (House rule H11, checked by evals/email_check.py) ----------
 # Rules: (project name in docs/PROJECTS.md, repo, keyword pattern, file or metric it changes, why). First match wins, so
 # the most specific rules come first. An item with no match is dropped (House rule H11).
-SD = ("Scout Daily", "afarah101/agent-builder-daily")
+SD = ("Daily Edge AI", "afarah101/agent-builder-daily")
 H11_RULES = (
     ("Aurora website", "afarah101/Aurora-Electrical-Website", r"third-party script|compromised cdn|served malware|malicious (code|script)|magecart",
      "external scripts loaded by app/layout.tsx", "risk: a bad third-party script can reach site visitors"),
@@ -248,7 +248,7 @@ def h11_items(news, case, radar):
 def _mailto(n, word, date):
     from urllib.parse import quote
     to = clean_header(os.getenv("REPORT_EMAIL") or os.getenv("GMAIL_USER") or "")
-    return f"mailto:{quote(to)}?subject={quote(f'Re: Scout Daily {date}')}&body={quote(f'{word} {n}')}"
+    return f"mailto:{quote(to)}?subject={quote(f'Re: Daily Edge AI {date}')}&body={quote(f'{word} {n}')}"
 
 
 def h11_top_line(items):
@@ -272,7 +272,7 @@ def build_email(data, now):
         f"The Signal: {top.get('title', 'no top story today')}",
         *([f"Case study of the day: {case['title']}" + (f" (from {case['shown_date']:%a %d %b})" if case["shown_date"] else "")]
           if case else []),
-        f"Research Radar: {len(radar)} paper(s)" + (f", led by {radar[0]['title']} ({_score(radar[0], 'total_score'):.0f}/75)" if radar else ""),
+        f"Research Radar: {len(radar)} paper(s)" + (f", led by {radar[0]['title']}" if radar else ""),
         f"Quick Hits: {len(hits)} more stories" + (f" from {', '.join(sources[:3])}" if sources else ""),
     ]
     h11 = h11_items(news, case, radar)
@@ -290,11 +290,11 @@ def build_email(data, now):
         "headlines": data.get("headlines", []),
         "footer": f"{len(news)} news items, {len(papers)} case studies. Data as of {data['newest']:%Y-%m-%d %H:%M} UTC.",
     }
-    subject = f"Scout Daily — {date} — {top.get('title', 'no top story')}"
+    subject = f"Daily Edge AI — {date} — {top.get('title', 'no top story')}"
     return subject, render_html(date, sections), render_text(date, sections), sections
 
 
-UNSUBSCRIBE_URL = "mailto:admin@optomate.co.uk?subject=Unsubscribe%20Scout%20Daily"
+UNSUBSCRIBE_URL = "mailto:admin@optomate.co.uk?subject=Unsubscribe%20Daily%20Edge%20AI"
 PRIVACY_URL = "https://agent-builder-daily.vercel.app/privacy.html"
 
 
@@ -319,7 +319,7 @@ def _p(text, color=None, size=15):
 def render_html(date, s):
     sig = s["signal"]
     radar = "".join(
-        _p(_link(c.get("url"), c.get("title")) + f' <span style="color:{C["green"]};">{_score(c, "total_score"):.0f}/75</span>')
+        _p(_link(c.get("url"), c.get("title")))
         + _p(_e(c.get("summary")), C["text2"], 14) for c in s["radar"]) or _p("No papers passed today's checks.", C["text2"])
     hits = "".join(f'<li style="margin:0 0 8px;">{_link(n.get("url"), n.get("title"))} '
                    f'<span style="color:{C["muted"]};">· {_e(n.get("source"))}</span></li>' for n in s["hits"])
@@ -346,16 +346,16 @@ def render_html(date, s):
                         f'<span style="color:{C["muted"]};">· {_e(n.get("pub_date"))}</span></li>' for n in s["headlines"])
     headline_block = _block("From McKinsey", f"<ul {ul}>{headlines}</ul>") if headlines else ""
     return f"""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"></head>
+<meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>Daily Edge AI</title></head>
 <body style="margin:0;padding:0;background:{C["bg"]};" bgcolor="{C["bg"]}">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="{C["bg"]}" style="background:{C["bg"]};"><tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border:1px solid {C["border"]};border-radius:8px;">
 <tr><td bgcolor="{C["surface2"]}" style="background:{C["surface2"]};padding:24px;">
-<div style="font:700 24px {FONT};color:{C["text"]};">Scout Daily</div>
+<div style="font:600 24px {FONT};color:{C["text"]};">Daily Edge <span style="color:{C["accent"]};">AI</span></div>
 <div style="font:13px {FONT};color:{C["text2"]};margin-top:4px;">{_e(date)} · {_link(SITE_URL, "agent-builder-daily.vercel.app")}</div></td></tr>
 {h11_html(date, s)}
 {_block("Good morning", _p(_e(s["greeting"])))}
-{_block("In today's Scout", f"<ul {ul}>{bullets}</ul>")}
+{_block("In today's issue", f"<ul {ul}>{bullets}</ul>")}
 {_block("The Signal", _p(_link(sig.get("url"), sig.get("title")), size=16) + _p(_e(sig.get("summary")), C["text2"], 14)
         + (f'<ul {ul.replace("margin:0;", "margin:0 0 10px;")}>{points}</ul>' if points else "")
         + _p(_link(sig.get("url"), "Read at " + (sig.get("source") or "source") + " →"), size=14))}
@@ -395,8 +395,8 @@ def h11_html(date, s):
 
 def render_text(date, s):
     sig = s["signal"]
-    lines = [f"SCOUT DAILY — {date}", SITE_URL, ""] + h11_text(date, s)
-    lines += ["Good morning", s["greeting"], "", "IN TODAY'S SCOUT"]
+    lines = [f"DAILY EDGE AI — {date}", SITE_URL, ""] + h11_text(date, s)
+    lines += ["Good morning", s["greeting"], "", "IN TODAY'S ISSUE"]
     lines += [f"- {b}" for b in s["bullets"]]
     lines += ["", "THE SIGNAL", sig.get("title", ""), sig.get("summary", "")]
     lines += [f"- {h}: {t}" if h else f"- {t}" for h, t in s["signal_points"]]
@@ -416,7 +416,7 @@ def render_text(date, s):
             lines += [f"Key idea: {c['key_idea']}"] if c.get("key_idea") else []
             lines += [c["url"]]
     lines += ["", "RESEARCH RADAR"]
-    lines += [f"- {c.get('title')} ({_score(c, 'total_score'):.0f}/75)\n  {c.get('summary', '')}\n  {safe_url(c.get('url'))}"
+    lines += [f"- {c.get('title')}\n  {c.get('summary', '')}\n  {safe_url(c.get('url'))}"
               for c in s["radar"]] or ["- No papers passed today's checks."]
     lines += ["", "QUICK HITS"] + [f"- {n.get('title')} — {safe_url(n.get('url'))}" for n in s["hits"]]
     if s["headlines"]:
@@ -445,7 +445,7 @@ def build_stale(data, now, why):
         age = now - data["newest"]
         reason = (f"Scout data is stale: newest data is from {data['newest']:%Y-%m-%d %H:%M} UTC, "
                   f"{age.total_seconds() / 3600:.0f} hours old (limit {STALE_AFTER.total_seconds() / 3600:.0f}h).")
-    text = f"{reason}\nCheck the Scout Daily workflow runs. No digest was sent.\n{SITE_URL}"
+    text = f"{reason}\nCheck the scout-daily workflow runs. No digest was sent.\n{SITE_URL}"
     body = _p(_e(text).replace("\n", "<br>"))
     page = f'<!doctype html><html><body bgcolor="{C["bg"]}" style="background:{C["bg"]};padding:24px;">{body}</body></html>'
     return subject, page, text

@@ -77,15 +77,15 @@ def test_renders_all_sections_from_fixture(tmp_path, monkeypatch, steps_on):
     data = de.load_data()
     assert [n["title"] for n in data["news"]] == [f"News {i}" for i in range(8)] and len(data["papers"]) == 4
     subject, html_body, text_body, s = de.build_email(data, data["newest"] + timedelta(hours=1))
-    assert subject == "Scout Daily — Thu 22 Oct 2026 — News 0"
-    for heading in ("Scout Daily", "Good morning", "In today&#x27;s Scout", "The Signal", "Case study of the day",
+    assert subject == "Daily Edge AI — Thu 22 Oct 2026 — News 0"
+    for heading in ("Daily Edge AI", "Good morning", "In today&#x27;s issue", "The Signal", "Case study of the day",
                     "Try this today", "Research Radar", "Quick Hits", de.SITE_URL, "Data as of"):
         assert heading in html_body, heading
-    for heading in ("Good morning", "IN TODAY'S SCOUT", "THE SIGNAL", "CASE STUDY OF THE DAY", "RESEARCH RADAR", "QUICK HITS"):
+    for heading in ("Good morning", "IN TODAY'S ISSUE", "THE SIGNAL", "CASE STUDY OF THE DAY", "RESEARCH RADAR", "QUICK HITS"):
         assert heading in text_body
     assert html_body.index("The Signal") < html_body.index("Case study of the day") < html_body.index("Research Radar")
     assert s["bullets"] == ["The Signal: News 0", "Case study of the day: Paper 0",
-                            "Research Radar: 3 paper(s), led by Paper 1 (50/75)", "Quick Hits: 5 more stories from OpenAI, TechCrunch"]
+                            "Research Radar: 3 paper(s), led by Paper 1", "Quick Hits: 5 more stories from OpenAI, TechCrunch"]
     assert s["signal"] == data["news"][0]
     assert s["hits"] == data["news"][1:6] and [c["title"] for c in s["radar"]] == ["Paper 1", "Paper 2", "Paper 3"]
     assert s["greeting"] == "Today: 1 agents story, 1 case study, 3 papers, 5 quick hits."
@@ -93,7 +93,7 @@ def test_renders_all_sections_from_fixture(tmp_path, monkeypatch, steps_on):
     assert "Paper summary 0. More detail." in case_text and "Even more." not in case_text  # 2-sentence case summary
     assert "https://arxiv.org/abs/0" in case_text and 'href="https://arxiv.org/abs/0"' in html_body
     assert all(step in text_body for step in STEPS) and "1. Open the Intune" in text_body
-    assert "/75" in html_body and 'max-width:600px' in html_body
+    assert "/75" not in html_body and 'max-width:600px' in html_body
     assert "Ahmed" not in html_body and "Ahmed" not in text_body and "Ahmed" not in subject
 
 
