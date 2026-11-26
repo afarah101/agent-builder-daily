@@ -77,7 +77,7 @@ def test_renders_all_sections_from_fixture(tmp_path, monkeypatch, steps_on):
     data = de.load_data()
     assert [n["title"] for n in data["news"]] == [f"News {i}" for i in range(8)] and len(data["papers"]) == 4
     subject, html_body, text_body, s = de.build_email(data, data["newest"] + timedelta(hours=1))
-    assert subject == "Scout Daily — Thu 22 Oct 2026 — News 0"
+    assert subject == "Daily Edge AI — Thu 22 Oct 2026 — News 0"
     for heading in ("Scout Daily", "Good morning", "In today&#x27;s Scout", "The Signal", "Case study of the day",
                     "Try this today", "Research Radar", "Quick Hits", de.SITE_URL, "Data as of"):
         assert heading in html_body, heading

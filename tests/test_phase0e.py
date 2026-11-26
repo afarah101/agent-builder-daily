@@ -67,7 +67,7 @@ def test_malformed_data_sends_alert_without_crashing(tmp_path, run, case):
 def test_well_formed_fixture_still_sends_digest(tmp_path, run):
     write_fixture(tmp_path)
     result, sent = run()
-    assert result == "sent" and sent[0][0] == "Scout Daily — Thu 22 Oct 2026 — News 0"
+    assert result == "sent" and sent[0][0] == "Daily Edge AI — Thu 22 Oct 2026 — News 0"
 
 
 def test_score_ring_is_out_of_75():
