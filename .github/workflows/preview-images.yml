@@ -27,12 +27,12 @@ jobs:
       - name: Generate AI images
         env:
           IMAGE_GEN_ENABLED: 'true'
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
           PYTHONIOENCODING: utf-8
         run: |
-          if [ -z "$HF_TOKEN" ]; then echo "HF_TOKEN secret is missing: add HF_TOKEN under Settings > Secrets and variables > Actions"; fi
           python generate_images.py
 
       - name: Generate page
@@ -40,7 +40,7 @@ jobs:
           PYTHONIOENCODING: utf-8
         run: python generate_html.py
 
-      - name: List generated images (slug, KB, provider)
+      - name: List generated images (slug, KB, neurons)
         run: |
           python - <<'EOF'
           import json, pathlib
@@ -49,7 +49,7 @@ jobs:
           files = sorted(d.glob("*.webp"))
           print(f"{len(files)} image(s)")
           for f in files:
-              print(f"IMAGE {f.stem} | {f.stat().st_size / 1024:.1f} KB | provider {alts.get(f.stem, {}).get('provider', 'unknown')}")
+              print(f"IMAGE {f.stem} | {f.stat().st_size / 1024:.1f} KB | neurons {alts.get(f.stem, {}).get('neurons', 'unknown')}")
           EOF
 
       - name: Push preview branch
