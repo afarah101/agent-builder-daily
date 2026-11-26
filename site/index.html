@@ -3,11 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scout — AI Intelligence Feed</title>
+  <title>Scout Daily: AI agent case studies and news</title>
+  <meta name="description" content="AI agent case studies and news for IT engineers, scored every day.">
+  <meta property="og:site_name" content="Scout Daily">
+  <meta property="og:title" content="Scout Daily: AI agent case studies and news">
+  <meta property="og:description" content="AI agent case studies and news for IT engineers, scored every day.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agent-builder-daily.vercel.app/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&family=Geist+Mono:wght@400;700&display=swap">
   <style>
     :root {
       /* Tokens from scout-daily-tokens.css (24 Nov 2026) */
-      --font: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+      --font: "Geist", ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --ls-head: -0.02em;
 
       --fs-hero: 72px;  --lh-hero: 1.08;  --ls-hero: -1.8px;
       --fs-h2: 48px;    --lh-h2: 1;       --ls-h2: -1.2px;
@@ -49,10 +60,6 @@
       --fs-hero-mobile: 44px;
       --tap: 44px;
     }
-
-    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
-    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -121,33 +128,28 @@
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    .header-stats { display: flex; gap: 32px; }
+    /* Headlines: Geist 700, tight tracking */
+    .brand, .hero-title, .card-title, .email-title { font-weight: 700; letter-spacing: var(--ls-head); }
 
-    .stat { text-align: right; }
-
-    .stat-num {
-      font-size: var(--fs-h3);
-      font-weight: 700;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
+    /* Scores, tags and dates: Geist Mono */
+    .score-ring, .score-num, .tag-pill, .status-badge, .tier-label, .pub-date, .archive-date, .archive-count, .trace-val, .updated,
+    .news-card .card-meta > span:last-child:not(:first-child) {
+      font-family: var(--font-mono);
     }
 
-    .stat-label, .tag-pill, .status-badge, .signal-title {
+    .tag-pill, .status-badge, .signal-title {
       font-size: var(--fs-label);
       line-height: var(--lh-label);
       letter-spacing: var(--ls-label);
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
     }
-
-    .stat-label { color: var(--c-on-dark-muted); margin-top: 4px; }
 
     .hero-title {
       max-width: 900px;
       margin: var(--section-pad) 0 16px;
       font-size: var(--fs-hero);
       line-height: var(--lh-hero);
-      letter-spacing: var(--ls-hero);
       font-weight: 700;
       text-wrap: balance;
     }
@@ -164,6 +166,7 @@
 
     /* Email capture, inside the hero */
     .email-banner {
+      color: var(--c-bg);  /* light text on the dark block, in the hero and at the page end */
       max-width: var(--reading-max);
       background: var(--c-surface-dark-2);
       border: 1px solid var(--c-border-dark);
@@ -173,7 +176,7 @@
 
     .email-inner { display: flex; flex-direction: column; gap: 12px; }
 
-    .email-title { font-size: var(--fs-body); font-weight: 600; }
+    .email-title { font-size: var(--fs-body); font-weight: 700; }
 
     .email-form { display: flex; gap: var(--gap); }
 
@@ -195,12 +198,12 @@
     .email-confirm { font-size: var(--fs-small); color: var(--c-on-dark-muted); }
 
     /* Buttons: flat, no shadow */
-    .email-btn, .breakdown-link, .md-export-btn {
+    .email-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font: inherit;
-      font-weight: 600;
+      font-weight: 700;
       line-height: 1;
       border: 1px solid transparent;
       border-radius: var(--radius);
@@ -213,12 +216,21 @@
     .email-btn { padding: 10px 20px; font-size: var(--fs-body); background: var(--c-bg); color: var(--c-text); }
     .email-btn:hover { background: var(--c-border); }
 
-    .breakdown-link, .md-export-btn { padding: 8px 14px; font-size: var(--fs-small); }
-    .breakdown-link { background: var(--c-surface-dark); color: var(--c-bg); }
-    .breakdown-link:hover { background: var(--c-border-dark); }
-    .md-export-btn { background: var(--c-bg); color: var(--c-text); border-color: var(--c-border); }
-    .md-export-btn:hover { border-color: var(--c-text); }
-    .md-export-btn.copied { color: var(--c-good); border-color: var(--c-good); }
+    /* Text links, never filled */
+    .breakdown-link, .privacy-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: var(--c-text-muted);
+    }
+    .breakdown-link:hover { text-decoration-color: var(--c-text); }
+    .privacy-link { align-self: flex-start; font-weight: 400; color: var(--c-on-dark-muted); }
+    .email-banner-end { margin: 48px auto 0; }
 
     /* White panel: overlaps the hero bottom by 64px */
     .content {
@@ -247,19 +259,23 @@
     /* Tabs */
     .tabs {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      min-width: 0;
+      max-width: 100%;
       gap: 4px;
       padding: 4px;
       margin-bottom: 8px;
-      border: 1px solid var(--c-border);
-      border-radius: var(--radius-pill);
     }
+
+    .tabs::-webkit-scrollbar { display: none; }
 
     .tab {
       padding: 8px 16px;
       font: inherit;
       font-size: var(--fs-small);
-      font-weight: 600;
+      font-weight: 700;
       color: var(--c-text-muted);
       cursor: pointer;
       border: none;
@@ -270,7 +286,7 @@
     }
 
     .tab:hover { color: var(--c-text); }
-    .tab.active { color: var(--c-bg); background: var(--c-surface-dark); }
+    .tab.active { color: var(--c-text); box-shadow: inset 0 -2px 0 var(--c-text); border-radius: 0; }
 
     .search {
       background: var(--c-bg);
@@ -328,15 +344,21 @@
       min-width: 0;
     }
 
+    .card-figure { margin: 0 0 16px; }
+    .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
+    .card-figure figcaption { margin-top: 4px; font-size: var(--fs-label); line-height: var(--lh-label); color: var(--c-text-muted); }
+
     .card-header {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      flex-wrap: wrap;
+      gap: 8px 12px;
       margin-bottom: 14px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: wrap; flex-grow: 1; }
+    .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
+    .tag-pill, .status-badge, .tier-label { white-space: nowrap; flex-shrink: 0; }
 
     .tag-pill, .status-badge { padding: 4px 8px; border-radius: var(--radius-sm); }
 
@@ -349,50 +371,21 @@
     .tier-label, .source-name {
       font-size: var(--fs-label);
       line-height: var(--lh-label);
-      font-weight: 600;
+      font-weight: 700;
       color: var(--c-text-muted);
     }
 
-    /* Score ring: out of 75 */
-    .score-ring {
-      --ring: var(--c-bad);
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-pill);
-      background: conic-gradient(var(--ring) calc(var(--pct) * 1%), var(--c-border) 0);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .ring-high { --ring: var(--c-good); }
-    .ring-mid { --ring: var(--c-warn); }
-
-    .score-ring::before {
-      content: '';
-      position: absolute;
-      width: 38px;
-      height: 38px;
-      background: var(--c-bg);
-      border-radius: var(--radius-pill);
-    }
-
-    .score-ring span {
-      position: relative;
-      font-size: var(--fs-label);
-      font-weight: 700;
-      color: var(--c-text);
-      font-variant-numeric: tabular-nums;
-    }
+    /* Score: "40/75" as text, coloured by level (all 4.5:1 or better on white) */
+    .score-ring { font-size: var(--fs-small); font-weight: 700; white-space: nowrap; color: var(--c-bad); font-variant-numeric: tabular-nums; }
+    .score-high { color: var(--c-good); }
+    .score-mid { color: var(--c-warn); }
 
     /* News relevance: a word beside the dot, never colour alone */
     .news-score-area {
       display: flex;
       align-items: center;
       gap: 6px;
-      flex-shrink: 0;
+      min-width: 0;
     }
 
     .rel-dot {
@@ -419,6 +412,7 @@
     .card-title {
       font-size: var(--fs-lead);
       font-weight: 700;
+      letter-spacing: var(--ls-head);
       line-height: var(--lh-h3);
       margin-bottom: 12px;
       overflow-wrap: anywhere;
@@ -439,7 +433,7 @@
       color: var(--c-text-muted);
     }
 
-    .card-meta > span:first-child { color: var(--c-text); font-weight: 600; }
+    .card-meta > span:first-child { color: var(--c-text); font-weight: 700; }
     .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
     .sep { color: var(--c-text-muted); }
 
@@ -505,7 +499,7 @@
     .trace-val {
       font-size: var(--fs-label);
       color: var(--c-text);
-      font-weight: 600;
+      font-weight: 700;
       font-variant-numeric: tabular-nums;
     }
 
@@ -555,7 +549,7 @@
     }
 
     .archive-date, .archive-count { font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
-    .archive-date { color: var(--c-text); font-weight: 600; }
+    .archive-date { color: var(--c-text); font-weight: 700; }
     .archive-count { color: var(--c-text-muted); }
 
     .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -589,28 +583,43 @@
     }
 
     footer span { font-size: var(--fs-label); color: var(--c-text-muted); }
+    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); }
 
     @media (max-width: 700px) {
-      .hero { padding-bottom: calc(64px + 48px); }
+      .hero { padding: 12px 0 calc(32px + 12px); }
       .header-inner { padding: 0 16px; }
-      .header-stats { gap: 20px; }
-      .hero-title { margin-top: 48px; }
+      .hero-title { margin: 16px 0 8px; }
+      .updated { margin-bottom: 16px; }
+      .email-banner { padding: 16px; }
+      .email-inner { gap: 8px; }
+      .content { margin-top: -32px; }
       .email-input { min-height: var(--tap); }
       .email-btn { min-height: var(--tap); padding: 0 18px; }
       .content { width: 100%; padding: 24px 16px 48px; }
       .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); position: static; }
-      .tab { flex: 1 1 40%; min-height: var(--tap); padding: 10px 12px; }
+      .tab { flex: 0 0 auto; min-height: var(--tap); padding: 10px 12px; }
       .search { width: 100%; min-height: var(--tap); font-size: var(--fs-body); }
       .card { padding: 18px; }
       .card-title { font-size: var(--fs-lead); }
       .card-title a { display: block; min-height: var(--tap); }
-      .trace-toggle, .breakdown-link, .md-export-btn { min-height: var(--tap); }
+      .trace-toggle { min-height: var(--tap); }
       .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
       .archive-title { display: flex; align-items: center; min-height: var(--tap); }
     }
 
-    @media (max-width: 639px) {
-      .hero-title { font-size: var(--fs-hero-mobile); }
+    @media (max-width: 640px) {
+      .hero-title { font-size: 30px; line-height: 1.15; }
+      /* Phone cards: tag, title, source • date, 2-line summary, one link. Desktop keeps the full text. */
+      .card .insight, .card .signal-points, .card .agent-trace, .card .status-badge, .card .tier-label { display: none; }
+      .cards-grid > .card .card-summary {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+      }
+      .card-meta { margin-bottom: 8px; }
+      .card-footer { margin-top: 8px; padding-top: 4px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -627,19 +636,9 @@
       <h1 class="brand">
         <span class="brand-name">Scout Daily</span><span class="brand-cursor" aria-hidden="true"></span>
       </h1>
-      <div class="header-stats">
-        <div class="stat">
-          <div class="stat-num">2</div>
-          <div class="stat-label">Case Studies</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">6</div>
-          <div class="stat-label">News Items</div>
-        </div>
-      </div>
     </div>
     <p class="hero-title">AI agent case studies and news, <span class="accent-word">scored every day</span>.</p>
-    <p class="updated">Updated 26 Nov 2026, 01:45 UTC</p>
+    <p class="updated">Updated 26 Nov 2026, 16:48 UTC</p>
 
   <div class="email-banner">
     <div class="email-inner">
@@ -650,6 +649,7 @@
         <button type="submit" class="email-btn">Subscribe</button>
       </form>
       <span class="email-confirm" id="email-confirm" role="status"></span>
+      <a class="privacy-link" href="privacy.html">How we use your email</a>
     </div>
   </div>
   </div>
@@ -669,74 +669,70 @@
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM serving optimisation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:53;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 40 of 75"><span>40</span></div>
+    <div class="card-tags"><span class="tag-pill">Cyber deception</span><span class="status-badge status-pass">AI-reviewed</span></div>
+    <span class="score-ring score-mid" style="--pct:40;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." aria-label="Scout score 30 of 75">30/75</span>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.33111v1" target="_blank" rel="noopener noreferrer">Draft Calibration for Speculative Decoding: Accelerating LLM Serving by Matching Draft and Target Distributions</a></h2>
-  <div class="card-meta"><span>Yuxing Liu, Wei Zuo, Walid Krichene, Tong Zhang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">24 Nov 2026</span></span></div>
-  <p class="card-summary">Speculative decoding speeds up LLM inference by letting a lightweight draft model propose tokens, but it stalls when the draft’s probability distribution mismatches the main model. The authors calibrated the draft with simple temperature scaling, boosting token acceptance by about 10% and improving throughput. This directly benefits any infra team running LLM services.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM inference, 1) apply a temperature scaling step to your draft model before serving; 2) monitor acceptance rates and adjust the temperature until you hit a ~10% lift; 3) measure throughput to confirm the expected speed‑up.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.34770v1" target="_blank" rel="noopener noreferrer">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a></h2>
+  <div class="card-meta"><span>Alessandro Cantelli-Forti, Isabella Marasco, Hosam Alamleh, Giada Boschi</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">25 Nov 2026</span></span></div>
+  <p class="card-summary">This research shows that using a persistent state‑based deception system, powered by a local language model, can force attackers to spend more time and resources while keeping defender cost lower. They built an SSH honeypot that keeps each attacker’s view consistent with their past actions and measured a 63 % reduction in defender effort compared to a basic LLM decoy. It is directly relevant to IT infrastructure managers looking to improve cost‑effective deception.
+</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage SSH or similar services, integrate a persistent state honeypot: 1) set up Cowrie with a local LLM; 2) configure the LLM to only render state, not store it; 3) monitor and adjust Deception Exchange Rate to keep defender costs under 63 % of a basic decoy.</p>
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">15/25</span></div>
       <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The paper discusses speculative decoding, a technique directly applicable to LLM serving infrastructure, offering measurable speedup that IT engineers could deploy. However, the work appears to be at a research stage with no released code or demonstrated production deployment, limiting immediate usability. The calibration methods proposed are actionable and could be adopted within 90 days, providing tangible monetisation potential for engineers managing LLM workloads.</p>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">10/25</span></div>
+      <p class="trace-reasoning">The paper proposes a novel deception technique using LLMs in a honeypot context. It directly impacts security tooling and endpoint management by potentially reducing defender compute costs. However, the implementation is only demonstrated in a proof‑of‑concept with Cowrie, lacking widespread deployment or released code, limiting maturity. The monetisation potential is modest: IT engineers could integrate a similar approach, but immediate commercial use would require further development and testing. Overall, the paper offers moderate real‑world relevance but low maturity and modest monetisation prospects, yielding a borderline score of 30, so a low_signal flag is set.</p>
     </div>
   </details>
-  <div class="card-footer">
-    <a href="breakdowns/draft-calibration-for-speculative-decoding-accelerating-llm-serving-by-matching-.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn"
-      data-title="Draft Calibration for Speculative Decoding: Accelerating LLM Serving by Matching Draft and Target Distributions"
-      data-summary="Speculative decoding speeds up LLM inference by letting a lightweight draft model propose tokens, but it stalls when the draft’s probability distribution mismatches the main model. The authors calibrated the draft with simple temperature scaling, boosting token acceptance by about 10% and improving throughput. This directly benefits any infra team running LLM services."
-      data-it="If you manage LLM inference, 1) apply a temperature scaling step to your draft model before serving; 2) monitor acceptance rates and adjust the temperature until you hit a ~10% lift; 3) measure throughput to confirm the expected speed‑up."
-      data-monetisation=""
-      data-reasoning="The paper discusses speculative decoding, a technique directly applicable to LLM serving infrastructure, offering measurable speedup that IT engineers could deploy. However, the work appears to be at a research stage with no released code or demonstrated production deployment, limiting immediate usability. The calibration methods proposed are actionable and could be adopted within 90 days, providing tangible monetisation potential for engineers managing LLM workloads."
-      data-score="40"
-      data-url="https://arxiv.org/abs/2611.33111v1">Copy as Markdown</button>
-  </div>
+  
 </article>
 <article class="card cs-card">
   <div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Llm inference optimisation</span><span class="status-badge status-pass">Verified</span></div>
-    <div class="score-ring ring-mid" style="--pct:53;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." role="img" aria-label="Scout score 40 of 75"><span>40</span></div>
+    <div class="card-tags"><span class="tag-pill">NLP training data augmentation</span><span class="status-badge status-pass">AI-reviewed</span></div>
+    <span class="score-ring score-low" style="--pct:26;" title="AI SCOUT SCORE: A 0-75 metric for Technical Novelty, Market Maturity, and Business Impact." aria-label="Scout score 20 of 75">20/75</span>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.33080v1" target="_blank" rel="noopener noreferrer">Shifter Quantization: Compact Representations for Native Integer Computation</a></h2>
-  <div class="card-meta"><span>Yufeng Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">24 Nov 2026</span></span></div>
-  <p class="card-summary">Shifter Quantization (SQ) and its SHI variant let you run low‑bit integer matrix‑multiply (up to INT4) for LLMs with less accuracy loss and faster inference, especially during prefill. They reconstruct full‑width operands by appending shared bits, yielding up to 3.8× faster 2‑bit prefill and 27% faster 8‑bit batch throughput while cutting KL divergence significantly. This can improve your GPU utilisation and reduce compute costs for large‑scale LLM inference.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage GPU inference for LLMs, 1) benchmark your current quantisation against SQ/SHI for your model size, 2) switch to SQ‑based INT4 kernels for 4‑bit workloads, 3) use SQ2 for 2‑bit when you need very fast prefill throughput.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.34785v1" target="_blank" rel="noopener noreferrer">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></h2>
+  <div class="card-meta"><span>Bich Ngoc Doan, Hanna Yukhymenko, Imanol Schlag</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">25 Nov 2026</span></span></div>
+  <p class="card-summary">PersonaFactory builds a pipeline that creates a huge synthetic persona bank and augments training dialogues with user personas to improve style and intent preservation in LLMs. The system produces 740,000 detailed personas and 1.24 million persona‑styled conversations across 85 languages, and shows that these enriched data help models match user style without losing intent. It is not directly relevant to managing cloud infrastructure.</p>
+  
   <details class="agent-trace">
     <summary class="trace-toggle">View Technical Reasoning</summary>
     <div class="trace-body">
-      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">20/25</span></div>
-      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">5/25</span></div>
-      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">15/25</span></div>
-      <p class="trace-reasoning">The paper presents a practical quantization technique that could directly improve inference speed for LLM deployments on GPUs, relevant to IT engineers managing AI workloads. However, the abstract does not mention released code or a production-ready system, indicating limited maturity. The method is actionable for engineers and could be adopted or sold as a performance optimization service within a few weeks, justifying a moderate monetisation score.</p>
+      <div class="trace-row"><span class="trace-label">Impact</span><span class="trace-val">5/25</span></div>
+      <div class="trace-row"><span class="trace-label">Maturity</span><span class="trace-val">10/25</span></div>
+      <div class="trace-row"><span class="trace-label">Monetisation</span><span class="trace-val">5/25</span></div>
+      <p class="trace-reasoning">The paper presents a synthetic persona generation pipeline that could be used to augment training data for LLMs. However, it is primarily a research prototype with no demonstrated deployment in real IT infrastructure or SaaS tooling. The approach is relevant to data preparation for AI models, but it does not directly affect how IT engineers manage Microsoft 365, Google Workspace, or cloud endpoints. The system appears built and tested, but it is not a ready-to‑deploy product. Commercial applicability within 90 days is uncertain, as the pipeline would need integration into existing data pipelines or LLM training workflows, which is non‑trivial. Overall impact and monetisation potential for typical IT engineers are limited.</p>
     </div>
   </details>
-  <div class="card-footer">
-    <a href="breakdowns/shifter-quantization-compact-representations-for-native-integer-computation.html" class="breakdown-link">IT Breakdown</a>
-    <button type="button" class="md-export-btn"
-      data-title="Shifter Quantization: Compact Representations for Native Integer Computation"
-      data-summary="Shifter Quantization (SQ) and its SHI variant let you run low‑bit integer matrix‑multiply (up to INT4) for LLMs with less accuracy loss and faster inference, especially during prefill. They reconstruct full‑width operands by appending shared bits, yielding up to 3.8× faster 2‑bit prefill and 27% faster 8‑bit batch throughput while cutting KL divergence significantly. This can improve your GPU utilisation and reduce compute costs for large‑scale LLM inference."
-      data-it="If you manage GPU inference for LLMs, 1) benchmark your current quantisation against SQ/SHI for your model size, 2) switch to SQ‑based INT4 kernels for 4‑bit workloads, 3) use SQ2 for 2‑bit when you need very fast prefill throughput."
-      data-monetisation=""
-      data-reasoning="The paper presents a practical quantization technique that could directly improve inference speed for LLM deployments on GPUs, relevant to IT engineers managing AI workloads. However, the abstract does not mention released code or a production-ready system, indicating limited maturity. The method is actionable for engineers and could be adopted or sold as a performance optimization service within a few weeks, justifying a moderate monetisation score."
-      data-score="40"
-      data-url="https://arxiv.org/abs/2611.33080v1">Copy as Markdown</button>
-  </div>
+  
 </article></div>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
-    
     <section class="signal">
-        <h2 class="signal-title">Today's signal</h2>
-        <p>AI users beware: OpenAI’s new ChatGPT merge may throttle heavy users, while Microsoft’s MCP AI agents change approval rules, and the NYT cautions Photoshop updates.</p>
+        <h2 class="signal-title">From McKinsey</h2>
+        <p><a class="archive-title" href="https://news.google.com/rss/articles/CBMiggFBVV95cUxOU0JrckFzOTh5RE9uSmJJcEh4bEZ3bHRBR2VkeTB4UDd0Zk9FMVAzY3RUejl5eVQ4c09RaEd6a0NwcjlvT0JGYnVISmdOZmxuVFVlUFo5YUhzOW0wNjlCZjNGUnBNdUl5eU00b3JURE0xWDVHYzZPNW1HcDg4cG5sbmpn?oc=5" target="_blank" rel="noopener noreferrer">Customers beat banks to AI</a> <span class="pub-date">25 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMimAFBVV95cUxQM0g5dW9xMUNBUmdleFZuRTRETGtjcm05VG90VlBYQ0lua2k4OExpRTFGc2JUX3BQS0VQb3Ixanoza2p2b3NRcnNZbTRDeGxIN3dRX3M0cjdfSVRVdGRCdnFwUXBxeFM5MUI2aXBYaFY5UVdrZ2JQb2o4M3hFOGZyTHhyUTZITUkyeGRVR3BWQzBkQVhEbmFLWQ?oc=5" target="_blank" rel="noopener noreferrer">McKinsey Technical Assessment and AI Interview Privacy and AI Notice</a> <span class="pub-date">23 Nov 2026</span></p><p><a class="archive-title" href="https://news.google.com/rss/articles/CBMipgFBVV95cUxOWU82WnpoSGhTQ0JQanJaSHZJWkhUTGdwMTNQVk9YM1VhaGQyTDhfVUZRaEJRQWRCeEthc2RaNTVPZDF6cVQ1bWlUZUtpV2hGdWYxYnlHWlNNSXVLYTNtN1M4WTRYbjhtRVhMS3pOSWJFM2REVk5vTF9YUGhhZ0t4UlRObjl0aXZpd0FzTzVaaUZUeGxIazlELTl4LXUybkRSdUZRdU1B?oc=5" target="_blank" rel="noopener noreferrer">A bold vision for Belgium</a> <span class="pub-date">19 Nov 2026</span></p>
     </section>
-    
     <div class="cards-grid"><article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Product Launch</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-high" aria-hidden="true"></span><span class="rel-word">High relevance</span>
+      <span class="score-num">8/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://nextcloud.com/blog/euro-office-comes-to-your-desktop-with-the-nextcloud-office-desktop-app/" target="_blank" rel="noopener noreferrer">Euro-Office comes to your desktop with the Nextcloud Office Desktop app</a></h2>
+  <div class="card-meta"><span>nextcloud.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">Nextcloud has released the Euro-Office Desktop app, a free, open‑source office suite that lets users edit Microsoft Office and OpenDocument files offline and in real time, with features such as digital signatures and local font usage. The app integrates with Nextcloud Hub, allowing teams to co‑edit files on Windows, macOS, and Linux.</p>
+  <p class="insight"><strong>How to use:</strong> Check your Nextcloud Hub integration today: install the Euro‑Office Desktop app, connect it to your instance, and enable the new offline editing and digital signature features. Neglecting this update could mean missing out on secure, offline collaboration and simplified document signing workflows for your team.</p>
+  <div class="card-footer"><a href="breakdowns/euro-office-comes-to-your-desktop-with-the-nextcloud-office-desktop-app.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
@@ -751,7 +747,24 @@
   <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
   <p class="card-summary">OpenAI is merging its ChatGPT and Work experiences, introducing a shared usage meter that may cause heavy users to hit limits sooner. The change is rolling out now to a select group of Pro subscribers, with broader deployment planned for December.</p>
   <p class="insight"><strong>How to use:</strong> Go to your OpenAI account settings this week and monitor your usage meter for the new shared limit. Failure to adjust could mean losing access to advanced models during critical support tasks, impacting incident response times. This directly affects any internal tooling that relies on ChatGPT APIs, so check your integration points in Freshservice or JumpCloud for potential throttling issues.</p>
-  <div class="card-footer"><a href="breakdowns/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work.html" class="breakdown-link">IT Breakdown</a></div>
+  <div class="card-footer"><a href="breakdowns/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Regulation</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">6/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.wired.com/story/meta-refused-to-share-muse-for-testing-uk-financial-watchdog-complains/" target="_blank" rel="noopener noreferrer">Meta Refused to Share Muse for Testing, UK Financial Watchdog Complains</a></h2>
+  <div class="card-meta"><span>Wired AI</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">Meta declined to share its Muse AI assistant with the UK’s Financial Conduct Authority for joint testing, prompting the regulator to urge stricter consumer protection oversight. This reflects growing scrutiny of AI assistants that can autonomously make payments or influence consumer behavior.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor UK regulatory announcements regarding AI assistants like Muse, and review your organization’s AI tool compliance posture to ensure alignment with potential new consumer protection standards. Understanding these requirements can guide future vendor selections and risk assessments for AI-driven customer interactions.</p>
+  
 </article>
 <article class="card news-card">
   <div class="card-header">
@@ -768,24 +781,41 @@
   <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
   <p class="card-summary">Anthropic has introduced Skills support over the Model Context Protocol (MCP) for Claude and Claude Code, now in public beta. This allows AI agents to access external services via MCP, expanding the capabilities of Claude models.</p>
   <p class="insight"><strong>How to use:</strong> Watch for how MCP-enabled skills can be integrated with existing identity and access management workflows; in the next 30 days evaluate if your current MDM or SSO solutions can expose APIs to MCP for automated policy enforcement or data retrieval.</p>
-  <div class="card-footer"><a href="breakdowns/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when.html" class="breakdown-link">IT Breakdown</a></div>
+  <div class="card-footer"><a href="breakdowns/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
+      <span class="score-num">5/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/ggml-org/llamacpp-amd-bench" target="_blank" rel="noopener noreferrer">Introducing the llama.cpp benchmark dashboard for AMD Ryzen and Radeon</a></h2>
+  <div class="card-meta"><span>Hugging Face</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">Hugging Face has released a benchmark dashboard that tracks llama.cpp inference performance on AMD Ryzen and Radeon GPUs, allowing users to compare different models, builds, and quantizations. The public data can be used to evaluate and optimize local AI workloads on AMD hardware.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on the dashboard when planning new AI workloads that might run locally on AMD machines. If your team is considering on‑prem inference for cost or compliance reasons, use the public benchmark results to pick the most efficient model/quantization combination and validate your own builds against the baseline. This can reduce trial‑and‑error and help justify hardware investments.</p>
+  <div class="card-footer"><a href="breakdowns/introducing-the-llamacpp-benchmark-dashboard-for-amd-ryzen-and-radeon.html" class="breakdown-link">Read the breakdown →</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
-      <span class="tag-pill">Security</span>
+      <span class="tag-pill">Other</span>
     </div>
     <div class="news-score-area">
       <span class="rel-dot rel-medium" aria-hidden="true"></span><span class="rel-word">Medium relevance</span>
-      <span class="score-num">6/10</span>
+      <span class="score-num">5/10</span>
     </div>
   </div>
-  <h2 class="card-title"><a href="https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features" target="_blank" rel="noopener noreferrer">The New York Times warns photographers not to update Photoshop over AI features</a></h2>
-  <div class="card-meta"><span>Hacker News</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">Adobe’s November 2027 Photoshop update introduces AI features that automatically embed C2PA metadata marking images as AI‑edited, prompting The New York Times to forbid photographers from using the new version to preserve editorial trust.</p>
-  <p class="insight"><strong>How to use:</strong> Review the metadata handling settings in your image assets platform to ensure no C2PA tags are automatically added when using AI tools. This will prevent inadvertent disclosure of AI usage in corporate or client media, mitigating reputational risk. Adjust your asset management workflows to strip or control these tags before publication.</p>
-  
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/25/anthropics-dario-amodei-calls-accusations-of-surrendering-human-control-to-ai-absurd/" target="_blank" rel="noopener noreferrer">Anthropic’s Dario Amodei calls accusations of surrendering human control to AI ‘absurd’</a></h2>
+  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
+  <p class="card-summary">Anthropic’s CEO Dario Amodei publicly rebukes claims that AI should relinquish human control, emphasizing the necessity of democratic oversight and human agency. He stresses limits on recursive self‑improvement while acknowledging that Anthropic’s own research increasingly incorporates AI authorship.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on Anthropic’s evolving stance as it may influence future policy discussions around AI governance and internal risk controls. Consider reviewing your organization’s AI governance framework to ensure human oversight remains central in any automated decision‑making processes you deploy.</p>
+  <div class="card-footer"><a href="breakdowns/anthropics-dario-amodei-calls-accusations-of-surrendering-human-control-to-ai-ab.html" class="breakdown-link">Read the breakdown →</a></div>
 </article>
 <article class="card news-card">
   <div class="card-header">
@@ -802,6 +832,23 @@
   <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
   <p class="card-summary">Nvidia CEO Jensen Huang admitted to violating the company’s code of conduct during a recent all‑hands meeting, sparking discussion on executive accountability and corporate culture. The incident highlights how leadership actions can affect employee morale and trust, even though it has no direct impact on IT tools or infrastructure.</p>
   <p class="insight"><strong>How to use:</strong> No immediate action is required for your IT stack. However, consider reviewing your organization’s code of conduct policies to ensure clarity and consistency across all levels. This helps prevent cultural erosion and maintains employee trust, which can indirectly influence productivity and security practices.</p>
+  <div class="card-footer"><a href="breakdowns/jensen-huang-broke-nvidias-code-of-conduct-and-his-employees-may-not-forget-it.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">AI Lab</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">3/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://huggingface.co/blog/training-swarms" target="_blank" rel="noopener noreferrer">Swarms, Flocks, Gangs: How to build, train, and evaluate multi-agent systems</a></h2>
+  <div class="card-meta"><span>Hugging Face</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">Hugging Face has released a blog series on building, training, and evaluating multi-agent systems, including reproducible examples that can be run on Hugging Face Jobs. The series highlights the challenges of swarm coordination, communication, and resource management while illustrating practical experiments with small agents and shared language models.</p>
+  
   
 </article>
 <article class="card news-card">
@@ -819,6 +866,40 @@
   <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
   <p class="card-summary">S&amp;P Global Ratings is evaluating a downgrade of Nvidia’s credit rating due to governance concerns and key‑man risk tied to CEO Jensen Huang. The downgrade could increase Nvidia’s borrowing costs, indirectly affecting customers and partners that rely on Nvidia for AI infrastructure financing.</p>
   <p class="insight"><strong>How to use:</strong> None.</p>
+  <div class="card-footer"><a href="breakdowns/sp-considers-nvidia-credit-downgrade-over-governance-and-key-man-risks.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/26/1149934/the-download-better-bionic-hands-ai-natural-gas-boom/" target="_blank" rel="noopener noreferrer">The Download: Better bionic hands and AI’s natural-gas boom</a></h2>
+  <div class="card-meta"><span>technologyreview.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">The MIT Tech Review highlights the arrival of a next‑generation bionic hand that can sense touch, following Avi Davidson’s personal journey with prosthetics.</p>
+  <p class="insight"><strong>How to use:</strong> Check whether your organization’s procurement or research teams are evaluating advanced prosthetic technologies for potential collaborations or employee wellness programs.</p>
+  <div class="card-footer"><a href="breakdowns/the-download-better-bionic-hands-and-ais-natural-gas-boom.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">1/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/26/1149923/the-next-generation-of-bionic-hands-is-here-and-they-can-feel/" target="_blank" rel="noopener noreferrer">The next generation of bionic hands is here—and they can feel</a></h2>
+  <div class="card-meta"><span>technologyreview.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">Avi Davidson&#x27;s new bionic hand, connected to forearm nerves, enables him to sense pressure, improving dexterity for delicate tasks.</p>
+  
   
 </article>
 <article class="card news-card">
@@ -833,10 +914,27 @@
     </div>
   </div>
   <h2 class="card-title"><a href="https://github.com/lsernau/grh-lean" target="_blank" rel="noopener noreferrer">Much shorter version of GRH Lean verification from Anthropic</a></h2>
-  <div class="card-meta"><span>Hacker News</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
+  <div class="card-meta"><span>github.com</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
   <p class="card-summary">Anthropic released a Lean 4 proof of the Riemann Hypothesis and its generalization, built on Mathlib. The repository is a research artifact and not maintained.</p>
   
   
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Other</span>
+    </div>
+    <div class="news-score-area">
+      <span class="rel-dot rel-low" aria-hidden="true"></span><span class="rel-word">Low relevance</span>
+      <span class="score-num">0/10</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://news.ycombinator.com/item?id=50655664" target="_blank" rel="noopener noreferrer">Tell HN: Happy Thanksgiving</a></h2>
+  <div class="card-meta"><span>news.ycombinator.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">This is a personal Thanksgiving message posted on Hacker News, unrelated to AI or technology developments.</p>
+  
+  <div class="card-footer"><a href="breakdowns/tell-hn-happy-thanksgiving.html" class="breakdown-link">Read the breakdown →</a></div>
 </article></div>
   </div>
 
@@ -844,7 +942,7 @@
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-26</div>
   <div class="archive-count">2 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.33111v1" target="_blank" rel="noopener noreferrer">Draft Calibration for Speculative Decoding: Accelerating LLM Serving by Matching Draft and Target Distributions</a><a class="archive-title" href="https://arxiv.org/abs/2611.33080v1" target="_blank" rel="noopener noreferrer">Shifter Quantization: Compact Representations for Native Integer Computation</a></div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.34770v1" target="_blank" rel="noopener noreferrer">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a><a class="archive-title" href="https://arxiv.org/abs/2611.34785v1" target="_blank" rel="noopener noreferrer">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></div>
 </div>
 <div class="archive-row">
   <div class="archive-date">2026-11-25</div>
@@ -996,7 +1094,7 @@
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-26</div>
-  <div class="archive-count">6 items</div>
+  <div class="archive-count">14 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/" target="_blank" rel="noopener noreferrer">OpenAI says heavy ChatGPT users may hit limits sooner as it merges Chat and Work</a><a class="archive-title" href="https://venturebeat.com/technology/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when-they-connect-one" target="_blank" rel="noopener noreferrer">MCP servers can now deliver AI agent skills, changing what companies approve when they connect one</a><a class="archive-title" href="https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features" target="_blank" rel="noopener noreferrer">The New York Times warns photographers not to update Photoshop over AI features</a></div>
 </div>
 <div class="archive-row">
@@ -1145,10 +1243,23 @@
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/retell-ai" target="_blank" rel="noopener noreferrer">Retell uses OpenAI models to help power 100M monthly calls</a><a class="archive-title" href="https://www.wired.com/story/macmillan-staff-say-the-publisher-threw-a-party-for-a-workplace-ai-assistant-that-was-later-killed/" target="_blank" rel="noopener noreferrer">Macmillan Staff Say the Publisher Threw a Party for a Workplace AI Assistant That Was Later Killed</a><a class="archive-title" href="https://www.anthropic.com/news/expanding-partnership-gsa" target="_blank" rel="noopener noreferrer">Expanding our partnership with GSA to bring Claude to all levels of government</a></div>
 </div></div>
   </div>
+
+  <div class="email-banner email-banner-end">
+    <div class="email-inner-2">
+      <p class="email-title" id="email-title-2">Get Scout Daily in your inbox</p>
+      <form class="email-form-2" aria-labelledby="email-title-2">
+        <label class="visually-hidden" for="email-input-2">Email address</label>
+        <input type="email" id="email-input-2" class="email-input" placeholder="your@email.com" autocomplete="email" required />
+        <button type="submit" class="email-btn">Subscribe</button>
+      </form>
+      <span class="email-confirm" id="email-confirm-2" role="status"></span>
+      <a class="privacy-link" href="privacy.html">How we use your email</a>
+    </div>
+  </div>
 </main>
 
 <footer>
-  <span>Scout · LangGraph + Groq + arXiv</span>
+  <span>Scout Daily · LangGraph + Groq + arXiv · <a href="privacy.html">Privacy</a></span>
   <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
 </footer>
 
@@ -1158,7 +1269,16 @@
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.getAttribute('aria-controls'), t)));
   document.getElementById('scout-search').addEventListener('input', e => filterCards(e.target.value));
   document.querySelector('.email-form').addEventListener('submit', e => submitEmail(e));
-  document.addEventListener('click', e => { const b = e.target.closest('.md-export-btn'); if (b) copyMarkdown(b); });
+  // The page-end form reuses submitEmail: copy its email into the hero form, submit, and mirror the status
+  const endForm = document.querySelector('.email-form-2');
+  if (endForm) endForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const top = document.getElementById('email-input'), end = document.getElementById('email-input-2');
+    const status = document.getElementById('email-confirm'), endStatus = document.getElementById('email-confirm-2');
+    top.value = end.value;
+    endStatus.textContent = 'Submitting…';
+    Promise.resolve(submitEmail(e)).then(() => { endStatus.textContent = status.textContent; if (!top.value) end.value = ''; });
+  });
 
   function showTab(id, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -1180,42 +1300,6 @@
     });
   }
 
-  function copyMarkdown(btn) {
-    const title = btn.dataset.title;
-    const summary = btn.dataset.summary;
-    const it = btn.dataset.it;
-    const monetisation = btn.dataset.monetisation;
-    const reasoning = btn.dataset.reasoning;
-    const score = btn.dataset.score;
-    const url = btn.dataset.url;
-    const md = [
-      "# " + title,
-      "",
-      "**Score:** " + score + "/75",
-      "",
-      "## Summary",
-      summary,
-      "",
-      "## IT Engineer Breakdown",
-      it,
-      "",
-      "## Business Opportunity",
-      monetisation,
-      "",
-      "## Agent Reasoning",
-      reasoning,
-      "",
-      "**Source:** " + url,
-    ].join("\n");
-    navigator.clipboard.writeText(md).then(() => {
-      btn.classList.add("copied");
-      btn.textContent = "Copied";
-      setTimeout(() => {
-        btn.classList.remove("copied");
-        btn.textContent = "Copy as Markdown";
-      }, 2000);
-    });
-  }
 </script>
 </body>
 </html>
