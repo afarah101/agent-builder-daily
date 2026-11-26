@@ -1,7 +1,8 @@
 name: preview-images
 
-# Manual only. Builds a preview of the page WITH AI images on branch preview/ai-images.
-# PREVIEW ONLY: never merge preview/ai-images. Delete the branch after review.
+# Manual only. Builds a preview of the page WITH AI images.
+# Started on a preview/* branch, it pushes back to that branch; started anywhere else, to preview/ai-images.
+# PREVIEW ONLY: never merge a preview/* branch. Delete the branch after review.
 on:
   workflow_dispatch:
 
@@ -53,10 +54,13 @@ jobs:
           EOF
 
       - name: Push preview branch
+        env:
+          START_REF: ${{ github.ref_name }}
         run: |
+          case "$START_REF" in preview/*) TARGET="$START_REF" ;; *) TARGET="preview/ai-images" ;; esac
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B preview/ai-images
+          git checkout -B "$TARGET"
           git add site/images/ site/index.html
           git commit -m "PREVIEW ONLY - do not merge" || echo "nothing to commit"
-          git push --force origin preview/ai-images
+          git push --force origin "$TARGET"
