@@ -255,7 +255,7 @@ def test_breakdown_page_uses_f2_tokens():
     css = page.split("<style>")[1].split("</style>")[0]
     assert "--c-text-muted:#a3a3a3" in css and "--c-accent:#10b981" in css and "#6366f1" not in css
     assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
-    assert ".brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap)" in css
+    assert ".brand-link,.back-link,.source-link,footer a{display:inline-flex;align-items:center;min-height:var(--tap)" in css
     assert "--tap:44px" in css and "background-clip" not in css and not re.search(r"border-left:\s*[2-9]px", css)
     assert "<main" in page and 'class="section-num"' not in page and 'class="badge"' not in page
 

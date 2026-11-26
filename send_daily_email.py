@@ -346,7 +346,7 @@ def render_html(date, s):
                         f'<span style="color:{C["muted"]};">· {_e(n.get("pub_date"))}</span></li>' for n in s["headlines"])
     headline_block = _block("From McKinsey", f"<ul {ul}>{headlines}</ul>") if headlines else ""
     return f"""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"></head>
+<meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>Daily Edge AI</title></head>
 <body style="margin:0;padding:0;background:{C["bg"]};" bgcolor="{C["bg"]}">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="{C["bg"]}" style="background:{C["bg"]};"><tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border:1px solid {C["border"]};border-radius:8px;">
