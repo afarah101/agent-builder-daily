@@ -5,86 +5,62 @@
     <link>https://agent-builder-daily.vercel.app</link>
     <description>Daily AI case studies and industry news for IT engineers and AI consultants.</description>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 25 Nov 2026 02:13:15 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 26 Nov 2026 01:45:53 +0000</lastBuildDate>
     <atom:link href="https://agent-builder-daily.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
-    <title>Where Did My Tokens Go? Verifiable Token Billing for LLM Services</title>
-    <link>https://arxiv.org/abs/2611.31806v1</link>
-    <guid>https://arxiv.org/abs/2611.31806v1</guid>
+    <title>Draft Calibration for Speculative Decoding: Accelerating LLM Serving by Matching Draft and Target Distributions</title>
+    <link>https://arxiv.org/abs/2611.33111v1</link>
+    <guid>https://arxiv.org/abs/2611.33111v1</guid>
     <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;TokenProv solves the problem of hidden or duplicated token charges in LLM services by using signed provider acceptances and causal histories to verify each billed call. The team built a verifier that matches observed acceptances with settlements, achieving near‑baseline throughput and low latency while detecting all attack attempts in tests. This is relevant for anyone managing LLM usage billing or ensuring fair cost allocation in multi‑provider cloud workflows.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud LLM usage, step 1: collect signed provider receipts for every request. Step 2: run a TokenProv‑style verifier to match receipts with your billing system and flag any missing or duplicated calls. Step 3: integrate the verifier into your audit pipeline to enforce one‑to‑one billing and prevent over‑billing or fraud.&lt;/p&gt;</description>
+    <description>&lt;p&gt;Speculative decoding speeds up LLM inference by letting a lightweight draft model propose tokens, but it stalls when the draft’s probability distribution mismatches the main model. The authors calibrated the draft with simple temperature scaling, boosting token acceptance by about 10% and improving throughput. This directly benefits any infra team running LLM services.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage LLM inference, 1) apply a temperature scaling step to your draft model before serving; 2) monitor acceptance rates and adjust the temperature until you hit a ~10% lift; 3) measure throughput to confirm the expected speed‑up.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</title>
-    <link>https://arxiv.org/abs/2611.29942v1</link>
-    <guid>https://arxiv.org/abs/2611.29942v1</guid>
-    <pubDate>Mon, 23 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;The study reviews how large language models (LLMs) can be used to move whole software projects from one language or framework to another, showing that while module‑level changes work well, full repository migration still struggles with build reliability, behaviour testing, and non‑functional properties. They built a taxonomy of migration approaches, analysed 96 papers, and identified gaps in requirements support, agent coordination, and cost‑benefit assessment. This research is relevant: it highlights practical risks and offers a framework for planning LLM‑driven migrations.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, use the taxonomy to map your migration stages: 1) catalogue modules needing change, 2) choose an agent type (agentless, single or multi‑agent) that matches your build pipeline, 3) integrate environment feedback loops to catch runtime behaviour gaps before full deployment.&lt;/p&gt;</description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>DELTA: Diagnosing Exploration Lineages via Twin-path Alignment - What Can Contrasting Design Paths Reveal About Microarchitectural Behavior?</title>
-    <link>https://arxiv.org/abs/2611.31767v1</link>
-    <guid>https://arxiv.org/abs/2611.31767v1</guid>
+    <title>Shifter Quantization: Compact Representations for Native Integer Computation</title>
+    <link>https://arxiv.org/abs/2611.33080v1</link>
+    <guid>https://arxiv.org/abs/2611.33080v1</guid>
     <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;DELTA captures every design change made during exploration and stores the outcome, letting engineers analyse why some tweaks help while others hurt. It builds a memory of parent‑child interventions, predicts performance accurately and can surface root causes that improve IPC by up to 1.4%.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, this is not directly applicable to your day‑to‑day tasks.&lt;/p&gt;</description>
+    <description>&lt;p&gt;Shifter Quantization (SQ) and its SHI variant let you run low‑bit integer matrix‑multiply (up to INT4) for LLMs with less accuracy loss and faster inference, especially during prefill. They reconstruct full‑width operands by appending shared bits, yielding up to 3.8× faster 2‑bit prefill and 27% faster 8‑bit batch throughput while cutting KL divergence significantly. This can improve your GPU utilisation and reduce compute costs for large‑scale LLM inference.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage GPU inference for LLMs, 1) benchmark your current quantisation against SQ/SHI for your model size, 2) switch to SQ‑based INT4 kernels for 4‑bit workloads, 3) use SQ2 for 2‑bit when you need very fast prefill throughput.&lt;/p&gt;</description>
     <category>Case Study</category>
   </item>
   <item>
-    <title>Modeling Event-Conditioned Emotional Expression Response with LLM Agents in a Synthetic Social Simulation</title>
-    <link>https://arxiv.org/abs/2611.31851v1</link>
-    <guid>https://arxiv.org/abs/2611.31851v1</guid>
-    <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;The paper presents a framework that lets large language model agents generate realistic, emotion‑conditioned responses to events, matching real social media patterns. It builds a hierarchical prompting system that feeds demographic, psychological, and context cues to the LLM and validates outputs against Facebook share data. The result shows the model can reproduce both polarized and consensus emotional trends, though it under‑expresses anger, indicating a need for further calibration.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; If you manage cloud infrastructure, this is not directly applicable to your work.&lt;/p&gt;</description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>Learning Compact State Abstractions for LLM Agents</title>
-    <link>https://arxiv.org/abs/2611.31800v1</link>
-    <guid>https://arxiv.org/abs/2611.31800v1</guid>
-    <pubDate>Tue, 24 Nov 2026 07:00:00 +0000</pubDate>
-    <description>&lt;p&gt;The research shows how to trim an AI agent’s memory to keep only what matters, cutting input size by up to 71% while keeping performance. However, this is about LLM behaviour modelling, not cloud infra management.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;IT Breakdown:&lt;/strong&gt; Not directly applicable to IT infrastructure work&lt;/p&gt;</description>
-    <category>Case Study</category>
-  </item>
-  <item>
-    <title>[News] After token leaderboards and spending caps, Snowflake has a third idea: Keep the cap, then learn from whoever breaks it</title>
-    <link>https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it</link>
-    <guid>https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it</guid>
-    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
-    <description>&lt;p&gt;Snowflake is implementing AI usage caps for employees, then analyzing the users who exceed these limits to uncover efficient AI workflows. The company treats overages as a source of insight for improving internal AI productivity.&lt;/p&gt;</description>
+    <title>[News] OpenAI says heavy ChatGPT users may hit limits sooner as it merges Chat and Work</title>
+    <link>https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/</link>
+    <guid>https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/</guid>
+    <pubDate>Thu, 26 Nov 2026 01:45:53 +0000</pubDate>
+    <description>&lt;p&gt;OpenAI is merging its ChatGPT and Work experiences, introducing a shared usage meter that may cause heavy users to hit limits sooner. The change is rolling out now to a select group of Pro subscribers, with broader deployment planned for December.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Searching for distant planets with Astra</title>
-    <link>https://openai.com/index/searching-for-distant-planets-with-astra</link>
-    <guid>https://openai.com/index/searching-for-distant-planets-with-astra</guid>
-    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
-    <description>&lt;p&gt;OpenAI’s Codex and Astra were used by amateur astronomers to sift through Kepler telescope data, identifying new exoplanet candidates that are now under review by professional scientists. This demonstrates how AI can process massive astronomical datasets, offering a model for large-scale data analysis in other domains.&lt;/p&gt;</description>
+    <title>[News] MCP servers can now deliver AI agent skills, changing what companies approve when they connect one</title>
+    <link>https://venturebeat.com/technology/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when-they-connect-one</link>
+    <guid>https://venturebeat.com/technology/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when-they-connect-one</guid>
+    <pubDate>Thu, 26 Nov 2026 01:45:53 +0000</pubDate>
+    <description>&lt;p&gt;Anthropic has introduced Skills support over the Model Context Protocol (MCP) for Claude and Claude Code, now in public beta. This allows AI agents to access external services via MCP, expanding the capabilities of Claude models.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton</title>
-    <link>https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance</link>
-    <guid>https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance</guid>
-    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
-    <description>&lt;p&gt;NVIDIA’s Isaac Lab now offers a ready‑made Sim2Real workflow for adding obstacle avoidance to the Microduck robot using Newton’s physics engine and ToF sensing. The tutorial walks through training an avoidance controller while reusing the existing walking policy, then exporting the policy for real‑robot deployment.&lt;/p&gt;</description>
+    <title>[News] The New York Times warns photographers not to update Photoshop over AI features</title>
+    <link>https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features</link>
+    <guid>https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features</guid>
+    <pubDate>Thu, 26 Nov 2026 01:45:53 +0000</pubDate>
+    <description>&lt;p&gt;Adobe’s November 2027 Photoshop update introduces AI features that automatically embed C2PA metadata marking images as AI‑edited, prompting The New York Times to forbid photographers from using the new version to preserve editorial trust.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] Jensen Huang’s Return Shows Nvidia Is Too Big to Police</title>
-    <link>https://www.wired.com/story/jensen-huang-nvidia-us-national-security-risks/</link>
-    <guid>https://www.wired.com/story/jensen-huang-nvidia-us-national-security-risks/</guid>
-    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
-    <description>&lt;p&gt;Nvidia’s board reinstated CEO Jensen Huang amid concerns over national security and export controls, highlighting the tension between corporate decisions and U.S. government oversight. The move underscores potential vulnerabilities in chip supply chains that could affect AI workloads and data security for enterprises.&lt;/p&gt;</description>
+    <title>[News] Jensen Huang broke Nvidia’s code of conduct, and his employees may not forget it</title>
+    <link>https://techcrunch.com/2026/11/25/jensen-huang-broke-nvidias-code-of-conduct-and-his-employees-may-not-forget-it/</link>
+    <guid>https://techcrunch.com/2026/11/25/jensen-huang-broke-nvidias-code-of-conduct-and-his-employees-may-not-forget-it/</guid>
+    <pubDate>Thu, 26 Nov 2026 01:45:53 +0000</pubDate>
+    <description>&lt;p&gt;Nvidia CEO Jensen Huang admitted to violating the company’s code of conduct during a recent all‑hands meeting, sparking discussion on executive accountability and corporate culture. The incident highlights how leadership actions can affect employee morale and trust, even though it has no direct impact on IT tools or infrastructure.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   <item>
-    <title>[News] GPT-6 models demonstrate intrinsic protein-design capabilities</title>
-    <link>https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities</link>
-    <guid>https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities</guid>
-    <pubDate>Wed, 25 Nov 2026 02:13:15 +0000</pubDate>
-    <description>&lt;p&gt;OpenAI has unveiled GPT‑6 models that can autonomously design new protein structures and amino‑acid sequences, outperforming specialized biology models on several tasks. The models use reasoning and code generation, enabling researchers to guide designs with natural language prompts.&lt;/p&gt;</description>
+    <title>[News] S&amp;P considers Nvidia credit downgrade over governance and ‘key man’ risks</title>
+    <link>https://techcrunch.com/2026/11/25/sp-considers-nvidia-credit-downgrade-over-governance-and-key-man-risks/</link>
+    <guid>https://techcrunch.com/2026/11/25/sp-considers-nvidia-credit-downgrade-over-governance-and-key-man-risks/</guid>
+    <pubDate>Thu, 26 Nov 2026 01:45:53 +0000</pubDate>
+    <description>&lt;p&gt;S&amp;amp;P Global Ratings is evaluating a downgrade of Nvidia’s credit rating due to governance concerns and key‑man risk tied to CEO Jensen Huang. The downgrade could increase Nvidia’s borrowing costs, indirectly affecting customers and partners that rely on Nvidia for AI infrastructure financing.&lt;/p&gt;</description>
     <category>Industry News</category>
   </item>
   </channel>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000 - IT Breakdown - Scout Daily</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;--text:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#8592a8;--accent:#00ff88;--accent-ink:#0f1117;--accent-tint:rgba(0,255,136,0.1);--warn:#fbbf24;--danger:#f87171;--fs-xs:12px;--fs-sm:13px;--radius:8px;--tap:44px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+    ::selection{background:var(--accent);color:var(--accent-ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .topbar{border-bottom:1px solid var(--border);padding:8px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+    .brand-link,.back-btn,.source-link{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
+    .brand-link{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);white-space:nowrap}
+    .back-btn{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);padding:0 4px}
+    .back-btn:hover{color:var(--text)}
+    .page-wrap{max-width:860px;margin:0 auto;padding:48px 32px 96px}
+    .page-title{font-family:'Georgia',serif;font-size:clamp(1.5rem,1.1rem + 1.6vw,2rem);font-weight:700;line-height:1.25;color:#ffffff;margin-bottom:12px;overflow-wrap:anywhere;text-wrap:balance}
+    .meta-line{font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:24px;overflow-wrap:anywhere}
+    .source-link{font-size:var(--fs-sm);font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid rgba(0,255,136,0.2);padding:0 16px;border-radius:6px;margin-bottom:40px}
+    .source-link:hover{background:rgba(0,255,136,0.16)}
+    .section-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px}
+    .summary-body{font-size:15px;line-height:1.8;color:var(--text-secondary);max-width:60ch}
+    .summary-body p{margin-bottom:16px}
+    .divider{height:1px;background:var(--border);margin:40px 0}
+    .guide-grid{display:flex;flex-direction:column;gap:16px}
+    .guide-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+    .guide-label{font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)}
+    .guide-block.green .guide-label{color:var(--accent)}
+    .guide-block.amber .guide-label{color:var(--warn)}
+    .guide-block.red .guide-label{color:var(--danger)}
+    .guide-text{font-size:14px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;overflow-wrap:anywhere;max-width:60ch}
+    .generated-note{margin-top:48px;font-size:var(--fs-xs);color:var(--text-muted);text-align:center}
+    @media(max-width:700px){.page-wrap{padding:32px 16px 64px}.topbar{padding:4px 16px;position:static}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="brand-link">Scout Daily</a>
+  <a href="../index.html" class="back-btn">← Back to feed</a>
+</header>
+<main class="page-wrap">
+  <h1 class="page-title">Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000</h1>
+  <p class="meta-line">Hugging Face · 25 Nov 202 · Generated 25 Nov 2026, 18:58</p>
+  <a href="https://huggingface.co/blog/inkling-2-mini-inference-hillclimb" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <section>
+    <h2 class="section-title">Detailed summary</h2>
+    <div class="summary-body"><p>Hugging Face has released the Inkling 2 Mini, a 26‑billion‑parameter multimodal large language model (LLM) that demonstrates state‑of‑the‑art inference performance on a single RTX PRO 6000 GPU. The model uses a looped Mixture‑of‑Experts (MoE) architecture, which allows it to route tokens through only a subset of experts, reducing compute while maintaining accuracy. Speculative decoding is enabled via DSpark, a technique that predicts token probabilities ahead of time, further accelerating inference. Benchmarks show that when run with vLLM or SGLang, Inkling 2 Mini outperforms many commercial models on modest hardware, achieving higher throughput and lower latency than comparable cloud offerings.</p><p>For enterprise IT teams, this release is significant because it provides a high‑performance, open‑source LLM that can be deployed on existing on‑prem GPU assets. The ability to run a 26B model on a single RTX PRO 6000 means that organizations can reduce reliance on expensive cloud inference services, lower egress costs, and maintain tighter control over data residency. The model’s multimodal capabilities (text, image, and potentially other modalities) also broaden its applicability across internal tools such as knowledge bases, automated documentation, and customer support assistants.</p><p>Key vendors and technologies involved include NVIDIA (RTX PRO 6000 GPU), Hugging Face (model and ecosystem), vLLM (efficient inference engine), SGLang (high‑performance language model runtime), and DSpark (speculative decoding library). The release underscores a broader industry shift toward more efficient, hardware‑agnostic LLM deployments, encouraging enterprises to evaluate open‑source alternatives that can run on existing infrastructure rather than scaling cloud usage.</p><p>The implications extend to cost optimization, data sovereignty, and competitive differentiation. By adopting models like Inkling 2 Mini, enterprises can accelerate AI adoption, reduce vendor lock‑in, and potentially re‑engineer internal workflows to leverage multimodal inference. Failure to benchmark and integrate such models may result in missed opportunities to replace costly cloud inference with a cost‑effective on‑prem solution.</p></div>
+  </section>
+  <div class="divider"></div>
+  <section>
+    <h2 class="section-title">IT engineer application guide</h2>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Inventory current GPU assets: count of RTX PRO 6000 or equivalent, total VRAM, and existing workloads.  
+   • Measure baseline inference latency and throughput for existing LLMs (e.g., GPT‑3.5, Claude) on the same hardware.  
+   • Assess power consumption and cooling capacity to ensure sustained high‑performance operation.  
+   • Verify software stack compatibility: CUDA version, cuDNN, Python, and any required libraries (vLLM, SGLang, DSpark).</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a cost‑benefit analysis comparing current cloud inference spend (per 1M tokens) versus projected on‑prem costs (GPU amortization, power, maintenance).  
+   • Include performance metrics: target latency &lt; 200 ms, throughput &gt; 10 tokens/sec per GPU.  
+   • Highlight risk mitigation: data residency, compliance, and reduced egress.  
+   • Present a phased pilot plan with ROI timeline (e.g., 6‑month break‑even).</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• NVIDIA GPU drivers, CUDA Toolkit, cuDNN.  
+   • Hugging Face Hub (model download).  
+   • vLLM or SGLang for inference deployment.  
+   • DSpark for speculative decoding.  
+   • Prometheus + Grafana for monitoring GPU utilization and inference metrics.  
+   • Docker or Singularity for containerized deployment.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Technical: MoE routing may lead to uneven GPU load; ensure proper profiling.  
+   • Compliance: UK GDPR requires data to remain within the EU; verify that all data processing stays on‑prem.  
+   • Operational: Lack of vendor support for open‑source model may increase maintenance burden.  
+   • Security: Container escape or model misuse; implement role‑based access and secure secrets management.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Deploy a single Inkling 2 Mini instance on an existing RTX PRO 6000, run a 24‑hour benchmark, and compare latency/throughput to the current cloud model.  
+   • Configure Prometheus alerts for GPU utilization &gt; 90% to catch bottlenecks early.  
+   • Document the setup in a runbook for future scaling.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">• Scale to a small GPU cluster (4–8 RTX PRO 6000s) using Kubernetes + NVIDIA GPU Operator.  
+   • Integrate the model into internal applications (e.g., internal search, code generation) via a REST API layer.  
+   • Continuously retrain or fine‑tune the model on proprietary data to improve relevance.  
+   • Establish a governance framework for model updates, monitoring, and compliance audits.  
+   • Explore hybrid deployment: keep sensitive data on‑prem while offloading non‑confidential inference to the cloud for cost optimization.</div></div></div>
+  </section>
+  <p class="generated-note">AI-generated breakdown · Scout Daily · 25 Nov 2026, 18:58</p>
+</main>
+</body>
+</html>

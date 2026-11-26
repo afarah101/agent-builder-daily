@@ -593,3 +593,57 @@ def test_non_lead_cards_clamp_summary_and_insight_to_3_lines(site):
                      r"\.cards-grid > \.card:not\(:first-child\) \.insight\s*\{([^}]*)\}", css)
     assert rule, "clamp rule missing"
     assert re.search(r"-webkit-line-clamp:\s*3;", rule.group(1)) and "overflow: hidden" in rule.group(1)
+
+
+# ---------- AI editorial images: markup only when the file exists, non-empty alt, caption ----------
+
+import generate_images as gi
+
+
+def with_image(site, title, alt="Indigo cubes linked by thin light rails"):
+    slug = gi.slugify(title)
+    images = site / "site" / "images"
+    images.mkdir(parents=True, exist_ok=True)
+    (images / f"{slug}.webp").write_bytes(b"RIFF0000WEBP")  # stand-in: only the file's presence matters
+    (images / "alt.json").write_text(json.dumps({slug: {"alt": alt, "created": "2026-11-25"}}))
+    return slug
+
+
+def test_card_shows_the_image_only_when_its_file_exists(site):
+    plain = cards(study(title="Paper"))
+    assert "<figure" not in plain and "images/" not in plain
+    news_plain = gh.render_news({"news": [{"title": "Story"}]}, {"news": {}})
+    assert "<figure" not in news_plain
+    slug = with_image(site, "Paper")
+    with_img = cards(study(title="Paper"))
+    assert f'<img src="images/{slug}.webp" loading="lazy" width="1200" height="675"' in with_img
+    assert with_img.index("<figure") < with_img.index('<div class="card-header">')  # at the top of the card
+    assert with_img.replace(gi.image_figure("Paper"), "") == plain  # no other change to the card
+    with_image(site, "Story")
+    assert "<figure" in gh.render_news({"news": [{"title": "Story"}]}, {"news": {}})
+
+
+@pytest.mark.parametrize("alt", ["Indigo cubes linked by thin light rails", "", "   "])
+def test_image_alt_is_never_empty(site, alt):
+    with_image(site, "Paper", alt=alt)
+    found = re.search(r'<img [^>]*alt="([^"]*)"', cards(study(title="Paper")))
+    assert found and found.group(1).strip()
+    if alt.strip():
+        assert found.group(1) == alt
+
+
+def test_image_has_the_ai_caption(site):
+    with_image(site, "Paper")
+    html = cards(study(title="Paper"))
+    assert re.search(r"<figure[^>]*>.*<figcaption>AI illustration</figcaption></figure>", html)
+
+
+def test_image_css_uses_the_card_radius():
+    assert re.search(r"\.card-figure img \{[^}]*border-radius: var\(--radius-card\)", open(ROOT / "generate_html.py").read())
+
+
+def test_image_generation_is_off_unless_enabled(monkeypatch, capsys):
+    monkeypatch.delenv("IMAGE_GEN_ENABLED", raising=False)
+    monkeypatch.setattr(gi, "run", lambda **kw: pytest.fail("run() must not start when disabled"))
+    assert gi.main([]) == 0
+    assert "0 API calls" in capsys.readouterr().out
