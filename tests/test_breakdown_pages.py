@@ -1,13 +1,14 @@
 """Breakdown pages and the archive page use the Daily Edge AI design: Geist, black background, emerald accent,
 the home page header (logo + name) and footer (Privacy link), and no scores."""
 import re
+import sys
 from pathlib import Path
 
 import pytest
 
-import generate_breakdowns as gb
-
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+import generate_breakdowns as gb  # noqa: E402
 PAGES = sorted((ROOT / "site" / "breakdowns").glob("*.html"))
 OLD = re.compile(r"scout daily|syne|00ff88|/75|scored|ai-reviewed", re.I)
 TEXT = re.compile(r'<div class="summary-body">.*?</section>|<div class="guide-grid">.*?</section>', re.S)
