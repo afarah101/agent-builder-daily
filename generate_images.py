@@ -17,7 +17,8 @@ IMAGES_DIR = "site/images"
 ALT_FILE = "alt.json"
 MODEL = "black-forest-labs/FLUX.1-schnell"  # Apache-2.0. Never FLUX.1-dev.
 HOUSE_STYLE = "clean editorial 3D illustration, soft studio light, near-black and indigo #4f46e5 accents, minimal, no text"
-NEGATIVE = "people, person, face, hands, crowd, logo, brand, text, letters, words, watermark, photo, photograph"
+NEGATIVE = ("text, letters, numbers, digits, logos, people, person, face, hands, crowd, brand, words, watermark, "
+            "photo, photograph")
 WIDTH, HEIGHT = 1200, 675
 GEN_HEIGHT = 672  # FLUX works in multiples of 16; the result is fitted to 1200x675
 QUALITY = 70
@@ -83,8 +84,11 @@ def scene_prompt(item):
     return f"""Describe ONE scene for an editorial illustration, in one sentence of at most 30 words.
 Topic: {title}
 Summary: {summary}
-Rules: an abstract or symbolic scene of objects, shapes or machines only. No people, no faces, no hands.
-No company, product or person names. No logos, brands, text, letters or numbers. Not a photo of a real event.
+Rules: show the story's own subject as one concrete, specific object or setting a reader would link to this topic
+(for a story about searching for planets: a telescope under a starfield; about a chip ban: a single chip on a
+customs scale). Never use generic filler: no gears, cubes, circuit boards, data streams, code, screens, charts or
+holograms unless the story is about that exact thing. No people, no faces, no hands. No company, product or person
+names. No logos, brands, text, letters, numbers or digits. Not a photo of a real event.
 Answer with the sentence only."""
 
 

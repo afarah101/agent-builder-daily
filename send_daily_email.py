@@ -294,6 +294,10 @@ def build_email(data, now):
     return subject, render_html(date, sections), render_text(date, sections), sections
 
 
+UNSUBSCRIBE_URL = "mailto:admin@optomate.co.uk?subject=Unsubscribe%20Scout%20Daily"
+PRIVACY_URL = "https://agent-builder-daily.vercel.app/privacy.html"
+
+
 def _e(s):
     return html.escape(str(s or ""))
 
@@ -359,7 +363,7 @@ def render_html(date, s):
 {_block("Research Radar", radar)}
 {_block("Quick Hits", f"<ul {ul}>{hits}</ul>")}
 {headline_block}
-<tr><td bgcolor="{C["bg"]}" style="background:{C["bg"]};padding:16px 24px;font:12px {FONT};color:{C["muted"]};">{_e(s["footer"])}</td></tr>
+<tr><td bgcolor="{C["bg"]}" style="background:{C["bg"]};padding:16px 24px;font:12px {FONT};color:{C["muted"]};">{_e(s["footer"])}<br><a href="{_e(UNSUBSCRIBE_URL)}" style="color:{C["accent"]};">Unsubscribe</a> · <a href="{_e(PRIVACY_URL)}" style="color:{C["accent"]};">Privacy</a></td></tr>
 </table></td></tr></table></body></html>"""
 
 
@@ -418,7 +422,7 @@ def render_text(date, s):
     if s["headlines"]:
         lines += ["", "FROM MCKINSEY"] + [f"- {n.get('title')} ({n.get('pub_date')}) — {safe_url(n.get('url'))}"
                                           for n in s["headlines"]]
-    lines += ["", s["footer"]]
+    lines += ["", s["footer"], f"Unsubscribe: {UNSUBSCRIBE_URL}", f"Privacy: {PRIVACY_URL}"]
     return "\n".join(lines)
 
 

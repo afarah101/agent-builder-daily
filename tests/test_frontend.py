@@ -30,7 +30,7 @@ def cards(*items):
 # ---------- status badge: eval_verdict first, never "Evaluating" for a passed item ----------
 
 @pytest.mark.parametrize("verdict, gemini, shown", [
-    ("pass", "pending", "Verified"), ("pass", None, "Verified"), (None, "pass", "Verified"),
+    ("pass", "pending", "AI-reviewed"), ("pass", None, "AI-reviewed"), (None, "pass", "AI-reviewed"),
     ("fail", "pending", "Flagged"), ("pending", "pending", "Evaluating"), (None, None, "Evaluating")])
 def test_badge_reads_eval_verdict_first(verdict, gemini, shown):
     html = cards(study(eval_verdict=verdict, gemini_eval_status=gemini))
@@ -48,9 +48,9 @@ def test_only_the_title_link_opens_the_source():
     links = re.findall(r'<a [^>]*href="https://arxiv.org/abs/1"', html)
     assert len(links) == 1
     assert re.search(r'<h2 class="card-title"><a href="https://arxiv.org/abs/1" target="_blank" rel="noopener noreferrer">', html)
-    # the reasoning toggle and the copy button are plain controls, not inside a link
+    # the reasoning toggle is a plain control, not inside a link; there is no copy button
     assert '<summary class="trace-toggle">View Technical Reasoning</summary>' in html
-    assert '<button type="button" class="md-export-btn"' in html and "onclick" not in html
+    assert "md-export-btn" not in html and "onclick" not in html
 
 
 def test_news_card_has_one_source_link_in_the_title():
@@ -647,3 +647,102 @@ def test_image_generation_is_off_unless_enabled(monkeypatch, capsys):
     monkeypatch.setattr(gi, "run", lambda **kw: pytest.fail("run() must not start when disabled"))
     assert gi.main([]) == 0
     assert "0 API calls" in capsys.readouterr().out
+
+
+# ---------- go-live: name, fewer choices, cards, honest content ----------
+
+def built_page(site, studies=None, news=None):
+    (site / "case_studies" / "archive.json").write_text("[]")
+    (site / "case_studies" / "2026-10-27.json").write_text(json.dumps({"case_studies": studies or [study()]}))
+    (site / "data" / "news" / "news_2026-10-27.json").write_text(json.dumps({"news": news or []}))
+    gh.generate_html()
+    return (site / "site" / "index.html").read_text()
+
+
+def test_name_is_scout_daily_and_no_counters(site):
+    page = built_page(site)
+    assert "<title>Scout Daily" in page
+    assert '<meta property="og:title" content="Scout Daily' in page and 'og:site_name" content="Scout Daily"' in page
+    assert '<span class="brand-name">Scout Daily</span>' in page
+    assert "stat-num" not in page and "News Items</div>" not in page and "Case Studies</div>" not in page
+    assert not re.search(r"<title>Scout —|Scout · LangGraph", page)
+
+
+def test_fewer_choices_and_two_signups_with_privacy(site):
+    page = built_page(site, [study(title="Paper")])
+    assert "Copy as Markdown" not in page and "md-export-btn" not in page
+    assert page.count('class="email-btn"') == 2  # hero and page end
+    assert page.count('href="privacy.html">How we use your email</a>') == 2
+    assert re.search(r"\.breakdown-link, \.privacy-link \{[^}]*text-decoration: underline", page)
+    assert not re.search(r"\.breakdown-link \{[^}]*background", page)  # a text link, never filled
+    assert not re.search(r"\.tab\.active \{[^}]*background", page)  # only Subscribe is filled
+
+
+def test_breakdown_link_text():
+    html = gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1"}]}, {"news": {"Story": "story"}})
+    assert '<a href="breakdowns/story.html" class="breakdown-link">Read the breakdown →</a>' in html
+    assert "IT Breakdown" not in html
+
+
+def test_score_reads_40_of_75_and_case_studies_use_the_grid(site):
+    assert ">40/75</span>" in gh.score_ring(40)
+    page = built_page(site)
+    cs_panel = page.split('id="case-studies"')[1].split('id="industry-news"')[0]
+    assert '<div class="cards-grid">' in cs_panel  # same lead + grid as Industry News
+
+
+def test_tags_never_wrap_and_relevance_cannot_overflow(site):
+    page = built_page(site)
+    assert re.search(r"\.card-tags \{[^}]*flex-wrap: nowrap", page)
+    assert re.search(r"\.tag-pill, \.status-badge, \.tier-label \{[^}]*white-space: nowrap", page)
+    assert re.search(r"\.card-header \{[^}]*flex-wrap: wrap", page)  # the relevance wraps below, not out of the card
+
+
+def test_only_the_lead_card_gets_an_image(site):
+    for t in ("Paper", "Second"):
+        with_image(site, t)
+    html = cards(study(title="Paper"), study(title="Second"))
+    assert html.count("<figure") == 1 and html.index("<figure") < html.index("Second")
+
+
+NOW = datetime(2026, 10, 27, 12, 0)
+
+
+def test_future_items_and_later_years_are_hidden():
+    changes = []
+    kept = gh.honest([study(title="Future", pub_date="2026-12-01"), study(title="Later", summary="Ships in 2027."),
+                      study(title="Fine", summary="Out in 2026."), study(title="Words", pub_date="26 Oct 2026"),
+                      study(title="Words ahead", pub_date="28 Oct 2026"), study(title="Unknown", pub_date="soon")],
+                     NOW, changes, "case study")
+    assert [i["title"] for i in kept] == ["Fine", "Words", "Unknown"]  # "26 Oct 2026" is a date, not a string compare
+    assert {c[1] for c in changes if c[2] == "hidden"} == {"Future", "Later", "Words ahead"}
+
+
+def test_source_that_does_not_match_the_url_shows_the_domain():
+    kept = gh.honest([{"title": "A", "source": "TechCrunch", "url": "https://www.theverge.com/x"},
+                      {"title": "B", "source": "The Verge", "url": "https://www.theverge.com/y"},
+                      {"title": "C", "source": "MIT Technology Review", "url": "https://www.technologyreview.com/z"}],
+                     NOW, [], "news")
+    assert [i["source"] for i in kept] == ["theverge.com", "The Verge", "MIT Technology Review"]
+
+
+@pytest.mark.parametrize("raw, shown", [
+    ("First point. Second point is cut off mid", "First point."),
+    ("First point. Second point…", "First point."),
+    ("First point. Second...", "First point."),
+    ("All done here.", "All done here."),
+    ("No sentence end…", "No sentence end")])
+def test_summaries_end_on_a_full_sentence(raw, shown):
+    out = gh.full_sentences(raw)
+    assert out == shown and not out.endswith(("…", "..."))
+
+
+def test_honest_checks_run_on_the_built_page(site):
+    page = built_page(site, [study(title="Kept paper"), study(title="Tomorrow paper", pub_date="2026-12-30")],
+                      [{"title": "Odd source", "url": "https://www.example.org/n", "source": "Reuters",
+                        "pub_date": "2026-10-26", "summary": "A real line. A cut"}])
+    live = page.split('id="archive-cs"')[0]
+    assert "Kept paper" in live and "Tomorrow paper" not in live
+    assert "<span>example.org</span>" in live and "Reuters" not in live
+    assert "A real line.</p>" in live and "A cut" not in live
+    assert ">AI-reviewed</span>" in live and "Verified" not in page
