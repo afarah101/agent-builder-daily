@@ -234,7 +234,7 @@ def render_case_studies(data, slug_map):
         breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">Read the breakdown →</a>' if slug else ""
 
         cards.append(f"""<article class="card cs-card">
-  {image_figure(cs.get("title", "Untitled")) if i == 0 else ""}<div class="card-header">
+  {image_figure(cs.get("title", "Untitled"))}<div class="card-header">
     <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}</div>
   </div>
   <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
@@ -260,7 +260,7 @@ def render_news(data, slug_map):
         meta_html = '<span class="sep" aria-hidden="true">•</span>'.join(f"<span>{m}</span>" for m in meta)
 
         cards.append(f"""<article class="card news-card">
-  {image_figure(item.get("title", "")) if i == 0 else ""}<div class="card-header">
+  {image_figure(item.get("title", ""))}<div class="card-header">
     <div class="card-tags">
       {tier_label(item.get("tier", "news"))}
       {tag_pill(item.get("category", "Other"))}

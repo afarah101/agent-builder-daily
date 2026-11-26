@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """AI editorial images for the top Daily Edge AI cards. Off unless IMAGE_GEN_ENABLED is "true".
 
-For the lead case study and the lead news item (one per tab), Groq writes a scene description from the title and summary,
+For every case study and news card in the window (up to 30 per tab), Groq writes a scene description from the title and summary,
 and FLUX.1-schnell (Apache-2.0) on Cloudflare Workers AI draws it in one house style. Each image is saved as site/images/<slug>.webp;
 site/images/alt.json keeps the scene description (the alt text) and the date it was made.
 Never fails the pipeline: the first error is logged, the run stops (no more API calls) and cards keep no image.
@@ -18,13 +18,13 @@ ALT_FILE = "alt.json"
 MODEL = "@cf/black-forest-labs/flux-1-schnell"  # Apache-2.0, on Cloudflare Workers AI. Never FLUX.1-dev.
 CF_URL = "https://api.cloudflare.com/client/v4/accounts/{account}/ai/run/{model}"
 CF_SECRETS = ("CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID")
-HOUSE_STYLE = "clean editorial 3D illustration, soft studio light, near-black and indigo #4f46e5 accents, minimal, no text"
+HOUSE_STYLE = "clean editorial 3D illustration, soft studio light, near-black and emerald #10b981 accents, minimal, no text"
 RULES = ("no text, no letters, no numbers, no digits, no logos, no people, no faces, no hands, no brands, "
          "no watermark, not a photograph")  # the model takes no negative prompt
 WIDTH, HEIGHT = 1200, 675
 STEPS = 4  # flux-1-schnell default; the model returns a square image, fitted to 1200x675
 QUALITY = 70
-TOP_N = 1  # lead story of each tab only: the page shows an image on the first card alone
+TOP_N = 30  # every card in the window, up to 30 per tab; a card keeps its image, so a later run makes new ones only
 MAX_AGE_DAYS = 120  # 4 months, the site's window
 FALLBACK_ALT = "Abstract editorial illustration"
 
@@ -134,7 +134,7 @@ def generate_image(scene, out_path):
 
 
 def top_items():
-    """The lead case study and the lead news item by the scores the page sorts by. Reads only: archives nothing."""
+    """The case studies and news items the page shows, by the scores the page sorts by. Reads only: archives nothing."""
     import generate_html as gh
     cutoff = (datetime.now() - timedelta(days=gh.CASE_STUDY_WINDOW_DAYS)).strftime("%Y-%m-%d")
     studies = []
