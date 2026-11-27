@@ -1,5 +1,5 @@
-"""Breakdown pages and the archive page use the Daily Edge AI design: Geist, black background, emerald accent,
-the home page header (logo + name) and footer (Privacy link), and no scores."""
+"""Breakdown pages and the archive page use the Daily Edge AI design: the home page's font set and token block,
+the dark hero header (logo + name), the white panel, one emerald button, the footer (Privacy link), and no scores."""
 import re
 import sys
 from pathlib import Path
@@ -9,6 +9,7 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 import generate_breakdowns as gb  # noqa: E402
+import generate_html as gh  # noqa: E402
 PAGES = sorted((ROOT / "site" / "breakdowns").glob("*.html"))
 OLD = re.compile(r"scout daily|syne|00ff88|/75|scored|ai-reviewed", re.I)
 TEXT = re.compile(r'<div class="summary-body">.*?</section>|<div class="guide-grid">.*?</section>', re.S)
@@ -49,11 +50,12 @@ def test_new_page_has_home_design():
     html = page(title="Edge AI")
     css = css_of(html)
     assert "<title>Edge AI — IT Breakdown — Daily Edge AI</title>" in html
-    assert 'family=Geist:wght@400;600;700&family=Geist+Mono' in html and '--font:"Geist"' in css
-    assert "--c-bg:#000000" in css and "--c-accent:#10b981" in css and "--c-accent-hover:#059669" in css
+    assert 'family=Geist:wght@400;600;700&family=Geist+Mono' in html and gh.font_links("../") in html
+    assert css.strip().startswith(gh.font_faces("../")) and gh.TOKENS_CSS in css and gb.ARTICLE_CSS in css
+    assert ".hero { background: var(--g-hero);" in css and "--c-accent: #10b981" in css
     assert '<link rel="icon" href="../favicon.svg" type="image/svg+xml">' in html
     assert '<a class="brand-link" href="../index.html"><span class="brand-logo" aria-hidden="true"></span>' in html
-    assert "background:url(../logo.svg)" in css and "<img" not in html  # no <img>: the escape tests forbid any
+    assert "background: url(../logo.svg)" in css and "<img" not in html  # no <img> without an image file: the escape tests forbid any
     assert "Daily Edge <span class=\"accent-word\">AI</span>" in html
     assert '<a class="back-link" href="../index.html">← Back to today</a>' in html
     assert '<footer>' in html and '<a href="../privacy.html">Privacy</a>' in html
@@ -61,22 +63,26 @@ def test_new_page_has_home_design():
 
 
 def test_new_page_keeps_sections_and_order():
-    html = page()
-    order = [html.index(s) for s in ('class="back-link"', 'class="page-title"', 'class="source-link"',
-                                     '<h2 class="section-title">Summary</h2>',
-                                     '<h2 class="section-title">How to apply</h2>', "<footer>")]
+    html = page()  # magazine order: tag, H1, meta, summary, "How to apply" panel, source button, back link
+    order = [html.index(s) for s in ('<p class="tag-pill">', 'class="page-title"', 'class="meta-line"',
+                                     '<h2 class="section-title">Summary</h2>', '<section class="apply-panel">',
+                                     '<h2 class="section-title">How to apply</h2>', 'class="source-link"',
+                                     'class="back-link"', "<footer>")]
     assert order == sorted(order)
 
 
 def test_phone_rules_in_css():
     css = css_of(page())
-    assert "--fs-body:16px" in css and "font-size:var(--fs-body)" in css.split("body{")[1].split("}")[0]
-    assert "--reading:65ch" in css and "max-width:var(--reading)" in css  # line length under 70ch
-    assert "overflow-wrap:anywhere" in css  # long words and URLs wrap at 360px
-    assert ".brand-link,.back-link,.source-link,footer a{display:inline-flex;align-items:center;min-height:var(--tap)" in css
-    assert "--tap:44px" in css
-    assert "@media(max-width:700px){.header-inner,.page-wrap,footer{padding-left:16px;padding-right:16px}" in css
-    assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
+    body = css.split("body {")[1].split("}")[0]
+    assert "--fs-body: 17px" in css and "font-size: var(--fs-body)" in body and "line-height: var(--lh-body)" in body
+    assert "--measure: 68ch" in css and "--reading-max: 680px" in css  # line length under 70ch in a 680px column
+    assert re.search(r"\.summary-body \{[^}]*max-width: var\(--measure\)", css)
+    assert "overflow-wrap: anywhere" in body  # long words and URLs wrap at 360px
+    for sel in (r"\.brand-link", r"\.source-link, \.cta", r"\.back-link, \.text-link, footer a"):
+        assert re.search(sel + r" \{[^}]*min-height: var\(--tap\)", css), sel
+    assert "--tap: 44px" in css
+    assert re.search(r"@media \(max-width: 700px\) \{[^@]*\.header-inner, \.article-head \{ padding: 0 var\(--s-16\); \}", css)
+    assert not re.findall(r"font-size:\s*\d+px", css.replace(gh.TOKENS_CSS, ""))  # every size is a token
 
 
 def test_current_shape_restyled_keeps_text():
@@ -100,7 +106,7 @@ def test_restyle_is_idempotent_and_keeps_pages_without_source():
 def test_every_committed_breakdown_page_has_the_new_design():
     assert PAGES
     stale = [p.name for p in PAGES if "url(../logo.svg)" not in (t := p.read_text())
-             or "--c-accent:#10b981" not in t or "← Back to today" not in t or OLD.search(frame(t))]
+             or gh.TOKENS_CSS not in t or "← Back to today" not in t or OLD.search(frame(t))]
     assert stale == []
 
 
@@ -112,6 +118,7 @@ def test_committed_page_round_trips(path):
 
 def test_archive_page_has_new_design():
     html = (ROOT / "site" / "archive.html").read_text()
-    assert '<meta http-equiv="refresh" content="0; url=/">' in html and '<a href="/">' in html
-    assert "background: #000000" in html and "#10b981" in html and "Geist" in html and 'src="logo.svg"' in html
-    assert "font: 16px/" in html and "min-height: 44px" in html and not OLD.search(html)
+    assert '<meta http-equiv="refresh" content="0; url=/">' in html and '<a class="cta" href="/">' in html
+    assert gh.font_links() in html and gh.TOKENS_CSS in html and 'src="logo.svg"' in html
+    assert "background: var(--g-hero)" in html and "font-size: var(--fs-body)" in html
+    assert html.count("min-height: var(--tap)") == 2 and not OLD.search(html)  # the logo link and the button

@@ -233,12 +233,7 @@ def test_hostile_text_is_escaped_on_a_short_page(site):
 def test_breakdown_page_uses_the_home_page_tokens(site):
     write_data(site, [study("Paper")], [], [story("Story")], [])
     gh.generate_html()
-    token = lambda css, name: re.search(rf"{name}:\s*([^;}}]+)", css).group(1).strip().replace(", ", ",")  # noqa: E731
     home = (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0]
     page = (site / "site" / "breakdowns" / "paper.html").read_text().split("<style>")[1].split("</style>")[0]
-    for name in ("--font", "--font-mono", "--ls-head", "--c-accent", "--c-accent-hover", "--c-on-accent", "--fs-body",
-                 "--fs-small", "--fs-label", "--radius", "--radius-card", "--tap", "--content-max"):
-        assert token(page, name) == token(home, name), name
-    # the page is the home page's dark surface: same dark tokens under the page's own names
-    for dark, home_name in (("--c-surface", "--c-surface-dark"), ("--c-border", "--c-border-dark"), ("--c-text-muted", "--c-on-dark-muted")):
-        assert token(page, dark) == token(home, home_name), dark
+    assert gh.TOKENS_CSS in home and gh.TOKENS_CSS in page  # one token block, the same bytes
+    assert not re.findall(r"#[0-9a-fA-F]{6}\b", page.replace(gh.TOKENS_CSS, ""))  # no colour outside the token block

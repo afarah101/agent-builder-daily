@@ -7,74 +7,333 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="../fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap">
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--font:"Geist",ui-sans-serif,system-ui,sans-serif;--font-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--ls-head:-0.02em;--c-bg:#000000;--c-surface:#171717;--c-border:#333333;--c-text:#ffffff;--c-text-2:#d4d4d4;--c-text-muted:#a3a3a3;--c-accent:#10b981;--c-accent-hover:#059669;--c-on-accent:#0a0a0a;--c-warn:#fbbf24;--c-bad:#f87171;--fs-body:16px;--lh-body:1.625;--fs-small:14px;--fs-label:12px;--radius:8px;--radius-card:12px;--tap:44px;--reading:65ch;--content-max:1152px}
-    body{background:var(--c-bg);color:var(--c-text);font-family:var(--font);font-size:var(--fs-body);line-height:var(--lh-body);min-height:100vh;overflow-wrap:anywhere}
-    ::selection{background:var(--c-accent);color:var(--c-on-accent)}
-    :focus-visible{outline:2px solid var(--c-accent);outline-offset:2px}
-    a{color:inherit}
-    .site-header{border-bottom:1px solid var(--c-border)}
-    .header-inner,.page-wrap,footer{max-width:var(--content-max);margin:0 auto;padding-left:32px;padding-right:32px}
-    .header-inner{display:flex;align-items:center;padding-top:12px;padding-bottom:12px}
-    .brand-link,.back-link,.source-link,footer a{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}
-    .brand-link{gap:10px;font-size:21px;line-height:1;font-weight:600;letter-spacing:var(--ls-head);color:var(--c-text)}
-    .brand-logo{display:block;width:28px;height:22px;flex-shrink:0;background:url(../logo.svg) center/contain no-repeat}
-    .brand-name{white-space:nowrap}
-    .accent-word{color:var(--c-accent)}
-    .page-wrap{padding-top:24px;padding-bottom:80px}
-    .back-link{gap:8px;padding-right:8px;font-size:var(--fs-body);font-weight:600;color:var(--c-accent);margin-bottom:24px}
-    .back-link:hover{color:var(--c-accent-hover)}
-    .page-title{max-width:var(--reading);font-size:clamp(28px,22px + 1.6vw,40px);line-height:1.15;font-weight:700;letter-spacing:var(--ls-head);text-wrap:balance;margin-bottom:12px}
-    .meta-line{font-family:var(--font-mono);font-size:var(--fs-small);line-height:20px;color:var(--c-text-muted);margin-bottom:24px}
-    .source-link{padding:0 20px;border-radius:var(--radius);background:var(--c-accent);color:var(--c-on-accent);font-weight:600;margin-bottom:48px}
-    .source-link:hover{background:var(--c-accent-hover)}
-    .section-title{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:var(--ls-head);margin-bottom:16px}
-    .summary-body{max-width:var(--reading);color:var(--c-text-2)}
-    .summary-body p{margin-bottom:16px}
-    .divider{height:1px;background:var(--c-border);margin:48px 0}
-    .guide-grid{display:flex;flex-direction:column;gap:16px}
-    .guide-block{max-width:calc(var(--reading) + 48px);background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-card);padding:20px 24px}
-    .guide-label{font-size:var(--fs-body);font-weight:700;margin-bottom:8px;color:var(--c-text)}
-    .guide-block.green .guide-label{color:var(--c-accent)}
-    .guide-block.amber .guide-label{color:var(--c-warn)}
-    .guide-block.red .guide-label{color:var(--c-bad)}
-    .guide-text{color:var(--c-text-2);white-space:pre-wrap}
-    .generated-note{margin-top:48px;font-family:var(--font-mono);font-size:var(--fs-label);color:var(--c-text-muted)}
-    footer{border-top:1px solid var(--c-border);padding-top:20px;padding-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-    footer span{font-size:var(--fs-label);color:var(--c-text-muted)}
-    footer a{padding:0 4px;color:var(--c-text);text-decoration:underline}
-    footer a:hover{color:var(--c-accent)}
-    @media(max-width:700px){.header-inner,.page-wrap,footer{padding-left:16px;padding-right:16px}.page-wrap{padding-top:16px;padding-bottom:48px}.guide-block{padding:16px}.divider{margin:32px 0}.source-link{margin-bottom:32px}}
+    @font-face { font-family: "Satoshi"; src: url("../fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
+      --font-head: "Satoshi", "Geist", ui-sans-serif, system-ui, sans-serif;  /* headings */
+      --font: "Geist", ui-sans-serif, system-ui, sans-serif;                  /* body */
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
+
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 56 on a phone, 72 on a desktop. Body: 17 at 1.6. */
+      --fs-label: 14px;
+      --fs-small: 14px;
+      --fs-ui: 16px;
+      --fs-body: 17px;
+      --fs-lead: 18px;
+      --fs-h4: 22px;
+      --fs-h3: 28px;
+      --fs-h2: 40px;
+      --fs-h1: 56px;
+      --fs-hero: 56px;
+      --lh-hero: 1.05;
+      --lh-head: 1.15;
+      --lh-snug: 1.3;
+      --lh-body: 1.6;
+      --lh-small: 1.5;
+      --ls-hero: -0.025em;  /* -1.8px at 72px */
+      --ls-head: -0.02em;
+      --ls-label: 0.04em;
+
+      /* Spacing: 4/8 scale */
+      --s-4: 4px;
+      --s-8: 8px;
+      --s-12: 12px;
+      --s-16: 16px;
+      --s-24: 24px;
+      --s-32: 32px;
+      --s-48: 48px;
+      --s-64: 64px;
+      --s-80: 80px;
+
+      --c-text: #171717;
+      --c-text-soft: #404040;      /* long-form body: 10.4:1 on white */
+      --c-text-muted: #737373;     /* 4.7:1 on white; never on --c-bg-alt */
+      --c-bg: #ffffff;
+      --c-bg-alt: #f5f5f5;
+      --c-surface-dark: #171717;
+      --c-surface-dark-2: #212121;
+      --c-border: #e5e5e5;
+      --c-border-dark: #333333;
+      --c-hero-bottom: #292929;
+      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
+      --c-accent: #10b981;         /* emerald: link underline, the one CTA, the accent word. Never text on white (2.5:1) */
+      --c-accent-hover: #059669;
+      --c-on-accent: #0a0a0a;      /* 7.8:1 on emerald */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;
+      --c-warn: #b45309;
+      --c-bad: #b91c1c;
+
+      --radius-sm: 4px;
+      --radius: 8px;
+      --radius-card: 12px;
+      --radius-lg: 16px;
+      --radius-panel: 28.8px;
+      --radius-pill: 9999px;
+
+      --content-max: 1152px;
+      --reading-max: 680px;  /* article column */
+      --measure: 68ch;       /* longest line of body text */
+      --tap: 44px;           /* smallest tap target */
+    }
+
+    @media (min-width: 1024px) {
+      :root { --fs-hero: 72px; }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      min-height: 100vh;
+      overflow-wrap: anywhere;  /* long words and URLs wrap at 360px */
+    }
+
+    ::selection { background: var(--c-text); color: var(--c-bg); }
+    :focus-visible { outline: 2px solid var(--c-text); outline-offset: 2px; }
+    .hero :focus-visible { outline-color: var(--c-bg); }
+
+    /* Hero: logo (links home), tag, H1, meta */
+    .hero { background: var(--g-hero); color: var(--c-bg); padding: var(--s-24) 0 calc(var(--s-64) + var(--s-48)); }
+    .header-inner { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--s-32); }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-family: var(--font-head);
+      font-size: var(--fs-h4);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      color: var(--c-bg);
+      text-decoration: none;
+    }
+
+    .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
+    .brand-name { white-space: nowrap; }
+    .accent-word { color: var(--c-accent); }
+
+    .article-head {
+      max-width: calc(var(--reading-max) + 2 * var(--s-64));
+      margin: var(--s-64) auto 0;
+      padding: 0 var(--s-64);
+    }
+
+    .tag-pill {
+      display: inline-block;
+      margin-bottom: var(--s-16);
+      padding: var(--s-4) var(--s-8);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius-sm);
+      background: var(--c-surface-dark-2);
+      color: var(--c-bg);
+      font-family: var(--font-mono);
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      letter-spacing: var(--ls-label);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .page-title {
+      margin-bottom: var(--s-16);
+      font-family: var(--font-head);
+      font-size: var(--fs-h3);
+      line-height: var(--lh-head);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      text-wrap: balance;
+    }
+
+    .meta-line {
+      font-family: var(--font-mono);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-on-dark-muted);
+    }
+
+    /* White panel: overlaps the hero bottom, as on the home page */
+    .content {
+      position: relative;
+      width: min(calc(var(--reading-max) + 2 * var(--s-64)), calc(100% - var(--s-32)));
+      margin: calc(-1 * var(--s-64)) auto 0;
+      padding: var(--s-48) var(--s-64) var(--s-64);
+      background: var(--c-bg);
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    }
+
+    .article { max-width: var(--reading-max); margin: 0 auto; }
+
+    .article-figure { margin: 0 0 var(--s-32); }
+    .article-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;  /* with width and height on the tag: the space is kept before the file loads */
+      object-fit: cover;
+      border-radius: var(--radius-card);
+      background: var(--c-bg-alt);
+    }
+    .article-figure figcaption {
+      margin-top: var(--s-8);
+      font-family: var(--font-mono);
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
+    }
+
+    .section-title {
+      margin-bottom: var(--s-16);
+      font-family: var(--font-head);
+      font-size: var(--fs-h4);
+      line-height: var(--lh-snug);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+    }
+
+    .summary-body { max-width: var(--measure); color: var(--c-text-soft); }
+    .summary-body p { margin-bottom: var(--s-16); }
+    .summary-body p:last-child { margin-bottom: 0; }
+    .divider { height: var(--s-48); }
+
+    /* "How to apply" panel */
+    .apply-panel { padding: var(--s-32); border-radius: var(--radius-panel); background: var(--c-bg-alt); }
+    .guide-grid { display: flex; flex-direction: column; gap: var(--s-12); }
+    .guide-block {
+      padding: var(--s-16) var(--s-24);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      background: var(--c-bg);
+    }
+    .guide-label {
+      margin-bottom: var(--s-8);
+      font-family: var(--font-head);
+      font-size: var(--fs-lead);
+      line-height: var(--lh-snug);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      color: var(--c-text);
+    }
+    .guide-text { color: var(--c-text-soft); white-space: pre-wrap; }
+
+    .generated-note {
+      margin-top: var(--s-16);
+      font-family: var(--font-mono);
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
+    }
+
+    /* Actions: the one emerald button, then the back link */
+    .article-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-24); margin-top: var(--s-32); }
+
+    .source-link, .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-24);
+      border-radius: var(--radius);
+      background: var(--c-accent);
+      color: var(--c-on-accent);
+      font-size: var(--fs-ui);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .source-link:hover, .cta:hover { background: var(--c-accent-hover); }
+
+    /* Text links: the text keeps its colour, the underline is emerald */
+    .back-link, .text-link, footer a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      color: var(--c-text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .back-link, .text-link { font-size: var(--fs-ui); font-weight: 600; }
+    .back-link:hover, .text-link:hover, footer a:hover { text-decoration-color: var(--c-accent-hover); }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--s-8);
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: var(--s-16) var(--s-32);
+      border-top: 1px solid var(--c-border);
+    }
+    footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    footer a { padding: 0 var(--s-4); }
+
+    @media (min-width: 701px) {
+      .page-title { font-size: var(--fs-h2); }
+    }
+
+    @media (max-width: 700px) {
+      .hero { padding: var(--s-12) 0 var(--s-64); }
+      .header-inner, .article-head { padding: 0 var(--s-16); }
+      .article-head { margin-top: var(--s-32); }
+      .content { width: 100%; margin-top: calc(-1 * var(--s-32)); padding: var(--s-24) var(--s-16) var(--s-48); }
+      .article-figure { margin-bottom: var(--s-24); }
+      .divider { height: var(--s-32); }
+      .apply-panel { padding: var(--s-16); border-radius: var(--radius-lg); }
+      .guide-block { padding: var(--s-16); }
+      .source-link, .cta { width: 100%; }
+      footer { padding: var(--s-16); }
+    }
+
+    .brand-logo { background: url(../logo.svg) center/contain no-repeat; }
   </style>
 </head>
 <body>
-<header class="site-header">
+<header class="hero">
   <div class="header-inner">
     <a class="brand-link" href="../index.html"><span class="brand-logo" aria-hidden="true"></span><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
   </div>
+  <div class="article-head">
+    <p class="tag-pill">Breakdown</p>
+    <h1 class="page-title">Model Routing Is Simple. Until It Isn’t.</h1>
+    <p class="meta-line">Hugging Face · 15 Jul 202 · Generated 15 Jul 2026, 19:26</p>
+  </div>
 </header>
-<main class="page-wrap">
-  <a class="back-link" href="../index.html">← Back to today</a>
-  <h1 class="page-title">Model Routing Is Simple. Until It Isn’t.</h1>
-  <p class="meta-line">Hugging Face · 15 Jul 202 · Generated 15 Jul 2026, 19:26</p>
-  <a href="https://huggingface.co/blog/ibm-research/model-routing-is-simple-until-it-isnt" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
-  <section>
-    <h2 class="section-title">Summary</h2>
-    <div class="summary-body"><p>Hugging Face recently discussed the complexities of model routing, highlighting the limitations of simple model routing methods and the importance of considering edge cases in model deployment. This is significant for enterprise IT teams as they manage AI workflows, as it emphasizes the need to evaluate current model deployment strategies to ensure they account for potential pitfalls. The discussion centered around the idea that while simple model routing may seem straightforward, it can become complicated when dealing with real-world scenarios and edge cases. Hugging Face, a prominent vendor in the AI and machine learning space, is involved in this development, and their insights have broader industry implications. The importance of considering edge cases and potential pitfalls in model deployment is a key takeaway, as it can impact the reliability, scalability, and maintainability of AI workflows. Enterprise IT teams should take note of this and assess their current model deployment strategies to ensure they are robust and effective. The discussion also highlights the need for more advanced model routing methods that can handle complex scenarios and edge cases, which may involve leveraging specialized tools and platforms. As the use of AI and machine learning continues to grow in the enterprise, the need for reliable and effective model deployment strategies will become increasingly important.</p></div>
-  </section>
-  <div class="divider"></div>
-  <section>
-    <h2 class="section-title">How to apply</h2>
-    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">Assess your current model deployment strategies to identify potential pitfalls and areas for improvement, including the handling of edge cases and complex scenarios. Review your existing workflows, tools, and platforms to determine if they are adequate for your needs.</div></div>
+<main class="content">
+  <article class="article">
+    
+    <section>
+      <h2 class="section-title">Summary</h2>
+      <div class="summary-body"><p>Hugging Face recently discussed the complexities of model routing, highlighting the limitations of simple model routing methods and the importance of considering edge cases in model deployment. This is significant for enterprise IT teams as they manage AI workflows, as it emphasizes the need to evaluate current model deployment strategies to ensure they account for potential pitfalls. The discussion centered around the idea that while simple model routing may seem straightforward, it can become complicated when dealing with real-world scenarios and edge cases. Hugging Face, a prominent vendor in the AI and machine learning space, is involved in this development, and their insights have broader industry implications. The importance of considering edge cases and potential pitfalls in model deployment is a key takeaway, as it can impact the reliability, scalability, and maintainability of AI workflows. Enterprise IT teams should take note of this and assess their current model deployment strategies to ensure they are robust and effective. The discussion also highlights the need for more advanced model routing methods that can handle complex scenarios and edge cases, which may involve leveraging specialized tools and platforms. As the use of AI and machine learning continues to grow in the enterprise, the need for reliable and effective model deployment strategies will become increasingly important.</p></div>
+    </section>
+    <div class="divider"></div>
+    <section class="apply-panel">
+      <h2 class="section-title">How to apply</h2>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">Assess your current model deployment strategies to identify potential pitfalls and areas for improvement, including the handling of edge cases and complex scenarios. Review your existing workflows, tools, and platforms to determine if they are adequate for your needs.</div></div>
 <div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">Build a business case for investing in more advanced model routing methods and tools, highlighting the potential benefits of improved reliability, scalability, and maintainability. Metrics such as model accuracy, deployment time, and maintenance costs can be used to support the business case.</div></div>
 <div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Consider leveraging platforms such as Hugging Face, TensorFlow, or PyTorch, which offer advanced model routing and deployment capabilities. Additionally, tools like AWS SageMaker, Azure Machine Learning, or Google Cloud AI Platform may be relevant.</div></div>
 <div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">Technical risks include the potential for model drift, data quality issues, or deployment failures. Compliance risks, such as those related to UK GDPR, may also be relevant, particularly if sensitive data is involved. Operational risks include the potential for increased maintenance costs or downtime.</div></div>
 <div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Implement a simple model monitoring and logging solution to track model performance and identify potential issues, which can be achievable in under 30 days. This can help identify areas for improvement and provide a foundation for more advanced model routing methods.</div></div>
 <div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Develop a strategic plan to implement more advanced model routing methods and tools, including the use of specialized platforms and tools, over the next 6-12 months. This may involve investing in staff training, developing new workflows, and integrating new tools and platforms into existing environments.</div></div></div>
-  </section>
-  <p class="generated-note">AI-generated breakdown · Daily Edge AI · 15 Jul 2026, 19:26</p>
+    </section>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 15 Jul 2026, 19:26</p>
+    <div class="article-actions">
+      <a href="https://huggingface.co/blog/ibm-research/model-routing-is-simple-until-it-isnt" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
+      <a class="back-link" href="../index.html">← Back to today</a>
+    </div>
+  </article>
 </main>
 <footer>
   <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="../privacy.html">Privacy</a></span>
