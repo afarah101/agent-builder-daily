@@ -43,6 +43,10 @@ jobs:
           PYTHONIOENCODING: utf-8
         run: python orchestrator.py
 
+      - name: Install OCR for the image text check
+        continue-on-error: true
+        run: sudo apt-get update -q && sudo apt-get install -y -q tesseract-ocr
+
       - name: Generate AI images
         continue-on-error: true
         env:

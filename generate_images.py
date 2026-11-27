@@ -6,6 +6,9 @@ and FLUX.1-schnell (Apache-2.0) on Cloudflare Workers AI draws it in one house s
 site/images/alt.json keeps the scene description (the alt text) and the date it was made.
 A card keeps its image until prune; a run draws at most MAX_NEW_PER_RUN new ones, newest cards first.
 Never fails the pipeline: the first error is logged, the run stops (no more API calls) and cards keep no image.
+No text in images: the scene is built from shapes, light, materials, architecture and nature only, a scene with a
+banned word is asked for once more and then replaced by a safe fallback, and every image is read by OCR (tesseract).
+An image with text is drawn once more from a new scene; if it still has text it is deleted ("skipped: text").
 """
 import json
 import os
@@ -28,6 +31,24 @@ QUALITY = 70
 MAX_NEW_PER_RUN = 25  # 2 runs a day x 25 x ~173 neurons stays under Cloudflare's free 10,000 neurons a day
 MAX_AGE_DAYS = 120  # 4 months, the site's window
 FALLBACK_ALT = "Abstract editorial illustration"
+# objects that carry text or digits; a scene that names one is asked for once more, then replaced by a fallback
+BANNED_WORDS = {
+    "code", "digit", "digits", "number", "numbers", "numeral", "binary", "text", "letter", "letters", "word", "words",
+    "screen", "monitor", "display", "phone", "smartphone", "camera", "lens", "lenses", "sign", "signage", "signpost",
+    "label", "tag", "book", "notebook", "handbook", "page", "paper", "document", "newspaper", "magazine", "poster",
+    "billboard", "banner", "chart", "graph", "dashboard", "keyboard", "laptop", "computer", "tablet", "terminal",
+    "logo", "brand", "barcode", "qr", "map", "calendar", "clock", "scroll", "note", "envelope", "stamp", "coin",
+    "badge", "ticket", "receipt", "menu", "plaque", "certificate", "typewriter", "whiteboard", "blackboard",
+    "chalkboard", "spreadsheet", "server", "hologram", "interface", "scale", "flag", "card", "packaging", "license",
+}
+FALLBACK_SCENES = (
+    "smooth emerald glass spheres resting on dark stone steps under a single soft beam of light",
+    "a curved concrete archway opening onto calm misty hills at dawn",
+    "folded ribbons of brushed metal forming a wave above still dark water",
+    "a lone tree of pale crystal on a black basalt plateau under a soft green glow",
+)
+OCR_MIN_CONF = 60  # tesseract confidence, 0-100
+OCR_MIN_LETTERS = 3  # a word of 3+ letters at OCR_MIN_CONF or more counts as text
 
 api_calls = 0  # every Groq or Cloudflare request adds 1
 
@@ -80,32 +101,91 @@ def strip_names(text, names):
     return re.sub(r"\s{2,}", " ", text).strip(" ,.;:-")
 
 
-def scene_prompt(item):
+def scene_prompt(item, avoid=""):
     names = names_in(item)
     title = strip_names(str(item.get("title", "")), names)
     summary = strip_names(str(item.get("summary", ""))[:600], names)
+    retry = f"\nYour earlier answer was rejected: {avoid}. Write a different scene.\n" if avoid else ""
     return f"""Describe ONE scene for an editorial illustration, in one sentence of at most 30 words.
 Topic: {title}
 Summary: {summary}
-Rules: show the story's own subject as one concrete, specific object or setting a reader would link to this topic
-(for a story about searching for planets: a telescope under a starfield; about a chip ban: a single chip on a
-customs scale). Never use generic filler: no gears, cubes, circuit boards, data streams, code, screens, charts or
-holograms unless the story is about that exact thing. No people, no faces, no hands. No company, product or person
-names. No logos, brands, text, letters, numbers or digits. Not a photo of a real event.
+Rules: build the scene ONLY from abstract shapes, light, materials (glass, stone, metal, wood, water, fabric),
+architecture and nature, as a calm visual metaphor for the story (for a story about searching for planets: a
+glowing sphere above a dark mountain lake; about a chip ban: a small emerald crystal behind a tall stone gate).
+Never show: code, digits, numbers, binary, screens, monitors, phones, cameras, lenses, signs, labels, tags, books,
+paper, documents, charts, keyboards, computers, servers, logos, maps, clocks, coins, stamps, posters, flags, or any
+other object that normally carries text. No people, no faces, no hands. No company, product or person names.
+No text, letters, numbers or digits. Not a photo of a real event.{retry}
 Answer with the sentence only."""
 
 
-def describe_scene(item):
+def ask_groq(prompt):
+    """One Groq call through the existing client (with its key fallback). Raises on no answer."""
     global api_calls
-    from generate_breakdowns import call_groq  # the existing Groq client, with its key fallback
+    from generate_breakdowns import call_groq
     api_calls += 1
-    raw = call_groq(scene_prompt(item))
+    raw = call_groq(prompt)
     if not raw or raw == "DAILY_LIMIT":
         raise RuntimeError(f"Groq returned {raw!r}")
-    scene = strip_names(raw.strip().strip('"').splitlines()[0], names_in(item))
-    if not scene:
-        raise RuntimeError("empty scene description")
-    return scene[:300]
+    return raw
+
+
+def banned_in(scene):
+    """Banned words (and digits) the scene names; plural forms count."""
+    found = {"digits"} if re.search(r"\d", scene) else set()
+    for word in re.findall(r"[a-z]+", scene.lower()):
+        stems = {word, word[:-1] if word.endswith("s") else word, word[:-2] if word.endswith("es") else word}
+        found |= stems & BANNED_WORDS
+    return sorted(found)
+
+
+def fallback_scene(item):
+    """A safe scene with no text-carrying object, picked by slug so cards do not all share one."""
+    slug = slugify(item.get("title", ""))
+    return FALLBACK_SCENES[sum(map(ord, slug)) % len(FALLBACK_SCENES)]
+
+
+def describe_scene(item, avoid=""):
+    """Groq's scene for the card. A scene with a banned word is asked for once more; then a safe fallback."""
+    for attempt in (1, 2):
+        raw = ask_groq(scene_prompt(item, avoid))
+        scene = strip_names(raw.strip().strip('"').splitlines()[0], names_in(item))[:300]
+        if not scene:
+            raise RuntimeError("empty scene description")
+        bad = banned_in(scene)
+        if not bad:
+            return scene
+        log(f"scene attempt {attempt} has banned word(s) {', '.join(bad)}: {scene}")
+        avoid = f"it named {', '.join(bad)}, objects that carry text"
+    log("using a safe fallback scene")
+    return fallback_scene(item)
+
+
+def ocr_ready():
+    """True when pytesseract and the tesseract binary are installed."""
+    try:
+        import pytesseract
+        pytesseract.get_tesseract_version()
+        return True
+    except Exception:
+        return False
+
+
+def text_in_image(path):
+    """Words of OCR_MIN_LETTERS+ letters that tesseract reads at OCR_MIN_CONF+ confidence; [] when clean.
+    Reads grayscale, 2x upscaled and inverted copies with page modes 3 (blocks) and 11 (sparse text)."""
+    import pytesseract
+    from PIL import Image, ImageOps
+    gray = ImageOps.grayscale(Image.open(path))
+    big = gray.resize((gray.width * 2, gray.height * 2))
+    for img in (gray, big, ImageOps.invert(big)):
+        for psm in (3, 11):
+            data = pytesseract.image_to_data(img, config=f"--psm {psm}", output_type=pytesseract.Output.DICT)
+            words = [w for w, c in zip(data["text"], data["conf"])
+                     if float(c) >= OCR_MIN_CONF and len(re.sub(r"[^A-Za-z]", "", w)) >= OCR_MIN_LETTERS]
+            if words:
+                return words
+    return []
 
 
 def generate_image(scene, out_path):
@@ -214,7 +294,11 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
         log(f"{', '.join(missing)} not set: add under Settings > Secrets and variables > Actions. "
             "No images generated, 0 API calls")
         return 0
-    made, used = 0, []
+    if not dry_run and not ocr_ready():
+        # no OCR means no text check: draw nothing rather than publish images that may hold text
+        log("OCR not available (pip install pytesseract; apt install tesseract-ocr). No images generated, 0 API calls")
+        return 0
+    made, regenerated, skipped, used = 0, 0, 0, []
     todo, seen = [], set()
     for item in newest_first(items):
         slug = slugify(item.get("title", ""))
@@ -232,13 +316,33 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
         if dry_run:
             log(f"dry run, would generate: {slug}")
             continue
+        if len(used) >= MAX_NEW_PER_RUN:  # a redraw counts too, so the neuron budget holds
+            log(f"{MAX_NEW_PER_RUN} draws used, the next run draws the rest")
+            break
         try:
             scene = describe_scene(item)
-            neurons = generate_image(scene, path)
+            for attempt in (1, 2):
+                neurons = generate_image(scene, path)
+                used.append(neurons)
+                try:
+                    text = text_in_image(path)
+                except Exception as e:  # an image that cannot be read is not trusted
+                    text = [f"OCR error {type(e).__name__}"]
+                if not text:
+                    break
+                path.unlink(missing_ok=True)
+                log(f"text in {slug} (attempt {attempt}): {', '.join(map(str, text[:5]))}")
+                if attempt == 2 or len(used) >= MAX_NEW_PER_RUN:
+                    break
+                regenerated += 1
+                scene = describe_scene(item, avoid=f"the image of '{scene}' showed text")
+            if text:
+                skipped += 1
+                log(f"skipped: text ({slug})")
+                continue
             alts[slug] = {"alt": scene, "created": today.strftime("%Y-%m-%d"), "model": MODEL,
                           "provider": "cloudflare-workers-ai", "neurons": neurons}
             made += 1
-            used.append(neurons)
             log(f"generated {slug} ({path.stat().st_size / 1024:.1f} KB, neurons {neurons}): {scene}")
         except Exception as e:
             # stop the whole run: no more Groq or Cloudflare calls after the first error
@@ -250,7 +354,8 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
                 json.dump(alts, f, indent=2, sort_keys=True)
         except Exception as e:
             log(f"could not write {ALT_FILE}: {e}")
-    log(f"done: {made} generated, {api_calls} API calls, neurons {neuron_total(used)}")
+    log(f"done: {made} generated, {regenerated} regenerated, {skipped} skipped (text), {len(used)} draws, "
+        f"{api_calls} API calls, neurons {neuron_total(used)}")
     return made
 
 
