@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Why your fine-tuning job takes longer than the FLOPs say</h1>
   <p class="meta-line">Hugging Face · 18 Nov 202 · Generated 19 Nov 2026, 15:38</p>
-  <a href="https://huggingface.co/blog/Dharma-AI/predicting-fine-tuning-time" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://huggingface.co/blog/Dharma-AI/predicting-fine-tuning-time" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>Hugging Face has released a preview of a research paper that demonstrates how a CatBoost machine‑learning model can predict the duration of fine‑tuning jobs on shared GPU clusters with sub‑hour accuracy, outperforming the traditional FLOP‑based estimate. The study collected runtime data from thousands of fine‑tuning runs across multiple GPU types and trained a regression model that incorporates features such as batch size, learning rate, model architecture, and GPU utilization patterns. The resulting predictor can be exposed via an API, allowing users to submit job metadata and receive a runtime forecast in seconds.</p><p>For enterprise IT teams, this capability directly addresses the pain point of idle GPU time in multi‑tenant environments. By integrating the predictor into the scheduler, clusters can be provisioned more accurately, reducing over‑provisioning and lowering cloud spend. The paper also includes a proof‑of‑concept integration with Kubernetes and Slurm, showing how predicted runtimes can inform pod placement and job prioritization.</p><p>The vendors involved are primarily Hugging Face (model and API), cloud providers (AWS, Azure, GCP) for GPU resources, and cluster orchestration platforms (Kubernetes, Slurm). The broader industry implication is a shift from static, FLOP‑based scheduling heuristics to data‑driven, predictive models. This trend will likely influence how AI‑as‑a‑service platforms price GPU usage, how internal data‑science teams plan experiments, and how compliance teams monitor resource usage for audit purposes.</p><p>If left unaddressed, organizations risk continued inefficiencies: higher cloud bills, delayed model releases, and suboptimal utilization of expensive GPU assets. By adopting a predictive scheduler, enterprises can achieve measurable cost savings, faster time‑to‑market, and better alignment with regulatory reporting on compute usage.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current GPU utilization metrics: average idle time, queue length, job failure rates.  
    - Collect historical fine‑tuning logs: job parameters, runtime, GPU type, batch size.  
    - Verify that your cluster management system (K8s, Slurm, AWS Batch) can expose job metadata to an external API.</div></div>

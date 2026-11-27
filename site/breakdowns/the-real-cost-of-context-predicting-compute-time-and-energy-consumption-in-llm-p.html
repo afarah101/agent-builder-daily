@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases</h1>
   <p class="meta-line">Lars Krupp, Daniel Geißler, Francisco M. Calatrava-Nicolas, Stefan Gerd Fritsch · Academic Institution · 2026-10-29 · Generated 30 Oct 2026, 12:33</p>
-  <a href="https://arxiv.org/abs/2610.39621v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2610.39621v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study by Krupp, Geißler, Calatrava‑Nicolas, and Fritsch investigates the relationship between token count and energy consumption in large language models (LLMs) during the prefill and decode phases. Using a custom profiling tool, the authors collected compute‑time and power data across a range of model sizes and token lengths. They derived scaling laws that show compute time—and by proxy energy consumption—grows linearly with the number of input tokens during prefill and sub‑linearly with the number of output tokens during decode. The authors validated their models on multiple hardware platforms (NVIDIA A100, H100, and AMD MI250) and demonstrated that compute time can serve as a reliable surrogate for energy when direct power measurements are unavailable. For enterprise IT, this means that workloads can be forecasted in terms of both latency and carbon footprint without needing specialized meters. The practical framework includes a lightweight profiling library, regression equations, and a web UI for quick estimation. Real‑world implications include the ability to set energy budgets for inference pipelines, optimize batch sizes, and make informed hardware procurement decisions. By quantifying the energy cost per token, organizations can target specific stages (prefill vs. decode) for optimization, leading to measurable reductions in operating expenses and carbon emissions.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1. Instrument current inference pipelines to capture token counts per request, batch size, and model version.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2. Record compute time on the GPU/CPU for each phase (prefill, decode) using existing profiling tools (e.g., NVIDIA Nsight Systems, Intel VTune).</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3. Map compute time to energy using the published regression coefficients or, if possible, calibrate on your own hardware with a power meter.</div></div>

@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Token Pooling-Aware Training for Multi-Vector Embedding Models</h1>
   <p class="meta-line">Hugging Face · 11 Nov 202 · Generated 11 Nov 2026, 16:51</p>
-  <a href="https://huggingface.co/blog/token-pooling" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://huggingface.co/blog/token-pooling" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>Hugging Face has released a new training methodology called token‑pooling‑aware training for multi‑vector embedding models. The approach modifies the training objective so that the model learns to compress token representations into fewer vectors without losing semantic fidelity. In practice, this means that a document can be represented by a smaller set of vectors that still support high‑quality retrieval in downstream tasks such as semantic search or question answering. The release is significant for enterprise IT teams because it directly addresses two pain points: the storage cost of large vector indices and the performance overhead of querying them. By reducing the dimensionality and number of vectors per document, organizations can shrink the size of their vector databases—whether they use Google Cloud Vertex AI, Azure Cognitive Search, or an on‑prem Elasticsearch deployment—while maintaining or even improving recall metrics. Hugging Face’s implementation is open‑source and integrates with the popular Transformers library, making it accessible to teams that already use Hugging Face pipelines for NLP workloads. Vendors that provide vector search infrastructure, such as Pinecone, Weaviate, and Elastic, can potentially incorporate this technique into their own product offerings. The broader industry implication is a shift toward more efficient embedding models that enable large‑scale semantic search at lower cost, which is especially relevant for regulated sectors that must store vast amounts of data but face strict storage budgets and compliance constraints. The token‑pooling‑aware training also opens the door to hybrid models that combine dense and sparse embeddings, further optimizing retrieval performance in complex search scenarios.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory current vector index size, storage costs, and query latency across all search deployments (e.g., Elasticsearch, Azure Cognitive Search, Google Vertex AI).</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure baseline retrieval metrics (precision@k, recall, MRR) for the existing embedding models.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify the proportion of documents that are frequently searched versus rarely accessed to prioritize compression targets.</div></div>

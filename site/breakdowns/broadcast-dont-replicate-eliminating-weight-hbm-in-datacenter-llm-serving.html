@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</h1>
   <p class="meta-line">Hannah Atmer, Yuan Yao, Thiemo Voigt, Stefanos Kaxiras · Academic Institution · 2026-11-12 · Generated 13 Nov 2026, 16:57</p>
-  <a href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study investigates the high memory and power overhead of serving large language models (LLMs) that rely on high-bandwidth memory (HBM) across thousands of GPUs. Researchers replaced replicated HBM on each accelerator with an Optical Broadcast Memory (OBM) system that streams model weights from a central server to multiple accelerators over optical links. The OBM architecture eliminates the need for petabytes of on‑node memory, while matching or exceeding the throughput and energy efficiency of traditional HBM‑based deployments. The authors demonstrate that OBM can support Mixture‑of‑Experts (MoE) enabled LLMs at scale, delivering comparable latency and throughput while reducing power consumption by up to 30% and memory footprint by an order of magnitude. For enterprise IT, this means that data centers can host larger models without the prohibitive cost of HBM modules, enabling more flexible scaling of inference workloads. Real‑world implications include lower capital and operational expenditures, reduced cooling and power budgets, and the ability to deploy models that were previously infeasible due to memory constraints. The approach also simplifies hardware procurement, as the central server can be upgraded independently of the accelerator fleet. Overall, the case study presents a viable path to scale LLM serving in production environments while maintaining or improving performance metrics.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1. Inventory current GPU fleet: count of GPUs, HBM capacity per node, power draw, and cooling requirements.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2. Measure inference workload: average batch size, latency targets, throughput, and model size (including MoE layers).</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3. Profile memory usage per inference: peak resident set, bandwidth utilization, and any memory bottlenecks.</div></div>

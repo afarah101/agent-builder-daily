@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Disgraced eMudhra drops out of TLS business after using cert private key of 4</h1>
   <p class="meta-line">Ars Technica · 22 Oct 202 · Generated 25 Oct 2026, 20:41</p>
-  <a href="https://arstechnica.com/security/2026/10/disgraced-emudhra-drops-out-of-tls-business-following-certificate-debacle/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arstechnica.com/security/2026/10/disgraced-emudhra-drops-out-of-tls-business-following-certificate-debacle/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>eMudhra, an Indian certificate authority that had been trusted by a wide range of enterprises, has announced its exit from the TLS certificate business after a security audit revealed that it had issued eight certificates with private keys that were so weak they could be cracked in milliseconds. The flaw was caused by the use of a single, reused private key for multiple certificates, a practice that violates basic cryptographic principles. As a result, any system that relies on eMudhra’s certificates—including web browsers, mail servers, IoT devices, Docker containers, and legacy Linux machines—now has a backdoor that could be exploited for man‑in‑the‑middle attacks, domain spoofing, or credential theft. The incident has immediate implications for enterprises that use eMudhra certificates in their public or private TLS chains, especially those that rely on cloud services such as Google Workspace, Freshservice, or MDM platforms that depend on trusted TLS chains for secure communication. The breach also raises questions about the vetting process for certificate authorities and the need for continuous monitoring of cryptographic health. Vendors such as DigiCert, Sectigo, and GlobalSign are likely to see increased demand for their services as organizations seek to replace compromised certificates. The broader industry implication is a renewed focus on certificate transparency, key rotation, and the enforcement of minimum key lengths. Regulators may tighten oversight of CAs, and compliance frameworks like ISO/IEC 27001 and GDPR will require organizations to demonstrate that they are not using compromised keys. Enterprises must act quickly to audit, replace, and monitor certificates to avoid being an easy target for attackers.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Run a full inventory of all TLS certificates in use, filtering by issuer name and key length.
    - Identify certificates issued by eMudhra or any CA that has a history of weak key usage.
    - Verify key strength (minimum 2048‑bit RSA or 256‑bit ECC) and check for reused keys across multiple certificates.

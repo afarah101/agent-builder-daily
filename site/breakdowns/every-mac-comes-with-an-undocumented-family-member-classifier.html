@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Every Mac comes with an (undocumented) family member classifier</h1>
   <p class="meta-line">Hacker News · 07 Nov 202 · Generated 07 Nov 2026, 12:47</p>
-  <a href="https://8rank.ai/game/apple-intelligence-personal-knowledge-graph" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://8rank.ai/game/apple-intelligence-personal-knowledge-graph" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>Apple’s macOS includes two undocumented background services—knowledgeconstructiond and knowledgegraphd—that automatically aggregate data from a wide range of user sources: Contacts, Calendar, Photos, Messages, Mail, Location, and Screen Time. The services build a personal knowledge graph that maps relationships between users and their contacts, effectively creating a detailed social network of every Mac user. A newly released open‑source tool called iKnow allows administrators to inspect the graph, revealing the extent of data collection. The discovery was highlighted on Hacker News and has raised immediate concerns for enterprise IT teams that manage fleets of macOS devices.</p><p>For enterprises, the issue matters because these daemons operate without user consent or clear policy controls, potentially exposing sensitive employee relationships, communication patterns, and location data. If left unchecked, the knowledge graph could be accessed by internal actors, third‑party apps, or even malicious actors if the services are compromised. The services are not documented in Apple’s official security or privacy documentation, which means standard MDM or endpoint protection tools may not automatically detect or control them.</p><p>Vendors and technologies involved include Apple’s macOS (specifically the undocumented daemons), mobile device management (MDM) solutions such as Jamf, Microsoft Intune, and VMware Workspace ONE, and endpoint security platforms that can monitor background processes. The broader industry implication is a renewed focus on “hidden” data collection mechanisms in consumer operating systems and the need for stricter audit and control frameworks in enterprise environments. Regulators may also scrutinize such practices under privacy laws like UK GDPR, where data minimization and transparency are mandatory.</p><p>The incident underscores the importance of proactive discovery, policy enforcement, and monitoring of all system daemons, even those not publicly documented. Failure to do so could lead to unintentional data exposure, compliance violations, and erosion of employee trust.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Scan all macOS devices for the presence of knowledgeconstructiond and knowledgegraphd using MDM inventory or command‑line tools (e.g., launchctl list | grep -E &#x27;knowledge.*&#x27;).
    - Verify which user accounts are running the daemons and the scope of data sources they access.
    - Assess current MDM policy templates to determine if they include restrictions on undocumented services or background data collection.

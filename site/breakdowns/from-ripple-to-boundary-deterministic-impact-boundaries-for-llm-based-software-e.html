@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">From Ripple to Boundary: Deterministic Impact Boundaries for LLM-Based Software Evolution</h1>
   <p class="meta-line">Jiameng Bai, Zhitao Wang, Long Wang, Keyue Qian · Academic Institution · 2026-10-27 · Generated 28 Oct 2026, 12:35</p>
-  <a href="https://arxiv.org/abs/2610.36549v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2610.36549v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study by Bai, Wang, Wang, and Qian addresses the challenge of pinpointing the precise code segments that must be altered when a design asset—such as a configuration template, architecture diagram, or policy document—undergoes modification in systems that rely on large language models (LLMs) for code generation. Traditional LLM‑driven IaC or configuration tools generate code in a monolithic fashion, making it difficult to isolate the impact of a single design change. The authors propose a knowledge‑graph based Merkle Directed Acyclic Graph (DAG) that explicitly maps each design asset to the code artifacts it produces. By hashing nodes and maintaining parent‑child relationships, the DAG allows deterministic traversal to compute an exact “impact boundary”: the minimal set of code files and lines that must be regenerated when a design asset changes. The approach was validated on a real cloud‑infrastructure codebase, demonstrating that the impact boundary is often less than 5% of the total codebase, and that the automated regeneration process produces syntactically correct and functionally equivalent code without manual intervention. For enterprise IT, this means that LLM‑based code generation can be safely integrated into production pipelines with a clear audit trail and rollback capability. The deterministic boundary calculation also enables compliance teams to verify that changes are confined to intended modules, reducing the risk of unintended side effects that could violate security or regulatory constraints. In practice, cloud infrastructure managers can now adopt LLM‑driven IaC tools with confidence, knowing that updates to design assets will not cascade unpredictably across the entire stack. The real‑world implications include faster deployment cycles, reduced manual code review effort, and improved traceability for compliance audits.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Inventory all LLM‑driven code generation workflows (IaC, CI/CD scripts, policy generators).  
    • Map current design assets (architecture diagrams, Terraform modules, YAML templates) to the generated code artifacts.  
    • Measure baseline change propagation: record how many files change when a single design asset is updated.  

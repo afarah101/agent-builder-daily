@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">When Relevant Code Is Wrong: Runtime-Aware Context for AI Coding Agents</h1>
   <p class="meta-line">Wesley K. G. Assunção, Ramesh Periyathambi · Academic Institution · 2026-10-28 · Generated 30 Oct 2026, 12:33</p>
-  <a href="https://arxiv.org/abs/2610.38800v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2610.38800v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study investigates the mismatch between code artifacts that AI coding agents retrieve from version control and the actual runtime environment in which those artifacts are executed. The authors identified a recurring issue: agents often pull legacy code that references deprecated APIs, disabled feature flags, or architectural components that have been removed or replaced. This leads to runtime failures, wasted developer effort, and potential security regressions. To address this, the team developed CASE (Context-Aware Source Extraction), a framework that maps each code artifact to its current runtime configuration. CASE queries the repository for code metadata, cross‑references feature flag states, dependency versions, and deployment topology, then classifies artifacts as “valid” or “invalid” for the current environment. In a prototype run against a large enterprise codebase, CASE successfully filtered out 16 artifacts that had previously been misapplied by the AI agent while retaining all artifacts that were still applicable. The prototype did not yet improve overall agent accuracy, but it demonstrated that runtime‑aware filtering is feasible and can reduce false positives. For enterprise IT, this is significant because it directly tackles the reliability and security of automated code generation tools, which are increasingly used in continuous delivery pipelines. By ensuring that only compatible code is suggested, organizations can reduce runtime errors, shorten debugging cycles, and maintain compliance with internal change‑management policies. Real‑world implications include the need to integrate runtime state into AI tooling, the potential for new governance layers around code reuse, and the opportunity to build more resilient DevOps workflows that automatically adapt to evolving infrastructure.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all feature flag systems (e.g., LaunchDarkly, Optimizely) and map flag states to code branches.  
    - Audit dependency graphs to identify deprecated libraries or API changes.  
    - Review deployment topology (microservices, serverless, on‑prem) and document which services are active.  

@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">GPU-unlock: FP/BF16 instruction issue rate on Nvidia 3000&#x27;s cards</h1>
   <p class="meta-line">Hacker News · 24 Oct 202 · Generated 24 Oct 2026, 19:42</p>
-  <a href="https://github.com/Zagitta/gpu-unlock" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://github.com/Zagitta/gpu-unlock" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>A kernel module named gpu‑unlock has been released that increases the instruction issue rate for FP32 and BF16 operations on Nvidia 3000 series GPUs. The module works by patching the kernel’s GPU driver at runtime, eliminating the need for manual driver updates or vendor‑specific patches. Benchmarks from the original Hacker News post show that matrix‑heavy workloads such as large‑language‑model prefill, diffusion models, and FlashAttention can see up to a 36 % reduction in execution time when the module is enabled. The improvement is achieved without changing application code or GPU firmware, making it immediately deployable on existing 3000‑series hardware.</p><p>For enterprise IT teams, the news is significant because it offers a low‑friction performance boost on a widely deployed GPU family. Many data‑center and edge sites still run 3000‑series GPUs for inference and training workloads. By enabling gpu‑unlock, those sites can extract more throughput from the same hardware, delaying the need for a full GPU refresh cycle and reducing capital expenditure. The module also impacts cloud‑based VMs that use Nvidia drivers, so it is relevant for both on‑prem and hybrid environments.</p><p>Vendors involved include Nvidia (the underlying driver and hardware), the open‑source community that produced the module, and any cloud providers that offer 3000‑series instances. The broader industry implication is a shift toward kernel‑level performance tuning as a competitive differentiator. If the community continues to produce similar modules, vendors may need to expose more low‑level tuning knobs in their drivers or offer official performance‑enhancement packages. Additionally, the ability to double FP/BF16 throughput may influence model design choices, encouraging more BF16‑friendly architectures.</p><p>Overall, gpu‑unlock demonstrates that significant performance gains can be achieved through kernel‑level interventions, and it forces enterprises to re‑evaluate their GPU utilization strategies, driver management processes, and cost‑benefit analyses for hardware upgrades.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all 3000‑series GPUs across on‑prem and cloud VMs.  
    - Capture baseline FP32/BF16 throughput for representative workloads (e.g., LLM inference, diffusion training).  
    - Verify current kernel and driver versions; note any custom patches or OEM driver bundles.  

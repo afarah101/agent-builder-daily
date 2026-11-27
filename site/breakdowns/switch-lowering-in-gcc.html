@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Switch Lowering in GCC</h1>
   <p class="meta-line">Hacker News · 31 Oct 202 · Generated 31 Oct 2026, 14:59</p>
-  <a href="https://xoranth.net/gcc-switch/" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://xoranth.net/gcc-switch/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The Hacker News article titled “Switch Lowering in GCC” dissects how the GNU Compiler Collection transforms switch statements into either jump tables or comparison trees during code generation. It explains the compiler’s decision logic, including threshold values that trigger a jump table versus a binary search tree, and how sparse case ranges are handled to avoid excessive memory usage. The piece includes annotated C code snippets that illustrate the compiler’s output for dense versus sparse switch constructs, and it highlights the impact on execution speed and binary size. For enterprise IT teams, this is significant because many high‑performance services—such as packet parsers, protocol handlers, and database query dispatchers—rely on switch statements for dispatch logic. If GCC’s lowering strategy is not aligned with the application’s performance profile, critical code paths may become bottlenecks or consume unnecessary memory, affecting scalability and cost. The article also touches on how newer GCC releases have tweaked thresholds and added flags (e.g., -fno-jump-tables) to give developers finer control. Vendors such as Red Hat, Canonical, and SUSE ship GCC in their distributions, and many CI/CD pipelines use containerized GCC builds. The broader industry implication is that compiler optimizations are no longer a black box; developers and DevOps must understand them to meet SLAs and optimize infrastructure spend. As cloud providers push for more efficient binaries, misaligned switch lowering can lead to higher CPU and memory usage, increasing cloud bill and impacting latency‑sensitive workloads. The article urges teams to audit their build flags, review switch density, and consider refactoring or compiler tuning to leverage jump tables where appropriate, thereby improving performance and reducing resource consumption.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Scan all C/C++ repositories for switch statements with more than 10 cases.
    - Use GCC’s -fdump-tree-all or -fdump-rtl-all to inspect the generated RTL for jump tables versus comparison trees.
    - Measure current CPU and memory usage of binaries that contain large switch blocks under load.

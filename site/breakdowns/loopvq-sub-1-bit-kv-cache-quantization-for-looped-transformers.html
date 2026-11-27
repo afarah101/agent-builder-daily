@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">LoopVQ: Sub 1-bit KV Cache Quantization for Looped Transformers</h1>
   <p class="meta-line">Minsoo Cheong, Sungjoo Yoo · Academic Institution · 2026-11-03 · Generated 04 Nov 2026, 14:10</p>
-  <a href="https://arxiv.org/abs/2611.05304v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.05304v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>LoopVQ is a quantisation technique designed to shrink the key‑value (KV) cache used by looped transformer models. The authors built a 0.5‑bit quantiser that groups multiple loop steps together, allowing the KV cache to be compressed by more than 50% while preserving accuracy on long‑context tasks such as code completion, summarisation, and question answering. In their experiments, they integrated LoopVQ into the SGLang inference framework and measured a throughput increase of up to 6× on a 2.6 B‑parameter model. The memory savings mean that a single GPU can handle longer contexts or larger batch sizes without additional hardware. For enterprise IT, this translates into lower inference costs, higher service availability, and the ability to deploy larger language models on existing GPU fleets. The approach also reduces cold‑start latency because the compressed KV cache can be pre‑loaded more quickly. Real‑world implications include the ability to offer more sophisticated conversational AI or code‑generation services without scaling GPU infrastructure, and the potential to meet regulatory constraints by keeping sensitive data in memory for shorter periods. The study demonstrates that aggressive quantisation of internal transformer states is feasible and that the gains are not limited to a specific model architecture, making it a compelling optimisation for any organisation that relies on large‑scale language models for production workloads.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Audit current transformer inference pipelines for KV cache size, memory utilisation, and throughput bottlenecks.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure the average context length and batch size that your workloads require.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Profile GPU memory usage per inference step to identify the proportion attributable to KV cache.</div></div>

@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">FOSCAR: Accelerating Decode Attention over 2- and 4-Bit KV Caches through Affine Folding</h1>
   <p class="meta-line">Donglin Zhuang, Pragaash Ponnusamy, Xiaoxia Wu, Shuaiwen Leon Song · Academic Institution · 2026-11-06 · Generated 09 Nov 2026, 15:51</p>
-  <a href="https://arxiv.org/abs/2611.09722v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.09722v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>FOSCAR is a research effort that addresses the bottleneck of decoding large‑language models (LLMs) when operating with extremely low‑precision key‑value (KV) caches. The study focuses on 2‑bit and 4‑bit quantized KV caches, which are attractive for reducing memory footprint and bandwidth but suffer from expensive scale‑and‑offset operations during attention computation. The authors introduce an affine folding technique that eliminates these per‑token scaling steps by folding the affine transformation into the attention kernel itself. They also develop a packing strategy that aligns the quantized values with the native Tensor Core data layouts on NVIDIA Hopper (H100) and Blackwell (B200) GPUs. The resulting GPU pipelines achieve 2–3× throughput gains over conventional FP8 and BF16 decoding pipelines, translating into a 341% increase in long‑context serving capacity for enterprise workloads that require extended context windows (e.g., legal document analysis, code generation, or scientific literature summarization). For enterprise IT, this means that existing GPU clusters can handle larger batch sizes or higher request rates without additional hardware, directly impacting cost per inference and latency SLAs. The real‑world implications include the ability to deploy LLMs with 8k–32k token contexts on commodity GPU infrastructure, reducing the need for specialized hardware or custom ASICs. The approach also demonstrates that careful algorithm‑hardware co‑design can unlock significant performance from already‑available GPU generations, providing a clear path for IT teams to extend the life cycle of their current GPU investments. The study’s open‑source implementation and benchmark suite give practitioners a concrete starting point for evaluating the technique in their own environments.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current decoding latency and GPU utilization for your LLM workloads, focusing on KV cache size and precision.
    - Measure the proportion of time spent in scale‑and‑offset operations versus core matrix multiplication.
    - Verify that your GPU fleet includes Hopper (H100) or Blackwell (B200) models; older GPUs may not support the required Tensor Core instructions.

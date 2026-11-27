@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Tailscale SSH: Investigation and remediation update</h1>
   <p class="meta-line">Hacker News · 27 Oct 202 · Generated 27 Oct 2026, 22:04</p>
-  <a href="https://tailscale.com/ssh-investigation-update" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://tailscale.com/ssh-investigation-update" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>Tailscale, the zero‑trust VPN provider, has announced that its SSH service contains privilege‑elevation vulnerabilities that could allow an attacker to gain higher access on endpoints that trust Tailscale’s SSH tunnel. The flaw is in the authentication and session handling logic of the SSH component, which is tightly integrated with the core Tailscale VPN and is often used as a single‑sign‑on (SSO) gateway for remote administration. The vendor has released a patch that will be available by the end of October 27, but the update requires a client upgrade and configuration changes. For enterprise IT teams, this is a critical issue because many organizations rely on Tailscale for secure remote access to servers, development environments, and internal services. If the vulnerability is exploited, an attacker could elevate privileges on any machine that accepts Tailscale SSH connections, potentially compromising sensitive data, violating compliance requirements, and exposing the broader network to lateral movement. The incident underscores the importance of rigorous access policy management, especially in zero‑trust architectures where the boundary is defined by software rather than a physical perimeter. Vendors such as Okta, Azure AD, and other identity providers that integrate with Tailscale may also need to review their federation configurations. The broader industry implication is a reminder that even well‑architected zero‑trust solutions can harbor critical bugs, and that patch management, configuration hardening, and continuous monitoring must be prioritized. Enterprises should treat this as a wake‑up call to audit all remote access mechanisms, enforce least‑privilege policies, and ensure that critical security updates are deployed promptly.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all Tailscale nodes that expose SSH, noting hostnames, OS versions, and user accounts.
    - Review current SSH access policies in Tailscale: which groups have SSH rights, what commands are allowed, and whether port forwarding is enabled.
    - Check for existing TS_SSH_DISABLE_FORWARDING settings and any custom SSH configuration files that override defaults.

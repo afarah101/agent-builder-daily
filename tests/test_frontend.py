@@ -39,24 +39,24 @@ def test_cards_show_no_score_or_review_label(verdict, gemini):
     assert gh.eval_status(study(eval_verdict=verdict, gemini_eval_status=gemini)) in ("pass", "fail", "pending")
 
 
-# ---------- card click: only the title link opens the source ----------
+# ---------- card click: the one link is the title, and it opens the breakdown page (the source link is there) ----------
 
-def test_only_the_title_link_opens_the_source():
-    html = cards(study(source_type="youtube_agent"))
+def test_only_the_title_link_opens_the_breakdown():
+    html = gh.render_case_studies({"case_studies": [study(source_type="youtube_agent")]}, {"case_studies": {"Paper": "paper"}})
     assert "onclick=\"window.open" not in html and "window.open" not in html
     assert not re.search(r"<article[^>]*onclick", html)
-    links = re.findall(r'<a [^>]*href="https://arxiv.org/abs/1"', html)
-    assert len(links) == 1
-    assert re.search(r'<h2 class="card-title"><a href="https://arxiv.org/abs/1" target="_blank" rel="noopener noreferrer">', html)
+    assert html.count("<a ") == 1 and "https://arxiv.org/abs/1" not in html and "target=" not in html
+    assert '<h2 class="card-title"><a class="card-link" href="breakdowns/paper.html">Paper</a></h2>' in html
     # no score-reasoning toggle; there is no copy button
     assert "trace-toggle" not in html
     assert "md-export-btn" not in html and "onclick" not in html
 
 
-def test_news_card_has_one_source_link_in_the_title():
+def test_news_card_has_one_breakdown_link_in_the_title():
     html = gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1", "relevance_signal": "high",
-                                     "relevance_score": 8}]}, {"news": {}})
-    assert "window.open" not in html and len(re.findall(r'href="https://example.test/1"', html)) == 1
+                                     "relevance_score": 8}]}, {"news": {"Story": "story"}})
+    assert "window.open" not in html and "https://example.test/1" not in html
+    assert html.count("<a ") == 1 and '<a class="card-link" href="breakdowns/story.html">Story</a>' in html
     assert "relevance" not in html and "/10" not in html  # no relevance score on the card
 
 
@@ -374,7 +374,7 @@ def test_safe_url_allows_https_only():
     assert gh.safe_url("https://a.test/x") == "https://a.test/x"
     for bad in ("http://a.test", "javascript:alert(1)", " JavaScript:x", "data:text/html,x", "//a.test", "", None):
         assert gh.safe_url(bad) == "#", bad
-    assert 'href="#"' in cards(study(url="http://a.test"))
+    assert "http://a.test" not in cards(study(url="http://a.test"))  # the card carries no source link at all
 
 
 def test_breakdown_links_use_the_raw_title():
@@ -707,7 +707,8 @@ def test_fewer_choices_and_two_signups_with_privacy(site):
 
 def test_breakdown_link_text():
     html = gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1"}]}, {"news": {"Story": "story"}})
-    assert '<a href="breakdowns/story.html" class="breakdown-link">Read the breakdown →</a>' in html
+    assert '<a class="card-link" href="breakdowns/story.html">Story</a>' in html
+    assert "Read the breakdown" not in html and "card-footer" not in html  # the whole card is the link
     assert "IT Breakdown" not in html
 
 
