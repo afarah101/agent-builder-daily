@@ -143,10 +143,12 @@ def top_items():
             continue
         data = gh.load_json(str(f))
         studies += (data.get("case_studies") or []) if isinstance(data, dict) else []
+    studies = gh.top_up(studies, gh.load_json(gh.ARCHIVE_CS_FILE), "case_studies")  # same stories the page shows
     studies = sorted((s for s in studies if gh.in_window(s, cutoff)), key=lambda x: gh.by_score(x, "total_score"), reverse=True)
     news_files = sorted(Path(gh.NEWS_DIR).glob("news_*.json"))
     news_data = gh.load_json(str(news_files[-1])) if news_files else {}
     news = sorted((news_data or {}).get("news") or [], key=lambda x: gh.by_score(x, "relevance_score"), reverse=True)
+    news = gh.top_up(news, gh.load_json(gh.ARCHIVE_NEWS_FILE), "news")
     return studies[:TOP_N] + news[:TOP_N]
 
 
