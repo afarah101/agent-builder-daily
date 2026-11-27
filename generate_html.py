@@ -6,6 +6,7 @@ from pathlib import Path
 
 from send_daily_email import signal_points  # the email's S1/S2/S3 parser, so site and email agree
 from generate_images import image_figure  # the <figure> of every card: its AI image, else its cover
+import topics  # topic pages, topic links and the Pagefind search box
 
 CASE_STUDIES_DIR = "case_studies"
 NEWS_DIR = "data/news"
@@ -738,6 +739,7 @@ def archive_page(head, cs_archive, news_archive):
         <a class="archive-link" href="./">← Back to today</a>
       </nav>
   </div>
+  {topics.search_box("")}
   <h2 class="section-title" id="case-studies">Case Studies</h2>
   {render_archive(cs_archive, 'cs')}
   <h2 class="section-title" id="industry-news">Industry News</h2>
@@ -775,7 +777,10 @@ def site_pages(site_dir="site"):
     breakdowns = sorted((p for p in (site / "breakdowns").glob("*.html")
                          if not any(note in p.read_text(encoding="utf-8") for note in notes)),
                         key=lambda p: (-p.stat().st_mtime, p.name))
-    return pages + [(f"breakdowns/{p.name}", day(p)) for p in breakdowns]
+    from topics import TOPICS
+    topic_pages = [(f"topics/{slug}/" if slug else "topics/", day(site / "topics" / slug / "index.html"))
+                   for slug in ["", *(slug for _, slug in TOPICS)] if (site / "topics" / slug / "index.html").is_file()]
+    return pages + topic_pages + [(f"breakdowns/{p.name}", day(p)) for p in breakdowns]
 
 
 def generate_seo_files(site_dir="site"):
@@ -1439,6 +1444,8 @@ def generate_html():
 </header>
 
 <main class="content" id="main">
+  """ + topics.home_nav() + """
+  """ + topics.search_box("", loader=False) + """
   <div class="toolbar">
       <div class="tab-row">
         <div class="tabs" role="tablist" aria-label="Sections">
@@ -1467,6 +1474,8 @@ def generate_html():
   // Handlers are attached here, not as on*= attributes, so the page carries no inline event handlers
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.getAttribute('aria-controls'), t)));
   document.getElementById('scout-search').addEventListener('input', e => filterCards(e.target.value));
+  // Site search (Pagefind), loaded from here so the page keeps its two scripts
+  """ + topics.search_loader("") + """
   // No consent, no submit: the browser stops it first (required), and this stops it when validation is off
   const agreed = (e, id) => document.getElementById(id).checked || (e.preventDefault(), document.getElementById(id).focus(), false);
   document.querySelector('.email-form').addEventListener('submit', e => { if (agreed(e, 'consent')) submitEmail(e); });
@@ -1519,6 +1528,10 @@ def generate_html():
             print(f"Removed {len(gone)} breakdown pages with no source-checked summary")
     except Exception as e:
         print(f"Fallback pages not checked ({e})")
+    try:  # after the fallback pages are gone: only live pages get topics and the search mark
+        topics.build("site", html.split("<body>")[0])
+    except Exception as e:  # the home page must still build
+        print(f"Topic pages not built ({type(e).__name__}: {e})")
     generate_seo_files("site")  # after the pages are written: the sitemap lists what is on disk now
     generate_rss(cs_data, news_data)
     # Copy data files to site/ so Vercel can serve them for the dashboard

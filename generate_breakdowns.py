@@ -533,6 +533,8 @@ STOCK_NOTES = ("No source-checked summary is stored for this story. Read the ori
                "This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. "
                "Read the original for the detail.", "No summary is stored for this story.")
 CANONICAL = re.compile(r'<link rel="canonical" href="[^"]*/breakdowns/(?P<slug>[^"/]+)\.html">')
+SEARCH_MARK = " data-pagefind-body"  # on the <article> of a live page: Pagefind indexes it (topics.py sets it)
+TOPIC_NAV = re.compile(r'\n    <nav class="article-actions" aria-label="Topics of this story">.*?</nav>', re.S)
 
 
 def page_seo(title, slug, summary_html):
@@ -549,7 +551,7 @@ def page_seo(title, slug, summary_html):
 
 
 def render_breakdown_page(title, slug, url, source_label, summary_html, guide_html, meta_line, generated_at,
-                          tag="", figure=""):
+                          tag="", figure="", topic_nav="", searchable=False):
     """The page frame, in magazine order: tag, H1, meta, image, summary, "How to apply" panel, source button, back link.
     title, url, meta_line, generated_at and tag are raw text and are escaped here; summary_html and guide_html come
     from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure.
@@ -589,7 +591,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   </div>
 </header>
 <main class="content" id="main">
-  <article class="article">
+  <article class="article"{SEARCH_MARK if searchable else ""}>
     {figure}
     <section>
       <h2 class="section-title">Summary</h2>
@@ -604,7 +606,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
     <div class="article-actions">
       {source_link_html(url)}
       <a class="back-link" href="../index.html">← Back to today</a>
-    </div>
+    </div>{topic_nav}
   </article>
 </main>
 <footer>
@@ -659,9 +661,10 @@ def restyle_page(old_html, tag="", figure=None, slug=""):
     url = unescape(source["url"]) if source else ""
     if figure is None:
         figure = stored_figure[0] if stored_figure else ""
-    stated = CANONICAL.search(old_html)
+    stated, nav = CANONICAL.search(old_html), TOPIC_NAV.search(old_html)  # the topic row and search mark stay
     return render_breakdown_page(stored_text(m["title"]), slug or (stated["slug"] if stated else ""), url, "", summary, guide,
-                                 meta, generated_at, tag=tag or (stored_text(stored_tag["tag"]) if stored_tag else ""), figure=figure)
+                                 meta, generated_at, tag=tag or (stored_text(stored_tag["tag"]) if stored_tag else ""), figure=figure,
+                                 topic_nav=nav[0] if nav else "", searchable=f'<article class="article"{SEARCH_MARK}>' in old_html)
 
 
 def known_tags():
