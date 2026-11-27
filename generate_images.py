@@ -9,6 +9,8 @@ Never fails the pipeline: the first error is logged, the run stops (no more API 
 No text in images: the scene is built from shapes, light, materials, architecture and nature only, a scene with a
 banned word is asked for once more and then replaced by a safe fallback, and every image is read by OCR (tesseract).
 An image with text is drawn once more from a new scene; if it still has text it is deleted ("skipped: text").
+Images made before this check are audited once: one whose scene names a banned object or that OCR finds text in
+is deleted, so its card is drawn again (or keeps no image). alt.json marks each checked image "text_check": "ok".
 """
 import json
 import os
@@ -112,6 +114,8 @@ Summary: {summary}
 Rules: build the scene ONLY from abstract shapes, light, materials (glass, stone, metal, wood, water, fabric),
 architecture and nature, as a calm visual metaphor for the story (for a story about searching for planets: a
 glowing sphere above a dark mountain lake; about a chip ban: a small emerald crystal behind a tall stone gate).
+Vary the setting from story to story (forest, desert, coast, canyon, courtyard, stairway, bridge, sky, cave):
+do not default to a prism, crystal or arch.
 Never show: code, digits, numbers, binary, screens, monitors, phones, cameras, lenses, signs, labels, tags, books,
 paper, documents, charts, keyboards, computers, servers, logos, maps, clocks, coins, stamps, posters, flags, or any
 other object that normally carries text. No people, no faces, no hands. No company, product or person names.
@@ -214,6 +218,33 @@ def generate_image(scene, out_path):
     return json.dumps(usage) if usage else "not reported"
 
 
+def audit_existing(images_dir, alts):
+    """Delete existing images not yet checked whose scene names a banned object or that OCR finds text in.
+    Clean ones are marked "text_check": "ok" so later runs do not read them again. Returns the deleted slugs."""
+    removed = []
+    for path in sorted(Path(images_dir).glob("*.webp")):
+        slug = path.stem
+        meta = alts.get(slug) or {}
+        if meta.get("text_check") == "ok":
+            continue
+        reason = banned_in(str(meta.get("alt", "")))
+        if not reason:
+            try:
+                reason = text_in_image(path)
+            except Exception as e:
+                reason = [f"OCR error {type(e).__name__}"]
+        if reason:
+            path.unlink(missing_ok=True)
+            alts.pop(slug, None)
+            removed.append(slug)
+            log(f"old image has text risk, deleted for a redraw: {slug} ({', '.join(map(str, reason[:5]))})")
+        elif slug in alts:
+            alts[slug]["text_check"] = "ok"
+        else:
+            alts[slug] = {"alt": FALLBACK_ALT, "text_check": "ok"}
+    return removed
+
+
 def top_items(now=None):
     """Every card the Case Studies and Industry News tabs show, built as generate_html builds them
     (top_up, 4-month window, score order, honesty checks). Reads only: archives nothing."""
@@ -299,6 +330,7 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
         log("OCR not available (pip install pytesseract; apt install tesseract-ocr). No images generated, 0 API calls")
         return 0
     made, regenerated, skipped, used = 0, 0, 0, []
+    audited = [] if dry_run else audit_existing(images_dir, alts)
     todo, seen = [], set()
     for item in newest_first(items):
         slug = slugify(item.get("title", ""))
@@ -341,7 +373,7 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
                 log(f"skipped: text ({slug})")
                 continue
             alts[slug] = {"alt": scene, "created": today.strftime("%Y-%m-%d"), "model": MODEL,
-                          "provider": "cloudflare-workers-ai", "neurons": neurons}
+                          "provider": "cloudflare-workers-ai", "neurons": neurons, "text_check": "ok"}
             made += 1
             log(f"generated {slug} ({path.stat().st_size / 1024:.1f} KB, neurons {neurons}): {scene}")
         except Exception as e:
@@ -354,7 +386,8 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
                 json.dump(alts, f, indent=2, sort_keys=True)
         except Exception as e:
             log(f"could not write {ALT_FILE}: {e}")
-    log(f"done: {made} generated, {regenerated} regenerated, {skipped} skipped (text), {len(used)} draws, "
+    log(f"done: {made} generated, {regenerated} regenerated, {skipped} skipped (text), "
+        f"{len(audited)} old image(s) deleted for text, {len(used)} draws, "
         f"{api_calls} API calls, neurons {neuron_total(used)}")
     return made
 

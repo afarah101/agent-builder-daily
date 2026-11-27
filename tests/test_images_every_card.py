@@ -189,7 +189,7 @@ def test_ocr_text_redraws_once_then_skips(site, monkeypatch, capsys):
     alts = json.loads((site / "site" / "images" / "alt.json").read_text())
     assert "texty" not in alts and "next" in alts
     out = capsys.readouterr().out
-    assert "skipped: text (texty)" in out and "1 generated, 1 regenerated, 1 skipped (text), 3 draws" in out
+    assert "skipped: text (texty)" in out and "1 generated, 1 regenerated, 1 skipped (text), 0 old image(s) deleted for text, 3 draws" in out
     assert "neurons 519.0" in out  # every draw counts, the deleted ones too
 
 
@@ -209,7 +209,7 @@ def test_ocr_clean_keeps_the_image_with_one_draw(site, monkeypatch, capsys):
     stub_api(monkeypatch, calls)
     assert gi.run(today=NOW) == 1 and calls == ["clean"]
     assert (site / "site" / "images" / "clean.webp").exists()
-    assert "0 regenerated, 0 skipped (text), 1 draws" in capsys.readouterr().out
+    assert "0 regenerated, 0 skipped (text), 0 old image(s) deleted for text, 1 draws" in capsys.readouterr().out
 
 
 def test_ocr_error_is_treated_as_text_and_never_fails_the_run(site, monkeypatch):
@@ -250,3 +250,35 @@ def test_text_in_image_reads_real_text(tmp_path):
         img.save(tmp_path / f"{name}.webp", "WEBP", quality=70)
     assert REAL_TEXT_IN_IMAGE(tmp_path / "text.webp")  # real tesseract finds the words
     assert REAL_TEXT_IN_IMAGE(tmp_path / "blank.webp") == []
+
+
+def test_old_image_with_text_risk_is_deleted_and_redrawn(site, monkeypatch, capsys):
+    images = site / "site" / "images"
+    for slug in ("old-sign", "old-ocr", "old-clean", "old-checked"):
+        (images / f"{slug}.webp").write_bytes(b"old")
+    (images / "alt.json").write_text(json.dumps({
+        "old-sign": {"alt": "A laptop screen showing a document"}, "old-ocr": {"alt": "A stone arch"},
+        "old-clean": {"alt": "A glass sphere over a lake"}, "old-checked": {"alt": "A sign", "text_check": "ok"}}))
+    monkeypatch.setattr(gi, "top_items", lambda: [news(t) for t in ("Old sign", "Old ocr", "Old clean", "Old checked")])
+    calls = []
+    stub_api(monkeypatch, calls)
+    ocr_reads = []
+    monkeypatch.setattr(gi, "text_in_image",
+                        lambda path: ocr_reads.append(path.stem) or (["HELLO"] if path.read_bytes() == b"old" and path.stem == "old-ocr" else []))
+    assert gi.run(today=NOW) == 2 and sorted(calls) == ["old-ocr", "old-sign"]  # both redrawn, clean ones kept
+    assert (images / "old-clean.webp").read_bytes() == b"old" and (images / "old-checked.webp").read_bytes() == b"old"
+    assert "old-checked" not in ocr_reads and ocr_reads[:2] == ["old-clean", "old-ocr"]  # alt ban needs no OCR
+    alts = json.loads((images / "alt.json").read_text())
+    assert all(alts[s]["text_check"] == "ok" for s in ("old-sign", "old-ocr", "old-clean", "old-checked"))
+    assert "2 old image(s) deleted for text" in capsys.readouterr().out
+    ocr_reads.clear()
+    assert gi.run(today=NOW) == 0 and sorted(calls) == ["old-ocr", "old-sign"]  # nothing new to draw
+    assert ocr_reads == []  # every image is marked, nothing is read again
+
+
+def test_dry_run_deletes_no_old_image(site, monkeypatch):
+    (site / "site" / "images" / "old.webp").write_bytes(b"old")
+    (site / "site" / "images" / "alt.json").write_text(json.dumps({"old": {"alt": "A book"}}))
+    monkeypatch.setattr(gi, "top_items", lambda: [news("Old")])
+    gi.run(dry_run=True, today=NOW)
+    assert (site / "site" / "images" / "old.webp").exists()
