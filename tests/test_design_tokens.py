@@ -58,13 +58,17 @@ def test_every_breakdown_page_loads_the_font_set_and_the_token_block():
     assert stale == []
 
 
-def test_font_set_is_satoshi_geist_and_geist_mono_with_swap():
-    assert "family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap" in gh.font_links()
-    assert 'font-family: "Satoshi"' in gh.font_faces() and "font-display: swap" in gh.font_faces()
-    assert 'href="../fonts/satoshi-700.woff2" as="font"' in gh.font_links("../")
-    assert (SITE / "fonts" / "satoshi-700.woff2").is_file()  # served from the site: the CSP allows fonts from 'self'
+def test_font_set_is_satoshi_and_geist_mono_with_swap():
+    assert "css2?family=Geist+Mono:wght@400;700&display=swap" in gh.font_links()  # Geist Mono only: Satoshi is the body font
+    faces = gh.font_faces("../").split("\n")
+    assert len(faces) == 2 and all('font-family: "Satoshi"' in f and "font-display: swap" in f for f in faces)
+    for weight in (400, 700):  # body and headings
+        assert f'url("../fonts/satoshi-{weight}.woff2") format("woff2"); font-weight: {weight};' in gh.font_faces("../")
+        assert f'href="../fonts/satoshi-{weight}.woff2" as="font"' in gh.font_links("../")
+        assert (SITE / "fonts" / f"satoshi-{weight}.woff2").is_file()  # served from the site: the CSP allows fonts from 'self'
     token = dict(re.findall(r"--(font[\w-]*):\s*\"([^\"]+)\"", gh.TOKENS_CSS))
-    assert token == {"font-head": "Satoshi", "font": "Geist", "font-mono": "Geist Mono"}
+    assert token == {"font-head": "Satoshi", "font": "Satoshi", "font-mono": "Geist Mono"}
+    assert '"Geist"' not in gh.TOKENS_CSS
 
 
 # ---------- type scale, body text, measure ----------
@@ -72,12 +76,14 @@ def test_font_set_is_satoshi_geist_and_geist_mono_with_swap():
 def test_type_scale_and_body_text():
     root = gh.TOKENS_CSS.split(":root {")[1].split("}")[0]
     sizes = {int(px) for px in re.findall(r"--fs-[\w-]+:\s*(\d+)px", root)}
-    assert sizes == {14, 16, 17, 18, 22, 28, 40, 56}  # the scale, plus the 17px body
-    assert "--fs-hero: 56px" in root and "--fs-body: 17px" in root and "--lh-body: 1.6;" in root
+    assert sizes == {14, 16, 18, 22, 28, 40, 56}  # the scale: every size is one of its steps
+    assert "--fs-body: 16px" in root and "--lh-body: 1.5;" in root and 16 * 1.5 == 24  # the benchmark's 16px / 24px
+    assert "--fs-hero: 28px" in root and "--lh-hero: 1.15;" in root  # the benchmark's phone hero: 28px / 32.2px
+    assert re.search(r"@media \(min-width: 701px\) \{\s*:root \{ --fs-hero: 56px; --lh-hero: 1.05; \}\s*\}", gh.TOKENS_CSS)
     assert re.search(r"@media \(min-width: 1024px\) \{\s*:root \{ --fs-hero: 72px; \}\s*\}", gh.TOKENS_CSS)
-    assert "--ls-hero: -0.025em" in root and round(-0.025 * 72, 1) == -1.8  # the benchmark's -1.8px at 72px
+    assert "--ls-hero: -0.025em" in root and (round(-0.025 * 28, 1), round(-0.025 * 72, 1)) == (-0.7, -1.8)  # the benchmark's
     assert "--radius-panel: 28.8px" in root and "--g-hero: linear-gradient(#000, var(--c-hero-bottom))" in root
-    assert "--reading-max: 680px" in root and 60 <= int(re.search(r"--measure:\s*(\d+)ch", root).group(1)) <= 70
+    assert "--reading-max: 672px" in root and 60 <= int(re.search(r"--measure:\s*(\d+)ch", root).group(1)) <= 70
 
 
 def test_no_page_sets_a_font_size_or_a_colour_outside_the_token_block():
@@ -205,7 +211,7 @@ def test_doherty_every_image_has_a_width_and_a_height():
 
 # ---------- privacy page ----------
 
-def test_privacy_page_is_one_680px_column_with_short_sections():
+def test_privacy_page_is_one_672px_column_with_short_sections():
     page = (SITE / "privacy.html").read_text()
     assert page.count("<h1") == 1 and '<h1 class="page-title">How we use your email</h1>' in page
     assert '<article class="article prose">' in page and ".article { max-width: var(--reading-max);" in page

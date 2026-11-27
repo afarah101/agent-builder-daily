@@ -219,7 +219,7 @@ def source_link_html(url):
     return f'<a href="{escape(url)}" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>'
 
 
-# The article shell: dark hero (logo, tag, H1, meta), then a white panel with a 680px reading column.
+# The article shell: dark hero (logo, tag, H1, meta), then a white panel with a 672px reading column.
 # site/privacy.html carries the same rules, so both pages have one layout. Every value is a token.
 ARTICLE_CSS = """*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

@@ -50,7 +50,7 @@ def test_new_page_has_home_design():
     html = page(title="Edge AI")
     css = css_of(html)
     assert "<title>Edge AI — IT Breakdown — Daily Edge AI</title>" in html
-    assert 'family=Geist:wght@400;600;700&family=Geist+Mono' in html and gh.font_links("../") in html
+    assert 'css2?family=Geist+Mono:wght@400;700' in html and gh.font_links("../") in html
     assert css.strip().startswith(gh.font_faces("../")) and gh.TOKENS_CSS in css and gb.ARTICLE_CSS in css
     assert ".hero { background: var(--g-hero);" in css and "--c-accent: #10b981" in css
     assert '<link rel="icon" href="../favicon.svg" type="image/svg+xml">' in html
@@ -74,8 +74,8 @@ def test_new_page_keeps_sections_and_order():
 def test_phone_rules_in_css():
     css = css_of(page())
     body = css.split("body {")[1].split("}")[0]
-    assert "--fs-body: 17px" in css and "font-size: var(--fs-body)" in body and "line-height: var(--lh-body)" in body
-    assert "--measure: 68ch" in css and "--reading-max: 680px" in css  # line length under 70ch in a 680px column
+    assert "--fs-body: 16px" in css and "--lh-body: 1.5;" in css and "font-size: var(--fs-body)" in body and "line-height: var(--lh-body)" in body
+    assert "--measure: 68ch" in css and "--reading-max: 672px" in css  # line length under 70ch in a 672px column
     assert re.search(r"\.summary-body \{[^}]*max-width: var\(--measure\)", css)
     assert "overflow-wrap: anywhere" in body  # long words and URLs wrap at 360px
     for sel in (r"\.brand-link", r"\.source-link, \.cta", r"\.back-link, \.text-link, footer a"):

@@ -15,48 +15,51 @@ ARCHIVE_NEWS_FILE = "data/news_archive.json"
 SLUG_MAP_FILE = "site/breakdowns/slug_map.json"
 
 # ---------- One font set and one token block, the same on every page ----------
-# Benchmark: therundown.ai (Satoshi headings, 72px hero at -1.8px, 28.8px panel, #000 to #292929 hero).
+# Benchmark: therundown.ai, read live on 27 Nov 2026 (Satoshi headings and body, 16px / 24px body, hero 28px on a
+# phone and 72px at -1.8px on a desktop, 672px column, 28.8px panel, #000 to #292929 hero).
 # Satoshi is the Fontshare file, served from site/fonts (the site's CSP allows fonts from 'self' only).
-GEIST_CSS = "https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap"
+SATOSHI_WEIGHTS = (400, 700)  # body and headings
+MONO_CSS = "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap"
 
 
 def font_links(prefix=""):
     """<link> tags of the font set. prefix is the path to the site root: "" or "../"."""
     return f"""<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="{prefix}fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{prefix}fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{GEIST_CSS}">"""
+  <link rel="stylesheet" href="{MONO_CSS}">"""
 
 
 def font_faces(prefix=""):
-    """The Satoshi @font-face, first rule of the page's <style>. font-display: swap, so text shows at once."""
-    return (f'@font-face {{ font-family: "Satoshi"; src: url("{prefix}fonts/satoshi-700.woff2") format("woff2"); '
-            f'font-weight: 700; font-style: normal; font-display: swap; }}')
+    """The Satoshi @font-face rules, first rules of the page's <style>. font-display: swap, so text shows at once."""
+    return "\n    ".join(f'@font-face {{ font-family: "Satoshi"; src: url("{prefix}fonts/satoshi-{w}.woff2") format("woff2"); '
+                          f'font-weight: {w}; font-style: normal; font-display: swap; }}' for w in SATOSHI_WEIGHTS)
 
 
 TOKENS_CSS = """:root {
       /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
-      --font-head: "Satoshi", "Geist", ui-sans-serif, system-ui, sans-serif;  /* headings */
-      --font: "Geist", ui-sans-serif, system-ui, sans-serif;                  /* body */
+      --font-head: "Satoshi", ui-sans-serif, system-ui, sans-serif;  /* headings: 700 */
+      --font: "Satoshi", ui-sans-serif, system-ui, sans-serif;       /* body: 400 */
       --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
 
-      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 56 on a phone, 72 on a desktop. Body: 17 at 1.6. */
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 28 on a phone, 56 on a tablet, 72 on a desktop. Body: 16 / 24. */
       --fs-label: 14px;
       --fs-small: 14px;
       --fs-ui: 16px;
-      --fs-body: 17px;
+      --fs-body: 16px;
       --fs-lead: 18px;
       --fs-h4: 22px;
       --fs-h3: 28px;
       --fs-h2: 40px;
       --fs-h1: 56px;
-      --fs-hero: 56px;
-      --lh-hero: 1.05;
+      --fs-hero: 28px;
+      --lh-hero: 1.15;
       --lh-head: 1.15;
       --lh-snug: 1.3;
-      --lh-body: 1.6;
+      --lh-body: 1.5;       /* 24px at 16px */
       --lh-small: 1.5;
-      --ls-hero: -0.025em;  /* -1.8px at 72px */
+      --ls-hero: -0.025em;  /* -0.7px at 28px, -1.8px at 72px */
       --ls-head: -0.02em;
       --ls-label: 0.04em;
 
@@ -98,9 +101,13 @@ TOKENS_CSS = """:root {
       --radius-pill: 9999px;
 
       --content-max: 1152px;
-      --reading-max: 680px;  /* article column */
+      --reading-max: 672px;  /* article column */
       --measure: 68ch;       /* longest line of body text */
       --tap: 44px;           /* smallest tap target */
+    }
+
+    @media (min-width: 701px) {
+      :root { --fs-hero: 56px; --lh-hero: 1.05; }
     }
 
     @media (min-width: 1024px) {
@@ -701,7 +708,7 @@ def generate_html():
     .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
     .brand-name { white-space: nowrap; }
 
-    /* Headings: Satoshi 700, tight tracking */
+    /* Headings: Satoshi 700, tight tracking. Body: Satoshi 400 */
     .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
 
     /* Tags and dates: Geist Mono */
