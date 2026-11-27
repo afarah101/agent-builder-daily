@@ -47,7 +47,8 @@ def test_every_stored_date_form_shows_the_whole_year(stored, shown):
 
 
 def test_archive_rows_show_the_date_in_the_same_form():
-    html = gh.render_archive([{"date": "2026-11-26", "total": 1, "news": [{"title": "T", "url": "https://a.test/x"}]}], "news")
+    html = gh.render_archive([{"date": "2026-11-26", "total": 1,
+                               "news": [{"title": "T", "url": "https://a.test/x", "summary": "A thing shipped."}]}], "news")
     assert '<div class="archive-date">26 Nov 2026</div>' in html and "2026-11-26" not in html
 
 
@@ -64,7 +65,8 @@ def test_archive_is_a_real_page_linked_from_the_home_page():
 
 
 def test_archive_shows_30_days_at_most():
-    days = [{"date": f"2026-{m:02d}-{d:02d}", "total": 1, "news": [{"title": "T", "url": "https://a.test/x"}]}
+    days = [{"date": f"2026-{m:02d}-{d:02d}", "total": 1,
+             "news": [{"title": "T", "url": "https://a.test/x", "summary": "A thing shipped."}]}
             for m in (11, 10) for d in range(28, 0, -1)]
     assert gh.render_archive(days, "news").count('<div class="archive-row">') == 30
 
@@ -125,7 +127,10 @@ PRIVACY_ITEMS = {
     "lawful basis": "lawful basis under the UK GDPR is your consent",
     "retention": "until you unsubscribe. Then we delete it within 7 days",
     "processor": "Google is our data processor",
-    "transfer": "transfer data outside the UK",
+    "transfer": "Google may process data outside the UK",
+    "transfer safeguards": "UK International Data Transfer Addendum",
+    "portability": "to receive it in a portable form (data portability)",
+    "object": "Right to object:",
     "complaint": "https://ico.org.uk",
     "consent record": "record of your consent",
 }

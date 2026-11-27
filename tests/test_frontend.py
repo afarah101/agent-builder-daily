@@ -759,9 +759,11 @@ def test_future_items_and_later_years_are_hidden():
 
 
 def test_source_that_does_not_match_the_url_shows_the_domain():
-    kept = gh.honest([{"title": "A", "source": "TechCrunch", "url": "https://www.theverge.com/x"},
-                      {"title": "B", "source": "The Verge", "url": "https://www.theverge.com/y"},
-                      {"title": "C", "source": "MIT Technology Review", "url": "https://www.technologyreview.com/z"}],
+    # every item needs a source-checked summary: without one it is not shown at all (publishable)
+    kept = gh.honest([{"title": "A", "source": "TechCrunch", "url": "https://www.theverge.com/x", "summary": "A thing shipped."},
+                      {"title": "B", "source": "The Verge", "url": "https://www.theverge.com/y", "summary": "A thing shipped."},
+                      {"title": "C", "source": "MIT Technology Review", "url": "https://www.technologyreview.com/z",
+                       "summary": "A thing shipped."}],
                      NOW, [], "news")
     assert [i["source"] for i in kept] == ["theverge.com", "The Verge", "MIT Technology Review"]
 

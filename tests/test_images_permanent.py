@@ -193,7 +193,7 @@ def test_every_shown_card_renders_a_figure(site, monkeypatch):
 
 
 def test_page_built_before_any_cover_file_still_has_a_figure_on_every_card(site):
-    write_data(site, [study("Study")], [news("News")])
+    write_data(site, [study("Study")], [news("A story")])
     gh.generate_html()  # generate_images.py did not run
     cards, figures, srcs = shown_cards((site / "site" / "index.html").read_text())
     assert cards == figures == 2 and all(s.startswith("data:image/svg+xml,") for s in srcs)
