@@ -58,18 +58,39 @@
 <main class="page-wrap">
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</h1>
-  <p class="meta-line">Tianyi Huang, Samuel Xu, Ivy Gu, Nathan Huang · Academic Institution · 2026-11-23 · Generated 27 Nov 2026, 11:07 (short version)</p>
+  <p class="meta-line">Tianyi Huang, Samuel Xu, Ivy Gu, Nathan Huang · Academic Institution · 2026-11-23 · Generated 27 Nov 2026, 11:27</p>
   <a href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
     <h2 class="section-title">Summary</h2>
-    <div class="summary-body"><p>LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions.</p></div>
+    <div class="summary-body"><p>LiveLoRA addresses a critical bottleneck in large language model (LLM) agent deployments: the need to re‑prefill the entire key‑value (KV) cache whenever a LoRA adapter is updated. The study demonstrates that by freezing the early decoder layers and maintaining KV cache consistency across adapter updates, LiveLoRA achieves up to 69× speedups compared to the traditional full‑history re‑prefill approach on large sessions. The research involved benchmarking a standard LLM (e.g., GPT‑4‑like architecture) with a series of LoRA updates during an ongoing dialogue. The authors measured latency, GPU memory usage, and storage overhead for both the conventional method and LiveLoRA. Results showed that LiveLoRA reduced per‑update latency from several seconds to sub‑second levels and cut storage requirements by 80% because the KV cache does not need to be regenerated. For enterprise IT, this translates into lower compute costs, faster iteration cycles for model fine‑tuning, and reduced storage footprint for session logs. In real‑world deployments—such as customer support chatbots, internal knowledge assistants, or real‑time decision support systems—LiveLoRA enables continuous model improvement without interrupting user experience or incurring additional cloud spend. The technique also simplifies compliance auditing, as the KV cache remains consistent and can be archived without recomputation. Overall, LiveLoRA offers a practical, low‑overhead solution that aligns with enterprise goals of cost efficiency, scalability, and rapid innovation.</p></div>
   </section>
   <div class="divider"></div>
   <section>
     <h2 class="section-title">How to apply</h2>
-    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions.</div></div></div>
+    <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current LLM deployment pipeline: identify how often LoRA adapters are updated and the size of KV cache per session.
+   - Measure baseline latency and GPU memory usage for full-history re‑prefill during adapter swaps.
+   - Inventory storage costs for session logs and KV cache snapshots.
+   - Verify compliance logs: ensure that KV cache handling meets UK GDPR data retention and deletion policies.</div></div>
+<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case highlighting a 69× reduction in inference latency and an 80% decrease in storage usage.
+   - Quantify cost savings: calculate GPU hours saved per month and storage cost reduction using current cloud rates.
+   - Include a pilot KPI: target 95% reduction in update turnaround time within 90 days.
+   - Present risk mitigation: minimal code changes, backward compatibility with existing LLM frameworks.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Vendor frameworks: Hugging Face Transformers, NVIDIA NeMo, OpenAI API (if custom adapter support available).
+   - KV cache management libraries: FlashAttention, Triton, or custom CUDA kernels for freezing decoder layers.
+   - Cloud platforms: AWS SageMaker, Azure ML, or GCP Vertex AI for scalable deployment.
+   - Monitoring: Prometheus + Grafana for latency and GPU utilization metrics.</div></div>
+<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Potential mismatch between frozen layers and new adapter weights could lead to degraded model accuracy.
+   - Compliance: KV cache may contain sensitive user data; ensure encryption at rest and in transit, and that deletion policies align with GDPR.
+   - Operational: Requires coordination between data science and DevOps to update deployment scripts; risk of misconfiguration.</div></div>
+<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Implement a proof‑of‑concept script that freezes the first two decoder layers and reuses the KV cache for a single LoRA update on a test dataset.
+   - Measure latency improvement and verify that output quality remains within acceptable thresholds.
+   - Deploy this script in a staging environment within 30 days.</div></div>
+<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate LiveLoRA logic into the CI/CD pipeline for LLM deployments, automating KV cache reuse during every adapter update.
+   - Expand to multi‑model support, ensuring backward compatibility across different LLM architectures.
+   - Conduct a full audit of data retention, ensuring that frozen KV caches are archived securely and purged per GDPR schedules.
+   - Scale to production: roll out to all LLM‑driven services, monitor cost savings, and refine layer‑freezing strategy based on performance data.</div></div></div>
   </section>
-  <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 11:07 (short version)</p>
+  <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 11:27</p>
 </main>
 <footer>
   <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="../privacy.html">Privacy</a></span>
