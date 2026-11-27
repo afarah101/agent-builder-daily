@@ -500,6 +500,50 @@ def sentences_of(text):
     return out
 
 
+def _parse_meaning(raw, chunk):
+    """{id: [label, ...]} from a model's answer, or None when it cannot be read. An item with a missing, duplicate or
+    mis-sized answer is left out: it was not checked, which is never a pass."""
+    try:
+        text = str(raw).strip()
+        if text.startswith("```"):  # some models wrap JSON in a code fence
+            text = re.sub(r"^```[a-zA-Z]*\s*|\s*```$", "", text)
+        answer = json.loads(text)["items"]
+        if not isinstance(answer, list):
+            raise ValueError("items is not a list")
+    except Exception:
+        return None
+    want = {it["id"]: len(it["sentences"]) for it in chunk}
+    counts = Counter(str(a.get("id")) for a in answer if isinstance(a, dict))
+    out = {}
+    for a in answer:
+        aid = str(a.get("id")) if isinstance(a, dict) else None
+        labels = a.get("labels") if isinstance(a, dict) else None
+        if aid not in want or counts[aid] != 1 or not isinstance(labels, list) or len(labels) != want[aid]:
+            continue
+        out[aid] = [{"label": str((lab or {}).get("label", "")).strip().upper().replace("_", " "),
+                     "reason": str((lab or {}).get("reason", ""))[:200]} for lab in labels]
+    return out
+
+
+def _meaning_groq(prompt, chunk):
+    """Groq reads the batch when Gemini has nothing left, so the meaning check still covers every page of the run.
+    Returns {id: [label, ...]}, or None when Groq has nothing left either."""
+    if not os.environ.get("GROQ_API_KEY") and not os.environ.get("GROQ_API_KEY_2"):
+        return None
+    try:
+        from generate_breakdowns import call_groq  # the Groq client of the page writer, with its own key fallback
+        raw = call_groq(prompt)
+    except Exception as e:
+        print(f"[MEANING] Groq fallback failed: {type(e).__name__}: {str(e)[:120]}")
+        return None
+    if not raw or raw == "DAILY_LIMIT":
+        print("[MEANING] Groq fallback has nothing left either")
+        return None
+    out = _parse_meaning(raw, chunk)
+    print("[MEANING] model used: Groq (Gemini had nothing left)" if out is not None else "[MEANING] Groq reply unreadable")
+    return out
+
+
 def _meaning_chunk(chunk):
     """One Gemini call for up to BATCH_SIZE items. Returns {id: [label, ...]} with one label for each sentence;
     an item the model did not label gets [] (the caller treats that as "not checked")."""
@@ -528,41 +572,28 @@ def _meaning_chunk(chunk):
                     continue
                 print(f"[MEANING] {candidate} {code or type(e).__name__} again, trying next model")
                 break
-            try:
-                answer = json.loads(raw)["items"]
-                if not isinstance(answer, list):
-                    raise ValueError("items is not a list")
-            except Exception as e:
-                last, answer = e, None
-                print(f"[MEANING] {candidate} unparseable reply ({type(e).__name__}), "
-                      + ("retrying" if attempt == 0 else "trying next model"))
+            answer = _parse_meaning(raw, chunk)
+            if answer is None:
+                last = ValueError("unparseable reply")
+                print(f"[MEANING] {candidate} unparseable reply, " + ("retrying" if attempt == 0 else "trying next model"))
                 continue
             print(f"[MEANING] model used: {candidate}")
             break
         if answer is not None:
             break
     if answer is None:
-        print(f"[MEANING] all models failed; last: {type(last).__name__}: {str(last)[:160]}")
-        return {}
-    want = {it["id"]: len(it["sentences"]) for it in chunk}
-    counts = Counter(str(a.get("id")) for a in answer if isinstance(a, dict))
-    out = {}
-    for a in answer:
-        aid = str(a.get("id")) if isinstance(a, dict) else None
-        labels = a.get("labels") if isinstance(a, dict) else None
-        if aid not in want or counts[aid] != 1 or not isinstance(labels, list) or len(labels) != want[aid]:
-            continue  # a missing, duplicate or mis-sized answer is "not checked", never a pass
-        out[aid] = [{"label": str((lab or {}).get("label", "")).strip().upper().replace("_", " "),
-                     "reason": str((lab or {}).get("reason", ""))[:200]} for lab in labels]
-    return out
+        print(f"[MEANING] all Gemini models failed; last: {type(last).__name__}: {str(last)[:160]}. Trying Groq")
+        return _meaning_groq(prompt, chunk) or {}
+    return answer
 
 
 def meaning_check(items):
     """The meaning check, batched: one call for each BATCH_SIZE items, so a whole run costs a few calls.
+    Gemini reads the batch; when its quota is spent, Groq reads it, so a run is checked end to end.
     items: [{"id", "title", "source", "sentences": [...]}]. Returns {id: [{"label", "reason"}, ...]}; an id that is
-    missing from the result was not checked. Without GEMINI_API_KEY nothing is checked and {} comes back."""
+    missing from the result was not checked. With no model key at all nothing is checked and {} comes back."""
     items = [it for it in items if it.get("sentences")]
-    if not items or not os.environ.get("GEMINI_API_KEY"):
+    if not items or not any(os.environ.get(k) for k in ("GEMINI_API_KEY", "GROQ_API_KEY", "GROQ_API_KEY_2")):
         return {}
     out = {}
     for start in range(0, len(items), BATCH_SIZE):

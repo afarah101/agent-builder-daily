@@ -370,3 +370,59 @@ def test_a_page_the_check_did_read_is_not_named(monkeypatch, capsys):
                         lambda batch: {it["id"]: [{"label": "SUPPORTED", "reason": ""}] * len(it["sentences"]) for it in batch})
     assert gb.meaning_check([(story("One"), "Megaspeed is accused.", "Check contracts.")]) == [[]]
     assert "NOT CHECKED" not in capsys.readouterr().out
+
+
+# ---------- the meaning check covers the run even when Gemini has nothing left ----------
+
+GEMINI_DEAD = type("Dead", (Exception,), {"code": 429})
+
+
+def gemini_exhausted(monkeypatch):
+    def dead(prompt, model):
+        raise GEMINI_DEAD("429 RESOURCE_EXHAUSTED")
+    monkeypatch.setattr(judge, "_ask", dead)
+    monkeypatch.setattr(judge, "_pace", lambda: None)  # the rate limiter paces real calls only
+
+
+def test_groq_reads_the_batch_when_gemini_has_nothing_left(monkeypatch, capsys):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    monkeypatch.setenv("GROQ_API_KEY", "test")
+    gemini_exhausted(monkeypatch)
+    answer = json.dumps({"items": [{"id": "0", "labels": [{"label": "CONTRADICTED", "reason": "the source says the customer"},
+                                                          {"label": "SUPPORTED", "reason": ""}]}]})
+    monkeypatch.setattr(gb, "call_groq", lambda prompt, note="": "```json\n" + answer + "\n```")  # a code fence is read too
+    out = judge.meaning_check([{"id": "0", "title": "T", "source": SOURCE, "sentences": ["Nvidia is the target.", "Megaspeed is accused."]}])
+    assert [lab["label"] for lab in out["0"]] == ["CONTRADICTED", "SUPPORTED"]
+    log = capsys.readouterr().out
+    assert "all Gemini models failed" in log and "model used: Groq (Gemini had nothing left)" in log
+
+
+def test_a_contradicted_sentence_is_still_held_back_with_gemini_exhausted(site, monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    monkeypatch.setenv("GROQ_API_KEY", "test")
+    gemini_exhausted(monkeypatch)
+    page = "Nvidia is the target of the US investigation.\n---SPLIT---\n1. EVALUATE - Check contracts."
+    monkeypatch.setattr(gb, "generate_content_for_news", lambda it, note="": page)
+    monkeypatch.setattr(gb, "judge_pages", lambda pages: [("pass", "")] * len(pages))
+    monkeypatch.setattr(gb, "call_groq", lambda prompt, note="": json.dumps({"items": [
+        {"id": str(n), "labels": [{"label": "CONTRADICTED" if "Nvidia is the target" in s else "SUPPORTED", "reason": "r"}
+                                  for s in re.findall(r'"((?:[^"\\]|\\.)*)"', prompt.split('"sentences"')[1 + n].split("]")[0])]}
+        for n in range(prompt.count('"sentences"'))]}))
+    gb.HELD_BACK.clear()
+    gb.process_items([story("Megaspeed")], "news", "27 Nov 2026, 09:00", site / "site" / "breakdowns", use_ai=True)
+    assert len(gb.HELD_BACK) == 1 and "meaning check" in gb.HELD_BACK[0][1] and "contradicts the source" in gb.HELD_BACK[0][1]
+
+
+def test_no_model_key_at_all_checks_nothing(monkeypatch):
+    for key in ("GEMINI_API_KEY", "GROQ_API_KEY", "GROQ_API_KEY_2"):
+        monkeypatch.delenv(key, raising=False)
+    assert judge.meaning_check([{"id": "0", "title": "T", "source": SOURCE, "sentences": ["A sentence."]}]) == {}
+
+
+def test_groq_with_nothing_left_leaves_the_pages_unchecked(monkeypatch, capsys):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    monkeypatch.setenv("GROQ_API_KEY", "test")
+    gemini_exhausted(monkeypatch)
+    monkeypatch.setattr(gb, "call_groq", lambda prompt, note="": "DAILY_LIMIT")
+    assert judge.meaning_check([{"id": "0", "title": "T", "source": SOURCE, "sentences": ["A sentence."]}]) == {}
+    assert "Groq fallback has nothing left either" in capsys.readouterr().out
