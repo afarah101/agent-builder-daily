@@ -6,14 +6,14 @@ import json
 import re
 import sys
 import time
+import hashlib
 from html import escape, unescape
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from groq import Groq
 
-CASE_STUDIES_DIR = "case_studies"
-NEWS_DIR = "data/news"
 OUTPUT_DIR = "site/breakdowns"
+SHORT = " (short version)"  # ends the "Generated" stamp of a page made without Groq; a later run replaces that page
 
 # Dual API key setup — falls back to key 2 if key 1 hits daily limit
 API_KEY_1 = os.environ.get("GROQ_API_KEY")
@@ -25,22 +25,18 @@ def get_client():
     return Groq(api_key=_current_key)
 
 
-def load_latest_json(directory, prefix=""):
-    path = Path(directory)
-    pattern = f"{prefix}*.json" if prefix else "*.json"
-    files = [f for f in sorted(path.glob(pattern), reverse=True) if "archive" not in f.name]
-    if not files:
-        return None
-    with open(files[0]) as f:
-        return json.load(f)
-
-
 def slugify(title):
     slug = title.lower()
     slug = re.sub(r"[^a-z0-9\s-]", "", slug)
     slug = re.sub(r"\s+", "-", slug.strip())
     slug = re.sub(r"-+", "-", slug)
     return slug[:80]
+
+
+def page_slug(title):
+    """The page's file name. A title with no ASCII letter or digit still gets one, from a hash."""
+    title = str(title or "Untitled")
+    return slugify(title) or "story-" + hashlib.sha1(title.encode("utf-8")).hexdigest()[:10]
 
 
 def call_groq(prompt, retries=3):
@@ -218,7 +214,7 @@ def source_link_html(url):
     url = str(url or "").strip()
     if not url.lower().startswith("https://"):
         return ""
-    return f'<a href="{escape(url)}" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>'
+    return f'<a href="{escape(url)}" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>'
 
 
 def render_breakdown_page(title, slug, url, source_label, summary_html, guide_html, meta_line, generated_at):
@@ -288,12 +284,12 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   <p class="meta-line">{meta_line} · Generated {generated_at}</p>
   {source_link_html(url)}
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body">{summary_html}</div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid">{guide_html}</div>
   </section>
   <p class="generated-note">AI-generated breakdown · Daily Edge AI · {generated_at}</p>
@@ -353,126 +349,131 @@ def restyle_existing_pages(directory=OUTPUT_DIR):
     return restyled, skipped
 
 
-def process_case_studies(cs_data, generated_at):
-    if not cs_data or not cs_data.get("case_studies"):
-        print("No case studies found.")
-        return {}
+NOT_APPLICABLE = ("not applicable", "not directly applicable")
 
+
+def meta_line_for(item, kind):
+    """Authors · institution · date for a case study; source · date for news."""
+    pub = str(item.get("pub_date") or "")
+    pub = pub[:10] if re.match(r"\d{4}-\d\d-\d\d", pub) else pub.strip()  # news dates ("26 Nov 2026") stay whole
+    if kind == "case_studies":
+        parts = [", ".join(item.get("authors") or []) or "Unknown", item.get("institution", ""), pub]
+    else:
+        parts = [item.get("source", ""), pub]
+    return " · ".join(str(p) for p in parts if p)
+
+
+def short_content(item, kind):
+    """(summary_html, guide_html) from the text the scout already stored for the item. No AI call."""
+    summary = str(item.get("summary") or "").strip() or "No summary is stored for this story."
+    summary_html = summary_block_html([p.strip() for p in summary.split("\n\n") if p.strip()])
+    if kind == "case_studies":
+        how = str(item.get("it_breakdown") or item.get("how_to_apply") or "").strip()
+        points = [("What to do", how)] if how else []
+    else:
+        from send_daily_email import signal_points  # the parser the home page and the email use for S1/S2/S3
+        points = [(head or "What to do", text) for head, text in signal_points(str(item.get("enterprise_use") or ""))]
+    points = [(head, text) for head, text in points if text and not any(p in text.lower() for p in NOT_APPLICABLE)]
+    if not points:
+        points = [("What to do", "No how-to notes are stored for this story. Read the original for the detail.")]
+    return summary_html, "\n".join(guide_block_html(head, "", text) for head, text in points)
+
+
+def is_short_page(path):
+    """True for a page made by short_content: its "Generated" stamp ends with SHORT."""
+    return bool(re.search(r'class="meta-line">[^<]*' + re.escape(escape(SHORT)) + "</p>", Path(path).read_text(encoding="utf-8")))
+
+
+def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
+    """A page on disk and a slug_map entry for EVERY item; returns {raw title: slug}.
+    Groq writes the full page. When Groq gives nothing (no key, error, daily limit, bad shape, or use_ai off), the
+    item's own summary and how-to text make a short page, so no card is left without one. A later run with Groq
+    replaces a short page with the full one; a full page is never rewritten."""
     slug_map = {}
-    studies = cs_data["case_studies"]
-    print(f"Generating breakdowns for {len(studies)} case studies...")
-
-    for i, cs in enumerate(studies):
-        title = cs.get("title", "Untitled")
-        slug = slugify(title)
-        output_path = f"{OUTPUT_DIR}/{slug}.html"
-
-        if os.path.exists(output_path):
-            print(f"  [{i+1}/{len(studies)}] Skipping (exists): {slug}")
-            slug_map[title] = slug
-            continue
-
-        print(f"  [{i+1}/{len(studies)}] Generating: {title[:60]}...")
-        raw = generate_content_for_case_study(cs)
-
-        if raw == "DAILY_LIMIT":
-            return slug_map
-        if not raw:
-            print(f"    Failed to generate content.")
-            continue
-
-        summary_html, guide_html = parse_groq_response(raw)
-        if not summary_html:
-            print(f"    Failed to parse response.")
-            continue
-
-        authors = ", ".join(cs.get("authors", [])) or "Unknown"
-        institution = cs.get("institution", "")
-        pub = cs.get("pub_date", "")[:10]
-        meta_line = " · ".join(filter(None, [authors, institution, pub]))
-        url = cs.get("url", "#")
-
-        html = render_breakdown_page(title, slug, url, "Read Paper →", summary_html, guide_html, meta_line, generated_at)
-
-        with open(output_path, "w") as f:
-            f.write(html)
-
+    generate = generate_content_for_case_study if kind == "case_studies" else generate_content_for_news
+    for i, item in enumerate(items or []):
+        title = item.get("title", "Untitled" if kind == "case_studies" else "")  # the key the card renderer looks up
+        slug = page_slug(title)
+        path = Path(directory) / f"{slug}.html"
         slug_map[title] = slug
-        print(f"    Saved: {output_path}")
-        time.sleep(0.5)
+        if path.exists() and not (use_ai and is_short_page(path)):
+            continue
 
+        summary_html = guide_html = None
+        if use_ai:
+            print(f"  [{i+1}/{len(items)}] Generating: {str(title)[:60]}...")
+            raw = generate(item)
+            if raw == "DAILY_LIMIT":
+                use_ai = False  # no more Groq calls this run; the items left still get a page below
+            elif raw:
+                summary_html, guide_html = parse_groq_response(raw)
+            time.sleep(0.5)
+
+        stamp = generated_at
+        if not summary_html:
+            if path.exists():
+                continue  # keep the short page that is already there
+            summary_html, guide_html = short_content(item, kind)
+            stamp += SHORT
+        path.write_text(render_breakdown_page(title or "Untitled", slug, item.get("url", ""), "", summary_html,
+                                              guide_html, meta_line_for(item, kind), stamp), encoding="utf-8")
+        print(f"    Saved: {path}")
     return slug_map
 
 
-def process_news(news_data, generated_at):
-    if not news_data or not news_data.get("news"):
-        print("No news found.")
-        return {}
-
-    slug_map = {}
-    items = news_data["news"]
-    print(f"Generating breakdowns for {len(items)} news items...")
-
-    for i, item in enumerate(items):
-        title = item.get("title", "Untitled")
-        slug = slugify(title)
-        output_path = f"{OUTPUT_DIR}/{slug}.html"
-
-        if os.path.exists(output_path):
-            print(f"  [{i+1}/{len(items)}] Skipping (exists): {slug}")
-            slug_map[title] = slug
-            continue
-
-        print(f"  [{i+1}/{len(items)}] Generating: {title[:60]}...")
-        raw = generate_content_for_news(item)
-
-        if raw == "DAILY_LIMIT":
-            return slug_map
-        if not raw:
-            print(f"    Failed to generate content.")
-            continue
-
-        summary_html, guide_html = parse_groq_response(raw)
-        if not summary_html:
-            print(f"    Failed to parse response.")
-            continue
-
-        source = item.get("source", "")
-        pub = item.get("pub_date", "")[:10]
-        meta_line = " · ".join(filter(None, [source, pub]))
-        url = item.get("url", "#")
-
-        html = render_breakdown_page(title, slug, url, "Read Article →", summary_html, guide_html, meta_line, generated_at)
-
-        with open(output_path, "w") as f:
-            f.write(html)
-
-        slug_map[title] = slug
-        print(f"    Saved: {output_path}")
-        time.sleep(0.5)
-
-    return slug_map
-
-
-def save_slug_map(cs_slugs, news_slugs):
+def save_slug_map(cs_slugs, news_slugs, directory=OUTPUT_DIR):
     slug_map = {"case_studies": cs_slugs, "news": news_slugs}
-    with open("site/breakdowns/slug_map.json", "w") as f:
+    path = Path(directory) / "slug_map.json"
+    with open(path, "w") as f:
         json.dump(slug_map, f, indent=2)
-    print(f"Slug map saved: site/breakdowns/slug_map.json")
+    print(f"Slug map saved: {path}")
+    return slug_map
+
+
+def ensure_pages(studies, news, directory=OUTPUT_DIR):
+    """The slug_map for exactly these items, each with a page on disk. Never calls Groq.
+    generate_html calls this with the cards it is about to render, so a card cannot link to a missing page."""
+    os.makedirs(directory, exist_ok=True)
+    generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
+    return save_slug_map(process_items(studies, "case_studies", generated_at, directory, use_ai=False),
+                         process_items(news, "news", generated_at, directory, use_ai=False), directory)
+
+
+def shown_items(now=None):
+    """(case studies, news) the home page tabs show, built with generate_html's own helpers as it builds them: every
+    active file, top_up from the archive, the 4-month window, score order, honesty checks. Reads only: archives nothing."""
+    import generate_html as gh
+    now = now or datetime.now()
+    cutoff = (now - timedelta(days=gh.CASE_STUDY_WINDOW_DAYS)).strftime("%Y-%m-%d")
+    studies = []
+    for f in sorted(Path(gh.CASE_STUDIES_DIR).glob("*.json")):
+        if "archive" not in f.name:
+            data = gh.load_json(str(f))
+            studies += (data.get("case_studies") or []) if isinstance(data, dict) else []
+    studies = gh.top_up(studies, gh.load_json(gh.ARCHIVE_CS_FILE), "case_studies")
+    studies = sorted((s for s in studies if gh.in_window(s, cutoff)), key=lambda x: gh.by_score(x, "total_score"), reverse=True)
+    news_files = sorted(f for f in Path(gh.NEWS_DIR).glob("news_*.json") if "archive" not in f.name)
+    data = gh.load_json(str(news_files[-1])) if news_files else {}
+    news = sorted((data.get("news") or []) if isinstance(data, dict) else [], key=lambda x: gh.by_score(x, "relevance_score"), reverse=True)
+    news = gh.top_up(news, gh.load_json(gh.ARCHIVE_NEWS_FILE), "news")
+    changes = []
+    return gh.honest(studies, now, changes, "case study"), gh.honest(news, now, changes, "news")
 
 
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
 
-    cs_data = load_latest_json(CASE_STUDIES_DIR)
-    news_data = load_latest_json(NEWS_DIR, prefix="news_")
-
-    cs_slugs = process_case_studies(cs_data, generated_at)
-    news_slugs = process_news(news_data, generated_at)
+    studies, news = shown_items()  # every card the page shows, archive top-up cards included
+    use_ai = bool(_current_key)
+    if not use_ai:
+        print("No GROQ_API_KEY: every missing page gets the short version.")
+    print(f"Breakdowns for {len(studies)} case studies and {len(news)} news items...")
+    cs_slugs = process_items(studies, "case_studies", generated_at, use_ai=use_ai)
+    news_slugs = process_items(news, "news", generated_at, use_ai=use_ai)
     save_slug_map(cs_slugs, news_slugs)
 
-    print(f"\nDone. {len(cs_slugs)} case study + {len(news_slugs)} news breakdowns generated.")
+    print(f"\nDone. {len(cs_slugs)} case study + {len(news_slugs)} news breakdowns on disk.")
 
 
 if __name__ == "__main__":

@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Sshole</h1>
   <p class="meta-line">Hacker News · 05 Nov 202 · Generated 05 Nov 2026, 14:31</p>
-  <a href="https://sshhole.com" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://sshhole.com" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The Hacker News article “Sshole” documents the evolution of password hashing in Unix and SSH, focusing on the use of the asterisk placeholder in /etc/passwd and /etc/shadow to disable accounts. Historically, a &#x27;*&#x27; or a NULL entry was interpreted by the crypt() function as an invalid hash, effectively blocking login. Over time, implementations of crypt() in various libc versions (musl, glibc) have changed their handling of NULL and failure states, sometimes returning a zero or a predictable value instead of rejecting the authentication attempt. The article explains that legacy systems may still accept these placeholder hashes or mis-handle crypt() failures, creating a window for attackers to craft inputs that trigger authentication bypass or denial‑of‑service conditions. For enterprise IT teams, this is a critical reminder that the authentication stack—SSH, PAM, local libc, and directory services—must be configured to reject accounts with placeholder or NULL hashes. Vendors such as OpenSSH, PAM modules, and operating system distributions (Red Hat, Ubuntu, Alpine) are directly involved. The broader industry implication is that many production environments still rely on legacy authentication mechanisms that are vulnerable to subtle bugs in crypt() handling. Failure to address these gaps can lead to unauthorized access or service disruption, undermining compliance with regulations like UK GDPR and jeopardizing the integrity of identity and access management (IAM) systems.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Scan /etc/shadow and directory services for accounts with &#x27;*&#x27; or NULL password hashes.
    - Verify the version of libc (musl or glibc) and confirm it includes the latest crypt() bug fixes.
    - Review SSH and PAM configuration files (sshd_config, pam.d/*) for any legacy options that allow placeholder hashes.

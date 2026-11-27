@@ -174,11 +174,19 @@ def honest(items, now, changes, kind):
     return kept
 
 
-def tag_pill(tag):
-    tag = str(tag or "Other")
+# A scorer tag that grades the story ("Low relevance", "high", "IT_relevance_moderate") is not a topic
+GRADE_WORD = re.compile(r"relevan|score|novelty|impact|signal", re.I)
+GRADE_ONLY = re.compile(r"(very |highly )?(low|medium|moderate|high|n/?a|none)", re.I)
+
+def topic_tag(tag):
+    """The topic to show on a card. A relevance or score label never shows: it becomes "Other"."""
+    tag = str(tag or "Other").strip()
     if "_" in tag:  # raw snake_case from the scorer
         tag = tag.replace("_", " ").capitalize()
-    return f'<span class="tag-pill">{esc(tag)}</span>'
+    return "Other" if not tag or GRADE_WORD.search(tag) or GRADE_ONLY.fullmatch(tag) else tag
+
+def tag_pill(tag):
+    return f'<span class="tag-pill">{esc(topic_tag(tag))}</span>'
 
 def score_ring(score, max_score=75):
     """Not shown on the page (scores are hidden); kept because tests/test_phase0e.py checks the 0-75 scale.
@@ -219,6 +227,13 @@ def signal_html(text):
     lis = "".join(f"<li><strong>{esc(h)}:</strong> {esc(t)}</li>" for h, t in points)
     return f'<ul class="signal-points">{lis}</ul>'
 
+def card_title(title, slug):
+    """The card's one link: the title, stretched over the whole card by .card-link::after, opens the breakdown page.
+    The source link is on that page. No slug means no page, so the title is plain text, never a dead link."""
+    if not slug:
+        return f'<h2 class="card-title">{title}</h2>'
+    return f'<h2 class="card-title"><a class="card-link" href="breakdowns/{esc(slug)}.html">{title}</a></h2>'
+
 def render_case_studies(data, slug_map):
     if not data or not data.get("case_studies"):
         return "<div class='empty-state'><p>No case studies available yet.</p></div>"
@@ -232,7 +247,6 @@ def render_case_studies(data, slug_map):
             pub = dt.strptime(pub_raw, "%Y-%m-%d").strftime("%d %b %Y")
         except:
             pub = esc(pub_raw)
-        url = esc(safe_url(cs.get("url", "#")))
         title = esc(cs.get("title", "Untitled"))
         # Meta: drop the "Academic Institution" placeholder and a name repeated as its own institution
         institution = esc(cs.get("institution", ""))
@@ -247,17 +261,15 @@ def render_case_studies(data, slug_map):
         meta_html = '<span class="sep" aria-hidden="true">·</span>'.join(f"<span>{m}</span>" for m in meta)
 
         slug = cs_slugs.get(cs.get("title", "Untitled"))  # slug_map is keyed by the raw title
-        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">Read the breakdown →</a>' if slug else ""
 
         cards.append(f"""<article class="card cs-card">
   {image_figure(cs.get("title", "Untitled"))}<div class="card-header">
     <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}</div>
   </div>
-  <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
+  {card_title(title, slug)}
   <div class="card-meta">{meta_html}</div>
   <p class="card-summary">{esc(cs.get('summary',''))}</p>
   {insight_html("How to apply:", cs.get('it_breakdown','') or cs.get('how_to_apply',''))}
-  {f'<div class="card-footer">{breakdown_link}</div>' if breakdown_link else ""}
 </article>""")
     return "\n".join(cards)
 
@@ -267,11 +279,8 @@ def render_news(data, slug_map):
     news_slugs = slug_map.get("news", {})
     cards = []
     for i, item in enumerate(data["news"]):
-        url = esc(safe_url(item.get("url", "#")))
         title = esc(item.get("title", ""))
-
         slug = news_slugs.get(item.get("title", ""))  # slug_map is keyed by the raw title
-        breakdown_link = f'<a href="breakdowns/{slug}.html" class="breakdown-link">Read the breakdown →</a>' if slug else ""
         meta = [esc(v) for v in (item.get('source', ''), item.get('pub_date', '')) if v]
         meta_html = '<span class="sep" aria-hidden="true">•</span>'.join(f"<span>{m}</span>" for m in meta)
 
@@ -282,11 +291,10 @@ def render_news(data, slug_map):
       {tag_pill(item.get("category", "Other"))}
     </div>
   </div>
-  <h2 class="card-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
+  {card_title(title, slug)}
   <div class="card-meta">{meta_html}</div>
   <p class="card-summary">{esc(item.get('summary',''))}</p>
   {signal_html(item.get('enterprise_use',''))}
-  {f'<div class="card-footer">{breakdown_link}</div>' if breakdown_link else ""}
 </article>""")
     return "\n".join(cards)
 
@@ -477,7 +485,12 @@ def generate_html():
     news_data = {"news": active_news}
 
     # --- Metadata ---
-    slug_map = load_slug_map()
+    try:  # a page and a slug for exactly the cards rendered below (top_up archive cards included); no AI call
+        from generate_breakdowns import ensure_pages
+        slug_map = ensure_pages(active_cs, active_news, os.path.dirname(SLUG_MAP_FILE))
+    except Exception as e:  # the home page must still build
+        print(f"Breakdown pages not checked ({e}); using the saved slug map.")
+        slug_map = load_slug_map()
     daily_hook = ""
     hook_path = Path("data/daily_hook.txt")
     if hook_path.exists():
@@ -833,6 +846,13 @@ def generate_html():
       padding: 24px;
       min-width: 0;
     }
+
+    /* The whole card is one tap target: the title link stretches over it */
+    .card { position: relative; }
+    .card-link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-card); }
+    .card:has(.card-link:hover) { border-color: var(--c-text); }
+    .card-link:focus-visible { outline: none; }
+    .card-link:focus-visible::after { outline: 2px solid var(--c-text); outline-offset: 2px; }
 
     .card-figure { margin: 0 0 16px; }
     .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }

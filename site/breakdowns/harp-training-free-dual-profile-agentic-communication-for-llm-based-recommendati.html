@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">HARP: Training-Free Dual-Profile Agentic Communication for LLM-Based Recommendation</h1>
   <p class="meta-line">Zhen Tao, Xun Zhou, Xuhui Chen, Ziyue Qiao · Academic Institution · 2026-11-03 · Generated 04 Nov 2026, 14:10</p>
-  <a href="https://arxiv.org/abs/2611.05319v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.05319v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>HARP (Hybrid Agentic Retrieval for Personalized Recommendations) addresses a common shortfall in large language model (LLM)–driven recommendation systems: the absence of structured item profiles. Traditional LLM recommender pipelines rely on user‑side structured data (e.g., demographics, past interactions) while treating items as unstructured text. This asymmetry hampers the model’s ability to capture item characteristics, leading to suboptimal relevance. HARP introduces three key components that operate without additional training data. First, it derives a rule‑based item profile by extracting structured attributes from item metadata (e.g., genre, price, brand). Second, it applies a homophily gate during retrieval, filtering candidate items to those whose derived profiles align with the user’s profile, thereby enforcing a similarity constraint. Third, it performs a single‑pass in‑context profile update, allowing the LLM to incorporate both user and item profiles in a single inference step. The authors evaluated the approach on multiple public datasets (MovieLens, Amazon product reviews, and a news recommendation benchmark). Hit@1 improved by 6.9% to 24.0% relative to baseline LLM recommender pipelines that only used user profiles. The lift varied with dataset sparsity and the richness of item metadata, but the gains were consistent across all experiments. For enterprise IT, this demonstrates that significant recommendation quality improvements can be achieved through architectural changes rather than costly model retraining or large labeled datasets. The real‑world implications are twofold: first, organizations can enhance user engagement and conversion rates without investing in new data labeling pipelines; second, the rule‑derived item profiles can be generated from existing catalog metadata, making the solution immediately deployable in e‑commerce, content platforms, and internal knowledge bases. The approach also aligns with privacy best practices, as it does not require additional user data beyond what is already collected.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory existing recommendation stack: identify LLM inference engine, retrieval backend, and metadata sources.
    - Verify availability and quality of item metadata (structured fields, tags, categories).
    - Measure current Hit@1, NDCG, and latency metrics to establish a baseline.

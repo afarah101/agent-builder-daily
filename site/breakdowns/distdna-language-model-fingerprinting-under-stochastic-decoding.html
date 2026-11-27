@@ -59,9 +59,9 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">DistDNA: Language Model Fingerprinting under Stochastic Decoding</h1>
   <p class="meta-line">Lifan Hu, Qian Yu, Zhaomin Wu, Bingsheng He · Academic Institution · 2026-11-20 · Generated 23 Nov 2026, 17:55</p>
-  <a href="https://arxiv.org/abs/2611.27831v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.27831v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>DistDNA is a methodology for fingerprinting large language model (LLM) checkpoints under stochastic decoding. The authors evaluated a set of popular open‑source LLMs (e.g., LLaMA, GPT‑Neo, and OPT) and constructed a statistical fingerprint for each checkpoint by sampling the distribution of responses to a curated prompt set. They then applied maximum mean discrepancy (MMD) to compare an unknown model’s response distribution against the library of fingerprints. The study demonstrated that DistDNA can correctly identify the exact checkpoint of a model with a 10‑point higher accuracy than prior fingerprinting approaches that relied on deterministic outputs or simple similarity metrics. The authors also quantified the impact of temperature, top‑k, and top‑p sampling on fingerprint stability and showed that the method remains robust across a wide range of decoding hyper‑parameters.</p><p>For enterprise IT, this capability addresses a critical blind spot: the ability to verify that an LLM instance in production matches the intended version and configuration. In regulated environments, unintentional drift to a different checkpoint can introduce compliance violations, security vulnerabilities, or inconsistent business logic. DistDNA provides a lightweight, non‑invasive audit mechanism that can be integrated into CI/CD pipelines or runtime monitoring. By detecting model drift or unauthorized model swaps, enterprises can enforce version control, maintain audit trails, and satisfy regulatory requirements such as UK GDPR’s accountability principle. Additionally, the method can be used to detect malicious model injection attacks where an adversary replaces a legitimate checkpoint with a compromised one.</p><p>Real‑world implications include:
 - Enabling automated version verification for LLM‑powered services without requiring source code access.
 - Supporting compliance reporting by providing verifiable evidence that the deployed model matches the approved checkpoint.
@@ -70,7 +70,7 @@
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all LLM checkpoints currently in use across production, staging, and development environments.
    - Capture the decoding hyper‑parameters (temperature, top‑k, top‑p) and any custom tokenizers or tokenization pipelines.
    - Run a baseline fingerprinting test using a small prompt set to establish current identification accuracy.

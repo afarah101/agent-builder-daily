@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes</h1>
   <p class="meta-line">Mekhala Hithyshini Sreenivasa · Academic Institution · 2026-11-19 · Generated 20 Nov 2026, 15:15</p>
-  <a href="https://arxiv.org/abs/2611.26480v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.26480v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study by Mekhala Hithyshini Sreenivasa investigates the resource consumption patterns of large language model (LLM) agents deployed on serverless and agent runtimes, specifically Amazon Bedrock AgentCore. The authors built a simulation that mimics real-world usage of LLM agents, where each user conversation is mapped to a distinct virtual environment (VE). They measured the number of VEs that remain active while the agent is idle, waiting for model inference or user input. The key finding is that each conversation reserves a full VE for the entire duration of the session, even when the agent is not actively processing. In a benchmark with 1,000 concurrent chats, the system reserved 1,000 VEs, exhausting the pool of available environments and forcing new sessions to wait or fail. This behavior leads to significant resource waste, higher costs, and reduced scalability. The authors recommend two mitigations: (1) closing or recycling VEs immediately after a conversation ends, and (2) allowing multiple concurrent conversations to share a single VE, thereby reducing the number of active environments. For enterprise IT, this study highlights a hidden cost vector in LLM agent deployments that can erode the expected elasticity of serverless platforms. It also underscores the need for fine-grained resource management policies and monitoring. Real-world implications include higher cloud spend, potential SLA violations due to environment exhaustion, and a need to redesign agent lifecycle management. Enterprises that rely on LLM agents for customer support, internal tooling, or automation should audit their current agent runtime configurations, implement environment recycling, and consider multi-session sharing to achieve cost savings and improved scalability.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM agent deployments across serverless platforms (AWS Lambda, Bedrock AgentCore, Azure Functions, GCP Cloud Functions).</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure average session duration, idle time, and number of active VEs per session using CloudWatch or equivalent logs.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify the maximum concurrent sessions supported before environment exhaustion occurs.</div></div>

@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Request-Adaptive Execution for Efficient Hybrid LLM Inference</h1>
   <p class="meta-line">Fahao Chen, Xuzhe Yan, Qi Zhang, Peng Li · Academic Institution · 2026-10-27 · Generated 29 Oct 2026, 12:41</p>
-  <a href="https://arxiv.org/abs/2610.37432v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2610.37432v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study investigates a hybrid inference framework named Morph that dynamically selects a mix of Attention and State Space Model (SSM) layers for each incoming request to a large language model (LLM). Traditional LLM deployments use a static architecture, which forces all requests to traverse the same sequence of layers regardless of content or length. Morph instead re‑architects the model into modular blocks and, at runtime, chooses a fixed, request‑specific layout that minimizes unnecessary computation. The system also groups similar requests into batches and re‑uses contextual embeddings across calls to reduce redundant processing. Experimental results on several benchmark datasets show that Morph can cut inference latency by up to 3.87× and increase overall throughput by a comparable factor when compared to a baseline static model. The gains are most pronounced for short‑to‑medium length prompts, where the overhead of full attention layers dominates. For enterprise IT, this approach directly addresses the cost and performance constraints of running LLMs in production. By reducing compute cycles per token, organizations can lower GPU utilization, defer scaling events, and improve response times for latency‑sensitive applications such as chatbots, code assistants, or real‑time translation services. Moreover, the ability to batch similar requests and reuse context aligns with existing data‑center optimization practices, enabling smoother integration with autoscaling policies and spot‑instance usage. Real‑world implications include the potential to run larger models on existing hardware, the ability to meet stricter SLAs without additional infrastructure, and a reduction in carbon footprint due to fewer GPU hours. The study also highlights the importance of a modular model design and a flexible runtime that can adapt to varying workloads, suggesting a shift from monolithic LLM deployments to request‑adaptive pipelines in enterprise environments.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1. Profile current LLM workloads: measure per‑request latency, token distribution, and batch sizes.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2. Identify compute bottlenecks: determine whether attention or SSM layers dominate CPU/GPU usage.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3. Assess data locality: evaluate how often context can be reused across requests in your current pipeline.</div></div>

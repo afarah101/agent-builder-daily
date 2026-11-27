@@ -63,7 +63,8 @@ def test_new_page_has_home_design():
 def test_new_page_keeps_sections_and_order():
     html = page()
     order = [html.index(s) for s in ('class="back-link"', 'class="page-title"', 'class="source-link"',
-                                     "Detailed summary", "IT engineer application guide", "<footer>")]
+                                     '<h2 class="section-title">Summary</h2>',
+                                     '<h2 class="section-title">How to apply</h2>', "<footer>")]
     assert order == sorted(order)
 
 

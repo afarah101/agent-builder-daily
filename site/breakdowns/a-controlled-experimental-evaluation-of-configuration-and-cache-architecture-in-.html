@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</h1>
   <p class="meta-line">Muhammad Faizan Anwar, Sina Keshvadi · Academic Institution · 2026-11-04 · Generated 05 Nov 2026, 14:31</p>
-  <a href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study conducted a controlled experimental evaluation of two popular large language model (LLM) serving engines, vLLM and SGLang, within a Kubernetes testbed. Researchers focused on how each engine handles the prefill phase for long prompts—a critical bottleneck in inference latency. By aligning a key configuration parameter, “chunked prefill,” across both engines, they eliminated the largest performance disparities that previously existed. The experiments revealed that, when configured identically, the engines still differed in tail‑latency behavior, with cache‑aware engines consistently delivering lower worst‑case latency. Quantitatively, the tuned configuration reduced the 99th‑percentile latency by up to 6× compared to default settings. For enterprise IT, this finding is significant because LLM services are increasingly deployed at scale in production environments where SLA guarantees on latency and cost predictability are mandatory. The ability to reduce tail latency through a single, well‑understood configuration tweak means that existing infrastructure can deliver higher quality of service without costly hardware upgrades or architectural overhauls. Additionally, the study demonstrates that performance is not solely a function of the underlying engine but also of how it is tuned; therefore, performance testing and continuous monitoring should become part of the standard operating procedure for LLM deployments. In practice, organizations can now benchmark their own deployments against the study’s baseline, identify misconfigurations, and apply the chunked prefill setting to achieve measurable latency gains. This directly translates to better user experience, lower operational costs, and stronger compliance with SLAs in regulated industries.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Inventory all LLM serving engines in use (vLLM, SGLang, or others).  
    • Capture current prefill configuration values (chunk size, batch size, memory limits).  
    • Measure baseline latency metrics: mean, median, 95th, and 99th percentile for typical prompt lengths.  

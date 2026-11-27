@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">ACCT: Asymmetric Cross-LLM Context Transfer</h1>
   <p class="meta-line">Yuzhe Liu, Haolin Tian, Tonghan Wang · Academic Institution · 2026-10-30 · Generated 02 Nov 2026, 15:20</p>
-  <a href="https://arxiv.org/abs/2610.42116v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2610.42116v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The ACCT study investigates a method to transfer the key‑value cache—essentially the context—between language models of different sizes. The authors built three lightweight components: a token selector that filters useful tokens from the source model’s cache, a retention controller that decides how many tokens to keep, and a cache converter that re‑formats the retained cache into a format ingestible by the target larger model. In controlled experiments, the larger model, when supplied with the transferred cache, achieved inference speeds up to 20 times faster and used 75 % less memory than when it processed the original prompt from scratch. Accuracy and downstream task performance were maintained or improved compared to the baseline. For enterprise IT, this means that large, expensive models can be run more efficiently on existing hardware, reducing GPU utilization, power consumption, and operational costs. The approach also shortens response times for latency‑sensitive applications such as real‑time analytics, chatbots, and compliance monitoring. By decoupling the prompt from the inference step, organizations can pre‑compute context for high‑frequency queries, enabling batch processing and better resource scheduling. The study demonstrates that cache transfer is a viable optimization that can be integrated into existing LLM pipelines without requiring architectural overhauls. Real‑world implications include lower cloud spend, faster deployment of new models, and the ability to run state‑of‑the‑art LLMs on edge devices or on-premises servers that would otherwise be unable to handle the full model size. The technique also opens opportunities for hybrid deployments where a small model handles initial filtering and a larger model performs final inference, improving overall system throughput.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current LLM workloads: measure prompt length, cache size, GPU memory usage, and inference latency.
    - Identify high‑frequency prompts that could benefit from pre‑cached context.
    - Assess existing infrastructure for compatibility with key‑value cache extraction and injection (e.g., support for model internals, API hooks).</div></div>

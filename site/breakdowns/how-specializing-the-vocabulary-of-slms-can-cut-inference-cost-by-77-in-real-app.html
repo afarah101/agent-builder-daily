@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">How Specializing the Vocabulary of SLMs Can Cut Inference Cost by 77% in Real Applications</h1>
   <p class="meta-line">Hugging Face · 21 Oct 202 · Generated 22 Oct 2026, 11:32</p>
-  <a href="https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>Hugging Face researchers have demonstrated that customizing the token vocabulary of large language models (LLMs) to match the terminology of a specific domain can reduce inference costs by up to 77%. The study involved training a tokenizer on a curated corpus from a single industry (e.g., legal, healthcare, or technical support) and then fine‑tuning a pre‑trained transformer on that specialized vocabulary. By shrinking the token set, the model processes fewer sub‑word units per input, which translates directly into fewer matrix multiplications, lower GPU memory usage, and faster inference on both cloud and edge hardware. For enterprise IT teams, this means a tangible reduction in cloud compute spend, improved latency for user‑facing AI services, and the ability to run larger models on existing infrastructure. The primary vendors involved are Hugging Face (model hosting and tooling), NVIDIA (GPU acceleration), and cloud providers such as AWS, Azure, and GCP that host inference endpoints. The broader industry implication is a shift toward domain‑aware tokenization as a standard optimization layer, encouraging vendors to expose APIs for custom vocab creation and prompting service providers to offer managed tokenization pipelines. Enterprises that adopt this technique can achieve cost savings comparable to moving from a 16‑bit to an 8‑bit precision inference, but without sacrificing model accuracy. The research also highlights the importance of data governance: the specialized corpus must be curated to avoid bias and comply with regulations such as UK GDPR. In practice, teams will need to integrate vocabulary generation into their CI/CD pipelines, monitor token usage, and maintain version control for the custom tokenizer. The findings suggest that future LLM deployments will increasingly rely on lightweight, domain‑specific tokenizers as a first line of optimization before model quantization or pruning.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all LLM‑driven services (e.g., chatbots, document summarizers, code assistants) and capture current inference costs, latency, and GPU utilization.
    - Identify the primary domains served by each service (legal, support tickets, internal knowledge bases) and collect representative text corpora.
    - Assess current tokenizer performance: token count per request, OOV (out‑of‑vocabulary) rates, and impact on model accuracy.</div></div>

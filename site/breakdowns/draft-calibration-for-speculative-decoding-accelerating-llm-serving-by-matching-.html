@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Draft Calibration for Speculative Decoding: Accelerating LLM Serving by Matching Draft and Target Distributions</h1>
   <p class="meta-line">Yuxing Liu, Wei Zuo, Walid Krichene, Tong Zhang · Academic Institution · 2026-11-24 · Generated 25 Nov 2026, 17:06</p>
-  <a href="https://arxiv.org/abs/2611.33111v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.33111v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study investigates speculative decoding, a technique that accelerates large language model (LLM) inference by using a lightweight draft model to generate candidate tokens that are then verified by a heavier target model. The authors identified a critical bottleneck: when the draft model’s probability distribution diverges from the target model’s, the acceptance rate of proposed tokens drops, limiting speed gains. To address this, they applied a simple temperature scaling calibration to the draft model’s output distribution. Empirically, this adjustment increased the token acceptance rate by roughly 10% and yielded a measurable throughput improvement across several benchmark workloads. For enterprise IT, this finding is significant because speculative decoding can reduce inference latency and CPU/GPU utilization, directly impacting cost per inference and user experience. The real‑world implications include the ability to deploy larger, more capable LLMs on existing hardware without proportional scaling of compute resources, and the potential to reallocate GPU cycles to other workloads. Additionally, the calibration technique is lightweight and can be integrated into existing inference pipelines with minimal engineering effort, making it an attractive optimization for teams managing LLM services at scale.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1. Measure current token acceptance rates in your inference pipeline (e.g., percentage of draft tokens that pass the target model check).</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2. Profile CPU/GPU utilization and latency per request for both draft and target models.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3. Verify the distribution mismatch by comparing log‑probabilities of draft vs. target for a representative sample of prompts.</div></div>

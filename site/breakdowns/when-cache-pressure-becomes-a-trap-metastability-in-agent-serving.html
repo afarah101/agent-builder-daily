@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">When Cache Pressure Becomes a Trap: Metastability in Agent Serving</h1>
   <p class="meta-line">Chengzhi Lu, Boxi Zhou, Yanying Lin, Dmitrii Ustiugov · MIT · 2026-11-02 · Generated 03 Nov 2026, 16:48</p>
-  <a href="https://arxiv.org/abs/2611.02543v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.02543v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>Large‑language‑model (LLM) servers are increasingly deployed to power conversational agents in enterprise settings. Chengzhi Lu, Boxi Zhou, Yanying Lin, and Dmitrii Ustiugov from MIT investigated a phenomenon they termed “cache pressure trap” that occurs when a sudden traffic spike forces the cache used for re‑using conversation prefixes to collapse. The collapse leads to the system repeatedly re‑processing stale requests, causing a long‑lasting slowdown that can persist for minutes or even hours after the spike subsides. The authors quantified the impact by measuring goodput—throughput of useful responses—on real hardware. They found that traditional cache‑first approaches could see goodput drop to less than 30 % of peak during recovery, whereas their new tool, Basin, restored high throughput within seconds.</p><p>Basin implements a three‑pronged strategy: (1) it prioritises sessions based on predicted future load, (2) it pre‑allocates cache space for expected peak conversation lengths, and (3) it drops or throttles excess load when the cache is saturated. The authors validated Basin on a production‑grade LLM deployment and reported a 3.6× improvement in goodput compared to baseline cache‑first policies. The study demonstrates that cache management is not a static configuration but a dynamic, workload‑aware problem that can dominate latency and resource utilisation in LLM‑driven services.</p><p>For enterprise IT, this case study highlights that LLM workloads can create hidden performance bottlenecks that are not apparent under normal load. The real‑world implication is that organisations must monitor cache utilisation, session characteristics, and traffic patterns in real time, and be prepared to adjust cache allocation or throttle traffic before a collapse occurs. Failure to do so can result in prolonged service degradation, increased compute costs, and a poor user experience. The Basin approach offers a concrete, actionable methodology that can be integrated into existing orchestration pipelines, providing a measurable lift in throughput and a more predictable cost profile for LLM‑based services.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Audit current LLM deployment for cache size, eviction policy, and session length distribution.  
    • Measure goodput, latency, and cache hit ratio under peak and off‑peak traffic.  
    • Identify the point at which cache collapse occurs (e.g., threshold of concurrent sessions or total token count).</div></div>

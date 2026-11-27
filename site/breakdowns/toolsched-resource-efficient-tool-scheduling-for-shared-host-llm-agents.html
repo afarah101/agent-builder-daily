@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">ToolSched: Resource-Efficient Tool Scheduling for Shared-Host LLM Agents</h1>
   <p class="meta-line">Shucheng Zou, Yuhao Gu, Long Chen, Zhongchun Zheng · Academic Institution · 2026-11-03 · Generated 04 Nov 2026, 14:10</p>
-  <a href="https://arxiv.org/abs/2611.05269v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.05269v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>ToolSched is a lightweight multi‑core process controller designed to mitigate resource contention among local large language model (LLM) agents that share a single host. The study deployed ToolSched on a production cluster running several LLM agents that execute shell commands on demand. Each agent first estimates its CPU, memory, and I/O requirements before dispatching a command. ToolSched’s MCP (Multi‑Core Processor) server receives these estimates, queries the host’s real‑time resource state, and schedules the command on an appropriate core or time slice. The evaluation compared three configurations: (1) no scheduling (agents run commands immediately), (2) a naive round‑robin scheduler, and (3) ToolSched. Across a mixed workload of 200 concurrent agents, ToolSched increased overall CPU utilisation by 148% and throughput (commands processed per minute) by 29% relative to the naive baseline. Memory fragmentation was reduced by 22%, and average response latency dropped from 1.8 s to 1.2 s. The study also measured the overhead of the estimation step; it added less than 5 ms per command, negligible compared to typical LLM inference times. For enterprise IT, these gains translate into higher density of LLM services per server, lower hardware cost per inference, and more predictable service levels. The real‑world implication is that organisations running multiple LLM agents on shared infrastructure—such as internal knowledge assistants, code generation bots, or customer‑support chatbots—can adopt ToolSched to avoid CPU starvation and I/O bottlenecks without redesigning their agent code. The approach is vendor‑agnostic and can be integrated with existing orchestration tools like Kubernetes or Docker Swarm by exposing the MCP as a sidecar service. The study demonstrates that a lightweight, estimation‑based scheduler can deliver measurable performance improvements in a production setting, making it a compelling option for IT teams managing shared LLM workloads.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM agents running on shared hosts and capture their current CPU, memory, and I/O utilisation profiles.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure baseline throughput and latency for each agent under peak load.</div></div>
 <div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify hosts that consistently hit &gt;80 % CPU utilisation or exhibit high context‑switch rates.</div></div>

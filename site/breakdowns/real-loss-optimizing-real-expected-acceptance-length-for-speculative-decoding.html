@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">REAL Loss: Optimizing Real Expected Acceptance Length for Speculative Decoding</h1>
   <p class="meta-line">Yu Tian · Academic Institution · 2026-11-10 · Generated 11 Nov 2026, 13:59</p>
-  <a href="https://arxiv.org/abs/2611.14399v1" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://arxiv.org/abs/2611.14399v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>The study introduces REAL (Real Expected Acceptance Length), a novel training loss designed to improve the decision process of speculative decoding in large language models. Speculative decoding generates draft tokens using a fast “drafter” model and then verifies them with a slower, higher‑accuracy “verifier.” The key challenge is selecting which draft tokens to keep; a suboptimal selection leads to wasted computation and longer inference times. REAL modifies the training objective so that the drafter learns to produce token sequences whose expected acceptance length aligns with the verifier’s capacity. The authors trained a Qwen model with a Domino drafter using this loss and evaluated it across multiple benchmarks, including code generation, summarization, and conversational tasks. Results show a consistent reduction in inference latency—up to 15–20% faster—without any changes to the inference pipeline or model architecture. Accuracy metrics remained within 1% of baseline, indicating that the speed gains do not compromise output quality.</p><p>For enterprise IT, this finding is significant because speculative decoding is already a proven technique for scaling LLM inference on commodity GPUs. However, the selection of draft tokens often requires manual tuning or additional post‑processing, which can offset performance benefits. By integrating REAL, organizations can achieve measurable latency reductions with zero code changes to their existing deployment stack. This translates to lower GPU utilization, reduced operational costs, and the ability to serve higher request volumes or lower response times for latency‑sensitive applications such as real‑time translation, customer support chatbots, or code autocompletion services.</p><p>Real‑world implications include the potential to repurpose existing GPU clusters for higher throughput, extend the lifespan of legacy hardware, and simplify the model‑deployment lifecycle. Enterprises can also leverage the loss tweak to meet strict SLAs in regulated industries where inference speed directly impacts user experience and compliance. The study demonstrates that a targeted training objective can unlock hidden performance in existing models, offering a low‑barrier, high‑impact optimization path.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current inference latency and GPU utilization for speculative decoding workloads.  
    - Identify the drafter/verifier pair used (e.g., Qwen + Domino) and the current token acceptance threshold.  
    - Measure the proportion of draft tokens rejected by the verifier to quantify wasted compute.  

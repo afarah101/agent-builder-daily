@@ -59,14 +59,14 @@
   <a class="back-link" href="../index.html">← Back to today</a>
   <h1 class="page-title">Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II)</h1>
   <p class="meta-line">OpenAI · 23 Oct 202 · Generated 24 Oct 2026, 09:08</p>
-  <a href="https://openai.com/index/scaling-storage-one-billion-users-part-two" target="_blank" rel="noopener noreferrer" class="source-link">View original source</a>
+  <a href="https://openai.com/index/scaling-storage-one-billion-users-part-two" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
   <section>
-    <h2 class="section-title">Detailed summary</h2>
+    <h2 class="section-title">Summary</h2>
     <div class="summary-body"><p>OpenAI announced that its Habitat storage platform now supports over 1 billion ChatGPT users by re‑architecting Azure Cosmos DB for high‑density multi‑tenant workloads. The company moved from a traditional single‑tenant model to a co‑managed container approach, where tenant isolation is achieved through logical partitioning and container sharing, rather than isolated physical resources. This change reduced over‑provisioning, lowered operational overhead, and increased throughput by 30–40 % for the same capacity. The post also detailed how Cosmos DB’s built‑in primitives—such as change feed, stored procedures, and server‑side JavaScript—were leveraged to implement tenant‑specific throttling and noise‑dampening, mitigating the “noisy neighbor” effect that often plagues multi‑tenant NoSQL deployments.</p><p>For enterprise IT teams, the lesson is that large‑scale SaaS providers can achieve significant cost savings and performance gains by moving to a co‑managed, logically partitioned model rather than maintaining separate clusters per tenant. The architecture relies heavily on Azure Cosmos DB’s global distribution, multi‑model API support, and elastic scaling, but the principles apply to any NoSQL service that offers logical partitioning and server‑side processing. Vendors such as Azure Cosmos DB, Amazon DynamoDB, and Google Cloud Firestore can adopt similar patterns.</p><p>The broader industry implication is a shift toward more efficient multi‑tenant storage solutions. Cloud providers are likely to enhance their NoSQL offerings with better isolation primitives, automated noise‑dampening, and cost‑allocation features. Enterprises must evaluate whether their current tenancy model is causing hidden costs or performance bottlenecks, and consider adopting co‑managed containers or equivalent constructs to improve scalability and reduce noise.</p></div>
   </section>
   <div class="divider"></div>
   <section>
-    <h2 class="section-title">IT engineer application guide</h2>
+    <h2 class="section-title">How to apply</h2>
     <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current NoSQL tenancy model: single‑tenant vs multi‑tenant, resource allocation per tenant, and over‑provisioning metrics.
    - Measure current throughput, latency, and CPU/memory utilization per tenant.
    - Identify noisy‑neighbor incidents and their impact on SLAs.
