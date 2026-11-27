@@ -432,9 +432,12 @@ def how_to_apply(item, kind):
 NOT_APPLICABLE = ("not applicable", "not directly applicable")
 
 
+NO_HOW_TEXT = "No direct steps for this story."  # the page's own words, when no how-to text is stored or it does not apply
+
+
 def insight_html(text):
-    """The card's one "How to apply" line (CSS keeps it to one line); nothing when there is no text."""
-    return f'<p class="insight"><strong>{HOW_LABEL}:</strong> {esc(text)}</p>' if text else ""
+    """The card's one "How to apply" line (CSS keeps it to one line). Every card has it: one card format."""
+    return f'<p class="insight"><strong>{HOW_LABEL}:</strong> {esc(text or NO_HOW_TEXT)}</p>'
 
 
 def score_ring(score, max_score=75):

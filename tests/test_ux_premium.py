@@ -142,8 +142,12 @@ def test_whole_card_is_one_link_with_a_focus_ring(site):
     page = build(site, [study(f"Study {i}") for i in range(3)], [news(f"News {i}") for i in range(3)])
     cards = cards_of(page)
     assert len(cards) >= 6 and all(c.count("<a ") == 1 and c.count('<a class="card-link" href="breakdowns/') == 1 for c in cards)
-    assert all("<a" not in c.split('<h2 class="card-title">')[0] for c in cards)  # the tag is not a link
+    assert all("<a" not in c.split('<h2 class="card-title">')[0] for c in cards)  # the image and the tag are not links
     assert all("<a" not in c.split("</h2>")[1] for c in cards)  # the meta, the summary and the how-to line are not links
+    for card in cards:  # the one link is the title; the tag and the meta line hold no link and are in no link
+        link = re.search(r"<a [^>]*>.*?</a>", card, re.S)[0]
+        assert "tag-pill" not in link and "card-meta" not in link and link in re.search(r'<h2 class="card-title">.*?</h2>', card, re.S)[0]
+        assert "<a" not in re.search(r'<div class="card-tags">.*?</div>', card, re.S)[0] + re.search(r'<p class="card-meta">.*?</p>', card, re.S)[0]
     css = page.split("<style>")[1].split("</style>")[0]
     assert re.search(r"\.card-link::after \{ content: \"\"; position: absolute; inset: 0;", css) and ".card { position: relative; }" in css
     assert ".card-link:focus-visible::after { outline: 2px solid var(--c-text); outline-offset: 2px; }" in css
@@ -174,12 +178,19 @@ def test_news_card_shows_one_how_to_apply_sentence(raw, shown):
     assert not re.search(r"How to use|Do this week|Risk if ignored|Tools affected|S[1-3]:", html)
 
 
-def test_case_study_card_shows_one_how_to_apply_sentence_and_none_when_not_applicable():
+def test_case_study_card_shows_one_how_to_apply_sentence():
     cards = lambda **kw: gh.render_case_studies({"case_studies": [study("Paper", **kw)]}, {"case_studies": {}})
     assert '<p class="insight"><strong>How to apply:</strong> Run the pipeline on one repo.</p>' in cards()
     assert "Compare the results" not in cards()  # the long text is on the breakdown page
-    assert 'class="insight"' not in cards(it_breakdown="Not directly applicable to IT work.")
     assert gh.HOW_LABEL == "How to apply"
+
+
+@pytest.mark.parametrize("stored", ["Not directly applicable to IT infrastructure work", "", None])
+def test_every_card_has_the_how_to_apply_line_also_with_no_stored_steps(stored):
+    line = '<p class="insight"><strong>How to apply:</strong> No direct steps for this story.</p>'
+    paper = gh.render_case_studies({"case_studies": [study("Paper", it_breakdown=stored, how_to_apply=stored)]}, {"case_studies": {}})
+    story = gh.render_news({"news": [news("Story", enterprise_use=stored)]}, {"news": {}})
+    assert line in paper and line in story and "Not directly applicable" not in paper + story  # one format; the stored text is not changed
 
 
 def test_card_summary_is_at_most_2_full_sentences_and_css_clamps_it_to_2_lines(site):
@@ -238,6 +249,8 @@ def test_every_tag_in_the_data_maps_to_a_canonical_tag():
 
 def test_meta_line_is_who_type_date_on_one_line():
     html = gh.render_news({"news": [news("Story", source="TechCrunch", pub_date="25 Nov 2026")]}, {"news": {}})
+    assert "tier-label" not in html and html.count("Press") == 1  # no floating "Press" label: the source type is in the meta line only
+    assert "Press" in re.search(r'<span class="meta-rest">.*?</span>', html)[0] and "Press" not in re.search(r'<div class="card-header">.*?</div>\s*</div>', html, re.S)[0]
     assert (f'<p class="card-meta"><span class="meta-who">TechCrunch</span>'
             f'<span class="meta-rest">{NB}·{NB}Press{NB}·{NB}25 Nov 2026</span></p>') in html  # the source type is in the meta line
     lab = gh.render_news({"news": [news("Story", source="Hugging Face", tier="ai_labs")]}, {"news": {}})
@@ -366,7 +379,8 @@ def test_committed_home_page_follows_every_rule():
             tag = text_of(re.search(r'<span class="tag-pill">(.*?)</span>', card)[1])
             assert tag in gh.CANONICAL_TAGS and len(tag.split()) <= 3 and "…" not in tag
             labels = re.findall(r"<strong>(.*?)</strong>", card)
-            assert labels in ([], ["How to apply:"]) and "AI illustration" not in card and "<ul" not in card
+            assert labels == ["How to apply:"] and "AI illustration" not in card and "<ul" not in card
+            assert "tier-label" not in card and "<a" not in card.split('<h2 class="card-title">')[0] + card.split("</h2>")[1]
             assert card.count('<p class="card-meta">') == 1 and card.count('<p class="card-summary">') == 1
         assert all(len(cards_of(part)) <= 7 for part in body.split('<h2 class="group-title">More stories</h2>'))
     assert "Images are AI-generated." in HOME.split("<footer>")[1]
