@@ -555,7 +555,7 @@
       </h1>
     </div>
     <p class="hero-title">AI news and real case studies, every day.</p>
-    <p class="updated">Updated 27 Nov 2026, 00:47 UTC</p>
+    <p class="updated">Updated 27 Nov 2026, 01:39 UTC</p>
 
   <div class="email-banner">
     <div class="email-inner">
@@ -585,6 +585,16 @@
   </div>
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid"><article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Container security</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2608.25793v1" target="_blank" rel="noopener noreferrer">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a></h2>
+  <div class="card-meta"><span>Jessica Hösl, Benedikt Hofmann, Patrick Stöckle</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">26 Aug 2026</span></span></div>
+  <p class="card-summary">Many enterprise Dockerfiles contain security misconfigurations and outdated practices, with 99% showing at least one flaw. The authors built a six‑step automated pipeline that crawls GitLab, enriches each Dockerfile with security metrics, clusters them by LLM‑derived semantics, and finds internal reference implementations. Using these references can raise the average security score by 60% without writing new templates.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage Dockerfile repos, run a similar pipeline: 1) crawl your GitLab instance and run static checks (Hadolint, Trivy, ShellCheck) on all Dockerfiles; 2) cluster similar files using an LLM to generate semantic tags and HDBSCAN to group them; 3) for each cluster, identify the highest‑scoring Dockerfile and replace or copy it into your own projects to improve security and consistency.</p>
+  
+</article>
+<article class="card cs-card">
   <figure class="card-figure"><img src="images/livelora-exact-kv-cache-migration-across-lora-updates-for-llm-agents.webp" loading="lazy" width="1200" height="675" alt="A sleek, silver neural adapter sits on a polished workbench, its upper layers encased in translucent glass, while a glowing, frozen core pulses softly"><figcaption>AI illustration</figcaption></figure><div class="card-header">
     <div class="card-tags"><span class="tag-pill">LLM deployment &amp; optimisation</span></div>
   </div>
@@ -592,6 +602,16 @@
   <div class="card-meta"><span>Tianyi Huang, Samuel Xu, Ivy Gu, Nathan Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
   <p class="card-summary">LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions.</p>
   <p class="insight"><strong>How to apply:</strong> If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions.</p>
+  
+</article>
+<article class="card cs-card">
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">BI automation</span></div>
+  </div>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2609.20886v1" target="_blank" rel="noopener noreferrer">BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</a></h2>
+  <div class="card-meta"><span>Chuxuan Hu, Yeye He, Penny Zhou, Wee Hyong Tok</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">16 Sep 2026</span></span></div>
+  <p class="card-summary">BI-Agent uses large language models and specialised data tools to automate the whole business intelligence process – from finding the right tables, transforming data, joining tables, to answering business questions. The authors built a benchmark (BI-Bench) from real dashboards and a tool‑augmented agent that improves accuracy by up to 40% over vanilla LLMs. This research is relevant if you manage BI workloads on cloud platforms, as it shows a way to reduce manual data prep and improve query accuracy.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage BI dashboards in Power BI or Tableau on the cloud, adopt a tool‑augmented agent approach: 1) integrate an LLM with data‑search, join, and transform tools; 2) train it on your own BI project logs using supervised fine‑tuning or reinforcement learning; 3) deploy the trained agent to automatically process user questions and return answers, cutting manual prep time by up to 40%.</p>
   
 </article>
 <article class="card cs-card">
@@ -636,12 +656,12 @@
   
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/put-the-world-back-timestamps-matter-in-time-series-reasoning.webp" loading="lazy" width="1200" height="675" alt="A lone, weathered stamp rests beside a translucent, floating question mark, its ink fading, as a silent laboratory hums in the ground"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Time series reasoning</span></div>
+  <div class="card-header">
+    <div class="card-tags"><span class="tag-pill">enterprise QA benchmarking</span></div>
   </div>
-  <h2 class="card-title"><a href="https://arxiv.org/abs/2611.34848v1" target="_blank" rel="noopener noreferrer">Put the World Back: Timestamps Matter in Time Series Reasoning</a></h2>
-  <div class="card-meta"><span>Tingrui Huang, Yuanyuan Deng, Qingren Yao, Joaquin Vanschoren</span><span class="sep" aria-hidden="true">·</span><span>NYU</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">25 Nov 2026</span></span></div>
-  <p class="card-summary">The study shows that large language models can answer time‑series questions accurately even without real timestamps, using shortcuts instead of true time‑alignment. Researchers built a diagnostic test that separates genuine timestamp‑based reasoning from simple correlations, revealing that many models ignore real dates when the sequence order is missing. For cloud infra managers, this research is not directly relevant to everyday infrastructure management tasks.</p>
+  <h2 class="card-title"><a href="https://arxiv.org/abs/2609.12171v1" target="_blank" rel="noopener noreferrer">WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</a></h2>
+  <div class="card-meta"><span>Amey Varhade, Ananya Sutradhar, Ravishankar Krishnaswamy, Navin Goyal</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">10 Sep 2026</span></span></div>
+  <p class="card-summary">The paper tackles the lack of realistic, complex data for testing enterprise question‑answering systems. It builds an automated pipeline that creates synthetic email conversations, long‑ and short‑form queries, and accurate answers, then evaluates current models, finding performance below 80% and highlighting the need for better systems. The work is not directly relevant to managing cloud infrastructure.</p>
   
   
 </article>
@@ -671,13 +691,26 @@
     
     <section class="signal">
         <h2 class="signal-title">Today's signal</h2>
-        <p>Unlock real‑time AI agents without overhauling your data stack – the future of instant, data‑driven insights starts now.</p>
+        <p>Nvidia’s Megaspeed, Z.ai’s GLM‑5.4, and live‑data AI agents—unlocking next‑gen speed, size, and integration without rebuilding your stack.</p>
     </section>
     <section class="signal">
         <h2 class="signal-title">From McKinsey</h2>
         <p><a class="archive-title" href="https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRyUWtsRm5CX01yZkFVb0xSdU8yYnRyb2NVRWZ3MkZRQ1gwTDRIQWRGaWV0MTNtcC1OWGp6dmJici02enI2Z2UzektmbHN3X01tVG1MVGN1cVItX3hQV2hmQ2FVelFGZEZnelpfYmpmMjlpZXNudVVTZkpwUnJETHA0WmVRbWlSd0tqR1VTNFNtS1FwUEdSaVNQb1NWVTNzV2VQa1BRYTc0ck9XTW1TZnFnV0dfQnRPM2U4ZkhHYUxmaGxGWlh6dHl0WQ?oc=5" target="_blank" rel="noopener noreferrer">The modern architecture that builds banks of the future</a> <span class="pub-date">25 Nov 2026</span></p>
     </section>
     <div class="cards-grid"><article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Security</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/25/the-questions-jensen-huang-and-nvidia-will-still-have-to-answer-about-megaspeed/" target="_blank" rel="noopener noreferrer">The questions Jensen Huang and Nvidia will still have to answer about Megaspeed</a></h2>
+  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
+  <p class="card-summary">Nvidia faces a U.S. investigation over potential export‑control violations involving GPUs sold to data‑center operator Megaspeed, which may have diverted chips to China. The scrutiny centers on whether Nvidia knew the end‑use of its hardware and the CEO’s ties to Megaspeed’s executive.</p>
+  <p class="insight"><strong>How to use:</strong> 1. Check your organization’s GPU procurement policies and verify that all hardware vendors are compliant with U.S. export controls, especially if you source from Nvidia or similar manufacturers. 2. Flag any existing contracts or supply chain arrangements that involve high‑performance GPUs and assess whether they meet current export‑control requirements. 3. Update your IT asset inventory and audit logs to include vendor compliance status, as this incident highlights the legal risk of non‑compliant hardware in AI workloads.</p>
+  <div class="card-footer"><a href="breakdowns/the-questions-jensen-huang-and-nvidia-will-still-have-to-answer-about-megaspeed.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
   <figure class="card-figure"><img src="images/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack.webp" loading="lazy" width="1200" height="675" alt="A humming server rack, its LED strip pulsing, sits beside a crystal‑clear glass pipe that streams data directly into a bustling control room"><figcaption>AI illustration</figcaption></figure><div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
@@ -691,6 +724,32 @@
   <div class="card-footer"><a href="breakdowns/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack.html" class="breakdown-link">Read the breakdown →</a></div>
 </article>
 <article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Tools</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://janlukas.blog/posts/ai-self-hosting" target="_blank" rel="noopener noreferrer">AI made self-hosting fun again</a></h2>
+  <div class="card-meta"><span>janlukas.blog</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-summary">AI coding agents now streamline self-hosting by simplifying Docker Compose and Git-based infrastructure configuration, enabling rapid experimentation with new services and automating deployment pipelines. The article highlights how AI reduces friction in managing self-hosted environments, encouraging adoption of declarative tools like NixOS and custom bootc images.</p>
+  <ul class="signal-points"><li><strong>Do this week:</strong> Evaluate integrating an AI coding assistant (e.g., GitHub Copilot or OpenAI Code Interpreter) into your GitOps workflows to auto-generate or refactor Docker Compose files and infrastructure scripts.</li><li><strong>Risk if ignored:</strong> Automating these tasks can reduce manual configuration errors, shorten deployment cycles, and free up time for strategic projects.</li><li><strong>Tools affected:</strong> Your most affected tools are Git repositories for configuration, Docker Compose for container orchestration, and any CI/CD pipeline that builds and deploys these images.</li></ul>
+  
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Regulation</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/24/yales-sonnenfeld-nvidia-is-a-detriment-to-u-s-industrial-might-not-a-champion/" target="_blank" rel="noopener noreferrer">Yale’s Sonnenfeld: Nvidia is a ‘detriment’ to US industrial might — not a champion</a></h2>
+  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
+  <p class="card-summary">Yale professor Jeffrey Sonnenfeld criticized the recent return of Nvidia’s CEO Jensen Huang, arguing it may expose the company to significant legal liability and raise concerns about advanced chip technology falling into adversaries&#x27; hands.</p>
+  <p class="insight"><strong>How to use:</strong> Keep an eye on Nvidia’s product roadmap and any potential regulatory or legal updates that could affect your GPU-dependent AI workloads. This week, review your cloud provider’s GPU offerings for any changes in licensing or compliance that might arise from Nvidia’s heightened scrutiny.</p>
+  
+</article>
+<article class="card news-card">
   <figure class="card-figure"><img src="images/zais-glm-54-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-.webp" loading="lazy" width="1200" height="675" alt="A single origami crane, folded twice to create a double‑layered silhouette, symbolizes the model’s strategy of reusing layers to quadruple performance"><figcaption>AI illustration</figcaption></figure><div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
@@ -702,6 +761,19 @@
   <p class="card-summary">Z.ai introduces its flagship GLM-5.4, a Loop Transformer model that achieves deeper processing by reusing layers instead of adding new ones. The architecture promises up to four times the performance of comparable models without increasing parameter count, positioning Z.ai as a contender in large‑scale language model development.</p>
   <p class="insight"><strong>How to use:</strong> Watch Z.ai’s GLM-5.4 as it could influence future AI‑powered analytics and automation tools that your IT team may adopt. While it doesn’t directly impact your current Google Workspace or JumpCloud configuration, understanding its architecture could inform evaluations of next‑generation AI services that integrate with your SSO or endpoint security solutions. Keep an eye on Z.ai’s roadmap for potential integrations with your existing MDM and access‑management platforms within the next 90 days.</p>
   <div class="card-footer"><a href="breakdowns/zais-glm-54-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-.html" class="breakdown-link">Read the breakdown →</a></div>
+</article>
+<article class="card news-card">
+  <div class="card-header">
+    <div class="card-tags">
+      <span class="tier-label">Press</span>
+      <span class="tag-pill">Research</span>
+    </div>
+  </div>
+  <h2 class="card-title"><a href="https://venturebeat.com/technology/nearly-half-of-surveyed-engineers-and-leaders-say-the-ai-agents-that-write-their-code-also-review-it" target="_blank" rel="noopener noreferrer">Nearly half of surveyed engineers and leaders say the AI agents that write their code also review it</a></h2>
+  <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-summary">A recent survey finds that nearly half of engineers and leaders feel uneasy reviewing AI-generated code, with only 26% confident in understanding AI changes fully. This highlights a growing bottleneck in code quality control as AI tools become more pervasive in development.</p>
+  <p class="insight"><strong>How to use:</strong> Monitor your team’s code review practices and consider integrating automated static analysis tools that flag AI-generated sections. Ensuring clear documentation and review protocols can mitigate the risk of subtle bugs slipping through, directly impacting the reliability of your production systems.</p>
+  <div class="card-footer"><a href="breakdowns/nearly-half-of-surveyed-engineers-and-leaders-say-the-ai-agents-that-write-their.html" class="breakdown-link">Read the breakdown →</a></div>
 </article>
 <article class="card news-card">
   <figure class="card-figure"><img src="images/nvidia-hits-pause-on-chip-shipments-to-southeast-asia.webp" loading="lazy" width="1200" height="675" alt="A lone, gleaming processor rests on a customs scale, its polished surface reflecting the dim warehouse lights as a pause in shipments hangs in the air"><figcaption>AI illustration</figcaption></figure><div class="card-header">
@@ -741,185 +813,11 @@
   <p class="card-summary">Amazon and Meta are reportedly negotiating to allow Meta’s AI agent Muse to connect directly to Amazon’s marketplace, potentially enabling users to purchase products via Muse. The talks focus on search presentation and advertising concerns, with Amazon wary of third‑party agents impacting its direct customer relationships.</p>
   
   <div class="card-footer"><a href="breakdowns/amazon-and-meta-reportedly-in-talks-to-lift-blockade-on-ai-agent-muse.html" class="breakdown-link">Read the breakdown →</a></div>
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work.webp" loading="lazy" width="1200" height="675" alt="A lone sandglass, its grains shimmering like AI tokens, sits on a polished desk, its hourglass neck narrowing as the timer ticks toward an unseen usage limit"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/" target="_blank" rel="noopener noreferrer">OpenAI says heavy ChatGPT users may hit limits sooner as it merges Chat and Work</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">OpenAI is merging its ChatGPT and Work experiences, introducing a shared usage meter that may cause heavy users to hit limits sooner. The change is rolling out now to a select group of Pro subscribers, with broader deployment planned for December.</p>
-  <p class="insight"><strong>How to use:</strong> Go to your OpenAI account settings this week and monitor your usage meter for the new shared limit. Failure to adjust could mean losing access to advanced models during critical support tasks, impacting incident response times. This directly affects any internal tooling that relies on ChatGPT APIs, so check your integration points in Freshservice or JumpCloud for potential throttling issues.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when.webp" loading="lazy" width="1200" height="675" alt="A lone server tower hums, its vents pulsing with a new skill, reshaping how companies approve connections"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Model Release</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://venturebeat.com/technology/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when-they-connect-one" target="_blank" rel="noopener noreferrer">MCP servers can now deliver AI agent skills, changing what companies approve when they connect one</a></h2>
-  <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">Anthropic has introduced Skills support over the Model Context Protocol (MCP) for Claude and Claude Code, now in public beta. This allows AI agents to access external services via MCP, expanding the capabilities of Claude models.</p>
-  <p class="insight"><strong>How to use:</strong> Watch for how MCP-enabled skills can be integrated with existing identity and access management workflows; in the next 30 days evaluate if your current MDM or SSO solutions can expose APIs to MCP for automated policy enforcement or data retrieval.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/jensen-huang-broke-nvidias-code-of-conduct-and-his-employees-may-not-forget-it.webp" loading="lazy" width="1200" height="675" alt="A shattered glass trophy, its shards glittering on a polished conference table, sits beside a stack of employee handbooks, their pages fluttering as if whispering the breach"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/25/jensen-huang-broke-nvidias-code-of-conduct-and-his-employees-may-not-forget-it/" target="_blank" rel="noopener noreferrer">Jensen Huang broke Nvidia’s code of conduct, and his employees may not forget it</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">Nvidia CEO Jensen Huang admitted to violating the company’s code of conduct during a recent all‑hands meeting, sparking discussion on executive accountability and corporate culture. The incident highlights how leadership actions can affect employee morale and trust, even though it has no direct impact on IT tools or infrastructure.</p>
-  <p class="insight"><strong>How to use:</strong> No immediate action is required for your IT stack. However, consider reviewing your organization’s code of conduct policies to ensure clarity and consistency across all levels. This helps prevent cultural erosion and maintains employee trust, which can indirectly influence productivity and security practices.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/sp-considers-nvidia-credit-downgrade-over-governance-and-key-man-risks.webp" loading="lazy" width="1200" height="675" alt="A single, ornate key rests on a polished mahogany desk, its shaft glinting under a dim lamp, hinting at the weight of leadership on a company’s fate"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/25/sp-considers-nvidia-credit-downgrade-over-governance-and-key-man-risks/" target="_blank" rel="noopener noreferrer">S&amp;P considers Nvidia credit downgrade over governance and ‘key man’ risks</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">S&amp;P Global Ratings is evaluating a downgrade of Nvidia’s credit rating due to governance concerns and key‑man risk tied to CEO Jensen Huang. The downgrade could increase Nvidia’s borrowing costs, indirectly affecting customers and partners that rely on Nvidia for AI infrastructure financing.</p>
-  <p class="insight"><strong>How to use:</strong> None.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/much-shorter-version-of-grh-lean-verification-from-anthropic.webp" loading="lazy" width="1200" height="675" alt="A single, weathered book lies open on a stone shelf, its pages glowing with swirling, translucent equations that drift upward like mist"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://github.com/lsernau/grh-lean" target="_blank" rel="noopener noreferrer">Much shorter version of GRH Lean verification from Anthropic</a></h2>
-  <div class="card-meta"><span>github.com</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">Anthropic released a Lean 4 proof of the Riemann Hypothesis and its generalization, built on Mathlib. The repository is a research artifact and not maintained.</p>
-  
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/euro-office-comes-to-your-desktop-with-the-nextcloud-office-desktop-app.webp" loading="lazy" width="1200" height="675" alt="A sleek laptop sits on a wooden desk, its screen displaying a document with a glowing digital signature icon, while a stylized local font glyph hovers above the text"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://nextcloud.com/blog/euro-office-comes-to-your-desktop-with-the-nextcloud-office-desktop-app/" target="_blank" rel="noopener noreferrer">Euro-Office comes to your desktop with the Nextcloud Office Desktop app</a></h2>
-  <div class="card-meta"><span>nextcloud.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">Nextcloud has released the Euro-Office Desktop app, a free, open‑source office suite that lets users edit Microsoft Office and OpenDocument files offline and in real time, with features such as digital signatures and local font usage. The app integrates with Nextcloud Hub, allowing teams to co‑edit files on Windows, macOS, and Linux.</p>
-  <p class="insight"><strong>How to use:</strong> Check your Nextcloud Hub integration today: install the Euro‑Office Desktop app, connect it to your instance, and enable the new offline editing and digital signature features. Neglecting this update could mean missing out on secure, offline collaboration and simplified document signing workflows for your team.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/meta-refused-to-share-muse-for-testing-uk-financial-watchdog-complains.webp" loading="lazy" width="1200" height="675" alt="A steel vault door, its lock engraved with a glowing AI chip, stands in a dim regulator office, its hinges trembling as the authority’s hand hesitates to open it"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Regulation</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.wired.com/story/meta-refused-to-share-muse-for-testing-uk-financial-watchdog-complains/" target="_blank" rel="noopener noreferrer">Meta Refused to Share Muse for Testing, UK Financial Watchdog Complains</a></h2>
-  <div class="card-meta"><span>Wired AI</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">Meta declined to share its Muse AI assistant with the UK’s Financial Conduct Authority for joint testing, prompting the regulator to urge stricter consumer protection oversight. This reflects growing scrutiny of AI assistants that can autonomously make payments or influence consumer behavior.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor UK regulatory announcements regarding AI assistants like Muse, and review your organization’s AI tool compliance posture to ensure alignment with potential new consumer protection standards. Understanding these requirements can guide future vendor selections and risk assessments for AI-driven customer interactions.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/introducing-the-llamacpp-benchmark-dashboard-for-amd-ryzen-and-radeon.webp" loading="lazy" width="1200" height="675" alt="A llama balances a gleaming GPU chip on its nose, its eyes reflecting a glowing bar graph of inference speed"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="tag-pill">Tools</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://huggingface.co/blog/ggml-org/llamacpp-amd-bench" target="_blank" rel="noopener noreferrer">Introducing the llama.cpp benchmark dashboard for AMD Ryzen and Radeon</a></h2>
-  <div class="card-meta"><span>Hugging Face</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">Hugging Face has released a benchmark dashboard that tracks llama.cpp inference performance on AMD Ryzen and Radeon GPUs, allowing users to compare different models, builds, and quantizations. The public data can be used to evaluate and optimize local AI workloads on AMD hardware.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on the dashboard when planning new AI workloads that might run locally on AMD machines. If your team is considering on‑prem inference for cost or compliance reasons, use the public benchmark results to pick the most efficient model/quantization combination and validate your own builds against the baseline. This can reduce trial‑and‑error and help justify hardware investments.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/anthropics-dario-amodei-calls-accusations-of-surrendering-human-control-to-ai-ab.webp" loading="lazy" width="1200" height="675" alt="A lone, rusted key hangs in a dim, abandoned control room, its shaft gleaming with the fnt pulse of an unseen algorithm"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://techcrunch.com/2026/11/25/anthropics-dario-amodei-calls-accusations-of-surrendering-human-control-to-ai-absurd/" target="_blank" rel="noopener noreferrer">Anthropic’s Dario Amodei calls accusations of surrendering human control to AI ‘absurd’</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">Anthropic’s CEO Dario Amodei publicly rebukes claims that AI should relinquish human control, emphasizing the necessity of democratic oversight and human agency. He stresses limits on recursive self‑improvement while acknowledging that Anthropic’s own research increasingly incorporates AI authorship.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on Anthropic’s evolving stance as it may influence future policy discussions around AI governance and internal risk controls. Consider reviewing your organization’s AI governance framework to ensure human oversight remains central in any automated decision‑making processes you deploy.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/swarms-flocks-gangs-how-to-build-train-and-evaluate-multi-agent-systems.webp" loading="lazy" width="1200" height="675" alt="A swarm of miniature drones hovers around a glowing beacon, their synchronized lights pulsing as they exchange data, illustrating the challenges of coordination, communication, and resource sharing"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="tag-pill">Tools</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://huggingface.co/blog/training-swarms" target="_blank" rel="noopener noreferrer">Swarms, Flocks, Gangs: How to build, train, and evaluate multi-agent systems</a></h2>
-  <div class="card-meta"><span>Hugging Face</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">Hugging Face has released a blog series on building, training, and evaluating multi-agent systems, including reproducible examples that can be run on Hugging Face Jobs. The series highlights the challenges of swarm coordination, communication, and resource management while illustrating practical experiments with small agents and shared language models.</p>
-  
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/the-download-better-bionic-hands-and-ais-natural-gas-boom.webp" loading="lazy" width="1200" height="675" alt="A gleaming, articulated prosthetic hand rests beside a towering natural‑gas pipeline, its sensors pulsing softly as it probes the metallic surface"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/26/1149934/the-download-better-bionic-hands-ai-natural-gas-boom/" target="_blank" rel="noopener noreferrer">The Download: Better bionic hands and AI’s natural-gas boom</a></h2>
-  <div class="card-meta"><span>technologyreview.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">The MIT Tech Review highlights the arrival of a next‑generation bionic hand that can sense touch, following Avi Davidson’s personal journey with prosthetics.</p>
-  <p class="insight"><strong>How to use:</strong> Check whether your organization’s procurement or research teams are evaluating advanced prosthetic technologies for potential collaborations or employee wellness programs.</p>
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/the-next-generation-of-bionic-hands-is-hereand-they-can-feel.webp" loading="lazy" width="1200" height="675" alt="A forearm glows with a single sensor pad, gently touching a fragile glass flower, its surface trembling as the bionic hand’s new nerves translate pressure into delicate motion"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://www.technologyreview.com/2026/11/26/1149923/the-next-generation-of-bionic-hands-is-here-and-they-can-feel/" target="_blank" rel="noopener noreferrer">The next generation of bionic hands is here—and they can feel</a></h2>
-  <div class="card-meta"><span>technologyreview.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">Avi Davidson&#x27;s new bionic hand, connected to forearm nerves, enables him to sense pressure, improving dexterity for delicate tasks.</p>
-  
-  
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/tell-hn-happy-thanksgiving.webp" loading="lazy" width="1200" height="675" alt="A crumpled, handwritten note lies beside a stack of dusty, open laptops, its ink fading like a forgotten conversation"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a href="https://news.ycombinator.com/item?id=50655664" target="_blank" rel="noopener noreferrer">Tell HN: Happy Thanksgiving</a></h2>
-  <div class="card-meta"><span>news.ycombinator.com</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">This is a personal Thanksgiving message posted on Hacker News, unrelated to AI or technology developments.</p>
-  
-  
 </article></div>
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
     <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-27</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.34848v1" target="_blank" rel="noopener noreferrer">Put the World Back: Timestamps Matter in Time Series Reasoning</a></div>
-</div>
-<div class="archive-row">
   <div class="archive-date">2026-11-26</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.34770v1" target="_blank" rel="noopener noreferrer">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a><a class="archive-title" href="https://arxiv.org/abs/2611.34785v1" target="_blank" rel="noopener noreferrer">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></div>
@@ -1063,13 +961,18 @@
   <div class="archive-date">2026-10-22</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.30114v1" target="_blank" rel="noopener noreferrer">The End of Consensus Research?</a><a class="archive-title" href="https://arxiv.org/abs/2610.30026v1" target="_blank" rel="noopener noreferrer">What the Author Wrote, What the Agent Reads: Silent Cue Loss in Enterprise Document Ingestion</a><a class="archive-title" href="https://arxiv.org/abs/2610.30016v1" target="_blank" rel="noopener noreferrer">Code Comprehensor: Hierarchical Documentation and Cross-Modal Retrieval for Large Repositories</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">2026-10-21</div>
+  <div class="archive-count">4 items</div>
+  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.26664v1" target="_blank" rel="noopener noreferrer">Honeypots for AI Agent Insider Threats</a><a class="archive-title" href="https://arxiv.org/abs/2610.28612v1" target="_blank" rel="noopener noreferrer">TraceLite: Efficient Trace Reduction for SWE Agents via Optical Compression and Redundancy Removal</a><a class="archive-title" href="https://arxiv.org/abs/2610.28611v1" target="_blank" rel="noopener noreferrer">Semantic Observability for Autonomous Systems Diagnostics</a></div>
 </div></div>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
     <div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-27</div>
-  <div class="archive-count">5 items</div>
+  <div class="archive-count">9 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/data/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack" target="_blank" rel="noopener noreferrer">Can you give AI agents live data without rebuilding your data stack?</a><a class="archive-title" href="https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia/" target="_blank" rel="noopener noreferrer">Nvidia hits pause on chip shipments to Southeast Asia</a><a class="archive-title" href="https://venturebeat.com/technology/z-ais-glm-5-4-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-twice" target="_blank" rel="noopener noreferrer">Z.ai&#x27;s GLM-5.4 aims to match models up to four times its size by running 28 layers twice</a></div>
 </div>
 <div class="archive-row">
