@@ -14,8 +14,8 @@ from groq import Groq
 
 import quality_checks
 # the one font set and token block, and the tag, meta and label rules the cards use
-from generate_html import (DEFAULT_TAG, HOW_LABEL, HOW_LABELS, KIND_TAG, TOKENS_CSS, canonical_tag, clean_meta, font_faces,
-                           font_links, meta_text)
+from generate_html import (DEFAULT_TAG, HOW_LABEL, HOW_LABELS, KIND_TAG, SKIP_CSS, SKIP_LINK, TOKENS_CSS, canonical_tag,
+                           clean_meta, font_faces, font_links, meta_text, seo_tags)
 
 OUTPUT_DIR = "site/breakdowns"
 SHORT = " (short version)"  # ends the "generated" note of a page made without Groq; a later run replaces that page
@@ -171,22 +171,29 @@ pilot, monitor, roll back, train staff) is advice, not a claim about the source,
 guide states a fact about the product, company or study in the source that the source does not state."""
 
 
-def judge_page(item, summary, guide):
-    """The Gemini judge on one generated page: "pass", "fail" or "error", with the reason. Without GEMINI_API_KEY the
-    judge is skipped ("pass"): the deterministic checks in page_problems have already run."""
+def judge_pages(pages):
+    """The Gemini judge on generated pages, all in one batch: one call for each 25 pages, so a run with many pages
+    does not use up the judge's daily quota. pages: [(item, summary text, guide text)]. Returns one (verdict, reason)
+    for each page, verdict "pass", "fail" or "error". Without GEMINI_API_KEY the judge is skipped ("pass"): the
+    checks in page_problems have already run."""
+    if not pages:
+        return []
     if not os.environ.get("GEMINI_API_KEY"):
-        return "pass", "judge skipped: no GEMINI_API_KEY"
+        return [("pass", "judge skipped: no GEMINI_API_KEY")] * len(pages)
     try:
         import judge
-        page = {"title": item.get("title") or "", "source_text": quality_checks.source_text(item), "source": item.get("source"),
-                "source_type": item.get("source_type"), "pub_date": item.get("pub_date"), "page_summary": summary, "page_guide": guide}
+        batch = [{"n": n, "title": item.get("title") or "", "source_text": quality_checks.source_text(item),
+                  "source": item.get("source"), "source_type": item.get("source_type"), "pub_date": item.get("pub_date"),
+                  "page_summary": summary, "page_guide": guide} for n, (item, summary, guide) in enumerate(pages)]
         logs = []
-        kept, _, stats = judge.gate([page], "title", "source_text", "page_summary", "page_guide", log=logs.append,
-                                    extra_rules=judge.GROUNDING_RULES + PAGE_JUDGE_RULES)
-        reason = next((m for m in logs if "HELD BACK" in m), "")
-        return ("pass" if kept else "error" if stats.get("errors") else "fail"), reason
+        kept, held, _ = judge.gate(batch, "title", "source_text", "page_summary", "page_guide", log=logs.append,
+                                   extra_rules=judge.GROUNDING_RULES + PAGE_JUDGE_RULES)
+        out = {page["n"]: ("pass", "") for page in kept}
+        for page, line in zip(held, (m for m in logs if "HELD BACK" in m)):  # gate logs one line for each held item, in order
+            out[page["n"]] = ("error" if ": error " in line else "fail", line)
+        return [out.get(n, ("error", "no verdict")) for n in range(len(pages))]
     except Exception as e:  # the judge must never stop the pages
-        return "error", f"{type(e).__name__}: {str(e)[:120]}"
+        return [("error", f"{type(e).__name__}: {str(e)[:120]}")] * len(pages)
 
 
 def parse_groq_response(raw):
@@ -493,12 +500,33 @@ def article_figure(slug, directory=OUTPUT_DIR):
             f'alt="{escape(alt)}" fetchpriority="high" decoding="async"><figcaption>AI illustration</figcaption></figure>')
 
 
+# Summaries that are the page's own words, not the story's: the same on many pages
+STOCK_NOTES = ("No source-checked summary is stored for this story. Read the original for the detail.",
+               "This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. "
+               "Read the original for the detail.", "No summary is stored for this story.")
+CANONICAL = re.compile(r'<link rel="canonical" href="[^"]*/breakdowns/(?P<slug>[^"/]+)\.html">')
+
+
+def page_seo(title, slug, summary_html):
+    """The SEO block of a breakdown page (generate_html.seo_tags), or "" when the page has no slug and so no address.
+    The description is the start of the page's own summary. A page with no summary of its own (the stock notes) gets
+    its title in the description, so no two pages share one."""
+    if not slug:
+        return ""
+    plain = lambda text: " ".join(re.sub(r"</?[a-zA-Z][^<>]*>", "", str(text)).split())  # a search or share card shows plain text
+    title, summary = plain(title), plain(stored_text(re.sub(r"</p>\s*<p>", " ", str(summary_html))))
+    if not summary or summary in STOCK_NOTES:
+        summary = f"{title}: the source link and the notes of Daily Edge AI for IT engineers."
+    return "\n  " + seo_tags(f"{title} — IT Breakdown — Daily Edge AI", summary, f"breakdowns/{slug}.html", "article")
+
+
 def render_breakdown_page(title, slug, url, source_label, summary_html, guide_html, meta_line, generated_at,
                           tag="", figure=""):
     """The page frame, in magazine order: tag, H1, meta, image, summary, "How to apply" panel, source button, back link.
     title, url, meta_line, generated_at and tag are raw text and are escaped here; summary_html and guide_html come
     from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure.
     The tag is one of the canonical tags and the meta line is "who · source type · date", as on the story's card."""
+    seo = page_seo(title, slug, summary_html)
     title, meta_line, generated_at = escape(str(title)), escape(clean_meta(meta_line)), escape(str(generated_at))
     tag = escape(canonical_tag(tag))
     return f"""<!DOCTYPE html>
@@ -506,9 +534,8 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title} — IT Breakdown — Daily Edge AI</title>
+  <title>{title} — IT Breakdown — Daily Edge AI</title>{seo}
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  {font_links("../")}
   <style>
     {font_faces("../")}
 
@@ -516,10 +543,13 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
 
     {ARTICLE_CSS}
 
+    {SKIP_CSS}
+
     .brand-logo {{ background: url(../logo.svg) center/contain no-repeat; }}
   </style>
 </head>
 <body>
+{SKIP_LINK}
 <header class="hero">
   <div class="header-inner">
     <a class="brand-link" href="../index.html"><span class="brand-logo" aria-hidden="true"></span><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
@@ -530,7 +560,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
     <p class="meta-line">{meta_line}</p>
   </div>
 </header>
-<main class="content">
+<main class="content" id="main">
   <article class="article">
     {figure}
     <section>
@@ -553,6 +583,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="../privacy.html">Privacy</a></span>
   <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
 </footer>
+{font_links("../")}
 </body>
 </html>"""
 
@@ -578,10 +609,11 @@ def stored_text(fragment):
     return unescape(re.sub(r"</?[a-zA-Z][^<>]*>", "", fragment))  # a tag starts with a letter: "<10 ms" is text
 
 
-def restyle_page(old_html, tag="", figure=None):
+def restyle_page(old_html, tag="", figure=None, slug=""):
     """New frame and style around an old page's stored text, with no AI call. None when the page has a shape this
     does not recognise, so the caller leaves it as it is. tag: the story's tag when the caller knows it, else the
-    page keeps the tag it has. figure: the <figure> to show ("" for none); None keeps the one the page has."""
+    page keeps the tag it has. figure: the <figure> to show ("" for none); None keeps the one the page has.
+    slug: the page's file name without ".html", for its canonical URL; "" keeps the address the page already states."""
     m = STORED.search(old_html)
     if not m:
         return None
@@ -598,8 +630,9 @@ def restyle_page(old_html, tag="", figure=None):
     url = unescape(source["url"]) if source else ""
     if figure is None:
         figure = stored_figure[0] if stored_figure else ""
-    return render_breakdown_page(stored_text(m["title"]), "", url, "", summary, guide, meta, generated_at,
-                                 tag=tag or (stored_text(stored_tag["tag"]) if stored_tag else ""), figure=figure)
+    stated = CANONICAL.search(old_html)
+    return render_breakdown_page(stored_text(m["title"]), slug or (stated["slug"] if stated else ""), url, "", summary, guide,
+                                 meta, generated_at, tag=tag or (stored_text(stored_tag["tag"]) if stored_tag else ""), figure=figure)
 
 
 def known_tags():
@@ -623,7 +656,7 @@ def restyle_existing_pages(directory=OUTPUT_DIR, tags=None):
     tags = tags or {}
     for path in sorted(Path(directory).glob("*.html")):
         new_html = restyle_page(path.read_text(encoding="utf-8"), tags.get(path.stem, ""),
-                                article_figure(path.stem, directory))
+                                article_figure(path.stem, directory), slug=path.stem)
         if new_html is None:
             skipped.append(path.name)
             continue
@@ -643,7 +676,7 @@ def sync_figures(directory=OUTPUT_DIR):
         stored = FIGURE.search(html)
         figure = article_figure(path.stem, directory) if path.stem in have else ""
         if (stored[0] if stored else "") != figure:
-            new_html = restyle_page(html, figure=figure)
+            new_html = restyle_page(html, figure=figure, slug=path.stem)
             if new_html:
                 path.write_text(new_html, encoding="utf-8")
                 changed += 1
@@ -667,7 +700,7 @@ def meta_line_for(item, kind):
     return meta_text(item if source_dated(item, kind) else {**item, "pub_date": ""}, kind)
 
 
-NO_SUMMARY = "No source-checked summary is stored for this story. Read the original for the detail."
+NO_SUMMARY = STOCK_NOTES[0]
 NO_HOW_TO = "No how-to notes are stored for this story. Read the original for the detail."
 
 
@@ -705,12 +738,24 @@ HELD_BACK = []  # (title, reason) for every AI page held back in this process
 def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
     """A page on disk and a slug_map entry for EVERY item; returns {raw title: slug}.
     Groq writes the full page from the story's stored source text. The page is published only when page_problems finds
-    nothing (one regenerate is allowed) and the judge passes it; otherwise the AI page is held back and the item's own
+    nothing (one regenerate is allowed) and the judge passes it (one judge call for all the pages of the run); otherwise the AI page is held back and the item's own
     source-checked summary and how-to text make a short page (stamp HELD: never replaced). When Groq gives nothing (no
     key, error, daily limit, bad shape, or use_ai off) the same short page is made with stamp SHORT, so no card is left
     without one; a later run with Groq replaces that page. A full page is never rewritten."""
-    slug_map = {}
+    slug_map, waiting = {}, []  # waiting: AI pages that passed the checks and wait for the one judge call
     generate = generate_content_for_case_study if kind == "case_studies" else generate_content_for_news
+
+    def write(item, title, slug, path, summary_html, guide_html, stamp):
+        url = "" if quality_checks.is_listing_url(item.get("url")) else item.get("url", "")  # no link to a listing page
+        path.write_text(render_breakdown_page(title or "Untitled", slug, url, "", summary_html,
+                                              guide_html, meta_line_for(item, kind), stamp, tag=tag_for(item, kind),
+                                              figure=article_figure(slug, directory)), encoding="utf-8")
+        print(f"    Saved: {path}")
+
+    def hold(title, why):
+        HELD_BACK.append((str(title), why))
+        print(f"    [GROUNDING] HELD BACK AI page for {str(title)[:60]}: {why}")
+
     for i, item in enumerate(items or []):
         title = item.get("title", "Untitled" if kind == "case_studies" else "")  # the key the card renderer looks up
         slug = page_slug(title)
@@ -719,7 +764,6 @@ def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
         if path.exists() and not (use_ai and is_short_page(path)):
             continue
 
-        summary_html = guide_html = None
         held = ""
         if use_ai and quality_checks.is_listing_url(item.get("url")):
             held = "the source URL is a listing page, not an article"
@@ -736,35 +780,31 @@ def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
                 if attempt == 1:
                     time.sleep(0.5)
                     raw = generate(item, REGENERATE_NOTE.format(problems="; ".join(problems)))
+            time.sleep(0.5)
             if raw == "DAILY_LIMIT":
                 use_ai = False  # no more Groq calls this run; the items left still get a page below
             elif raw and split_sections(raw)[0] is not None:
-                if problems:
-                    held = "; ".join(problems)
-                else:
-                    verdict, why = judge_page(item, *split_sections(raw))
-                    if verdict == "pass":
-                        summary_html, guide_html = parse_groq_response(raw)
-                    elif verdict == "fail":
-                        held = f"judge: {why}"
-                    else:  # the judge gave no verdict: keep the short page, a later run tries again
-                        print(f"    [GROUNDING] judge error, AI page not published this run: {why}")
-            time.sleep(0.5)
+                if not problems:
+                    waiting.append((item, title, slug, path, raw))
+                    continue
+                held = "; ".join(problems)
         if held:
-            HELD_BACK.append((str(title), held))
-            print(f"    [GROUNDING] HELD BACK AI page for {str(title)[:60]}: {held}")
+            hold(title, held)
+        if path.exists() and not held:
+            continue  # keep the short page that is already there
+        write(item, title, slug, path, *short_content(item, kind), generated_at + (HELD if held else SHORT))
 
-        stamp = generated_at
-        if not summary_html:
-            if path.exists() and not held:
-                continue  # keep the short page that is already there
-            summary_html, guide_html = short_content(item, kind)
-            stamp += HELD if held else SHORT
-        url = "" if quality_checks.is_listing_url(item.get("url")) else item.get("url", "")  # no link to a listing page
-        path.write_text(render_breakdown_page(title or "Untitled", slug, url, "", summary_html,
-                                              guide_html, meta_line_for(item, kind), stamp, tag=tag_for(item, kind),
-                                              figure=article_figure(slug, directory)), encoding="utf-8")
-        print(f"    Saved: {path}")
+    verdicts = judge_pages([(item, *split_sections(raw)) for item, _, _, _, raw in waiting])
+    for (item, title, slug, path, raw), (verdict, why) in zip(waiting, verdicts):
+        if verdict == "pass":
+            write(item, title, slug, path, *parse_groq_response(raw), generated_at)
+        elif verdict == "fail":
+            hold(title, f"judge: {why}")
+            write(item, title, slug, path, *short_content(item, kind), generated_at + HELD)
+        else:  # the judge gave no verdict: the short page stays, and a later run tries again
+            print(f"    [GROUNDING] judge error, AI page not published this run: {why}")
+            if not path.exists():
+                write(item, title, slug, path, *short_content(item, kind), generated_at + SHORT)
     return slug_map
 
 
@@ -868,8 +908,7 @@ def scan_pages(directory=OUTPUT_DIR, index=None, strict=True):
 
 
 WITHDRAWN = " (withdrawn)"  # ends the "generated" note of a page whose text was taken down by fix_pages
-WITHDRAWN_NOTE = ("This breakdown was withdrawn. It was written without the source text, and it did not pass the source "
-                  "check. Read the original for the detail.")
+WITHDRAWN_NOTE = STOCK_NOTES[1]
 
 
 def fix_pages(failures, directory=OUTPUT_DIR, index=None, delete=False):

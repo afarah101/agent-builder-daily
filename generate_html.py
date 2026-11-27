@@ -24,7 +24,9 @@ MONO_CSS = "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&dis
 
 
 def font_links(prefix=""):
-    """<link> tags of the font set. prefix is the path to the site root: "" or "../"."""
+    """<link> tags of the font set. prefix is the path to the site root: "" or "../". Every page has this block as the
+    last thing in its <body>: in the <head>, the Geist Mono stylesheet held the first paint back (about 0.8 s on a
+    phone). The Satoshi files load from the @font-face rules in the page's <style>, with font-display: swap."""
     return f"""<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="{prefix}fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -114,6 +116,60 @@ TOKENS_CSS = """:root {
     @media (min-width: 1024px) {
       :root { --fs-hero: 72px; }
     }"""
+
+
+SITE_URL = "https://agent-builder-daily.vercel.app"
+OG_IMAGE = SITE_URL + "/og-image.png"  # site/og-image.png: the 1200x630 branded card
+HOME_TITLE = "Daily Edge AI: AI news and real case studies"
+HOME_DESCRIPTION = "AI news and real case studies, every day."
+ARCHIVE_TITLE = "Archive — Daily Edge AI"
+ARCHIVE_DESCRIPTION = "Every past day of Daily Edge AI: case studies and industry news, newest first."
+DESCRIPTION_MAX = 160
+
+
+def short_description(text):
+    """One line of at most DESCRIPTION_MAX characters, cut at a word and ended with "…" when it is longer."""
+    text = " ".join(str(text or "").split())
+    if len(text) <= DESCRIPTION_MAX:
+        return text
+    return text[:DESCRIPTION_MAX - 1].rsplit(" ", 1)[0].rstrip(",;:—-") + "…"
+
+
+def seo_tags(title, description, path="", kind="website"):
+    """The SEO block of one page: meta description, canonical URL, Open Graph and Twitter card. path is the page's
+    path from the site root ("" for the home page). Every value is escaped."""
+    url, description = f"{SITE_URL}/{path}", short_description(description)
+    return f"""<meta name="description" content="{html_lib.escape(description)}">
+  <link rel="canonical" href="{html_lib.escape(url)}">
+  <meta property="og:site_name" content="Daily Edge AI">
+  <meta property="og:title" content="{html_lib.escape(str(title))}">
+  <meta property="og:description" content="{html_lib.escape(description)}">
+  <meta property="og:type" content="{kind}">
+  <meta property="og:url" content="{html_lib.escape(url)}">
+  <meta property="og:image" content="{OG_IMAGE}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">"""
+
+
+# The first link of every page: a keyboard user goes straight to the content. It shows only when it has focus.
+SKIP_LINK = '<a class="skip-link" href="#main">Skip to content</a>'
+SKIP_CSS = """.skip-link {
+      position: absolute;
+      top: var(--s-8);
+      left: var(--s-8);
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-16);
+      border-radius: var(--radius);
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-weight: 700;
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: none; outline: 2px solid var(--c-text); outline-offset: 2px; }"""
 
 
 def load_latest_json(directory, prefix=""):
@@ -527,6 +583,12 @@ def card_grids(cards_html, after_lead_row=""):
     return html
 
 
+def eager_lead(panel_html):
+    """The first image of the tab that is open on load is the page's largest paint: it loads at once, with high
+    priority. Every other card image stays lazy."""
+    return panel_html.replace(' loading="lazy"', ' fetchpriority="high" decoding="async"', 1)
+
+
 def archive_link(anchor, text="Archive"):
     return f'<a class="archive-link" href="archive.html#{anchor}">{esc(text)}</a>'
 
@@ -559,7 +621,7 @@ def render_archive(archive, kind="cs"):
         if not weeks or weeks[-1][0] != title or len(weeks[-1][1]) >= GROUP_MAX:
             weeks.append([title, []])
         weeks[-1][1].append(f"""<div class="archive-row">
-  <div class="archive-date">{esc(entry.get("date", ""))}</div>
+  <div class="archive-date">{esc(show_date(entry.get("date", "")))}</div>
   <div class="archive-count">{esc(entry.get("total", 0))} items</div>
   <div class="archive-previews">{preview_html}</div>
 </div>""")
@@ -638,8 +700,10 @@ PAGE_FOOTER = """<footer>
 
 def archive_page(head, cs_archive, news_archive):
     """site/archive.html: every past day of both tabs, on one page. head: the home page up to <body>."""
-    head = head.replace("<title>Daily Edge AI: AI news and real case studies</title>", "<title>Archive — Daily Edge AI</title>")
+    head = head.replace(f"<title>{HOME_TITLE}</title>", f"<title>{ARCHIVE_TITLE}</title>")
+    head = head.replace(seo_tags(HOME_TITLE, HOME_DESCRIPTION), seo_tags(ARCHIVE_TITLE, ARCHIVE_DESCRIPTION, "archive.html"))
     return head + f"""<body>
+{SKIP_LINK}
 
 <header class="header hero">
   <div class="header-inner">
@@ -653,7 +717,7 @@ def archive_page(head, cs_archive, news_archive):
   </div>
 </header>
 
-<main class="content">
+<main class="content" id="main">
   <div class="toolbar">
       <nav class="tab-row" aria-label="Archive sections">
         <a class="archive-link" href="#case-studies">Case Studies</a>
@@ -668,13 +732,20 @@ def archive_page(head, cs_archive, news_archive):
 </main>
 
 {PAGE_FOOTER}
+{font_links()}
 </body>
 </html>"""
 
 
+# The words a subscriber agrees to. The Apps Script stores the same words with each email (apps-script/README.md).
+CONSENT_TEXT = "Send me the Daily Edge AI email. I can unsubscribe at any time."
+
+
 def generate_email_capture(n=""):
     """Sign-up block. n="" is the hero form that js/subscribe.js drives; n="-2" is the page-end copy, which the
-    page script forwards to the first form so subscribe.js stays unchanged."""
+    page script forwards to the first form so subscribe.js stays unchanged. The consent box is not ticked, and the
+    browser and the page script both stop a submit until it is. Order on screen and for the Tab key: email, consent,
+    Subscribe."""
     return f"""
   <div class="email-banner{' email-banner-end' if n else ''}">
     <div class="email-inner{n}">
@@ -682,6 +753,7 @@ def generate_email_capture(n=""):
       <form class="email-form{n}" aria-labelledby="email-title{n}">
         <label class="visually-hidden" for="email-input{n}">Email address</label>
         <input type="email" id="email-input{n}" class="email-input" placeholder="your@email.com" autocomplete="email" required />
+        <label class="consent" for="consent{n}"><input type="checkbox" id="consent{n}" class="consent-box" name="consent" required /><span>{CONSENT_TEXT}</span></label>
         <button type="submit" class="email-btn">Subscribe</button>
       </form>
       <span class="email-confirm" id="email-confirm{n}" role="status"></span>
@@ -792,15 +864,9 @@ def generate_html():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Edge AI: AI news and real case studies</title>
-  <meta name="description" content="AI news and real case studies, every day.">
-  <meta property="og:site_name" content="Daily Edge AI">
-  <meta property="og:title" content="Daily Edge AI: AI news and real case studies">
-  <meta property="og:description" content="AI news and real case studies, every day.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://agent-builder-daily.vercel.app/">
+  <title>""" + HOME_TITLE + """</title>
+  """ + seo_tags(HOME_TITLE, HOME_DESCRIPTION) + """
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  """ + font_links() + """
   <style>
     """ + font_faces() + """
 
@@ -830,6 +896,8 @@ def generate_html():
       clip: rect(0 0 0 0);
       white-space: nowrap;
     }
+
+    """ + SKIP_CSS + """
 
     /* Hero */
     .hero {
@@ -920,10 +988,24 @@ def generate_html():
 
     .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
 
-    .email-form { display: flex; gap: var(--s-8); }
+    /* Row 1: the email. Row 2: the consent box, then Subscribe. The Tab order is the same. */
+    .email-form, .email-form-2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-16); }
+
+    .consent {
+      flex: 1 1 240px;
+      display: flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-bg);
+      cursor: pointer;
+    }
+    .consent-box { flex: none; width: 20px; height: 20px; accent-color: var(--c-bg); cursor: pointer; }
 
     .email-input {
-      flex: 1;
+      flex: 1 1 100%;
       min-width: 0;
       background: var(--c-surface-dark);
       border: 1px solid var(--c-border-dark);
@@ -1295,6 +1377,7 @@ def generate_html():
   </style>
 </head>
 <body>
+""" + SKIP_LINK + """
 
 <header class="header hero">
   <div class="header-inner">
@@ -1309,7 +1392,7 @@ def generate_html():
   </div>
 </header>
 
-<main class="content">
+<main class="content" id="main">
   <div class="toolbar">
       <div class="tab-row">
         <div class="tabs" role="tablist" aria-label="Sections">
@@ -1322,7 +1405,7 @@ def generate_html():
       <input type="search" id="scout-search" class="search" placeholder="Search stories" />
   </div>
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
-    """ + card_grids(render_case_studies(cs_data, slug_map)) + panel_foot("case-studies", "case studies") + """
+    """ + eager_lead(card_grids(render_case_studies(cs_data, slug_map))) + panel_foot("case-studies", "case studies") + """
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
@@ -1338,10 +1421,13 @@ def generate_html():
   // Handlers are attached here, not as on*= attributes, so the page carries no inline event handlers
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.getAttribute('aria-controls'), t)));
   document.getElementById('scout-search').addEventListener('input', e => filterCards(e.target.value));
-  document.querySelector('.email-form').addEventListener('submit', e => submitEmail(e));
+  // No consent, no submit: the browser stops it first (required), and this stops it when validation is off
+  const agreed = (e, id) => document.getElementById(id).checked || (e.preventDefault(), document.getElementById(id).focus(), false);
+  document.querySelector('.email-form').addEventListener('submit', e => { if (agreed(e, 'consent')) submitEmail(e); });
   // The page-end form reuses submitEmail: copy its email into the hero form, submit, and mirror the status
   const endForm = document.querySelector('.email-form-2');
   if (endForm) endForm.addEventListener('submit', e => {
+    if (!agreed(e, 'consent-2')) return;
     e.preventDefault();
     const top = document.getElementById('email-input'), end = document.getElementById('email-input-2');
     const status = document.getElementById('email-confirm'), endStatus = document.getElementById('email-confirm-2');
@@ -1371,6 +1457,7 @@ def generate_html():
   }
 
 </script>
+""" + font_links() + """
 </body>
 </html>"""
 
