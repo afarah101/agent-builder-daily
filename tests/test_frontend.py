@@ -64,9 +64,9 @@ def test_news_card_has_one_meta_line_with_the_source():
     html = gh.render_news({"news": [{"title": "Story", "url": "https://example.test/1", "source": "Ars Technica",
                                      "pub_date": "2026-11-24"}]}, {"news": {}})
     assert html.count('class="card-meta"') == 1
-    assert ('<div class="card-meta"><span>Ars Technica</span><span class="sep" aria-hidden="true">•</span>'
-            '<span>2026-11-24</span></div>') in html
-    assert html.count("Ars Technica") == 1 and html.count("2026-11-24") == 1  # no duplicate source or date span
+    assert ('<p class="card-meta"><span class="meta-who">Ars Technica</span>'
+            '<span class="meta-rest">\u00a0·\u00a0Press\u00a0·\u00a024 Nov 2026</span></p>') in html
+    assert html.count("Ars Technica") == 1 and html.count("24 Nov 2026") == 1  # no duplicate source or date span
 
 
 # ---------- score ring: never on a card ----------
@@ -192,15 +192,15 @@ def test_lead_story_grid(site):
     mid = re.search(r"@media \(min-width: 641px\) \{(.*?)\n    \}", css, re.S).group(1)
     wide = re.search(r"@media \(min-width: 1025px\) \{(.*?)\n    \}", css, re.S).group(1)
     assert re.search(r"\.cards-grid\s*\{\s*grid-template-columns:\s*repeat\(2,", mid)
-    assert re.search(r"\.cards-grid > \.card:first-child\s*\{\s*grid-column:\s*span 2;", mid)
+    assert re.search(r"\.lead-grid > \.card:first-child\s*\{\s*grid-column:\s*1 / -1;", mid)
     assert re.search(r"\.cards-grid\s*\{\s*grid-template-columns:\s*repeat\(4,", wide)
-    assert re.search(r"\.cards-grid > \.card:first-child\s*\{\s*grid-row:\s*span 2;", wide)
-    assert re.search(r"\.cards-grid > \.card:first-child \.card-title\s*\{\s*font-size:\s*var\(--fs-h3\);", wide)
+    assert re.search(r"\.lead-grid > \.card:first-child\s*\{\s*grid-column:\s*span 2;", wide)  # the lead and 2 cards: one row
+    assert re.search(r"\.lead-grid > \.card:first-child \.card-title\s*\{\s*font-size:\s*var\(--fs-h3\);", wide)
 
 
 # ---------- the two retired pages redirect to the current site ----------
 
-@pytest.mark.parametrize("name", ["archive.html", "news.html"])
+@pytest.mark.parametrize("name", ["news.html"])  # archive.html is the archive page now (tests/test_ux_premium.py)
 def test_retired_pages_redirect(name):
     page = (ROOT / "site" / name).read_text()
     assert '<meta http-equiv="refresh" content="0; url=/">' in page and '<a class="cta" href="/">' in page
@@ -268,12 +268,12 @@ def test_old_page_restyled_keeps_its_text():
     new = gb.restyle_page(OLD_PAGE)
     assert new and gh.TOKENS_CSS in new and "#6366f1" not in new and 'class="badge"' not in new
     assert '<h1 class="page-title">Edge AI &amp; robots</h1>' in new
-    assert '<p class="meta-line">Ars Technica · 2026-10-01 · Generated 01 Oct 2026, 09:00</p>' in new
+    assert '<p class="meta-line">Ars Technica\u00a0· 1\u00a0Oct\u00a02026</p>' in new
     assert '<p>Latency (&lt;10 ms) and throughput (&gt;1 TB/day).</p><p>Second para.</p>' in new
     assert '<h3 class="guide-label">Evaluate</h3><div class="guide-text">- Step one\n   - Step two</div>' in new
     assert '<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3>' in new
     assert 'href="https://example.test/story?a=1&amp;b=2" target="_blank" rel="noopener noreferrer"' in new
-    assert re.search(r"AI-generated breakdown · [^<]+ · 01 Oct 2026, 09:00", new)  # name comes from generate_breakdowns.py
+    assert re.search(r"AI-generated breakdown&nbsp;· [^<]+&nbsp;· 01 Oct 2026, 09:00", new)  # name comes from generate_breakdowns.py
 
 
 def test_restyle_leaves_unknown_pages_alone(tmp_path):
@@ -389,14 +389,15 @@ def test_breakdown_links_use_the_raw_title():
                                                           {"news": {title: "att"}})
 
 
-def test_news_signal_points_replace_s_labels():
+def test_news_card_shows_one_how_to_apply_line_and_no_s_label():
     news = lambda text: gh.render_news({"news": [{"title": "N", "url": "https://n.test", "enterprise_use": text}]}, {"news": {}})
     html = news("S1: Patch <b>X</b>. S2: Breach risk. S3: Okta, Intune.")
-    assert ('<ul class="signal-points"><li><strong>Do this week:</strong> Patch &lt;b&gt;X&lt;/b&gt;.</li>'
-            '<li><strong>Risk if ignored:</strong> Breach risk.</li><li><strong>Tools affected:</strong> Okta, Intune.</li></ul>') in html
+    assert '<p class="insight"><strong>How to apply:</strong> Patch &lt;b&gt;X&lt;/b&gt;.</p>' in html  # "Do this week", as one line
+    assert "<ul" not in html and "Breach risk" not in html and "Okta" not in html  # the 3 points are on the breakdown page
     assert not re.search(r"S[1-3]\s*:", html)
     plain = news("Watch the rollout. S2: dangling label")
-    assert "How to use:" in plain and not re.search(r"S[1-3]\s*:", plain) and "signal-points" not in plain
+    assert "<strong>How to apply:</strong> Watch the rollout." in plain and not re.search(r"S[1-3]\s*:", plain)
+    assert "How to use" not in html + plain and "Do this week" not in html + plain
 
 
 def test_archived_file_merges_into_an_existing_day(site):
@@ -589,13 +590,14 @@ def test_dashboard_counts_a_passed_item_as_passed(tmp_path):
     assert (r["text"]["qc-pass-count"], r["text"]["qc-fail-count"], r["text"]["qc-pending-count"]) == ("1", "0", "0")
 
 
-def test_non_lead_cards_clamp_summary_and_insight_to_3_lines(site):
+def test_every_card_clamps_the_summary_to_2_lines_and_the_how_to_line_to_1(site):
     gh.generate_html()
     css = (site / "site" / "index.html").read_text().split("<style>")[1].split("</style>")[0]
-    rule = re.search(r"\.cards-grid > \.card:not\(:first-child\) \.card-summary,\s*"
-                     r"\.cards-grid > \.card:not\(:first-child\) \.insight\s*\{([^}]*)\}", css)
-    assert rule, "clamp rule missing"
-    assert re.search(r"-webkit-line-clamp:\s*3;", rule.group(1)) and "overflow: hidden" in rule.group(1)
+    rule = re.search(r"\.card-summary, \.insight\s*\{([^}]*)\}", css)
+    assert rule and "overflow: hidden" in rule.group(1) and "display: -webkit-box" in rule.group(1)
+    assert re.search(r"\.card-summary \{ -webkit-line-clamp: 2; line-clamp: 2;", css)
+    assert re.search(r"\.insight \{ -webkit-line-clamp: 1; line-clamp: 1;", css)
+    assert "line-clamp: 3" not in css
 
 
 # ---------- AI editorial images: the AI image when its file exists (non-empty alt, caption), else the cover ----------
@@ -637,10 +639,11 @@ def test_image_alt_is_never_empty(site, alt):
         assert found.group(1) == alt
 
 
-def test_image_has_the_ai_caption(site):
+def test_card_image_has_no_caption_and_the_footer_says_images_are_ai_generated(site):
     with_image(site, "Paper")
     html = cards(study(title="Paper"))
-    assert re.search(r"<figure[^>]*>.*<figcaption>AI illustration</figcaption></figure>", html)
+    assert "<figcaption" not in html and "AI illustration" not in html and 'src="images/paper.webp"' in html
+    assert "Images are AI-generated.</span>\n</footer>" in gh.PAGE_FOOTER
 
 
 def test_image_css_uses_the_card_radius():
@@ -725,14 +728,14 @@ def test_no_score_on_the_page_and_case_studies_use_the_grid(site):
     for word in ("/75", "/25", "/10", "AI-reviewed", "score-ring", "score-num", "status-badge"):
         assert word not in page, word
     cs_panel = page.split('id="case-studies"')[1].split('id="industry-news"')[0]
-    assert '<div class="cards-grid">' in cs_panel  # same lead + grid as Industry News
+    assert '<div class="cards-grid lead-grid">' in cs_panel  # same lead + grid as Industry News
 
 
 def test_tags_never_wrap_and_relevance_cannot_overflow(site):
     page = built_page(site)
-    assert re.search(r"\.card-tags \{[^}]*flex-wrap: nowrap", page)
-    assert re.search(r"\.tag-pill, \.tier-label \{[^}]*white-space: nowrap", page)
-    assert re.search(r"\.card-header \{[^}]*flex-wrap: wrap", page)  # the relevance wraps below, not out of the card
+    assert re.search(r"\.tag-pill \{[^}]*white-space: nowrap", page)  # one short canonical tag, never cut
+    assert "text-overflow: ellipsis" not in re.search(r"\.tag-pill \{[^}]*\}", page)[0] and "tier-label" not in page
+    assert re.search(r"\.card-header \{[^}]*flex-wrap: wrap", page)
 
 
 def test_every_card_with_an_image_shows_it(site):
@@ -780,6 +783,6 @@ def test_honest_checks_run_on_the_built_page(site):
                         "pub_date": "2026-10-26", "summary": "A real line. A cut"}])
     live = page.split('id="archive-cs"')[0]
     assert "Kept paper" in live and "Tomorrow paper" not in live
-    assert "<span>example.org</span>" in live and "Reuters" not in live
+    assert '<span class="meta-who">example.org</span>' in live and "Reuters" not in live
     assert "A real line.</p>" in live and "A cut" not in live
     assert "AI-reviewed" not in live and "Verified" not in page

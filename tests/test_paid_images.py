@@ -193,7 +193,7 @@ def test_every_shown_card_gets_an_ai_image_in_one_run(site, monkeypatch):
     assert covers(site) == [] and len(list((site / "site" / "images").glob("*.webp"))) == 21
     gh.generate_html()
     page = (site / "site" / "index.html").read_text().split('<div id="archive-cs"', 1)[0]
-    assert page.count('<article class="card ') == 21 == page.count("<figcaption>AI illustration</figcaption>")
+    assert page.count('<article class="card ') == 21 == len(re.findall(r'<figure class="card-figure"><img src="images/[a-z0-9-]+\.webp"', page))
     assert "images/covers/" not in page and "data:image/svg" not in page
 
 

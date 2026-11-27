@@ -287,7 +287,7 @@ def test_short_page_leaves_out_stored_text_that_fails_the_checks(tmp_path):
     assert "£/token" not in guide_html and "Watch the price." in guide_html
 
 
-def test_scan_finds_the_audited_failures_and_fix_removes_or_re_renders(tmp_path, monkeypatch):
+def test_scan_finds_the_audited_failures_and_fix_re_renders_withdraws_or_removes(tmp_path, monkeypatch):
     out = tmp_path / "site" / "breakdowns"
     out.mkdir(parents=True)
     monkeypatch.chdir(tmp_path)
@@ -306,17 +306,23 @@ def test_scan_finds_the_audited_failures_and_fix_removes_or_re_renders(tmp_path,
     assert checked == 4 and sorted(failures) == ["announcements.html", "gta.html", "orphan.html"]
     assert "0.02 £" in failures["gta.html"][0] and "listing page" in failures["announcements.html"][-1]
     assert any("xxxx" in p for p in failures["orphan.html"])
-    rendered, removed = gb.fix_pages(failures, out, index)
-    assert rendered == ["gta.html"] and removed == ["announcements.html", "orphan.html"]
+    rendered, withdrawn, removed = gb.fix_pages(failures, out, index)
+    assert (rendered, withdrawn, removed) == (["gta.html"], ["orphan.html"], ["announcements.html"])
     assert "£/token" not in (out / "gta.html").read_text() and gb.is_short_page(out / "gta.html")
-    assert gb.scan_pages(out, index) == (2, {})
+    orphan = (out / "orphan.html").read_text()  # no stored source: the address and the link stay, the text goes
+    assert gb.WITHDRAWN_NOTE in orphan and "$5" not in orphan and "xxxx" not in orphan and "https://example.test/a-story" in orphan
+    assert not gb.is_short_page(out / "orphan.html")
+    assert gb.scan_pages(out, index) == (3, {})
+    write("orphan-two", "It costs $5.\n---SPLIT---\n1. EVALUATE - Check.", "https://example.test/b-story")
+    assert gb.fix_pages(gb.scan_pages(out, index)[1], out, index, delete=True) == ([], [], ["orphan-two.html"])
 
 
 def test_an_old_scraped_story_shows_no_date():
+    meta = lambda item: gb.meta_line_for(item, "news").replace("\u00a0", " ")
     old = {"title": "T", "source": "Anthropic", "pub_date": "24 Oct 2026"}
-    assert gb.meta_line_for(old, "news") == "Anthropic"                                   # the day of the scrape is not shown
-    assert gb.meta_line_for({**old, "scraped": True, "pub_date": "06 Oct 2026"}, "news") == "Anthropic · 06 Oct 2026"
-    assert gb.meta_line_for({**old, "source": "TechCrunch"}, "news") == "TechCrunch · 24 Oct 2026"
+    assert meta(old) == "Anthropic · Press"                                               # the day of the scrape is not shown
+    assert meta({**old, "scraped": True, "pub_date": "06 Oct 2026"}) == "Anthropic · Press · 6 Oct 2026"
+    assert meta({**old, "source": "TechCrunch"}) == "TechCrunch · Press · 24 Oct 2026"
 
 
 # ---------- the live site ----------

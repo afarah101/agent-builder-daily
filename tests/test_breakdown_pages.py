@@ -89,7 +89,9 @@ def test_current_shape_restyled_keeps_text():
     new = gb.restyle_page(CURRENT_SHAPE)
     assert new and not OLD.search(new) and "url(../logo.svg)" in new
     assert '<h1 class="page-title">Edge AI &amp; robots</h1>' in new
-    assert '<p class="meta-line">Ars Technica · 2026-10-01 · Generated 01 Oct 2026, 09:00</p>' in new
+    assert '<p class="meta-line">Ars Technica\u00a0· 1\u00a0Oct\u00a02026</p>' in new  # who · date; the stamp is in the note
+    assert '<p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 01 Oct 2026, 09:00</p>' in new
+    assert gb.restyle_page(new) == new  # the current shape round-trips
     assert '<p>Latency (&lt;10 ms).</p><p>Second para.</p>' in new
     assert '<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">Data residency.</div>' in new
     assert 'href="https://example.test/story?a=1&amp;b=2"' in new
@@ -118,7 +120,6 @@ def test_committed_page_round_trips(path):
 
 def test_archive_page_has_new_design():
     html = (ROOT / "site" / "archive.html").read_text()
-    assert '<meta http-equiv="refresh" content="0; url=/">' in html and '<a class="cta" href="/">' in html
+    assert "http-equiv" not in html and '<h1 class="hero-title">Archive</h1>' in html  # the archive page, not a redirect
     assert gh.font_links() in html and gh.TOKENS_CSS in html and 'src="logo.svg"' in html
-    assert "background: var(--g-hero)" in html and "font-size: var(--fs-body)" in html
-    assert html.count("min-height: var(--tap)") == 2 and not OLD.search(html)  # the logo link and the button
+    assert "background: var(--g-hero)" in html and "font-size: var(--fs-body)" in html and not OLD.search(html)

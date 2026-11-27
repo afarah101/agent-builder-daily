@@ -13,10 +13,12 @@ from datetime import datetime, timedelta
 from groq import Groq
 
 import quality_checks
-from generate_html import TOKENS_CSS, font_faces, font_links, topic_tag  # the one font set and token block
+# the one font set and token block, and the tag, meta and label rules the cards use
+from generate_html import (DEFAULT_TAG, HOW_LABEL, HOW_LABELS, KIND_TAG, TOKENS_CSS, canonical_tag, clean_meta, font_faces,
+                           font_links, meta_text)
 
 OUTPUT_DIR = "site/breakdowns"
-SHORT = " (short version)"  # ends the "Generated" stamp of a page made without Groq; a later run replaces that page
+SHORT = " (short version)"  # ends the "generated" note of a page made without Groq; a later run replaces that page
 HELD = " (source-checked short version)"  # the AI page failed the grounding checks twice: this page is not replaced
 SOURCE_CAP = 4000  # characters of source text sent with a page prompt
 
@@ -242,10 +244,12 @@ def summary_block_html(paras):
 
 
 def guide_block_html(label, color, text):
-    """One guide block. Label, colour and text are all escaped; the colour only ever picks a CSS class."""
+    """One guide block. Label, colour and text are all escaped; the colour only ever picks a CSS class.
+    "How to use", "Do this week" and "What to do" all show as "How to apply", the label the cards use."""
     color_class = f" {color}" if color in ("green", "amber", "red") else ""
+    label = HOW_LABEL if str(label).strip().rstrip(":").lower() in HOW_LABELS else label.capitalize()
     return (f'<div class="guide-block{color_class}">'
-            f'<h3 class="guide-label">{escape(label.capitalize())}</h3>'
+            f'<h3 class="guide-label">{escape(label)}</h3>'
             f'<div class="guide-text">{escape(text)}</div>'
             f'</div>')
 
@@ -472,14 +476,9 @@ ARTICLE_CSS = """*, *::before, *::after { box-sizing: border-box; margin: 0; pad
       footer { padding: var(--s-16); }
     }"""
 
-DEFAULT_TAG = "Breakdown"  # a page whose story is in no data file
-KIND_TAG = {"case_studies": "Case study", "news": "News"}
-
-
 def tag_for(item, kind):
-    """The page's tag: the topic on the story's card, or the kind of story when the topic is "Other"."""
-    topic = topic_tag(item.get("relevance_tag" if kind == "case_studies" else "category"))
-    return KIND_TAG[kind] if topic == "Other" else topic
+    """The page's tag: the canonical tag on the story's card (the kind of story when it has no known topic)."""
+    return canonical_tag(item.get("relevance_tag" if kind == "case_studies" else "category"), kind)
 
 
 def article_figure(slug, directory=OUTPUT_DIR):
@@ -498,9 +497,10 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
                           tag="", figure=""):
     """The page frame, in magazine order: tag, H1, meta, image, summary, "How to apply" panel, source button, back link.
     title, url, meta_line, generated_at and tag are raw text and are escaped here; summary_html and guide_html come
-    from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure."""
-    title, meta_line, generated_at = escape(str(title)), escape(str(meta_line)), escape(str(generated_at))
-    tag = escape(str(tag or DEFAULT_TAG))
+    from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure.
+    The tag is one of the canonical tags and the meta line is "who · source type · date", as on the story's card."""
+    title, meta_line, generated_at = escape(str(title)), escape(clean_meta(meta_line)), escape(str(generated_at))
+    tag = escape(canonical_tag(tag))
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -527,7 +527,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   <div class="article-head">
     <p class="tag-pill">{tag}</p>
     <h1 class="page-title">{title}</h1>
-    <p class="meta-line">{meta_line} · Generated {generated_at}</p>
+    <p class="meta-line">{meta_line}</p>
   </div>
 </header>
 <main class="content">
@@ -542,7 +542,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
       <h2 class="section-title">How to apply</h2>
       <div class="guide-grid">{guide_html}</div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · {generated_at}</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· {generated_at}</p>
     <div class="article-actions">
       {source_link_html(url)}
       <a class="back-link" href="../index.html">← Back to today</a>
@@ -550,19 +550,21 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   </article>
 </main>
 <footer>
-  <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="../privacy.html">Privacy</a></span>
-  <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
+  <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="../privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
 </footer>
 </body>
 </html>"""
 
 
-# Old and current page shapes: meta line and generated note as <div> or <p>, guide labels as <div> or <h3>.
+# Old and current page shapes: meta line and generated note as <div> or <p>, guide labels as <div> or <h3>; the
+# "Generated" stamp at the end of the meta line (old) or only in the generated note (current).
 STORED = re.compile(
     r'<h1 class="page-title">(?P<title>.*?)</h1>.*?'
     r'<(?:div|p) class="meta-line">(?P<meta>.*?)</(?:div|p)>(?P<between>.*?)'
     r'<div class="summary-body">(?P<summary>.*?)</div>\s*(?:</section>\s*)?<div class="divider">.*?'
-    r'<div class="guide-grid">(?P<guide>.*?)</div>\s*(?:</section>\s*)?<(?:div|p) class="generated-note">', re.S)
+    r'<div class="guide-grid">(?P<guide>.*?)</div>\s*(?:</section>\s*)?<(?:div|p) class="generated-note">'
+    r'(?P<note>.*?)</(?:div|p)>', re.S)
 SOURCE = re.compile(r'<a href="(?P<url>[^"]*)"[^>]*class="source-link">')
 TAG = re.compile(r'<p class="tag-pill">(?P<tag>.*?)</p>')
 FIGURE = re.compile(r'<figure class="article-figure">.*?</figure>', re.S)
@@ -584,6 +586,8 @@ def restyle_page(old_html, tag="", figure=None):
     if not m:
         return None
     meta, sep, generated_at = stored_text(m["meta"]).rpartition(" · Generated ")
+    if not sep:  # the current shape: the stamp is in the generated note only
+        meta, (_, sep, generated_at) = stored_text(m["meta"]), stored_text(m["note"]).replace("\u00a0", " ").rpartition(" · ")
     blocks = list(STORED_BLOCK.finditer(m["guide"]))
     if not sep or len(blocks) != m["guide"].count('class="guide-block'):
         return None
@@ -658,14 +662,9 @@ def source_dated(item, kind):
 
 
 def meta_line_for(item, kind):
-    """Authors · institution · date for a case study; source · date for news. The date is the source's own or none."""
-    pub = str(item.get("pub_date") or "") if source_dated(item, kind) else ""
-    pub = pub[:10] if re.match(r"\d{4}-\d\d-\d\d", pub) else pub.strip()  # news dates ("26 Nov 2026") stay whole
-    if kind == "case_studies":
-        parts = [", ".join(item.get("authors") or []) or "Unknown", item.get("institution", ""), pub]
-    else:
-        parts = [item.get("source", ""), pub]
-    return " · ".join(str(p) for p in parts if p)
+    """The card's meta line: the first 2 authors + "et al." or the source, the source type, the date. The date is the
+    source's own or none (source_dated)."""
+    return meta_text(item if source_dated(item, kind) else {**item, "pub_date": ""}, kind)
 
 
 NO_SUMMARY = "No source-checked summary is stored for this story. Read the original for the detail."
@@ -694,8 +693,10 @@ def short_content(item, kind):
 
 
 def is_short_page(path):
-    """True for a page made by short_content: its "Generated" stamp ends with SHORT."""
-    return bool(re.search(r'class="meta-line">[^<]*' + re.escape(escape(SHORT)) + "</p>", Path(path).read_text(encoding="utf-8")))
+    """True for a page made by short_content: its "generated" stamp ends with SHORT (in the generated note; in the
+    meta line on a page of the old shape)."""
+    return bool(re.search(r'class="(?:meta-line|generated-note)">[^<]*' + re.escape(escape(SHORT)) + "</(?:p|div)>",
+                          Path(path).read_text(encoding="utf-8")))
 
 
 HELD_BACK = []  # (title, reason) for every AI page held back in this process
@@ -852,8 +853,8 @@ def scan_page(path, index, strict=True):
         problems = ["placeholder text: " + ", ".join(found)] if found else []
     if quality_checks.is_listing_url(url):
         problems.append(f"source URL is a listing page: {url}")
-    shown = meta.rpartition(" · Generated ")[0]
-    if not source_dated(item, kind) and re.search(r"\d", shown.rpartition(" · ")[2]):
+    shown = meta.rpartition(" · Generated ")[0] or meta  # an old page has the stamp in its meta line
+    if not source_dated(item, kind) and re.search(r"\d", shown.replace("\u00a0", " ").rpartition(" · ")[2]):
         problems.append("the date shown is the day of the scrape, not the source's publish date")
     return problems
 
@@ -866,42 +867,63 @@ def scan_pages(directory=OUTPUT_DIR, index=None, strict=True):
     return len(pages), failures
 
 
-def fix_pages(failures, directory=OUTPUT_DIR, index=None, keep=()):
-    """Each failed page is re-rendered or removed. Re-rendered: the story is in a data file, its URL is an article, and
-    its stored summary passes the checks (or its slug is in keep: a card links to it), so the page becomes the
-    source-checked short version. Removed: every other page. Returns (re-rendered names, removed names)."""
+WITHDRAWN = " (withdrawn)"  # ends the "generated" note of a page whose text was taken down by fix_pages
+WITHDRAWN_NOTE = ("This breakdown was withdrawn. It was written without the source text, and it did not pass the source "
+                  "check. Read the original for the detail.")
+
+
+def fix_pages(failures, directory=OUTPUT_DIR, index=None, delete=False):
+    """Each failed page is re-rendered, withdrawn or removed. Returns (re-rendered, withdrawn, removed) file names.
+    Removed: the source URL is a listing page (a list of stories is not a story), or the page has an unknown shape.
+    Re-rendered: the story is in a data file, so the page becomes the short version of its stored text, and stored text
+    that fails the checks is left out (short_content). A later run with Groq replaces a short page of a shown card.
+    Withdrawn: the story is in no data file, so no claim on the page can be checked. The page keeps its address, its
+    title and its link to the original, and WITHDRAWN_NOTE takes the place of its text. delete=True removes it."""
     index = story_index() if index is None else index
     generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
-    rendered, removed = [], []
+    rendered, withdrawn, removed = [], [], []
     for name in sorted(failures):
         path, slug = Path(directory) / name, name[:-5]
-        item, kind = index.get(slug, (None, None))
-        usable = item and not quality_checks.is_listing_url(item.get("url")) and (
-            slug in keep or (str(item.get("summary") or "").strip() and not page_problems(item.get("summary"), "", item)))
-        if not usable:
+        html = path.read_text(encoding="utf-8")
+        parts, (item, kind) = page_text(html), index.get(slug, (None, None))
+        listing = quality_checks.is_listing_url(item.get("url") if item else parts[3] if parts else "")
+        if parts is None or listing or (delete and not item):
             path.unlink()
             removed.append(name)
-            continue
-        summary_html, guide_html = short_content(item, kind)
-        path.write_text(render_breakdown_page(item.get("title") or "Untitled", slug, item.get("url", ""), "", summary_html,
-                                              guide_html, meta_line_for(item, kind), generated_at + SHORT,
-                                              tag=tag_for(item, kind), figure=article_figure(slug, directory)), encoding="utf-8")
-        rendered.append(name)
-    return rendered, removed
+        elif item:
+            summary_html, guide_html = short_content(item, kind)
+            path.write_text(render_breakdown_page(item.get("title") or "Untitled", slug, item.get("url", ""), "", summary_html,
+                                                  guide_html, meta_line_for(item, kind), generated_at + SHORT,
+                                                  tag=tag_for(item, kind), figure=article_figure(slug, directory)), encoding="utf-8")
+            rendered.append(name)
+        else:
+            title, _, _, url, meta = parts
+            meta = (meta.rpartition(" · Generated ")[0] or meta).replace("\u00a0", " ")
+            if meta.split(" · ")[0] in SCRAPED_SOURCES:  # that date was the day of the scrape
+                meta = " · ".join(p for p in meta.split(" · ") if not re.search(r"\d{4}", p))
+            tag = TAG.search(html)
+            path.write_text(render_breakdown_page(title, slug, url, "", summary_block_html([WITHDRAWN_NOTE]),
+                                                  guide_block_html(HOW_LABEL, "", NO_HOW_TO), meta, generated_at + WITHDRAWN,
+                                                  tag=stored_text(tag["tag"]) if tag else "", figure=article_figure(slug, directory)),
+                            encoding="utf-8")
+            withdrawn.append(name)
+    return rendered, withdrawn, removed
 
 
-def scan_main(fix=False):
-    """--scan: list every page that fails. --scan --fix: also re-render or remove each one, then scan again."""
+def scan_main(fix=False, delete=False):
+    """--scan: list every page that fails. --scan --fix: also re-render, withdraw or remove each one, then scan again.
+    --scan --fix --delete: remove a page that --fix alone withdraws."""
     index = story_index()
     checked, failures = scan_pages(index=index)
     print(f"Scanned {checked} pages: {len(failures)} fail the grounding checks.")
     for name, problems in failures.items():
         print(f"FAIL {name}: {' | '.join(problems)[:300]}")
     if fix and failures:
-        slug_map = json.loads((Path(OUTPUT_DIR) / "slug_map.json").read_text()) if (Path(OUTPUT_DIR) / "slug_map.json").exists() else {}
-        keep = {slug for group in slug_map.values() for slug in group.values()}  # the cards on the home page
-        rendered, removed = fix_pages(failures, index=index, keep=keep)
-        print(f"Re-rendered {len(rendered)} pages as the source-checked short version; removed {len(removed)} pages.")
+        rendered, withdrawn, removed = fix_pages(failures, index=index, delete=delete)
+        print(f"Re-rendered {len(rendered)} pages as the source-checked short version; withdrew the text of {len(withdrawn)} pages; "
+              f"removed {len(removed)} pages.")
+        for name in withdrawn:
+            print(f"WITHDRAWN {name}")
         for name in removed:
             print(f"REMOVED {name}")
         checked, failures = scan_pages(index=index)
@@ -928,7 +950,7 @@ def main():
 
 if __name__ == "__main__":
     if "--scan" in sys.argv:  # check every live page against its stored source: no Groq call
-        sys.exit(1 if scan_main(fix="--fix" in sys.argv)[1] else 0)
+        sys.exit(1 if scan_main(fix="--fix" in sys.argv, delete="--delete" in sys.argv)[1] else 0)
     elif "--restyle" in sys.argv:  # re-frame existing pages only: no Groq call
         done, skipped = restyle_existing_pages(tags=known_tags())
         print(f"Restyled {done} pages; skipped {len(skipped)} with an unknown shape: {skipped}")
