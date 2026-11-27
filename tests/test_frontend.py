@@ -146,7 +146,9 @@ def test_main_page_escapes_ai_fields():
     html += gh.render_news({"news": [{"title": "N", "url": "https://n.test", "summary": HOSTILE, "enterprise_use": HOSTILE,
                                       "source": HOSTILE, "category": HOSTILE, "relevance_score": HOSTILE}]}, {"news": {}})
     html += gh.render_archive([{"date": "d", "total": 1, "case_studies": [{"title": HOSTILE, "url": "javascript:x"}]}])
-    assert "<script>" not in html and "<img" not in html and "javascript:" not in html
+    covers = re.findall(r'<figure class="card-figure"><img src="[^"<>]*" loading="lazy" width="1200" height="675" alt=""></figure>', html)
+    assert len(covers) == 2  # each card shows its cover; no other <img> is on the page
+    assert "<script>" not in html and html.count("<img") == 2 and "javascript:" not in html
 
 
 def test_daily_hook_is_escaped(site):
@@ -500,7 +502,8 @@ def test_hostile_build_has_no_injected_markup(site):
     feed = (site / "site" / "feed.xml").read_text()
     tags, handlers = parsed(page)
     assert tags.count("script") == 2 and handlers == []  # the page's own two scripts only
-    assert tags.count("img") == 1 and page.count('<img class="brand-logo" src="logo.svg"') == 1  # the logo, nothing injected
+    covers = page.count('<figure class="card-figure"><img src="')  # one cover on each card
+    assert covers >= 2 and tags.count("img") == 1 + covers and page.count('<img class="brand-logo" src="logo.svg"') == 1  # nothing injected
     assert "javascript:" not in page.lower() and "javascript:" not in feed.lower() and "<script" not in feed and "<img" not in feed
 
 
@@ -595,7 +598,7 @@ def test_non_lead_cards_clamp_summary_and_insight_to_3_lines(site):
     assert re.search(r"-webkit-line-clamp:\s*3;", rule.group(1)) and "overflow: hidden" in rule.group(1)
 
 
-# ---------- AI editorial images: markup only when the file exists, non-empty alt, caption ----------
+# ---------- AI editorial images: the AI image when its file exists (non-empty alt, caption), else the cover ----------
 
 import generate_images as gi
 
@@ -609,18 +612,20 @@ def with_image(site, title, alt="Indigo cubes linked by thin light rails"):
     return slug
 
 
-def test_card_shows_the_image_only_when_its_file_exists(site):
+def test_card_shows_the_ai_image_when_its_file_exists_else_a_cover(site):
     plain = cards(study(title="Paper"))
-    assert "<figure" not in plain and "images/" not in plain
+    assert plain.count("<figure") == 1 and "images/paper.webp" not in plain  # the cover: decoration, no caption
+    assert 'alt=""></figure>' in plain and "<figcaption" not in plain
     news_plain = gh.render_news({"news": [{"title": "Story"}]}, {"news": {}})
-    assert "<figure" not in news_plain
+    assert news_plain.count("<figure") == 1 and "images/story.webp" not in news_plain
     slug = with_image(site, "Paper")
     with_img = cards(study(title="Paper"))
     assert f'<img src="images/{slug}.webp" loading="lazy" width="1200" height="675"' in with_img
     assert with_img.index("<figure") < with_img.index('<div class="card-header">')  # at the top of the card
-    assert with_img.replace(gi.image_figure("Paper"), "") == plain  # no other change to the card
+    no_figure = lambda html: re.sub(r"<figure.*?</figure>", "", html)
+    assert with_img.count("<figure") == 1 and no_figure(with_img) == no_figure(plain)  # no other change to the card
     with_image(site, "Story")
-    assert "<figure" in gh.render_news({"news": [{"title": "Story"}]}, {"news": {}})
+    assert "images/story.webp" in gh.render_news({"news": [{"title": "Story"}]}, {"news": {}})
 
 
 @pytest.mark.parametrize("alt", ["Indigo cubes linked by thin light rails", "", "   "])
@@ -645,6 +650,7 @@ def test_image_css_uses_the_card_radius():
 def test_image_generation_is_off_unless_enabled(monkeypatch, capsys):
     monkeypatch.delenv("IMAGE_GEN_ENABLED", raising=False)
     monkeypatch.setattr(gi, "run", lambda **kw: pytest.fail("run() must not start when disabled"))
+    monkeypatch.setattr(gi, "top_items", lambda: [])  # no card: the covers of the real site stay as they are
     assert gi.main([]) == 0
     assert "0 API calls" in capsys.readouterr().out
 
