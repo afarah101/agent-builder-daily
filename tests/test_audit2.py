@@ -353,3 +353,20 @@ def test_privacy_notice_has_portability_object_and_the_transfer_text():
             "that purpose. You do not have to give a reason.") in page
     assert ("Google may process data outside the UK. Google protects these transfers with the safeguards in its data "
             "processing terms, including the UK International Data Transfer Addendum. Email us for a copy.") in page
+
+
+def test_a_page_the_meaning_check_could_not_read_is_named_in_the_run_log(monkeypatch, capsys):
+    """A quota error leaves a page unchecked. The page still goes out (the number check ran), and the run says so."""
+    monkeypatch.setattr(judge, "meaning_check", lambda batch: {})  # 429 on every model
+    pages = [(story("One"), "Megaspeed is accused.", "Check contracts."), (story("Two"), "Megaspeed is accused.", "")]
+    assert gb.meaning_check(pages) == [[], []]
+    out = capsys.readouterr().out
+    assert "[MEANING] NOT CHECKED for 2 of 2 pages (no labels came back): One; Two." in out
+    assert "The number check and the judge still ran." in out
+
+
+def test_a_page_the_check_did_read_is_not_named(monkeypatch, capsys):
+    monkeypatch.setattr(judge, "meaning_check",
+                        lambda batch: {it["id"]: [{"label": "SUPPORTED", "reason": ""}] * len(it["sentences"]) for it in batch})
+    assert gb.meaning_check([(story("One"), "Megaspeed is accused.", "Check contracts.")]) == [[]]
+    assert "NOT CHECKED" not in capsys.readouterr().out

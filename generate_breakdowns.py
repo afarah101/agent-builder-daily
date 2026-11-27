@@ -184,7 +184,11 @@ def meaning_check(pages):
         labels = judge.meaning_check(batch)
     except Exception as e:  # the meaning check must never stop the pages
         print(f"    [MEANING] check skipped: {type(e).__name__}: {str(e)[:120]}")
-        return [[] for _ in pages]
+        labels = {}
+    missed = [it["title"][:60] for it in batch if it["id"] not in labels]
+    if missed:  # a quota error or an unreadable answer: say which pages went out without the meaning check
+        print(f"    [MEANING] NOT CHECKED for {len(missed)} of {len(batch)} pages (no labels came back): "
+              f"{'; '.join(missed[:5])}{' ...' if len(missed) > 5 else ''}. The number check and the judge still ran.")
     return [judge.meaning_problems(labels.get(it["id"]), it["sentences"]) for it in batch]
 
 
