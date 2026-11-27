@@ -891,13 +891,14 @@ def generate_html():
     .cards-grid {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: 24px;
+      gap: 32px 24px;
     }
 
     /* Lead story + grid: the first card spans 2 columns (and 2 rows above 1024px) */
     @media (min-width: 641px) {
       .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .cards-grid > .card:first-child { grid-column: span 2; }
+      .cards-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
     }
 
     @media (min-width: 1025px) {
@@ -916,18 +917,13 @@ def generate_html():
       .cards-grid > .card:nth-child(4n+6):last-child { grid-column: 1 / -1; }
     }
 
-    .card {
-      background: var(--c-bg);
-      border: 1px solid var(--c-border);
-      border-radius: var(--radius-card);
-      padding: 24px;
-      min-width: 0;
-    }
+    /* Cards follow the benchmark (therundown.ai, read live): no box. No border, no radius, no padding;
+       the grid gap separates them. Only the image has a radius. */
+    .card { min-width: 0; }
 
     /* The whole card is one tap target: the title link stretches over it */
     .card { position: relative; }
     .card-link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-card); }
-    .card:has(.card-link:hover) { border-color: var(--c-text); }
     .card-link:focus-visible { outline: none; }
     .card-link:focus-visible::after { outline: 2px solid var(--c-text); outline-offset: 2px; }
 
@@ -959,7 +955,7 @@ def generate_html():
 
     /* Card content */
     .card-title {
-      font-size: var(--fs-h4);
+      font-size: var(--fs-lead);
       font-weight: 700;
       letter-spacing: var(--ls-head);
       line-height: var(--lh-snug);
@@ -1112,7 +1108,6 @@ def generate_html():
       .tab { padding: 8px 12px; }
       .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
       .search { width: 100%; }
-      .card { padding: 16px; }
       .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
       .archive-date, .archive-count { line-height: var(--lh-small); }
       .group-title { margin: var(--s-32) 0 var(--s-16); }
