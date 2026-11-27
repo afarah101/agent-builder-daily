@@ -10,6 +10,7 @@ from generate_images import image_figure  # the <figure> of every card: its AI i
 CASE_STUDIES_DIR = "case_studies"
 NEWS_DIR = "data/news"
 OUTPUT_FILE = "site/index.html"
+ARCHIVE_PAGE = "site/archive.html"  # every past day; the home page links to it
 ARCHIVE_CS_FILE = "case_studies/archive.json"
 ARCHIVE_NEWS_FILE = "data/news_archive.json"
 SLUG_MAP_FILE = "site/breakdowns/slug_map.json"
@@ -280,14 +281,161 @@ GRADE_WORD = re.compile(r"relevan|score|novelty|impact|signal", re.I)
 GRADE_ONLY = re.compile(r"(very |highly )?(low|medium|moderate|high|n/?a|none)", re.I)
 
 def topic_tag(tag):
-    """The topic to show on a card. A relevance or score label never shows: it becomes "Other"."""
+    """The raw topic of a story. A relevance or score label never shows: it becomes "Other"."""
     tag = str(tag or "Other").strip()
     if "_" in tag:  # raw snake_case from the scorer
         tag = tag.replace("_", " ").capitalize()
     return "Other" if not tag or GRADE_WORD.search(tag) or GRADE_ONLY.fullmatch(tag) else tag
 
-def tag_pill(tag):
-    return f'<span class="tag-pill">{esc(topic_tag(tag))}</span>'
+
+# One short tag list for every card and every breakdown page (3 words at most). A raw tag from the scorer is free
+# text ("LLM deployment / API optimisation"), so it is mapped to one of these, never cut with "…".
+KIND_TAG = {"case_studies": "Case Study", "news": "News"}  # a story with no topic shows its kind
+DEFAULT_TAG = "Breakdown"  # a page whose story is in no data file
+TAG_RULES = (  # first match wins
+    ("Security", r"secur|vulnerab|cyber|safety|deception|threat|attack|privacy|watermark|malware|phishing"),
+    ("AI Agents", r"\bagent|agentic"),
+    ("Policy", r"regulat|polic(?:y|ies)|governance|compliance|oversight|legal|\blaw"),
+    ("Funding", r"funding|investment|acquisition|valuation|\bipo\b"),
+    ("BI & Data", r"\bbi\b|business intelligence|database|data engineering|data stack|analytics|\bsql\b|\betl\b|time series"),
+    ("Infrastructure", r"(?<!non-)infrastructure|data ?cent(?:er|re)|\bgpu|hardware|cloud|\bedge\b|\bhpc\b|energy|power|\bchip|on-prem"),
+    ("LLM Ops", r"llm|mlops|deploy|serving|inference|pruning|compression|fine-?tun|prompt|\brag\b|monitoring|\bmodel"),
+    ("Computer Vision", r"vision|image|video|spatial"),
+    ("Healthcare AI", r"health|medical|clinical"),
+    ("NLP", r"\bnlp\b|language|\btext|translation|speech"),
+    ("Automation", r"automat|control|robot|workflow"),
+    ("Product Launch", r"launch|product"),
+    ("Model Release", r"release"),
+    ("Tools", r"\btool|\bapi\b|\bsdk\b|library|framework|software|\bcod(?:e|ing)\b|devops|documentation|migration"),
+    ("Research", r"research|benchmark|dataset|\bstud(?:y|ies)\b|paper|academic|uncertainty|learning|reasoning|evaluation"),
+)
+CANONICAL_TAGS = tuple(name for name, _ in TAG_RULES) + tuple(KIND_TAG.values()) + (DEFAULT_TAG,)
+
+
+def canonical_tag(tag, kind=None):
+    """The one tag a story shows, always from CANONICAL_TAGS. kind: "case_studies" or "news"; a story with no known
+    topic shows its kind. A list of topics ("NLP, MLOps") takes its first topic that is known."""
+    fallback = KIND_TAG.get(kind, DEFAULT_TAG)
+    topic = topic_tag(tag)
+    if topic == "Other":
+        return fallback
+    for name in CANONICAL_TAGS:
+        if topic.lower() == name.lower():
+            return name
+    for part in [*re.split(r"[,/;&]", topic), topic]:
+        for name, pattern in TAG_RULES:
+            if re.search(pattern, part, re.I):
+                return name
+    return fallback
+
+
+def tag_pill(tag, kind=None):
+    return f'<span class="tag-pill">{esc(canonical_tag(tag, kind))}</span>'
+
+
+# ---------- Meta line: who · source type · date, the same on a card and on its breakdown page ----------
+SOURCE_TYPES = {"ai_labs": "AI Lab", "consulting": "Consulting", "news": "Press", "universities": "Academic"}
+NBSP = "\u00a0"
+
+
+def short_names(names):
+    """The first 2 names of a list, then "et al." ("A, B et al."). One or two names stay as they are."""
+    names = [str(n).strip() for n in (names or []) if str(n).strip()]
+    return ", ".join(names[:2]) + (" et al." if len(names) > 2 else "")
+
+
+def show_date(value):
+    """A date as "5 Nov 2026" whatever format it is stored in; an unknown format shows as it is."""
+    iso = parse_date(value)
+    if not iso:
+        return str(value or "").strip()[:20]
+    day = datetime.strptime(iso, "%Y-%m-%d")
+    return f"{day.day} {day:%b %Y}"
+
+
+def meta_parts(item, kind):
+    """(who, [source type, date]) of a story: the source for news, the first 2 authors for a case study."""
+    if kind == "news":
+        who = str(item.get("source") or "").strip()
+        kind_label = SOURCE_TYPES.get(item.get("tier", "news"), "")
+    else:
+        who = short_names(item.get("authors"))
+        kind_label = "Video" if item.get("source_type") == "youtube_agent" else ""
+    return who, [x for x in (kind_label, show_date(item.get("pub_date"))) if x]
+
+
+def join_meta(who, rest):
+    """The meta line as text. A no-break space stands before each "·", so a line never starts with one."""
+    return f"{NBSP}· ".join(x.replace(" ", NBSP) if n else x for n, x in enumerate([who, *rest]) if x)
+
+
+def meta_text(item, kind):
+    return join_meta(*meta_parts(item, kind))
+
+
+def clean_meta(meta):
+    """A stored meta line in the current form: the source or the first 2 authors + "et al.", the source type, the date
+    as "5 Nov 2026". An institution and the "Unknown" placeholder are left out. Text in the current form does not change."""
+    parts = [x.strip() for x in str(meta or "").replace(NBSP, " ").split("·") if x.strip()]
+    date = show_date(parts.pop()) if parts and parse_date(parts[-1]) else ""
+    who = parts[0] if parts and parts[0] not in ("Unknown", "Unknown authors") else ""
+    if who.count(", ") > 1 and not who.endswith("et al."):
+        who = short_names(who.split(", "))
+    kinds = [x for x in parts[1:] if x in (*SOURCE_TYPES.values(), "Video")]
+    return join_meta(who, [*kinds[:1], date])
+
+
+def card_meta(item, kind):
+    """One line: the name can shrink (CSS cuts it), the source type and the date always show."""
+    who, rest = meta_parts(item, kind)
+    sep = f"{NBSP}·{NBSP}"
+    tail = (sep if who and rest else "") + sep.join(esc(x) for x in rest)
+    who_html = f'<span class="meta-who">{esc(who)}</span>' if who else ""
+    rest_html = f'<span class="meta-rest">{tail}</span>' if tail else ""
+    return f'<p class="card-meta">{who_html}{rest_html}</p>'
+
+
+# ---------- Card text: a short summary and one "How to apply" line. The full text is on the breakdown page ----------
+HOW_LABEL = "How to apply"
+HOW_LABELS = ("how to use", "do this week", "what to do", "how to apply")  # old labels: all show as HOW_LABEL
+ABBREVIATION = re.compile(r"(?:\b(?:e\.g|i\.e|vs|etc|dr|mr|mrs|ms|inc|ltd|co|no|fig|approx|st)|\b[A-Za-z](?:\.[A-Za-z])*)$", re.I)
+
+
+def sentences(text, limit):
+    """The first `limit` full sentences of a text. "U.S." and "e.g." end no sentence."""
+    text = " ".join(str(text or "").split())
+    taken = 0
+    for m in SENTENCE_END.finditer(text):
+        dot = m.start()
+        nxt = text[m.end():].lstrip()[:1]
+        if text[dot] == "." and (ABBREVIATION.search(text[:dot]) or (nxt and not (nxt.isupper() or nxt.isdigit() or nxt in "\"'\u201c\u2018(["))):
+            continue
+        taken += 1
+        if taken == limit:
+            return text[:m.end()]
+    return text
+
+
+def how_to_apply(item, kind):
+    """The first sentence of the story's how-to text: "Do this week" for news, the IT breakdown for a case study.
+    "" when there is none or the model said it does not apply."""
+    if kind == "news":
+        points = signal_points(str(item.get("enterprise_use") or ""))
+        text = points[0][1] if points else ""
+    else:
+        text = str(item.get("it_breakdown") or item.get("how_to_apply") or "")
+    if not text or any(p in text.lower() for p in NOT_APPLICABLE):
+        return ""
+    return sentences(re.sub(r"^\s*(?:\d+[.)]|[-\u2022*])\s*", "", text), 1)
+
+
+NOT_APPLICABLE = ("not applicable", "not directly applicable")
+
+
+def insight_html(text):
+    """The card's one "How to apply" line (CSS keeps it to one line); nothing when there is no text."""
+    return f'<p class="insight"><strong>{HOW_LABEL}:</strong> {esc(text)}</p>' if text else ""
+
 
 def score_ring(score, max_score=75):
     """Not shown on the page (scores are hidden); kept because tests/test_phase0e.py checks the 0-75 scale.
@@ -300,33 +448,9 @@ def score_ring(score, max_score=75):
     return (f'<span class="score-ring score-{level}" style="--pct:{pct};" title="{legend}" '
             f'aria-label="Scout score {score} of {max_score}">{score}/{max_score}</span>')
 
-def tier_label(tier):
-    labels = {"ai_labs": "AI Lab", "consulting": "Consulting", "news": "Press", "universities": "Academic"}
-    return f'<span class="tier-label">{esc(labels.get(tier, tier))}</span>'
-
 def eval_status(cs):
     """eval_verdict (the judge) first, then the Gemini field; anything not pass/fail is still pending."""
     return next((s for s in (cs.get("eval_verdict"), cs.get("gemini_eval_status")) if s in ("pass", "fail")), "pending")
-
-NOT_APPLICABLE = ("not applicable", "not directly applicable")
-
-def insight_html(label, text):
-    """'How to apply' line, left out when empty or when the model said it does not apply."""
-    if not text or any(p in str(text).lower() for p in NOT_APPLICABLE):
-        return ""
-    return f'<p class="insight"><strong>{label}</strong> {esc(text)}</p>'
-
-def signal_html(text):
-    """News 'How to use': 'S1: … S2: … S3: …' becomes three headed bullets, as in the email; no S-label survives."""
-    if not text or any(p in str(text).lower() for p in NOT_APPLICABLE):
-        return ""
-    points = signal_points(str(text))
-    if not points:
-        return ""
-    if points[0][0] is None:  # labels missing or out of order: one plain line
-        return insight_html("How to use:", points[0][1])
-    lis = "".join(f"<li><strong>{esc(h)}:</strong> {esc(t)}</li>" for h, t in points)
-    return f'<ul class="signal-points">{lis}</ul>'
 
 def card_title(title, slug):
     """The card's one link: the title, stretched over the whole card by .card-link::after, opens the breakdown page.
@@ -335,69 +459,37 @@ def card_title(title, slug):
         return f'<h2 class="card-title">{title}</h2>'
     return f'<h2 class="card-title"><a class="card-link" href="breakdowns/{esc(slug)}.html">{title}</a></h2>'
 
+def card_html(item, kind, slug):
+    """One card, the same format for a case study and for news: image, tag, title (the card's one link), who · date,
+    a short summary, one "How to apply" line."""
+    default = "Untitled" if kind == "case_studies" else ""
+    css = "cs-card" if kind == "case_studies" else "news-card"
+    # no caption on a card: one line in the page footer says that the images are AI-generated
+    figure = image_figure(item.get("title", default)).replace("<figcaption>AI illustration</figcaption>", "")
+    return f"""<article class="card {css}">
+  {figure}<div class="card-header">
+    <div class="card-tags">{tag_pill(item.get("relevance_tag" if kind == "case_studies" else "category"), kind)}</div>
+  </div>
+  {card_title(esc(item.get("title", default)), slug)}
+  {card_meta(item, kind)}
+  <p class="card-summary">{esc(sentences(item.get("summary"), 2))}</p>
+  {insight_html(how_to_apply(item, kind))}
+</article>"""
+
+
 def render_case_studies(data, slug_map):
     if not data or not data.get("case_studies"):
         return "<div class='empty-state'><p>No case studies available yet.</p></div>"
-    cs_slugs = slug_map.get("case_studies", {})
-    cards = []
-    for i, cs in enumerate(data["case_studies"]):
-        authors = esc(", ".join(cs.get("authors", [])) or "Unknown authors")
-        pub_raw = cs.get("pub_date", "")[:10]
-        try:
-            from datetime import datetime as dt
-            pub = dt.strptime(pub_raw, "%Y-%m-%d").strftime("%d %b %Y")
-        except:
-            pub = esc(pub_raw)
-        title = esc(cs.get("title", "Untitled"))
-        # Meta: drop the "Academic Institution" placeholder and a name repeated as its own institution
-        institution = esc(cs.get("institution", ""))
-        meta = [authors]
-        if institution and institution != "Academic Institution" and institution != authors:
-            meta.append(institution)
-        meta.append(f'<span class="pub-date">{pub}</span>')
-        if cs.get("source_type", "") == "youtube_agent":
-            meta.append("Video")
-        if cs.get("author_built_product", False):
-            meta.append("Author shipped a product")
-        meta_html = '<span class="sep" aria-hidden="true">·</span>'.join(f"<span>{m}</span>" for m in meta)
+    slugs = slug_map.get("case_studies", {})  # slug_map is keyed by the raw title
+    return "\n".join(card_html(cs, "case_studies", slugs.get(cs.get("title", "Untitled"))) for cs in data["case_studies"])
 
-        slug = cs_slugs.get(cs.get("title", "Untitled"))  # slug_map is keyed by the raw title
-
-        cards.append(f"""<article class="card cs-card">
-  {image_figure(cs.get("title", "Untitled"))}<div class="card-header">
-    <div class="card-tags">{tag_pill(cs.get("relevance_tag", "Other"))}</div>
-  </div>
-  {card_title(title, slug)}
-  <div class="card-meta">{meta_html}</div>
-  <p class="card-summary">{esc(cs.get('summary',''))}</p>
-  {insight_html("How to apply:", cs.get('it_breakdown','') or cs.get('how_to_apply',''))}
-</article>""")
-    return "\n".join(cards)
 
 def render_news(data, slug_map):
     if not data or not data.get("news"):
         return "<div class='empty-state'><p>No news available yet.</p></div>"
-    news_slugs = slug_map.get("news", {})
-    cards = []
-    for i, item in enumerate(data["news"]):
-        title = esc(item.get("title", ""))
-        slug = news_slugs.get(item.get("title", ""))  # slug_map is keyed by the raw title
-        meta = [esc(v) for v in (item.get('source', ''), item.get('pub_date', '')) if v]
-        meta_html = '<span class="sep" aria-hidden="true">•</span>'.join(f"<span>{m}</span>" for m in meta)
+    slugs = slug_map.get("news", {})
+    return "\n".join(card_html(item, "news", slugs.get(item.get("title", ""))) for item in data["news"])
 
-        cards.append(f"""<article class="card news-card">
-  {image_figure(item.get("title", ""))}<div class="card-header">
-    <div class="card-tags">
-      {tier_label(item.get("tier", "news"))}
-      {tag_pill(item.get("category", "Other"))}
-    </div>
-  </div>
-  {card_title(title, slug)}
-  <div class="card-meta">{meta_html}</div>
-  <p class="card-summary">{esc(item.get('summary',''))}</p>
-  {signal_html(item.get('enterprise_use',''))}
-</article>""")
-    return "\n".join(cards)
 
 def render_headlines(items):
     if not items:
@@ -406,17 +498,39 @@ def render_headlines(items):
         f'<p><a class="archive-title" href="{esc(safe_url(i.get("url")))}" target="_blank" rel="noopener noreferrer">{esc(i.get("title", ""))}</a> '
         f'<span class="pub-date">{esc(i.get("pub_date", ""))}</span></p>'
         for i in items[:3])
-    return f'<section class="signal">\n        <h2 class="signal-title">From McKinsey</h2>\n        {rows}\n    </section>'
+    return f'\n    <section class="signal">\n        <h2 class="signal-title">From McKinsey</h2>\n        {rows}\n    </section>'
 
 GROUP_MAX = 7  # Miller's law: at most 7 items in one group
+LEAD_ROW = 3  # the lead story and the 2 cards beside it: the first row
+MORE_TITLE = "More stories"
 
 
-def card_grids(cards_html, more_title):
-    """The cards in grids of at most GROUP_MAX, in equal parts (10 cards: 5 + 5). Each grid after the first has a heading."""
+def card_grids(cards_html, after_lead_row=""):
+    """The cards in groups of at most GROUP_MAX. The first group is the lead row (the lead story first, 2 cards beside
+    it) and one row of 4. after_lead_row (the news tab's signal blocks) goes below the lead row, never above the
+    lead story. Every later group starts with a "More stories" heading; those groups have equal sizes."""
     cards = re.split(r'\n(?=<article class="card )', cards_html)
-    size = -(-len(cards) // -(-len(cards) // GROUP_MAX))
-    grids = ['<div class="cards-grid">' + "\n".join(cards[n:n + size]) + "</div>" for n in range(0, len(cards), size)]
-    return f'\n    <h2 class="group-title">{esc(more_title)}</h2>\n    '.join(grids)
+    if "<article" not in cards_html:  # the empty state
+        return f'<div class="cards-grid">{cards_html}</div>{after_lead_row}'
+    first, rest = cards[:GROUP_MAX], cards[GROUP_MAX:]
+    html = '<div class="cards-grid lead-grid">' + "\n".join(first[:LEAD_ROW]) + "</div>" + after_lead_row
+    if first[LEAD_ROW:]:
+        html += '\n    <div class="cards-grid">' + "\n".join(first[LEAD_ROW:]) + "</div>"
+    if rest:
+        size = -(-len(rest) // -(-len(rest) // GROUP_MAX))
+        for n in range(0, len(rest), size):
+            html += (f'\n    <h2 class="group-title">{MORE_TITLE}</h2>\n    <div class="cards-grid">'
+                     + "\n".join(rest[n:n + size]) + "</div>")
+    return html
+
+
+def archive_link(anchor, text="Archive"):
+    return f'<a class="archive-link" href="archive.html#{anchor}">{esc(text)}</a>'
+
+
+def panel_foot(anchor, what):
+    """The foot of a tab: the one way to the older stories."""
+    return f'\n    <p class="panel-foot">{archive_link(anchor, f"Archive: older {what}")}</p>'
 
 
 def week_title(date_str):
@@ -511,6 +625,48 @@ def generate_rss(cs_data, news_data):
     with open("site/feed.xml", "w", encoding="utf-8") as f:
         f.write(rss)
     print("RSS feed generated -> site/feed.xml")
+
+
+PAGE_FOOTER = """<footer>
+  <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
+</footer>"""  # &nbsp; before each "·": a line never starts with one
+
+
+def archive_page(head, cs_archive, news_archive):
+    """site/archive.html: every past day of both tabs, on one page. head: the home page up to <body>."""
+    head = head.replace("<title>Daily Edge AI: AI news and real case studies</title>", "<title>Archive — Daily Edge AI</title>")
+    return head + f"""<body>
+
+<header class="header hero">
+  <div class="header-inner">
+    <div class="header-top">
+      <p class="brand">
+        <a class="brand-link" href="./"><img class="brand-logo" src="logo.svg" width="28" height="22" alt=""><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
+      </p>
+    </div>
+    <h1 class="hero-title">Archive</h1>
+    <p class="updated">Every past day of case studies and industry news.</p>
+  </div>
+</header>
+
+<main class="content">
+  <div class="toolbar">
+      <nav class="tab-row" aria-label="Archive sections">
+        <a class="archive-link" href="#case-studies">Case Studies</a>
+        <a class="archive-link" href="#industry-news">Industry News</a>
+        <a class="archive-link" href="./">← Back to today</a>
+      </nav>
+  </div>
+  <h2 class="section-title" id="case-studies">Case Studies</h2>
+  {render_archive(cs_archive, 'cs')}
+  <h2 class="section-title" id="industry-news">Industry News</h2>
+  {render_archive(news_archive, 'news')}
+</main>
+
+{PAGE_FOOTER}
+</body>
+</html>"""
 
 
 def generate_email_capture(n=""):
@@ -624,6 +780,9 @@ def generate_html():
         with open(hook_path) as f:
             daily_hook = f.read().strip()
     generated_at = datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
+    # Today's signal and From McKinsey go below the lead row of the news tab
+    signals = (f'\n    <section class="signal">\n        <h2 class="signal-title">Today\'s signal</h2>\n'
+               f'        <p>{esc(daily_hook)}</p>\n    </section>' if daily_hook else "") + render_headlines(active_headlines)
 
     html = """<!DOCTYPE html>
 <html lang="en">
@@ -712,8 +871,7 @@ def generate_html():
     .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
 
     /* Tags and dates: Geist Mono */
-    .tag-pill, .tier-label, .pub-date, .archive-date, .archive-count, .updated,
-    .news-card .card-meta > span:last-child:not(:first-child) {
+    .tag-pill, .pub-date, .archive-date, .archive-count, .updated {
       font-family: var(--font-mono);
     }
 
@@ -874,6 +1032,27 @@ def generate_html():
     .tab:hover { color: var(--c-text); }
     .tab.active { color: var(--c-text); box-shadow: inset 0 -2px 0 var(--c-text); border-radius: 0; }
 
+    /* 2 tabs, then one link to the archive page: the end of the tab row and the foot of each tab */
+    .tab-row { display: flex; align-items: center; flex-wrap: wrap; min-width: 0; max-width: 100%; margin-bottom: 8px; }
+    .tab-row .tabs { margin-bottom: 0; }
+    .archive-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      white-space: nowrap;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .archive-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .panel-foot { margin-top: var(--s-32); }
+    .panel-foot .archive-link { padding-left: 0; font-size: var(--fs-ui); }
+
     .search {
       background: var(--c-bg);
       border: 1px solid var(--c-border);
@@ -901,27 +1080,30 @@ def generate_html():
       gap: 32px 24px;
     }
 
-    /* Lead story + grid: the first card spans 2 columns (and 2 rows above 1024px) */
+    /* The first row: the lead story spans 2 columns, 2 cards stand beside it. Every other grid is uniform. */
+    .cards-grid + .cards-grid, .signal + .cards-grid { margin-top: 32px; }
+
     @media (min-width: 641px) {
       .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .cards-grid > .card:first-child { grid-column: span 2; }
-      .cards-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
+      .lead-grid > .card:first-child { grid-column: 1 / -1; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
+      /* No empty cell: a card alone on the last row takes the whole row */
+      .lead-grid > .card:nth-child(2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: 1 / -1; }
     }
 
     @media (min-width: 1025px) {
       .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .cards-grid > .card:first-child { grid-row: span 2; }
-      .cards-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
-      /* No empty cell: widen the last card(s) to fill the row */
-      .cards-grid > .card:first-child:last-child,
-      .cards-grid > .card:first-child:nth-last-child(2),
-      .cards-grid > .card:first-child:nth-last-child(2) + .card { grid-column: 1 / -1; grid-row: auto; }
-      .cards-grid > .card:first-child:nth-last-child(3) ~ .card,
-      .cards-grid > .card:first-child:nth-last-child(4) ~ .card:last-child,
-      .cards-grid > .card:nth-child(4n+6):nth-last-child(2),
-      .cards-grid > .card:nth-child(4n+7):last-child,
-      .cards-grid > .card:nth-child(4n+8):last-child { grid-column: span 2; }
-      .cards-grid > .card:nth-child(4n+6):last-child { grid-column: 1 / -1; }
+      .lead-grid > .card:first-child { grid-column: span 2; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
+      .lead-grid > .card:first-child:last-child { grid-column: 1 / -1; }
+      .lead-grid > .card:nth-child(2):last-child { grid-column: span 2; }
+      /* No empty cell: the cards of a short last row are 2 columns wide */
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: auto; }
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):nth-last-child(2),
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+3):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):last-child { grid-column: span 2; }
     }
 
     /* Cards follow the benchmark (therundown.ai, read live): no box. No border, no radius, no padding;
@@ -936,7 +1118,6 @@ def generate_html():
 
     .card-figure { margin: 0 0 16px; }
     .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
-    .card-figure figcaption { margin-top: 4px; font-family: var(--font-mono); font-size: var(--fs-label); line-height: var(--lh-small); color: var(--c-text-muted); }
 
     .card-header {
       display: flex;
@@ -947,18 +1128,11 @@ def generate_html():
       margin-bottom: 12px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: var(--s-8); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
-    .tag-pill, .tier-label { white-space: nowrap; flex-shrink: 0; }
-    .tag-pill { flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }  /* a long tag is cut inside its card */
-
-    .tag-pill { padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
-
-    .tier-label, .source-name {
-      font-size: var(--fs-label);
-      line-height: var(--lh-small);
-      font-weight: 400;
-      color: var(--c-text-muted);
-    }
+    /* One short tag from the canonical list: it is never cut */
+    .card-tags { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
+    .tag-pill { white-space: nowrap; padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
+    /* The lead story's tag is the one emerald mark in the cards */
+    .lead-grid > .card:first-child .tag-pill { background: var(--c-accent); color: var(--c-on-accent); }
 
     /* Card content */
     .card-title {
@@ -974,49 +1148,34 @@ def generate_html():
     .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
     .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
+    /* Who · source type · date on one line: the name is cut by CSS when the card is narrow, the date always shows */
     .card-meta {
       display: flex;
-      align-items: center;
-      gap: var(--s-8);
-      flex-wrap: wrap;
+      min-width: 0;
       margin-bottom: 16px;
       font-size: var(--fs-small);
       line-height: var(--lh-small);
       color: var(--c-text-muted);
+      white-space: nowrap;
     }
 
-    .card-meta > span:first-child { color: var(--c-text); font-weight: 700; }
+    .meta-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--c-text); font-weight: 700; }
+    .meta-rest { flex: none; font-variant-numeric: tabular-nums; }
     .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .sep { color: var(--c-text-muted); }
 
-    .card-summary {
-      font-size: var(--fs-ui);
-      line-height: var(--lh-body);
-      color: var(--c-text-muted);
-      margin-bottom: 16px;
-    }
-
-    .insight, .signal-points {
-      font-size: var(--fs-ui);
-      line-height: var(--lh-body);
-      color: var(--c-text);
-      margin-bottom: 16px;
-    }
-
-    .insight strong, .signal-points strong { font-weight: 700; }
-
-    /* Every card except the lead: summary and "How to apply" show 3 lines */
-    .cards-grid > .card:not(:first-child) .card-summary,
-    .cards-grid > .card:not(:first-child) .insight {
+    /* Summary: 2 lines on every card (10.4:1 on white). "How to apply": 1 line. The full text is on the breakdown page. */
+    .card-summary, .insight {
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      line-clamp: 3;
       overflow: hidden;
+      font-size: var(--fs-ui);
+      line-height: var(--lh-body);
+      margin-bottom: 16px;
     }
 
-    .signal-points { padding-left: 20px; }
-    .signal-points li { margin-bottom: 8px; }
+    .card-summary { -webkit-line-clamp: 2; line-clamp: 2; color: var(--c-text-soft); }
+    .insight { -webkit-line-clamp: 1; line-clamp: 1; color: var(--c-text); }
+    .insight strong { font-weight: 700; }
 
     /* Card footer */
     .card-footer {
@@ -1029,13 +1188,13 @@ def generate_html():
       flex-wrap: wrap;
     }
 
-    /* Today's signal */
+    /* Today's signal and From McKinsey: below the lead row, never above the lead story */
     .signal {
       background: var(--c-bg);
       border: 1px solid var(--c-border);
       border-radius: var(--radius-card);
       padding: 16px 20px;
-      margin-bottom: 24px;
+      margin-top: 32px;
     }
 
     .signal-title { font-family: var(--font-mono); color: var(--c-text); margin-bottom: var(--s-8); }
@@ -1098,6 +1257,9 @@ def generate_html():
     }
 
     footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    .section-title { font-family: var(--font-head); font-size: var(--fs-h3); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: var(--s-48) 0 var(--s-24); scroll-margin-top: var(--s-16); }
+    .section-title:first-child { margin-top: 0; }
+    .archive-week .group-title { font-size: var(--fs-h4); margin: var(--s-32) 0 var(--s-16); }
     footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     @media (max-width: 700px) {
@@ -1111,8 +1273,7 @@ def generate_html():
       .email-btn { padding: 0 16px; }
       .content { width: 100%; padding: 24px 16px 48px; }
       .toolbar { flex-direction: column; align-items: stretch; gap: var(--s-8); position: static; }
-      .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }  /* all 4 tabs in view */
-      .tab { padding: 8px 12px; }
+      .tab, .tab-row .archive-link { padding: 8px 12px; }  /* 2 tabs and the Archive link in one row at 360px */
       .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
       .search { width: 100%; }
       .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
@@ -1121,15 +1282,6 @@ def generate_html():
     }
 
     @media (max-width: 640px) {
-      /* Phone cards: tag, title, source • date, 2-line summary, one link. Desktop keeps the full text. */
-      .card .insight, .card .signal-points, .card .tier-label { display: none; }
-      .cards-grid > .card .card-summary {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        overflow: hidden;
-      }
       .card-meta { margin-bottom: 8px; }
       .card-footer { margin-top: 8px; padding-top: 4px; }
     }
@@ -1156,43 +1308,27 @@ def generate_html():
 
 <main class="content">
   <div class="toolbar">
-      <div class="tabs" role="tablist" aria-label="Sections">
+      <div class="tab-row">
+        <div class="tabs" role="tablist" aria-label="Sections">
           <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true">Case Studies</button>
           <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false">Industry News</button>
-          <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false">Archive: Studies</button>
-          <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false">Archive: News</button>
+        </div>
+        """ + archive_link("case-studies") + """
       </div>
       <label class="visually-hidden" for="scout-search">Search stories</label>
       <input type="search" id="scout-search" class="search" placeholder="Search stories" />
   </div>
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
-    """ + card_grids(render_case_studies(cs_data, slug_map), "More case studies") + """
+    """ + card_grids(render_case_studies(cs_data, slug_map)) + panel_foot("case-studies", "case studies") + """
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
-    """ + (f'''
-    <section class="signal">
-        <h2 class="signal-title">Today\'s signal</h2>
-        <p>{esc(daily_hook)}</p>
-    </section>
-    ''' if daily_hook else "") + render_headlines(active_headlines) + """
-    """ + card_grids(render_news(news_data, slug_map), "More industry news") + """
-  </div>
-
-  <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
-    """ + render_archive(cs_archive, 'cs') + """
-  </div>
-
-  <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
-    """ + render_archive(news_archive, 'news') + """
+    """ + card_grids(render_news(news_data, slug_map), signals) + panel_foot("industry-news", "news") + """
   </div>
 """ + generate_email_capture("-2") + """
 </main>
 
-<footer>
-  <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="privacy.html">Privacy</a></span>
-  <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
-</footer>
+""" + PAGE_FOOTER + """
 
 <script src="js/subscribe.js"></script>
 <script>
@@ -1225,7 +1361,7 @@ def generate_html():
     const q = query.toLowerCase().trim();
     const activePanel = document.querySelector('.panel.active');
     if (!activePanel) return;
-    const cards = activePanel.querySelectorAll('.card, .archive-row');
+    const cards = activePanel.querySelectorAll('.card');
     cards.forEach(card => {
       card.style.display = (!q || card.innerText.toLowerCase().includes(q)) ? '' : 'none';
     });
@@ -1238,6 +1374,8 @@ def generate_html():
     os.makedirs("site", exist_ok=True)
     with open(OUTPUT_FILE, "w") as f:
         f.write(html)
+    with open(ARCHIVE_PAGE, "w") as f:  # the same head and style as the home page
+        f.write(archive_page(html.split("<body>")[0], cs_archive, news_archive))
     generate_rss(cs_data, news_data)
     # Copy data files to site/ so Vercel can serve them for the dashboard
     for src, dst in ((ARCHIVE_CS_FILE, "site/case_studies_archive.json"), (ARCHIVE_NEWS_FILE, "site/news_archive.json")):

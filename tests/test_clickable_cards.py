@@ -103,7 +103,7 @@ def test_no_relevance_or_score_label_on_the_committed_page():
 def test_a_grade_is_never_shown_as_the_tag(raw):
     assert gh.topic_tag(raw) == "Other"
     html = gh.render_case_studies({"case_studies": [study("Paper", relevance_tag=raw)]}, {"case_studies": {}})
-    assert '<span class="tag-pill">Other</span>' in html and "relevan" not in html.lower() and "impact" not in html.lower()
+    assert '<span class="tag-pill">Case Study</span>' in html and "relevan" not in html.lower() and "impact" not in html.lower()
 
 
 @pytest.mark.parametrize("raw, shown", [("container_security", "Container security"), ("Security", "Security"),
@@ -174,7 +174,7 @@ def test_short_page_when_groq_gives_nothing(site):
     slugs.update(gb.process_items([story("Story")], "news", "27 Nov 2026, 09:00", out, use_ai=False))
     assert slugs == {"Paper": "paper", "No notes": "no-notes", "Story": "story"}
     paper, none, news = ((out / f"{s}.html").read_text() for s in ("paper", "no-notes", "story"))
-    assert "<p>Summary of Paper.</p>" in paper and '<h3 class="guide-label">What to do</h3><div class="guide-text">Apply Paper.</div>' in paper
+    assert "<p>Summary of Paper.</p>" in paper and '<h3 class="guide-label">How to apply</h3><div class="guide-text">Apply Paper.</div>' in paper
     assert 'href="https://arxiv.org/abs/paper" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>' in paper
     assert '<a class="back-link" href="../index.html">← Back to today</a>' in paper
     assert "Not directly applicable" not in none and "No how-to notes are stored" in none

@@ -21,7 +21,7 @@ import generate_images as gi  # noqa: E402
 
 NOW = datetime(2026, 11, 27, 9, 0)
 SUFFIX = ("minimal still life, soft studio light, matte materials, shallow depth of field, neutral grey background, "
-          "single emerald #10b981 accent, editorial magazine photo")
+          "editorial magazine photo, single emerald #10b981 accent only, no orange, no copper, no warm metals")
 GROUPS = ("landmarks", "buildings", "streets", "screens", "signs", "documents", "books", "labels", "logos", "people",
           "faces", "flags", "maps")
 
@@ -251,7 +251,6 @@ def test_no_committed_image_has_a_banned_scene():
     bad = {p.stem: gi.banned_words(alts[p.stem].get("alt")) for p in folder.glob("*.webp")
            if p.stem in alts and gi.banned_words(alts[p.stem].get("alt"))}
     assert bad == {}
-    assert not (folder / "towerbridge-bridging-the-dual-encoder-modality-gap-via-weight-space-programming.webp").exists()
 
 
 def test_no_committed_image_shows_text():

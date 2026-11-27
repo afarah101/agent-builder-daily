@@ -165,8 +165,7 @@
     .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
 
     /* Tags and dates: Geist Mono */
-    .tag-pill, .tier-label, .pub-date, .archive-date, .archive-count, .updated,
-    .news-card .card-meta > span:last-child:not(:first-child) {
+    .tag-pill, .pub-date, .archive-date, .archive-count, .updated {
       font-family: var(--font-mono);
     }
 
@@ -327,6 +326,27 @@
     .tab:hover { color: var(--c-text); }
     .tab.active { color: var(--c-text); box-shadow: inset 0 -2px 0 var(--c-text); border-radius: 0; }
 
+    /* 2 tabs, then one link to the archive page: the end of the tab row and the foot of each tab */
+    .tab-row { display: flex; align-items: center; flex-wrap: wrap; min-width: 0; max-width: 100%; margin-bottom: 8px; }
+    .tab-row .tabs { margin-bottom: 0; }
+    .archive-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      white-space: nowrap;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .archive-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .panel-foot { margin-top: var(--s-32); }
+    .panel-foot .archive-link { padding-left: 0; font-size: var(--fs-ui); }
+
     .search {
       background: var(--c-bg);
       border: 1px solid var(--c-border);
@@ -354,27 +374,30 @@
       gap: 32px 24px;
     }
 
-    /* Lead story + grid: the first card spans 2 columns (and 2 rows above 1024px) */
+    /* The first row: the lead story spans 2 columns, 2 cards stand beside it. Every other grid is uniform. */
+    .cards-grid + .cards-grid, .signal + .cards-grid { margin-top: 32px; }
+
     @media (min-width: 641px) {
       .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .cards-grid > .card:first-child { grid-column: span 2; }
-      .cards-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
+      .lead-grid > .card:first-child { grid-column: 1 / -1; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
+      /* No empty cell: a card alone on the last row takes the whole row */
+      .lead-grid > .card:nth-child(2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: 1 / -1; }
     }
 
     @media (min-width: 1025px) {
       .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .cards-grid > .card:first-child { grid-row: span 2; }
-      .cards-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
-      /* No empty cell: widen the last card(s) to fill the row */
-      .cards-grid > .card:first-child:last-child,
-      .cards-grid > .card:first-child:nth-last-child(2),
-      .cards-grid > .card:first-child:nth-last-child(2) + .card { grid-column: 1 / -1; grid-row: auto; }
-      .cards-grid > .card:first-child:nth-last-child(3) ~ .card,
-      .cards-grid > .card:first-child:nth-last-child(4) ~ .card:last-child,
-      .cards-grid > .card:nth-child(4n+6):nth-last-child(2),
-      .cards-grid > .card:nth-child(4n+7):last-child,
-      .cards-grid > .card:nth-child(4n+8):last-child { grid-column: span 2; }
-      .cards-grid > .card:nth-child(4n+6):last-child { grid-column: 1 / -1; }
+      .lead-grid > .card:first-child { grid-column: span 2; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
+      .lead-grid > .card:first-child:last-child { grid-column: 1 / -1; }
+      .lead-grid > .card:nth-child(2):last-child { grid-column: span 2; }
+      /* No empty cell: the cards of a short last row are 2 columns wide */
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: auto; }
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):nth-last-child(2),
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+3):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):last-child { grid-column: span 2; }
     }
 
     /* Cards follow the benchmark (therundown.ai, read live): no box. No border, no radius, no padding;
@@ -389,7 +412,6 @@
 
     .card-figure { margin: 0 0 16px; }
     .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
-    .card-figure figcaption { margin-top: 4px; font-family: var(--font-mono); font-size: var(--fs-label); line-height: var(--lh-small); color: var(--c-text-muted); }
 
     .card-header {
       display: flex;
@@ -400,18 +422,11 @@
       margin-bottom: 12px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: var(--s-8); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
-    .tag-pill, .tier-label { white-space: nowrap; flex-shrink: 0; }
-    .tag-pill { flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }  /* a long tag is cut inside its card */
-
-    .tag-pill { padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
-
-    .tier-label, .source-name {
-      font-size: var(--fs-label);
-      line-height: var(--lh-small);
-      font-weight: 400;
-      color: var(--c-text-muted);
-    }
+    /* One short tag from the canonical list: it is never cut */
+    .card-tags { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
+    .tag-pill { white-space: nowrap; padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
+    /* The lead story's tag is the one emerald mark in the cards */
+    .lead-grid > .card:first-child .tag-pill { background: var(--c-accent); color: var(--c-on-accent); }
 
     /* Card content */
     .card-title {
@@ -427,49 +442,34 @@
     .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
     .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
+    /* Who · source type · date on one line: the name is cut by CSS when the card is narrow, the date always shows */
     .card-meta {
       display: flex;
-      align-items: center;
-      gap: var(--s-8);
-      flex-wrap: wrap;
+      min-width: 0;
       margin-bottom: 16px;
       font-size: var(--fs-small);
       line-height: var(--lh-small);
       color: var(--c-text-muted);
+      white-space: nowrap;
     }
 
-    .card-meta > span:first-child { color: var(--c-text); font-weight: 700; }
+    .meta-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--c-text); font-weight: 700; }
+    .meta-rest { flex: none; font-variant-numeric: tabular-nums; }
     .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .sep { color: var(--c-text-muted); }
 
-    .card-summary {
-      font-size: var(--fs-ui);
-      line-height: var(--lh-body);
-      color: var(--c-text-muted);
-      margin-bottom: 16px;
-    }
-
-    .insight, .signal-points {
-      font-size: var(--fs-ui);
-      line-height: var(--lh-body);
-      color: var(--c-text);
-      margin-bottom: 16px;
-    }
-
-    .insight strong, .signal-points strong { font-weight: 700; }
-
-    /* Every card except the lead: summary and "How to apply" show 3 lines */
-    .cards-grid > .card:not(:first-child) .card-summary,
-    .cards-grid > .card:not(:first-child) .insight {
+    /* Summary: 2 lines on every card (10.4:1 on white). "How to apply": 1 line. The full text is on the breakdown page. */
+    .card-summary, .insight {
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      line-clamp: 3;
       overflow: hidden;
+      font-size: var(--fs-ui);
+      line-height: var(--lh-body);
+      margin-bottom: 16px;
     }
 
-    .signal-points { padding-left: 20px; }
-    .signal-points li { margin-bottom: 8px; }
+    .card-summary { -webkit-line-clamp: 2; line-clamp: 2; color: var(--c-text-soft); }
+    .insight { -webkit-line-clamp: 1; line-clamp: 1; color: var(--c-text); }
+    .insight strong { font-weight: 700; }
 
     /* Card footer */
     .card-footer {
@@ -482,13 +482,13 @@
       flex-wrap: wrap;
     }
 
-    /* Today's signal */
+    /* Today's signal and From McKinsey: below the lead row, never above the lead story */
     .signal {
       background: var(--c-bg);
       border: 1px solid var(--c-border);
       border-radius: var(--radius-card);
       padding: 16px 20px;
-      margin-bottom: 24px;
+      margin-top: 32px;
     }
 
     .signal-title { font-family: var(--font-mono); color: var(--c-text); margin-bottom: var(--s-8); }
@@ -551,6 +551,9 @@
     }
 
     footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    .section-title { font-family: var(--font-head); font-size: var(--fs-h3); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: var(--s-48) 0 var(--s-24); scroll-margin-top: var(--s-16); }
+    .section-title:first-child { margin-top: 0; }
+    .archive-week .group-title { font-size: var(--fs-h4); margin: var(--s-32) 0 var(--s-16); }
     footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     @media (max-width: 700px) {
@@ -564,8 +567,7 @@
       .email-btn { padding: 0 16px; }
       .content { width: 100%; padding: 24px 16px 48px; }
       .toolbar { flex-direction: column; align-items: stretch; gap: var(--s-8); position: static; }
-      .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }  /* all 4 tabs in view */
-      .tab { padding: 8px 12px; }
+      .tab, .tab-row .archive-link { padding: 8px 12px; }  /* 2 tabs and the Archive link in one row at 360px */
       .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
       .search { width: 100%; }
       .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
@@ -574,15 +576,6 @@
     }
 
     @media (max-width: 640px) {
-      /* Phone cards: tag, title, source • date, 2-line summary, one link. Desktop keeps the full text. */
-      .card .insight, .card .signal-points, .card .tier-label { display: none; }
-      .cards-grid > .card .card-summary {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        overflow: hidden;
-      }
       .card-meta { margin-bottom: 8px; }
       .card-footer { margin-top: 8px; padding-top: 4px; }
     }
@@ -602,7 +595,7 @@
       </h1>
     </div>
     <p class="hero-title">AI news and real case studies, every day.</p>
-    <p class="updated">Updated 27 Nov 2026, 16:28 UTC</p>
+    <p class="updated">Updated 27 Nov 2026, 17:14 UTC</p>
 
   <div class="email-banner">
     <div class="email-inner">
@@ -621,684 +614,290 @@
 
 <main class="content">
   <div class="toolbar">
-      <div class="tabs" role="tablist" aria-label="Sections">
+      <div class="tab-row">
+        <div class="tabs" role="tablist" aria-label="Sections">
           <button type="button" class="tab active" role="tab" id="tab-case-studies" aria-controls="case-studies" aria-selected="true">Case Studies</button>
           <button type="button" class="tab" role="tab" id="tab-industry-news" aria-controls="industry-news" aria-selected="false">Industry News</button>
-          <button type="button" class="tab" role="tab" id="tab-archive-cs" aria-controls="archive-cs" aria-selected="false">Archive: Studies</button>
-          <button type="button" class="tab" role="tab" id="tab-archive-news" aria-controls="archive-news" aria-selected="false">Archive: News</button>
+        </div>
+        <a class="archive-link" href="archive.html#case-studies">Archive</a>
       </div>
       <label class="visually-hidden" for="scout-search">Search stories</label>
       <input type="search" id="scout-search" class="search" placeholder="Search stories" />
   </div>
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
-    <div class="cards-grid"><article class="card cs-card">
-  <figure class="card-figure"><img src="images/closing-the-gap-automated-discovery-of-secure-dockerfile-reference-standards-via.webp" loading="lazy" width="1200" height="675" alt="A rusted key, a cracked USB drive, and a pile of old server racks"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Container security</span></div>
+    <div class="cards-grid lead-grid"><article class="card cs-card">
+  <figure class="card-figure"><img src="images/closing-the-gap-automated-discovery-of-secure-dockerfile-reference-standards-via.webp" loading="lazy" width="1200" height="675" alt="A rusted key, a cracked USB drive, and a pile of old server racks"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Security</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/closing-the-gap-automated-discovery-of-secure-dockerfile-reference-standards-via.html">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a></h2>
-  <div class="card-meta"><span>Jessica Hösl, Benedikt Hofmann, Patrick Stöckle</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">26 Aug 2026</span></span></div>
-  <p class="card-summary">Many enterprise Dockerfiles contain security misconfigurations and outdated practices, with 99% showing at least one flaw. The authors built a six‑step automated pipeline that crawls GitLab, enriches each Dockerfile with security metrics, clusters them by LLM‑derived semantics, and finds internal reference implementations. Using these references can raise the average security score by 60% without writing new templates.</p>
+  <p class="card-meta"><span class="meta-who">Jessica Hösl, Benedikt Hofmann et al.</span><span class="meta-rest"> · 26 Aug 2026</span></p>
+  <p class="card-summary">Many enterprise Dockerfiles contain security misconfigurations and outdated practices, with 99% showing at least one flaw. The authors built a six‑step automated pipeline that crawls GitLab, enriches each Dockerfile with security metrics, clusters them by LLM‑derived semantics, and finds internal reference implementations.</p>
   <p class="insight"><strong>How to apply:</strong> If you manage Dockerfile repos, run a similar pipeline: 1) crawl your GitLab instance and run static checks (Hadolint, Trivy, ShellCheck) on all Dockerfiles; 2) cluster similar files using an LLM to generate semantic tags and HDBSCAN to group them; 3) for each cluster, identify the highest‑scoring Dockerfile and replace or copy it into your own projects to improve security and consistency.</p>
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/livelora-exact-kv-cache-migration-across-lora-updates-for-llm-agents.webp" loading="lazy" width="1200" height="675" alt="A block of ice and a glass of water"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM deployment &amp; optimisation</span></div>
+  <figure class="card-figure"><img src="images/livelora-exact-kv-cache-migration-across-lora-updates-for-llm-agents.webp" loading="lazy" width="1200" height="675" alt="A block of ice and a glass of water"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM Ops</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/livelora-exact-kv-cache-migration-across-lora-updates-for-llm-agents.html">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a></h2>
-  <div class="card-meta"><span>Tianyi Huang, Samuel Xu, Ivy Gu, Nathan Huang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
+  <p class="card-meta"><span class="meta-who">Tianyi Huang, Samuel Xu et al.</span><span class="meta-rest"> · 23 Nov 2026</span></p>
   <p class="card-summary">LiveLora lets you upgrade an LLM adapter without re-running the whole chat history, saving time and storage. It freezes early decoder layers and keeps KV cache entries consistent across adapter updates, giving almost 69× speedups over full-history re-prefill on large sessions.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections. 2) During a new adapter release, migrate existing KV cache entries to the new format and recompute the final token. 3) Commit the updated cache and logits before serving next token. This reduces re‑prefill costs and storage for long-running sessions.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage LLM-serving, update your deployment pipeline to keep the first decoder blocks frozen and enable LiveLora’s cache migration logic: 1) Freeze lower blocks and adapter down-projections.</p>
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/bi-agent-and-bi-bench-towards-automating-end-to-end-business-intelligence.webp" loading="lazy" width="1200" height="675" alt="A stack of translucent sheets, a metal gear, and a crystal prism"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">BI automation</span></div>
+  <figure class="card-figure"><img src="images/bi-agent-and-bi-bench-towards-automating-end-to-end-business-intelligence.webp" loading="lazy" width="1200" height="675" alt="A stack of translucent sheets, a metal gear, and a crystal prism"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">BI &amp; Data</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/bi-agent-and-bi-bench-towards-automating-end-to-end-business-intelligence.html">BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</a></h2>
-  <div class="card-meta"><span>Chuxuan Hu, Yeye He, Penny Zhou, Wee Hyong Tok</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">16 Sep 2026</span></span></div>
-  <p class="card-summary">BI-Agent uses large language models and specialised data tools to automate the whole business intelligence process – from finding the right tables, transforming data, joining tables, to answering business questions. The authors built a benchmark (BI-Bench) from real dashboards and a tool‑augmented agent that improves accuracy by up to 40% over vanilla LLMs. This research is relevant if you manage BI workloads on cloud platforms, as it shows a way to reduce manual data prep and improve query accuracy.</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage BI dashboards in Power BI or Tableau on the cloud, adopt a tool‑augmented agent approach: 1) integrate an LLM with data‑search, join, and transform tools; 2) train it on your own BI project logs using supervised fine‑tuning or reinforcement learning; 3) deploy the trained agent to automatically process user questions and return answers, cutting manual prep time by up to 40%.</p>
-</article>
-<article class="card cs-card">
-  <figure class="card-figure"><img src="images/decoupling-solving-from-abstention-single-rollout-conformal-risk-control-for-har.webp" loading="lazy" width="1200" height="675" alt="A severed metal chain link beside a transparent glass pane"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM deployment / API optimisation</span></div>
+  <p class="card-meta"><span class="meta-who">Chuxuan Hu, Yeye He et al.</span><span class="meta-rest"> · 16 Sep 2026</span></p>
+  <p class="card-summary">BI-Agent uses large language models and specialised data tools to automate the whole business intelligence process – from finding the right tables, transforming data, joining tables, to answering business questions. The authors built a benchmark (BI-Bench) from real dashboards and a tool‑augmented agent that improves accuracy by up to 40% over vanilla LLMs.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage BI dashboards in Power BI or Tableau on the cloud, adopt a tool‑augmented agent approach: 1) integrate an LLM with data‑search, join, and transform tools; 2) train it on your own BI project logs using supervised fine‑tuning or reinforcement learning; 3) deploy the trained agent to automatically process user questions and return answers, cutting manual prep time by up to 40%.</p>
+</article></div>
+    <div class="cards-grid"><article class="card cs-card">
+  <figure class="card-figure"><img src="images/decoupling-solving-from-abstention-single-rollout-conformal-risk-control-for-har.webp" loading="lazy" width="1200" height="675" alt="A severed metal chain link beside a transparent glass pane"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM Ops</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/decoupling-solving-from-abstention-single-rollout-conformal-risk-control-for-har.html">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a></h2>
-  <div class="card-meta"><span>Qianyi Chen, Bo Li</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
-  <p class="card-summary">Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer. It boosts correct‑submission rates by 15–30 points, cuts wrong answers to under 7%, and saves 4–13% inference cost.</p>
+  <p class="card-meta"><span class="meta-who">Qianyi Chen, Bo Li</span><span class="meta-rest"> · 23 Nov 2026</span></p>
+  <p class="card-summary">Hard token limits stop LLMs before answering, risking wrong outputs. The authors built Tail-CRC, a single‑rollout method that first trains a solver to respect token budgets, then uses conformal risk control to decide whether to submit the answer.</p>
   <p class="insight"><strong>How to apply:</strong> If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold.</p>
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/tidesand-performance-accurate-sandbox-multiplexing-for-llm-agents.webp" loading="lazy" width="1200" height="675" alt="A set of interlocking metal gears, a stack of translucent memory foam blocks, and a rotating copper wheel"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">LLM resource management</span></div>
+  <figure class="card-figure"><img src="images/tidesand-performance-accurate-sandbox-multiplexing-for-llm-agents.webp" loading="lazy" width="1200" height="675" alt="A set of interlocking metal gears, a stack of translucent memory foam blocks, and a rotating copper wheel"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">LLM Ops</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/tidesand-performance-accurate-sandbox-multiplexing-for-llm-agents.html">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></h2>
-  <div class="card-meta"><span>Shulu Li, Hanchen Li, Xiaokun Chen, Qiuyang Mang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
+  <p class="card-meta"><span class="meta-who">Shulu Li, Hanchen Li et al.</span><span class="meta-rest"> · 23 Nov 2026</span></p>
   <p class="card-summary">TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches.</p>
   <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability.</p>
-</article></div>
-    <h2 class="group-title">More case studies</h2>
-    <div class="cards-grid"><article class="card cs-card">
-  <figure class="card-figure"><img src="images/make-the-adversary-spend-more-stateful-deception-as-a-cost-exchange-primitive-fo.webp" loading="lazy" width="1200" height="675" alt="A bare silicon wafer resting on a clear glass pane"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Cyber deception</span></div>
+</article>
+<article class="card cs-card">
+  <figure class="card-figure"><img src="images/make-the-adversary-spend-more-stateful-deception-as-a-cost-exchange-primitive-fo.webp" loading="lazy" width="1200" height="675" alt="A bare silicon wafer resting on a clear glass pane"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Security</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/make-the-adversary-spend-more-stateful-deception-as-a-cost-exchange-primitive-fo.html">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a></h2>
-  <div class="card-meta"><span>Alessandro Cantelli-Forti, Isabella Marasco, Hosam Alamleh, Giada Boschi</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">25 Nov 2026</span></span></div>
-  <p class="card-summary">This research shows that using a persistent state‑based deception system, powered by a local language model, can force attackers to spend more time and resources while keeping defender cost lower. They built an SSH honeypot that keeps each attacker’s view consistent with their past actions and measured a 63 % reduction in defender effort compared to a basic LLM decoy. It is directly relevant to IT infrastructure managers looking to improve cost‑effective deception.
-</p>
-  <p class="insight"><strong>How to apply:</strong> If you manage SSH or similar services, integrate a persistent state honeypot: 1) set up Cowrie with a local LLM; 2) configure the LLM to only render state, not store it; 3) monitor and adjust Deception Exchange Rate to keep defender costs under 63 % of a basic decoy.</p>
+  <p class="card-meta"><span class="meta-who">Alessandro Cantelli-Forti, Isabella Marasco et al.</span><span class="meta-rest"> · 25 Nov 2026</span></p>
+  <p class="card-summary">This research shows that using a persistent state‑based deception system, powered by a local language model, can force attackers to spend more time and resources while keeping defender cost lower. They built an SSH honeypot that keeps each attacker’s view consistent with their past actions and measured a 63 % reduction in defender effort compared to a basic LLM decoy.</p>
+  <p class="insight"><strong>How to apply:</strong> If you manage SSH or similar services, integrate a persistent state honeypot: 1) set up Cowrie with a local LLM; 2) configure the LLM to only render state, not store it; 3) monitor and adjust Deception Exchange Rate to keep defender costs under 63 % of a basic decoy.</p>
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/llm-assisted-software-migration-from-module-level-transformation-to-repository-l.webp" loading="lazy" width="1200" height="675" alt="Two clay blocks pressed into one"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Software migration</span></div>
+  <figure class="card-figure"><img src="images/llm-assisted-software-migration-from-module-level-transformation-to-repository-l.webp" loading="lazy" width="1200" height="675" alt="Two clay blocks pressed into one"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Tools</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/llm-assisted-software-migration-from-module-level-transformation-to-repository-l.html">LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</a></h2>
-  <div class="card-meta"><span>Yanan Zhang, Shengqi Liu, Tao Zhang, Yidi Liu</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
-  <p class="card-summary">The study reviews how large language models (LLMs) can be used to move whole software projects from one language or framework to another, showing that while module‑level changes work well, full repository migration still struggles with build reliability, behaviour testing, and non‑functional properties. They built a taxonomy of migration approaches, analysed 96 papers, and identified gaps in requirements support, agent coordination, and cost‑benefit assessment. This research is relevant: it highlights practical risks and offers a framework for planning LLM‑driven migrations.</p>
+  <p class="card-meta"><span class="meta-who">Yanan Zhang, Shengqi Liu et al.</span><span class="meta-rest"> · 23 Nov 2026</span></p>
+  <p class="card-summary">The study reviews how large language models (LLMs) can be used to move whole software projects from one language or framework to another, showing that while module‑level changes work well, full repository migration still struggles with build reliability, behaviour testing, and non‑functional properties. They built a taxonomy of migration approaches, analysed 96 papers, and identified gaps in requirements support, agent coordination, and cost‑benefit assessment.</p>
   <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, use the taxonomy to map your migration stages: 1) catalogue modules needing change, 2) choose an agent type (agentless, single or multi‑agent) that matches your build pipeline, 3) integrate environment feedback loops to catch runtime behaviour gaps before full deployment.</p>
-</article>
-<article class="card cs-card">
-  <figure class="card-figure"><img src="images/winsyn-an-automated-pipeline-for-realistic-enterprise-question-answering-evaluat.webp" loading="lazy" width="1200" height="675" alt="A stack of blk sheets of paper d a silver fountain pen"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">enterprise QA benchmarking</span></div>
+</article></div>
+    <h2 class="group-title">More stories</h2>
+    <div class="cards-grid"><article class="card cs-card">
+  <figure class="card-figure"><img src="images/winsyn-an-automated-pipeline-for-realistic-enterprise-question-answering-evaluat.webp" loading="lazy" width="1200" height="675" alt="A stack of blk sheets of paper d a silver fountain pen"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Research</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/winsyn-an-automated-pipeline-for-realistic-enterprise-question-answering-evaluat.html">WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</a></h2>
-  <div class="card-meta"><span>Amey Varhade, Ananya Sutradhar, Ravishankar Krishnaswamy, Navin Goyal</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">10 Sep 2026</span></span></div>
-  <p class="card-summary">The paper tackles the lack of realistic, complex data for testing enterprise question‑answering systems. It builds an automated pipeline that creates synthetic email conversations, long‑ and short‑form queries, and accurate answers, then evaluates current models, finding performance below 80% and highlighting the need for better systems. The work is not directly relevant to managing cloud infrastructure.</p>
+  <p class="card-meta"><span class="meta-who">Amey Varhade, Ananya Sutradhar et al.</span><span class="meta-rest"> · 10 Sep 2026</span></p>
+  <p class="card-summary">The paper tackles the lack of realistic, complex data for testing enterprise question‑answering systems. It builds an automated pipeline that creates synthetic email conversations, long‑ and short‑form queries, and accurate answers, then evaluates current models, finding performance below 80% and highlighting the need for better systems.</p>
   
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/personafactory-stylistic-user-prompt-augmentation-with-synthetic-persona-bank.webp" loading="lazy" width="1200" height="675" alt="A steel pipe, a steel coil, and a steel plate"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">NLP training data augmentation</span></div>
+  <figure class="card-figure"><img src="images/personafactory-stylistic-user-prompt-augmentation-with-synthetic-persona-bank.webp" loading="lazy" width="1200" height="675" alt="A steel pipe, a steel coil, and a steel plate"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">NLP</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/personafactory-stylistic-user-prompt-augmentation-with-synthetic-persona-bank.html">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></h2>
-  <div class="card-meta"><span>Bich Ngoc Doan, Hanna Yukhymenko, Imanol Schlag</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">25 Nov 2026</span></span></div>
-  <p class="card-summary">PersonaFactory builds a pipeline that creates a huge synthetic persona bank and augments training dialogues with user personas to improve style and intent preservation in LLMs. The system produces 740,000 detailed personas and 1.24 million persona‑styled conversations across 85 languages, and shows that these enriched data help models match user style without losing intent. It is not directly relevant to managing cloud infrastructure.</p>
+  <p class="card-meta"><span class="meta-who">Bich Ngoc Doan, Hanna Yukhymenko et al.</span><span class="meta-rest"> · 25 Nov 2026</span></p>
+  <p class="card-summary">PersonaFactory builds a pipeline that creates a huge synthetic persona bank and augments training dialogues with user personas to improve style and intent preservation in LLMs. The system produces 740,000 detailed personas and 1.24 million persona‑styled conversations across 85 languages, and shows that these enriched data help models match user style without losing intent.</p>
   
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/towerbridge-bridging-the-dual-encoder-modality-gap-via-weight-space-programming.webp" loading="lazy" width="1200" height="675" alt="Two polished steel rods intersecting, a translucent glass sphere resting atop, all made of metal and glass"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags"><span class="tag-pill">Other</span></div>
+  <figure class="card-figure"><img src="images/towerbridge-bridging-the-dual-encoder-modality-gap-via-weight-space-programming.webp" loading="lazy" width="1200" height="675" alt="Two polished steel rods intersecting, a translucent glass sphere resting atop, all made of metal and glass"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Case Study</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/towerbridge-bridging-the-dual-encoder-modality-gap-via-weight-space-programming.html">TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming</a></h2>
-  <div class="card-meta"><span>Hani Alomari, Md Atabuzzaman, Chris Thomas</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
-  <p class="card-summary">The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance. It improves retrieval scores by up to 17 points on COCO and 6.6 on Flickr30k across many checkpoints, while keeping inference costs the same.</p>
+  <p class="card-meta"><span class="meta-who">Hani Alomari, Md Atabuzzaman et al.</span><span class="meta-rest"> · 23 Nov 2026</span></p>
+  <p class="card-summary">The paper solves the problem of a modality gap that hurts image‑text retrieval in CLIP‑style models. Researchers built TowerBridge, a quick, model‑agnostic recipe that tweaks weights based on a statistic to close the gap without hurting performance.</p>
   <p class="insight"><strong>How to apply:</strong> If you manage dual‑encoder models, use TowerBridge: step 1 – run the provided script on 25,000 labelled pairs to compute the statistic; step 2 – apply the closed‑form weight edits to your encoder weights; step 3 – test retrieval and hubness – you should see a boost without extra inference cost.</p>
 </article></div>
+    <p class="panel-foot"><a class="archive-link" href="archive.html#case-studies">Archive: older case studies</a></p>
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
+    <div class="cards-grid lead-grid"><article class="card news-card">
+  <figure class="card-figure"><img src="images/the-questions-jensen-huang-and-nvidia-will-still-have-to-answer-about-megaspeed.webp" loading="lazy" width="1200" height="675" alt="A bare silicon wafer rests behind a clear glass pane"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Security</span></div>
+  </div>
+  <h2 class="card-title"><a class="card-link" href="breakdowns/the-questions-jensen-huang-and-nvidia-will-still-have-to-answer-about-megaspeed.html">The questions Jensen Huang and Nvidia will still have to answer about Megaspeed</a></h2>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 25 Nov 2026</span></p>
+  <p class="card-summary">Nvidia faces a U.S. investigation over potential export‑control violations involving GPUs sold to data‑center operator Megaspeed, which may have diverted chips to China. The scrutiny centers on whether Nvidia knew the end‑use of its hardware and the CEO’s ties to Megaspeed’s executive.</p>
+  <p class="insight"><strong>How to apply:</strong> Check your organization’s GPU procurement policies and verify that all hardware vendors are compliant with U.S. export controls, especially if you source from Nvidia or similar manufacturers.</p>
+</article>
+<article class="card news-card">
+  <figure class="card-figure"><img src="images/kimi-for-science-more-scientific-ideas-made-possible.webp" loading="lazy" width="1200" height="675" alt="A glass jar, a stainless‑steel cylinder, and a wooden block"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Tools</span></div>
+  </div>
+  <h2 class="card-title"><a class="card-link" href="breakdowns/kimi-for-science-more-scientific-ideas-made-possible.html">Kimi for Science: More scientific ideas, made possible</a></h2>
+  <p class="card-meta"><span class="meta-who">kimi.ai</span><span class="meta-rest"> · Press · 27 Nov 2026</span></p>
+  <p class="card-summary">Kimi for Science has announced a grant program offering up to $20,000 in API credits to researchers for scientific projects. The initiative provides early access to new models, technical support, and resources to accelerate scientific discovery.</p>
+  <p class="insight"><strong>How to apply:</strong> Check the Kimi API documentation to understand how the generous credit allocation could be leveraged for internal data analysis or AI-powered tooling experiments.</p>
+</article>
+<article class="card news-card">
+  <figure class="card-figure"><img src="images/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack.webp" loading="lazy" width="1200" height="675" alt="A translucent glass tube, a silver wire coil, and a copper sheet"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Product Launch</span></div>
+  </div>
+  <h2 class="card-title"><a class="card-link" href="breakdowns/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack.html">Can you give AI agents live data without rebuilding your data stack?</a></h2>
+  <p class="card-meta"><span class="meta-who">VentureBeat</span><span class="meta-rest"> · Press · 25 Nov 2026</span></p>
+  <p class="card-summary">EnterpriseDB has unveiled a new capability that lets AI agents access live data streams without the need to rebuild existing data pipelines. This approach enables real‑time AI integration directly from production databases, simplifying workflows for data‑centric AI projects.</p>
+  <p class="insight"><strong>How to apply:</strong> Examine your current database environments and evaluate whether EnterpriseDB’s live‑data AI agent feature can replace or complement your existing data integration tooling.</p>
+</article></div>
     <section class="signal">
         <h2 class="signal-title">From McKinsey</h2>
         <p><a class="archive-title" href="https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRyUWtsRm5CX01yZkFVb0xSdU8yYnRyb2NVRWZ3MkZRQ1gwTDRIQWRGaWV0MTNtcC1OWGp6dmJici02enI2Z2UzektmbHN3X01tVG1MVGN1cVItX3hQV2hmQ2FVelFGZEZnelpfYmpmMjlpZXNudVVTZkpwUnJETHA0WmVRbWlSd0tqR1VTNFNtS1FwUEdSaVNQb1NWVTNzV2VQa1BRYTc0ck9XTW1TZnFnV0dfQnRPM2U4ZkhHYUxmaGxGWlh6dHl0WQ?oc=5" target="_blank" rel="noopener noreferrer">The modern architecture that builds banks of the future</a> <span class="pub-date">25 Nov 2026</span></p>
     </section>
     <div class="cards-grid"><article class="card news-card">
-  <figure class="card-figure"><img src="images/the-questions-jensen-huang-and-nvidia-will-still-have-to-answer-about-megaspeed.webp" loading="lazy" width="1200" height="675" alt="A bare silicon wafer rests behind a clear glass pane"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Security</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a class="card-link" href="breakdowns/the-questions-jensen-huang-and-nvidia-will-still-have-to-answer-about-megaspeed.html">The questions Jensen Huang and Nvidia will still have to answer about Megaspeed</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">Nvidia faces a U.S. investigation over potential export‑control violations involving GPUs sold to data‑center operator Megaspeed, which may have diverted chips to China. The scrutiny centers on whether Nvidia knew the end‑use of its hardware and the CEO’s ties to Megaspeed’s executive.</p>
-  <p class="insight"><strong>How to use:</strong> 1. Check your organization’s GPU procurement policies and verify that all hardware vendors are compliant with U.S. export controls, especially if you source from Nvidia or similar manufacturers. 2. Flag any existing contracts or supply chain arrangements that involve high‑performance GPUs and assess whether they meet current export‑control requirements. 3. Update your IT asset inventory and audit logs to include vendor compliance status, as this incident highlights the legal risk of non‑compliant hardware in AI workloads.</p>
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/kimi-for-science-more-scientific-ideas-made-possible.webp" loading="lazy" width="1200" height="675" alt="A glass jar, a stainless‑steel cylinder, and a wooden block"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Tools</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a class="card-link" href="breakdowns/kimi-for-science-more-scientific-ideas-made-possible.html">Kimi for Science: More scientific ideas, made possible</a></h2>
-  <div class="card-meta"><span>kimi.ai</span><span class="sep" aria-hidden="true">•</span><span>27 Nov 2026</span></div>
-  <p class="card-summary">Kimi for Science has announced a grant program offering up to $20,000 in API credits to researchers for scientific projects. The initiative provides early access to new models, technical support, and resources to accelerate scientific discovery.</p>
-  <p class="insight"><strong>How to use:</strong> Check the Kimi API documentation to understand how the generous credit allocation could be leveraged for internal data analysis or AI-powered tooling experiments. Evaluate whether integrating Kimi’s model into your existing data pipelines can reduce compute costs for experimental workloads. Consider applying or collaborating with a research team to pilot the API in a controlled environment, ensuring compliance with your organization’s data governance policies.</p>
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack.webp" loading="lazy" width="1200" height="675" alt="A translucent glass tube, a silver wire coil, and a copper sheet"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Product Launch</span>
-    </div>
-  </div>
-  <h2 class="card-title"><a class="card-link" href="breakdowns/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack.html">Can you give AI agents live data without rebuilding your data stack?</a></h2>
-  <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
-  <p class="card-summary">EnterpriseDB has unveiled a new capability that lets AI agents access live data streams without the need to rebuild existing data pipelines. This approach enables real‑time AI integration directly from production databases, simplifying workflows for data‑centric AI projects.</p>
-  <ul class="signal-points"><li><strong>Do this week:</strong> Examine your current database environments and evaluate whether EnterpriseDB’s live‑data AI agent feature can replace or complement your existing data integration tooling.</li><li><strong>Risk if ignored:</strong> Failure to consider this option may keep you tied to costly ETL rebuilds and delay AI adoption across applications.</li><li><strong>Tools affected:</strong> The feature most directly impacts your database management and data‑access layers, which can ripple through to your SSO and MDM configurations if they rely on real‑time data feeds.</li></ul>
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/taking-trainium3-to-the-track-generating-videos-with-ltx-25.webp" loading="lazy" width="1200" height="675" alt="A glowing LED strip beside a twisted copper wire coil"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">AI Lab</span>
-      <span class="tag-pill">Tools</span>
-    </div>
+  <figure class="card-figure"><img src="images/taking-trainium3-to-the-track-generating-videos-with-ltx-25.webp" loading="lazy" width="1200" height="675" alt="A glowing LED strip beside a twisted copper wire coil"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Tools</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/taking-trainium3-to-the-track-generating-videos-with-ltx-25.html">Taking Trainium3 to the Track: Generating Videos with LTX-2.5</a></h2>
-  <div class="card-meta"><span>Hugging Face</span><span class="sep" aria-hidden="true">•</span><span>27 Nov 2026</span></div>
-  <p class="card-summary">Hugging Face tested video generation on an AWS Trainium3 instance using LTX‑2.5, achieving a 10‑second clip in 22‑23 seconds, matching or slightly beating LTX’s own API. This showcases the performance potential of training‑optimized hardware for diffusion‑based media pipelines.</p>
-  <p class="insight"><strong>How to use:</strong> Review the Trainium3 performance data when planning future GPU‑heavy inference workloads in the next 30 days. Understanding the speed and cost trade‑offs can inform decisions on whether to shift from CUDA‑based VMs to AWS Neuron‑powered instances for AI video generation or similar tasks.</p>
+  <p class="card-meta"><span class="meta-who">Hugging Face</span><span class="meta-rest"> · AI Lab · 27 Nov 2026</span></p>
+  <p class="card-summary">Hugging Face tested video generation on an AWS Trainium3 instance using LTX‑2.5, achieving a 10‑second clip in 22‑23 seconds, matching or slightly beating LTX’s own API. This showcases the performance potential of training‑optimized hardware for diffusion‑based media pipelines.</p>
+  <p class="insight"><strong>How to apply:</strong> Review the Trainium3 performance data when planning future GPU‑heavy inference workloads in the next 30 days.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/ai-made-self-hosting-fun-again.webp" loading="lazy" width="1200" height="675" alt="A stack of blank white sheets, a wooden box, and a glass bottle of oil"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Tools</span>
-    </div>
+  <figure class="card-figure"><img src="images/ai-made-self-hosting-fun-again.webp" loading="lazy" width="1200" height="675" alt="A stack of blank white sheets, a wooden box, and a glass bottle of oil"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Tools</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/ai-made-self-hosting-fun-again.html">AI made self-hosting fun again</a></h2>
-  <div class="card-meta"><span>janlukas.blog</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">janlukas.blog</span><span class="meta-rest"> · Press · 26 Nov 2026</span></p>
   <p class="card-summary">AI coding agents now streamline self-hosting by simplifying Docker Compose and Git-based infrastructure configuration, enabling rapid experimentation with new services and automating deployment pipelines. The article highlights how AI reduces friction in managing self-hosted environments, encouraging adoption of declarative tools like NixOS and custom bootc images.</p>
-  <ul class="signal-points"><li><strong>Do this week:</strong> Evaluate integrating an AI coding assistant (e.g., GitHub Copilot or OpenAI Code Interpreter) into your GitOps workflows to auto-generate or refactor Docker Compose files and infrastructure scripts.</li><li><strong>Risk if ignored:</strong> Automating these tasks can reduce manual configuration errors, shorten deployment cycles, and free up time for strategic projects.</li><li><strong>Tools affected:</strong> Your most affected tools are Git repositories for configuration, Docker Compose for container orchestration, and any CI/CD pipeline that builds and deploys these images.</li></ul>
+  <p class="insight"><strong>How to apply:</strong> Evaluate integrating an AI coding assistant (e.g., GitHub Copilot or OpenAI Code Interpreter) into your GitOps workflows to auto-generate or refactor Docker Compose files and infrastructure scripts.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/yales-sonnenfeld-nvidia-is-a-detriment-to-us-industrial-might-not-a-champion.webp" loading="lazy" width="1200" height="675" alt="A polished steel disk and a matte glass pane"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Regulation</span>
-    </div>
+  <figure class="card-figure"><img src="images/yales-sonnenfeld-nvidia-is-a-detriment-to-us-industrial-might-not-a-champion.webp" loading="lazy" width="1200" height="675" alt="A polished steel disk and a matte glass pane"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Policy</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/yales-sonnenfeld-nvidia-is-a-detriment-to-us-industrial-might-not-a-champion.html">Yale’s Sonnenfeld: Nvidia is a ‘detriment’ to US industrial might — not a champion</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 25 Nov 2026</span></p>
   <p class="card-summary">Yale professor Jeffrey Sonnenfeld criticized the recent return of Nvidia’s CEO Jensen Huang, arguing it may expose the company to significant legal liability and raise concerns about advanced chip technology falling into adversaries&#x27; hands.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on Nvidia’s product roadmap and any potential regulatory or legal updates that could affect your GPU-dependent AI workloads. This week, review your cloud provider’s GPU offerings for any changes in licensing or compliance that might arise from Nvidia’s heightened scrutiny.</p>
+  <p class="insight"><strong>How to apply:</strong> Keep an eye on Nvidia’s product roadmap and any potential regulatory or legal updates that could affect your GPU-dependent AI workloads.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/zais-glm-54-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-.webp" loading="lazy" width="1200" height="675" alt="a metal loop, a stack of identical metal sheets, a transparent glass pane"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Model Release</span>
-    </div>
+  <figure class="card-figure"><img src="images/zais-glm-54-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-.webp" loading="lazy" width="1200" height="675" alt="a metal loop, a stack of identical metal sheets, a transparent glass pane"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Model Release</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/zais-glm-54-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-.html">Z.ai&#x27;s GLM-5.4 aims to match models up to four times its size by running 28 layers twice</a></h2>
-  <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">VentureBeat</span><span class="meta-rest"> · Press · 24 Nov 2026</span></p>
   <p class="card-summary">Z.ai introduces its flagship GLM-5.4, a Loop Transformer model that achieves deeper processing by reusing layers instead of adding new ones. The architecture promises up to four times the performance of comparable models without increasing parameter count, positioning Z.ai as a contender in large‑scale language model development.</p>
-  <p class="insight"><strong>How to use:</strong> Watch Z.ai’s GLM-5.4 as it could influence future AI‑powered analytics and automation tools that your IT team may adopt. While it doesn’t directly impact your current Google Workspace or JumpCloud configuration, understanding its architecture could inform evaluations of next‑generation AI services that integrate with your SSO or endpoint security solutions. Keep an eye on Z.ai’s roadmap for potential integrations with your existing MDM and access‑management platforms within the next 90 days.</p>
+  <p class="insight"><strong>How to apply:</strong> Watch Z.ai’s GLM-5.4 as it could influence future AI‑powered analytics and automation tools that your IT team may adopt.</p>
 </article></div>
-    <h2 class="group-title">More industry news</h2>
+    <h2 class="group-title">More stories</h2>
     <div class="cards-grid"><article class="card news-card">
-  <figure class="card-figure"><img src="images/nearly-half-of-surveyed-engineers-and-leaders-say-the-ai-agents-that-write-their.webp" loading="lazy" width="1200" height="675" alt="A tangled copper wire and a polished steel screwdriver"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Research</span>
-    </div>
+  <figure class="card-figure"><img src="images/nearly-half-of-surveyed-engineers-and-leaders-say-the-ai-agents-that-write-their.webp" loading="lazy" width="1200" height="675" alt="A tangled copper wire and a polished steel screwdriver"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Research</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/nearly-half-of-surveyed-engineers-and-leaders-say-the-ai-agents-that-write-their.html">Nearly half of surveyed engineers and leaders say the AI agents that write their code also review it</a></h2>
-  <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">VentureBeat</span><span class="meta-rest"> · Press · 24 Nov 2026</span></p>
   <p class="card-summary">A recent survey finds that nearly half of engineers and leaders feel uneasy reviewing AI-generated code, with only 26% confident in understanding AI changes fully. This highlights a growing bottleneck in code quality control as AI tools become more pervasive in development.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor your team’s code review practices and consider integrating automated static analysis tools that flag AI-generated sections. Ensuring clear documentation and review protocols can mitigate the risk of subtle bugs slipping through, directly impacting the reliability of your production systems.</p>
+  <p class="insight"><strong>How to apply:</strong> Monitor your team’s code review practices and consider integrating automated static analysis tools that flag AI-generated sections.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/the-group-chat-where-your-ai-talks-behind-your-back.webp" loading="lazy" width="1200" height="675" alt="A cracked ceramic mug, a stack of blank white sheets, and a single black pen"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Security</span>
-    </div>
+  <figure class="card-figure"><img src="images/the-group-chat-where-your-ai-talks-behind-your-back.webp" loading="lazy" width="1200" height="675" alt="A cracked ceramic mug, a stack of blank white sheets, and a single black pen"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Security</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/the-group-chat-where-your-ai-talks-behind-your-back.html">The group chat where your AI talks behind your back</a></h2>
-  <div class="card-meta"><span>construct22.com</span><span class="sep" aria-hidden="true">•</span><span>27 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">construct22.com</span><span class="meta-rest"> · Press · 27 Nov 2026</span></p>
   <p class="card-summary">A new prompt tricks ChatGPT and other LLMs into fabricating a private WhatsApp‑style group chat that reveals user data, exposing how models can leak personal information. This demonstrates a potential privacy risk for anyone using LLMs in their workflows.</p>
-  <p class="insight"><strong>How to use:</strong> Check that any prompts you use in internal tools or support chats do not inadvertently reveal sensitive user data. Consider implementing a prompt‑audit step in your documentation and training to avoid accidental information leaks. This issue is most relevant to your use of AI‑powered support tools and customer data handling.</p>
+  <p class="insight"><strong>How to apply:</strong> Check that any prompts you use in internal tools or support chats do not inadvertently reveal sensitive user data.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/a-deterministic-subexponential-time-algorithm-for-the-discrete-logarithm-problem.webp" loading="lazy" width="1200" height="675" alt="A fractured quartz crystal and a polished steel disk"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Research</span>
-    </div>
+  <figure class="card-figure"><img src="images/a-deterministic-subexponential-time-algorithm-for-the-discrete-logarithm-problem.webp" loading="lazy" width="1200" height="675" alt="A fractured quartz crystal and a polished steel disk"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Research</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/a-deterministic-subexponential-time-algorithm-for-the-discrete-logarithm-problem.html">A Deterministic Subexponential-Time Algorithm for the Discrete Logarithm Problem [pdf]</a></h2>
-  <div class="card-meta"><span>eprint.iacr.org</span><span class="sep" aria-hidden="true">•</span><span>27 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">eprint.iacr.org</span><span class="meta-rest"> · Press · 27 Nov 2026</span></p>
   <p class="card-summary">A new deterministic subexponential-time algorithm for solving the discrete logarithm problem has been published in a research paper, potentially impacting the security foundations of asymmetric cryptography. This breakthrough could eventually undermine the cryptographic protocols that secure many IT infrastructure services, including those used by Google Workspace and other SaaS platforms.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor developments in this research area over the next three months, as new cryptanalytic techniques could force vendors to update key lengths or migration strategies for their encryption services.</p>
+  <p class="insight"><strong>How to apply:</strong> Monitor developments in this research area over the next three months, as new cryptanalytic techniques could force vendors to update key lengths or migration strategies for their encryption services.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/nvidia-hits-pause-on-chip-shipments-to-southeast-asia.webp" loading="lazy" width="1200" height="675" alt="A polished steel disk, a matte ceramic plate, and a translucent glass cube"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Regulation</span>
-    </div>
+  <figure class="card-figure"><img src="images/nvidia-hits-pause-on-chip-shipments-to-southeast-asia.webp" loading="lazy" width="1200" height="675" alt="A polished steel disk, a matte ceramic plate, and a translucent glass cube"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Policy</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/nvidia-hits-pause-on-chip-shipments-to-southeast-asia.html">Nvidia hits pause on chip shipments to Southeast Asia</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 26 Nov 2026</span></p>
   <p class="card-summary">Nvidia has ordered a temporary halt on server shipments to Malaysia, Singapore, Thailand, and Indonesia as it evaluates whether regional partners comply with U.S. export controls. The pause reflects a tightening of U.S. policy on Chinese access to high‑performance AI hardware.</p>
-  <p class="insight"><strong>How to use:</strong> Review whether your cloud or on‑prem AI workloads rely on Nvidia GPUs that might be sourced from these regions. If so, consider diversifying your hardware suppliers or negotiating with local partners to ensure compliance with U.S. export rules, otherwise you risk sudden supply disruptions.</p>
+  <p class="insight"><strong>How to apply:</strong> Review whether your cloud or on‑prem AI workloads rely on Nvidia GPUs that might be sourced from these regions.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/grand-theft-auto-vi-proves-why-efficiency-isnt-a-virtue.webp" loading="lazy" width="1200" height="675" alt="A stack of polished steel sheets beside a translucent glass sphere"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
+  <figure class="card-figure"><img src="images/grand-theft-auto-vi-proves-why-efficiency-isnt-a-virtue.webp" loading="lazy" width="1200" height="675" alt="A stack of polished steel sheets beside a translucent glass sphere"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">News</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/grand-theft-auto-vi-proves-why-efficiency-isnt-a-virtue.html">Grand Theft Auto VI proves why efficiency isn’t a virtue</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>26 Nov 2026</span></div>
-  <p class="card-summary">The release of Grand Theft Auto VI and the historic IPO of Anthropic’s Claude AI model made headlines last week, underscoring a shift away from generative‑AI‑driven game development and marking a milestone in the AI industry’s financial trajectory. While the events illustrate broader industry trends, they do not directly influence the day‑to‑day tools or security posture of most IT departments.</p>
-  <p class="insight"><strong>How to use:</strong> Keep an eye on Anthropic’s public offering for potential downstream impacts on AI services and pricing. Monitoring their API offerings over the next 30 days could reveal new integration opportunities that align with existing Google Workspace or JumpCloud workflows.</p>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 26 Nov 2026</span></p>
+  <p class="card-summary">The release of Grand Theft Auto VI and the historic IPO of Anthropic’s Claude AI model made headlines last week, underscoring a shift away from generative‑AI‑driven game development and marking a milestone in the AI industry’s financial trajectory. While the events illustrate broader industry trends, they do not directly influence the day‑to‑day tools or security posture of most IT departments.</p>
+  <p class="insight"><strong>How to apply:</strong> Keep an eye on Anthropic’s public offering for potential downstream impacts on AI services and pricing.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/even-the-best-ai-agents-struggle-with-everyday-life.webp" loading="lazy" width="1200" height="675" alt="A cracked ceramic mug, a tangled ball of yarn, and a stack of loose paper sheets"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Research</span>
-    </div>
+  <figure class="card-figure"><img src="images/even-the-best-ai-agents-struggle-with-everyday-life.webp" loading="lazy" width="1200" height="675" alt="A cracked ceramic mug, a tangled ball of yarn, and a stack of loose paper sheets"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">Research</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/even-the-best-ai-agents-struggle-with-everyday-life.html">Even the best AI agents struggle with everyday life</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 24 Nov 2026</span></p>
   <p class="card-summary">ShellBench, a benchmark built with Red Hat, Hugging Face, and others, shows that top AI agents from OpenAI, Anthropic, and Meta fail over 15% of the time on everyday tasks, raising safety and reliability concerns. The study highlights gaps in agents’ ability to handle messy personal workspaces, a key issue as personal assistants gain traction among developers.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor your organization’s adoption of personal AI assistants in tools like Google Workspace or Microsoft 365, and audit their handling of calendar, email, and spreadsheet data for safety violations. Flag any agent that consistently fails to meet safety criteria, and consider restricting or disabling unsupervised agent usage until reliability improves.</p>
-</article>
-<article class="card news-card">
-  <figure class="card-figure"><img src="images/buy-nothing-day-friday-november-27th-2026.webp" loading="lazy" width="1200" height="675" alt="A glass bottle, a wooden spoon, and a ceramic mug"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
+  <p class="insight"><strong>How to apply:</strong> Monitor your organization’s adoption of personal AI assistants in tools like Google Workspace or Microsoft 365, and audit their handling of calendar, email, and spreadsheet data for safety violations.</p>
+</article></div>
+    <h2 class="group-title">More stories</h2>
+    <div class="cards-grid"><article class="card news-card">
+  <figure class="card-figure"><img src="images/buy-nothing-day-friday-november-27th-2026.webp" loading="lazy" width="1200" height="675" alt="A glass bottle, a wooden spoon, and a ceramic mug"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">News</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/buy-nothing-day-friday-november-27th-2026.html">Buy Nothing Day – Friday November 27th 2026</a></h2>
-  <div class="card-meta"><span>buynothingday.co.uk</span><span class="sep" aria-hidden="true">•</span><span>27 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">buynothingday.co.uk</span><span class="meta-rest"> · Press · 27 Nov 2026</span></p>
   <p class="card-summary">Buy Nothing Day, a global consumerism detox event scheduled for Friday November 27th, encourages individuals to refrain from shopping for 24 hours to reduce environmental impact.</p>
-  <p class="insight"><strong>How to use:</strong> Consider scheduling a brief internal team reflection on digital consumption habits—reviewing unnecessary cloud resource usage and promoting mindful IT provisioning.</p>
-</article></div>
-    <h2 class="group-title">More industry news</h2>
-    <div class="cards-grid"><article class="card news-card">
-  <figure class="card-figure"><img src="images/amazon-and-meta-reportedly-in-talks-to-lift-blockade-on-ai-agent-muse.webp" loading="lazy" width="1200" height="675" alt="A silver key, a glass pane, and a wooden block"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
+  <p class="insight"><strong>How to apply:</strong> Consider scheduling a brief internal team reflection on digital consumption habits—reviewing unnecessary cloud resource usage and promoting mindful IT provisioning.</p>
+</article>
+<article class="card news-card">
+  <figure class="card-figure"><img src="images/amazon-and-meta-reportedly-in-talks-to-lift-blockade-on-ai-agent-muse.webp" loading="lazy" width="1200" height="675" alt="A silver key, a glass pane, and a wooden block"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">News</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/amazon-and-meta-reportedly-in-talks-to-lift-blockade-on-ai-agent-muse.html">Amazon and Meta reportedly in talks to lift blockade on AI agent Muse</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>25 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 25 Nov 2026</span></p>
   <p class="card-summary">Amazon and Meta are reportedly negotiating to allow Meta’s AI agent Muse to connect directly to Amazon’s marketplace, potentially enabling users to purchase products via Muse. The talks focus on search presentation and advertising concerns, with Amazon wary of third‑party agents impacting its direct customer relationships.</p>
   
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/walmart-teams-up-with-meta-to-bring-black-friday-deals-to-ai-agent-muse.webp" loading="lazy" width="1200" height="675" alt="A white plastic shopping bag and a blue glass bottle"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
+  <figure class="card-figure"><img src="images/walmart-teams-up-with-meta-to-bring-black-friday-deals-to-ai-agent-muse.webp" loading="lazy" width="1200" height="675" alt="A white plastic shopping bag and a blue glass bottle"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">News</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/walmart-teams-up-with-meta-to-bring-black-friday-deals-to-ai-agent-muse.html">Walmart teams up with Meta to bring Black Friday deals to AI agent Muse</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 24 Nov 2026</span></p>
   <p class="card-summary">Walmart has partnered with Meta to enable its Black Friday deals to be accessed through Meta’s AI agent, Muse. The collaboration uses Walmart’s Agent Gateway to let Muse query product listings and build carts while safeguarding user data.</p>
-  <p class="insight"><strong>How to use:</strong> Check your internal security policies for third‑party AI integrations and ensure your access controls and audit logs cover any external agents that may interact with your customer data. This helps prevent accidental data exposure and ensures compliance with your SSO and MDM settings.</p>
+  <p class="insight"><strong>How to apply:</strong> Check your internal security policies for third‑party AI integrations and ensure your access controls and audit logs cover any external agents that may interact with your customer data.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/anthropic-shares-fall-below-ipo-price-a-worrying-sign-for-ai-startups.webp" loading="lazy" width="1200" height="675" alt="A single smooth steel rod, a glass bottle, and a wooden block"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
+  <figure class="card-figure"><img src="images/anthropic-shares-fall-below-ipo-price-a-worrying-sign-for-ai-startups.webp" loading="lazy" width="1200" height="675" alt="A single smooth steel rod, a glass bottle, and a wooden block"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">News</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/anthropic-shares-fall-below-ipo-price-a-worrying-sign-for-ai-startups.html">Anthropic shares fall below IPO price, a worrying sign for AI startups</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 24 Nov 2026</span></p>
   <p class="card-summary">Anthropic’s shares fell below their IPO price, trading as low as $76 a share, signaling potential market hesitation toward AI startups. This decline may influence investor confidence and future funding for AI ventures.</p>
-  <p class="insight"><strong>How to use:</strong> Monitor how this market sentiment could affect funding availability for AI solutions your team considers, and be prepared to adjust budget requests for new AI tooling if investor appetite wanes.</p>
+  <p class="insight"><strong>How to apply:</strong> Monitor how this market sentiment could affect funding availability for AI solutions your team considers, and be prepared to adjust budget requests for new AI tooling if investor appetite wanes.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/maple-raises-53m-to-build-ai-products-that-protect-your-data-even-from-itself.webp" loading="lazy" width="1200" height="675" alt="A glass vial, a steel lock, and a blank sheet of paper"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
+  <figure class="card-figure"><img src="images/maple-raises-53m-to-build-ai-products-that-protect-your-data-even-from-itself.webp" loading="lazy" width="1200" height="675" alt="A glass vial, a steel lock, and a blank sheet of paper"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">News</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/maple-raises-53m-to-build-ai-products-that-protect-your-data-even-from-itself.html">Maple raises $5.3M to build AI products that protect your data, even from itself</a></h2>
-  <div class="card-meta"><span>TechCrunch</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
-  <p class="card-summary">Maple, a privacy‑focused AI startup, has raised $5.3 M to develop an AI app that keeps user data encrypted and invisible even to the company’s own servers. The launch of Maple Work, a desktop agent that can manage files and browser tasks, aims to compete with mainstream AI agents while preserving strict data isolation.</p>
-  <p class="insight"><strong>How to use:</strong> This announcement is mainly background context; it does not directly affect your current Google Workspace, JumpCloud, Freshservice, or other tools. Keep an eye on Maple’s future releases as they may introduce new privacy‑first AI capabilities that could influence how you evaluate third‑party AI integrations for your organization.</p>
+  <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 24 Nov 2026</span></p>
+  <p class="card-summary">Maple, a privacy‑focused AI startup, has raised $5.3 M to develop an AI app that keeps user data encrypted and invisible even to the company’s own servers. The launch of Maple Work, a desktop agent that can manage files and browser tasks, aims to compete with mainstream AI agents while preserving strict data isolation.</p>
+  <p class="insight"><strong>How to apply:</strong> This announcement is mainly background context; it does not directly affect your current Google Workspace, JumpCloud, Freshservice, or other tools.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/how-cutting-edge-prosthetics-can-help-probe-the-human-mind.webp" loading="lazy" width="1200" height="675" alt="A titanium prosthetic arm, a translucent polymer brain model, and a silver neural chip"><figcaption>AI illustration</figcaption></figure><div class="card-header">
-    <div class="card-tags">
-      <span class="tier-label">Press</span>
-      <span class="tag-pill">Other</span>
-    </div>
+  <figure class="card-figure"><img src="images/how-cutting-edge-prosthetics-can-help-probe-the-human-mind.webp" loading="lazy" width="1200" height="675" alt="A titanium prosthetic arm, a translucent polymer brain model, and a silver neural chip"></figure><div class="card-header">
+    <div class="card-tags"><span class="tag-pill">News</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/how-cutting-edge-prosthetics-can-help-probe-the-human-mind.html">How cutting-edge prosthetics can help probe the human mind</a></h2>
-  <div class="card-meta"><span>technologyreview.com</span><span class="sep" aria-hidden="true">•</span><span>27 Nov 2026</span></div>
+  <p class="card-meta"><span class="meta-who">technologyreview.com</span><span class="meta-rest"> · Press · 27 Nov 2026</span></p>
   <p class="card-summary">The article discusses advances in prosthetic technology and their potential to explore the human mind, featuring insights from trauma therapist Alexander (Avi) Davidson.</p>
-  <p class="insight"><strong>How to use:</strong> No direct application for IT infrastructure or workflow optimization.</p>
+  <p class="insight"><strong>How to apply:</strong> No direct application for IT infrastructure or workflow optimization.</p>
 </article></div>
-  </div>
-
-  <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
-    <section class="archive-week">
-<h2 class="group-title">Week of 23 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-26</div>
-  <div class="archive-count">2 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.34770v1" target="_blank" rel="noopener noreferrer">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a><a class="archive-title" href="https://arxiv.org/abs/2611.34785v1" target="_blank" rel="noopener noreferrer">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-25</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.29942v1" target="_blank" rel="noopener noreferrer">LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-24</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.31065v1" target="_blank" rel="noopener noreferrer">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.31118v1" target="_blank" rel="noopener noreferrer">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 16 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-22</div>
-  <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2608.25793v1" target="_blank" rel="noopener noreferrer">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a><a class="archive-title" href="https://arxiv.org/abs/2609.20886v1" target="_blank" rel="noopener noreferrer">BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</a><a class="archive-title" href="https://arxiv.org/abs/2609.12171v1" target="_blank" rel="noopener noreferrer">WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-21</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.26553v1" target="_blank" rel="noopener noreferrer">Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)</a><a class="archive-title" href="https://arxiv.org/abs/2611.26363v1" target="_blank" rel="noopener noreferrer">HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs</a><a class="archive-title" href="https://arxiv.org/abs/2611.25905v1" target="_blank" rel="noopener noreferrer">Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-20</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a><a class="archive-title" href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.26432v1" target="_blank" rel="noopener noreferrer">MaskPE: One Mask, Two Roles: Weight Placement and MAC Gating in Systolic Arrays</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-19</div>
-  <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24052v1" target="_blank" rel="noopener noreferrer">From Data to Valves: A Self-Learning, Production-Grade Edge Stack for Sustainable HVAC Control</a><a class="archive-title" href="https://arxiv.org/abs/2611.23905v1" target="_blank" rel="noopener noreferrer">Inference-Time Scaling in Agentic Hardware Verification Workflows: A Multi-Strategy Characterization Across Protocol Complexity</a><a class="archive-title" href="https://arxiv.org/abs/2611.24491v1" target="_blank" rel="noopener noreferrer">Probing agent overeagerness in realistic settings with continuation audits</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-18</div>
-  <div class="archive-count">2 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.23142v1" target="_blank" rel="noopener noreferrer">Mind the Gap: A Deployed Multi-Agent System for Documentation Maintenance</a><a class="archive-title" href="https://arxiv.org/abs/2611.23063v1" target="_blank" rel="noopener noreferrer">Deep Reinforcement Learning for Heat Pump and Underfloor Heating Control: An End-to-End Case Study</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-16</div>
-  <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.18392v1" target="_blank" rel="noopener noreferrer">VelServe: Taming Decode Jitters in LLM Inference with Tail-Calibrated Scheduling</a><a class="archive-title" href="https://arxiv.org/abs/2611.18453v1" target="_blank" rel="noopener noreferrer">Black-Box Uncertainty Quantification for Large Language Models via Ensemble-of-Ensembles</a><a class="archive-title" href="https://arxiv.org/abs/2611.18553v1" target="_blank" rel="noopener noreferrer">WeightBench: Evaluating Language Models as Weight-Space Programmers</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 09 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-15</div>
-  <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a><a class="archive-title" href="https://arxiv.org/abs/2611.15700v1" target="_blank" rel="noopener noreferrer">AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</a><a class="archive-title" href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-14</div>
-  <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15118v1" target="_blank" rel="noopener noreferrer">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.15268v1" target="_blank" rel="noopener noreferrer">Knowledge in the Harness, Reliability in the Weights: Teacher-Free Co-Evolution of an LLM Agent</a><a class="archive-title" href="https://arxiv.org/abs/2611.17108v1" target="_blank" rel="noopener noreferrer">LazyWeights: Decode-on-Demand Edge LLMs</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-13</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.17304v1" target="_blank" rel="noopener noreferrer">Where LLM Agents Get Stuck Debugging Databases: Access More Than Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.17280v1" target="_blank" rel="noopener noreferrer">Synthesis Smuggling: Maliciously Hiding Inferred Personal Attributes in LLM Outputs</a><a class="archive-title" href="https://arxiv.org/abs/2611.16693v1" target="_blank" rel="noopener noreferrer">MobileProbe: Adaptive Security Evaluation of Mobile Agents via Trajectory-Aware Injection</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-11</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.11929v1" target="_blank" rel="noopener noreferrer">Can LLM Agents Organize Their Own Memory?</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-10</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.12412v1" target="_blank" rel="noopener noreferrer">Unprompted coordination through shared memory in LLM agents: a locked two-implementation replication and extension</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-09</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.09891v1" target="_blank" rel="noopener noreferrer">CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse</a><a class="archive-title" href="https://arxiv.org/abs/2611.08781v1" target="_blank" rel="noopener noreferrer">Aligning, Fast and Slow: A Control-Theoretic Oversight Framework for Long-Horizon Trajectories and Maintained Deployments</a><a class="archive-title" href="https://arxiv.org/abs/2611.09734v1" target="_blank" rel="noopener noreferrer">GuardrailAgent: An Agentic Framework for Jailbreak Defense</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 02 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-07</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.08116v1" target="_blank" rel="noopener noreferrer">Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup</a><a class="archive-title" href="https://arxiv.org/abs/2611.07558v1" target="_blank" rel="noopener noreferrer">SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking</a><a class="archive-title" href="https://arxiv.org/abs/2611.08325v1" target="_blank" rel="noopener noreferrer">Decision Models as Retrieval Gates Against Injection and Pollution</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-06</div>
-  <div class="archive-count">2 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.08483v1" target="_blank" rel="noopener noreferrer">SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization</a><a class="archive-title" href="https://arxiv.org/abs/2611.06409v1" target="_blank" rel="noopener noreferrer">Zero-Shot Coordination among LLM Agents</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-05</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</a><a class="archive-title" href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</a><a class="archive-title" href="https://arxiv.org/abs/2611.06858v1" target="_blank" rel="noopener noreferrer">CompressionBench: How can your coding agents compress LLMs?</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-04</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.04032v1" target="_blank" rel="noopener noreferrer">ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration</a><a class="archive-title" href="https://arxiv.org/abs/2611.03772v1" target="_blank" rel="noopener noreferrer">RuntimeTickets: Source-Grounded Security Obligations for Agent Skills</a><a class="archive-title" href="https://arxiv.org/abs/2611.03852v1" target="_blank" rel="noopener noreferrer">Why Pay for Long Reasoning When Rewrite Do Trick? Causal Effects of Reasoning History Compaction on Future Generation and Agent Cost</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-03</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.03434v1" target="_blank" rel="noopener noreferrer">Optimize the Harness, Not the Model: Fitting a Minimal Agent to a Self-Hostable LLM for Investigative Analysis</a><a class="archive-title" href="https://arxiv.org/abs/2611.03431v1" target="_blank" rel="noopener noreferrer">IAMRAGBENCH: Benchmarking Authorization Expansions in LLM-Generated AWS IAM Policies under RAG Poisoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.03575v1" target="_blank" rel="noopener noreferrer">VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifiably</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-02</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.41968v1" target="_blank" rel="noopener noreferrer">Prune Gradually, Adapt Sparsely: Efficient Pruning of Large Language Models at Extreme Sparsity</a><a class="archive-title" href="https://arxiv.org/abs/2610.41172v1" target="_blank" rel="noopener noreferrer">Context as Infrastructure: Knowledge Compilation for Retrieval in Agentic Systems with Harnesses</a><a class="archive-title" href="https://arxiv.org/abs/2610.41998v1" target="_blank" rel="noopener noreferrer">SecPO: Principled Adversarial Training for Prompt Injection Security</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 26 Oct 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-01</div>
-  <div class="archive-count">1 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.40483v1" target="_blank" rel="noopener noreferrer">Preserving Utility in Continual LLM Unlearning via Orthogonal Projections</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-31</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.39807v1" target="_blank" rel="noopener noreferrer">InferD: A Honeypot Framework for AI Inference Infrastructure</a><a class="archive-title" href="https://arxiv.org/abs/2610.39621v1" target="_blank" rel="noopener noreferrer">The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases</a><a class="archive-title" href="https://arxiv.org/abs/2610.38800v1" target="_blank" rel="noopener noreferrer">When Relevant Code Is Wrong: Runtime-Aware Context for AI Coding Agents</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-30</div>
-  <div class="archive-count">2 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.38799v1" target="_blank" rel="noopener noreferrer">CARI: Cross-Boundary Adversarial Runtime Injection in Coding-Agent Workflows</a><a class="archive-title" href="https://arxiv.org/abs/2610.40396v1" target="_blank" rel="noopener noreferrer">Understanding and Mitigating Role Spoofing in LLMs</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-29</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.37432v1" target="_blank" rel="noopener noreferrer">Request-Adaptive Execution for Efficient Hybrid LLM Inference</a><a class="archive-title" href="https://arxiv.org/abs/2610.36549v1" target="_blank" rel="noopener noreferrer">From Ripple to Boundary: Deterministic Impact Boundaries for LLM-Based Software Evolution</a><a class="archive-title" href="https://arxiv.org/abs/2610.35451v1" target="_blank" rel="noopener noreferrer">Then there is prompt injection, a malicious email, ...: The Wild Wide West of OpenClaw Agentic System Security</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-27</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.34620v1" target="_blank" rel="noopener noreferrer">Built to Remember, Shipped to Forget: Operational Contracts, Failures, and Repairs in Containerized LLM Agent Deployments</a><a class="archive-title" href="https://arxiv.org/abs/2610.35629v1" target="_blank" rel="noopener noreferrer">From Language to Drives: A Multimodal Framework for Aligning Autonomous Robots with Human Purposes</a><a class="archive-title" href="https://arxiv.org/abs/2610.34634v1" target="_blank" rel="noopener noreferrer">AgentProofBench: Benchmarking Reusable Verifiers for Web Agents</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-26</div>
-  <div class="archive-count">3 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.32131v1" target="_blank" rel="noopener noreferrer">Pairing Matters: Performance, Failures, and Efficiency in Lightweight Coding Agents</a><a class="archive-title" href="https://arxiv.org/abs/2610.32851v1" target="_blank" rel="noopener noreferrer">Reimagining Enterprise RAG for Multi-Agent Systems: A Knowledge Layer That Organizes Before It Retrieves</a><a class="archive-title" href="https://arxiv.org/abs/2610.32752v1" target="_blank" rel="noopener noreferrer">ActionRAG: Evidence-Refining Graph Diffusion for Long-Term Memory in LLM Agents</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 19 Oct 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-10-23</div>
-  <div class="archive-count">5 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.31657v1" target="_blank" rel="noopener noreferrer">Cost-Aware Abstention for LLM-Based IT Ticket Classification</a><a class="archive-title" href="https://arxiv.org/abs/2610.31573v1" target="_blank" rel="noopener noreferrer">Social-HUMINT: An LLM-Augmented Unified Framework for Measuring Social Media Exposure</a><a class="archive-title" href="https://arxiv.org/abs/2610.31552v1" target="_blank" rel="noopener noreferrer">CAMGen: A Core Change-Aware Multi-View Framework for Commit Message Generation</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-22</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.30114v1" target="_blank" rel="noopener noreferrer">The End of Consensus Research?</a><a class="archive-title" href="https://arxiv.org/abs/2610.30026v1" target="_blank" rel="noopener noreferrer">What the Author Wrote, What the Agent Reads: Silent Cue Loss in Enterprise Document Ingestion</a><a class="archive-title" href="https://arxiv.org/abs/2610.30016v1" target="_blank" rel="noopener noreferrer">Code Comprehensor: Hierarchical Documentation and Cross-Modal Retrieval for Large Repositories</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-21</div>
-  <div class="archive-count">4 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.26664v1" target="_blank" rel="noopener noreferrer">Honeypots for AI Agent Insider Threats</a><a class="archive-title" href="https://arxiv.org/abs/2610.28612v1" target="_blank" rel="noopener noreferrer">TraceLite: Efficient Trace Reduction for SWE Agents via Optical Compression and Redundancy Removal</a><a class="archive-title" href="https://arxiv.org/abs/2610.28611v1" target="_blank" rel="noopener noreferrer">Semantic Observability for Autonomous Systems Diagnostics</a></div>
-</div></div>
-</section>
-  </div>
-
-  <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
-    <section class="archive-week">
-<h2 class="group-title">Week of 23 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-27</div>
-  <div class="archive-count">21 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/data/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack" target="_blank" rel="noopener noreferrer">Can you give AI agents live data without rebuilding your data stack?</a><a class="archive-title" href="https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia/" target="_blank" rel="noopener noreferrer">Nvidia hits pause on chip shipments to Southeast Asia</a><a class="archive-title" href="https://venturebeat.com/technology/z-ais-glm-5-4-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-twice" target="_blank" rel="noopener noreferrer">Z.ai&#x27;s GLM-5.4 aims to match models up to four times its size by running 28 layers twice</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-26</div>
-  <div class="archive-count">14 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/" target="_blank" rel="noopener noreferrer">OpenAI says heavy ChatGPT users may hit limits sooner as it merges Chat and Work</a><a class="archive-title" href="https://venturebeat.com/technology/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when-they-connect-one" target="_blank" rel="noopener noreferrer">MCP servers can now deliver AI agent skills, changing what companies approve when they connect one</a><a class="archive-title" href="https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features" target="_blank" rel="noopener noreferrer">The New York Times warns photographers not to update Photoshop over AI features</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-25</div>
-  <div class="archive-count">26 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it" target="_blank" rel="noopener noreferrer">After token leaderboards and spending caps, Snowflake has a third idea: Keep the cap, then learn from whoever breaks it</a><a class="archive-title" href="https://openai.com/index/searching-for-distant-planets-with-astra" target="_blank" rel="noopener noreferrer">Searching for distant planets with Astra</a><a class="archive-title" href="https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance" target="_blank" rel="noopener noreferrer">Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-24</div>
-  <div class="archive-count">21 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://stalw.art/blog/microsoft-exchange-replacement/" target="_blank" rel="noopener noreferrer">Stalwart is now a drop-in replacement for Microsoft Exchange</a><a class="archive-title" href="https://openai.com/index/introducing-shirudo" target="_blank" rel="noopener noreferrer">OpenAI and Cisco introduce Shirudo</a><a class="archive-title" href="https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/" target="_blank" rel="noopener noreferrer">How to tell a cyberattack from a plain old outage</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-23</div>
-  <div class="archive-count">23 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips/" target="_blank" rel="noopener noreferrer">Amazon snaps up Decart’s AI optimization tech for $7.5B as it prepares to sell Trainium chips</a><a class="archive-title" href="https://ladybird.org/posts/alpha/" target="_blank" rel="noopener noreferrer">Ladybird Is Now in Alpha</a><a class="archive-title" href="https://techcrunch.com/2026/11/23/jensen-huang-isnt-out-of-the-woods-yet/" target="_blank" rel="noopener noreferrer">Jensen Huang isn’t out of the woods yet</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 16 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-22</div>
-  <div class="archive-count">11 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines" target="_blank" rel="noopener noreferrer">Even the fastest AI clusters can be held back by their release pipelines</a><a class="archive-title" href="https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/" target="_blank" rel="noopener noreferrer">Banks Have Had It Up to Here With Your AI Agent</a><a class="archive-title" href="https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/" target="_blank" rel="noopener noreferrer">Anthropic’s IPO could deliver $156B to charity</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-21</div>
-  <div class="archive-count">22 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/brace-yourself-for-years-of-outage-chaos/" target="_blank" rel="noopener noreferrer">The Outages Are Just Getting Started</a><a class="archive-title" href="https://www.wired.com/story/uncanny-valley-podcast-whats-with-all-these-outages/" target="_blank" rel="noopener noreferrer">What’s With All These Outages?</a><a class="archive-title" href="https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html" target="_blank" rel="noopener noreferrer">RCE in Gnupg</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-20</div>
-  <div class="archive-count">29 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/19/these-tech-outages-are-giving-y2k-ai-agent-style/" target="_blank" rel="noopener noreferrer">These tech outages are giving Y2K, AI agent style</a><a class="archive-title" href="https://openai.com/business/learn/deploying-daybreak-red" target="_blank" rel="noopener noreferrer">Deploying Daybreak Red</a><a class="archive-title" href="https://arstechnica.com/security/2026/11/man-charged-with-spying-on-silicon-valley-tech-and-defense-company-for-russia/" target="_blank" rel="noopener noreferrer">Man hired by Russia spied on Silicon Valley tech and defense company, feds say</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-19</div>
-  <div class="archive-count">36 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://deepmind.google/blog/introducing-gemini-4-neon/" target="_blank" rel="noopener noreferrer">Introducing Gemini 4 Neon</a><a class="archive-title" href="https://openai.com/index/the-silent-consensus" target="_blank" rel="noopener noreferrer">The Silent Consensus</a><a class="archive-title" href="https://techcrunch.com/2026/11/18/amidst-fears-of-ai-cyberattacks-satya-nadella-says-lots-of-critical-infrastructure-is-unpatchable/" target="_blank" rel="noopener noreferrer">Amidst fears of AI cyberattacks, Satya Nadella says lots of critical infrastructure is ‘unpatchable’</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-18</div>
-  <div class="archive-count">18 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arstechnica.com/security/2026/11/malicious-code-delivered-through-optimizely-hits-visitors-to-hundreds-of-sites/" target="_blank" rel="noopener noreferrer">Hundreds of websites deliver potent malware cocktail to unsuspecting visitors</a><a class="archive-title" href="https://techcrunch.com/2026/11/17/nvidia-says-its-open-source-ai-strategy-remains-intact-after-jensen-huangs-exit/" target="_blank" rel="noopener noreferrer">Nvidia says its open source AI strategy remains intact after Jensen Huang’s exit</a><a class="archive-title" href="https://blog.cloudflare.com/quad9-withdrawal-from-france/" target="_blank" rel="noopener noreferrer">Quad9&#x27;s withdrawal from France: A canary in the coal mine</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-17</div>
-  <div class="archive-count">25 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/16/california-state-ag-sues-openai-over-rogue-agent-incidents/" target="_blank" rel="noopener noreferrer">California state AG sues OpenAI over rogue agent incidents</a><a class="archive-title" href="https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/" target="_blank" rel="noopener noreferrer">Optimizely Compromised, Served Malware on Zoom, GitLab</a><a class="archive-title" href="https://huggingface.co/blog/openrouter" target="_blank" rel="noopener noreferrer">Hugging Face and OpenRouter join forces to make open-weight models easy to run</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-16</div>
-  <div class="archive-count">7 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/advancing-computer-use-for-healthcare-teams" target="_blank" rel="noopener noreferrer">Advancing computer-use agents for healthcare teams</a><a class="archive-title" href="https://openai.com/index/lvmh-media-division-partnership" target="_blank" rel="noopener noreferrer">LVMH’s Media Division announces strategic partnership with OpenAI</a><a class="archive-title" href="https://www.technologyreview.com/2026/11/16/1146070/building-ai-that-can-work-across-the-enterprise/" target="_blank" rel="noopener noreferrer">Building AI that can work across the enterprise</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 09 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-15</div>
-  <div class="archive-count">14 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/" target="_blank" rel="noopener noreferrer">Where was Nvidia’s security team?</a><a class="archive-title" href="https://www.wired.com/story/this-ai-tamagotchi-oats-turns-everyday-objects-into-needy-virtual-pets/" target="_blank" rel="noopener noreferrer">This AI Tamagotchi Turns Everyday Objects Into Needy Virtual Pets</a><a class="archive-title" href="https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches" target="_blank" rel="noopener noreferrer">We&#x27;re Asking an Appeals Court to Require a Warrant for ALPR Searches</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-14</div>
-  <div class="archive-count">6 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/beware-the-new-ai-fueled-ransomware-boom/" target="_blank" rel="noopener noreferrer">Beware the New AI-Fueled Ransomware Boom</a><a class="archive-title" href="https://openai.com/business/customer-stories/shield" target="_blank" rel="noopener noreferrer">Shield helps technicians hand off legacy portal work with OpenAI</a><a class="archive-title" href="https://www.wired.com/story/no-pilots-few-air-traffic-controllers-what-could-go-wrong/" target="_blank" rel="noopener noreferrer">No Pilots. Few Air Traffic Controllers. What Could Go Wrong?</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-13</div>
-  <div class="archive-count">33 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://openai.com/business/customer-stories/amplitude" target="_blank" rel="noopener noreferrer">How Amplitude ships product improvements in 1–2 days with OpenAI</a><a class="archive-title" href="https://openai.com/business/customer-stories/holidays-extras-codex" target="_blank" rel="noopener noreferrer">Holiday Extras is rethinking what it can build with Codex</a><a class="archive-title" href="https://deepmind.google/blog/opening-the-datasets-behind-our-ai-weather-models/" target="_blank" rel="noopener noreferrer">Opening the datasets behind our AI weather models</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-12</div>
-  <div class="archive-count">31 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/jiostar-vijay-seshadri" target="_blank" rel="noopener noreferrer">JioStar’s chief architect on AI discovery at 500M-user scale</a><a class="archive-title" href="https://research.google/blog/using-wearables-to-enable-cardiovascular-kidney-metabolic-ckm-risk-profiling-for-personalized-coaching/" target="_blank" rel="noopener noreferrer">Using wearables to enable cardiovascular-kidney-metabolic (CKM) risk profiling for personalized coaching</a><a class="archive-title" href="https://techcrunch.com/2026/11/11/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/" target="_blank" rel="noopener noreferrer">The unfolding Jensen Huang scandal: a timeline</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-11</div>
-  <div class="archive-count">26 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/teen-girl-asked-gemini-about-suicide-for-months-until-it-was-flagged/" target="_blank" rel="noopener noreferrer">A 13-Year-Old Asked AI About Suicide on Her School Laptop. It Didn’t Get Flagged for Weeks</a><a class="archive-title" href="https://openai.com/index/introducing-businesses-chatgpt" target="_blank" rel="noopener noreferrer">Introducing Businesses in ChatGPT</a><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener noreferrer">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-10</div>
-  <div class="archive-count">33 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://arstechnica.com/security/2026/11/vulnerability-that-lets-hackers-ssh-into-linux-devices-is-under-active-exploitation/" target="_blank" rel="noopener noreferrer">Vulnerability that lets hackers SSH into Linux devices is under active exploitation</a><a class="archive-title" href="https://www.wired.com/story/jensen-huangs-troubles-leaves-the-ai-industry-reeling/" target="_blank" rel="noopener noreferrer">Jensen Huang’s Troubles Leave the AI Industry Reeling</a><a class="archive-title" href="https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/" target="_blank" rel="noopener noreferrer">TPU 8tx and TPU 8i Max</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-09</div>
-  <div class="archive-count">16 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/" target="_blank" rel="noopener noreferrer">Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50”</a><a class="archive-title" href="https://techcrunch.com/2026/11/09/automattic-debuts-a-platform-to-deploy-vibe-coding-apps-amid-a-changing-internet/" target="_blank" rel="noopener noreferrer">Automattic debuts a platform to deploy vibe coding apps amid a changing internet</a><a class="archive-title" href="https://news.ycombinator.com/item?id=50422628" target="_blank" rel="noopener noreferrer">ChatGPT Desktop forwards your SSH agent to remote machines</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 02 Nov 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-08</div>
-  <div class="archive-count">6 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/" target="_blank" rel="noopener noreferrer">After the midterms, things are looking rocky for Elon Musk and data centers</a><a class="archive-title" href="https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview/" target="_blank" rel="noopener noreferrer">GitHub New pull request overview page in public preview</a><a class="archive-title" href="https://techcrunch.com/2026/11/06/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots/" target="_blank" rel="noopener noreferrer">Physicl raises $10M to make the digital world real enough for robots</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-07</div>
-  <div class="archive-count">13 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://8rank.ai/game/apple-intelligence-personal-knowledge-graph" target="_blank" rel="noopener noreferrer">Every Mac comes with an (undocumented) family member classifier</a><a class="archive-title" href="https://techcrunch.com/podcast/how-a-blue-wave-midterm-might-reshape-the-ai-industry/" target="_blank" rel="noopener noreferrer">How a Blue Wave midterm might reshape the AI industry</a><a class="archive-title" href="https://openai.com/index/franklin-templeton" target="_blank" rel="noopener noreferrer">Franklin Templeton uses OpenAI to support investment research</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-06</div>
-  <div class="archive-count">21 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/cultfit-builds-with-codex" target="_blank" rel="noopener noreferrer">Cult.fit builds operational muscle with Codex</a><a class="archive-title" href="https://deepmind.google/blog/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips/" target="_blank" rel="noopener noreferrer">Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips</a><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/" target="_blank" rel="noopener noreferrer">Formally verifying agent-written full-stack web apps with PDD Kit</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-05</div>
-  <div class="archive-count">28 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" target="_blank" rel="noopener noreferrer">Dharma Field Extractor: Any Document In, Structured Fields in JSON Out</a><a class="archive-title" href="https://openai.com/index/introducing-images-2-6" target="_blank" rel="noopener noreferrer">Introducing Images 2.6</a><a class="archive-title" href="https://techcrunch.com/2026/11/05/a-yc-startup-is-putting-1m-behind-five-unsolved-materials-science-problems-for-ai/" target="_blank" rel="noopener noreferrer">A YC startup is putting $1M behind five unsolved materials science problems for AI</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-04</div>
-  <div class="archive-count">26 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/" target="_blank" rel="noopener noreferrer">Securing the agentic enterprise with data lineage</a><a class="archive-title" href="https://www.technologyreview.com/2026/11/02/1147846/the-agentic-web-is-here/" target="_blank" rel="noopener noreferrer">The agentic web is here</a><a class="archive-title" href="https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/" target="_blank" rel="noopener noreferrer">Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-03</div>
-  <div class="archive-count">36 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/" target="_blank" rel="noopener noreferrer">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a><a class="archive-title" href="https://www.cnbc.com/2026/11/02/oracle-files-to-sell-20-billion-in-new-stock-bonds-to-finance-ai-buildout.html" target="_blank" rel="noopener noreferrer">Oracle files to sell $20B in new stock, bonds to finance AI buildout</a><a class="archive-title" href="https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/" target="_blank" rel="noopener noreferrer">Trajectory raises $45M to make AI model training accessible to nontechnical experts</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-11-02</div>
-  <div class="archive-count">12 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack" target="_blank" rel="noopener noreferrer">Supermarket freezers across Europe hit by second suspected cyber-attack</a><a class="archive-title" href="https://techcrunch.com/2026/11/02/omen-ai-adds-liquid-know-how-in-16-million-aquatic-labs-acquisition/" target="_blank" rel="noopener noreferrer">Omen AI adds liquid know-how in $16 million Aquatic Labs acquisition</a><a class="archive-title" href="https://www.wired.com/story/hundreds-of-mundane-ai-apps-are-hiding-abusive-deepfake-features/" target="_blank" rel="noopener noreferrer">Hundreds of Mundane AI Apps Are Hiding Sexually Abusive Deepfake Features</a></div>
-</div></div>
-</section>
-<section class="archive-week">
-<h2 class="group-title">Week of 26 Oct 2026</h2>
-<div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-01</div>
-  <div class="archive-count">9 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/" target="_blank" rel="noopener noreferrer">Apple CEO says the company doesn’t ‘want to ship AI for AI’s sake’</a><a class="archive-title" href="https://techcrunch.com/2026/10/31/judge-allows-naacp-lawsuit-over-xai-data-center-pollution-to-move-forward/" target="_blank" rel="noopener noreferrer">Judge allows NAACP lawsuit over xAI data center pollution to move forward</a><a class="archive-title" href="https://www.visitnorway.com/plan-your-trip/travel-tips-a-z/norwegian-scenic-routes/worlds-best-toilets/" target="_blank" rel="noopener noreferrer">Norway makes shithouses great again</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-31</div>
-  <div class="archive-count">18 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/uncanny-valley-podcast-how-a-contractors-claude-agent-got-into-the-pentagon/" target="_blank" rel="noopener noreferrer">How a Contractor’s Claude Agent Got Into the Pentagon</a><a class="archive-title" href="https://arstechnica.com/security/2026/10/anthropic-vs-code-extension-on-cursor-backdoored-for-nearly-12-hours/" target="_blank" rel="noopener noreferrer">Anthropic VS code extension on Cursor backdoored for nearly 12 hours</a><a class="archive-title" href="https://www.wired.com/story/metas-muse-could-upend-all-kinds-of-businesses-it-hasnt-yet/" target="_blank" rel="noopener noreferrer">Meta’s Muse Could Upend All Kinds of Businesses. It Hasn’t Yet</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-30</div>
-  <div class="archive-count">11 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/10/29/you-dont-need-to-believe-in-a-god-to-get-a-religious-exemption-from-using-ai-at-work/" target="_blank" rel="noopener noreferrer">You don’t need to believe in a god to get a religious exemption from using AI at work</a><a class="archive-title" href="https://techcrunch.com/2026/10/29/meta-quietly-launches-an-ai-fashion-app-called-style-sketch/" target="_blank" rel="noopener noreferrer">Meta quietly launches an AI fashion app called Style Sketch</a><a class="archive-title" href="https://elect.horse/" target="_blank" rel="noopener noreferrer">elect.horse</a></div>
-</div>
-<div class="archive-row">
-  <div class="archive-date">2026-10-29</div>
-  <div class="archive-count">32 items</div>
-  <div class="archive-previews"><a class="archive-title" href="https://smsofdeath.com/" target="_blank" rel="noopener noreferrer">Zero click, silent, remote Android DoS</a><a class="archive-title" href="https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/" target="_blank" rel="noopener noreferrer">Forging a Microsoft Edge Full Chain with Logic Bugs Only</a><a class="archive-title" href="https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/" target="_blank" rel="noopener noreferrer">Gemini 4 Carbon: Our next frontier model</a></div>
-</div></div>
-</section>
+    <p class="panel-foot"><a class="archive-link" href="archive.html#industry-news">Archive: older news</a></p>
   </div>
 
   <div class="email-banner email-banner-end">
@@ -1316,8 +915,8 @@
 </main>
 
 <footer>
-  <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="privacy.html">Privacy</a></span>
-  <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
+  <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
 </footer>
 
 <script src="js/subscribe.js"></script>
@@ -1351,7 +950,7 @@
     const q = query.toLowerCase().trim();
     const activePanel = document.querySelector('.panel.active');
     if (!activePanel) return;
-    const cards = activePanel.querySelectorAll('.card, .archive-row');
+    const cards = activePanel.querySelectorAll('.card');
     cards.forEach(card => {
       card.style.display = (!q || card.innerText.toLowerCase().includes(q)) ? '' : 'none';
     });

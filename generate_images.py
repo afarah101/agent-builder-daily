@@ -33,7 +33,7 @@ CF_URL = "https://api.cloudflare.com/client/v4/accounts/{account}/ai/run/{model}
 CF_SECRETS = ("CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID")
 # The fixed suffix on every image prompt. No "no text" list: the model takes no negative prompt, and naming text invites it.
 HOUSE_STYLE = ("minimal still life, soft studio light, matte materials, shallow depth of field, neutral grey background, "
-               "single emerald #10b981 accent, editorial magazine photo")
+               "editorial magazine photo, single emerald #10b981 accent only, no orange, no copper, no warm metals")
 STYLE_ID = "still-life-1"  # stored in alt.json; an image made in another style is redrawn, so the cards look like one series
 
 # Things that carry writing in real life, and people. FLUX draws fake letters on them, so a scene may not name one.
