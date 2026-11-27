@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Tools</p>
     <h1 class="page-title">180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers</h1>
-    <p class="meta-line">Hugging Face · 18 Nov 202 · Generated 19 Nov 2026, 15:38</p>
+    <p class="meta-line">Hugging Face · 18 Nov 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,37 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Hugging Face has released Strata, an inference engine that can run 180‑billion‑parameter mixture‑of‑experts (MoE) transformer models on GPUs with as little as 32 GB of RAM. Strata achieves this by streaming the non‑hot experts from host memory or disk into the GPU during inference, effectively decoupling the model size from the GPU memory footprint. The announcement demonstrates that extremely large language models can be deployed on-premises without the need for expensive multi‑GPU clusters or persistent cloud connections. For enterprise IT teams, this capability means that sensitive data can remain within the corporate network, reducing exposure to third‑party cloud providers and potentially lowering latency for time‑critical applications. The technology stack involves Hugging Face’s open‑source Strata library, NVIDIA CUDA, and standard GPU hardware. It also relies on the underlying MoE architecture, which selectively activates only a subset of experts per input, a technique that has become popular in large‑scale NLP research. The broader industry implication is a shift toward edge or on‑premise inference for large models, prompting vendors to re‑evaluate their hardware offerings and prompting enterprises to consider hybrid deployment strategies. As more organizations adopt large language models for internal tools, the ability to run them locally with modest GPU resources could become a competitive differentiator, especially in regulated sectors where data residency and compliance are critical. The announcement also signals that the boundary of what is feasible on commodity hardware is moving upward, encouraging further research into memory‑efficient inference techniques and prompting cloud providers to adjust pricing models for large‑scale inference workloads.</p></div>
+      <div class="summary-body"><p>Hugging Face’s Strata inference engine enables massive 180B‑parameter MoE models to run on GPUs with limited memory by streaming non‑hot experts from RAM or disk. This approach allows developers to deploy large language models locally, reducing reliance on cloud inference services.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory GPU assets: count GPUs, memory per unit, and current utilization.  
-   - Measure data sensitivity: classify workloads that require on‑premise inference.  
-   - Benchmark existing inference latency and cost on cloud vs. local setups.  
-   - Assess storage throughput: disk I/O must support streaming experts at required rates.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit analysis: compare cloud inference spend (per 1k requests) against capital and operating costs of a 32 GB GPU workstation.  
-   - Include latency metrics: target SLA (e.g., &lt;50 ms response) and measure Strata’s inference time on a test set.  
-   - Highlight compliance savings: quantify avoided data‑transfer risks under UK GDPR.  
-   - Present a phased pilot: 3‑month pilot with 10 % of production traffic.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Hugging Face Strata (open‑source inference engine).  
-   - NVIDIA CUDA Toolkit and cuBLAS for GPU acceleration.  
-   - Docker or Singularity containers for reproducible deployment.  
-   - Prometheus + Grafana for monitoring GPU memory and inference latency.  
-   - GitHub Actions or Azure DevOps for CI/CD of model deployments.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Disk I/O bottlenecks can negate memory savings; ensure NVMe SSDs with &gt;1 GB/s throughput.  
-   - Compliance: Ensure that any data streamed to disk is encrypted at rest and that logs do not expose PII.  
-   - Operational: GPU driver and CUDA version mismatches can cause runtime failures; maintain a pinned environment.  
-   - Vendor lock‑in: Strata currently supports NVIDIA GPUs; plan for future hardware diversification.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy Strata on a single 32 GB GPU workstation and run a 1‑hour benchmark with a 180B MoE model on a representative dataset.  
-   - Capture latency, memory usage, and disk I/O metrics.  
-   - Publish results to the operations dashboard within 14 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Scale to a small cluster of 4–8 32 GB GPUs, implementing a load‑balancing layer to distribute inference requests.  
-   - Integrate Strata with the organization’s model registry and CI/CD pipeline for automated model updates.  
-   - Conduct a compliance audit to certify on‑premise inference meets UK GDPR and any sector‑specific regulations.  
-   - Evaluate hybrid deployment: keep sensitive models on‑premise while offloading less critical workloads to the cloud, optimizing cost and performance over 6–12 months.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">This innovation may not require immediate action, but IT engineers could experiment with Strata on high‑memory workstations to evaluate on‑premise inference for sensitive data or latency‑critical workloads. If your organization plans to host large models, consider testing Strata in a sandbox to benchmark performance versus cloud options.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 19 Nov 2026, 15:38</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://huggingface.co/blog/moe-expert-streaming" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

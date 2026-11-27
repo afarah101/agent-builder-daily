@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Show HN: Coldframe, a honeypot that poses as a supermarket fridge controller</h1>
-    <p class="meta-line">Hacker News · 07 Nov 202 · Generated 07 Nov 2026, 21:41</p>
+    <p class="meta-line">Hacker News · 07 Nov 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Coldframe, a new open‑source honeypot, emulates the control interface of supermarket refrigeration units. The project was announced on Hacker News and demonstrates that an attacker can convincingly spoof a legitimate industrial IoT device, then observe the attacker’s tactics, techniques, and procedures (TTPs) in real time. The honeypot runs on a single Raspberry Pi and mimics the Modbus/TCP and proprietary protocols used by most commercial fridge controllers. When an adversary connects, Coldframe logs the entire session, including credentials, command sequences, and any payloads delivered.</p><p>For enterprise IT teams, the implications are immediate. Many facilities rely on legacy refrigeration and HVAC systems that are exposed to corporate networks or the Internet for remote monitoring. Coldframe shows that even a single compromised device can become a foothold for lateral movement. The project also highlights a gap in existing detection tools: traditional IDS/IPS signatures rarely cover the nuanced traffic patterns of industrial control protocols. By deploying a low‑footprint honeypot, teams can surface malicious activity that would otherwise be invisible.</p><p>Vendors and technologies involved include Modbus/TCP, OPC UA, and the various proprietary firmware stacks used by manufacturers such as Carrier, Daikin, and Honeywell. The honeypot’s lightweight design makes it suitable for edge deployment, and it can be integrated with SIEMs via syslog or MQTT. The broader industry implication is a shift toward “honeypot‑as‑a‑service” for industrial control systems (ICS). Security teams will need to adopt threat‑intelligence feeds that include known malicious IPs targeting refrigeration protocols and consider expanding their network segmentation to isolate legacy devices.</p><p>The announcement also underscores the need for better authentication and encryption on legacy IoT devices. Many refrigeration controllers still use clear‑text passwords or no authentication at all. Coldframe’s success in mimicking a legitimate device demonstrates that attackers can bypass security controls with minimal effort. Consequently, organizations should prioritize firmware updates, enforce network segmentation, and deploy behavioral analytics that flag anomalous Modbus/TCP traffic. Failure to do so could result in undetected compromise, leading to potential physical damage, supply‑chain disruptions, or regulatory fines under frameworks such as NIST CSF and UK GDPR for data breaches.</p></div>
+      <div class="summary-body"><p>Coldframe is a lightweight honeypot that mimics supermarket refrigeration controllers, allowing security researchers to observe attacks on real industrial IoT devices. It demonstrates how easily authentic-looking hardware interfaces can be spoofed, exposing a new threat vector for plant and facility security teams.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all refrigeration and HVAC controllers, noting model, firmware version, and network connectivity.
-   - Map out the network segments these devices reside in and identify any direct Internet exposure or VPN access.
-   - Run a protocol analysis (e.g., Wireshark with Modbus/TCP dissector) to capture baseline traffic patterns.
-   - Review existing IDS/IPS rule sets for Modbus/TCP and proprietary protocols; document gaps.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify risk: calculate the potential impact of a compromised refrigeration unit (e.g., product spoilage cost, downtime).
-   - Benchmark: compare current detection coverage (e.g., % of Modbus traffic flagged) against industry best practices.
-   - Build a cost‑benefit model: upfront cost of a Raspberry Pi honeypot (~$50) versus potential savings from early threat detection.
-   - Present metrics: expected reduction in mean time to detection (MTTD) and mean time to containment (MTTC) by adding a honeypot.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Coldframe (open source) – lightweight, Modbus/TCP compatible.
-   - OpenPLC or Node-RED – for custom protocol emulation if vendor protocols differ.
-   - Snort/Suricata with Modbus/TCP rules – for baseline detection.
-   - SIEM integration: Splunk, ELK Stack, or Microsoft Sentinel for log aggregation.
-   - Network segmentation tools: Cisco TrustSec, Palo Alto Networks Panorama, or Juniper SRX.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: false positives from legitimate maintenance traffic; potential for the honeypot to be used as a pivot point if not isolated.
-   - Compliance: UK GDPR – ensure that any captured data does not include personal data; implement data minimization and secure storage.
-   - Operational: risk of disrupting legitimate device operation if the honeypot is misconfigured; ensure redundancy and fail‑safe modes.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a single Raspberry Pi running Coldframe in a non‑production segment adjacent to existing refrigeration controllers.
-   - Configure syslog forwarding to the SIEM and set up alerts for any connection attempts.
-   - Within 30 days, review the first 10 attack sessions and adjust detection rules accordingly.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Scale the honeypot deployment to cover all critical industrial control segments over 6–12 months.
-   - Integrate behavioral analytics to detect anomalous command sequences across multiple devices.
-   - Develop a formal incident response playbook that includes procedures for isolating compromised controllers.
-   - Conduct regular penetration tests that target the same protocols to validate the effectiveness of the honeypot and detection controls.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Monitor your own industrial control systems for anomalous traffic patterns that match known honeypot signatures; consider deploying a similar low‑footprint honeypot to attract and analyze adversaries early.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 07 Nov 2026, 21:41</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://github.com/hedgerow-dev/coldframe" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

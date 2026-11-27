@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Bunny CDN Security Incident</h1>
-    <p class="meta-line">Hacker News · 30 Oct 202 · Generated 30 Oct 2026, 22:12</p>
+    <p class="meta-line">Hacker News · 30 Oct 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,35 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Bunny CDN, a popular edge‑delivery platform, reported an unauthorized access event on a server provisioned by an infrastructure provider. The incident was detected during routine monitoring, triggering an immediate shutdown of the affected node, a comprehensive data review, and the re‑issuance of TLS certificates for all affected zones. No data exfiltration or breach of customer data was confirmed, but the event exposed a potential vulnerability in the shared hosting environment that could have allowed an attacker to read cached content, modify Pull Zone configurations, or compromise TLS private keys.</p><p>For enterprise IT teams, the incident underscores the risks inherent in third‑party CDN and cloud infrastructure dependencies. Even when a vendor declares no breach, the exposure of TLS material or configuration data can enable man‑in‑the‑middle attacks, domain hijacking, or unauthorized content injection. The fact that the attack was limited to a single server but involved a critical component of the CDN stack highlights the need for continuous monitoring of all edge nodes, strict access controls, and rapid certificate rotation procedures.</p><p>Vendors involved include Bunny CDN, the underlying infrastructure provider (unspecified), and any certificate management tools integrated with the CDN (e.g., Let’s Encrypt, DigiCert, or internal PKI). The broader industry implication is a renewed focus on zero‑trust principles for edge services, the importance of automated certificate lifecycle management, and the necessity of shared responsibility models that clearly delineate vendor and customer duties. Enterprises that rely on CDN‑based custom domain certificates should audit their current arrangements, ensure that certificate revocation lists (CRLs) and OCSP stapling are correctly configured, and verify that any CDN‑managed keys are not exposed to unauthorized personnel.</p><p>The incident also serves as a reminder that shared infrastructure can become a single point of failure. Organizations should evaluate whether their current CDN strategy includes redundant providers, geographic diversity, and the ability to quickly revoke and re‑issue certificates without service disruption. Failure to address these gaps could lead to extended exposure of cached content, compromised TLS sessions, or regulatory non‑compliance if personal data is inadvertently served over insecure channels.</p></div>
+      <div class="summary-body"><p>Bunny CDN experienced a security incident where an unauthorized access event was detected in a server supplied by an infrastructure provider. The incident prompted an immediate shutdown, data review, and TLS certificate reissuance, with no confirmed data breach.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all CDN Pull Zones and custom domain certificates, noting which are managed through third‑party CDNs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Verify current TLS certificate validity, revocation status, and whether OCSP stapling is enabled.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Review access logs for CDN provider consoles and infrastructure nodes for anomalous activity.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Confirm that your incident response playbook includes CDN‑specific procedures for certificate rotation and node isolation.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify the risk: calculate potential downtime per incident and the cost of a TLS key compromise (e.g., $10,000 per compromised certificate).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Present a cost‑benefit analysis: compare the expense of re‑issuing certificates (minimal) against the potential loss from a breach (high).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Highlight compliance impact: under UK GDPR, a breach of TLS keys could trigger notification obligations and fines up to £17.5 m or 4 % of global turnover.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Recommend a phased approach: immediate revocation for CDN‑managed certificates, followed by a review of all edge configurations.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Certbot (Let’s Encrypt) for automated certificate renewal.
-   - DigiCert CertCentral or Venafi for enterprise PKI management.
-   - Cloudflare or Akamai for multi‑CDN redundancy.
-   - Splunk or ELK Stack for centralized log aggregation and anomaly detection.
-   - OpenSSL or HashiCorp Vault for secure key storage and rotation.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Incomplete revocation may leave stale certificates active; misconfigured Pull Zones could expose cached content.
-   - Compliance: Failure to revoke compromised TLS keys may violate UK GDPR breach notification requirements.
-   - Operational: Manual certificate rotation can cause downtime; lack of automation increases human error.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Immediately revoke all CDN‑managed TLS certificates and re‑issue them using an automated tool (e.g., Certbot with DNS‑01 challenge).
-   - Deploy a one‑page incident response checklist for CDN events and distribute it to the security operations team.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Implement a zero‑trust architecture for CDN access: enforce MFA for CDN console, restrict API keys to least privilege, and enable IP whitelisting for node management.
-   - Migrate to a multi‑CDN strategy to avoid single‑point exposure; orchestrate traffic via a global load balancer that can failover between providers.
-   - Integrate certificate lifecycle management with your CI/CD pipeline to ensure that any new Pull Zone or custom domain automatically receives a fresh certificate and that revocation is automated on decommissioning.
-   - Conduct quarterly penetration tests focused on edge infrastructure and perform regular compliance audits against GDPR and ISO 27001 controls.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Do this week</h3><div class="guide-text">Inspect your own TLS certificates and revoke/reissue any that are managed through Bunny CDN or similar third‑party CDN services this week.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Failing to do so could expose temporary cached content, Pull Zone configurations, or TLS keys if an attacker gained access.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">The most affected area for your IT stack is your CDN and any custom domain certificate management, which may intersect with your existing certificate lifecycle tools.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 30 Oct 2026, 22:12</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://status.bunny.net/incidents/p6gf1by9kr7m" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

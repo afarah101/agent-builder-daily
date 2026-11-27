@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">AI security for LLMs</p>
     <h1 class="page-title">Decision Models as Retrieval Gates Against Injection and Pollution</h1>
-    <p class="meta-line">Mahdi Ghadamyari, Reza Habibi · Academic Institution · 2026-11-05 · Generated 07 Nov 2026, 12:47</p>
+    <p class="meta-line">Mahdi Ghadamyari, Reza Habibi · Academic Institution · 2026-11-05 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,31 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by Ghadamyari and Habibi evaluates a lightweight decision model, referred to as Kev-4B, designed to act as a retrieval gate that filters malicious or misleading content before it reaches a language model. The authors implemented the gate to scan HTML content and evaluate whether a prompt could be used to inject or pollute the model’s output. In controlled experiments, the Kev-4B gate reduced successful injection attacks from 27.9 % to 5.7 % while maintaining a false‑positive rate below 1 %. The gate processes each page in 76 ms on commodity hardware, indicating that the overhead is negligible compared to the cost of a full model inference. The authors argue that this approach offers a cheaper, faster defense than traditional prompt‑engineering or model‑level mitigations, and that it preserves the performance of downstream applications.</p><p>For enterprise IT, the findings are significant because they provide a practical, low‑cost layer of protection that can be deployed on existing web‑content pipelines. The gate can be integrated into content‑delivery networks, API gateways, or internal data‑injection points, allowing organizations to filter out potentially dangerous prompts before they reach a generative model. The reduction in injection success translates directly into fewer data leaks, fewer policy violations, and lower compliance risk. Moreover, the minimal latency impact means that user experience is largely unaffected, a key requirement for production systems that rely on real‑time AI responses.</p><p>Real‑world implications include the ability to enforce stricter content‑security policies without sacrificing performance, the opportunity to meet regulatory requirements such as UK GDPR by preventing inadvertent disclosure of personal data, and the potential to reduce the cost of model hosting by limiting the number of unsafe inferences. Enterprises can adopt this gate as part of a layered defense strategy, complementing existing input‑validation and monitoring tools. The study demonstrates that a simple, rule‑based decision model can provide measurable security benefits at scale, making it a compelling addition to any AI‑driven product portfolio.</p></div>
+      <div class="summary-body"><p>This research shows that a lightweight decision model can act as a filter to stop malicious or misleading content from tricking language models. They built a Kev-4B gate that scans HTML and cuts injection success from 27.9% to 5.7%, with only 76 ms per page and a small false‑positive rate. The result is a cheaper, faster defence that keeps most queries safe while keeping performance nearly unchanged.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Audit current prompt‑generation workflows to identify points where untrusted HTML or user input is passed to the LLM.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure baseline injection success rates by simulating known prompt‑injection attacks against your deployed models.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Profile latency and throughput of your existing content‑processing pipeline to quantify the impact of adding an extra filtering layer.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Inventory compliance controls related to data leakage (UK GDPR, CCPA) to determine where a gate could mitigate risk.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Present a cost‑benefit analysis: baseline injection risk vs. reduced risk with Kev‑4B, including estimated savings from fewer compliance incidents.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Use metrics from the study: 22.2 % absolute reduction in injection success, 76 ms per page, &lt;1 % false‑positive rate.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Estimate ROI: fewer model inference errors, lower incident response costs, and potential reduction in model licensing fees due to fewer unsafe calls.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Highlight alignment with regulatory requirements (e.g., GDPR Article 5: data minimization) and internal security policies.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 Open‑source implementation of Kev‑4B (if available) or a custom rule‑engine such as OpenAI’s PromptGuard or Anthropic’s Guardrails.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 Vendor‑specific content filtering platforms: Cloudflare WAF, Akamai Kona Site Defender, or AWS WAF with custom Lambda@Edge logic.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Integration frameworks: Kubernetes admission controllers, Istio Envoy filters, or Azure API Management policies.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 Monitoring tools: Datadog, Prometheus + Grafana, or Splunk for tracking gate performance and false‑positive incidents.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Over‑blocking legitimate content leading to degraded user experience; under‑blocking new injection vectors.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Incorrect classification of personal data could violate GDPR; false negatives could lead to data breaches.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Added latency may affect SLAs; maintenance of the gate requires continuous rule updates.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Vendor lock‑in if using proprietary solutions; ensure open‑source fallback.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy a lightweight rule‑based filter on a single high‑traffic API endpoint that processes user‑generated HTML. Configure the gate to block known injection patterns (e.g., “&lt;script&gt;”, “DROP TABLE”, “SELECT * FROM”). Measure reduction in failed requests within 30 days and adjust thresholds to keep false positives below 1 %.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months, architect a centralized gate service that ingests all HTML and prompt data across the organization. Implement continuous learning by feeding attack logs back into the decision model, refine thresholds, and integrate with SIEM for real‑time alerts. Expand coverage to include other content types (JSON, Markdown) and align the gate with the organization’s broader AI governance framework.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 07 Nov 2026, 12:47</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.08325v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

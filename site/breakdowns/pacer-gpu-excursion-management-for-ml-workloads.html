@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">GPU power management for AI workloads</p>
     <h1 class="page-title">PACER: GPU Excursion Management for ML Workloads</h1>
-    <p class="meta-line">Rutwik Jain, Nathaniel Morris, Yiwei Jiang, Shidhartha Das · Academic Institution · 2026-11-12 · Generated 13 Nov 2026, 14:26</p>
+    <p class="meta-line">Rutwik Jain, Nathaniel Morris, Yiwei Jiang, Shidhartha Das · Academic Institution · 2026-11-12 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,35 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The authors investigated the power consumption patterns of GPU clusters running large language model (LLM) inference and training workloads. They observed that the instantaneous power draw of modern GPUs frequently exceeds the rated limits by 20–30 % during short bursts, triggering hardware throttling and resulting in unpredictable latency spikes. To mitigate this, the team designed a hybrid hardware/firmware solution that smooths the power envelope: a custom power‑delivery controller with fine‑grained voltage and current regulation, coupled with firmware that anticipates workload spikes and pre‑emptively adjusts power limits. Benchmarks on a 4‑node NVIDIA A100 cluster showed a 3 % throughput improvement for inference and up to 12 % for training, with a 15 % reduction in average GPU temperature and a 10 % drop in power‑to‑performance ratio. The study also quantified the impact on service level agreements (SLAs): a 12 % reduction in tail latency translates to a 5 % increase in user request capacity without additional hardware.</p><p>For enterprise IT, these findings are critical because GPU‑based ML services are increasingly deployed in production environments where cost, reliability, and uptime are tightly constrained. Power overshoot not only throttles performance but also accelerates component wear, leading to higher maintenance costs and potential downtime. By implementing a power‑management layer that smooths peaks, operators can extract more performance from existing GPU fleets, delay the need for costly hardware refreshes, and improve SLA compliance. Additionally, the reduced thermal load can lower data‑center cooling requirements, offering further operational savings.</p><p>Real‑world implications include the ability to re‑balance GPU workloads across nodes without sacrificing performance, the potential to extend GPU lifespan, and the opportunity to re‑price services based on more predictable performance curves. Enterprises that adopt similar controls can also better meet regulatory requirements that mandate consistent performance and uptime, such as those in financial services or healthcare. The case study demonstrates that a relatively modest investment in power‑management hardware and firmware can yield measurable gains in both performance and cost efficiency for GPU‑centric ML workloads.</p></div>
+      <div class="summary-body"><p>GPU workloads for LLMs suffer from power overshoot spikes that cause throttling and inconsistent performance. The authors built hardware and firmware controls that smooth these power peaks, boosting performance by 3‑12 % over existing GPU power‑management solutions. This can directly improve the reliability and speed of your GPU‑based ML services.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Collect power usage data from GPU monitoring tools (nvidia-smi, DCGM) and identify peaks that exceed 90 % of the rated power limit.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure GPU throttling events and correlate them with workload patterns (batch size, sequence length).</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Audit current cooling and power delivery infrastructure to ensure it can support higher sustained loads if needed.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Review SLAs for latency and throughput to quantify the business impact of current throttling.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a cost‑benefit model: calculate the expected throughput increase (3–12 %) against the cost of a custom power controller and firmware integration.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Include metrics such as reduced tail latency, increased request capacity, and lower power‑to‑performance ratio.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present a pilot plan with a 30‑day ROI window, highlighting the potential to defer GPU upgrades by 12–18 months.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Emphasize compliance benefits: smoother power draw reduces risk of hardware failures that could trigger data‑loss incidents.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 NVIDIA Data Center GPU Manager (DCGM) for detailed power profiling.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 Intel Power Management SDK or AMD ROCm Power APIs for firmware integration.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Vendor‑specific power delivery modules such as ASUS ROG Strix Power Control or Supermicro Power Management Boards.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 Cloud‑native solutions like AWS Nitro Enclaves for isolated power‑management logic if operating in the cloud.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Incorrect firmware tuning could cause under‑delivery of power, leading to performance loss or GPU instability.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Modifying power delivery may affect warranty terms and could be subject to UK GDPR if data integrity is impacted during throttling events.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Integration downtime may affect critical ML services; schedule maintenance windows and rollback plans.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Vendor lock‑in: Proprietary power controllers may limit future GPU upgrades.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Deploy DCGM power monitoring on all GPU nodes and generate a baseline report within 7 days.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Configure GPU power limits to a conservative 80 % of rated capacity to reduce peak spikes.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Run a short (2‑week) pilot with the custom power controller on a single node; measure latency and throughput improvements.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Over 6–12 months, roll out the power‑management firmware across the entire GPU fleet, integrating with the cluster scheduler to pre‑emptively adjust power limits based on workload forecasts.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Implement automated alerts for power overshoot events and integrate with the incident‑management system.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Conduct a formal audit to quantify ROI, including reduced cooling costs, extended GPU lifespan, and SLA compliance gains, and use the data to justify future investments in power‑management infrastructure.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 13 Nov 2026, 14:26</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.17206v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Ghostty 1.4</h1>
-    <p class="meta-line">Hacker News · 27 Oct 202 · Generated 27 Oct 2026, 22:04</p>
+    <p class="meta-line">Hacker News · 27 Oct 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,34 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Ghostty 1.4 was released on October 27 2026 and delivers significant performance and memory optimizations, as well as a complete implementation of the Kitty graphics protocol. The update also patches several high‑severity vulnerabilities that were identified in the GHSA database. These include a flaw in paste protection that could allow an attacker to inject malicious input, a bug in Kitty graphics commands that could lead to memory corruption, an issue in tmux control mode that could be abused for remote code execution, and a macOS hyperlink handling bug that could expose privileged sessions to phishing or credential theft. The affected components are all part of the terminal emulator stack that many enterprises use for remote access, scripting, and automation. Ghostty is an open‑source terminal emulator that has gained traction as a drop‑in replacement for more mainstream options such as iTerm2, Alacritty, and the default macOS Terminal. The release is relevant for organizations that rely on SSH, terminal multiplexers, or automated workflows that invoke terminal commands, especially those managed via JumpCloud, MDM, or other endpoint management solutions. The broader industry implication is that terminal emulators are increasingly becoming a target for privilege escalation and memory corruption attacks, and that vendors must keep pace with security patches to avoid exposing privileged sessions to compromise. Enterprises should treat terminal emulator updates as a critical security control, and should consider the cost of downtime versus the risk of exploitation.</p></div>
+      <div class="summary-body"><p>Ghostty 1.4, released October 27 2026, brings major performance and memory improvements along with a full Kitty graphics implementation. The update also addresses several high‑severity security issues affecting paste protection, Kitty graphics commands, tmux control mode, and macOS hyperlink handling.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all terminal emulators in use across the organization, noting version numbers and deployment methods (e.g., package manager, MDM, manual install).
-   - Run a vulnerability scan against the GHSA IDs referenced in the Ghostty 1.4 release notes to confirm whether any of the identified flaws are present in your environment.
-   - Verify that scripts, automation pipelines, and tmux sessions are not invoking the vulnerable Kitty graphics commands or relying on paste protection features that could be bypassed.
-   - Assess the exposure of macOS workstations to hyperlink handling vulnerabilities, especially those that run privileged processes or have elevated SSH sessions.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the risk by estimating the potential impact of a remote execution or memory corruption event on critical services (e.g., number of privileged accounts, uptime impact, data sensitivity).
-   - Present a cost comparison: the effort to upgrade to Ghostty 1.4 versus the estimated cost of a breach (incident response, forensic analysis, regulatory fines).
-   - Highlight compliance implications: failure to patch could violate UK GDPR data protection requirements for protecting personal data in transit and at rest.
-   - Use metrics such as mean time to patch (MTTP) and mean time to detect (MTTD) to demonstrate improvement with the update.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Ghostty 1.4 (open source, GitHub repository)
-   - Enterprise patch management platforms (e.g., Microsoft SCCM, Jamf Pro, Intune)
-   - Vulnerability scanners that support GHSA integration (e.g., Qualys, Tenable.io)
-   - SSH hardening tools (e.g., OpenSSH audit scripts, ssh-audit)
-   - Endpoint detection and response (EDR) solutions that monitor terminal activity (e.g., CrowdStrike Falcon, SentinelOne)</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Compatibility issues with existing terminal scripts or tmux configurations; potential regressions in performance on older hardware.
-   - Compliance: Non‑compliance with UK GDPR if personal data is exposed through compromised terminals; potential breach notification obligations.
-   - Operational: Downtime during rollout; user resistance to new terminal interface; risk of misconfiguration leading to loss of access to critical systems.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a script that automatically checks the Ghostty version on all managed macOS and Linux machines and flags any that are below 1.4.
-   - Apply the patch to a small pilot group of high‑privilege users and monitor for stability before full rollout.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate terminal emulator version control into the organization’s continuous security assessment pipeline, ensuring that any new GHSA‑identified vulnerabilities trigger an automated review.
-   - Standardize on a hardened terminal emulator (Ghostty 1.4 or an alternative with proven security track record) across all remote access points, and enforce it via MDM or group policy.
-   - Conduct regular tabletop exercises that simulate terminal‑based attack scenarios to validate incident response readiness and refine mitigation strategies.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Do this week</h3><div class="guide-text">Review your current terminal usage and verify whether any of the listed GHSA vulnerabilities could be triggered by the scripts or workflows you run.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Unpatched terminals could allow remote execution or memory corruption, potentially compromising privileged sessions.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">If you rely on SSH or terminal automation (e.g., via JumpCloud or MDM‑managed machines), consider upgrading to Ghostty 1.4 or switching to a more hardened terminal emulator.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Oct 2026, 22:04</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://ghostty.org/docs/install/release-notes/1-4-0" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

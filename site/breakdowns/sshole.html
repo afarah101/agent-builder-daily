@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Sshole</h1>
-    <p class="meta-line">Hacker News · 05 Nov 202 · Generated 05 Nov 2026, 14:31</p>
+    <p class="meta-line">Hacker News · 05 Nov 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,34 +322,15 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The Hacker News article “Sshole” documents the evolution of password hashing in Unix and SSH, focusing on the use of the asterisk placeholder in /etc/passwd and /etc/shadow to disable accounts. Historically, a &#x27;*&#x27; or a NULL entry was interpreted by the crypt() function as an invalid hash, effectively blocking login. Over time, implementations of crypt() in various libc versions (musl, glibc) have changed their handling of NULL and failure states, sometimes returning a zero or a predictable value instead of rejecting the authentication attempt. The article explains that legacy systems may still accept these placeholder hashes or mis-handle crypt() failures, creating a window for attackers to craft inputs that trigger authentication bypass or denial‑of‑service conditions. For enterprise IT teams, this is a critical reminder that the authentication stack—SSH, PAM, local libc, and directory services—must be configured to reject accounts with placeholder or NULL hashes. Vendors such as OpenSSH, PAM modules, and operating system distributions (Red Hat, Ubuntu, Alpine) are directly involved. The broader industry implication is that many production environments still rely on legacy authentication mechanisms that are vulnerable to subtle bugs in crypt() handling. Failure to address these gaps can lead to unauthorized access or service disruption, undermining compliance with regulations like UK GDPR and jeopardizing the integrity of identity and access management (IAM) systems.</p></div>
+      <div class="summary-body"><p>The post traces the history of password hashing in Unix and SSH, explaining how the &#x27;*&#x27; placeholder in /etc/passwd and /etc/shadow evolved to prevent login and how crypt() handling of NULL and failure states changed over time.
+It highlights the security implications of legacy authentication mechanisms and the importance of correctly handling crypt() failures in modern systems.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Scan /etc/shadow and directory services for accounts with &#x27;*&#x27; or NULL password hashes.
-   - Verify the version of libc (musl or glibc) and confirm it includes the latest crypt() bug fixes.
-   - Review SSH and PAM configuration files (sshd_config, pam.d/*) for any legacy options that allow placeholder hashes.
-   - Run a penetration test that attempts authentication with a &#x27;*&#x27; hash to confirm rejection.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify risk: number of accounts with placeholder hashes, potential impact on service availability, and likelihood of exploitation.
-   - Benchmark: target zero accounts with placeholder hashes within 90 days; measure reduction in authentication failures.
-   - Present cost of remediation (patching, reconfiguration, testing) versus potential breach cost (data loss, regulatory fines).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenSSH (latest stable release) with PAM integration.
-   - PAM modules: pam_unix.so, pam_ldap.so, pam_sss.so.
-   - System audit tools: OpenSCAP, Lynis, or Nessus for configuration compliance.
-   - Version control for configuration: Ansible, Chef, or Puppet to enforce hash policies.
-   - Directory services: JumpCloud, Okta, Azure AD, or LDAP with password policy enforcement.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Misconfigured PAM may inadvertently allow &#x27;*&#x27; hashes; outdated libc may still contain crypt() bugs.
-   - Compliance: UK GDPR requires proper authentication controls; failure to enforce valid passwords can lead to data breaches.
-   - Operational: Overly aggressive account locking may lock legitimate users; patching may disrupt services if not tested.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a script that parses /etc/shadow and reports any &#x27;*&#x27; or NULL entries; remediate by setting a strong password or disabling the account.
-   - Update the local libc package to the latest security release on all servers.
-   - Add a PAM rule that explicitly rejects authentication attempts with placeholder hashes.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Migrate all user authentication to a centralized IAM solution that enforces password policies and does not rely on legacy shadow files.
-   - Implement continuous compliance monitoring with automated policy checks for password hash validity.
-   - Conduct regular code reviews and penetration testing focused on authentication stack vulnerabilities, ensuring that any new libc or SSH releases are evaluated for crypt() behavior before deployment.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Check that your SSH and PAM configurations properly reject accounts with &#x27;*&#x27; or NULL hashes and ensure your local libc (musl, glibc) is up-to-date to avoid legacy bugs that could lead to authentication bypass. Missing this check could allow attackers to craft inputs that exploit mis‑handled hash failures, potentially causing denial‑of‑service or unintended authentication. Your JumpCloud or SSO integration should enforce that all user accounts in your directory have valid, non‑placeholder passwords and that the underlying OS rejects any attempt to authenticate with a &#x27;*&#x27; hash.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 05 Nov 2026, 14:31</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://sshhole.com" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

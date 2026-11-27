@@ -112,6 +112,34 @@ If the paper gives an IT engineer no practical action, return "try_this": [] ins
 """
 TRY_THIS_FIELD = ', "try_this": ["", "", ""]'
 
+# Sent with every summary prompt. quality_checks C7-C10 and the judge enforce it: a story that breaks it is held back.
+GROUNDING_RULES = """GROUNDING RULES (a story that breaks one is not published):
+- Use only facts that are in the Abstract below. If the Abstract does not say it, do not write it.
+- Every number, percentage, date, version and name of a system, product, company or person that you write must
+  appear in the Abstract or the Title. Write no other number.
+- Never write a price, cost, benchmark or result that the Abstract does not state.
+- State no prediction as fact. A forward view (a prediction, an implication, why it matters) starts with
+  "Our take:" and comes after the facts.
+- In it_breakdown, name only tools from the Abstract or from the reader's own stack (Microsoft 365, Google Workspace,
+  JumpCloud, Okta, AWS, Azure). A time frame for the reader's own work ("this week", "30 days") is allowed there.
+- Never write a placeholder such as "xxxx", "TBD", "[insert" or "example.com".
+
+"""
+REGENERATE_NOTE = """
+
+Your last answer broke the GROUNDING RULES: {problems}.
+Write the JSON again. Remove every number, name and claim that is not in the Abstract. Start a forward view with "Our take:"."""
+
+
+def _grounded_steps(steps, paper):
+    """The steps when every claim in them is in the paper's source and none is a placeholder, else [] (logged)."""
+    bad = quality_checks.step_problems(steps, quality_checks.source_text(paper))
+    if bad:
+        print(f"[TRY_THIS] DROPPED all steps for {paper.get('title', '')[:60] or '?'}: not in source: {', '.join(bad[:6])}")
+        return []
+    return steps
+
+
 def _try_this_steps(steps, title=""):
     """Exactly 3 non-empty steps of 25 words or fewer, else []: the email shows all three or none. Every drop is logged.
     shortcut: verb-first, real-tool and under-1-hour rules are enforced by the prompt only; add a judge check if they drift."""
@@ -360,6 +388,7 @@ def score_papers(state):
     papers = state["raw_papers"]
     print("[DEBUG] Scoring " + str(len(papers)) + " papers...")
     scored = []
+    _run["regenerated"] = 0
     steps_on = try_this_enabled()
     limit = min(len(papers), MAX_PAPERS)
     for i in range(limit):
@@ -404,7 +433,7 @@ Paper abstract:
 
 Write for someone who manages cloud infrastructure and wants to know if this research affects their work or creates an opportunity.
 
-SUMMARY: 2-3 sentences. What problem does it solve? What did they build? What was the result? If it's not relevant to IT work, say so in one sentence.
+SUMMARY: 2-3 sentences. What problem does it solve? What did they build? What was the result, as the Abstract states it? If it's not relevant to IT work, say so in one sentence.
 
 HOW TO APPLY THIS (it_breakdown): Specific and direct.
 Either:
@@ -413,7 +442,7 @@ Either:
 - "Not directly applicable to IT infrastructure work"
 Never vague. Never "could be used for". Max 3 sentences.
 
-{TRY_THIS_PROMPT if steps_on else ""}Return JSON only. No markdown. No preamble.
+{TRY_THIS_PROMPT if steps_on else ""}{GROUNDING_RULES}Return JSON only. No markdown. No preamble.
 {{"summary": "", "it_breakdown": ""{TRY_THIS_FIELD if steps_on else ""}}}
 
 Abstract:
@@ -482,7 +511,18 @@ Abstract:
                 if text is None:
                     continue
                 s = _parse_json_output(text)
-                s["try_this"] = _try_this_steps(s.get("try_this"), paper["title"]) if steps_on else []
+                problems = quality_checks.grounding_problems({**paper, "summary": s.get("summary", ""), "it_breakdown": s.get("it_breakdown", "")})
+                if problems:  # regenerate once; the quality gate holds the story back if the second answer fails too
+                    print(f"[QUALITY] REGENERATE {paper['title'][:60]}: " + "; ".join(problems))
+                    _run["regenerated"] = _run.get("regenerated", 0) + 1
+                    try:
+                        retry = groq_complete(
+                            [{"role": "user", "content": summary_prompt + REGENERATE_NOTE.format(problems="; ".join(problems))}],
+                            max_tokens=800, model=MODEL_SUMMARY, validate=_parse_json_output, call_site="case_study.summary.regenerate")
+                        s = _parse_json_output(retry) if retry else s
+                    except Exception as e:
+                        print(f"[QUALITY] Regenerate failed, first answer kept for the gate: {str(e)[:120]}")
+                s["try_this"] = _grounded_steps(_try_this_steps(s.get("try_this"), paper["title"]), paper) if steps_on else []
                 break
             except json.JSONDecodeError:
                 print(f"[DEBUG] Summary JSON parse error on attempt {attempt+1}/3 — retrying...")
@@ -533,10 +573,14 @@ def save_and_archive(state):
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back")
     if try_this_enabled():
         # try_this rides in the same batch: no extra Gemini call. Any failed or unjudged step drops all three.
-        kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown", steps_key="try_this")
+        kept, judge_held, judge_stats = judge.gate(kept, "title", "abstract", "summary", "it_breakdown", steps_key="try_this",
+                                                   extra_rules=judge.GROUNDING_RULES)
     else:  # off: steps are never judged or saved, whatever the items carry
-        kept, judge_held, judge_stats = judge.gate([{**x, "try_this": []} for x in kept], "title", "abstract", "summary", "it_breakdown")
+        kept, judge_held, judge_stats = judge.gate([{**x, "try_this": []} for x in kept], "title", "abstract", "summary", "it_breakdown",
+                                                   extra_rules=judge.GROUNDING_RULES)
     _judge.clear(); _judge.update(judge_stats)
+    print(f"[GROUNDING] case studies: {len(kept)} passed, {len(held) + len(judge_held)} held back "
+          f"({len(held)} quality checks, {len(judge_held)} judge), {_run.get('regenerated', 0)} regenerated once")
     kept = [{**x, "eval_verdict": "pass"} for x in kept]
     published, below_min, beyond_top = rank_for_publish(kept)
     print(f"[RANK] Publishing {len(published)}; cut {below_min} below {MIN_TOTAL}/75, {beyond_top} beyond top {MAX_PUBLISHED}")

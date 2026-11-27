@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Disgraced eMudhra drops out of TLS business after using cert private key of 4</h1>
-    <p class="meta-line">Ars Technica · 22 Oct 202 · Generated 25 Oct 2026, 20:41</p>
+    <p class="meta-line">Ars Technica · 22 Oct 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,37 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>eMudhra, an Indian certificate authority that had been trusted by a wide range of enterprises, has announced its exit from the TLS certificate business after a security audit revealed that it had issued eight certificates with private keys that were so weak they could be cracked in milliseconds. The flaw was caused by the use of a single, reused private key for multiple certificates, a practice that violates basic cryptographic principles. As a result, any system that relies on eMudhra’s certificates—including web browsers, mail servers, IoT devices, Docker containers, and legacy Linux machines—now has a backdoor that could be exploited for man‑in‑the‑middle attacks, domain spoofing, or credential theft. The incident has immediate implications for enterprises that use eMudhra certificates in their public or private TLS chains, especially those that rely on cloud services such as Google Workspace, Freshservice, or MDM platforms that depend on trusted TLS chains for secure communication. The breach also raises questions about the vetting process for certificate authorities and the need for continuous monitoring of cryptographic health. Vendors such as DigiCert, Sectigo, and GlobalSign are likely to see increased demand for their services as organizations seek to replace compromised certificates. The broader industry implication is a renewed focus on certificate transparency, key rotation, and the enforcement of minimum key lengths. Regulators may tighten oversight of CAs, and compliance frameworks like ISO/IEC 27001 and GDPR will require organizations to demonstrate that they are not using compromised keys. Enterprises must act quickly to audit, replace, and monitor certificates to avoid being an easy target for attackers.</p></div>
+      <div class="summary-body"><p>The Indian certificate authority eMudhra has exited the TLS business after revealing that it issued eight certificates with private keys so weak that they could be cracked in milliseconds. This breach exposes all systems trusting eMudhra’s certificates—including browsers, mail servers, IoT devices, Docker containers, and legacy Linux machines—to potential man‑in‑the‑middle attacks.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Run a full inventory of all TLS certificates in use, filtering by issuer name and key length.
-   - Identify certificates issued by eMudhra or any CA that has a history of weak key usage.
-   - Verify key strength (minimum 2048‑bit RSA or 256‑bit ECC) and check for reused keys across multiple certificates.
-   - Cross‑reference the certificate list with critical services: web servers, mail gateways, VPN endpoints, IoT devices, Docker registries, and legacy Linux hosts.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the risk: estimate potential data exfiltration or ransomware spread per compromised domain.
-   - Present a cost‑benefit analysis: replacement cost vs. potential breach cost (e.g., average breach cost in India ~ $1.5M).
-   - Highlight compliance impact: non‑compliance with GDPR Article 32 (security of processing) could lead to fines up to €20M or 4% of global turnover.
-   - Recommend a phased replacement plan with a clear ROI timeline (e.g., 90% of critical certificates replaced within 90 days).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenSSL or GnuTLS for key validation scripts.
-   - CertStream or Certificate Transparency logs to monitor new certificates issued by eMudhra.
-   - Qualys SSL Labs or Rapid7 InsightVM for automated certificate scanning.
-   - HashiCorp Vault or AWS Certificate Manager for secure key management and rotation.
-   - Microsoft Defender for Identity or CrowdStrike Falcon for monitoring TLS traffic anomalies.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Reuse of private keys can allow attackers to decrypt traffic across multiple services.
-   - Compliance: GDPR Article 32 requires appropriate technical measures; failure to replace weak keys may be deemed non‑compliant.
-   - Operational: Downtime during certificate replacement, especially for legacy systems that may not support newer key types.
-   - Vendor lock‑in: Switching CAs may require re‑configuration of dependent services.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a script that queries all internal hosts for eMudhra‑issued certificates and flags them for immediate replacement.
-   - Update the SSL/TLS configuration of web servers to enforce minimum key length of 2048 bits and disable weak ciphers.
-   - Notify all stakeholders (devops, security, compliance) of the identified risk and schedule a rapid replacement window.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Implement a continuous certificate monitoring pipeline that automatically flags any new certificate with weak keys or reused private keys.
-   - Adopt a zero‑trust TLS model: enforce mutual TLS for internal services and use short‑lived certificates (e.g., 90 days) with automated rotation.
-   - Conduct regular penetration tests focused on TLS interception to validate the effectiveness of the new controls.
-   - Update incident response playbooks to include TLS key compromise scenarios and ensure that all teams are trained on the new procedures.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Do this week</h3><div class="guide-text">Immediately audit all TLS certificates in your environment for issuers that match eMudhra or have similar weak key characteristics.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Failing to replace these compromised certificates could allow attackers to spoof any domain or service, leading to data breaches or ransomware spread.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">This directly impacts your Google Workspace, Freshservice, and MDM platforms, which rely on trusted TLS chains for secure communication.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 25 Oct 2026, 20:41</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://arstechnica.com/security/2026/10/disgraced-emudhra-drops-out-of-tls-business-following-certificate-debacle/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

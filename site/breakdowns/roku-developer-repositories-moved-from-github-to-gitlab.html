@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Product Launch</p>
     <h1 class="page-title">Roku developer repositories moved from GitHub to GitLab</h1>
-    <p class="meta-line">Hacker News · 24 Oct 202 · Generated 24 Oct 2026, 19:42</p>
+    <p class="meta-line">Hacker News · 24 Oct 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,37 +322,15 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Roku has announced that all of its public developer repositories will be migrated from GitHub to GitLab. The move is a strategic decision to consolidate its source‑code hosting on a single platform that offers tighter integration with its internal tooling and a more flexible licensing model. For enterprise IT teams, the shift means that any automated processes—CI/CD pipelines, webhooks, vulnerability scanners, or third‑party integrations—that currently reference Roku’s GitHub URLs will break unless updated to point to the new GitLab endpoints. The impact is immediate: build failures, missing code updates, and stale security alerts can surface within hours of the migration.</p><p>The vendors involved are GitHub (the previous host) and GitLab (the new host). Both platforms expose REST and GraphQL APIs, but GitLab’s API endpoints differ in authentication, pagination, and event payloads. If your organization uses GitHub‑centric tools such as GitHub Actions, Dependabot, or third‑party CI services that rely on GitHub webhooks, those will need re‑configuration. Additionally, any security scanners that pull data from GitHub’s public API (e.g., Snyk, GitHub CodeQL) will lose visibility into Roku’s code until they are pointed at GitLab.</p><p>Industry implications are significant. The migration underscores a broader trend of vendors moving away from GitHub’s open‑source dominance toward self‑hosted or alternative SaaS solutions that offer more control over data residency and compliance. Enterprises that rely on public repositories for integration, testing, or compliance will need to audit their tooling dependencies more rigorously. The shift also signals to the market that GitLab’s feature set—particularly its built‑in CI/CD, issue tracking, and security scanning—continues to attract large players, potentially accelerating adoption among other SaaS providers.</p><p>For IT teams, the key takeaway is to perform a rapid inventory of all references to Roku’s GitHub repositories, update webhook URLs, re‑configure CI/CD pipelines, and adjust any vulnerability scanning workflows. Failure to do so can result in build breakage, delayed code reviews, and exposure to unpatched vulnerabilities. The migration also presents an opportunity to evaluate whether your organization’s current GitHub usage aligns with your security and compliance posture, and whether a shift to GitLab or a hybrid model might better serve your needs.</p></div>
+      <div class="summary-body"><p>Roku has moved its developer repositories from GitHub to GitLab, a strategic shift that repositions its source‑code hosting platform.
+This change means that any developers or tools that rely on Roku’s public code now need to point to GitLab instead of GitHub.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Run a search across all GitHub repositories, CI/CD configs, and webhook definitions for “roku.com” or specific Roku repo URLs.
-   - Identify all pipelines (GitHub Actions, Jenkins, GitLab CI, CircleCI) that reference Roku repos.
-   - Audit vulnerability scanners (Snyk, GitHub CodeQL, Trivy) for data sources pointing to GitHub.
-   - Map out any automated deployment scripts that pull code from GitHub via API calls.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the risk: estimate the number of build failures per week if repos remain on GitHub (e.g., 5 pipelines × 2 failures/day = 10 failures/week).
-   - Calculate downtime cost: 10 failures × 30 minutes × $200/hr = $60,000/month.
-   - Present a cost‑benefit: migration effort (2 weeks) vs. avoided downtime and compliance risk.
-   - Include compliance metrics: potential GDPR violations if data remains on a platform with less granular control.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- GitLab Enterprise Edition (self‑hosted or SaaS) for hosting Roku repos.
-   - GitHub Enterprise Server for any remaining GitHub‑only workflows.
-   - GitHub‑to‑GitLab migration tools (e.g., gitlab-migrate, git-filter-repo).
-   - CI/CD orchestration tools that support both platforms (Jenkins, GitLab CI, Azure DevOps).
-   - Vulnerability scanners that integrate with GitLab (Snyk, GitLab Security Dashboard).</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: webhook payload differences may break downstream services; authentication token mismatches.
-   - Compliance: GDPR data residency concerns if GitLab instance is hosted outside the EU; ensure proper data processing agreements.
-   - Operational: potential downtime during migration; loss of commit history if migration scripts fail.
-   - Security: temporary exposure of secrets if migration scripts are misconfigured.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Within 30 days, update all webhook URLs in GitHub to point to the new GitLab repo URLs.
-   - Re‑configure one critical CI pipeline to use GitLab CI and validate a successful build.
-   - Run a scan with Snyk against the new GitLab repo to confirm vulnerability data is still captured.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, evaluate a full migration of all internal GitHub usage to GitLab, including self‑hosting for sensitive repos.
-   - Implement a unified policy framework for repository hosting, access controls, and audit logging across platforms.
-   - Integrate GitLab’s security dashboard into the enterprise risk management system to provide real‑time visibility.
-   - Conduct periodic compliance reviews to ensure GDPR and other regulations are met with the chosen hosting model.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Go to your internal GitHub integration settings this week and verify whether any Roku repositories are linked or mirrored. If a Roku repo is still pointing to GitHub, update the webhook URLs or CI/CD pipelines to target GitLab to avoid build failures. This shift most directly affects your CI/CD toolchain and any automated vulnerability scanning that relies on GitHub APIs.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 24 Oct 2026, 19:42</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://blog.roku.com/developer/gitlab-move" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

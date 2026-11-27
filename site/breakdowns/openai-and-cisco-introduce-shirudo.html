@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">OpenAI and Cisco introduce Shirudo</h1>
-    <p class="meta-line">OpenAI · 23 Nov 202 · Generated 24 Nov 2026, 04:00</p>
+    <p class="meta-line">OpenAI · 23 Nov 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,40 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>OpenAI and Cisco have released Shirudo, an open‑source runtime that enables operators to deploy AI‑generated eBPF shields on running Linux systems without requiring service restarts. The runtime intercepts system calls and network traffic, applying machine‑learning models trained on known exploit patterns such as Java4Shell. Shirudo verifies the integrity of its eBPF programs with cryptographic signatures and can leverage TPM modules for secure boot and runtime attestation. The tool is designed to protect critical services—Elasticsearch, Java EE applications, and other long‑running processes—while vendor patches are pending or unavailable. For enterprise IT teams, Shirudo represents a new layer of runtime protection that bridges the gap between vulnerability discovery and patch deployment. It reduces the window of exposure for zero‑day and known‑exploit vulnerabilities, thereby mitigating data breach risk and potential downtime. The collaboration between OpenAI and Cisco combines AI‑driven threat detection with Cisco’s network and security expertise, positioning Shirudo as a complementary component to existing endpoint protection platforms. Industry implications include a shift toward runtime defense as a standard practice, increased adoption of eBPF for security, and a broader acceptance of AI‑based defensive tooling in production environments. Organizations that fail to adopt such runtime protection risk leaving vulnerable code paths exposed during patch delays, which can lead to service disruption or regulatory non‑compliance. The release also signals a trend toward open‑source security solutions that can be audited, customized, and integrated into existing DevSecOps pipelines.</p></div>
+      <div class="summary-body"><p>OpenAI and Cisco have launched Shirudo, an open‑source runtime that lets operators protect running Linux systems with AI‑generated eBPF shields while patches are pending. The tool can block exploits like Java4Shell in real time without restarting services, using cryptographic verification and TPM support.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all Linux hosts running Java, Elasticsearch, or other long‑running services.
-   - Identify services that are currently unpatched for known CVEs (e.g., Java4Shell, CVE‑2024‑xxxx).
-   - Assess current eBPF support: kernel version, eBPF tooling (bcc, bpftrace), and TPM availability.
-   - Review existing runtime protection (AppArmor, SELinux) and determine overlap or gaps.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify risk reduction: estimate potential downtime cost per incident and compare to Shirudo deployment cost.
-   - Use metrics such as mean time to patch (MTTP) and mean time to detect (MTTD) for critical services.
-   - Present a cost‑benefit analysis: $X per server for Shirudo + operational overhead vs. $Y lost revenue from a potential breach.
-   - Highlight compliance alignment: demonstrate how Shirudo’s cryptographic verification satisfies audit requirements for data integrity.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Shirudo (open‑source runtime, GitHub repo)
-   - eBPF tooling: bcc, libbpf, bpftool
-   - TPM 2.0 firmware and software stack (tpm2-tools)
-   - Cisco Secure Endpoint (for integration with existing EDR)
-   - OpenAI API (for model updates, if using commercial version)
-   - Kubernetes admission controllers (if deploying in containerized environments)</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Compatibility issues with older kernels, potential performance overhead on high‑traffic services.
-   - Compliance: Ensure that cryptographic keys and TPM usage comply with UK GDPR data handling and storage requirements.
-   - Operational: Need for skilled personnel to maintain eBPF programs and monitor model drift.
-   - Vendor lock‑in: While Shirudo is open‑source, integration with Cisco products may create partial dependency.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy Shirudo on a single test server hosting Elasticsearch.
-   - Configure a basic eBPF shield for Java4Shell and validate with a controlled exploit test.
-   - Measure performance impact and verify TPM attestation.
-   - Document results and share with stakeholders within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Roll out Shirudo across all production Linux hosts over 6–12 months.
-   - Automate deployment via configuration management (Ansible, Terraform) and integrate with CI/CD pipelines.
-   - Establish a monitoring framework to collect telemetry from eBPF shields and feed back into AI model updates.
-   - Conduct periodic security audits to validate that runtime protection remains effective against emerging threats.
-   - Evaluate integration with Cisco SecureX for centralized threat intelligence and incident response orchestration.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Go to your Linux servers this week and experiment with Shirudo’s eBPF shields to protect critical services such as Elasticsearch or other Java applications. Failing to adopt this runtime risks exposing vulnerable code paths during patch delays, potentially leading to data breaches or downtime. The most immediate impact will be on your Linux infrastructure and endpoint security stack, where Shirudo can be integrated to provide live, programmable protection.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 24 Nov 2026, 04:00</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://openai.com/index/introducing-shirudo" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

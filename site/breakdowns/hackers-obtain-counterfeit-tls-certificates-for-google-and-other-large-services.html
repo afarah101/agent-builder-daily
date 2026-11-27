@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Hackers obtain counterfeit TLS certificates for Google and other large services</h1>
-    <p class="meta-line">Ars Technica · 06 Oct 202 · Generated 27 Oct 2026, 12:00</p>
+    <p class="meta-line">Ars Technica · 06 Oct 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,33 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Hackers recently exploited administrative control over the .gh (Ghana), .sl (Sierra Leone), and .as (American Samoa) country code top‑level domains to generate counterfeit TLS certificates for high‑profile brands, including Google. The attackers leveraged the ability to publish DNS‑based Certificate Authority Authorization (CAA) records that were misconfigured or absent, allowing them to issue certificates that passed validation by browsers and certificate transparency (CT) logs. Google has responded by blocking the forged certificates in Chrome and has issued a public advisory urging all domain owners to audit their CAA records and CT logs. The incident highlights the critical role of domain registrar configuration, DNS security, and CT logging in the trust chain that underpins secure web traffic.</p><p>For enterprise IT teams, the attack underscores several immediate concerns. First, any domain that is part of an organization’s SSO, MDM, or internal services could be targeted if its CAA records are not strictly scoped to approved CAs. Second, the use of CT logs as a monitoring mechanism is now a frontline defense; unexpected entries in a log can indicate a compromise before browsers detect it. Third, the incident demonstrates that even large vendors can be vulnerable to third‑party domain hijacking, so internal controls must be robust regardless of external brand reputation.</p><p>Vendors and technologies involved include domain registrars (e.g., GoDaddy, Namecheap, Cloudflare), DNS providers, CT log operators (e.g., Google Certificate Transparency, DigiCert), and browser vendors (Chrome, Firefox, Edge). The broader industry implication is a renewed focus on DNS‑based security controls, such as mandatory CAA records, DNSSEC, and continuous CT log monitoring. Regulatory bodies may also tighten requirements for certificate issuance and domain ownership verification, especially under frameworks like GDPR where data integrity and security are core principles.</p><p>Enterprise IT must therefore treat domain configuration as a security asset, enforce strict CAA policies, and integrate CT log alerts into security operations. Failure to do so exposes users to man‑in‑the‑middle attacks that can compromise authentication tokens, VPN connections, and other critical services. The incident serves as a wake‑up call that the trust chain is only as strong as its weakest link, and that proactive domain hygiene is essential for maintaining enterprise security posture.</p></div>
+      <div class="summary-body"><p>Hackers exploited control over .gh, .sl, and .as ccTLDs to mint counterfeit TLS certificates for Google and other major brands. Google has blocked the forged certs in Chrome and urged domain owners to audit certificate transparency logs and enforce CA‑Authorization DNS records.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all domains and subdomains used by the organization, including third‑party services and internal tooling.
-   - Verify that each domain has a CAA record that explicitly lists only the CAs approved by the organization (e.g., Google, DigiCert, Let&#x27;s Encrypt if used).
-   - Export and review all CT log entries for the organization’s domains over the past 30 days; flag any certificates that were not issued by an approved CA.
-   - Check DNSSEC status for each domain; ensure it is enabled and correctly signed.
-   - Confirm that the domain registrar’s API access is restricted to authorized personnel and that audit logs are enabled.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify risk: estimate the potential impact of a compromised TLS certificate on SSO, MDM, and VPN services (e.g., downtime, data exfiltration, credential theft).
-   - Benchmark: compare current CAA compliance rate against industry best practice (target 100% compliance).
-   - Cost estimate: allocate budget for DNSSEC deployment, CT log monitoring tools, and staff training (e.g., $5,000–$10,000 for tooling, $2,000 for training).
-   - ROI: demonstrate that preventing even a single certificate compromise can save the organization from costly incident response, regulatory fines, and brand damage.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- DNSSEC management: Infoblox, Cloudflare DNS, AWS Route 53.
-   - CAA record audit: DNSViz, CAA‑Check, or custom scripts using dnspython.
-   - CT log monitoring: Google Certificate Transparency API, DigiCert Certificate Transparency Log Viewer, or commercial solutions like Qualys SSL Labs or Rapid7 InsightVM.
-   - Alerting: Splunk, Elastic Stack, or native SIEM integration with CT log feeds.
-   - Policy enforcement: Terraform or Pulumi scripts to enforce CAA records as code.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Misconfigured CAA records can inadvertently block legitimate certificate issuance, causing service outages.
-   - Compliance: Under UK GDPR, failure to protect data integrity and confidentiality can lead to fines up to 4% of global turnover.
-   - Operational: Over‑restrictive CAA policies may delay emergency certificate renewals during incidents.
-   - Vendor lock‑in: Relying on a single registrar or DNS provider may limit flexibility.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Within 30 days, run a full CAA audit, correct any misconfigurations, and enable DNSSEC on all domains. Deploy a simple CT log monitoring script that sends alerts to the security ops channel whenever a new certificate is issued for an organization domain.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, implement a policy‑as‑code framework that automatically generates and validates CAA records during domain provisioning. Integrate CT log monitoring into the CI/CD pipeline for certificate issuance. Conduct quarterly penetration tests focused on DNS and certificate issuance paths. Establish a formal incident response playbook that includes steps for rapid revocation of compromised certificates and communication with browser vendors.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Go to your domain registrar’s DNS console and verify that each of your domain’s CA‑Authorization records correctly limits which CAs can issue certificates for your namespace. If you are a Google Workspace tenant, check the Google Admin console’s Security &gt; Advanced settings &gt; Certificate transparency logs for any unexpected entries. Failing to enforce these controls exposes your users to man‑in‑the‑middle attacks and undermines the integrity of your SSO and MDM integrations.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Oct 2026, 12:00</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://arstechnica.com/security/2026/10/hackers-obtain-counterfeit-tls-certificates-for-google-and-other-large-services/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

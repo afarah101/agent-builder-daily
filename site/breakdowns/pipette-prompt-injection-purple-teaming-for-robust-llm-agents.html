@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security / LLM Agent Protection</p>
     <h1 class="page-title">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</h1>
-    <p class="meta-line">Lipeng He, Yihan Wang, Jiawen Zhang, N. Asokan · Academic Institution · 2026-11-18 · Generated 19 Nov 2026, 15:38</p>
+    <p class="meta-line">Lipeng He, Yihan Wang, Jiawen Zhang, N. Asokan · Academic Institution · 2026-11-18 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,34 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The PIPETTE study addresses the emerging threat of prompt injection attacks against large language model (LLM) agents that are increasingly deployed in enterprise automation, customer support, and decision‑support workflows. The authors built a purple‑team framework that systematically expands the attack surface by generating a comprehensive dictionary of injection vectors and then training defenders against those vectors. The approach combines a dictionary‑reward system to discover novel attack patterns with an on‑policy training pipeline that preserves normal agent functionality while enforcing injection‑blocking policies. Evaluation on a suite of static and adaptive attacks demonstrated that agents trained under PIPETTE achieved near‑zero success rates for known injection techniques and maintained robust performance against unseen, adversarial prompts. The study shows that a structured purple‑team methodology can produce LLM agents that are resilient to both scripted and dynamic injection attempts without sacrificing productivity.</p><p>For enterprise IT, this matters because prompt injection can subvert automated decision‑making, leak sensitive data, or cause policy violations. Traditional security controls (e.g., input sanitization, access controls) are insufficient against sophisticated injection that manipulates the LLM’s internal prompt. PIPETTE provides a repeatable, data‑driven process to harden agents before deployment, reducing the risk of data exfiltration, compliance breaches, and operational downtime. The real‑world implications include the ability to certify LLM agents for regulated environments (e.g., finance, healthcare), to integrate robust defenses into CI/CD pipelines, and to provide measurable security metrics that can be reported to auditors and executives. By adopting a purple‑team approach, organizations can proactively discover hidden attack vectors, build hardened models, and maintain business continuity while leveraging LLM capabilities.</p></div>
+      <div class="summary-body"><p>PIPETTE tackles prompt injection attacks on LLM agents by creating a purple‑team framework that pushes red‑team attacks to cover many strategies, then trains defenders with those attacks to build robust agents. It built a dictionary‑reward system for wider attack discovery and an on‑policy training pipeline that keeps normal tasks working while blocking injection. The result was agents with almost zero success for static attacks and strong resistance to adaptive attacks without losing performance.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM agents in production or in the pipeline, noting their purpose, data access level, and integration points.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Conduct a threat model focused on prompt injection: identify potential adversaries, attack vectors, and the impact of compromised outputs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Run a baseline penetration test using a small set of known injection prompts to gauge current resilience and document failure modes.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Measure current model performance metrics (accuracy, latency, throughput) to establish a pre‑defense baseline.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify risk reduction: estimate the potential cost of a successful injection (e.g., data breach, regulatory fines) versus the cost of implementing PIPETTE.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Present a pilot ROI: 3‑month pilot with expected 90% reduction in injection success, 5% performance overhead, and a projected $200k annual savings from avoided incidents.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Align with compliance: show how hardened agents meet GDPR Article 32 (security of processing) and ISO/IEC 27001 controls.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Include a phased rollout plan with clear milestones and success criteria.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI or Azure OpenAI for base LLMs
-   - Hugging Face Transformers for model fine‑tuning
-   - OpenAI API’s “prompt injection detection” endpoint (if available)
-   - RedTeamAI or PIPETTE open‑source repo (GitHub)
-   - CI/CD tools: GitHub Actions, GitLab CI, or Azure DevOps
-   - Security orchestration: Splunk SOAR or Palo Alto Cortex XSOAR
-   - Monitoring: Prometheus + Grafana for latency and error rates</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Over‑blocking legitimate prompts, increased latency, model drift if training data is insufficient.
-   - Compliance: GDPR – ensure that data used for training does not contain personal data without consent; maintain audit logs of model changes.
-   - Operational: Integration complexity with existing MLOps pipelines; potential skill gaps in security‑focused model training.
-   - Vendor lock‑in if relying solely on proprietary APIs for detection.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy a sandboxed “prompt validator” that intercepts user inputs, runs them through a lightweight regex‑based injection filter, and logs suspicious patterns. Configure alerts in Splunk for any matches. This can be set up within 30 days and will surface high‑risk prompts before they reach the agent.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months, implement the full PIPETTE purple‑team cycle: automate dictionary generation, integrate on‑policy training into the model release pipeline, and establish continuous monitoring of injection attempts. Build an internal security‑operations center (SOC) module that ingests model logs, correlates injection attempts with business outcomes, and feeds back into the training loop. This will create a self‑healing LLM ecosystem that adapts to new attack vectors while maintaining compliance and performance.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 19 Nov 2026, 15:38</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

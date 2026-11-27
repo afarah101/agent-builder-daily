@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Forging a Microsoft Edge Full Chain with Logic Bugs Only</h1>
-    <p class="meta-line">Hacker News · 29 Oct 202 · Generated 29 Oct 2026, 15:48</p>
+    <p class="meta-line">Hacker News · 29 Oct 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,38 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Security researchers have chained five logic bugs in Microsoft Edge that allow an attacker to bypass the browser’s sandbox without triggering any memory corruption. The chain exploits the Conditional Access Navigation Throttle (CANT) that is invoked when Edge is used with Microsoft Entra ID (formerly Azure AD) for conditional access policies. By manipulating the throttle’s logic, an attacker can cause Edge to load a malicious page that then escalates privileges inside the sandbox, ultimately enabling credential theft and lateral movement across the corporate network. The vulnerability is significant because it targets a core component of the Microsoft 365 Edge deployment that many enterprises rely on for secure web access. The exploit does not require any user interaction beyond normal browsing, making it a silent threat that can be triggered by phishing or malicious web content. Microsoft has released a patch that updates the EdgeCAGuidanceNavigationThrottle code, but many organizations still run older Edge versions or have not applied the latest cumulative update. The broader industry implication is that logic bugs in widely deployed browsers can provide a foothold for credential compromise, undermining the security model of conditional access and zero‑trust architectures. Enterprises must now prioritize patching Edge, monitoring for anomalous login prompts, and validating that conditional access policies are correctly enforced. Failure to address this flaw leaves organizations exposed to credential reuse attacks, data exfiltration, and potential compliance violations under regulations such as UK GDPR.</p></div>
+      <div class="summary-body"><p>Security researchers chained five logic bugs in Microsoft Edge, bypassing memory corruption to escape the sandbox. The exploit targets Edge’s Conditional Access Navigation Throttle used with Entra ID, exposing enterprise users to credential misuse.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all Edge installations across endpoints, servers, and virtual machines.
-   - Verify the current Edge version and cumulative update level; compare against the latest Microsoft 365 Edge release notes.
-   - Audit Conditional Access policies that rely on the Navigation Throttle; confirm that the throttle is enabled and that Entra ID integration is active.
-   - Review endpoint detection and response (EDR) logs for anomalous sandbox escape indicators such as unexpected process creation or elevated privileges from browser contexts.
-   - Map user accounts that have elevated permissions in Entra ID to assess potential impact scope.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Present the risk of credential theft and lateral movement quantified by the number of privileged accounts exposed and the potential data loss cost (e.g., $X per compromised credential).
-   - Benchmark patch deployment success rates in similar organizations; cite Microsoft’s security bulletin that shows 95% of enterprises apply cumulative updates within 30 days.
-   - Highlight compliance risk: UK GDPR requires timely remediation of known vulnerabilities that could lead to personal data exposure; failure to patch may result in fines up to €20 million.
-   - Recommend a phased rollout plan with a projected timeline and resource allocation, aligning with ITIL change management.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Microsoft Endpoint Manager (Intune) for automated Edge update deployment.
-   - Microsoft Defender for Endpoint for monitoring sandbox escape indicators.
-   - Azure AD Conditional Access Insights for policy validation.
-   - Qualys or Tenable for vulnerability scanning of Edge components.
-   - Splunk or Elastic SIEM for correlating anomalous login prompts and profile switches.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Incorrect update deployment could break existing web applications that rely on legacy Edge features.
-   - Compliance: Delayed patching may violate UK GDPR Article 32 (security of processing) and lead to regulatory penalties.
-   - Operational: Over‑restrictive conditional access policies could inadvertently block legitimate user access, impacting productivity.
-   - Vendor lock‑in: Relying solely on Microsoft tooling may limit visibility into third‑party browser usage.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy the latest Microsoft 365 Edge cumulative update to all endpoints within 30 days using Intune.
-   - Configure a rule in Defender for Endpoint to alert on any process that attempts to escape the Edge sandbox.
-   - Run a one‑off vulnerability scan to confirm the patch has removed the logic bug signatures.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, implement a zero‑trust web gateway that inspects and controls all outbound traffic, reducing reliance on browser sandbox integrity alone.
-   - Integrate continuous monitoring of conditional access policy enforcement with automated remediation workflows.
-   - Conduct periodic red‑team exercises that simulate logic‑bug exploitation to validate the effectiveness of the patching and monitoring strategy.
-   - Review and update the organization’s security architecture to include multi‑factor authentication and least‑privilege access for all Entra ID users.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Check your Microsoft 365 Edge deployments for the latest security updates and apply any patches released for the EdgeCAGuidanceNavigationThrottle. Monitor for anomalous login prompts or unexpected profile switches that could indicate exploitation attempts. Failure to update leaves users vulnerable to credential theft and potential lateral movement within the corporate network.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 29 Oct 2026, 15:48</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

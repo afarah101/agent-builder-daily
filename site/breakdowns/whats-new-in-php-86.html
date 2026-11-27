@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Product Launch</p>
     <h1 class="page-title">What&#x27;s New in PHP 8.6</h1>
-    <p class="meta-line">Hacker News · 19 Nov 202 · Generated 19 Nov 2026, 17:54</p>
+    <p class="meta-line">Hacker News · 19 Nov 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>PHP 8.6 was released with a suite of language enhancements that shift the balance toward more expressive, type‑safe, and performant code. The most visible additions are Partial Function Application, a Duration class, a Polling API, and a built‑in clamp() helper. Partial Function Application allows developers to bind arguments to functions ahead of time, creating reusable closures without boilerplate. The Duration class replaces the ad‑hoc use of integers or strings for time spans, offering a strongly‑typed representation that can be used in timeout, retry, and scheduling logic. The Polling API provides a non‑blocking, event‑driven alternative to traditional blocking I/O, enabling PHP applications to scale I/O‑bound workloads without resorting to external event loops or worker pools. clamp() gives a concise way to constrain values, improving code readability.</p><p>For enterprise IT teams, these changes directly impact application performance, reliability, and maintainability. The Polling API can reduce CPU usage and memory footprint in high‑traffic services, while Duration improves error handling and reduces bugs in timeout logic. Partial Function Application cuts down on repetitive wrapper code, easing code reviews and static analysis. Vendors such as Zend Technologies (Zend Server), Cloudflare (Workers), and PHP hosting providers are already updating their stacks to support PHP 8.6, and CI/CD pipelines will need to be updated to test against the new features. The broader industry implication is a push toward more modern, event‑driven PHP stacks that can compete with Node.js and Go in I/O‑heavy scenarios. Organizations that adopt PHP 8.6 early will gain a performance edge, lower operational costs, and a more future‑proof codebase.</p></div>
+      <div class="summary-body"><p>PHP 8.6 introduces several new language features such as Partial Function Application, a Duration class for precise time handling, a Polling API for scalable I/O, and a clamp() function. These changes aim to make PHP code more expressive, type-safe, and efficient for modern applications.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Scan existing code for blocking I/O calls (file_get_contents, curl_exec, stream_socket_client) and identify services with high concurrency.
-   - Audit timeout and retry logic to see if integer seconds or string intervals are used; note any flaky behavior.
-   - Review current PHP version and hosting environment; ensure PHP 8.6 is supported by the runtime (e.g., Apache, Nginx, PHP-FPM).
-   - Measure baseline latency, CPU, and memory usage of key endpoints to establish a performance baseline.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case showing potential CPU savings of 15‑30% by replacing blocking calls with the Polling API in high‑traffic services.
-   - Quantify reliability gains: reduce timeout‑related failures by 20% using the Duration class.
-   - Include cost of migration (developer hours, testing, potential downtime) versus projected savings in hosting and support.
-   - Present benchmark data from a pilot implementation (e.g., 10‑20% throughput increase, 10‑15% latency reduction).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Zend Server or Zend Optimizer for PHP 8.6 support.
-   - PHP-FPM with PHP 8.6 compiled with libuv or libev for Polling API.
-   - Composer for dependency management; use packages like php-duration for Duration support if needed.
-   - PHPUnit and Pest for regression testing of new code paths.
-   - New Relic or Datadog for monitoring performance changes post‑migration.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Compatibility risk: legacy extensions or custom modules may not compile with PHP 8.6.
-   - Compliance risk: ensure that any new I/O handling does not expose sensitive data; validate against UK GDPR data handling requirements.
-   - Operational risk: improper use of the Polling API can lead to resource starvation or deadlocks if event loops are misconfigured.
-   - Security risk: new features may introduce subtle bugs; enforce strict code reviews and static analysis.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Replace a single high‑traffic blocking call (e.g., external API fetch) with the Polling API in a test environment and measure latency improvements within 10 days.
-   - Refactor timeout logic in one service to use the Duration class, reducing hard‑coded values and improving clarity.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6‑12 months, refactor all I/O‑bound services to use the Polling API, integrating with an event‑driven architecture (e.g., using Swoole or ReactPHP).
-   - Standardize timeout and retry logic across the organization using the Duration class, and enforce it via CI linting rules.
-   - Conduct a full code audit to identify and replace all manual clamp() implementations with the built‑in function, improving consistency.
-   - Train developers on Partial Function Application patterns and update coding standards to leverage the new feature for cleaner, more reusable code.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Monitor your PHP-based web services for potential performance gains by refactoring blocking calls to use the new Polling API. Consider testing the Duration class in your timeout and retry logic to reduce latency and improve reliability.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 19 Nov 2026, 17:54</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://www.php.net/releases/8.6/en.php" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

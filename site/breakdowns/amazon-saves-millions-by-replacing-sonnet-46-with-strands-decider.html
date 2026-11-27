@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Product Launch</p>
     <h1 class="page-title">Amazon saves millions by replacing Sonnet 4.6 with Strands Decider</h1>
-    <p class="meta-line">Hacker News · 10 Nov 202 · Generated 10 Nov 2026, 14:44</p>
+    <p class="meta-line">Hacker News · 10 Nov 2026 · Generated 27 Nov 2026, 17:24 (short version)</p>
   </div>
 </header>
 <main class="content">
@@ -322,37 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Amazon has replaced its internal use of Claude Sonnet 4.6 with the newly launched Strands Decider decision model. The switch was driven by a 98 % reduction in token costs while preserving labeling accuracy for a massive ticketing system that processes thousands of support tickets daily. The decision model, built on a decision‑tree architecture, eliminates the need for large language model inference for routine classification tasks. This move directly impacts the cost structure of Amazon’s internal operations, freeing up budget for higher‑value AI projects. For enterprise IT teams, the news signals a shift toward decision‑model based workflows that can dramatically cut cloud spend while maintaining performance. The primary vendors involved are Anthropic (Claude Sonnet 4.6), Strands (Decider), and AWS (SageMaker and AppConfig). The broader industry implication is that large enterprises will increasingly evaluate whether a pure LLM approach is necessary for routine tasks, or if a lightweight decision model can provide the same accuracy at a fraction of the cost. This trend may accelerate the adoption of hybrid AI pipelines, where a decision model routes requests to an LLM only when needed, optimizing both latency and spend. As cloud providers continue to offer more specialized AI services, IT teams must reassess their AI architecture to avoid unnecessary token consumption and to keep inference times predictable. Failure to adopt cost‑efficient models could result in higher operational expenses and slower ticket resolution, impacting customer satisfaction and service level agreements.</p></div>
+      <div class="summary-body"><p>Amazon has replaced its internal use of Claude Sonnet 4.6 with the newly launched Strands Decider decision model, cutting token costs by 98% while maintaining labeling accuracy for a massive ticketing system.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current ticket labeling pipeline: measure token usage per ticket, inference latency, and accuracy metrics.
-   - Identify the proportion of tickets that require full LLM inference versus those that can be handled by rule‑based or decision logic.
-   - Review cost breakdown in AWS billing for SageMaker endpoints, including per‑second charges and data transfer.
-   - Map existing AppConfig settings that control model selection and thresholds.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case showing projected savings: 98 % token reduction translates to X dollars per month (use current token count and AWS pricing).
-   - Include benchmarks: compare labeling accuracy before and after implementing Strands Decider on a sample dataset.
-   - Highlight risk mitigation: reduced inference time leads to faster ticket triage, improving SLA adherence.
-   - Present ROI timeline: break‑even point based on current spend and projected savings.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- AWS SageMaker: for hosting the Strands Decider model and managing endpoints.
-   - AWS AppConfig: to toggle between decision model and LLM in production.
-   - Strands Decider: the decision‑tree model itself.
-   - Anthropic Claude (Sonnet 4.6): for fallback or comparison if needed.
-   - CloudWatch and X-Ray: for monitoring latency and error rates.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: model drift if ticket patterns change; ensure retraining schedule.
-   - Compliance: UK GDPR – ensure data used for training is anonymized; maintain audit logs for model decisions.
-   - Operational: potential downtime during model rollout; implement blue‑green deployment.
-   - Vendor lock‑in: reliance on AWS services; consider multi‑cloud readiness.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a pilot in a non‑critical ticket queue: replace Sonnet 4.6 with Strands Decider for 10 % of traffic.
-   - Measure token usage and accuracy over 2 weeks; adjust thresholds in AppConfig.
-   - Document cost savings and performance metrics; use results to refine the business case.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Scale the decision model across all ticketing queues over 6–12 months.
-   - Integrate a feedback loop that feeds misclassified tickets back into the decision tree for continuous improvement.
-   - Explore hybrid inference: route only complex tickets to Claude Sonnet 4.6, while the majority use Strands Decider.
-   - Standardize the architecture in Terraform or CloudFormation for reproducibility and compliance auditing.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">What to do</h3><div class="guide-text">Go to your AWS SageMaker and AppConfig settings this week to evaluate whether a decision‑model approach could replace your current LLM‑based ticket labeling workflow. Missing this shift could leave you paying far more for token usage and slower inference; the most affected tool is AWS SageMaker, which sits at the core of the ticketing pipeline.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 10 Nov 2026, 14:44</p>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · 27 Nov 2026, 17:24 (short version)</p>
     <div class="article-actions">
       <a href="https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>
