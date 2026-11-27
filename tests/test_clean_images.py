@@ -75,7 +75,7 @@ def stub(monkeypatch, items, scenes=None, text_on=()):
 # ---------- house style: one fixed suffix on every prompt ----------
 
 def test_house_style_is_the_fixed_suffix():
-    assert gi.HOUSE_STYLE == SUFFIX and gi.MAX_NEW_PER_RUN == 25
+    assert gi.HOUSE_STYLE == SUFFIX and gi.MAX_NEW_PER_RUN == 120
 
 
 @pytest.mark.parametrize("scene", ["Two clay blocks pressed into one.", "A glass cube", *gi.SAFE_SCENES])
@@ -236,6 +236,7 @@ def test_good_image_is_kept_and_bad_or_old_style_images_are_redrawn(images, monk
 
 
 def test_second_tries_count_toward_the_25_drawings(images, monkeypatch):
+    monkeypatch.setattr(gi, "MAX_NEW_PER_RUN", 25)  # the run's limit, set low for this test
     items = [news(f"Story {i:02d}", f"2026-11-{26 - i % 20:02d}") for i in range(30)]
     calls = stub(monkeypatch, items, text_on={1, 3})  # two cards need a second drawing
     assert gi.run(today=NOW) == 23 and len(calls["draws"]) == 25

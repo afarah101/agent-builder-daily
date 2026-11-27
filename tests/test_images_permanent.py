@@ -1,9 +1,10 @@
-"""Images, permanent: no card is ever without a figure, and drawing can never use up Cloudflare's free neurons for a day.
+"""Images, permanent: no card is ever without a figure, and drawing can never pass the day's spend cap.
 
 - Cover: a card with no AI image shows site/images/covers/<slug>.webp, drawn with Pillow from the slug. No text, no API call.
 - image_figure: the AI image, else the cover file, else an inline cover. Never "".
-- Budget: site/images/budget.json keeps {UTC date: neurons}. No drawing starts when the day's total would pass 9000.
-- A Cloudflare 429 marks the day as used up: no run draws again that UTC day. The run succeeds and the page builds.
+- Budget: site/images/budget.json keeps {UTC date: neurons}. No drawing starts when the day's total would pass the cap
+  (DAILY_NEURON_BUDGET; its value and the 429 rule are in tests/test_paid_images.py).
+- After a Cloudflare 429 the run succeeds and the page builds.
 - Ban list: only things that carry text. Plain objects (paper, a phone face-down, cups) may be drawn.
 No network: Groq and Cloudflare are stubbed."""
 import json
@@ -198,19 +199,21 @@ def test_page_built_before_any_cover_file_still_has_a_figure_on_every_card(site)
     assert cards == figures == 2 and all(s.startswith("data:image/svg+xml,") for s in srcs)
 
 
-# ---------- daily budget: 9000 neurons a UTC day, across all runs ----------
+# ---------- daily budget: one neuron total a UTC day, across all runs ----------
+
+CAP = gi.DAILY_NEURON_BUDGET
+
 
 def test_budget_constants():
-    assert gi.DAILY_NEURON_BUDGET == 9000 and gi.NEURONS_PER_DRAWING == 175 and gi.FREE_DAILY_NEURONS == 10000
-    assert gi.DAILY_NEURON_BUDGET + gi.NEURONS_PER_DRAWING < gi.FREE_DAILY_NEURONS
+    assert gi.NEURONS_PER_DRAWING == 175 and gi.FREE_DAILY_NEURONS == 10000 and CAP > gi.FREE_DAILY_NEURONS
 
 
-def test_budget_stops_at_9000(site, monkeypatch, capsys):
-    (site / "site" / "images" / "budget.json").write_text(json.dumps({DAY: 8650}))
+def test_budget_stops_at_the_cap(site, monkeypatch, capsys):
+    (site / "site" / "images" / "budget.json").write_text(json.dumps({DAY: CAP - 350}))
     calls = stub(monkeypatch, [news(f"Story {i}") for i in range(10)])
-    assert gi.run(today=NOW) == 2 and len(calls["draws"]) == 2  # 8650 + 2 x 173 = 8996; a third drawing would pass 9000
-    assert budget(site) == {DAY: 8996.0} and budget(site)[DAY] <= gi.DAILY_NEURON_BUDGET
-    assert "daily neuron budget reached (8996 of 9000 used on 2026-11-27 UTC)" in capsys.readouterr().out
+    assert gi.run(today=NOW) == 2 and len(calls["draws"]) == 2  # 2 x 173 = 346; a third drawing would pass the cap
+    assert budget(site) == {DAY: CAP - 4.0} and budget(site)[DAY] <= CAP
+    assert f"daily spend cap reached ({CAP - 4} of {CAP} neurons" in capsys.readouterr().out
     calls["draws"].clear(), calls["scenes"].clear()
     monkeypatch.setattr(gi, "api_calls", 0)
     assert gi.run(today=NOW) == 0 and calls == {"scenes": [], "draws": []} and gi.api_calls == 0  # no Groq call either
@@ -218,12 +221,14 @@ def test_budget_stops_at_9000(site, monkeypatch, capsys):
 
 
 def test_budget_is_one_total_for_all_runs_of_the_day(site, monkeypatch):
+    (site / "site" / "images" / "budget.json").write_text(json.dumps({DAY: CAP - 9000}))
+    monkeypatch.setattr(gi, "MAX_NEW_PER_RUN", 25)
     calls = stub(monkeypatch, [news(f"Story {i:03d}") for i in range(80)])
     made = [gi.run(today=NOW) for _ in range(4)]
-    assert made == [25, 25, 2, 0] and len(calls["draws"]) == 52  # 52 x 173 = 8996
-    assert budget(site) == {DAY: 8996.0}
+    assert made == [25, 25, 2, 0] and len(calls["draws"]) == 52  # 52 x 173 = 8996 of the 9000 that were left
+    assert budget(site) == {DAY: CAP - 4.0}
     assert gi.run(today=datetime(2026, 11, 28, 6, 0)) == 25  # a new UTC day starts at 0
-    assert budget(site) == {DAY: 8996.0, "2026-11-28": 4325.0}
+    assert budget(site) == {DAY: CAP - 4.0, "2026-11-28": 4325.0}
 
 
 def test_neurons_not_reported_count_175_a_drawing(site, monkeypatch):
@@ -235,11 +240,11 @@ def test_neurons_not_reported_count_175_a_drawing(site, monkeypatch):
 
 
 def test_second_try_counts_in_the_budget_and_does_not_start_past_it(site, monkeypatch):
-    (site / "site" / "images" / "budget.json").write_text(json.dumps({DAY: 8700}))
+    (site / "site" / "images" / "budget.json").write_text(json.dumps({DAY: CAP - 300}))
     calls = stub(monkeypatch, [news("Story")])
     monkeypatch.setattr(gi, "text_found", lambda path: "GRAND OPENING")  # every drawing shows text
-    assert gi.run(today=NOW) == 0 and calls["draws"] == ["story"]  # 8873 after one drawing: no room for the second try
-    assert budget(site) == {DAY: 8873.0} and not (site / "site" / "images" / "story.webp").exists()
+    assert gi.run(today=NOW) == 0 and calls["draws"] == ["story"]  # 127 left after one drawing: no room for the second try
+    assert budget(site) == {DAY: CAP - 127.0} and not (site / "site" / "images" / "story.webp").exists()
 
 
 def test_failed_drawing_counts_one_drawing(site, monkeypatch):
@@ -260,7 +265,7 @@ def test_dry_run_uses_no_budget(site, monkeypatch):
     assert not (site / "site" / "images" / "budget.json").exists()
 
 
-# ---------- Cloudflare 429: the day is used up ----------
+# ---------- Cloudflare 429: the run stops, the page still builds ----------
 
 def reply_429(monkeypatch):
     posts = []
@@ -276,36 +281,11 @@ def reply_429(monkeypatch):
     return posts
 
 
-def test_generate_image_raises_daily_limit_on_429(site, monkeypatch):
+def test_generate_image_raises_outage_on_429(site, monkeypatch):
     reply_429(monkeypatch)
-    with pytest.raises(gi.DailyLimit, match="Cloudflare HTTP 429: .*daily free allocation of 10,000 neurons"):
+    with pytest.raises(gi.Outage, match="Cloudflare HTTP 429: .*daily free allocation of 10,000 neurons"):
         gi.generate_image("A glass cube", site / "site" / "images" / "x.webp")
-    assert issubclass(gi.DailyLimit, RuntimeError) and not (site / "site" / "images" / "x.webp").exists()
-
-
-def test_429_sets_the_day_exhausted_and_no_run_draws_again_that_day(site, monkeypatch, capsys):
-    items = [news(f"Story {i}") for i in range(5)]
-    scenes = []
-    monkeypatch.setattr(gi, "top_items", lambda now=None: items)
-    monkeypatch.setattr(gi, "describe_scene", lambda item, avoid="": scenes.append(item["title"]) or "A glass cube")
-    posts = reply_429(monkeypatch)
-    assert gi.run(today=NOW) == 0  # the run succeeds
-    assert len(posts) == 1 and len(scenes) == 1  # it stops at the first 429
-    assert budget(site) == {DAY: 10000.0} and budget(site)[DAY] >= gi.DAILY_NEURON_BUDGET  # the day is exhausted
-    assert "Cloudflare's free neurons are used up for 2026-11-27 UTC" in capsys.readouterr().out
-    for hour in (12, 18, 23):  # the later runs of the same UTC day
-        assert gi.run(today=datetime(2026, 11, 27, hour, 59)) == 0
-    assert len(posts) == 1 and len(scenes) == 1  # no Cloudflare call and no Groq call
-    posts.clear()
-    gi.run(today=datetime(2026, 11, 28, 0, 5))  # the next UTC day: drawing starts again
-    assert len(posts) == 1
-
-
-def test_429_keeps_the_neurons_already_counted_when_they_are_higher(site):
-    (site / "site" / "images" / "budget.json").write_text(json.dumps({DAY: 10400}))
-    b = gi.Budget(str(site / "site" / "images"), DAY)
-    b.exhaust()
-    assert budget(site) == {DAY: 10400.0} and not b.can_draw()
+    assert issubclass(gi.Outage, RuntimeError) and not (site / "site" / "images" / "x.webp").exists()
 
 
 def test_after_a_429_the_run_succeeds_and_the_page_builds_with_a_figure_on_every_card(site, monkeypatch, capsys):
@@ -314,7 +294,7 @@ def test_after_a_429_the_run_succeeds_and_the_page_builds_with_a_figure_on_every
     monkeypatch.setattr(gi, "describe_scene", lambda item, avoid="": "A glass cube")
     posts = reply_429(monkeypatch)
     assert gi.main([]) == 0 and len(posts) == 1  # exit code 0: "python generate_images.py && python generate_html.py" goes on
-    assert budget(site) == {DAY: 10000.0}
+    assert not (site / "site" / "images" / "budget.json").exists()  # nothing is stored about the day
     assert "covers: 7 made" in capsys.readouterr().out
     gh.generate_html()
     cards, figures, srcs = shown_cards((site / "site" / "index.html").read_text())
@@ -392,8 +372,7 @@ def test_committed_page_has_a_figure_on_every_shown_card_and_every_file_exists()
 
 
 def test_committed_covers_show_no_text():
-    covers = sorted((ROOT / "site" / "images" / gi.COVERS_DIR).glob("*.webp"))
-    assert covers
+    covers = sorted((ROOT / "site" / "images" / gi.COVERS_DIR).glob("*.webp"))  # none when every card has its AI image
     for path in random.Random(0).sample(covers, min(5, len(covers))):  # OCR on 5 covers
         with Image.open(path) as image:
             assert image.size == (gi.WIDTH, gi.HEIGHT), path.name
@@ -402,4 +381,4 @@ def test_committed_covers_show_no_text():
 
 def test_committed_budget_file_is_date_to_neurons():
     data = json.loads((ROOT / "site" / "images" / gi.BUDGET_FILE).read_text())
-    assert data and all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", day) and isinstance(n, (int, float)) and n >= 0 for day, n in data.items())
+    assert isinstance(data, dict) and all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", day) and isinstance(n, (int, float)) and n >= 0 for day, n in data.items())

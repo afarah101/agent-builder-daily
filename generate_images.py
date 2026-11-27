@@ -13,9 +13,11 @@ Never blank: a card with no AI image shows a cover, site/images/covers/<slug>.we
 (abstract shapes, no text, 0 API calls). Every run makes the missing covers, also when IMAGE_GEN_ENABLED is off.
 image_figure gives every card a figure: the AI image, else the cover, else (no cover file yet) the same idea as inline SVG.
 
-Never over the free limit: site/images/budget.json keeps the neurons used on each UTC day, across all runs. No drawing starts
-when it would take the day above DAILY_NEURON_BUDGET. A Cloudflare 429 marks the day as used up: no more drawings that day.
+Spend cap (Workers Paid): site/images/budget.json keeps the neurons used on each UTC day, across all runs. No drawing starts
+when it would take the day above DAILY_NEURON_BUDGET: the 10,000 free neurons plus DAILY_SPEND_CAP_USD at $0.011 per 1,000.
+Every run logs the day's neurons and the estimated cost in USD.
 Never fails the pipeline: the first API error is logged, the run stops (no more API calls) and that card keeps its cover.
+A Cloudflare 429 or 5xx stops that run only: the next run draws again, and the card keeps its cover until then.
 """
 import json
 import os
@@ -80,14 +82,17 @@ OCR_MIN_SCORE = 0.5  # RapidOCR confidence below this is noise, not writing
 WIDTH, HEIGHT = 1200, 675
 STEPS = 4  # flux-1-schnell default; the model returns a square image, fitted to 1200x675
 QUALITY = 70
-MAX_NEW_PER_RUN = 25  # drawings in one run; the day's limit is DAILY_NEURON_BUDGET
+MAX_NEW_PER_RUN = 120  # drawings in one run: a full backfill of the page in one run; the day's limit is DAILY_NEURON_BUDGET
 MAX_AGE_DAYS = 120  # 4 months, the site's window
 FALLBACK_ALT = "Abstract editorial illustration"
 
-# The day's neuron budget, in site/images/budget.json as {UTC date: neurons used}. All runs of a day share it.
+# The day's spend cap on Cloudflare Workers Paid. site/images/budget.json keeps {UTC date: neurons used}; all runs of a
+# day share it. A cap on spend, not on images: about 580 drawings fit in one day.
 BUDGET_FILE = "budget.json"
-DAILY_NEURON_BUDGET = 9000  # no drawing starts when it would take the day's total above this
-FREE_DAILY_NEURONS = 10000  # Cloudflare's free allocation for one UTC day; a 429 says all of it is used
+DAILY_SPEND_CAP_USD = 1.00  # the most one UTC day of drawings may cost
+USD_PER_1000_NEURONS = 0.011  # the Workers AI price above the free neurons
+FREE_DAILY_NEURONS = 10000  # included in every UTC day at no cost
+DAILY_NEURON_BUDGET = 100909  # 10,000 free + 1.00 / 0.011 x 1000. No drawing starts when it would take the day above this
 NEURONS_PER_DRAWING = 175  # counted for a drawing when Cloudflare reports no number (a drawing uses about 173)
 BUDGET_KEEP_DAYS = 30  # older days leave budget.json
 
@@ -246,8 +251,13 @@ def prune_covers(images_dir, shown):
     return gone
 
 
-class DailyLimit(RuntimeError):
-    """Cloudflare answered HTTP 429: the account's free neurons for this UTC day are used up."""
+class Outage(RuntimeError):
+    """Cloudflare answered HTTP 429 or 5xx: it drew nothing. This run stops; the next run draws again."""
+
+
+def cost_usd(neurons):
+    """The estimated cost in USD of one UTC day's neurons: the first 10,000 are free, the rest cost $0.011 per 1,000."""
+    return max(0.0, float(neurons) - FREE_DAILY_NEURONS) / 1000 * USD_PER_1000_NEURONS
 
 
 class Budget:
@@ -275,10 +285,10 @@ class Budget:
         self.days[self.day] = round(self.used + neurons_of(usage), 1)
         self.save()
 
-    def exhaust(self):
-        """A 429 from Cloudflare: the day's free allocation is used up, whatever this file counted."""
-        self.days[self.day] = max(self.used, float(FREE_DAILY_NEURONS))
-        self.save()
+    def status(self):
+        """The day's neurons and their estimated cost, for the log."""
+        return (f"{self.used:g} of {DAILY_NEURON_BUDGET} neurons, estimated cost ${cost_usd(self.used):.2f} of the "
+                f"${DAILY_SPEND_CAP_USD:.2f} cap, on {self.day} UTC")
 
     def save(self):
         first = (datetime.strptime(self.day, "%Y-%m-%d") - timedelta(days=BUDGET_KEEP_DAYS)).strftime("%Y-%m-%d")
@@ -414,8 +424,8 @@ def generate_image(scene, out_path):
     resp = requests.post(CF_URL.format(account=account, model=MODEL), headers={"Authorization": f"Bearer {token}"},
                          json={"prompt": image_prompt(scene), "steps": STEPS}, timeout=120)
     body = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
-    if resp.status_code == 429:
-        raise DailyLimit(f"Cloudflare HTTP 429: {body.get('errors') or resp.text[:200]}")
+    if resp.status_code == 429 or resp.status_code >= 500:
+        raise Outage(f"Cloudflare HTTP {resp.status_code}: {body.get('errors') or resp.text[:200]}")
     if resp.status_code != 200 or not body.get("success"):
         raise RuntimeError(f"Cloudflare HTTP {resp.status_code}: {body.get('errors') or resp.text[:200]}")
     image = Image.open(io.BytesIO(base64.b64decode(body["result"]["image"])))
@@ -510,8 +520,8 @@ def draw_clean(item, path, draws_left, budget):
         scene = describe_scene(item) if attempt == 1 else describe_scene(item, avoid=scene)
         try:
             usage = generate_image(scene, path)
-        except DailyLimit:
-            raise  # run() marks the day as used up
+        except Outage:
+            raise  # Cloudflare drew nothing: no neurons to count
         except Exception:
             budget.add()  # the call can have used neurons before it failed: count one drawing
             raise
@@ -559,8 +569,7 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
     budget = Budget(images_dir, today.strftime("%Y-%m-%d"))
     if todo and not budget.can_draw():
         # checked before any Groq call: a day with no room left makes 0 API calls
-        log(f"daily neuron budget reached ({budget.used:g} of {DAILY_NEURON_BUDGET} used on {budget.day} UTC): "
-            f"{len(todo)} cards keep their cover, 0 API calls")
+        log(f"daily spend cap reached ({budget.status()}): {len(todo)} cards keep their cover, 0 API calls")
         todo = []
     if len(todo) > MAX_NEW_PER_RUN:
         log(f"{len(todo)} cards need an image; this run draws {MAX_NEW_PER_RUN}, the next run the rest")
@@ -575,8 +584,7 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
         if len(used) >= MAX_NEW_PER_RUN:  # every drawing counts, a second try too
             break
         if not dry_run and not budget.can_draw():
-            log(f"daily neuron budget reached ({budget.used:g} of {DAILY_NEURON_BUDGET} used on {budget.day} UTC): "
-                "no more drawings today, the other cards keep their cover")
+            log(f"daily spend cap reached ({budget.status()}): no more drawings today, the other cards keep their cover")
             break
         path = out / f"{slug}.webp"
         if dry_run:
@@ -593,11 +601,11 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
             alts[slug] = {"alt": scene, "created": today.strftime("%Y-%m-%d"), "model": MODEL,
                           "provider": "cloudflare-workers-ai", "neurons": neurons[-1], "style": STYLE_ID}
             made += 1
+            (out / COVERS_DIR / f"{cover_slug(item.get('title', ''))}.webp").unlink(missing_ok=True)  # the AI image replaces the cover
             log(f"generated {slug} ({path.stat().st_size / 1024:.1f} KB, neurons {neurons[-1]}): {scene}")
-        except DailyLimit as e:
-            budget.exhaust()  # no run draws again before the next UTC day
-            log(f"Cloudflare's free neurons are used up for {budget.day} UTC: no more drawings today, "
-                f"cards keep their cover: {e}")
+        except Outage as e:
+            # this run only: nothing is stored about the day, so the next run draws again
+            log(f"Cloudflare did not draw {slug}, stopping this run, cards keep their cover until the next run: {e}")
             break
         except Exception as e:
             # stop the whole run: no more Groq or Cloudflare calls after the first error
@@ -611,8 +619,7 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
                 json.dump(alts, f, indent=2, sort_keys=True)
         except Exception as e:
             log(f"could not write {ALT_FILE}: {e}")
-    log(f"done: {made} generated, {api_calls} API calls, neurons {neuron_total(used)}; "
-        f"day total {budget.used:g} of {DAILY_NEURON_BUDGET} ({budget.day} UTC)")
+    log(f"done: {made} generated, {api_calls} API calls, neurons {neuron_total(used)}; day total {budget.status()}")
     return made
 
 
