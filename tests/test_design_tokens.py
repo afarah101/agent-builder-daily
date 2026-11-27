@@ -278,3 +278,17 @@ def test_committed_pages_with_an_image_show_it():
         assert f'<img src="../images/{path.stem}.webp" width="{gi.WIDTH}" height="{gi.HEIGHT}"' in path.read_text(), path.name
     shown = sum('<figure class="article-figure">' in p.read_text() for p in BREAKDOWNS)
     assert shown == len(WITH_IMAGE)
+
+
+# ---------- cards: the benchmark's pattern (therundown.ai, read live on 27 Nov 2026) ----------
+
+def test_cards_have_no_box_as_on_the_benchmark():
+    css = page_css()["index.html"]
+    card = [body for sel, body in rules(css) if sel == ".card"]
+    assert card and not [b for b in card if re.search(r"border|padding|background|box-shadow", b)]
+    assert re.search(r"\.card-figure img \{[^}]*border-radius: var\(--radius-card\)", css)  # only the image has a radius
+    assert re.search(r"\.cards-grid \{[^}]*gap: 32px 24px;", css)  # the gap separates the cards
+    # titles: 18px in the grid (benchmark 17px), 22px for the lead from 641px, 28px from 1025px (benchmark 30px)
+    assert re.search(r"\.card-title \{[^}]*font-size: var\(--fs-lead\)", css)
+    assert re.search(r"\.cards-grid > \.card:first-child \.card-title \{ font-size: var\(--fs-h4\); \}", css)
+    assert re.search(r"\.cards-grid > \.card:first-child \.card-title \{ font-size: var\(--fs-h3\); \}", css)
