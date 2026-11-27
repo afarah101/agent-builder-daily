@@ -14,8 +14,8 @@ from groq import Groq
 
 import quality_checks
 # the one font set and token block, and the tag, meta and label rules the cards use
-from generate_html import (DEFAULT_TAG, HOW_LABEL, HOW_LABELS, KIND_TAG, TOKENS_CSS, canonical_tag, clean_meta, font_faces,
-                           font_links, meta_text)
+from generate_html import (DEFAULT_TAG, HOW_LABEL, HOW_LABELS, KIND_TAG, SKIP_CSS, SKIP_LINK, TOKENS_CSS, canonical_tag,
+                           clean_meta, font_faces, font_links, meta_text, seo_tags)
 
 OUTPUT_DIR = "site/breakdowns"
 SHORT = " (short version)"  # ends the "generated" note of a page made without Groq; a later run replaces that page
@@ -493,12 +493,33 @@ def article_figure(slug, directory=OUTPUT_DIR):
             f'alt="{escape(alt)}" fetchpriority="high" decoding="async"><figcaption>AI illustration</figcaption></figure>')
 
 
+# Summaries that are the page's own words, not the story's: the same on many pages
+STOCK_NOTES = ("No source-checked summary is stored for this story. Read the original for the detail.",
+               "This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. "
+               "Read the original for the detail.", "No summary is stored for this story.")
+CANONICAL = re.compile(r'<link rel="canonical" href="[^"]*/breakdowns/(?P<slug>[^"/]+)\.html">')
+
+
+def page_seo(title, slug, summary_html):
+    """The SEO block of a breakdown page (generate_html.seo_tags), or "" when the page has no slug and so no address.
+    The description is the start of the page's own summary. A page with no summary of its own (the stock notes) gets
+    its title in the description, so no two pages share one."""
+    if not slug:
+        return ""
+    plain = lambda text: " ".join(re.sub(r"</?[a-zA-Z][^<>]*>", "", str(text)).split())  # a search or share card shows plain text
+    title, summary = plain(title), plain(stored_text(re.sub(r"</p>\s*<p>", " ", str(summary_html))))
+    if not summary or summary in STOCK_NOTES:
+        summary = f"{title}: the source link and the notes of Daily Edge AI for IT engineers."
+    return "\n  " + seo_tags(f"{title} — IT Breakdown — Daily Edge AI", summary, f"breakdowns/{slug}.html", "article")
+
+
 def render_breakdown_page(title, slug, url, source_label, summary_html, guide_html, meta_line, generated_at,
                           tag="", figure=""):
     """The page frame, in magazine order: tag, H1, meta, image, summary, "How to apply" panel, source button, back link.
     title, url, meta_line, generated_at and tag are raw text and are escaped here; summary_html and guide_html come
     from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure.
     The tag is one of the canonical tags and the meta line is "who · source type · date", as on the story's card."""
+    seo = page_seo(title, slug, summary_html)
     title, meta_line, generated_at = escape(str(title)), escape(clean_meta(meta_line)), escape(str(generated_at))
     tag = escape(canonical_tag(tag))
     return f"""<!DOCTYPE html>
@@ -506,9 +527,8 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title} — IT Breakdown — Daily Edge AI</title>
+  <title>{title} — IT Breakdown — Daily Edge AI</title>{seo}
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  {font_links("../")}
   <style>
     {font_faces("../")}
 
@@ -516,10 +536,13 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
 
     {ARTICLE_CSS}
 
+    {SKIP_CSS}
+
     .brand-logo {{ background: url(../logo.svg) center/contain no-repeat; }}
   </style>
 </head>
 <body>
+{SKIP_LINK}
 <header class="hero">
   <div class="header-inner">
     <a class="brand-link" href="../index.html"><span class="brand-logo" aria-hidden="true"></span><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
@@ -530,7 +553,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
     <p class="meta-line">{meta_line}</p>
   </div>
 </header>
-<main class="content">
+<main class="content" id="main">
   <article class="article">
     {figure}
     <section>
@@ -553,6 +576,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="../privacy.html">Privacy</a></span>
   <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
 </footer>
+{font_links("../")}
 </body>
 </html>"""
 
@@ -578,10 +602,11 @@ def stored_text(fragment):
     return unescape(re.sub(r"</?[a-zA-Z][^<>]*>", "", fragment))  # a tag starts with a letter: "<10 ms" is text
 
 
-def restyle_page(old_html, tag="", figure=None):
+def restyle_page(old_html, tag="", figure=None, slug=""):
     """New frame and style around an old page's stored text, with no AI call. None when the page has a shape this
     does not recognise, so the caller leaves it as it is. tag: the story's tag when the caller knows it, else the
-    page keeps the tag it has. figure: the <figure> to show ("" for none); None keeps the one the page has."""
+    page keeps the tag it has. figure: the <figure> to show ("" for none); None keeps the one the page has.
+    slug: the page's file name without ".html", for its canonical URL; "" keeps the address the page already states."""
     m = STORED.search(old_html)
     if not m:
         return None
@@ -598,8 +623,9 @@ def restyle_page(old_html, tag="", figure=None):
     url = unescape(source["url"]) if source else ""
     if figure is None:
         figure = stored_figure[0] if stored_figure else ""
-    return render_breakdown_page(stored_text(m["title"]), "", url, "", summary, guide, meta, generated_at,
-                                 tag=tag or (stored_text(stored_tag["tag"]) if stored_tag else ""), figure=figure)
+    stated = CANONICAL.search(old_html)
+    return render_breakdown_page(stored_text(m["title"]), slug or (stated["slug"] if stated else ""), url, "", summary, guide,
+                                 meta, generated_at, tag=tag or (stored_text(stored_tag["tag"]) if stored_tag else ""), figure=figure)
 
 
 def known_tags():
@@ -623,7 +649,7 @@ def restyle_existing_pages(directory=OUTPUT_DIR, tags=None):
     tags = tags or {}
     for path in sorted(Path(directory).glob("*.html")):
         new_html = restyle_page(path.read_text(encoding="utf-8"), tags.get(path.stem, ""),
-                                article_figure(path.stem, directory))
+                                article_figure(path.stem, directory), slug=path.stem)
         if new_html is None:
             skipped.append(path.name)
             continue
@@ -643,7 +669,7 @@ def sync_figures(directory=OUTPUT_DIR):
         stored = FIGURE.search(html)
         figure = article_figure(path.stem, directory) if path.stem in have else ""
         if (stored[0] if stored else "") != figure:
-            new_html = restyle_page(html, figure=figure)
+            new_html = restyle_page(html, figure=figure, slug=path.stem)
             if new_html:
                 path.write_text(new_html, encoding="utf-8")
                 changed += 1
@@ -667,7 +693,7 @@ def meta_line_for(item, kind):
     return meta_text(item if source_dated(item, kind) else {**item, "pub_date": ""}, kind)
 
 
-NO_SUMMARY = "No source-checked summary is stored for this story. Read the original for the detail."
+NO_SUMMARY = STOCK_NOTES[0]
 NO_HOW_TO = "No how-to notes are stored for this story. Read the original for the detail."
 
 
@@ -868,8 +894,7 @@ def scan_pages(directory=OUTPUT_DIR, index=None, strict=True):
 
 
 WITHDRAWN = " (withdrawn)"  # ends the "generated" note of a page whose text was taken down by fix_pages
-WITHDRAWN_NOTE = ("This breakdown was withdrawn. It was written without the source text, and it did not pass the source "
-                  "check. Read the original for the detail.")
+WITHDRAWN_NOTE = STOCK_NOTES[1]
 
 
 def fix_pages(failures, directory=OUTPUT_DIR, index=None, delete=False):

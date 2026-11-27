@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Archive — Daily Edge AI</title>
-  <meta name="description" content="AI news and real case studies, every day.">
+  <meta name="description" content="Every past day of Daily Edge AI: case studies and industry news, newest first.">
+  <link rel="canonical" href="https://agent-builder-daily.vercel.app/archive.html">
   <meta property="og:site_name" content="Daily Edge AI">
-  <meta property="og:title" content="Daily Edge AI: AI news and real case studies">
-  <meta property="og:description" content="AI news and real case studies, every day.">
+  <meta property="og:title" content="Archive — Daily Edge AI">
+  <meta property="og:description" content="Every past day of Daily Edge AI: case studies and industry news, newest first.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://agent-builder-daily.vercel.app/">
+  <meta property="og:url" content="https://agent-builder-daily.vercel.app/archive.html">
+  <meta property="og:image" content="https://agent-builder-daily.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap">
   <style>
     @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
     @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
@@ -122,6 +122,23 @@
       white-space: nowrap;
     }
 
+    .skip-link {
+      position: absolute;
+      top: var(--s-8);
+      left: var(--s-8);
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-16);
+      border-radius: var(--radius);
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-weight: 700;
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: none; outline: 2px solid var(--c-text); outline-offset: 2px; }
+
     /* Hero */
     .hero {
       background: var(--g-hero);
@@ -211,10 +228,24 @@
 
     .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
 
-    .email-form { display: flex; gap: var(--s-8); }
+    /* Row 1: the email. Row 2: the consent box, then Subscribe. The Tab order is the same. */
+    .email-form, .email-form-2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-16); }
+
+    .consent {
+      flex: 1 1 240px;
+      display: flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-bg);
+      cursor: pointer;
+    }
+    .consent-box { flex: none; width: 20px; height: 20px; accent-color: var(--c-bg); cursor: pointer; }
 
     .email-input {
-      flex: 1;
+      flex: 1 1 100%;
       min-width: 0;
       background: var(--c-surface-dark);
       border: 1px solid var(--c-border-dark);
@@ -586,6 +617,7 @@
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <header class="header hero">
   <div class="header-inner">
@@ -599,7 +631,7 @@
   </div>
 </header>
 
-<main class="content">
+<main class="content" id="main">
   <div class="toolbar">
       <nav class="tab-row" aria-label="Archive sections">
         <a class="archive-link" href="#case-studies">Case Studies</a>
@@ -611,17 +643,17 @@
   <section class="archive-week">
 <h2 class="group-title">Week of 23 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-26</div>
+  <div class="archive-date">26 Nov 2026</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.34770v1" target="_blank" rel="noopener noreferrer">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a><a class="archive-title" href="https://arxiv.org/abs/2611.34785v1" target="_blank" rel="noopener noreferrer">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-25</div>
+  <div class="archive-date">25 Nov 2026</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.29942v1" target="_blank" rel="noopener noreferrer">LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-24</div>
+  <div class="archive-date">24 Nov 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.31065v1" target="_blank" rel="noopener noreferrer">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.31118v1" target="_blank" rel="noopener noreferrer">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></div>
 </div></div>
@@ -629,32 +661,32 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 16 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-22</div>
+  <div class="archive-date">22 Nov 2026</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2608.25793v1" target="_blank" rel="noopener noreferrer">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a><a class="archive-title" href="https://arxiv.org/abs/2609.20886v1" target="_blank" rel="noopener noreferrer">BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</a><a class="archive-title" href="https://arxiv.org/abs/2609.12171v1" target="_blank" rel="noopener noreferrer">WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-21</div>
+  <div class="archive-date">21 Nov 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.26553v1" target="_blank" rel="noopener noreferrer">Replication of Agentic Security Events: Audit and Investigation (ROGUE-AI)</a><a class="archive-title" href="https://arxiv.org/abs/2611.26363v1" target="_blank" rel="noopener noreferrer">HiSA: Sparsifying the Hidden Dimension of RoPE Attention in LLMs</a><a class="archive-title" href="https://arxiv.org/abs/2611.25905v1" target="_blank" rel="noopener noreferrer">Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-20</div>
+  <div class="archive-date">20 Nov 2026</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer">GateWatch: Low-Overhead LLM Monitoring with Boolean Circuits</a><a class="archive-title" href="https://arxiv.org/abs/2611.24362v1" target="_blank" rel="noopener noreferrer">PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.26432v1" target="_blank" rel="noopener noreferrer">MaskPE: One Mask, Two Roles: Weight Placement and MAC Gating in Systolic Arrays</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-19</div>
+  <div class="archive-date">19 Nov 2026</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.24052v1" target="_blank" rel="noopener noreferrer">From Data to Valves: A Self-Learning, Production-Grade Edge Stack for Sustainable HVAC Control</a><a class="archive-title" href="https://arxiv.org/abs/2611.23905v1" target="_blank" rel="noopener noreferrer">Inference-Time Scaling in Agentic Hardware Verification Workflows: A Multi-Strategy Characterization Across Protocol Complexity</a><a class="archive-title" href="https://arxiv.org/abs/2611.24491v1" target="_blank" rel="noopener noreferrer">Probing agent overeagerness in realistic settings with continuation audits</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-18</div>
+  <div class="archive-date">18 Nov 2026</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.23142v1" target="_blank" rel="noopener noreferrer">Mind the Gap: A Deployed Multi-Agent System for Documentation Maintenance</a><a class="archive-title" href="https://arxiv.org/abs/2611.23063v1" target="_blank" rel="noopener noreferrer">Deep Reinforcement Learning for Heat Pump and Underfloor Heating Control: An End-to-End Case Study</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-16</div>
+  <div class="archive-date">16 Nov 2026</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.18392v1" target="_blank" rel="noopener noreferrer">VelServe: Taming Decode Jitters in LLM Inference with Tail-Calibrated Scheduling</a><a class="archive-title" href="https://arxiv.org/abs/2611.18453v1" target="_blank" rel="noopener noreferrer">Black-Box Uncertainty Quantification for Large Language Models via Ensemble-of-Ensembles</a><a class="archive-title" href="https://arxiv.org/abs/2611.18553v1" target="_blank" rel="noopener noreferrer">WeightBench: Evaluating Language Models as Weight-Space Programmers</a></div>
 </div></div>
@@ -662,32 +694,32 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 09 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-15</div>
+  <div class="archive-date">15 Nov 2026</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a><a class="archive-title" href="https://arxiv.org/abs/2611.15700v1" target="_blank" rel="noopener noreferrer">AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</a><a class="archive-title" href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-14</div>
+  <div class="archive-date">14 Nov 2026</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15118v1" target="_blank" rel="noopener noreferrer">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.15268v1" target="_blank" rel="noopener noreferrer">Knowledge in the Harness, Reliability in the Weights: Teacher-Free Co-Evolution of an LLM Agent</a><a class="archive-title" href="https://arxiv.org/abs/2611.17108v1" target="_blank" rel="noopener noreferrer">LazyWeights: Decode-on-Demand Edge LLMs</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-13</div>
+  <div class="archive-date">13 Nov 2026</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.17304v1" target="_blank" rel="noopener noreferrer">Where LLM Agents Get Stuck Debugging Databases: Access More Than Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.17280v1" target="_blank" rel="noopener noreferrer">Synthesis Smuggling: Maliciously Hiding Inferred Personal Attributes in LLM Outputs</a><a class="archive-title" href="https://arxiv.org/abs/2611.16693v1" target="_blank" rel="noopener noreferrer">MobileProbe: Adaptive Security Evaluation of Mobile Agents via Trajectory-Aware Injection</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-11</div>
+  <div class="archive-date">11 Nov 2026</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.11929v1" target="_blank" rel="noopener noreferrer">Can LLM Agents Organize Their Own Memory?</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-10</div>
+  <div class="archive-date">10 Nov 2026</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.12412v1" target="_blank" rel="noopener noreferrer">Unprompted coordination through shared memory in LLM agents: a locked two-implementation replication and extension</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-09</div>
+  <div class="archive-date">9 Nov 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.09891v1" target="_blank" rel="noopener noreferrer">CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse</a><a class="archive-title" href="https://arxiv.org/abs/2611.08781v1" target="_blank" rel="noopener noreferrer">Aligning, Fast and Slow: A Control-Theoretic Oversight Framework for Long-Horizon Trajectories and Maintained Deployments</a><a class="archive-title" href="https://arxiv.org/abs/2611.09734v1" target="_blank" rel="noopener noreferrer">GuardrailAgent: An Agentic Framework for Jailbreak Defense</a></div>
 </div></div>
@@ -695,32 +727,32 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 02 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-07</div>
+  <div class="archive-date">7 Nov 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.08116v1" target="_blank" rel="noopener noreferrer">Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup</a><a class="archive-title" href="https://arxiv.org/abs/2611.07558v1" target="_blank" rel="noopener noreferrer">SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking</a><a class="archive-title" href="https://arxiv.org/abs/2611.08325v1" target="_blank" rel="noopener noreferrer">Decision Models as Retrieval Gates Against Injection and Pollution</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-06</div>
+  <div class="archive-date">6 Nov 2026</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.08483v1" target="_blank" rel="noopener noreferrer">SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization</a><a class="archive-title" href="https://arxiv.org/abs/2611.06409v1" target="_blank" rel="noopener noreferrer">Zero-Shot Coordination among LLM Agents</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-05</div>
+  <div class="archive-date">5 Nov 2026</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.05991v1" target="_blank" rel="noopener noreferrer">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</a><a class="archive-title" href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</a><a class="archive-title" href="https://arxiv.org/abs/2611.06858v1" target="_blank" rel="noopener noreferrer">CompressionBench: How can your coding agents compress LLMs?</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-04</div>
+  <div class="archive-date">4 Nov 2026</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.04032v1" target="_blank" rel="noopener noreferrer">ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration</a><a class="archive-title" href="https://arxiv.org/abs/2611.03772v1" target="_blank" rel="noopener noreferrer">RuntimeTickets: Source-Grounded Security Obligations for Agent Skills</a><a class="archive-title" href="https://arxiv.org/abs/2611.03852v1" target="_blank" rel="noopener noreferrer">Why Pay for Long Reasoning When Rewrite Do Trick? Causal Effects of Reasoning History Compaction on Future Generation and Agent Cost</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-03</div>
+  <div class="archive-date">3 Nov 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.03434v1" target="_blank" rel="noopener noreferrer">Optimize the Harness, Not the Model: Fitting a Minimal Agent to a Self-Hostable LLM for Investigative Analysis</a><a class="archive-title" href="https://arxiv.org/abs/2611.03431v1" target="_blank" rel="noopener noreferrer">IAMRAGBENCH: Benchmarking Authorization Expansions in LLM-Generated AWS IAM Policies under RAG Poisoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.03575v1" target="_blank" rel="noopener noreferrer">VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifiably</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-02</div>
+  <div class="archive-date">2 Nov 2026</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.41968v1" target="_blank" rel="noopener noreferrer">Prune Gradually, Adapt Sparsely: Efficient Pruning of Large Language Models at Extreme Sparsity</a><a class="archive-title" href="https://arxiv.org/abs/2610.41172v1" target="_blank" rel="noopener noreferrer">Context as Infrastructure: Knowledge Compilation for Retrieval in Agentic Systems with Harnesses</a><a class="archive-title" href="https://arxiv.org/abs/2610.41998v1" target="_blank" rel="noopener noreferrer">SecPO: Principled Adversarial Training for Prompt Injection Security</a></div>
 </div></div>
@@ -728,32 +760,32 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 26 Oct 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-01</div>
+  <div class="archive-date">1 Nov 2026</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.40483v1" target="_blank" rel="noopener noreferrer">Preserving Utility in Continual LLM Unlearning via Orthogonal Projections</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-31</div>
+  <div class="archive-date">31 Oct 2026</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.39807v1" target="_blank" rel="noopener noreferrer">InferD: A Honeypot Framework for AI Inference Infrastructure</a><a class="archive-title" href="https://arxiv.org/abs/2610.39621v1" target="_blank" rel="noopener noreferrer">The Real Cost of Context: Predicting Compute Time and Energy Consumption in LLM Prefill and Decode Phases</a><a class="archive-title" href="https://arxiv.org/abs/2610.38800v1" target="_blank" rel="noopener noreferrer">When Relevant Code Is Wrong: Runtime-Aware Context for AI Coding Agents</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-30</div>
+  <div class="archive-date">30 Oct 2026</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.38799v1" target="_blank" rel="noopener noreferrer">CARI: Cross-Boundary Adversarial Runtime Injection in Coding-Agent Workflows</a><a class="archive-title" href="https://arxiv.org/abs/2610.40396v1" target="_blank" rel="noopener noreferrer">Understanding and Mitigating Role Spoofing in LLMs</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-29</div>
+  <div class="archive-date">29 Oct 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.37432v1" target="_blank" rel="noopener noreferrer">Request-Adaptive Execution for Efficient Hybrid LLM Inference</a><a class="archive-title" href="https://arxiv.org/abs/2610.36549v1" target="_blank" rel="noopener noreferrer">From Ripple to Boundary: Deterministic Impact Boundaries for LLM-Based Software Evolution</a><a class="archive-title" href="https://arxiv.org/abs/2610.35451v1" target="_blank" rel="noopener noreferrer">Then there is prompt injection, a malicious email, ...: The Wild Wide West of OpenClaw Agentic System Security</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-27</div>
+  <div class="archive-date">27 Oct 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.34620v1" target="_blank" rel="noopener noreferrer">Built to Remember, Shipped to Forget: Operational Contracts, Failures, and Repairs in Containerized LLM Agent Deployments</a><a class="archive-title" href="https://arxiv.org/abs/2610.35629v1" target="_blank" rel="noopener noreferrer">From Language to Drives: A Multimodal Framework for Aligning Autonomous Robots with Human Purposes</a><a class="archive-title" href="https://arxiv.org/abs/2610.34634v1" target="_blank" rel="noopener noreferrer">AgentProofBench: Benchmarking Reusable Verifiers for Web Agents</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-26</div>
+  <div class="archive-date">26 Oct 2026</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.32131v1" target="_blank" rel="noopener noreferrer">Pairing Matters: Performance, Failures, and Efficiency in Lightweight Coding Agents</a><a class="archive-title" href="https://arxiv.org/abs/2610.32851v1" target="_blank" rel="noopener noreferrer">Reimagining Enterprise RAG for Multi-Agent Systems: A Knowledge Layer That Organizes Before It Retrieves</a><a class="archive-title" href="https://arxiv.org/abs/2610.32752v1" target="_blank" rel="noopener noreferrer">ActionRAG: Evidence-Refining Graph Diffusion for Long-Term Memory in LLM Agents</a></div>
 </div></div>
@@ -761,17 +793,17 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 19 Oct 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-10-23</div>
+  <div class="archive-date">23 Oct 2026</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.31657v1" target="_blank" rel="noopener noreferrer">Cost-Aware Abstention for LLM-Based IT Ticket Classification</a><a class="archive-title" href="https://arxiv.org/abs/2610.31573v1" target="_blank" rel="noopener noreferrer">Social-HUMINT: An LLM-Augmented Unified Framework for Measuring Social Media Exposure</a><a class="archive-title" href="https://arxiv.org/abs/2610.31552v1" target="_blank" rel="noopener noreferrer">CAMGen: A Core Change-Aware Multi-View Framework for Commit Message Generation</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-22</div>
+  <div class="archive-date">22 Oct 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.30114v1" target="_blank" rel="noopener noreferrer">The End of Consensus Research?</a><a class="archive-title" href="https://arxiv.org/abs/2610.30026v1" target="_blank" rel="noopener noreferrer">What the Author Wrote, What the Agent Reads: Silent Cue Loss in Enterprise Document Ingestion</a><a class="archive-title" href="https://arxiv.org/abs/2610.30016v1" target="_blank" rel="noopener noreferrer">Code Comprehensor: Hierarchical Documentation and Cross-Modal Retrieval for Large Repositories</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-21</div>
+  <div class="archive-date">21 Oct 2026</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.26664v1" target="_blank" rel="noopener noreferrer">Honeypots for AI Agent Insider Threats</a><a class="archive-title" href="https://arxiv.org/abs/2610.28612v1" target="_blank" rel="noopener noreferrer">TraceLite: Efficient Trace Reduction for SWE Agents via Optical Compression and Redundancy Removal</a><a class="archive-title" href="https://arxiv.org/abs/2610.28611v1" target="_blank" rel="noopener noreferrer">Semantic Observability for Autonomous Systems Diagnostics</a></div>
 </div></div>
@@ -780,27 +812,27 @@
   <section class="archive-week">
 <h2 class="group-title">Week of 23 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-27</div>
+  <div class="archive-date">27 Nov 2026</div>
   <div class="archive-count">21 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/data/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack" target="_blank" rel="noopener noreferrer">Can you give AI agents live data without rebuilding your data stack?</a><a class="archive-title" href="https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia/" target="_blank" rel="noopener noreferrer">Nvidia hits pause on chip shipments to Southeast Asia</a><a class="archive-title" href="https://venturebeat.com/technology/z-ais-glm-5-4-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-twice" target="_blank" rel="noopener noreferrer">Z.ai&#x27;s GLM-5.4 aims to match models up to four times its size by running 28 layers twice</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-26</div>
+  <div class="archive-date">26 Nov 2026</div>
   <div class="archive-count">14 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/" target="_blank" rel="noopener noreferrer">OpenAI says heavy ChatGPT users may hit limits sooner as it merges Chat and Work</a><a class="archive-title" href="https://venturebeat.com/technology/mcp-servers-can-now-deliver-ai-agent-skills-changing-what-companies-approve-when-they-connect-one" target="_blank" rel="noopener noreferrer">MCP servers can now deliver AI agent skills, changing what companies approve when they connect one</a><a class="archive-title" href="https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features" target="_blank" rel="noopener noreferrer">The New York Times warns photographers not to update Photoshop over AI features</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-25</div>
+  <div class="archive-date">25 Nov 2026</div>
   <div class="archive-count">26 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/orchestration/after-token-leaderboards-and-spending-caps-snowflake-has-a-third-idea-keep-the-cap-then-learn-from-whoever-breaks-it" target="_blank" rel="noopener noreferrer">After token leaderboards and spending caps, Snowflake has a third idea: Keep the cap, then learn from whoever breaks it</a><a class="archive-title" href="https://openai.com/index/searching-for-distant-planets-with-astra" target="_blank" rel="noopener noreferrer">Searching for distant planets with Astra</a><a class="archive-title" href="https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance" target="_blank" rel="noopener noreferrer">Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-24</div>
+  <div class="archive-date">24 Nov 2026</div>
   <div class="archive-count">21 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://stalw.art/blog/microsoft-exchange-replacement/" target="_blank" rel="noopener noreferrer">Stalwart is now a drop-in replacement for Microsoft Exchange</a><a class="archive-title" href="https://openai.com/index/introducing-shirudo" target="_blank" rel="noopener noreferrer">OpenAI and Cisco introduce Shirudo</a><a class="archive-title" href="https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/" target="_blank" rel="noopener noreferrer">How to tell a cyberattack from a plain old outage</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-23</div>
+  <div class="archive-date">23 Nov 2026</div>
   <div class="archive-count">23 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips/" target="_blank" rel="noopener noreferrer">Amazon snaps up Decart’s AI optimization tech for $7.5B as it prepares to sell Trainium chips</a><a class="archive-title" href="https://ladybird.org/posts/alpha/" target="_blank" rel="noopener noreferrer">Ladybird Is Now in Alpha</a><a class="archive-title" href="https://techcrunch.com/2026/11/23/jensen-huang-isnt-out-of-the-woods-yet/" target="_blank" rel="noopener noreferrer">Jensen Huang isn’t out of the woods yet</a></div>
 </div></div>
@@ -808,37 +840,37 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 16 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-22</div>
+  <div class="archive-date">22 Nov 2026</div>
   <div class="archive-count">11 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines" target="_blank" rel="noopener noreferrer">Even the fastest AI clusters can be held back by their release pipelines</a><a class="archive-title" href="https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/" target="_blank" rel="noopener noreferrer">Banks Have Had It Up to Here With Your AI Agent</a><a class="archive-title" href="https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/" target="_blank" rel="noopener noreferrer">Anthropic’s IPO could deliver $156B to charity</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-21</div>
+  <div class="archive-date">21 Nov 2026</div>
   <div class="archive-count">22 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/brace-yourself-for-years-of-outage-chaos/" target="_blank" rel="noopener noreferrer">The Outages Are Just Getting Started</a><a class="archive-title" href="https://www.wired.com/story/uncanny-valley-podcast-whats-with-all-these-outages/" target="_blank" rel="noopener noreferrer">What’s With All These Outages?</a><a class="archive-title" href="https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html" target="_blank" rel="noopener noreferrer">RCE in Gnupg</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-20</div>
+  <div class="archive-date">20 Nov 2026</div>
   <div class="archive-count">29 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/19/these-tech-outages-are-giving-y2k-ai-agent-style/" target="_blank" rel="noopener noreferrer">These tech outages are giving Y2K, AI agent style</a><a class="archive-title" href="https://openai.com/business/learn/deploying-daybreak-red" target="_blank" rel="noopener noreferrer">Deploying Daybreak Red</a><a class="archive-title" href="https://arstechnica.com/security/2026/11/man-charged-with-spying-on-silicon-valley-tech-and-defense-company-for-russia/" target="_blank" rel="noopener noreferrer">Man hired by Russia spied on Silicon Valley tech and defense company, feds say</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-19</div>
+  <div class="archive-date">19 Nov 2026</div>
   <div class="archive-count">36 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://deepmind.google/blog/introducing-gemini-4-neon/" target="_blank" rel="noopener noreferrer">Introducing Gemini 4 Neon</a><a class="archive-title" href="https://openai.com/index/the-silent-consensus" target="_blank" rel="noopener noreferrer">The Silent Consensus</a><a class="archive-title" href="https://techcrunch.com/2026/11/18/amidst-fears-of-ai-cyberattacks-satya-nadella-says-lots-of-critical-infrastructure-is-unpatchable/" target="_blank" rel="noopener noreferrer">Amidst fears of AI cyberattacks, Satya Nadella says lots of critical infrastructure is ‘unpatchable’</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-18</div>
+  <div class="archive-date">18 Nov 2026</div>
   <div class="archive-count">18 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arstechnica.com/security/2026/11/malicious-code-delivered-through-optimizely-hits-visitors-to-hundreds-of-sites/" target="_blank" rel="noopener noreferrer">Hundreds of websites deliver potent malware cocktail to unsuspecting visitors</a><a class="archive-title" href="https://techcrunch.com/2026/11/17/nvidia-says-its-open-source-ai-strategy-remains-intact-after-jensen-huangs-exit/" target="_blank" rel="noopener noreferrer">Nvidia says its open source AI strategy remains intact after Jensen Huang’s exit</a><a class="archive-title" href="https://blog.cloudflare.com/quad9-withdrawal-from-france/" target="_blank" rel="noopener noreferrer">Quad9&#x27;s withdrawal from France: A canary in the coal mine</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-17</div>
+  <div class="archive-date">17 Nov 2026</div>
   <div class="archive-count">25 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/16/california-state-ag-sues-openai-over-rogue-agent-incidents/" target="_blank" rel="noopener noreferrer">California state AG sues OpenAI over rogue agent incidents</a><a class="archive-title" href="https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/" target="_blank" rel="noopener noreferrer">Optimizely Compromised, Served Malware on Zoom, GitLab</a><a class="archive-title" href="https://huggingface.co/blog/openrouter" target="_blank" rel="noopener noreferrer">Hugging Face and OpenRouter join forces to make open-weight models easy to run</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-16</div>
+  <div class="archive-date">16 Nov 2026</div>
   <div class="archive-count">7 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/advancing-computer-use-for-healthcare-teams" target="_blank" rel="noopener noreferrer">Advancing computer-use agents for healthcare teams</a><a class="archive-title" href="https://openai.com/index/lvmh-media-division-partnership" target="_blank" rel="noopener noreferrer">LVMH’s Media Division announces strategic partnership with OpenAI</a><a class="archive-title" href="https://www.technologyreview.com/2026/11/16/1146070/building-ai-that-can-work-across-the-enterprise/" target="_blank" rel="noopener noreferrer">Building AI that can work across the enterprise</a></div>
 </div></div>
@@ -846,37 +878,37 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 09 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-15</div>
+  <div class="archive-date">15 Nov 2026</div>
   <div class="archive-count">14 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/" target="_blank" rel="noopener noreferrer">Where was Nvidia’s security team?</a><a class="archive-title" href="https://www.wired.com/story/this-ai-tamagotchi-oats-turns-everyday-objects-into-needy-virtual-pets/" target="_blank" rel="noopener noreferrer">This AI Tamagotchi Turns Everyday Objects Into Needy Virtual Pets</a><a class="archive-title" href="https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches" target="_blank" rel="noopener noreferrer">We&#x27;re Asking an Appeals Court to Require a Warrant for ALPR Searches</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-14</div>
+  <div class="archive-date">14 Nov 2026</div>
   <div class="archive-count">6 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/beware-the-new-ai-fueled-ransomware-boom/" target="_blank" rel="noopener noreferrer">Beware the New AI-Fueled Ransomware Boom</a><a class="archive-title" href="https://openai.com/business/customer-stories/shield" target="_blank" rel="noopener noreferrer">Shield helps technicians hand off legacy portal work with OpenAI</a><a class="archive-title" href="https://www.wired.com/story/no-pilots-few-air-traffic-controllers-what-could-go-wrong/" target="_blank" rel="noopener noreferrer">No Pilots. Few Air Traffic Controllers. What Could Go Wrong?</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-13</div>
+  <div class="archive-date">13 Nov 2026</div>
   <div class="archive-count">33 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/business/customer-stories/amplitude" target="_blank" rel="noopener noreferrer">How Amplitude ships product improvements in 1–2 days with OpenAI</a><a class="archive-title" href="https://openai.com/business/customer-stories/holidays-extras-codex" target="_blank" rel="noopener noreferrer">Holiday Extras is rethinking what it can build with Codex</a><a class="archive-title" href="https://deepmind.google/blog/opening-the-datasets-behind-our-ai-weather-models/" target="_blank" rel="noopener noreferrer">Opening the datasets behind our AI weather models</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-12</div>
+  <div class="archive-date">12 Nov 2026</div>
   <div class="archive-count">31 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/jiostar-vijay-seshadri" target="_blank" rel="noopener noreferrer">JioStar’s chief architect on AI discovery at 500M-user scale</a><a class="archive-title" href="https://research.google/blog/using-wearables-to-enable-cardiovascular-kidney-metabolic-ckm-risk-profiling-for-personalized-coaching/" target="_blank" rel="noopener noreferrer">Using wearables to enable cardiovascular-kidney-metabolic (CKM) risk profiling for personalized coaching</a><a class="archive-title" href="https://techcrunch.com/2026/11/11/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/" target="_blank" rel="noopener noreferrer">The unfolding Jensen Huang scandal: a timeline</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-11</div>
+  <div class="archive-date">11 Nov 2026</div>
   <div class="archive-count">26 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/teen-girl-asked-gemini-about-suicide-for-months-until-it-was-flagged/" target="_blank" rel="noopener noreferrer">A 13-Year-Old Asked AI About Suicide on Her School Laptop. It Didn’t Get Flagged for Weeks</a><a class="archive-title" href="https://openai.com/index/introducing-businesses-chatgpt" target="_blank" rel="noopener noreferrer">Introducing Businesses in ChatGPT</a><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/" target="_blank" rel="noopener noreferrer">Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-10</div>
+  <div class="archive-date">10 Nov 2026</div>
   <div class="archive-count">33 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arstechnica.com/security/2026/11/vulnerability-that-lets-hackers-ssh-into-linux-devices-is-under-active-exploitation/" target="_blank" rel="noopener noreferrer">Vulnerability that lets hackers SSH into Linux devices is under active exploitation</a><a class="archive-title" href="https://www.wired.com/story/jensen-huangs-troubles-leaves-the-ai-industry-reeling/" target="_blank" rel="noopener noreferrer">Jensen Huang’s Troubles Leave the AI Industry Reeling</a><a class="archive-title" href="https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/" target="_blank" rel="noopener noreferrer">TPU 8tx and TPU 8i Max</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-09</div>
+  <div class="archive-date">9 Nov 2026</div>
   <div class="archive-count">16 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/" target="_blank" rel="noopener noreferrer">Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50”</a><a class="archive-title" href="https://techcrunch.com/2026/11/09/automattic-debuts-a-platform-to-deploy-vibe-coding-apps-amid-a-changing-internet/" target="_blank" rel="noopener noreferrer">Automattic debuts a platform to deploy vibe coding apps amid a changing internet</a><a class="archive-title" href="https://news.ycombinator.com/item?id=50422628" target="_blank" rel="noopener noreferrer">ChatGPT Desktop forwards your SSH agent to remote machines</a></div>
 </div></div>
@@ -884,37 +916,37 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 02 Nov 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-08</div>
+  <div class="archive-date">8 Nov 2026</div>
   <div class="archive-count">6 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/" target="_blank" rel="noopener noreferrer">After the midterms, things are looking rocky for Elon Musk and data centers</a><a class="archive-title" href="https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview/" target="_blank" rel="noopener noreferrer">GitHub New pull request overview page in public preview</a><a class="archive-title" href="https://techcrunch.com/2026/11/06/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots/" target="_blank" rel="noopener noreferrer">Physicl raises $10M to make the digital world real enough for robots</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-07</div>
+  <div class="archive-date">7 Nov 2026</div>
   <div class="archive-count">13 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://8rank.ai/game/apple-intelligence-personal-knowledge-graph" target="_blank" rel="noopener noreferrer">Every Mac comes with an (undocumented) family member classifier</a><a class="archive-title" href="https://techcrunch.com/podcast/how-a-blue-wave-midterm-might-reshape-the-ai-industry/" target="_blank" rel="noopener noreferrer">How a Blue Wave midterm might reshape the AI industry</a><a class="archive-title" href="https://openai.com/index/franklin-templeton" target="_blank" rel="noopener noreferrer">Franklin Templeton uses OpenAI to support investment research</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-06</div>
+  <div class="archive-date">6 Nov 2026</div>
   <div class="archive-count">21 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/cultfit-builds-with-codex" target="_blank" rel="noopener noreferrer">Cult.fit builds operational muscle with Codex</a><a class="archive-title" href="https://deepmind.google/blog/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips/" target="_blank" rel="noopener noreferrer">Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips</a><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/formally-verifying-agent-written-full-stack-web-apps-with-pdd-kit/" target="_blank" rel="noopener noreferrer">Formally verifying agent-written full-stack web apps with PDD Kit</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-05</div>
+  <div class="archive-date">5 Nov 2026</div>
   <div class="archive-count">28 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" target="_blank" rel="noopener noreferrer">Dharma Field Extractor: Any Document In, Structured Fields in JSON Out</a><a class="archive-title" href="https://openai.com/index/introducing-images-2-6" target="_blank" rel="noopener noreferrer">Introducing Images 2.6</a><a class="archive-title" href="https://techcrunch.com/2026/11/05/a-yc-startup-is-putting-1m-behind-five-unsolved-materials-science-problems-for-ai/" target="_blank" rel="noopener noreferrer">A YC startup is putting $1M behind five unsolved materials science problems for AI</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-04</div>
+  <div class="archive-date">4 Nov 2026</div>
   <div class="archive-count">26 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/" target="_blank" rel="noopener noreferrer">Securing the agentic enterprise with data lineage</a><a class="archive-title" href="https://www.technologyreview.com/2026/11/02/1147846/the-agentic-web-is-here/" target="_blank" rel="noopener noreferrer">The agentic web is here</a><a class="archive-title" href="https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/" target="_blank" rel="noopener noreferrer">Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-03</div>
+  <div class="archive-date">3 Nov 2026</div>
   <div class="archive-count">36 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.microsoft.com/en-us/research/blog/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confidence/" target="_blank" rel="noopener noreferrer">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a><a class="archive-title" href="https://www.cnbc.com/2026/11/02/oracle-files-to-sell-20-billion-in-new-stock-bonds-to-finance-ai-buildout.html" target="_blank" rel="noopener noreferrer">Oracle files to sell $20B in new stock, bonds to finance AI buildout</a><a class="archive-title" href="https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/" target="_blank" rel="noopener noreferrer">Trajectory raises $45M to make AI model training accessible to nontechnical experts</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-11-02</div>
+  <div class="archive-date">2 Nov 2026</div>
   <div class="archive-count">12 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack" target="_blank" rel="noopener noreferrer">Supermarket freezers across Europe hit by second suspected cyber-attack</a><a class="archive-title" href="https://techcrunch.com/2026/11/02/omen-ai-adds-liquid-know-how-in-16-million-aquatic-labs-acquisition/" target="_blank" rel="noopener noreferrer">Omen AI adds liquid know-how in $16 million Aquatic Labs acquisition</a><a class="archive-title" href="https://www.wired.com/story/hundreds-of-mundane-ai-apps-are-hiding-abusive-deepfake-features/" target="_blank" rel="noopener noreferrer">Hundreds of Mundane AI Apps Are Hiding Sexually Abusive Deepfake Features</a></div>
 </div></div>
@@ -922,22 +954,22 @@
 <section class="archive-week">
 <h2 class="group-title">Week of 26 Oct 2026</h2>
 <div class="archive-list"><div class="archive-row">
-  <div class="archive-date">2026-11-01</div>
+  <div class="archive-date">1 Nov 2026</div>
   <div class="archive-count">9 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/" target="_blank" rel="noopener noreferrer">Apple CEO says the company doesn’t ‘want to ship AI for AI’s sake’</a><a class="archive-title" href="https://techcrunch.com/2026/10/31/judge-allows-naacp-lawsuit-over-xai-data-center-pollution-to-move-forward/" target="_blank" rel="noopener noreferrer">Judge allows NAACP lawsuit over xAI data center pollution to move forward</a><a class="archive-title" href="https://www.visitnorway.com/plan-your-trip/travel-tips-a-z/norwegian-scenic-routes/worlds-best-toilets/" target="_blank" rel="noopener noreferrer">Norway makes shithouses great again</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-31</div>
+  <div class="archive-date">31 Oct 2026</div>
   <div class="archive-count">18 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.wired.com/story/uncanny-valley-podcast-how-a-contractors-claude-agent-got-into-the-pentagon/" target="_blank" rel="noopener noreferrer">How a Contractor’s Claude Agent Got Into the Pentagon</a><a class="archive-title" href="https://arstechnica.com/security/2026/10/anthropic-vs-code-extension-on-cursor-backdoored-for-nearly-12-hours/" target="_blank" rel="noopener noreferrer">Anthropic VS code extension on Cursor backdoored for nearly 12 hours</a><a class="archive-title" href="https://www.wired.com/story/metas-muse-could-upend-all-kinds-of-businesses-it-hasnt-yet/" target="_blank" rel="noopener noreferrer">Meta’s Muse Could Upend All Kinds of Businesses. It Hasn’t Yet</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-30</div>
+  <div class="archive-date">30 Oct 2026</div>
   <div class="archive-count">11 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/10/29/you-dont-need-to-believe-in-a-god-to-get-a-religious-exemption-from-using-ai-at-work/" target="_blank" rel="noopener noreferrer">You don’t need to believe in a god to get a religious exemption from using AI at work</a><a class="archive-title" href="https://techcrunch.com/2026/10/29/meta-quietly-launches-an-ai-fashion-app-called-style-sketch/" target="_blank" rel="noopener noreferrer">Meta quietly launches an AI fashion app called Style Sketch</a><a class="archive-title" href="https://elect.horse/" target="_blank" rel="noopener noreferrer">elect.horse</a></div>
 </div>
 <div class="archive-row">
-  <div class="archive-date">2026-10-29</div>
+  <div class="archive-date">29 Oct 2026</div>
   <div class="archive-count">32 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://smsofdeath.com/" target="_blank" rel="noopener noreferrer">Zero click, silent, remote Android DoS</a><a class="archive-title" href="https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/" target="_blank" rel="noopener noreferrer">Forging a Microsoft Edge Full Chain with Logic Bugs Only</a><a class="archive-title" href="https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/" target="_blank" rel="noopener noreferrer">Gemini 4 Carbon: Our next frontier model</a></div>
 </div></div>
@@ -948,5 +980,10 @@
   <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="privacy.html">Privacy</a></span>
   <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
 </footer>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap">
 </body>
 </html>

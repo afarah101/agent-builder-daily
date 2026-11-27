@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daily Edge AI: AI news and real case studies</title>
   <meta name="description" content="AI news and real case studies, every day.">
+  <link rel="canonical" href="https://agent-builder-daily.vercel.app/">
   <meta property="og:site_name" content="Daily Edge AI">
   <meta property="og:title" content="Daily Edge AI: AI news and real case studies">
   <meta property="og:description" content="AI news and real case studies, every day.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://agent-builder-daily.vercel.app/">
+  <meta property="og:image" content="https://agent-builder-daily.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap">
   <style>
     @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
     @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
@@ -122,6 +122,23 @@
       white-space: nowrap;
     }
 
+    .skip-link {
+      position: absolute;
+      top: var(--s-8);
+      left: var(--s-8);
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-16);
+      border-radius: var(--radius);
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-weight: 700;
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: none; outline: 2px solid var(--c-text); outline-offset: 2px; }
+
     /* Hero */
     .hero {
       background: var(--g-hero);
@@ -211,10 +228,24 @@
 
     .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
 
-    .email-form { display: flex; gap: var(--s-8); }
+    /* Row 1: the email. Row 2: the consent box, then Subscribe. The Tab order is the same. */
+    .email-form, .email-form-2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-16); }
+
+    .consent {
+      flex: 1 1 240px;
+      display: flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-bg);
+      cursor: pointer;
+    }
+    .consent-box { flex: none; width: 20px; height: 20px; accent-color: var(--c-bg); cursor: pointer; }
 
     .email-input {
-      flex: 1;
+      flex: 1 1 100%;
       min-width: 0;
       background: var(--c-surface-dark);
       border: 1px solid var(--c-border-dark);
@@ -586,6 +617,7 @@
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <header class="header hero">
   <div class="header-inner">
@@ -595,7 +627,7 @@
       </h1>
     </div>
     <p class="hero-title">AI news and real case studies, every day.</p>
-    <p class="updated">Updated 27 Nov 2026, 17:24 UTC</p>
+    <p class="updated">Updated 27 Nov 2026, 17:52 UTC</p>
 
   <div class="email-banner">
     <div class="email-inner">
@@ -603,6 +635,7 @@
       <form class="email-form" aria-labelledby="email-title">
         <label class="visually-hidden" for="email-input">Email address</label>
         <input type="email" id="email-input" class="email-input" placeholder="your@email.com" autocomplete="email" required />
+        <label class="consent" for="consent"><input type="checkbox" id="consent" class="consent-box" name="consent" required /><span>Send me the Daily Edge AI email. I can unsubscribe at any time.</span></label>
         <button type="submit" class="email-btn">Subscribe</button>
       </form>
       <span class="email-confirm" id="email-confirm" role="status"></span>
@@ -612,7 +645,7 @@
   </div>
 </header>
 
-<main class="content">
+<main class="content" id="main">
   <div class="toolbar">
       <div class="tab-row">
         <div class="tabs" role="tablist" aria-label="Sections">
@@ -626,7 +659,7 @@
   </div>
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
     <div class="cards-grid lead-grid"><article class="card cs-card">
-  <figure class="card-figure"><img src="images/closing-the-gap-automated-discovery-of-secure-dockerfile-reference-standards-via.webp" loading="lazy" width="1200" height="675" alt="A rusted key, a cracked USB drive, and a pile of old server racks"></figure><div class="card-header">
+  <figure class="card-figure"><img src="images/closing-the-gap-automated-discovery-of-secure-dockerfile-reference-standards-via.webp" fetchpriority="high" decoding="async" width="1200" height="675" alt="A rusted key, a cracked USB drive, and a pile of old server racks"></figure><div class="card-header">
     <div class="card-tags"><span class="tag-pill">Security</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/closing-the-gap-automated-discovery-of-secure-dockerfile-reference-standards-via.html">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a></h2>
@@ -830,8 +863,8 @@
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/grand-theft-auto-vi-proves-why-efficiency-isnt-a-virtue.html">Grand Theft Auto VI proves why efficiency isn’t a virtue</a></h2>
   <p class="card-meta"><span class="meta-who">TechCrunch</span><span class="meta-rest"> · Press · 26 Nov 2026</span></p>
-  <p class="card-summary">The release of Grand Theft Auto VI and the historic IPO of Anthropic’s Claude AI model made headlines last week, underscoring a shift away from generative‑AI‑driven game development and marking a milestone in the AI industry’s financial trajectory. While the events illustrate broader industry trends, they do not directly influence the day‑to‑day tools or security posture of most IT departments.</p>
-  <p class="insight"><strong>How to apply:</strong> Keep an eye on Anthropic’s public offering for potential downstream impacts on AI services and pricing.</p>
+  <p class="card-summary">Grand Theft Auto VI was created entirely without generative AI, and it made $3.79 billion on release day, TechCrunch reports. At virtually the same moment, Anthropic became the first major AI lab to go public, with an $81.3 billion IPO.</p>
+  <p class="insight"><strong>How to apply:</strong> No action is needed for Google Workspace, JumpCloud or your other IT tools.</p>
 </article>
 <article class="card news-card">
   <figure class="card-figure"><img src="images/even-the-best-ai-agents-struggle-with-everyday-life.webp" loading="lazy" width="1200" height="675" alt="A cracked ceramic mug, a tangled ball of yarn, and a stack of loose paper sheets"></figure><div class="card-header">
@@ -906,6 +939,7 @@
       <form class="email-form-2" aria-labelledby="email-title-2">
         <label class="visually-hidden" for="email-input-2">Email address</label>
         <input type="email" id="email-input-2" class="email-input" placeholder="your@email.com" autocomplete="email" required />
+        <label class="consent" for="consent-2"><input type="checkbox" id="consent-2" class="consent-box" name="consent" required /><span>Send me the Daily Edge AI email. I can unsubscribe at any time.</span></label>
         <button type="submit" class="email-btn">Subscribe</button>
       </form>
       <span class="email-confirm" id="email-confirm-2" role="status"></span>
@@ -924,10 +958,13 @@
   // Handlers are attached here, not as on*= attributes, so the page carries no inline event handlers
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.getAttribute('aria-controls'), t)));
   document.getElementById('scout-search').addEventListener('input', e => filterCards(e.target.value));
-  document.querySelector('.email-form').addEventListener('submit', e => submitEmail(e));
+  // No consent, no submit: the browser stops it first (required), and this stops it when validation is off
+  const agreed = (e, id) => document.getElementById(id).checked || (e.preventDefault(), document.getElementById(id).focus(), false);
+  document.querySelector('.email-form').addEventListener('submit', e => { if (agreed(e, 'consent')) submitEmail(e); });
   // The page-end form reuses submitEmail: copy its email into the hero form, submit, and mirror the status
   const endForm = document.querySelector('.email-form-2');
   if (endForm) endForm.addEventListener('submit', e => {
+    if (!agreed(e, 'consent-2')) return;
     e.preventDefault();
     const top = document.getElementById('email-input'), end = document.getElementById('email-input-2');
     const status = document.getElementById('email-confirm'), endStatus = document.getElementById('email-confirm-2');
@@ -957,5 +994,10 @@
   }
 
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap">
 </body>
 </html>
