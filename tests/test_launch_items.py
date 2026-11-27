@@ -121,7 +121,6 @@ def test_seo_values_are_escaped_and_short():
 
 PRIVACY_ITEMS = {
     "controller": "Axiom Tech LTD, trading as Optomate",
-    "address": "Address: ",
     "contact": "mailto:admin@optomate.co.uk",
     "lawful basis": "lawful basis under the UK GDPR is your consent",
     "retention": "until you unsubscribe. Then we delete it within 7 days",
@@ -140,6 +139,8 @@ def test_privacy_page_has_every_uk_gdpr_item():
     for right in ("access", "correct", "delete", "restrict", "object", "withdraw your consent"):
         assert right in rights, right
     assert "Information Commissioner's Office (ICO)" in page
+    # The company address was taken off the page on 27 Nov 2026 (the owner's decision): no placeholder may be live
+    assert "AHMED TO FILL" not in page and "Address:" not in page
 
 
 # ---------- 5. Consent ----------
