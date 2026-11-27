@@ -203,7 +203,8 @@ def test_retired_pages_redirect(name):
     page = (ROOT / "site" / name).read_text()
     assert '<meta http-equiv="refresh" content="0; url=/">' in page and '<a class="cta" href="/">' in page
     assert "background: var(--g-hero)" in page and "Agent Builder Daily" not in page
-    assert len(page.replace(gh.TOKENS_CSS, "")) < 2500  # a short page: the shared token block and little else
+    own = page.replace(gh.TOKENS_CSS, "").replace(gh.font_faces(), "").replace(gh.font_links(), "")
+    assert len(own) < 2000  # a short page: the shared font set, the shared token block and little else
 
 
 # ---------- F2b: every breakdown field escaped, https-only source link, old pages restyled ----------
@@ -674,7 +675,7 @@ def test_logo_links_home_and_is_the_favicon(site):
     assert re.search(r'<h1 class="brand">\s*<a class="brand-link" href="\./"><img class="brand-logo" src="logo\.svg" '
                      r'width="28" height="22" alt="">', page)
     assert '<link rel="icon" href="favicon.svg" type="image/svg+xml">' in page
-    assert "Geist:wght@400;600;700" in page and re.search(r"\.brand-link \{[^}]*font-weight: 600", page)
+    assert "satoshi-700.woff2" in page and re.search(r"\.brand-link \{[^}]*font-family: var\(--font-head\);[^}]*font-weight: 600", page)  # 600 takes the 700 face
     for name in ("logo.svg", "favicon.svg"):
         svg = (ROOT / "site" / name).read_text()
         assert 'viewBox="0 0 56 44"' in svg and svg.count('fill="#10b981"') == 2 and 'opacity=".5"' in svg
