@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Models &amp; research — Topics — Daily Edge AI</title>
+  <meta name="description" content="Every Daily Edge AI story on Models &amp; research, newest first: case studies and industry news for IT engineers.">
+  <link rel="canonical" href="https://agent-builder-daily.vercel.app/topics/models-research/">
+  <meta property="og:site_name" content="Daily Edge AI">
+  <meta property="og:title" content="Models &amp; research — Topics — Daily Edge AI">
+  <meta property="og:description" content="Every Daily Edge AI story on Models &amp; research, newest first: case studies and industry news for IT engineers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agent-builder-daily.vercel.app/topics/models-research/">
+  <meta property="og:image" content="https://agent-builder-daily.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "Satoshi"; src: url("../../fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Satoshi"; src: url("../../fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
+      --font-head: "Satoshi", ui-sans-serif, system-ui, sans-serif;  /* headings: 700 */
+      --font: "Satoshi", ui-sans-serif, system-ui, sans-serif;       /* body: 400 */
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
+
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 28 on a phone, 56 on a tablet, 72 on a desktop. Body: 16 / 24. */
+      --fs-label: 14px;
+      --fs-small: 14px;
+      --fs-ui: 16px;
+      --fs-body: 16px;
+      --fs-lead: 18px;
+      --fs-h4: 22px;
+      --fs-h3: 28px;
+      --fs-h2: 40px;
+      --fs-h1: 56px;
+      --fs-hero: 28px;
+      --lh-hero: 1.15;
+      --lh-head: 1.15;
+      --lh-snug: 1.3;
+      --lh-body: 1.5;       /* 24px at 16px */
+      --lh-small: 1.5;
+      --ls-hero: -0.025em;  /* -0.7px at 28px, -1.8px at 72px */
+      --ls-head: -0.02em;
+      --ls-label: 0.04em;
+
+      /* Spacing: 4/8 scale */
+      --s-4: 4px;
+      --s-8: 8px;
+      --s-12: 12px;
+      --s-16: 16px;
+      --s-24: 24px;
+      --s-32: 32px;
+      --s-48: 48px;
+      --s-64: 64px;
+      --s-80: 80px;
+
+      --c-text: #171717;
+      --c-text-soft: #404040;      /* long-form body: 10.4:1 on white */
+      --c-text-muted: #737373;     /* 4.7:1 on white; never on --c-bg-alt */
+      --c-bg: #ffffff;
+      --c-bg-alt: #f5f5f5;
+      --c-surface-dark: #171717;
+      --c-surface-dark-2: #212121;
+      --c-border: #e5e5e5;
+      --c-border-dark: #333333;
+      --c-hero-bottom: #292929;
+      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
+      --c-accent: #10b981;         /* emerald: link underline, the one CTA, the accent word. Never text on white (2.5:1) */
+      --c-accent-hover: #059669;
+      --c-on-accent: #0a0a0a;      /* 7.8:1 on emerald */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;
+      --c-warn: #b45309;
+      --c-bad: #b91c1c;
+
+      --radius-sm: 4px;
+      --radius: 8px;
+      --radius-card: 12px;
+      --radius-lg: 16px;
+      --radius-panel: 28.8px;
+      --radius-pill: 9999px;
+
+      --content-max: 1152px;
+      --reading-max: 672px;  /* article column */
+      --measure: 68ch;       /* longest line of body text */
+      --tap: 44px;           /* smallest tap target */
+    }
+
+    @media (min-width: 701px) {
+      :root { --fs-hero: 56px; --lh-hero: 1.05; }
+    }
+
+    @media (min-width: 1024px) {
+      :root { --fs-hero: 72px; }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      min-height: 100vh;
+      overflow-wrap: anywhere;  /* long words and URLs wrap at 360px */
+    }
+
+    ::selection { background: var(--c-text); color: var(--c-bg); }
+    :focus-visible { outline: 2px solid var(--c-text); outline-offset: 2px; }
+    .hero :focus-visible { outline-color: var(--c-bg); }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: var(--s-8);
+      left: var(--s-8);
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-16);
+      border-radius: var(--radius);
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-weight: 700;
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: none; outline: 2px solid var(--c-text); outline-offset: 2px; }
+
+    /* Hero */
+    .hero {
+      background: var(--g-hero);
+      color: var(--c-bg);
+      padding: 24px 0 calc(64px + var(--s-80));
+    }
+
+    .header-inner {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand { font-size: var(--fs-h4); line-height: 1; }
+
+    /* Logo top-left, links home */
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: var(--tap);
+      color: var(--c-bg);
+      text-decoration: none;
+      font-family: var(--font-head);
+      font-weight: 600;
+      letter-spacing: var(--ls-head);
+    }
+
+    .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
+    .brand-name { white-space: nowrap; }
+
+    /* Headings: Satoshi 700, tight tracking. Body: Satoshi 400 */
+    .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
+
+    /* Tags and dates: Geist Mono */
+    .tag-pill, .pub-date, .archive-date, .archive-count, .updated {
+      font-family: var(--font-mono);
+    }
+
+    .tag-pill, .signal-title {
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      letter-spacing: var(--ls-label);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      max-width: 900px;
+      margin: var(--s-80) 0 16px;
+      font-size: var(--fs-hero);
+      line-height: var(--lh-hero);
+      letter-spacing: var(--ls-hero);
+      font-weight: 700;
+      text-wrap: balance;
+    }
+
+    /* Key words: one solid colour, never a gradient */
+    .accent-word { color: var(--c-accent); }
+
+    .updated {
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-on-dark-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Email capture, inside the hero */
+    .email-banner {
+      color: var(--c-bg);  /* light text on the dark block, in the hero and at the page end */
+      max-width: var(--reading-max);
+      background: var(--c-surface-dark-2);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius-card);
+      padding: 20px;
+    }
+
+    .email-inner { display: flex; flex-direction: column; gap: 12px; }
+
+    .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
+
+    /* Row 1: the email. Row 2: the consent box, then Subscribe. The Tab order is the same. */
+    .email-form, .email-form-2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-16); }
+
+    .consent {
+      flex: 1 1 240px;
+      display: flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-bg);
+      cursor: pointer;
+    }
+    .consent-box { flex: none; width: 20px; height: 20px; accent-color: var(--c-bg); cursor: pointer; }
+
+    .email-input {
+      flex: 1 1 100%;
+      min-width: 0;
+      background: var(--c-surface-dark);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius);
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font: inherit;
+      font-size: var(--fs-ui);
+      color: var(--c-bg);
+      transition: border-color 0.15s;
+    }
+
+    .email-input::placeholder { color: var(--c-on-dark-muted); }
+    .email-input:focus { border-color: var(--c-bg); }
+
+    .email-confirm { font-size: var(--fs-small); color: var(--c-on-dark-muted); }
+
+    /* Buttons: flat, no shadow */
+    .email-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font: inherit;
+      font-weight: 700;
+      line-height: 1;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      white-space: nowrap;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    /* The one emerald CTA on each screen */
+    .email-btn { min-height: var(--tap); padding: 0 24px; font-size: var(--fs-ui); background: var(--c-accent); color: var(--c-on-accent); }
+    .email-btn:hover { background: var(--c-accent-hover); }
+
+    /* Text links, never filled: the text keeps its colour, the underline is emerald */
+    .breakdown-link, .privacy-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .breakdown-link:hover, .privacy-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .privacy-link { align-self: flex-start; font-weight: 400; color: var(--c-on-dark-muted); }
+    .email-banner-end { margin: 48px auto 0; }
+
+    /* White panel: overlaps the hero bottom by 64px */
+    .content {
+      position: relative;
+      width: min(var(--content-max), calc(100% - 32px));
+      margin: -64px auto 0;
+      padding: 32px 32px 64px;
+      background: var(--c-bg);
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--c-border);
+      margin-bottom: 32px;
+      position: sticky;  /* tabs and search stay in view, as the old header did */
+      top: 0;
+      z-index: 1;
+      background: var(--c-bg);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      min-width: 0;
+      max-width: 100%;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 8px;
+    }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font: inherit;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-radius: var(--radius-pill);
+      transition: color 0.15s, background-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab:hover { color: var(--c-text); }
+    .tab.active { color: var(--c-text); box-shadow: inset 0 -2px 0 var(--c-text); border-radius: 0; }
+
+    /* 2 tabs, then one link to the archive page: the end of the tab row and the foot of each tab */
+    .tab-row { display: flex; align-items: center; flex-wrap: wrap; min-width: 0; max-width: 100%; margin-bottom: 8px; }
+    .tab-row .tabs { margin-bottom: 0; }
+    .archive-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      white-space: nowrap;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .archive-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .panel-foot { margin-top: var(--s-32); }
+    .panel-foot .archive-link { padding-left: 0; font-size: var(--fs-ui); }
+
+    .search {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      min-height: var(--tap);
+      padding: 8px 16px;
+      margin-bottom: 8px;
+      font: inherit;
+      font-size: var(--fs-ui);
+      color: var(--c-text);
+      width: 240px;
+      transition: border-color 0.15s;
+    }
+
+    .search::placeholder { color: var(--c-text-muted); }
+    .search:focus { border-color: var(--c-text); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px 24px;
+    }
+
+    /* The first row: the lead story spans 2 columns, 2 cards stand beside it. Every other grid is uniform. */
+    .cards-grid + .cards-grid, .signal + .cards-grid { margin-top: 32px; }
+
+    @media (min-width: 641px) {
+      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lead-grid > .card:first-child { grid-column: 1 / -1; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
+      /* No empty cell: a card alone on the last row takes the whole row */
+      .lead-grid > .card:nth-child(2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: 1 / -1; }
+    }
+
+    @media (min-width: 1025px) {
+      .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .lead-grid > .card:first-child { grid-column: span 2; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
+      .lead-grid > .card:first-child:last-child { grid-column: 1 / -1; }
+      .lead-grid > .card:nth-child(2):last-child { grid-column: span 2; }
+      /* No empty cell: the cards of a short last row are 2 columns wide */
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: auto; }
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):nth-last-child(2),
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+3):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):last-child { grid-column: span 2; }
+    }
+
+    /* Cards follow the benchmark (therundown.ai, read live): no box. No border, no radius, no padding;
+       the grid gap separates them. Only the image has a radius. */
+    .card { min-width: 0; }
+
+    /* The whole card is one tap target: the title link stretches over it */
+    .card { position: relative; }
+    .card-link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-card); }
+    .card-link:focus-visible { outline: none; }
+    .card-link:focus-visible::after { outline: 2px solid var(--c-text); outline-offset: 2px; }
+
+    .card-figure { margin: 0 0 16px; }
+    .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-bottom: 12px;
+    }
+
+    /* One short tag from the canonical list: it is never cut */
+    .card-tags { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
+    .tag-pill { white-space: nowrap; padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
+    /* The lead story's tag is the one emerald mark in the cards */
+    .lead-grid > .card:first-child .tag-pill { background: var(--c-accent); color: var(--c-on-accent); }
+
+    /* Card content */
+    .card-title {
+      font-size: var(--fs-lead);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      line-height: var(--lh-snug);
+      margin-bottom: 12px;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+    }
+
+    .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
+    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    /* Who · source type · date on one line: the name is cut by CSS when the card is narrow, the date always shows */
+    .card-meta {
+      display: flex;
+      min-width: 0;
+      margin-bottom: 16px;
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
+      white-space: nowrap;
+    }
+
+    .meta-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--c-text); font-weight: 700; }
+    .meta-rest { flex: none; font-variant-numeric: tabular-nums; }
+    .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+    /* Summary: 2 lines on every card (10.4:1 on white). "How to apply": 1 line. The full text is on the breakdown page. */
+    .card-summary, .insight {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: var(--fs-ui);
+      line-height: var(--lh-body);
+      margin-bottom: 16px;
+    }
+
+    .card-summary { -webkit-line-clamp: 2; line-clamp: 2; color: var(--c-text-soft); }
+    .insight { -webkit-line-clamp: 1; line-clamp: 1; color: var(--c-text); }
+    .insight strong { font-weight: 700; }
+
+    /* Card footer */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--c-border);
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Today's signal and From McKinsey: below the lead row, never above the lead story */
+    .signal {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      margin-top: 32px;
+    }
+
+    .signal-title { font-family: var(--font-mono); color: var(--c-text); margin-bottom: var(--s-8); }
+    .signal p { font-size: var(--fs-body); max-width: var(--measure); color: var(--c-text); }
+
+    /* Archive */
+    /* Groups: at most 7 cards in a grid and 7 days in an archive week */
+    .group-title { font-size: var(--fs-h3); line-height: var(--lh-head); margin: var(--s-48) 0 var(--s-24); }
+    .archive-week:first-child .group-title { margin-top: 0; }
+
+    .archive-list { display: flex; flex-direction: column; gap: var(--s-8); }
+
+    .archive-row {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      padding: 12px 20px;
+      display: grid;
+      grid-template-columns: 112px 88px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .archive-date, .archive-count { font-size: var(--fs-label); line-height: var(--tap); font-variant-numeric: tabular-nums; }
+    .archive-date { color: var(--c-text); font-weight: 700; }
+    .archive-count { color: var(--c-text-muted); }
+
+    .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+    .archive-title {
+      display: flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-ui);
+      line-height: var(--lh-snug);
+      color: var(--c-text);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .archive-title:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 32px;
+      color: var(--c-text-muted);
+      font-size: var(--fs-ui);
+    }
+
+    footer {
+      border-top: 1px solid var(--c-border);
+      padding: 20px 32px;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--s-8);
+    }
+
+    footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    .section-title { font-family: var(--font-head); font-size: var(--fs-h3); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: var(--s-48) 0 var(--s-24); scroll-margin-top: var(--s-16); }
+    .section-title:first-child { margin-top: 0; }
+    .archive-week .group-title { font-size: var(--fs-h4); margin: var(--s-32) 0 var(--s-16); }
+    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    @media (max-width: 700px) {
+      .hero { padding: 12px 0 calc(32px + 12px); }
+      .header-inner { padding: 0 16px; }
+      .hero-title { margin: 24px 0 16px; }
+      .updated { margin-bottom: 16px; }
+      .email-banner { padding: 16px; }
+      .email-inner { gap: 8px; }
+      .content { margin-top: -32px; }
+      .email-btn { padding: 0 16px; }
+      .content { width: 100%; padding: 24px 16px 48px; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--s-8); position: static; }
+      .tab, .tab-row .archive-link { padding: 8px 12px; }  /* 2 tabs and the Archive link in one row at 360px */
+      .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
+      .search { width: 100%; }
+      .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
+      .archive-date, .archive-count { line-height: var(--lh-small); }
+      .group-title { margin: var(--s-32) 0 var(--s-16); }
+    }
+
+    @media (max-width: 640px) {
+      .card-meta { margin-bottom: 8px; }
+      .card-footer { margin-top: 8px; padding-top: 4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="header hero">
+  <div class="header-inner">
+    <div class="header-top">
+      <p class="brand">
+        <a class="brand-link" href="../../"><img class="brand-logo" src="../../logo.svg" width="28" height="22" alt=""><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
+      </p>
+    </div>
+    <h1 class="hero-title">Models &amp; research</h1>
+    <p class="updated">70 stories, newest first.</p>
+  </div>
+</header>
+
+<main class="content" id="main" data-pagefind-body>
+  <div class="toolbar">
+      <nav class="tab-row" aria-label="Topics">
+        <a class="archive-link" href="../../topics/security/">Security</a>
+        <a class="archive-link" href="../../topics/llm-apps/">LLM apps</a>
+        <a class="archive-link" href="../../topics/agents/">Agents</a>
+        <a class="archive-link" href="../../topics/models-research/" aria-current="page">Models &amp; research</a>
+        <a class="archive-link" href="../../topics/coding-tools/">Coding tools</a>
+        <a class="archive-link" href="../../topics/business-funding/">Business &amp; funding</a>
+        <a class="archive-link" href="../../topics/policy-regulation/">Policy &amp; regulation</a>
+        <a class="archive-link" href="../../topics/chips-hardware/">Chips &amp; hardware</a>
+        <a class="archive-link" href="../../">← Back to today</a>
+      </nav>
+  </div>
+  <div id="site-search" role="search" aria-label="Search the site" style="min-height: var(--s-64)"></div>
+  <script>
+  const pfc = document.createElement('link'); pfc.rel = 'stylesheet'; pfc.href = '../../pagefind/pagefind-ui.css';
+  const pf = document.createElement('script'); pf.src = '../../pagefind/pagefind-ui.js';
+  pf.onload = () => new PagefindUI({ element: '#site-search', showSubResults: false, showImages: false });
+  document.head.append(pfc); document.body.append(pf);
+  </script>
+  <div class="archive-list">
+<div class="archive-row">
+  <div class="archive-date">26 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/building-on-nemotron-35-parse-open-data-fine-tuning-and-faster-inference.html">Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">24 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-solved-maths-most-famous-problem-now-humans-are-struggling-to-understand-it.html">AI Solved Math’s Most Famous Problem. Now Humans Are Struggling to Understand It</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/can-ai-help-scientists-identify-promising-drug-candidates.html">Can AI help scientists identify promising drug candidates?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-claimed-a-solution-to-the-167-year-old-riemann-hypothesis-and-a-human-did-too.html">AI claimed a solution to the 167-year-old Riemann hypothesis — and a human did, too</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/energy-based-reasoners-385x-more-efficient-inference.html">Energy-Based Reasoners: 385x more efficient inference</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/daisyrose-27b-pushing-the-frontier-of-post-training-efficiency.html">DaisyRose-27B: Pushing the Frontier of Post-Training Efficiency</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/daisyrose-27b-1200-task-rl-took-qwen38-from-56-to-12-on-terminal-bench-41.html">DaisyRose-27B: 1,200-task RL took Qwen3.8 from 5.6% to 12% on Terminal-Bench 4.1</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/180b-parameters-32gb-of-ram-pushing-moe-inference-to-the-limit-with-transformers.html">180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">17 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/deep-reinforcement-learning-for-heat-pump-and-underfloor-heating-control-an-end-.html">Deep Reinforcement Learning for Heat Pump and Underfloor Heating Control: An End-to-End Case Study</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">17 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/can-ai-help-build-a-healthier-future.html">Can AI help build a healthier future?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">15 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-step-toward-defining-the-standard-model-on-a-lattice.html">A step toward defining the Standard Model on a lattice</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">13 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/black-box-uncertainty-quantification-for-large-language-models-via-ensemble-of-e.html">Black-Box Uncertainty Quantification for Large Language Models via Ensemble-of-Ensembles</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">11 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/controlling-the-probability-of-unknown-unknowns-in-pre-deployment-testing-of-ai-.html">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">11 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease.html">AlphaGenome 2: Deciphering how cells read DNA to better understand disease</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">10 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/gemini-4-carbon-is-now-available.html">Gemini 4 Carbon is now available</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">9 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/exploring-the-worlds-languages-with-language-explorer.html">Exploring the world&#x27;s languages with Language Explorer</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">6 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/egyptian-and-nigerian-english-join-the-open-asr-leaderboard.html">Egyptian and Nigerian English join the Open ASR Leaderboard</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">6 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-is-dramatically-accelerating-ai-research.html">AI is dramatically accelerating AI research</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">5 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/decision-models-as-retrieval-gates-against-injection-and-pollution.html">Decision Models as Retrieval Gates Against Injection and Pollution</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">5 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ais-next-trick-speaking-dolphin.html">AI’s Next Trick? Speaking Dolphin</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/dharma-field-extractor-any-document-in-structured-fields-in-json-out.html">Dharma Field Extractor: Any Document In, Structured Fields in JSON Out</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/agile-deliberation-how-ai-helps-humans-define-the-gray-areas.html">Agile Deliberation: How AI helps humans define the gray areas</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-controlled-experimental-evaluation-of-configuration-and-cache-architecture-in-.html">A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">3 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/cwe-bench-v2-more-coverage-quality-and-transparency.html">CWE-bench v2: More coverage, quality, and transparency</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/announcing-project-protostar-making-publicly-funded-science-ai-ready.html">Announcing Project ProtoStar: Making Publicly Funded Science AI-Ready</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/an-updated-model-spec-for-more-capable-and-beneficial-ai.html">An updated Model Spec for more capable and beneficial AI</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">28 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/gemini-4-carbon-our-next-frontier-model.html">Gemini 4 Carbon: Our next frontier model</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">28 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-for-science-expands-to-foundations-and-research-institutions.html">AI for Science expands to foundations and research institutions</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/genie-4-a-new-generation-of-world-simulation.html">Genie 4: A new generation of world simulation</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/early-progress-on-accelerating-drug-development-with-claude.html">Early progress on accelerating drug development with Claude</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/can-we-trust-llms-to-judge-whether-a-research-idea-is-novel.html">Can we trust LLMs to judge whether a research idea is novel?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/build-specialized-multimodal-models-with-lfm3.html">Build specialized multimodal models with LFM3</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">23 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/bringing-foundational-models-to-the-front-lines-of-tb-screening.html">Bringing foundational models to the front lines of TB screening</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">22 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ensemble-forecasting-with-ibm-granite-time-series-models.html">Ensemble forecasting with IBM Granite time-series models</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/called-to-serve-tech-research-and-positive-impact.html">Called to serve: Tech, research, and positive impact</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/altk-evolve-how-learned-memory-tops-the-bench-leaderboard-on-customer-service-ta.html">ALTK-Evolve: How learned memory tops the τ²-bench leaderboard on customer service tasks without a frontier model</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">13 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/gemini-4-argon-built-to-solve-your-hardest-problems.html">Gemini 4 Argon: Built to solve your hardest problems</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">7 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/does-better-work-always-mean-better-workers.html">Does better work always mean better workers?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">6 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/falcon-emirati-when-an-llm-learns-the-dialect-the-culture-and-the-nuance.html">Falcon-Emirati: When an LLM Learns the Dialect, the Culture, and the Nuance</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">6 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model.html">EmbeddingGemma 2: an open, lightweight multimodal embedding model</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">2 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-model-guide-for-the-gpt-6-family.html">A model guide for the GPT-6 family</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Sep 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/gemini-4-argon-our-next-era-of-frontier-intelligence.html">Gemini 4 Argon: our next era of frontier intelligence</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Sep 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/disrupting-a-coordinated-model-distillation-campaign.html">Disrupting a coordinated model-distillation campaign</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Sep 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/devday-2026-recap.html">DevDay 2026 Recap</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">24 Sep 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/accelerating-vision-language-models-with-lfm25-vl-dspark.html">Accelerating vision-language models with LFM2.5-VL-DSpark</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">7 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/emo-pretraining-mixture-of-experts-for-emergent-modularity.html">EMO: Pretraining Mixture of Experts for Emergent Modularity</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">5 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/annotation-quality-in-aspect-based-sentiment-analysis-a-case-study-comparing-exp.html">Annotation Quality in Aspect-Based Sentiment Analysis: A Case Study Comparing Experts, Students, Crowdworkers, and Large Language Model</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/double-rectified-linear-unit-based-modular-semantics-for-quantitative-bipolar-ar.html">Double Rectified Linear Unit-based Modular Semantics for Quantitative Bipolar Argumentation Framework</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/coherent-hierarchical-multi-label-learning-to-defer-for-medical-imaging.html">Coherent Hierarchical Multi-Label Learning to Defer for Medical Imaging</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/caliper-in-the-loop-black-box-optimization-for-hyperledger-fabric-performance-tu.html">Caliper-in-the-Loop: Black-Box Optimization for Hyperledger Fabric Performance Tuning</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">1 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/directed-social-regard-surfacing-targeted-advocacy-opposition-aid-harms-and-vict.html">Directed Social Regard: Surfacing Targeted Advocacy, Opposition, Aid, Harms, and Victimization in Online Media</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">1 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/deployment-efficient-short-term-load-forecasting-in-ai-data-centers-via-sequence.html">Deployment-Efficient Short-Term Load Forecasting in AI Data Centers via Sequence-to-Point Knowledge Distillation</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">1 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/asymptotic-profiles-for-the-cauchy-problem-of-semilinear-beam-equation-with-two-.html">Asymptotic profiles for the Cauchy problem of semilinear beam equation with two variable coefficients in the subcritical case</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">1 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/alphainventory-evolving-white-box-inventory-policies-via-large-language-models-w.html">AlphaInventory: Evolving White-Box Inventory Policies via Large Language Models with Deployment Guarantees</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/design-structure-matrix-modularization-with-large-language-models.html">Design Structure Matrix Modularization with Large Language Models</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/default-automated-fault-detection-categorization-and-diagnosis-for-transformer-a.html">DEFault++: Automated Fault Detection, Categorization, and Diagnosis for Transformer Architectures</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/computing-equilibrium-beyond-unilateral-deviation.html">Computing Equilibrium beyond Unilateral Deviation</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/3d-reconstruction-techniques-in-the-manufacturing-domain-applications-research-o.html">3D Reconstruction Techniques in the Manufacturing Domain: Applications, Research Opportunities and Use Cases</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/exploring-the-potential-of-probabilistic-transformer-for-time-series-modeling-a-.html">Exploring the Potential of Probabilistic Transformer for Time Series Modeling: A Report on the ST-PT Framework</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/domain-adapted-small-language-models-for-reliable-clinical-triage.html">Domain-Adapted Small Language Models for Reliable Clinical Triage</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/deep-testing-the-case-of-dependence-detection.html">Deep-testing: the case of dependence detection</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/calibrated-surprise-an-information-theoretic-account-of-creative-quality.html">Calibrated Surprise: An Information-Theoretic Account of Creative Quality</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/apriori-based-analysis-of-learned-helplessness-in-mathematics-tutoring-behaviora.html">Apriori-based Analysis of Learned Helplessness in Mathematics Tutoring: Behavioral Patterns by Level, Intervention, and Outcome</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/characterizing-vision-language-action-models-across-xpus-constraints-and-acceler.html">Characterizing Vision-Language-Action Models across XPUs: Constraints and Acceleration for On-Robot Deployment</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">22 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/cortex-20-grounding-world-models-in-real-world-industrial-deployment.html">Cortex 2.0: Grounding World Models in Real-World Industrial Deployment</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/eva-bench-data-20-3-domains-121-tools-213-scenarios.html">EVA-Bench Data 2.0: 3 Domains, 121 Tools, 213 Scenarios</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/diffusiongemma-4x-faster-text-generation.html">DiffusionGemma: 4x faster text generation</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/can-we-ai-our-way-to-a-more-sustainable-world.html">Can we AI our way to a more sustainable world?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/building-realistic-electric-transmission-grid-dataset-at-scale-a-pipeline-from-o.html">Building realistic electric transmission grid dataset at scale: a pipeline from open dataset</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/adding-benchmaxxer-repellant-to-the-open-asr-leaderboard.html">Adding Benchmaxxer Repellant to the Open ASR Leaderboard</a></div>
+</div>
+  </div>
+</main>
+
+<footer>
+  <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="../../privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
+</footer>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="../../fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap">
+</body>
+</html>

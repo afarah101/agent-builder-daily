@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chips &amp; hardware — Topics — Daily Edge AI</title>
+  <meta name="description" content="Every Daily Edge AI story on Chips &amp; hardware, newest first: case studies and industry news for IT engineers.">
+  <link rel="canonical" href="https://agent-builder-daily.vercel.app/topics/chips-hardware/">
+  <meta property="og:site_name" content="Daily Edge AI">
+  <meta property="og:title" content="Chips &amp; hardware — Topics — Daily Edge AI">
+  <meta property="og:description" content="Every Daily Edge AI story on Chips &amp; hardware, newest first: case studies and industry news for IT engineers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agent-builder-daily.vercel.app/topics/chips-hardware/">
+  <meta property="og:image" content="https://agent-builder-daily.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "Satoshi"; src: url("../../fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Satoshi"; src: url("../../fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
+      --font-head: "Satoshi", ui-sans-serif, system-ui, sans-serif;  /* headings: 700 */
+      --font: "Satoshi", ui-sans-serif, system-ui, sans-serif;       /* body: 400 */
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
+
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 28 on a phone, 56 on a tablet, 72 on a desktop. Body: 16 / 24. */
+      --fs-label: 14px;
+      --fs-small: 14px;
+      --fs-ui: 16px;
+      --fs-body: 16px;
+      --fs-lead: 18px;
+      --fs-h4: 22px;
+      --fs-h3: 28px;
+      --fs-h2: 40px;
+      --fs-h1: 56px;
+      --fs-hero: 28px;
+      --lh-hero: 1.15;
+      --lh-head: 1.15;
+      --lh-snug: 1.3;
+      --lh-body: 1.5;       /* 24px at 16px */
+      --lh-small: 1.5;
+      --ls-hero: -0.025em;  /* -0.7px at 28px, -1.8px at 72px */
+      --ls-head: -0.02em;
+      --ls-label: 0.04em;
+
+      /* Spacing: 4/8 scale */
+      --s-4: 4px;
+      --s-8: 8px;
+      --s-12: 12px;
+      --s-16: 16px;
+      --s-24: 24px;
+      --s-32: 32px;
+      --s-48: 48px;
+      --s-64: 64px;
+      --s-80: 80px;
+
+      --c-text: #171717;
+      --c-text-soft: #404040;      /* long-form body: 10.4:1 on white */
+      --c-text-muted: #737373;     /* 4.7:1 on white; never on --c-bg-alt */
+      --c-bg: #ffffff;
+      --c-bg-alt: #f5f5f5;
+      --c-surface-dark: #171717;
+      --c-surface-dark-2: #212121;
+      --c-border: #e5e5e5;
+      --c-border-dark: #333333;
+      --c-hero-bottom: #292929;
+      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
+      --c-accent: #10b981;         /* emerald: link underline, the one CTA, the accent word. Never text on white (2.5:1) */
+      --c-accent-hover: #059669;
+      --c-on-accent: #0a0a0a;      /* 7.8:1 on emerald */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;
+      --c-warn: #b45309;
+      --c-bad: #b91c1c;
+
+      --radius-sm: 4px;
+      --radius: 8px;
+      --radius-card: 12px;
+      --radius-lg: 16px;
+      --radius-panel: 28.8px;
+      --radius-pill: 9999px;
+
+      --content-max: 1152px;
+      --reading-max: 672px;  /* article column */
+      --measure: 68ch;       /* longest line of body text */
+      --tap: 44px;           /* smallest tap target */
+    }
+
+    @media (min-width: 701px) {
+      :root { --fs-hero: 56px; --lh-hero: 1.05; }
+    }
+
+    @media (min-width: 1024px) {
+      :root { --fs-hero: 72px; }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      min-height: 100vh;
+      overflow-wrap: anywhere;  /* long words and URLs wrap at 360px */
+    }
+
+    ::selection { background: var(--c-text); color: var(--c-bg); }
+    :focus-visible { outline: 2px solid var(--c-text); outline-offset: 2px; }
+    .hero :focus-visible { outline-color: var(--c-bg); }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: var(--s-8);
+      left: var(--s-8);
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-16);
+      border-radius: var(--radius);
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-weight: 700;
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: none; outline: 2px solid var(--c-text); outline-offset: 2px; }
+
+    /* Hero */
+    .hero {
+      background: var(--g-hero);
+      color: var(--c-bg);
+      padding: 24px 0 calc(64px + var(--s-80));
+    }
+
+    .header-inner {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand { font-size: var(--fs-h4); line-height: 1; }
+
+    /* Logo top-left, links home */
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: var(--tap);
+      color: var(--c-bg);
+      text-decoration: none;
+      font-family: var(--font-head);
+      font-weight: 600;
+      letter-spacing: var(--ls-head);
+    }
+
+    .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
+    .brand-name { white-space: nowrap; }
+
+    /* Headings: Satoshi 700, tight tracking. Body: Satoshi 400 */
+    .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
+
+    /* Tags and dates: Geist Mono */
+    .tag-pill, .pub-date, .archive-date, .archive-count, .updated {
+      font-family: var(--font-mono);
+    }
+
+    .tag-pill, .signal-title {
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      letter-spacing: var(--ls-label);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      max-width: 900px;
+      margin: var(--s-80) 0 16px;
+      font-size: var(--fs-hero);
+      line-height: var(--lh-hero);
+      letter-spacing: var(--ls-hero);
+      font-weight: 700;
+      text-wrap: balance;
+    }
+
+    /* Key words: one solid colour, never a gradient */
+    .accent-word { color: var(--c-accent); }
+
+    .updated {
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-on-dark-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Email capture, inside the hero */
+    .email-banner {
+      color: var(--c-bg);  /* light text on the dark block, in the hero and at the page end */
+      max-width: var(--reading-max);
+      background: var(--c-surface-dark-2);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius-card);
+      padding: 20px;
+    }
+
+    .email-inner { display: flex; flex-direction: column; gap: 12px; }
+
+    .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
+
+    /* Row 1: the email. Row 2: the consent box, then Subscribe. The Tab order is the same. */
+    .email-form, .email-form-2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-16); }
+
+    .consent {
+      flex: 1 1 240px;
+      display: flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-bg);
+      cursor: pointer;
+    }
+    .consent-box { flex: none; width: 20px; height: 20px; accent-color: var(--c-bg); cursor: pointer; }
+
+    .email-input {
+      flex: 1 1 100%;
+      min-width: 0;
+      background: var(--c-surface-dark);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius);
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font: inherit;
+      font-size: var(--fs-ui);
+      color: var(--c-bg);
+      transition: border-color 0.15s;
+    }
+
+    .email-input::placeholder { color: var(--c-on-dark-muted); }
+    .email-input:focus { border-color: var(--c-bg); }
+
+    .email-confirm { font-size: var(--fs-small); color: var(--c-on-dark-muted); }
+
+    /* Buttons: flat, no shadow */
+    .email-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font: inherit;
+      font-weight: 700;
+      line-height: 1;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      white-space: nowrap;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    /* The one emerald CTA on each screen */
+    .email-btn { min-height: var(--tap); padding: 0 24px; font-size: var(--fs-ui); background: var(--c-accent); color: var(--c-on-accent); }
+    .email-btn:hover { background: var(--c-accent-hover); }
+
+    /* Text links, never filled: the text keeps its colour, the underline is emerald */
+    .breakdown-link, .privacy-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .breakdown-link:hover, .privacy-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .privacy-link { align-self: flex-start; font-weight: 400; color: var(--c-on-dark-muted); }
+    .email-banner-end { margin: 48px auto 0; }
+
+    /* White panel: overlaps the hero bottom by 64px */
+    .content {
+      position: relative;
+      width: min(var(--content-max), calc(100% - 32px));
+      margin: -64px auto 0;
+      padding: 32px 32px 64px;
+      background: var(--c-bg);
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--c-border);
+      margin-bottom: 32px;
+      position: sticky;  /* tabs and search stay in view, as the old header did */
+      top: 0;
+      z-index: 1;
+      background: var(--c-bg);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      min-width: 0;
+      max-width: 100%;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 8px;
+    }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font: inherit;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-radius: var(--radius-pill);
+      transition: color 0.15s, background-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab:hover { color: var(--c-text); }
+    .tab.active { color: var(--c-text); box-shadow: inset 0 -2px 0 var(--c-text); border-radius: 0; }
+
+    /* 2 tabs, then one link to the archive page: the end of the tab row and the foot of each tab */
+    .tab-row { display: flex; align-items: center; flex-wrap: wrap; min-width: 0; max-width: 100%; margin-bottom: 8px; }
+    .tab-row .tabs { margin-bottom: 0; }
+    .archive-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      white-space: nowrap;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .archive-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .panel-foot { margin-top: var(--s-32); }
+    .panel-foot .archive-link { padding-left: 0; font-size: var(--fs-ui); }
+
+    .search {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      min-height: var(--tap);
+      padding: 8px 16px;
+      margin-bottom: 8px;
+      font: inherit;
+      font-size: var(--fs-ui);
+      color: var(--c-text);
+      width: 240px;
+      transition: border-color 0.15s;
+    }
+
+    .search::placeholder { color: var(--c-text-muted); }
+    .search:focus { border-color: var(--c-text); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px 24px;
+    }
+
+    /* The first row: the lead story spans 2 columns, 2 cards stand beside it. Every other grid is uniform. */
+    .cards-grid + .cards-grid, .signal + .cards-grid { margin-top: 32px; }
+
+    @media (min-width: 641px) {
+      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lead-grid > .card:first-child { grid-column: 1 / -1; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
+      /* No empty cell: a card alone on the last row takes the whole row */
+      .lead-grid > .card:nth-child(2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: 1 / -1; }
+    }
+
+    @media (min-width: 1025px) {
+      .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .lead-grid > .card:first-child { grid-column: span 2; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
+      .lead-grid > .card:first-child:last-child { grid-column: 1 / -1; }
+      .lead-grid > .card:nth-child(2):last-child { grid-column: span 2; }
+      /* No empty cell: the cards of a short last row are 2 columns wide */
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: auto; }
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):nth-last-child(2),
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+3):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):last-child { grid-column: span 2; }
+    }
+
+    /* Cards follow the benchmark (therundown.ai, read live): no box. No border, no radius, no padding;
+       the grid gap separates them. Only the image has a radius. */
+    .card { min-width: 0; }
+
+    /* The whole card is one tap target: the title link stretches over it */
+    .card { position: relative; }
+    .card-link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-card); }
+    .card-link:focus-visible { outline: none; }
+    .card-link:focus-visible::after { outline: 2px solid var(--c-text); outline-offset: 2px; }
+
+    .card-figure { margin: 0 0 16px; }
+    .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-bottom: 12px;
+    }
+
+    /* One short tag from the canonical list: it is never cut */
+    .card-tags { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
+    .tag-pill { white-space: nowrap; padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
+    /* The lead story's tag is the one emerald mark in the cards */
+    .lead-grid > .card:first-child .tag-pill { background: var(--c-accent); color: var(--c-on-accent); }
+
+    /* Card content */
+    .card-title {
+      font-size: var(--fs-lead);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      line-height: var(--lh-snug);
+      margin-bottom: 12px;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+    }
+
+    .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
+    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    /* Who · source type · date on one line: the name is cut by CSS when the card is narrow, the date always shows */
+    .card-meta {
+      display: flex;
+      min-width: 0;
+      margin-bottom: 16px;
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
+      white-space: nowrap;
+    }
+
+    .meta-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--c-text); font-weight: 700; }
+    .meta-rest { flex: none; font-variant-numeric: tabular-nums; }
+    .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+    /* Summary: 2 lines on every card (10.4:1 on white). "How to apply": 1 line. The full text is on the breakdown page. */
+    .card-summary, .insight {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: var(--fs-ui);
+      line-height: var(--lh-body);
+      margin-bottom: 16px;
+    }
+
+    .card-summary { -webkit-line-clamp: 2; line-clamp: 2; color: var(--c-text-soft); }
+    .insight { -webkit-line-clamp: 1; line-clamp: 1; color: var(--c-text); }
+    .insight strong { font-weight: 700; }
+
+    /* Card footer */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--c-border);
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Today's signal and From McKinsey: below the lead row, never above the lead story */
+    .signal {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      margin-top: 32px;
+    }
+
+    .signal-title { font-family: var(--font-mono); color: var(--c-text); margin-bottom: var(--s-8); }
+    .signal p { font-size: var(--fs-body); max-width: var(--measure); color: var(--c-text); }
+
+    /* Archive */
+    /* Groups: at most 7 cards in a grid and 7 days in an archive week */
+    .group-title { font-size: var(--fs-h3); line-height: var(--lh-head); margin: var(--s-48) 0 var(--s-24); }
+    .archive-week:first-child .group-title { margin-top: 0; }
+
+    .archive-list { display: flex; flex-direction: column; gap: var(--s-8); }
+
+    .archive-row {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      padding: 12px 20px;
+      display: grid;
+      grid-template-columns: 112px 88px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .archive-date, .archive-count { font-size: var(--fs-label); line-height: var(--tap); font-variant-numeric: tabular-nums; }
+    .archive-date { color: var(--c-text); font-weight: 700; }
+    .archive-count { color: var(--c-text-muted); }
+
+    .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+    .archive-title {
+      display: flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-ui);
+      line-height: var(--lh-snug);
+      color: var(--c-text);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .archive-title:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 32px;
+      color: var(--c-text-muted);
+      font-size: var(--fs-ui);
+    }
+
+    footer {
+      border-top: 1px solid var(--c-border);
+      padding: 20px 32px;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--s-8);
+    }
+
+    footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    .section-title { font-family: var(--font-head); font-size: var(--fs-h3); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: var(--s-48) 0 var(--s-24); scroll-margin-top: var(--s-16); }
+    .section-title:first-child { margin-top: 0; }
+    .archive-week .group-title { font-size: var(--fs-h4); margin: var(--s-32) 0 var(--s-16); }
+    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    @media (max-width: 700px) {
+      .hero { padding: 12px 0 calc(32px + 12px); }
+      .header-inner { padding: 0 16px; }
+      .hero-title { margin: 24px 0 16px; }
+      .updated { margin-bottom: 16px; }
+      .email-banner { padding: 16px; }
+      .email-inner { gap: 8px; }
+      .content { margin-top: -32px; }
+      .email-btn { padding: 0 16px; }
+      .content { width: 100%; padding: 24px 16px 48px; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--s-8); position: static; }
+      .tab, .tab-row .archive-link { padding: 8px 12px; }  /* 2 tabs and the Archive link in one row at 360px */
+      .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
+      .search { width: 100%; }
+      .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
+      .archive-date, .archive-count { line-height: var(--lh-small); }
+      .group-title { margin: var(--s-32) 0 var(--s-16); }
+    }
+
+    @media (max-width: 640px) {
+      .card-meta { margin-bottom: 8px; }
+      .card-footer { margin-top: 8px; padding-top: 4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="header hero">
+  <div class="header-inner">
+    <div class="header-top">
+      <p class="brand">
+        <a class="brand-link" href="../../"><img class="brand-logo" src="../../logo.svg" width="28" height="22" alt=""><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
+      </p>
+    </div>
+    <h1 class="hero-title">Chips &amp; hardware</h1>
+    <p class="updated">17 stories, newest first.</p>
+  </div>
+</header>
+
+<main class="content" id="main" data-pagefind-body>
+  <div class="toolbar">
+      <nav class="tab-row" aria-label="Topics">
+        <a class="archive-link" href="../../topics/security/">Security</a>
+        <a class="archive-link" href="../../topics/llm-apps/">LLM apps</a>
+        <a class="archive-link" href="../../topics/agents/">Agents</a>
+        <a class="archive-link" href="../../topics/models-research/">Models &amp; research</a>
+        <a class="archive-link" href="../../topics/coding-tools/">Coding tools</a>
+        <a class="archive-link" href="../../topics/business-funding/">Business &amp; funding</a>
+        <a class="archive-link" href="../../topics/policy-regulation/">Policy &amp; regulation</a>
+        <a class="archive-link" href="../../topics/chips-hardware/" aria-current="page">Chips &amp; hardware</a>
+        <a class="archive-link" href="../../">← Back to today</a>
+      </nav>
+  </div>
+  <div id="site-search" role="search" aria-label="Search the site" style="min-height: var(--s-64)"></div>
+  <script>
+  const pfc = document.createElement('link'); pfc.rel = 'stylesheet'; pfc.href = '../../pagefind/pagefind-ui.css';
+  const pf = document.createElement('script'); pf.src = '../../pagefind/pagefind-ui.js';
+  pf.onload = () => new PagefindUI({ element: '#site-search', showSubResults: false, showImages: false });
+  document.head.append(pfc); document.body.append(pf);
+  </script>
+  <div class="archive-list">
+<div class="archive-row">
+  <div class="archive-date">27 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-new-breed-of-chip-runs-ai-models-using-waves-of-light.html">A New Breed of Chip Runs AI Models Using Waves of Light</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">25 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-data-centers-are-becoming-harder-to-build-and-neoclouds-are-feeling-it.html">AI data centers are becoming harder to build, and neoclouds are feeling it</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">24 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/data-centers-are-getting-their-own-natural-gas-power-plants.html">Data centers are getting their own natural gas power plants</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/frostbite-a-new-cpu-architecture-discovered-designed-and-verified-by-ai.html">Frostbite: A new CPU architecture discovered, designed and verified by AI</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/chips-can-survive-the-space-environment-can-their-financing.html">Chips can survive the space environment — can their financing?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/from-data-to-valves-a-self-learning-production-grade-edge-stack-for-sustainable-.html">From Data to Valves: A Self-Learning, Production-Grade Edge Stack for Sustainable HVAC Control</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/does-nvidia-got-this-interim-ceo-colette-kress-says-its-got-this.html">Does Nvidia Got This? Interim CEO Colette Kress Says It’s Got This</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/americas-ai-chip-war-is-heating-up-in-the-dumbest-possible-ways.html">America’s AI Chip War Is Heating Up in the Dumbest Possible Ways</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">13 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jense.html">Export-banned Nvidia chips are behind China’s most powerful AI models — uh-oh, Jensen!</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">12 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/broadcast-dont-replicate-eliminating-weight-hbm-in-datacenter-llm-serving.html">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">7 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/crusoe-sells-troubled-wyoming-data-center-project-to-google.html">Crusoe sells troubled Wyoming data center project to Google</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/enabling-aws-cloud-fpga-development-using-high-level-vitis-hls.html">Enabling AWS Cloud FPGA Development Using High-Level Vitis HLS</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">3 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/could-a-modern-chess-engine-on-a-pentium-have-defeated-kasparov-in-1996.html">Could a modern chess engine on a Pentium have defeated Kasparov in 1996?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">25 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/cerebras-deploys-trillion-parameter-ai-models.html">Cerebras Deploys Trillion-Parameter AI Models</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/from-sensors-to-insight-rapid-edge-to-core-application-development-for-sensor-dr.html">From Sensors to Insight: Rapid, Edge-to-Core Application Development for Sensor-Driven Applications</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/experimental-performance-of-a-5g-n78-reconfigurable-intelligent-surface-from-con.html">Experimental Performance of a 5G N78 Reconfigurable Intelligent Surface: From Controlled Measurements to Commercial Network Deployment</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/after-nvidias-20b-not-aqui-hire-ai-chip-startup-groq-reportedly-raising-650m.html">After Nvidia’s $20B not-aqui-hire, AI chip startup Groq reportedly raising $650M</a></div>
+</div>
+  </div>
+</main>
+
+<footer>
+  <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="../../privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
+</footer>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="../../fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap">
+</body>
+</html>

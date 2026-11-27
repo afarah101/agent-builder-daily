@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy &amp; regulation — Topics — Daily Edge AI</title>
+  <meta name="description" content="Every Daily Edge AI story on Policy &amp; regulation, newest first: case studies and industry news for IT engineers.">
+  <link rel="canonical" href="https://agent-builder-daily.vercel.app/topics/policy-regulation/">
+  <meta property="og:site_name" content="Daily Edge AI">
+  <meta property="og:title" content="Policy &amp; regulation — Topics — Daily Edge AI">
+  <meta property="og:description" content="Every Daily Edge AI story on Policy &amp; regulation, newest first: case studies and industry news for IT engineers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agent-builder-daily.vercel.app/topics/policy-regulation/">
+  <meta property="og:image" content="https://agent-builder-daily.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "Satoshi"; src: url("../../fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Satoshi"; src: url("../../fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
+      --font-head: "Satoshi", ui-sans-serif, system-ui, sans-serif;  /* headings: 700 */
+      --font: "Satoshi", ui-sans-serif, system-ui, sans-serif;       /* body: 400 */
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
+
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 28 on a phone, 56 on a tablet, 72 on a desktop. Body: 16 / 24. */
+      --fs-label: 14px;
+      --fs-small: 14px;
+      --fs-ui: 16px;
+      --fs-body: 16px;
+      --fs-lead: 18px;
+      --fs-h4: 22px;
+      --fs-h3: 28px;
+      --fs-h2: 40px;
+      --fs-h1: 56px;
+      --fs-hero: 28px;
+      --lh-hero: 1.15;
+      --lh-head: 1.15;
+      --lh-snug: 1.3;
+      --lh-body: 1.5;       /* 24px at 16px */
+      --lh-small: 1.5;
+      --ls-hero: -0.025em;  /* -0.7px at 28px, -1.8px at 72px */
+      --ls-head: -0.02em;
+      --ls-label: 0.04em;
+
+      /* Spacing: 4/8 scale */
+      --s-4: 4px;
+      --s-8: 8px;
+      --s-12: 12px;
+      --s-16: 16px;
+      --s-24: 24px;
+      --s-32: 32px;
+      --s-48: 48px;
+      --s-64: 64px;
+      --s-80: 80px;
+
+      --c-text: #171717;
+      --c-text-soft: #404040;      /* long-form body: 10.4:1 on white */
+      --c-text-muted: #737373;     /* 4.7:1 on white; never on --c-bg-alt */
+      --c-bg: #ffffff;
+      --c-bg-alt: #f5f5f5;
+      --c-surface-dark: #171717;
+      --c-surface-dark-2: #212121;
+      --c-border: #e5e5e5;
+      --c-border-dark: #333333;
+      --c-hero-bottom: #292929;
+      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
+      --c-accent: #10b981;         /* emerald: link underline, the one CTA, the accent word. Never text on white (2.5:1) */
+      --c-accent-hover: #059669;
+      --c-on-accent: #0a0a0a;      /* 7.8:1 on emerald */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;
+      --c-warn: #b45309;
+      --c-bad: #b91c1c;
+
+      --radius-sm: 4px;
+      --radius: 8px;
+      --radius-card: 12px;
+      --radius-lg: 16px;
+      --radius-panel: 28.8px;
+      --radius-pill: 9999px;
+
+      --content-max: 1152px;
+      --reading-max: 672px;  /* article column */
+      --measure: 68ch;       /* longest line of body text */
+      --tap: 44px;           /* smallest tap target */
+    }
+
+    @media (min-width: 701px) {
+      :root { --fs-hero: 56px; --lh-hero: 1.05; }
+    }
+
+    @media (min-width: 1024px) {
+      :root { --fs-hero: 72px; }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      min-height: 100vh;
+      overflow-wrap: anywhere;  /* long words and URLs wrap at 360px */
+    }
+
+    ::selection { background: var(--c-text); color: var(--c-bg); }
+    :focus-visible { outline: 2px solid var(--c-text); outline-offset: 2px; }
+    .hero :focus-visible { outline-color: var(--c-bg); }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: var(--s-8);
+      left: var(--s-8);
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-16);
+      border-radius: var(--radius);
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-weight: 700;
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: none; outline: 2px solid var(--c-text); outline-offset: 2px; }
+
+    /* Hero */
+    .hero {
+      background: var(--g-hero);
+      color: var(--c-bg);
+      padding: 24px 0 calc(64px + var(--s-80));
+    }
+
+    .header-inner {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand { font-size: var(--fs-h4); line-height: 1; }
+
+    /* Logo top-left, links home */
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: var(--tap);
+      color: var(--c-bg);
+      text-decoration: none;
+      font-family: var(--font-head);
+      font-weight: 600;
+      letter-spacing: var(--ls-head);
+    }
+
+    .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
+    .brand-name { white-space: nowrap; }
+
+    /* Headings: Satoshi 700, tight tracking. Body: Satoshi 400 */
+    .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
+
+    /* Tags and dates: Geist Mono */
+    .tag-pill, .pub-date, .archive-date, .archive-count, .updated {
+      font-family: var(--font-mono);
+    }
+
+    .tag-pill, .signal-title {
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      letter-spacing: var(--ls-label);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      max-width: 900px;
+      margin: var(--s-80) 0 16px;
+      font-size: var(--fs-hero);
+      line-height: var(--lh-hero);
+      letter-spacing: var(--ls-hero);
+      font-weight: 700;
+      text-wrap: balance;
+    }
+
+    /* Key words: one solid colour, never a gradient */
+    .accent-word { color: var(--c-accent); }
+
+    .updated {
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-on-dark-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Email capture, inside the hero */
+    .email-banner {
+      color: var(--c-bg);  /* light text on the dark block, in the hero and at the page end */
+      max-width: var(--reading-max);
+      background: var(--c-surface-dark-2);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius-card);
+      padding: 20px;
+    }
+
+    .email-inner { display: flex; flex-direction: column; gap: 12px; }
+
+    .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
+
+    /* Row 1: the email. Row 2: the consent box, then Subscribe. The Tab order is the same. */
+    .email-form, .email-form-2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-16); }
+
+    .consent {
+      flex: 1 1 240px;
+      display: flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-bg);
+      cursor: pointer;
+    }
+    .consent-box { flex: none; width: 20px; height: 20px; accent-color: var(--c-bg); cursor: pointer; }
+
+    .email-input {
+      flex: 1 1 100%;
+      min-width: 0;
+      background: var(--c-surface-dark);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius);
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font: inherit;
+      font-size: var(--fs-ui);
+      color: var(--c-bg);
+      transition: border-color 0.15s;
+    }
+
+    .email-input::placeholder { color: var(--c-on-dark-muted); }
+    .email-input:focus { border-color: var(--c-bg); }
+
+    .email-confirm { font-size: var(--fs-small); color: var(--c-on-dark-muted); }
+
+    /* Buttons: flat, no shadow */
+    .email-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font: inherit;
+      font-weight: 700;
+      line-height: 1;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      white-space: nowrap;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    /* The one emerald CTA on each screen */
+    .email-btn { min-height: var(--tap); padding: 0 24px; font-size: var(--fs-ui); background: var(--c-accent); color: var(--c-on-accent); }
+    .email-btn:hover { background: var(--c-accent-hover); }
+
+    /* Text links, never filled: the text keeps its colour, the underline is emerald */
+    .breakdown-link, .privacy-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .breakdown-link:hover, .privacy-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .privacy-link { align-self: flex-start; font-weight: 400; color: var(--c-on-dark-muted); }
+    .email-banner-end { margin: 48px auto 0; }
+
+    /* White panel: overlaps the hero bottom by 64px */
+    .content {
+      position: relative;
+      width: min(var(--content-max), calc(100% - 32px));
+      margin: -64px auto 0;
+      padding: 32px 32px 64px;
+      background: var(--c-bg);
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--c-border);
+      margin-bottom: 32px;
+      position: sticky;  /* tabs and search stay in view, as the old header did */
+      top: 0;
+      z-index: 1;
+      background: var(--c-bg);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      min-width: 0;
+      max-width: 100%;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 8px;
+    }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font: inherit;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-radius: var(--radius-pill);
+      transition: color 0.15s, background-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab:hover { color: var(--c-text); }
+    .tab.active { color: var(--c-text); box-shadow: inset 0 -2px 0 var(--c-text); border-radius: 0; }
+
+    /* 2 tabs, then one link to the archive page: the end of the tab row and the foot of each tab */
+    .tab-row { display: flex; align-items: center; flex-wrap: wrap; min-width: 0; max-width: 100%; margin-bottom: 8px; }
+    .tab-row .tabs { margin-bottom: 0; }
+    .archive-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 8px 16px;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: var(--c-text);
+      white-space: nowrap;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .archive-link:hover { text-decoration-color: var(--c-accent-hover); }
+    .panel-foot { margin-top: var(--s-32); }
+    .panel-foot .archive-link { padding-left: 0; font-size: var(--fs-ui); }
+
+    .search {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      min-height: var(--tap);
+      padding: 8px 16px;
+      margin-bottom: 8px;
+      font: inherit;
+      font-size: var(--fs-ui);
+      color: var(--c-text);
+      width: 240px;
+      transition: border-color 0.15s;
+    }
+
+    .search::placeholder { color: var(--c-text-muted); }
+    .search:focus { border-color: var(--c-text); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px 24px;
+    }
+
+    /* The first row: the lead story spans 2 columns, 2 cards stand beside it. Every other grid is uniform. */
+    .cards-grid + .cards-grid, .signal + .cards-grid { margin-top: 32px; }
+
+    @media (min-width: 641px) {
+      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lead-grid > .card:first-child { grid-column: 1 / -1; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h4); }
+      /* No empty cell: a card alone on the last row takes the whole row */
+      .lead-grid > .card:nth-child(2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: 1 / -1; }
+    }
+
+    @media (min-width: 1025px) {
+      .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .lead-grid > .card:first-child { grid-column: span 2; }
+      .lead-grid > .card:first-child .card-title { font-size: var(--fs-h3); }
+      .lead-grid > .card:first-child:last-child { grid-column: 1 / -1; }
+      .lead-grid > .card:nth-child(2):last-child { grid-column: span 2; }
+      /* No empty cell: the cards of a short last row are 2 columns wide */
+      .cards-grid:not(.lead-grid) > .card:nth-child(odd):last-child { grid-column: auto; }
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):nth-last-child(2),
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+2):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+3):last-child,
+      .cards-grid:not(.lead-grid) > .card:nth-child(4n+1):last-child { grid-column: span 2; }
+    }
+
+    /* Cards follow the benchmark (therundown.ai, read live): no box. No border, no radius, no padding;
+       the grid gap separates them. Only the image has a radius. */
+    .card { min-width: 0; }
+
+    /* The whole card is one tap target: the title link stretches over it */
+    .card { position: relative; }
+    .card-link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-card); }
+    .card-link:focus-visible { outline: none; }
+    .card-link:focus-visible::after { outline: 2px solid var(--c-text); outline-offset: 2px; }
+
+    .card-figure { margin: 0 0 16px; }
+    .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-bottom: 12px;
+    }
+
+    /* One short tag from the canonical list: it is never cut */
+    .card-tags { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
+    .tag-pill { white-space: nowrap; padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
+    /* The lead story's tag is the one emerald mark in the cards */
+    .lead-grid > .card:first-child .tag-pill { background: var(--c-accent); color: var(--c-on-accent); }
+
+    /* Card content */
+    .card-title {
+      font-size: var(--fs-lead);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      line-height: var(--lh-snug);
+      margin-bottom: 12px;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+    }
+
+    .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
+    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    /* Who · source type · date on one line: the name is cut by CSS when the card is narrow, the date always shows */
+    .card-meta {
+      display: flex;
+      min-width: 0;
+      margin-bottom: 16px;
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
+      white-space: nowrap;
+    }
+
+    .meta-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--c-text); font-weight: 700; }
+    .meta-rest { flex: none; font-variant-numeric: tabular-nums; }
+    .pub-date { font-size: var(--fs-label); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+    /* Summary: 2 lines on every card (10.4:1 on white). "How to apply": 1 line. The full text is on the breakdown page. */
+    .card-summary, .insight {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: var(--fs-ui);
+      line-height: var(--lh-body);
+      margin-bottom: 16px;
+    }
+
+    .card-summary { -webkit-line-clamp: 2; line-clamp: 2; color: var(--c-text-soft); }
+    .insight { -webkit-line-clamp: 1; line-clamp: 1; color: var(--c-text); }
+    .insight strong { font-weight: 700; }
+
+    /* Card footer */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--c-border);
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Today's signal and From McKinsey: below the lead row, never above the lead story */
+    .signal {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      margin-top: 32px;
+    }
+
+    .signal-title { font-family: var(--font-mono); color: var(--c-text); margin-bottom: var(--s-8); }
+    .signal p { font-size: var(--fs-body); max-width: var(--measure); color: var(--c-text); }
+
+    /* Archive */
+    /* Groups: at most 7 cards in a grid and 7 days in an archive week */
+    .group-title { font-size: var(--fs-h3); line-height: var(--lh-head); margin: var(--s-48) 0 var(--s-24); }
+    .archive-week:first-child .group-title { margin-top: 0; }
+
+    .archive-list { display: flex; flex-direction: column; gap: var(--s-8); }
+
+    .archive-row {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      padding: 12px 20px;
+      display: grid;
+      grid-template-columns: 112px 88px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .archive-date, .archive-count { font-size: var(--fs-label); line-height: var(--tap); font-variant-numeric: tabular-nums; }
+    .archive-date { color: var(--c-text); font-weight: 700; }
+    .archive-count { color: var(--c-text-muted); }
+
+    .archive-previews { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+    .archive-title {
+      display: flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-ui);
+      line-height: var(--lh-snug);
+      color: var(--c-text);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .archive-title:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 32px;
+      color: var(--c-text-muted);
+      font-size: var(--fs-ui);
+    }
+
+    footer {
+      border-top: 1px solid var(--c-border);
+      padding: 20px 32px;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--s-8);
+    }
+
+    footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    .section-title { font-family: var(--font-head); font-size: var(--fs-h3); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: var(--s-48) 0 var(--s-24); scroll-margin-top: var(--s-16); }
+    .section-title:first-child { margin-top: 0; }
+    .archive-week .group-title { font-size: var(--fs-h4); margin: var(--s-32) 0 var(--s-16); }
+    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
+
+    @media (max-width: 700px) {
+      .hero { padding: 12px 0 calc(32px + 12px); }
+      .header-inner { padding: 0 16px; }
+      .hero-title { margin: 24px 0 16px; }
+      .updated { margin-bottom: 16px; }
+      .email-banner { padding: 16px; }
+      .email-inner { gap: 8px; }
+      .content { margin-top: -32px; }
+      .email-btn { padding: 0 16px; }
+      .content { width: 100%; padding: 24px 16px 48px; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--s-8); position: static; }
+      .tab, .tab-row .archive-link { padding: 8px 12px; }  /* 2 tabs and the Archive link in one row at 360px */
+      .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
+      .search { width: 100%; }
+      .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
+      .archive-date, .archive-count { line-height: var(--lh-small); }
+      .group-title { margin: var(--s-32) 0 var(--s-16); }
+    }
+
+    @media (max-width: 640px) {
+      .card-meta { margin-bottom: 8px; }
+      .card-footer { margin-top: 8px; padding-top: 4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="header hero">
+  <div class="header-inner">
+    <div class="header-top">
+      <p class="brand">
+        <a class="brand-link" href="../../"><img class="brand-logo" src="../../logo.svg" width="28" height="22" alt=""><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
+      </p>
+    </div>
+    <h1 class="hero-title">Policy &amp; regulation</h1>
+    <p class="updated">59 stories, newest first.</p>
+  </div>
+</header>
+
+<main class="content" id="main" data-pagefind-body>
+  <div class="toolbar">
+      <nav class="tab-row" aria-label="Topics">
+        <a class="archive-link" href="../../topics/security/">Security</a>
+        <a class="archive-link" href="../../topics/llm-apps/">LLM apps</a>
+        <a class="archive-link" href="../../topics/agents/">Agents</a>
+        <a class="archive-link" href="../../topics/models-research/">Models &amp; research</a>
+        <a class="archive-link" href="../../topics/coding-tools/">Coding tools</a>
+        <a class="archive-link" href="../../topics/business-funding/">Business &amp; funding</a>
+        <a class="archive-link" href="../../topics/policy-regulation/" aria-current="page">Policy &amp; regulation</a>
+        <a class="archive-link" href="../../topics/chips-hardware/">Chips &amp; hardware</a>
+        <a class="archive-link" href="../../">← Back to today</a>
+      </nav>
+  </div>
+  <div id="site-search" role="search" aria-label="Search the site" style="min-height: var(--s-64)"></div>
+  <script>
+  const pfc = document.createElement('link'); pfc.rel = 'stylesheet'; pfc.href = '../../pagefind/pagefind-ui.css';
+  const pf = document.createElement('script'); pf.src = '../../pagefind/pagefind-ui.js';
+  pf.onload = () => new PagefindUI({ element: '#site-search', showSubResults: false, showImages: false });
+  document.head.append(pfc); document.body.append(pf);
+  </script>
+  <div class="archive-list">
+<div class="archive-row">
+  <div class="archive-date">25 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/backblaze-explains-why-its-sharing-customer-information-with-advertisers.html">Backblaze explains why it&#x27;s sharing customer information with advertisers</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">25 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/anthropics-dario-amodei-calls-accusations-of-surrendering-human-control-to-ai-ab.html">Anthropic’s Dario Amodei calls accusations of surrendering human control to AI ‘absurd’</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">25 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-is-straining-americas-open-records-systems.html">AI is straining America’s open records systems</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">23 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/elon-musk-and-others-rejoice-as-jensen-huang-is-reinstated-at-nvidia-amid-scanda.html">Elon Musk and others rejoice as Jensen Huang is reinstated at Nvidia amid scandal</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">22 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/banks-have-had-it-up-to-here-with-your-ai-agent.html">Banks Have Had It Up to Here With Your AI Agent</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">22 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/87-of-the-anthropic-power-will-come-from-gas-and-11-from-coal-in-2028.html">87% of the Anthropic power will come from gas and 11% from coal in 2028</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">21 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines.html">Even the fastest AI clusters can be held back by their release pipelines</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/even-his-own-officials-dont-think-trumps-china-trip-will-lead-to-progress-on-ai.html">Even His Own Officials Don’t Think Trump’s China Trip Will Lead to Progress on AI</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">18 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/elon-musk-says-ousting-jensen-huang-is-like-kicking-michael-jordan-off-your-team.html">Elon Musk says ousting Jensen Huang is like ‘kicking Michael Jordan off your team’</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">17 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-told-these-ex-google-guys-how-to-build-a-billion-dollar-weapons-business.html">AI Told These Ex-Google Guys How to Build a Billion-Dollar Weapons Business</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">16 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/california-state-ag-sues-openai-over-rogue-agent-incidents.html">California state AG sues OpenAI over rogue agent incidents</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">16 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/building-trustworthy-ai-by-fencing-it-in-not-predicting-it.html">Building trustworthy AI by fencing it in, not predicting it</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">15 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/all-ai-generated-code-should-be-open-source.html">All AI-generated code should be Open Source</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">12 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/alex-karp-said-hes-a-progressive-ok-heres-some-other-stuff-hes-said-recently.html">Alex Karp Said He’s a ‘Progressive.’ OK! Here’s Some Other Stuff He’s Said Recently</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">11 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/chinas-nvidia-honeypot-isnt-surprising-jensen-huang-fell-for-it-anyway.html">China’s Nvidia Honeypot Isn’t Surprising. Jensen Huang Fell for It Anyway</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">11 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/apple-is-killing-its-support-community-forum-next-week.html">Apple is killing its Support Community forum next week</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">11 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-13-year-old-asked-ai-about-suicide-on-her-school-laptop-it-didnt-get-flagged-f.html">A 13-Year-Old Asked AI About Suicide on Her School Laptop. It Didn’t Get Flagged for Weeks</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">9 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/do-more-with-sustainability-data.html">Do More With Sustainability Data</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">9 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/authors-can-defend-against-ai-allegations-with-paper-trail-tools-is-it-enough.html">Authors Can Defend Against AI Allegations With ‘Paper Trail’ Tools. Is It Enough?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">9 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-short-seller-flagged-nvidia-ceos-ties-to-a-suspected-chinese-spy-six-months-be.html">A short seller flagged Nvidia CEO’s ties to a suspected Chinese spy six months before the scandal</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">7 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers.html">After the midterms, things are looking rocky for Elon Musk and data centers</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">6 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/after-the-midterms-is-the-ai-industry-in-for-a-rough-two-years.html">After the midterms, is the AI industry in for a rough two years?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">5 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/environmental-social-issues.html">Environmental &amp; Social Issues</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">5 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/australian-universities-are-creating-ai-native-graduates.html">Australian universities are creating AI-native graduates</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">3 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/apple-restricts-dating-apps-and-ai-companions-to-users-18-and-up.html">Apple restricts dating apps and AI companions to users 18 and up</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">2 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/anthropic-warns-that-its-very-close-to-rsi-capability-aka-self-building-ai.html">Anthropic warns that it’s very close to RSI capability, aka self-building AI</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">1 Nov 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/chatbots-are-leading-hikers-astray-with-dangerous-consequences.html">Chatbots Are Leading Hikers Astray, With Dangerous Consequences</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">31 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake.html">Apple CEO says the company doesn’t ‘want to ship AI for AI’s sake’</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/from-synthetic-enterprise-data-evaluations-to-real-microsoft-copilot-ai-confiden.html">From synthetic enterprise data evaluations to real Microsoft Copilot AI confidence</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/fair-use-benefits-everyone.html">Fair use benefits everyone</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">30 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/community-safety-report-and-new-protections-for-teens.html">Community safety report and new protections for teens</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/as-search-traffic-dries-up-reddit-announces-its-shifting-to-a-logged-in-experien.html">As search traffic dries up, Reddit announces it’s shifting to a logged-in experience</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">28 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/expanding-our-partnership-with-gsa-to-bring-claude-to-all-levels-of-government.html">Expanding our partnership with GSA to bring Claude to all levels of government</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">28 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-emergency-alerts-are-coming-humans-might-not-be-ready.html">AI Emergency Alerts Are Coming. Humans Might Not Be Ready</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/deloitte-insights-magazine.html">Deloitte Insights Magazine</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/cohere-says-alibabas-qwen-model-tried-to-send-a-file-to-beijing.html">Cohere says Alibaba’s Qwen model tried to send a file to Beijing</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/bank-of-america-kindly-asks-that-you-dont-share-your-banking-password-with-your-.html">Bank of America kindly asks that you don’t share your banking password with your AI assistant</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">27 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/anthropic-says-it-will-revolutionize-biologysome-day.html">Anthropic Says It Will Revolutionize Biology—Some Day</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">21 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/democratic-governance-of-frontier-ai-part-ii-empowering-cyber-defenders.html">Democratic governance of frontier AI, part II: Empowering cyber defenders</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">21 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/broad-access-through-consistent-standards.html">Broad access through consistent standards</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">21 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-promises-productivity-but-for-managers-its-mostly-a-headache-for-now.html">AI promises productivity, but for managers, it’s mostly a headache for now</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/fairstress-a-deeper-evaluation-of-fairness-in-llm-decision-making.html">FairStress: A deeper evaluation of fairness in LLM decision-making</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/anthropic-pitches-ai-safety-bill-that-may-block-a-model-if-50-people-could-be-ki.html">Anthropic pitches AI safety bill that may block a model if 50+ people could be killed</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">20 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/advancing-digital-sovereignty-with-greater-control-and-choice.html">Advancing digital sovereignty with greater control and choice</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">16 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/an-nvidia-insider-turned-vc-on-why-robotics-hasnt-hit-its-chatgpt-moment-yet.html">An Nvidia insider-turned-VC on why robotics hasn’t hit its ChatGPT moment, yet</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">14 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/deezer-will-soon-let-you-filter-out-ai-generated-music.html">Deezer will soon let you filter out AI-generated music</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">13 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/facebook-is-giving-users-more-control-over-their-algorithm.html">Facebook is giving users more control over their algorithm</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">13 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/amex-introduces-a-framework-to-prevent-ai-agents-from-making-unauthorized-purcha.html">Amex introduces a framework to prevent AI agents from making unauthorized purchases</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">9 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/amazon-and-others-are-done-keeping-data-center-deals-secret-is-it-enough-to-buil.html">Amazon and others are done keeping data center deals secret. Is it enough to build trust?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">4 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/can-super-intelligence-and-a-non-binding-safety-pact-solve-ais-image-problem.html">Can ‘super intelligence’ and a non-binding safety pact solve AI’s image problem?</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">2 Oct 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-new-contest-pits-competitors-against-each-other-in-a-race-to-biological-youth.html">A new contest pits competitors against each other in a race to biological youth</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Sep 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/anthropics-prospectus-details-losses-growth-and-yes-a-warning-that-its-ai-could-.html">Anthropic’s prospectus details losses, growth, and, yes, a warning that its AI could end humanity</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">1 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/fairness-of-classifiers-in-the-presence-of-constraints-between-features.html">Fairness of Classifiers in the Presence of Constraints between Features</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">1 May 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/ai-washing-inflates-expected-performance-but-not-interaction-outcomes-an-ai-plac.html">AI Washing Inflates Expected Performance but Not Interaction Outcomes: An AI Placebo Study Using Fitts&#x27; Law</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">29 Apr 2026</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/culturally-aware-genai-risks-for-youth-perspectives-from-youth-parents-and-teach.html">Culturally Aware GenAI Risks for Youth: Perspectives from Youth, Parents, and Teachers in a Non-Western Context</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/beyond-the-model-why-responsible-ai-must-address-workforce-impact.html">Beyond the Model — Why Responsible AI Must Address Workforce Impact</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/at-waymo-an-ai-project-isnt-ready-until-its-evals-are-not-when-the-model-perform.html">At Waymo, an AI project isn&#x27;t ready until its evals are — not when the model performs well</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/announcing-our-partnership-with-the-republic-of-korea.html">Announcing our partnership with the Republic of Korea</a></div>
+</div>
+<div class="archive-row">
+  <div class="archive-date">Undated</div>
+  <div class="archive-count">Story</div>
+  <div class="archive-previews"><a class="archive-title" href="../../breakdowns/a-need-for-nuance-the-economists-andrew-palmer.html">A Need for Nuance: The Economist’s Andrew Palmer</a></div>
+</div>
+  </div>
+</main>
+
+<footer>
+  <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="../../privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
+</footer>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="../../fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap">
+</body>
+</html>
