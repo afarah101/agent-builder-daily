@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Tools</p>
     <h1 class="page-title">The Definitive Fine-Tuning Guide for 3D Generation Models</h1>
-    <p class="meta-line">Hugging Face</p>
+    <p class="meta-line">Hugging Face · AI Lab · 12 Nov 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,32 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Hugging Face has published a comprehensive fine‑tuning guide for the TRELLIS.2 3D generation model, a state‑of‑the‑art diffusion architecture designed to produce high‑fidelity 3D meshes. The guide includes ready‑to‑run scripts, Docker container definitions, and step‑by‑step instructions for both local GPU clusters and Hugging Face’s managed Jobs platform. The primary focus is on leveraging Low‑Rank Adaptation (LoRA) adapters to specialize the model for domain‑specific tasks; the example provided targets footwear geometry refinement using the GSO dataset, a curated collection of shoe scans.</p><p>For enterprise IT teams, the release signals a shift toward accessible, open‑source 3D asset pipelines that can be integrated into existing rendering or product‑development workflows. By offering containerized deployments, Hugging Face lowers the barrier to entry for teams that already run Kubernetes or Docker‑based infrastructure. The ability to fine‑tune on proprietary datasets without retraining the full model reduces GPU hours and accelerates time‑to‑value.</p><p>Key vendors and technologies involved include Hugging Face (model hub, inference API, Jobs service), NVIDIA GPUs (CUDA, TensorRT), Docker/Kubernetes for orchestration, and dataset providers such as GSO. The guide also references ONNX export for downstream compatibility with game engines or CAD tools.</p><p>Industry implications are significant: 3D content creation is moving from manual sculpting to AI‑driven generation. Enterprises that can quickly prototype and iterate on 3D assets—whether for e‑commerce, virtual try‑on, or AR/VR experiences—will gain a competitive edge. The LoRA approach demonstrates that large diffusion models can be adapted cost‑effectively, encouraging broader adoption across sectors that rely on 3D visualization.</p><p>Overall, the release provides a clear, actionable path for IT teams to evaluate, pilot, and potentially scale 3D generation capabilities using open‑source tooling, while aligning with existing GPU and container infrastructures.</p></div>
+      <div class="summary-body"><p>Hugging Face has released a detailed fine‑tuning guide for the TRELLIS.2 3D generation model, providing scripts and container support for both local and HF Jobs environments. The guide focuses on using LoRA adapters to adapt the model to specific tasks, such as improving footwear geometry with the GSO dataset.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory GPU resources: count of NVIDIA A100/H100 or equivalent, available CUDA version, and current utilization.
-   - Assess container runtime: Docker version, Kubernetes cluster health, and CI/CD pipelines that can ingest Docker images.
-   - Data readiness: Verify access to proprietary 3D datasets (e.g., CAD files, scans) and confirm they are in a format ingestible by TRELLIS.2 (OBJ, PLY, etc.).
-   - Network bandwidth: Ensure sufficient egress for pulling large model weights (~10–20 GB) from Hugging Face Hub.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Cost baseline: Current manual 3D asset creation cost per item (e.g., $200–$500). Estimate savings by automating 70% of the workflow.
-   - Time‑to‑value: Current iteration cycle is 4–6 weeks; projected cycle with LoRA fine‑tuning is 1–2 weeks.
-   - ROI metric: Compute break‑even GPU hours. If a single A100 costs $3/hour, and fine‑tuning reduces per‑item GPU time from 10 h to 2 h, the savings per item are $24.
-   - Include a pilot KPI: number of assets generated per month, quality score (e.g., mesh error &lt; 0.5 mm), and user adoption rate.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Hugging Face Hub &amp; Jobs: for model hosting and managed training.
-   - NVIDIA CUDA Toolkit &amp; cuDNN: for GPU acceleration.
-   - Docker &amp; Kubernetes: for container orchestration.
-   - ONNX Runtime: for exporting models to production inference engines.
-   - Data versioning tools (e.g., DVC) to track dataset changes.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: GPU memory constraints may limit batch size; LoRA adapters may not converge on highly specialized domains.
-   - Compliance: If training on customer data, ensure GDPR (UK) data residency; encrypt data at rest and in transit.
-   - Operational: Over‑reliance on a single vendor (Hugging Face) for model weights; plan for fallback to open‑source checkpoints.
-   - Security: Container images must be scanned for vulnerabilities; restrict network access to the Jobs service.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy the provided Docker image on a single A100 node and run the LoRA fine‑tuning script on a small subset of the GSO dataset (e.g., 50 shoes). Measure GPU utilization and output mesh quality. Document the pipeline and share results with stakeholders within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, expand the pipeline to support multiple 3D domains (e.g., automotive, apparel). Integrate the fine‑tuned models into the existing rendering workflow via ONNX or TensorRT. Build a governance framework for dataset curation, model versioning, and audit logging to meet enterprise compliance standards. Consider hybrid deployment: on‑prem GPU clusters for sensitive data, with fallback to Hugging Face Jobs for non‑confidential workloads.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">This article is mainly informational for developers interested in 3D asset generation; it does not directly impact the IT engineer’s current toolset.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 12 Nov 2026, 23:29</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://huggingface.co/blog/3d-lora-finetuning" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

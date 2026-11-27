@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>MobileProbe is a specialized testing framework designed to uncover hidden security vulnerabilities in mobile automation agents. The authors focused on the interaction between automated test scripts and the mobile application under test, specifically targeting the injection of malicious payloads during agent execution. They built a trajectory‑aware injection engine that monitors the agent’s state and context, automatically identifies potential injection points, and adapts payloads to the current execution path. The study evaluated the tool against 83 real‑world scenarios spanning 12 popular mobile applications, including banking, e‑commerce, and social media platforms. MobileProbe discovered 27 previously unknown attack vectors that were missed by conventional static analysis and existing dynamic testing tools. The discovered vulnerabilities ranged from insecure data handling in automation logs to privilege escalation via injected intents and cross‑app data leakage.</p><p>For enterprise IT, this work highlights that automated mobile testing pipelines can be a blind spot for security. Mobile automation agents often run with elevated privileges and can access sensitive data; if they are compromised, the entire application ecosystem is at risk. MobileProbe demonstrates that a trajectory‑aware approach can surface vulnerabilities that static or generic dynamic tests miss, providing a more realistic threat model for continuous integration/continuous delivery (CI/CD) environments.</p><p>Real‑world implications include the need to integrate adaptive injection testing into mobile QA pipelines, especially for applications that rely on third‑party automation frameworks (e.g., Appium, Espresso). Enterprises must audit their automation scripts for potential injection points, ensure that test data is sanitized, and monitor agent logs for anomalous behavior. The study also suggests that security teams should treat automation agents as first‑class assets, applying the same hardening and monitoring practices used for production code. By adopting MobileProbe‑style testing, organizations can reduce the risk of post‑deployment exploits that originate from the testing layer, thereby protecting both user data and corporate reputation.</p></div>
+      <div class="summary-body"><p>MobileProbe is an automated testing tool that finds hidden security risks in mobile app‑automation agents by injecting malicious content during their task execution. It builds a trajectory‑aware framework that automatically discovers vulnerable points, crafts adaptive payloads, and tests 83 real‑world scenarios across 12 apps, beating existing methods in finding attacks. This work is relevant for anyone deploying or managing mobile automation – it offers a practical auditing tool to spot and fix security holes before launch.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all mobile automation agents (Appium, UIAutomator, Espresso, Robotium) and their runtime permissions.
-   - Map the execution paths of each agent against the target app’s UI flow; identify points where external input is accepted (e.g., intent filters, deep links, test data files).
-   - Run a baseline dynamic analysis (e.g., OWASP Mobile Security Testing Guide) to capture current injection surface area.
-   - Review CI/CD logs for evidence of agent‑generated payloads or anomalous network traffic.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify risk: calculate the number of high‑severity findings per 1000 lines of automation code and compare to industry benchmarks (e.g., 0.5 vulnerabilities per 1000 lines).
-   - Present ROI: estimate potential cost of a post‑deployment breach (average $2.5M per incident) versus the cost of implementing MobileProbe (estimated $50K for tooling, $10K for staff time).
-   - Include compliance impact: demonstrate how early detection mitigates GDPR Article 32 breach notification costs and reduces audit findings.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- MobileProbe (open source, GitHub repository, requires Python 3.8+).
-   - OWASP ZAP with mobile extensions for dynamic scanning.
-   - Burp Suite Professional for intercepting agent traffic.
-   - Appium Inspector for real‑time UI state capture.
-   - Jenkins or GitLab CI for integrating automated injection tests into the pipeline.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: false positives from adaptive payloads may disrupt test runs; ensure sandboxed environments.
-   - Compliance: handling of personal data in test payloads must comply with UK GDPR; anonymize any PII before injection.
-   - Operational: increased test runtime may affect CI throughput; monitor resource usage and adjust concurrency.
-   - Security: ensure that the injection framework itself is not exposed to external attackers; restrict access to the test environment.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy MobileProbe in a single test environment for one high‑traffic app; run a 48‑hour scan to surface injection points.
-   - Fix the top three high‑severity findings and re‑run the scan to validate remediation.
-   - Document the process and create a checklist for future tests.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate MobileProbe into the nightly CI pipeline for all mobile projects; schedule weekly scans.
-   - Expand the framework to include API‑level injection testing for backend services that interact with mobile agents.
-   - Train QA and security teams on trajectory‑aware testing principles; establish a governance model for automation security.
-   - Periodically review findings against evolving threat intelligence (e.g., new intent‑based attacks) and update payload libraries accordingly.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage mobile automation agents, use MobileProbe to run automated penetration tests: 1. Integrate MobileProbe into your CI pipeline to scan new agent builds. 2. Review the identified attack paths and harden those UI surfaces. 3. Re‑run tests after changes to confirm vulnerabilities are mitigated.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 13 Nov 2026, 14:26</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.16693v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

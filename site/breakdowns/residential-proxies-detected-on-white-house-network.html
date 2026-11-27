@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Residential proxies detected on White House network</h1>
-    <p class="meta-line">Hacker News</p>
+    <p class="meta-line">Hacker News · Press · 4 Nov 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,34 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The Residential Proxy Observatory (RPO) recently reported that the White House network was used as an exit point for residential proxy traffic, with 236 incidents detected between October 5 and November 3. The proxy traffic originated from compromised residential proxy SDKs that routed through the White House’s public IP space, effectively turning a highly secure government network into a transit hub for potentially malicious traffic. This exposure demonstrates that even the most fortified networks can become unwitting conduits for adversaries if outbound proxy traffic is not tightly controlled. For enterprise IT teams, the incident underscores the risk that compromised or malicious proxy SDKs can bypass network segmentation, reach internal endpoints, and undermine endpoint protection platforms such as MDM, CrowdStrike, or JumpCloud. The vendors most directly impacted are those that provide proxy monitoring, VPN, and endpoint detection and response (EDR) solutions. The broader industry implication is a heightened need for granular outbound traffic visibility, stricter proxy policy enforcement, and anomaly detection that can flag unusual residential IP usage. Governments and large enterprises must now treat residential proxy traffic as a high‑risk vector and incorporate it into their threat hunting and incident response playbooks. The incident also highlights the importance of supply‑chain security for SDKs and third‑party libraries that may be embedded in corporate applications. As a result, many organizations will need to re‑evaluate their proxy and VPN configurations, enforce stricter device compliance policies, and adopt more advanced threat detection capabilities to prevent lateral movement through compromised proxies.</p></div>
+      <div class="summary-body"><p>Residential Proxy Observatory has exposed that the White House network was being used as an exit point for residential proxy traffic, with 236 incidents detected between October 5 and November 3. The findings highlight a potential threat vector where compromised proxy SDKs could enable lateral movement into highly secure internal networks.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Scan all VPN and proxy logs for outbound traffic to residential IP ranges (e.g., 2.0.0.0/8, 3.0.0.0/8, 4.0.0.0/8).  
-   - Run a network flow audit to identify any unexpected egress points or NAT devices that could be used as exit nodes.  
-   - Inventory all SDKs and third‑party libraries in use; check for known vulnerabilities or malicious code.  
-   - Verify that device compliance policies enforce no proxy configuration on endpoints unless explicitly allowed.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Present a cost‑benefit analysis: $X per month for a proxy monitoring solution versus potential breach cost of $Y (based on industry breach cost averages).  
-   - Use metrics such as “number of unauthorized outbound proxy connections per week” and “time to detect anomalous proxy activity” to benchmark current posture.  
-   - Highlight regulatory impact: non‑compliance with UK GDPR could trigger fines up to €20M or 4% of global turnover.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Palo Alto Networks Prisma Access or Cisco Umbrella for outbound proxy filtering.  
-   - JumpCloud for centralized device policy enforcement.  
-   - CrowdStrike Falcon X for real‑time anomaly detection on endpoints.  
-   - Splunk Enterprise Security or Elastic SIEM for correlating proxy logs and generating alerts.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: False positives from legitimate VPN traffic; misconfiguration of proxy rules.  
-   - Compliance: GDPR “data minimization” violations if proxy logs contain personal data.  
-   - Operational: Disruption of legitimate remote work if proxy blocks are too aggressive.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a rule in your firewall to block outbound traffic to known residential IP ranges and generate alerts.  
-   - Enable anomaly detection in CrowdStrike for any outbound proxy activity and set a threshold of 5 incidents per day.  
-   - Run a one‑off audit of all device proxy settings and enforce a “no proxy” policy for all corporate laptops.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Implement a zero‑trust network model that requires device attestation before any outbound connection.  
-   - Integrate a continuous monitoring platform that feeds proxy logs into a SIEM with machine‑learning anomaly detection.  
-   - Establish a quarterly review of all third‑party SDKs, including supply‑chain risk assessments, and automate patch management.  
-   - Conduct regular penetration tests focused on proxy bypass scenarios and update incident response plans accordingly.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">1) Go to your corporate VPN and proxy monitoring dashboards this week and verify that no residential proxy traffic is exiting from your perimeter. 2) The risk of undetected proxy SDKs could allow adversaries to bypass network segmentation and compromise endpoint devices, undermining your MDM and endpoint security controls. 3) Your JumpCloud and CrowdStrike setups are most affected – enable anomaly detection for outbound proxy activity and review device compliance policies.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 04 Nov 2026, 23:33</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://layer3intel.com/blog/residential-proxies-white-house-network" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

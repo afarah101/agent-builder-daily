@@ -322,30 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Large‑language‑model (LLM) coding agents such as Claude Code have been evaluated for their ability to debug production database incidents. The study focused on eight real incidents that involved lock contention, deadlocks, and performance regressions. Researchers instrumented the agents to attempt fixes while the database was live, but the agents were only provided static code and schema information. They lacked visibility into runtime metrics such as lock tables, wait‑time statistics, and deadlock graphs. As a result, the agents repeatedly suggested incorrect index changes, mis‑identified the root cause, and in some cases introduced new deadlocks. The study quantified the impact: each misdiagnosis required an additional deployment, adding an average of 3.5 hours of downtime and 2.1 hours of manual debugging per incident. The authors argue that the missing production state is the primary barrier to effective LLM debugging. They propose a forensics layer that streams live database telemetry to the agent in a controlled, secure manner, preserving existing security controls while providing the necessary context. For enterprise IT, this finding is critical because database incidents are a top contributor to service disruptions. Relying on LLMs without real‑time data can amplify risk and cost. The real‑world implication is that organizations must evaluate whether their LLM tooling can ingest live telemetry and whether their security posture can accommodate such data flows. If implemented correctly, the forensics layer could reduce incident resolution time by up to 40% and cut the number of redeployments by half, directly improving SLA compliance and reducing operational overhead.</p></div>
+      <div class="summary-body"><p>Large‑language‑model coding agents often fail to debug database issues because they lack real‑time access to production state such as lock views and deadlock logs. The study analysed Claude Code fixing eight incidents and showed that missing production data caused repeated misdiagnoses and extra deploys. A new forensics layer could give these agents the needed state without breaking security controls.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current database monitoring stack: verify if lock views, deadlock logs, and wait‑time metrics are captured and accessible via APIs.
-   - Assess LLM integration points: determine if the coding agent can ingest external data streams or if it is limited to static inputs.
-   - Review security controls: confirm that any telemetry exposure complies with internal data handling policies and external regulations (e.g., UK GDPR).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case around the cost of incident downtime: calculate average lost revenue per hour of database unavailability.
-   - Benchmark current mean time to resolution (MTTR) for database incidents; target a 30–40% reduction with the forensics layer.
-   - Include ROI: estimate savings from fewer redeployments and reduced manual debugging effort.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Vendor telemetry collectors: Oracle Enterprise Manager, Microsoft SQL Server Management Studio, PostgreSQL pg_stat_statements.
-   - Forensics integration platforms: Elastic Stack (Elasticsearch, Beats), Splunk, Datadog APM.
-   - LLM orchestration: OpenAI API, Anthropic Claude, or Azure OpenAI Service with custom prompt templates.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: data latency between telemetry capture and agent ingestion could lead to stale diagnostics.
-   - Compliance: transmitting production database state may expose personally identifiable information; ensure data masking and GDPR‑compliant retention.
-   - Operational: increased attack surface if telemetry endpoints are exposed; enforce network segmentation and role‑based access.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight Beats or Logstash agent to stream lock and deadlock logs to a secure Elasticsearch cluster.
-   - Create a simple API endpoint that the LLM can query for the latest lock statistics; test with a single incident to validate data flow.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, implement a full forensics layer that aggregates real‑time telemetry, applies automated anomaly detection, and feeds contextual data into the LLM.
-   - Integrate the solution with the existing incident management system (e.g., ServiceNow) to trigger automated ticket creation and rollback procedures.
-   - Continuously refine prompt engineering and model fine‑tuning based on incident outcomes to achieve a self‑learning debugging loop.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage cloud infra that uses LLM agents for debugging, first check if your agents have a secure API to fetch live lock views and deadlock reports. Second, enable a production replay harness so the agent can run in read‑only mode with the current state. Third, monitor for repeated deploy‑and‑observe cycles – if they appear, add the forensics layer before relying on the agent for live fixes.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 13 Nov 2026, 14:26</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.17304v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

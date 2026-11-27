@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study investigates GPU memory contention during large language model (LLM) inference, a critical bottleneck for enterprises deploying generative AI workloads. The authors propose a scheduling rule that prioritises inference requests by a composite metric, cμ, which integrates compute speed (c), memory bandwidth (μ), and memory usage. Using a fluid‑model framework, they prove that the cμ rule asymptotically minimises average latency while maximising throughput under a hard memory constraint. Experimental validation on an NVIDIA H800 GPU demonstrates that the rule reduces average inference latency by up to 18 % compared to round‑robin or FIFO scheduling, without sacrificing overall throughput. For enterprise IT, this means that existing GPU clusters can deliver faster response times for AI services without additional hardware investment. The rule is algorithmically simple, requiring only per‑request profiling of compute and memory characteristics, and can be integrated into existing job schedulers or container orchestrators. Real‑world implications include improved user experience for AI‑powered applications, higher utilisation of GPU resources, and a clearer pathway to scaling LLM inference in production environments. The study also provides a theoretical foundation for future extensions to multi‑GPU or distributed settings, making it a valuable reference for architects designing AI‑centric infrastructure.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current inference workloads: collect per‑request compute cycles, memory bandwidth, and peak memory usage.
-   - Measure GPU memory utilisation patterns under peak load; identify contention hotspots.
-   - Benchmark existing scheduler (e.g., Kubernetes default, Slurm, or custom) for latency and throughput metrics.
-   - Verify that the GPU memory limit is a hard constraint (e.g., no over‑commitment allowed).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: baseline latency (e.g., 250 ms) vs. projected latency with cμ (≈210 ms) and throughput (unchanged).
-   - Quantify potential revenue uplift or cost savings: e.g., 18 % faster inference could reduce server time by 10 % → $X/month.
-   - Include risk mitigation: no additional hardware, minimal code changes, and compatibility with existing CI/CD pipelines.
-   - Present pilot results from the H800 testbed as evidence.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA Nsight Systems / Nsight Compute for profiling compute and memory metrics.
-   - Kubernetes with custom scheduler extensions or NVIDIA GPU Operator for resource management.
-   - Prometheus + Grafana for real‑time monitoring of GPU utilisation and latency.
-   - MLflow or Kubeflow Pipelines for orchestrating inference jobs with metadata tracking.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Incorrect estimation of μ can lead to sub‑optimal scheduling; need robust profiling.
-   - Compliance: Ensure that profiling does not expose sensitive user data; anonymise request metadata to comply with UK GDPR.
-   - Operational: Scheduler changes may disrupt existing SLAs; implement gradual rollout and rollback plans.
-   - Vendor lock‑in: cμ rule relies on GPU‑specific metrics; portability to other vendors (AMD, Intel) may require adaptation.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight profiling agent on one GPU node to capture c and μ for the top 10 most frequent inference models.
-   - Implement a simple priority queue in the existing inference service that orders requests by the measured cμ value.
-   - Validate latency improvement within 30 days; document results for stakeholder review.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate the cμ scheduler into the cluster’s resource manager (e.g., extend Kubernetes scheduler or Slurm plugin) for all GPU nodes.
-   - Automate continuous profiling and dynamic adjustment of cμ weights as model versions evolve.
-   - Extend the framework to multi‑GPU and multi‑node scenarios, incorporating inter‑GPU bandwidth and network latency.
-   - Conduct a formal audit after 6–12 months to quantify ROI, refine the model, and publish internal best‑practice guidelines.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 04 Nov 2026, 14:10</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.04807v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

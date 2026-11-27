@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Tools</p>
     <h1 class="page-title">Profiling TorchNeuron (Part 1): System-level profiling on AWS Trainium.</h1>
-    <p class="meta-line">Hugging Face</p>
+    <p class="meta-line">Hugging Face · AI Lab · 21 Oct 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,38 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Hugging Face has released TorchNeuron, a system‑level profiler specifically designed for AWS Trainium instances. The tool exposes instruction‑level and cache‑level metrics for neural network training workloads, allowing engineers to see where compute, memory, or I/O bottlenecks occur on the custom ASIC. For enterprise IT teams, this means the ability to validate that the cost‑effective Trainium hardware is being used to its full potential and to identify hidden inefficiencies that can inflate training time and billable compute hours. The profiler is integrated into the Hugging Face ecosystem, leveraging the existing Torch framework and the AWS Neuron SDK, and it can be deployed via standard pip or Docker images on existing Trainium clusters. Vendors involved include AWS, which provides the underlying Trainium hardware and Neuron runtime, and Hugging Face, which supplies the profiling tooling and documentation. The broader industry implication is a shift toward hardware‑specific performance tooling; as AI workloads move to specialized accelerators, enterprises will need native profilers to justify capital and operating expenditures. The availability of TorchNeuron also signals AWS’s commitment to the Trainium platform, potentially accelerating adoption among organizations that already use AWS for other workloads. In the competitive landscape, other accelerator vendors (e.g., NVIDIA, Google TPU, Intel Habana) are likely to respond with comparable profiling solutions, raising the bar for performance transparency across the AI hardware market. For enterprises, early adoption of TorchNeuron can provide a measurable ROI by reducing wasted compute cycles, enabling tighter budget control, and supporting compliance with cost‑management policies.</p></div>
+      <div class="summary-body"><p>Hugging Face released a system‑level profiling tool called TorchNeuron for AWS Trainium, enabling detailed performance insights for neural network training on the custom hardware. This new feature allows developers to optimize model runs and reduce training costs by pinpointing bottlenecks at the instruction and cache levels.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all Trainium instances and associated Neuron runtimes.
-   - Verify current training workloads and their average GPU/CPU utilization, memory usage, and I/O patterns.
-   - Capture baseline cost metrics: hourly instance cost, total training time per model, and total compute hours.
-   - Check existing monitoring solutions (CloudWatch, X-Ray) for gaps in low‑level hardware visibility.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit case: estimate potential savings by reducing training time by 10–20% based on current inefficiencies.
-   - Use benchmark data from TorchNeuron (e.g., instruction mix, cache miss rates) to quantify performance gaps.
-   - Present a phased rollout: pilot on a single model, then scale to production workloads.
-   - Include metrics such as reduced training hours, lower compute spend, and improved model throughput.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Hugging Face TorchNeuron profiler (pip install torchneuron-profiler).
-   - AWS Neuron SDK for deployment and runtime integration.
-   - AWS CloudWatch for aggregating profiler logs.
-   - Grafana or Prometheus for visualizing custom metrics.
-   - AWS Cost Explorer for correlating performance improvements with cost savings.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Compatibility: TorchNeuron may require specific Neuron runtime versions; ensure version alignment.
-   - Data privacy: if training data is stored on S3, ensure profiler logs do not leak sensitive information; apply encryption and access controls.
-   - Compliance: under UK GDPR, any profiling data that could be linked to individuals must be handled as personal data; implement data minimization.
-   - Operational: increased log volume could impact storage costs; set retention policies.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy TorchNeuron on a single Trainium instance within 30 days.
-   - Run a standard benchmark model (e.g., BERT fine‑tuning) and capture instruction and cache metrics.
-   - Identify one clear bottleneck (e.g., high cache miss rate) and adjust model or data pipeline accordingly.
-   - Document the time and cost savings achieved and present to stakeholders.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate TorchNeuron metrics into automated CI/CD pipelines for model training.
-   - Build a centralized dashboard that correlates hardware performance with cost metrics across all AI workloads.
-   - Use insights to inform hardware procurement decisions, potentially negotiating better instance pricing or exploring spot instances.
-   - Develop a governance framework that mandates performance profiling before scaling new models, ensuring continuous optimization and cost control over 6–12 months.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Go to your AWS Trainium instances and install the new TorchNeuron profiler this week to benchmark existing models.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Without this visibility, you may miss hidden inefficiencies that drive up training time and cost, potentially leading to missed deadlines or budget overruns.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">This directly impacts your AWS infrastructure and any AI workloads you run on Trainium, making it the most relevant tool to evaluate.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 21 Oct 2026, 21:28</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://huggingface.co/blog/amazon/profiling-torchneuron-part-1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

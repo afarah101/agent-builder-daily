@@ -322,38 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by Krupp, Geißler, Calatrava‑Nicolas, and Fritsch investigates the relationship between token count and energy consumption in large language models (LLMs) during the prefill and decode phases. Using a custom profiling tool, the authors collected compute‑time and power data across a range of model sizes and token lengths. They derived scaling laws that show compute time—and by proxy energy consumption—grows linearly with the number of input tokens during prefill and sub‑linearly with the number of output tokens during decode. The authors validated their models on multiple hardware platforms (NVIDIA A100, H100, and AMD MI250) and demonstrated that compute time can serve as a reliable surrogate for energy when direct power measurements are unavailable. For enterprise IT, this means that workloads can be forecasted in terms of both latency and carbon footprint without needing specialized meters. The practical framework includes a lightweight profiling library, regression equations, and a web UI for quick estimation. Real‑world implications include the ability to set energy budgets for inference pipelines, optimize batch sizes, and make informed hardware procurement decisions. By quantifying the energy cost per token, organizations can target specific stages (prefill vs. decode) for optimization, leading to measurable reductions in operating expenses and carbon emissions.</p></div>
+      <div class="summary-body"><p>This research shows how the energy used by LLMs grows with both the input (prefill) and output (decode) tokens, giving clear scaling rules and a simple way to estimate energy from compute time. It builds a profiling tool and statistical models that map token lengths to compute time and energy, proving that compute time is a good stand‑in for energy when measurements are hard to get. The result is a practical framework that can help you predict and reduce the energy footprint of your LLM workloads.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1. Instrument current inference pipelines to capture token counts per request, batch size, and model version.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2. Record compute time on the GPU/CPU for each phase (prefill, decode) using existing profiling tools (e.g., NVIDIA Nsight Systems, Intel VTune).</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3. Map compute time to energy using the published regression coefficients or, if possible, calibrate on your own hardware with a power meter.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4. Benchmark baseline energy per request and identify high‑cost workloads (e.g., long‑form generation, large context windows).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1. Build a cost model: Energy per request = a × prefill_tokens + b × decode_tokens + c (constants from the paper).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2. Translate energy to CO₂e using local grid emission factors (e.g., 0.5 kg CO₂e/kWh in the UK).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3. Present ROI: compare current energy spend vs. projected savings after implementing token‑aware batching or model pruning.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4. Include compliance metrics: energy usage per request, potential impact on data centre power usage effectiveness (PUE).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA Nsight Systems / Nsight Compute for GPU profiling.
-   - Intel VTune Profiler for CPU inference.
-   - OpenTelemetry with custom metrics exporter for token counts.
-   - Power measurement hardware: RAPL (Intel), NVIDIA NVML, or external meters (e.g., WattsUp Pro).
-   - Cloud provider cost calculators (AWS Compute Optimizer, Azure Cost Management) to integrate energy estimates.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Data privacy: tokenization may expose sensitive content; ensure token logs are anonymized before analysis.
-   - GDPR: storing request metadata (user ID, timestamps) requires lawful basis; implement data minimisation.
-   - Operational: profiling may add overhead; run in a staging environment first.
-   - Vendor lock‑in: proprietary profiling APIs may limit portability; prefer open standards where possible.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy the profiling library in a single inference service and generate a 7‑day energy report.
-   - Identify the top 10% of requests consuming &gt;80% of energy; implement a simple rule to cap context length for those cases.
-   - Communicate findings to stakeholders within 30 days to secure buy‑in for further optimisation.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">LONG‑TERM PLAY
-   - Over 6–12 months, integrate token‑aware scheduling into the orchestration layer (Kubernetes, Kubeflow).
-   - Automate dynamic batch sizing based on real‑time token statistics to maximise GPU utilisation while keeping energy per token low.
-   - Evaluate model compression or distillation techniques that reduce compute time without sacrificing accuracy.
-   - Align with enterprise sustainability goals: set quarterly energy budgets, track CO₂e reductions, and report to ESG committees.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 30 Oct 2026, 12:33</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2610.39621v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

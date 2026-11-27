@@ -322,32 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by Abbas Raza Ali, Muhammad Hamza Rehman, Xu Li, and Muhammad Ajmal Siddiqui demonstrates a fully on‑edge AI stack deployed on a single NVIDIA Jetson Orin gateway to predict indoor temperatures and control HVAC valve positions in a hotel environment. Over an 18‑month period, the system achieved sub‑degree temperature prediction accuracy and maintained optimal valve actuation without relying on external cloud services. The architecture integrates a lightweight convolutional neural network for temperature forecasting, a reinforcement‑learning policy for valve control, and a continuous learning loop that retrains the model locally as new sensor data arrives. Key findings include: 1) the edge‑only approach eliminates latency and bandwidth constraints associated with cloud‑based HVAC control; 2) continuous local learning allows the system to adapt to seasonal changes and occupancy patterns, improving energy efficiency by up to 12% compared to baseline rule‑based control; 3) the solution operates within the power envelope of the Jetson Orin, making it suitable for retrofit scenarios in existing buildings. For enterprise IT, this case study validates the feasibility of deploying complex AI workloads on single‑board GPUs in production, reducing dependency on data center resources and mitigating data sovereignty concerns. Real‑world implications are significant: organizations can achieve granular, real‑time environmental control, lower operational costs, and improve occupant comfort without extensive cloud infrastructure. The approach also demonstrates a scalable model for other building automation use cases, such as lighting or security, where edge inference and continuous learning can provide resilience and compliance with data protection regulations.</p></div>
+      <div class="summary-body"><p>The study builds a fully on‑edge AI stack that learns to predict HVAC temperatures and control valve positions on a single NVIDIA Jetson Orin gateway, achieving sub‑degree accuracy in a hotel over 18 months and demonstrating continuous, local learning without cloud retraining.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory existing HVAC sensors, actuators, and network topology.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure current latency, bandwidth, and data residency requirements.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Assess GPU or edge device availability; verify power and thermal budgets.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Identify data privacy obligations (e.g., UK GDPR) for sensor data handling.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Quantify baseline energy consumption and peak HVAC loads.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Estimate savings from a 12% efficiency improvement; translate to cost per kWh.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present a pilot ROI: initial hardware cost (~$3,000 per gateway) versus projected annual savings.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Include a risk mitigation plan and compliance alignment.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA Jetson Orin (edge GPU)
-   - NVIDIA JetPack SDK (CUDA, TensorRT)
-   - TensorFlow Lite or PyTorch Mobile for model deployment
-   - Docker or NVIDIA Container Toolkit for containerized workloads
-   - OpenTelemetry for telemetry collection
-   - Ansible or Puppet for configuration management</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: model drift, hardware failure, network partitioning.
-   - Compliance: GDPR data residency, consent for sensor data, secure data deletion.
-   - Operational: maintenance of edge devices, firmware updates, vendor lock‑in.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy a pre‑trained temperature forecasting model on an existing Jetson Nano or Orin; validate inference latency (&lt;200 ms) and integrate with current HVAC PLC via MQTT. Complete within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months, roll out a fleet of Jetson Orin gateways across the hotel, implement continuous local learning pipelines, integrate with building management systems, and establish a governance framework for model versioning and audit logs. This will enable full automation of HVAC control, real‑time energy optimization, and compliance reporting.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage HVAC or building automation, deploy a Jetson Orin per building, run the compact forecaster and soft actor‑critic agent locally, and use the provided change‑point baseline for savings verification. Check that your system can handle five‑minute cycle updates and 15 GB RAM usage before rollout.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 19 Nov 2026, 17:54</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.24052v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

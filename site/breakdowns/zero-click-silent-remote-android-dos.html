@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Zero click, silent, remote Android DoS</h1>
-    <p class="meta-line">Hacker News</p>
+    <p class="meta-line">Hacker News · Press · 29 Oct 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,34 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The recent zero‑click, silent denial‑of‑service (DoS) vulnerability in Android’s telephony stack was triggered by a malformed WAP Push SMS. The exploit crashes the device’s call handler, rendering the phone unable to place or receive calls, including emergency services. Because the attack requires no user interaction and can be delivered remotely, it can be executed against any device that receives the malicious SMS. The flaw is only mitigated by a factory reset, which is a disruptive recovery method and not a practical defense for enterprise fleets. The affected Android versions span multiple OEM releases, and the vulnerability is present in the core telephony framework, meaning it is not limited to a single vendor. For enterprise IT teams, the risk is immediate: employees lose critical communication channels, potentially violating regulatory requirements for business continuity and emergency preparedness. The incident also highlights the broader industry issue of insufficient patching cycles for critical OS components and the need for more granular control over device firmware. Vendors such as Google, Samsung, Huawei, and others must coordinate rapid OTA updates, while MDM solutions must provide visibility into device OS versions and enforce mandatory patch compliance. The incident underscores the importance of integrating telephony stack health into endpoint security monitoring and incident response plans. Failure to address this flaw could lead to legal liabilities, reputational damage, and operational paralysis in environments where mobile communication is essential.</p></div>
+      <div class="summary-body"><p>Android’s telephony stack has a zero‑click, silent DoS flaw that crashes the phone’s call handler via a malformed WAP Push SMS, causing persistent loss of telephony including emergency calls. The flaw requires a factory reset and can be triggered without user interaction, making it a severe risk for mobile device users.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Pull a list of all Android devices from the MDM, including OS version, build number, and OEM.
-   - Cross‑reference each build against the CVE database to identify vulnerable releases (e.g., Android 10.0.0‑10.0.5, 11.0.0‑11.0.4).
-   - Verify that the telephony stack has not been patched by checking the presence of the latest OTA security patch level (e.g., 2024‑10‑patch).
-   - Run a controlled test by sending a signed WAP Push SMS to a sandbox device to confirm the crash behavior (if allowed by policy).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the risk: estimate the number of devices at risk, the potential downtime per device (average 48 h until factory reset), and the cost of lost productivity (e.g., $200 per employee per day).
-   - Benchmark against industry SLA for communications uptime (99.9 %); show that the DoS could cause a 0.1 % breach.
-   - Present a cost‑benefit: patch rollout (minimal bandwidth, &lt;$5k) vs. potential legal fines for non‑compliance with emergency service regulations (up to £50k per incident in the UK).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- MDM platforms: VMware Workspace ONE, Microsoft Intune, MobileIron, Citrix Endpoint Management.
-   - OTA patch distribution: Google Play Protect, OEM OTA services (Samsung Knox, Huawei Mobile Service).
-   - Endpoint monitoring: Splunk, Elastic Stack, or native MDM dashboards to detect call handler crashes.
-   - Incident response: ServiceNow ITSM, PagerDuty for alerting.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Over‑patching may introduce regression in legacy applications; ensure backward compatibility testing.
-   - Compliance: Under UK GDPR, loss of communication could affect data processing agreements; document mitigation steps.
-   - Operational: Factory reset requirement may lead to data loss; ensure device backups and restore procedures are in place.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a mandatory OTA security patch rollout to all devices identified as vulnerable within 30 days.
-   - Configure the MDM to block reception of WAP Push SMS from unknown senders until devices are patched.
-   - Update incident response playbooks to include a DoS detection step and a predefined recovery script.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Implement a zero‑trust device posture assessment that continuously verifies telephony stack integrity.
-   - Integrate a telemetry layer that reports call handler health metrics to the central monitoring system.
-   - Develop a vendor risk management framework that requires OEMs to provide timely security patch schedules for critical OS components.
-   - Conduct quarterly penetration tests focused on telephony and messaging services to surface similar flaws early.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Immediately audit all Android devices managed through your MDM platform for firmware versions vulnerable to this exploit and apply the latest security patches or roll out a hotfix.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Failure to patch exposes employees to persistent phone outages, potentially disrupting business communications and exposing them to legal liabilities if emergency services are unreachable.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">This issue most directly impacts the mobile endpoint security component of your stack, so prioritize it in your device management and incident response playbooks.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 29 Oct 2026, 12:41</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://smsofdeath.com/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

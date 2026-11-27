@@ -322,46 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by Gretz, Halfon, Katz, and Dankin addresses the challenge of deploying large language models (LLMs) for agentic workloads—applications where the model acts autonomously, such as virtual assistants, automated support agents, or decision‑making bots. Traditional validation methods rely on synthetic benchmarks that do not capture the complexity of real user interactions. The authors built an end‑to‑end evaluation pipeline that ingests replayed real‑world traces from production systems and supplements them with synthetic tests. The pipeline measures token throughput, concurrency, latency, and code‑coverage across mixed‑expert models (e.g., combining a base model with specialized adapters). By replaying actual user sessions, the authors demonstrated that the pipeline could reproduce live workload characteristics, uncover hidden code‑coverage gaps, and predict performance under scaling scenarios. The key findings are: (1) captured traces provide a more accurate proxy for production load than synthetic workloads; (2) the pipeline can detect performance regressions and coverage gaps before deployment; (3) the open‑source tools and trace dataset enable teams to benchmark and tune large, mixed‑expert models reliably. For enterprise IT, this means a systematic, repeatable approach to validate LLM deployments, reducing the risk of outages, SLA violations, or compliance breaches. The real‑world implications include faster time‑to‑market for AI features, more predictable scaling costs, and a defensible audit trail that satisfies regulatory requirements such as UK GDPR. By adopting this validation framework, enterprises can confidently integrate LLMs into mission‑critical services while maintaining operational stability and regulatory compliance.</p></div>
+      <div class="summary-body"><p>The research tackles the problem of reliably validating and scaling large language model (LLM) deployments for agentic workloads. The team built an end‑to‑end evaluation pipeline that uses replayed real‑world traces and synthetic tests to benchmark token load, concurrency and throughput, proving that captured traces can accurately simulate live workloads while revealing hidden code‑coverage gaps. The result is a set of open‑source tools and a trace dataset that enable teams to more confidently deploy and tune large, mixed‑expert models.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM‑driven services and identify those with agentic responsibilities (e.g., chatbots, recommendation engines).</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Capture current production traffic: log request patterns, token counts, user session lengths, and error rates.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Measure baseline latency, throughput, and CPU/GPU utilization for each model variant.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Assess code coverage of inference pipelines using tools like coverage.py or JaCoCo for Java services.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">5 Verify compliance posture: ensure data handling in traces aligns with UK GDPR (data minimization, pseudonymisation).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a business case around measurable KPIs:
-        - Reduction in SLA violations (target 30% lower).  
-        - Predictable scaling cost (e.g., $0.05 per token with 95th percentile latency &lt; 200ms).  
-        - Faster feature rollout (time from dev to prod cut by 40%).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Use the evaluation pipeline to generate a cost‑benefit analysis: compare current ad‑hoc testing costs versus the pipeline’s automated validation cost.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present a risk matrix: quantify potential downtime costs versus investment in validation tooling.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Open‑source:  
-        • LangChain for orchestrating LLM workflows.  
-        • OpenTelemetry for tracing and metrics collection.  
-        • Pytest with coverage for unit tests.  
-   - Commercial:  
-        • Datadog or New Relic for real‑time monitoring.  
-        • Dynatrace for AI‑driven anomaly detection.  
-        • AWS SageMaker Pipelines or Azure ML for managed inference endpoints.  
-   - Infrastructure:  
-        • NVIDIA A100 or H100 GPUs for high‑throughput inference.  
-        • Kubernetes with KEDA for autoscaling based on token rate.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical:  
-        • Model drift leading to degraded performance after deployment.  
-        • Inadequate handling of edge cases causing runtime errors.  
-   - Compliance:  
-        • GDPR data retention: traces must not store personally identifiable information beyond the minimum.  
-        • Data residency: ensure that trace data and model weights are stored in approved regions.  
-   - Operational:  
-        • Over‑provisioning of GPU resources due to inaccurate load predictions.  
-        • Security vulnerabilities in open‑source libraries (e.g., unpatched dependencies).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy the trace capture module on a single high‑traffic chatbot within 30 days. Configure OpenTelemetry to export token counts and latency to a central Prometheus instance. Run a 48‑hour replay of captured sessions against the current model and generate a simple coverage report. Use the results to adjust GPU allocation by 10–15% and document the impact on latency.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months, expand the pipeline to cover all agentic services. Integrate synthetic test generators that mimic rare user behaviors identified in trace analysis. Automate the entire validation workflow: capture → replay → benchmark → alert. Implement a governance board to review model updates against the validation results before production rollout. Align the pipeline with a continuous compliance framework, ensuring that every model change is auditable under UK GDPR and other relevant regulations.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 21 Nov 2026, 23:00</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.25905v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

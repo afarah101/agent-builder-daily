@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study examined OpenClaw, an AI‑assistant platform that integrates multiple tools and services to provide agentic functionality. Researchers performed a systematic threat analysis across the platform’s codebase, configuration, and runtime behavior. They identified 521 distinct CWE instances spanning 59 vulnerability types, with the most common issues in access control, data leakage, and prompt injection. The authors mapped each weakness to the agent’s trust boundaries—points where the agent interacts with external systems, user input, or internal services—to illustrate how an attacker could exploit these gaps to gain unauthorized access or exfiltrate data. The findings highlight that unsafe tool use (e.g., executing shell commands or database queries without proper sanitization) and inadequate execution containment (lack of sandboxing or resource limits) are the primary risk vectors. The authors propose seven mitigation tactics, including stricter input validation, fine‑grained access control, runtime isolation, and continuous monitoring. They demonstrate that applying these controls reduces the attack surface by 45% in a controlled environment. For enterprise IT, the implications are significant: many modern AI‑assisted workflows rely on similar agentic architectures, and the same gaps can lead to data breaches, privilege escalation, or supply‑chain attacks. The study underscores the need for a security‑first design in AI platforms, especially when handling sensitive data under regulations such as UK GDPR. It also provides a concrete framework for prioritizing remediation efforts, which can be translated to other agentic systems in production.</p></div>
+      <div class="summary-body"><p>OpenClaw, an AI assistant platform, suffers from widespread security gaps—especially in access control, data leaks, and injection attacks—found in 521 CWE instances across 59 types. The study maps these weaknesses to the agent’s trust boundaries and offers seven mitigation tactics, showing that unsafe tool use and execution containment are major risks.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Conduct a full inventory of all AI agents and their connected services (APIs, databases, file systems).
-   - Run static analysis tools (e.g., Semgrep, SonarQube) to detect CWE patterns identified in the study.
-   - Perform dynamic runtime monitoring to capture prompt injection attempts and unauthorized tool executions.
-   - Verify that each agent’s trust boundary is documented and that access controls are enforced at those boundaries.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the risk by calculating the potential data loss per vulnerability (e.g., average size of sensitive records).
-   - Build a cost‑benefit model: remediation cost vs. expected loss reduction (e.g., $X per incident avoided).
-   - Use compliance metrics: number of GDPR‑related audit findings reduced, or time to remediate a critical vulnerability.
-   - Present a phased implementation plan with clear ROI milestones (e.g., 30‑day quick win, 6‑month strategic rollout).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Static analysis: Semgrep, SonarQube, CodeQL.
-   - Runtime isolation: Docker, Kata Containers, gVisor.
-   - Access control: Open Policy Agent (OPA), AWS IAM for cloud resources.
-   - Monitoring &amp; logging: Elastic Stack (ELK), Splunk, or Datadog APM.
-   - Prompt injection detection: OpenAI’s Moderation API, or custom regex/ML filters.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Inadequate input sanitization, missing sandboxing, privilege escalation via tool execution.
-   - Compliance: GDPR Article 32 (security of processing), potential fines for data leakage.
-   - Operational: Service downtime due to over‑restrictive controls, developer productivity loss if controls are too strict.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Implement a mandatory whitelist for external tool calls in the agent configuration.
-   - Deploy a lightweight sandbox (e.g., Docker with read‑only volumes) for all agent processes.
-   - Add a simple prompt‑validation layer that blocks known injection patterns before the agent processes input.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate a policy engine (OPA) to enforce fine‑grained access control across all agent interactions.
-   - Establish a continuous security pipeline: code scanning, container scanning, and runtime anomaly detection.
-   - Conduct regular red‑team exercises focused on prompt injection and tool misuse scenarios.
-   - Align the security strategy with GDPR compliance by documenting data flow, implementing data minimization, and ensuring audit trails for all agent actions.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage OpenClaw or similar agentic systems, set explicit trust boundaries for user input, enforce least‑privilege access for tools, sandbox local execution, and monitor runtime behaviour to catch injection or data‑leak attempts.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 29 Oct 2026, 12:41</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2610.35451v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

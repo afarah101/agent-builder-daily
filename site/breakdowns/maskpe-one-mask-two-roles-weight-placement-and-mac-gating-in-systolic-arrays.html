@@ -322,32 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>MaskPE is a hardware/software co‑design that addresses the mismatch between weight pruning in deep neural networks and the energy savings realized on systolic array accelerators. The authors investigated how the presence of zero weights in compressed models leads to wasted memory bandwidth and unnecessary switching activity in the array. They introduced a dual‑purpose mask processor that routes non‑zero weights to the processing elements (PEs) while simultaneously clock‑gating the PEs that would otherwise multiply by zero. The study was performed on a 64×64 systolic array prototype, using a mix of convolutional and fully connected layers from standard benchmarks such as ImageNet and CIFAR‑10. The key findings are: (1) compressed weight storage can be reduced by 34.9% because the mask processor eliminates the need to store zero entries; (2) execution energy drops by up to 14.4% at 50% sparsity, with the benefit scaling with higher sparsity levels; (3) the additional logic for mask routing adds less than 2% area overhead and does not impact the critical path. For enterprise IT, these results translate into lower data center power consumption, reduced cooling costs, and the ability to deploy larger models on edge devices without exceeding power budgets. The real‑world implications include the potential to extend the lifespan of existing GPU clusters by integrating MaskPE‑compatible accelerators, to accelerate inference workloads for AI‑enabled services, and to meet regulatory energy‑efficiency targets in data centers. The approach also offers a pathway to comply with emerging AI‑specific carbon‑footprint reporting standards, as the energy savings can be quantified and reported in a standardized manner.</p></div>
+      <div class="summary-body"><p>MaskPE tackles the gap between weight pruning and energy savings in systolic arrays by routing non‑zero weights to processing elements and clock‑gating zero‑weights, cutting compressed weight storage by 34.9% and reducing execution energy by up to 14.4% at 50% sparsity.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current inference workloads to determine average sparsity after pruning.
-   - Measure memory bandwidth utilization and PE utilization on existing accelerators.
-   - Audit power consumption per layer and identify hotspots where zero‑weight multiplications dominate.
-   - Verify that current firmware supports dynamic clock gating or can be updated to accept mask signals.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: compute expected energy savings (≈14% at 50% sparsity) against the cost of new accelerator modules or firmware updates.
-   - Benchmark against baseline: run a representative set of models on current hardware, record power and latency, then simulate MaskPE improvements.
-   - Present ROI in terms of reduced cooling costs (e.g., 10% lower PUE) and extended hardware lifespan.
-   - Include compliance metrics: demonstrate that energy savings contribute to ESG reporting and potential tax incentives for green IT.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Vendor accelerators: NVIDIA A100 with TensorRT (supports dynamic sparsity), Intel Xeon Phi with oneAPI, Xilinx Alveo U280 (FPGA with customizable systolic arrays).
-   - Software frameworks: TensorFlow Lite with XNNPACK, PyTorch with sparsity APIs, ONNX Runtime with custom kernel for MaskPE.
-   - Profiling tools: NVIDIA Nsight Systems, Intel VTune, Xilinx SDSoC Analyzer.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Increased complexity in firmware may introduce timing violations; mask routing logic could become a bottleneck if not properly pipelined.
-   - Compliance: UK GDPR requires that any data processed by AI models remains within jurisdiction; ensure that hardware upgrades do not alter data residency.
-   - Operational: Migration may require retraining of staff on new debugging tools; risk of downtime during firmware rollout.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Enable existing sparsity‑aware kernels on current GPUs (e.g., TensorRT sparse inference) to immediately reduce energy usage by ~5–7% without new hardware.
-   - Deploy a pilot on a single server: replace one 64×64 array with a MaskPE‑compatible module and run a 50% sparse model to validate energy metrics.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, design or procure a custom ASIC or FPGA board that incorporates MaskPE logic into the systolic array.
-   - Integrate mask‑aware pruning pipelines into the model training workflow (e.g., using PyTorch’s sparsity API) to ensure models are ready for the hardware.
-   - Conduct a phased rollout: start with edge inference nodes, then scale to core data‑center accelerators, continuously monitoring power and performance metrics to refine the business case.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage a systolic‑array‑based inference engine, step 1: add a mask‑driven preload stage to send only non‑zero weights to the relevant PEs; step 2: enable clock‑gating on registers in PEs that receive zero‑weights; step 3: validate with RTL to ensure no stall or accuracy loss.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 20 Nov 2026, 23:55</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.26432v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

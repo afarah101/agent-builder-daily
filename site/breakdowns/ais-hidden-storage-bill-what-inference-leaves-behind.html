@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Research</p>
     <h1 class="page-title">AI’s hidden storage bill: What inference leaves behind</h1>
-    <p class="meta-line">MIT Tech Review</p>
+    <p class="meta-line">MIT Tech Review · Press · 22 Oct 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,39 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The MIT Technology Review article “AI’s hidden storage bill: What inference leaves behind” reports that the volume of data generated during AI inference operations is far larger than commonly assumed. While GPU utilization and compute cost dominate headlines, the article shows that inference engines produce terabytes of intermediate results, model outputs, and telemetry that must be persisted for debugging, compliance, or future retraining. In cloud environments, this translates into significant object and block storage consumption, often overlooked in budgeting. For enterprise IT teams, the finding highlights a hidden cost driver that can inflate cloud bills by 20–30% if not managed. Major cloud vendors such as AWS, Azure, and Google Cloud now expose detailed storage metrics for AI workloads, and the article notes that many organizations still rely on default lifecycle policies that leave stale inference artifacts in S3 buckets or Azure Blob containers indefinitely. The vendors involved include AWS S3, Azure Blob Storage, Google Cloud Storage, and specialized AI platforms like AWS SageMaker, Azure Machine Learning, and Google Vertex AI, all of which generate logs and model artifacts that can accumulate rapidly. The broader industry implication is a shift toward “storage-first” budgeting for AI projects, prompting vendors to introduce tiered storage classes and lifecycle management features. Enterprises must now factor in storage capacity, data egress, and compliance retention when planning AI deployments, or risk unexpected cost spikes and regulatory exposure.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Pull current storage usage reports from AWS Cost Explorer, Azure Cost Management, and GCP Billing for the past 90 days.  
-   • Identify buckets, containers, or volumes that have AI-related tags (e.g., “ml-inference”, “model-output”).  
-   • Measure the growth rate of these assets; calculate the average daily increase in GB.  
-   • Audit lifecycle policies: confirm that objects older than 30 days are transitioned to cheaper tiers or deleted.  
-   • Verify that monitoring alerts for sudden spikes in object count or storage cost are enabled.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a cost baseline: compute current monthly storage spend for AI inference artifacts versus compute spend.  
-   • Estimate savings: apply a 50% reduction in storage by enforcing a 30‑day retention policy; project $X monthly savings.  
-   • Include compliance risk mitigation: demonstrate that proper lifecycle management reduces GDPR retention violations.  
-   • Present ROI: cost avoided per inference run, and potential for re‑using archived artifacts for model explainability.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• AWS S3 Lifecycle Policies and S3 Intelligent-Tiering  
-   • Azure Blob Storage Lifecycle Management and Cool/Archive tiers  
-   • Google Cloud Storage Object Lifecycle Management  
-   • CloudWatch/CloudTrail for alerting on storage usage spikes  
-   • Terraform or Pulumi for declarative lifecycle policy deployment  
-   • Data catalog tools (AWS Glue, Azure Purview) to tag and discover inference artifacts</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Technical: accidental deletion of needed artifacts if policies are too aggressive.  
-   • Compliance: GDPR requires retention of personal data for a minimum period; ensure policies respect legal hold.  
-   • Operational: increased latency when retrieving archived data for debugging.  
-   • Vendor lock‑in: proprietary lifecycle features may limit cross‑cloud portability.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Implement a 30‑day lifecycle rule on all AI inference buckets/containers within 14 days.  
-   • Configure an alert in CloudWatch/Monitor that triggers when object count exceeds 10% of the monthly average.  
-   • Run a one‑off audit of the last 7 days of inference artifacts and delete any duplicates or test outputs.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">• Over 6–12 months, migrate infrequently accessed inference artifacts to cold or archival storage tiers (S3 Glacier, Azure Archive, GCS Nearline).  
-   • Build an automated data catalog that tags artifacts with model version, inference date, and sensitivity level.  
-   • Integrate lifecycle policies into CI/CD pipelines for AI models so that new deployments automatically inherit retention rules.  
-   • Conduct quarterly reviews of storage cost versus compute cost to adjust thresholds and ensure optimal balance.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Monitor your cloud storage usage trends—especially for AI-related workloads—and evaluate whether your current cost models accurately reflect the storage side of AI inference. Consider setting up alerts for sudden spikes in object or block storage usage, and review your data lifecycle policies to ensure that obsolete model outputs are purged in a timely manner. This is most relevant for your Azure and AWS infrastructure, as well as any MDM or endpoint security logs that may accumulate during AI-driven analytics.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 24 Oct 2026, 19:42</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://www.technologyreview.com/2026/10/22/1146948/ais-hidden-storage-bill-what-inference-leaves-behind/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

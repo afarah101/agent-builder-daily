@@ -322,38 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Flide is an inference engine designed to accelerate decision‑making models that rely on large language models (LLMs). The study focused on the bottleneck caused by redundant calculations in traditional attention mechanisms, where the same token contexts are recomputed for every decision branch. Flide addresses this by flattening token streams and employing GPU‑based indexing to fork attention across distinct decision paths. The result is a reduction in computational overhead and a 9.5× speed increase in query processing compared to conventional engines, while preserving mathematical exactness of the output. For enterprise IT, this translates to lower inference latency, reduced GPU utilization, and higher throughput for LLM‑driven decision systems. The exactness guarantee is critical for regulated industries where deterministic outputs are required for audit trails. Real‑world implications include faster response times for customer support chatbots, more efficient fraud detection pipelines, and scalable deployment of policy‑based decision engines in cloud environments. The approach also reduces energy consumption and operational costs, making it attractive for data centers that need to meet sustainability targets. Overall, Flide demonstrates that architectural changes at the attention level can deliver significant performance gains without sacrificing accuracy, a combination that is essential for mission‑critical enterprise applications.</p></div>
+      <div class="summary-body"><p>Flide is an inference engine that speeds up decision‑making models by avoiding redundant calculation and keeping results mathematically exact. It does this by flattening token streams and using GPU‑based indices to fork attention across different decision branches, allowing up to 9.5× faster queries than existing engines while maintaining precision. This means faster, more accurate LLM‑driven decision systems for applications that need low latency and high reliability.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Profile current inference workloads to identify latency hotspots and GPU utilization rates.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure the proportion of redundant token computations across decision branches.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Audit existing LLM deployment stack (framework, model size, precision settings) for compatibility with GPU‑based indexing.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Verify compliance with UK GDPR regarding data residency and auditability of inference outputs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a cost‑benefit model: baseline GPU hours per 1M queries vs. projected 9.5× reduction.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Quantify latency improvement: target &lt;50 ms response for high‑volume use cases.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Include ROI metrics: compute cost savings, potential revenue lift from faster decision cycles, and reduced carbon footprint.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Present pilot results (e.g., 30‑day test on a subset of workloads) to validate assumptions.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 NVIDIA CUDA Toolkit with cuBLAS and cuDNN for GPU indexing.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 TensorRT for optimized inference pipelines.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Hugging Face Transformers as the base model framework.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 Kubernetes with GPU node pools for scalable deployment.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">5 Prometheus + Grafana for real‑time performance monitoring.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Potential incompatibility with existing model architectures or precision constraints.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Ensure that flattened token streams do not violate data minimization principles under UK GDPR.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Increased complexity in debugging forked attention paths; require specialized monitoring.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Vendor lock‑in: Heavy reliance on NVIDIA hardware may limit future portability.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Deploy Flide on a single GPU node as a side‑by‑side benchmark against the current inference engine.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Run a 7‑day test with production traffic to capture latency and cost metrics.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Document findings and share with stakeholders to secure buy‑in for larger rollout.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Integrate Flide into the core inference microservice, replacing the legacy attention module.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Expand GPU fleet to support multi‑tenant inference workloads, leveraging the reduced GPU footprint.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Implement automated scaling policies based on real‑time latency thresholds.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">4 Conduct a formal audit to certify that exactness guarantees meet regulatory audit requirements.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">5 Explore hybrid deployment (edge + cloud) to further reduce end‑to‑end latency for latency‑sensitive applications.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage LLM‑based decision systems, step 1: replace your current inference engine with Flide; step 2: update your deployment to use the flattened token stream format; step 3: test performance and precision against your baseline, aiming for up to 9.5× speed improvement without sacrificing accuracy.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 02 Nov 2026, 15:20</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2610.42148v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

@@ -322,32 +322,17 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>CPU‑ARC is a research effort that converts the reasoning steps performed by a large‑language‑model (LLM) into executable CPU code that can be cached and reused. The study evaluated the approach on a suite of mathematics and science problems, measuring both accuracy and cost. Results show that the cached reasoning traces achieve nearly the same accuracy as the original LLM while reducing inference cost by 16‑to‑291×. The authors implemented a lightweight cache that stores intermediate reasoning traces and re‑uses them for new inputs, enabling continuous training and explainability. For enterprise IT, this means that workloads that previously required expensive GPU‑based LLM calls can be migrated to commodity CPU infrastructure, lowering capital and operational expenditures. The real‑world implications include the ability to run large‑scale reasoning workloads on existing data‑center hardware, improved auditability of decision logic, and the potential to integrate LLM reasoning into mission‑critical pipelines without vendor lock‑in. The study also demonstrates that a caching layer can be built on top of existing inference engines, providing a clear path for incremental adoption in regulated environments where explainability and cost control are paramount.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory current LLM usage: number of calls, latency, GPU/CPU resources, cost per token.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Profile reasoning depth: average number of reasoning steps per request and variance across workloads.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Measure explainability gaps: audit logs, traceability, and compliance requirements for each application.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Benchmark CPU vs GPU inference on representative workloads to establish baseline performance and cost.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a cost‑benefit model: compute current LLM spend (tokens × price) versus projected CPU‑ARC spend (cached traces × CPU cost).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Include metrics: reduction in inference cost (16‑291×), latency improvement, CPU utilization, and compliance score.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present ROI: payback period, net present value, and risk mitigation (e.g., reduced vendor lock‑in).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Highlight operational benefits: easier scaling, lower energy consumption, and improved audit trails.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 OpenAI or Hugging Face LLM APIs for baseline inference.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 ONNX Runtime or TensorRT for optimized CPU inference.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Redis or Apache Ignite for in‑memory cache of reasoning traces.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 Kubernetes with CPU‑only nodes for scalable deployment.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">5 Prometheus + Grafana for monitoring trace cache hit rates and performance.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: cache consistency, trace invalidation on model updates, and potential performance regressions.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: UK GDPR – ensure trace data does not contain personal data; implement data minimization and deletion policies.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: dependency on custom caching layer, potential for increased debugging complexity, and need for skilled personnel to maintain trace logic.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy a pilot on a low‑volume, non‑critical workload: instrument the LLM pipeline to capture reasoning traces, store them in Redis, and serve new requests from the cache. Measure cost savings and latency within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">LONG‑TERM PLAY
-   Over 6‑12 months, expand the cache to cover all high‑volume reasoning workloads, integrate continuous training pipelines to refresh traces, and formalize governance for trace storage. Replace GPU clusters with CPU‑only infrastructure, achieving full cost neutrality while maintaining compliance and auditability.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage cloud infrastructure, here is what to do:
+1. Export your LLM’s reasoning traces to a CPU cache (ARC).
+2. Deploy the ARC on your on‑prem or edge nodes.
+3. Replace expensive LLM calls with ARC invocations, cutting compute cost and improving latency.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 09 Nov 2026, 19:23</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.09891v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

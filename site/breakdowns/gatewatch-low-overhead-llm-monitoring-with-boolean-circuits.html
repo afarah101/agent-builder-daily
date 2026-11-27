@@ -322,37 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>GateWatch is a lightweight monitoring framework for large language models (LLMs) that translates a handful of critical runtime features into Boolean logic. The authors evaluated the approach on Gemma‑2‑9B, a 9‑billion‑parameter open‑source model, by instrumenting the model with a set of probes that capture token‑level statistics, attention patterns, and memory usage. Instead of collecting full activation tensors, GateWatch encodes each probe’s output as a single bit, then applies a small Boolean circuit to detect anomalous behavior such as out‑of‑distribution inputs, excessive memory consumption, or policy violations. The study measured memory overhead, latency, and detection accuracy. GateWatch reduced memory usage by 99.98% compared to traditional tensor‑dumping methods and added less than 1 ms of latency per inference when running hundreds of probes. Detection accuracy was within 2–3 % of a heavier baseline that logged full activations. For enterprise IT, this means that large‑scale LLM deployments can be continuously monitored without impacting throughput or requiring expensive GPU memory. The real‑world implications are significant: organizations can detect model drift, policy breaches, or resource spikes in near real‑time, enabling rapid incident response and compliance reporting. GateWatch’s minimal footprint also allows it to run on edge devices or within existing inference pipelines without additional infrastructure, making it a practical solution for regulated environments where data residency and auditability are critical.</p></div>
+      <div class="summary-body"><p>GateWatch offers a very lightweight way to watch what large language models (LLMs) do by turning a few key features into simple Boolean rules. They built a system that keeps memory use down by 99.98% and adds almost no lag when running many probes on a model like Gemma‑2‑9B. The result is accurate monitoring that almost matches heavier methods while staying fast and tiny.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all LLM workloads: model size, inference frequency, GPU/CPU allocation, and current monitoring tools.
-   - Measure baseline memory usage and latency for each model using standard profiling (e.g., nvidia-smi, torch.profiler).
-   - Identify compliance requirements (UK GDPR, HIPAA) that mandate audit trails or data minimization.
-   - Assess existing alerting and logging infrastructure for capacity to ingest additional metrics.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify savings: GateWatch reduces memory overhead by ~99.98%; calculate cost per GB of GPU memory avoided.
-   - Benchmark latency: &lt;1 ms per probe; compare to current monitoring latency (often &gt;10 ms).
-   - ROI: Faster detection of policy violations reduces incident response time; estimate cost of a single breach incident versus GateWatch implementation.
-   - Present a phased pilot: 30‑day proof of concept on a non‑critical model, with metrics on memory, latency, and detection accuracy.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- GateWatch open‑source repository (GitHub) for integration.
-   - NVIDIA Nsight Systems or AMD Radeon™ GPU Profiler for baseline profiling.
-   - Prometheus + Grafana for metric collection and alerting.
-   - OpenTelemetry for standardized telemetry export.
-   - Vendor‑specific model serving platforms (e.g., NVIDIA Triton Inference Server, Hugging Face Inference API) that support custom hooks for probe injection.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Probe insertion may interfere with model execution if not properly isolated; ensure thread‑safe implementation.
-   - Compliance: Even minimal data collection must be documented; verify that Boolean outputs do not inadvertently expose sensitive input content.
-   - Operational: Over‑aggressive probing could still add latency; monitor for performance regressions during load testing.
-   - Security: Ensure probes cannot be tampered with; implement integrity checks on the monitoring code.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy GateWatch on a single inference endpoint for a 1‑billion‑parameter model.
-   - Configure a basic Boolean rule set (e.g., memory threshold, token repetition) and expose metrics to Prometheus.
-   - Validate that latency remains below 5 ms and that alerts trigger on a synthetic anomaly within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Scale GateWatch across all production LLM endpoints, integrating with the enterprise observability stack.
-   - Develop a policy library of Boolean rules for different compliance domains (data leakage, bias, safety).
-   - Automate rule updates via CI/CD pipelines, ensuring that new model versions inherit monitoring configurations.
-   - Conduct periodic audit reviews to align monitoring outputs with evolving regulatory requirements, maintaining a documented audit trail for UK GDPR.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 20 Nov 2026, 00:32</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.24619v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

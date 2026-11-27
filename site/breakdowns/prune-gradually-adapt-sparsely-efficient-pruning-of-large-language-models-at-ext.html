@@ -322,37 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by Randrianantenaina, Nguyen, Ullah, and Zhang introduces a method called ETAPS (Efficient Training and Adaptive Pruning at Sparsity) that incrementally prunes large language models (LLMs) while fine‑tuning them to recover performance. Instead of a single aggressive pruning step, ETAPS removes a small percentage of weights at a time, allowing the optimizer to adjust with minimal disruption to the learned representations. Experiments on standard benchmarks demonstrate that at 50–90% sparsity, ETAPS consistently outperforms previous state‑of‑the‑art pruning techniques, achieving higher perplexity scores and lower inference latency. The authors report up to 49% reduction in GPU compute time and a five‑fold decrease in memory usage during both training and inference. For enterprise IT, these gains translate directly into lower cloud spend, faster model deployment cycles, and the ability to run high‑capacity LLMs on existing hardware. The incremental approach also mitigates the risk of catastrophic forgetting, which is critical when models must adapt to evolving data or regulatory constraints. Real‑world implications include the feasibility of hosting multiple specialized LLMs on a single GPU cluster, the ability to meet strict SLAs for latency‑sensitive applications, and a clearer path to compliance with data residency requirements by reducing the footprint of model checkpoints. Enterprises that rely on generative AI for customer support, code generation, or data analysis can adopt ETAPS to extend model life cycles, reduce storage costs, and maintain competitive performance without investing in new GPU infrastructure.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Audit current GPU utilization and memory consumption for existing LLM workloads.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure baseline inference latency and throughput on the target hardware.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify the sparsity tolerance of downstream applications (e.g., acceptable accuracy drop).</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Inventory storage costs for model checkpoints and intermediate optimizer states.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a cost‑benefit model: compute projected savings from 49% GPU time reduction versus current cloud spend.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Benchmark ETAPS on a representative subset of your data to quantify accuracy retention at 70% sparsity.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present ROI in terms of reduced GPU hours, lower storage fees, and faster deployment cycles.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Include a risk matrix highlighting the incremental pruning advantage over one‑shot methods.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 NVIDIA A100 or H100 GPUs with mixed‑precision support for efficient sparse tensor operations.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 PyTorch 2.0 with the torch.nn.utils.prune module for custom pruning schedules.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Hugging Face Transformers for model loading and fine‑tuning pipelines.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 NVIDIA TensorRT or ROCm for accelerated inference of sparse models.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">5 Cloud providers’ GPU‑optimized instances (AWS G5, Azure NDv4, GCP A2) for scalability testing.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Potential degradation of model accuracy if pruning steps are too aggressive; monitor validation loss closely.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Ensure that pruning does not inadvertently expose sensitive training data through model inversion attacks; conduct a GDPR impact assessment.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Increased complexity in model versioning and rollback; establish clear CI/CD pipelines for sparse models.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Vendor lock‑in: Proprietary sparse libraries may limit portability; prefer open‑source frameworks where possible.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Implement a pilot ETAPS run on a single LLM (e.g., DistilBERT) using 10% incremental pruning.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Measure inference latency and compare against baseline; document savings in GPU hours.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Deploy the pruned model to a staging environment and validate end‑to‑end performance within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Scale the ETAPS pipeline to all production LLMs, targeting 70–90% sparsity across services.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Integrate sparse model checkpoints into the existing artifact repository with automated metadata tagging.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Develop a governance framework for monitoring model drift post‑pruning and schedule periodic re‑pruning cycles.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">4 Explore hardware‑specific optimizations (e.g., sparse CUDA kernels) to further reduce inference cost over 6–12 months.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 02 Nov 2026, 15:20</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2610.41968v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

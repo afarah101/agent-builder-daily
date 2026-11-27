@@ -71,6 +71,30 @@ SCRAPE_SOURCES = [
     {"url": "https://www.deloitte.com/us/en/insights.html", "name": "Deloitte", "tier": "consulting", "article_selector": "a[href*='/insights/']", "base_url": "https://www.deloitte.com"},
 ]
 
+# Sent with every classify prompt. quality_checks C7-C10 and the judge enforce it: a story that breaks it is held back.
+GROUNDING_RULES = """GROUNDING RULES (a story that breaks one is not published):
+- Use only facts that are in the Content below. If the Content does not say it, do not write it.
+- Every number, price, percentage, date, version and name of a product, company or person that you write
+  must appear in the Content or the Title. Write no other number.
+- Never write a price, cost, benchmark, tier, feature, menu path or setting that the Content does not state.
+- State no prediction as fact. A forward view (a prediction, an implication, why it matters) starts with
+  "Our take:" and comes after the facts.
+- In enterprise_use, name only tools from the Content or from the reader's stack listed above. A time frame
+  for the reader's own work ("this week", "30 days") is allowed there.
+- Never write a placeholder such as "xxxx", "TBD", "[insert" or "example.com".
+"""
+REGENERATE_NOTE = """
+
+Your last answer broke the GROUNDING RULES: {problems}.
+Write the JSON again. Remove every number, name and claim that is not in the Content. Start a forward view with "Our take:"."""
+
+
+def _grounding_problems(article, g):
+    """Why the generated summary and enterprise_use are not grounded in the article's source. [] means they pass."""
+    return quality_checks.grounding_problems({**article, "summary": g.get("summary", ""),
+                                              "enterprise_use": g.get("enterprise_use", ""), "relevance_score": 0})
+
+
 def _parse_classify_output(text):
     if "```" in text:
         text = text.split("```")[1]
@@ -203,7 +227,10 @@ def scrape_articles(source, seen):
             seen_hrefs.add(href)
             if not href.startswith("http"):
                 href = source["base_url"] + href
-            title = link.get_text(strip=True)
+            if quality_checks.is_listing_url(href):  # /news/announcements is a list of stories, not a story
+                continue
+            heading = link.find(["h1", "h2", "h3", "h4"])  # the card's headline, without its teaser text
+            title = (heading or link).get_text(" ", strip=True)
             if not title or len(title) < 10 or href in seen:
                 continue
             seen.add(href)
@@ -213,7 +240,8 @@ def scrape_articles(source, seen):
                 "summary_raw": "",
                 "source": source["name"],
                 "tier": source["tier"],
-                "pub_date": datetime.now().strftime("%d %b %Y"),
+                "pub_date": "",  # a listing page gives no date: fetch_source_text reads it from the article page
+                "scraped": True,
                 "url": href,
             })
             count += 1
@@ -256,8 +284,34 @@ def _refuse_reason(url):
     return None
 
 
-def _fetch_article_text(url, deadline):
-    """Redirects followed by hand so every hop is address-checked; body streamed, capped and stopped at deadline."""
+_DATE_META = ("article:published_time", "og:article:published_time", "datepublished", "date", "pubdate", "publish-date",
+              "publish_date", "parsely-pub-date", "dc.date", "dc.date.issued", "sailthru.date")
+_JSON_DATE = re.compile(r'"datePublished"\s*:\s*"([^"]+)"')
+
+
+def page_facts(html):
+    """What an article page says about itself: {"date": "YYYY-MM-DD", "title": "..."}, each "" when the page does not
+    say. Only explicit publish markers count (meta tags, JSON-LD datePublished, the first <time datetime>): a date in
+    the body text is never taken as the publish date."""
+    soup = BeautifulSoup(html, "html.parser")
+    found = []
+    for tag in soup.find_all("meta"):
+        key = str(tag.get("property") or tag.get("name") or tag.get("itemprop") or "").lower()
+        if key in _DATE_META and tag.get("content"):
+            found.append((_DATE_META.index(key), str(tag["content"])))
+    found = [value for _, value in sorted(found)]
+    found += _JSON_DATE.findall(html if isinstance(html, str) else html.decode("utf-8", "ignore"))
+    stamp = soup.find("time", attrs={"datetime": True})
+    if stamp:
+        found.append(str(stamp["datetime"]))
+    date = next((dt.strftime("%Y-%m-%d") for dt in map(parse_date, found) if dt), "")
+    og = soup.find("meta", attrs={"property": "og:title"})
+    return {"date": date, "title": " ".join(str(og.get("content") or "").split()) if og else ""}
+
+
+def _fetch_article_text(url, deadline, facts=None):
+    """Redirects followed by hand so every hop is address-checked; body streamed, capped and stopped at deadline.
+    facts: a dict that gets the page's own publish date and title (page_facts)."""
     # shortcut: the host is resolved for the check and again by requests, so DNS rebinding can slip past; pin the
     # resolved IP in the connection if feeds start pointing at hostile hosts.
     for _ in range(MAX_REDIRECTS + 1):
@@ -282,20 +336,29 @@ def _fetch_article_text(url, deadline):
                 resp.close()
                 raise TimeoutError(f"over {FETCH_DEADLINE}s")
         resp.close()
+        if facts is not None:
+            facts.update(page_facts(bytes(body)))
         return (trafilatura.extract(bytes(body), include_comments=False, include_tables=False) or "").strip()
     raise ValueError(f"more than {MAX_REDIRECTS} redirects")
 
 
 def fetch_source_text(article):
-    """Full article text (up to SOURCE_CAP) when the snippet is thin; the snippet on any failure or limit."""
+    """Full article text (up to SOURCE_CAP) when the snippet is thin; the snippet on any failure or limit.
+    A scraped article also gets its pub_date and title from the article page itself. No date on the page leaves
+    pub_date empty, and classify_news then holds the story back: the date shown is the source's own or none."""
     snippet = article.get("summary_raw") or ""
     if len(snippet) >= MIN_SNIPPET or not article.get("url"):
         return snippet[:SOURCE_CAP]
     box, deadline = {}, time.monotonic() + FETCH_DEADLINE
+    facts = {} if article.get("scraped") else None
 
     def work():
         try:
-            box["text"] = _fetch_article_text(article["url"], deadline)
+            box["text"] = _fetch_article_text(article["url"], deadline, facts) if facts is not None \
+                else _fetch_article_text(article["url"], deadline)
+            if facts:
+                article["pub_date"] = format_date(facts.get("date", ""))
+                article["title"] = facts.get("title") or article["title"]
         except Exception as e:
             box["error"] = e
 
@@ -353,6 +416,9 @@ def fetch_news(state):
                 uid = url or title
                 if uid in seen or not title:
                     continue
+                if quality_checks.is_listing_url(url):
+                    print("[QUALITY] SKIPPED listing page, not an article: " + url)
+                    continue
                 seen.add(uid)
                 summary = re.sub(r"<[^>]+>", "", entry.get("summary", "") or entry.get("description", ""))[:500].strip()
                 raw_articles.append({
@@ -402,10 +468,17 @@ def classify_news(state):
     articles = state["raw_articles"]
     print("[DEBUG] Classifying " + str(len(articles)) + " articles...")
     classified = []
+    _run["held_date"] = _run["regenerated"] = 0
     limit = min(len(articles), MAX_ITEMS)
     for i in range(limit):
         article = articles[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + article["title"][:60])
+        published = quality_checks.parse_date(article.get("pub_date"))  # reads "06 Oct 2026", the form format_date writes
+        if article.get("scraped") and not (published and published >= EIGHT_WEEKS_AGO):
+            why = "is older than 8 weeks" if published else "has no publish date on its page"
+            print("[QUALITY] HELD BACK " + article["title"][:70] + ": the source " + why)
+            _run["held_date"] = _run.get("held_date", 0) + 1
+            continue
         title = article["title"]
         source = article["source"]
         content = (article.get("source_text") or article["summary_raw"])[:SOURCE_CAP]
@@ -457,18 +530,19 @@ CALIBRATION EXAMPLES:
 OUTPUT FIELDS:
 
 summary: 2 sentences.
-S1: What happened -- name the specific product, company, feature.
-    No vague language.
-S2: Why it matters to an IT engineer specifically.
+S1: What happened -- name the specific product, company, feature,
+    as the Content states it. No vague language.
+S2: Starts with "Our take:". Why it matters to an IT engineer specifically.
 BAD: "An AI company released a new feature."
 GOOD: "JumpCloud has added AI-driven conditional access policies
-that flag anomalous login patterns in real time. This gives IT
-engineers an automated first line of defence against credential
+that flag anomalous login patterns in real time. Our take: this gives
+IT engineers an automated first line of defence against credential
 stuffing without manual rule-writing."
 
 enterprise_use: How the reader specifically can use or act on this.
 HIGH signal (score 7+): 3 sentences.
-  S1: The specific action -- "Go to [tool] and check [setting] this week"
+  S1: The specific action this week, with a tool the Content names
+      or a tool from his stack. Do not invent a setting or menu path.
   S2: What risk or opportunity inaction creates
   S3: Which of his tools is most affected or most useful here
 MEDIUM signal (score 4-6): 2 sentences.
@@ -476,11 +550,12 @@ MEDIUM signal (score 4-6): 2 sentences.
   S2: Why it matters for his workflow
 LOW signal (score 1-3): 1 sentence max.
 BAD: "IT teams could consider implementing this."
-GOOD: "Check your JumpCloud admin console under Insights >
-Anomalies -- enable the new AI detection flag if available
-on your tier. Missing this means relying solely on manual
-log review for suspicious login patterns."
+GOOD: "Check your JumpCloud admin console this week for the new
+AI detection feature and enable it if your plan has it. Missing
+this means relying solely on manual log review for suspicious
+login patterns."
 
+{GROUNDING_RULES}
 category: pick the MOST SPECIFIC from:
 Security, API Update, Model Release, Product Launch,
 Research, Regulation, Tools, Infrastructure, Other
@@ -509,6 +584,16 @@ Content: {content}
             text = groq_complete([{"role": "user", "content": classify_prompt}], max_tokens=400,
                                  validate=_parse_classify_output, call_site="news.classify")
             g = _parse_classify_output(text)
+            problems = [] if source == HEADLINE_SOURCE else _grounding_problems(article, g)
+            if problems:  # regenerate once; the quality gate holds the story back if the second answer fails too
+                print("[QUALITY] REGENERATE " + title[:60] + ": " + "; ".join(problems))
+                _run["regenerated"] = _run.get("regenerated", 0) + 1
+                try:
+                    retry = classify_prompt + REGENERATE_NOTE.format(problems="; ".join(problems))
+                    g = _parse_classify_output(groq_complete([{"role": "user", "content": retry}], max_tokens=400,
+                                                             validate=_parse_classify_output, call_site="news.classify.regenerate"))
+                except Exception as e:
+                    print("[QUALITY] Regenerate failed, first answer kept for the gate: " + str(e)[:120])
             if source == HEADLINE_SOURCE:  # keep the score, drop text written from the headline alone
                 g["summary"] = g["enterprise_use"] = ""
             classified.append({
@@ -543,7 +628,12 @@ def save_and_archive(state):
         summary["fails"]["classify_failed"] = [f"{x['title'][:50]}: classify call failed" for x in failed]
     _quality.clear(); _quality.update(summary)
     print(f"[QUALITY] {len(kept)} kept, {len(held)} held back, {len(failed)} classify_failed")
-    kept, judge_held, judge_stats = judge.gate(kept, "title", "summary_raw", "summary", "enterprise_use")
+    # log, steps_key, extra_rules by position: the judge also fails ungrounded claims and unlabelled forward views
+    kept, judge_held, judge_stats = judge.gate(kept, "title", "summary_raw", "summary", "enterprise_use",
+                                               print, None, judge.GROUNDING_RULES)
+    print(f"[GROUNDING] news: {len(kept)} published, {len(held) + len(judge_held) + _run.get('held_date', 0)} held back "
+          f"({len(held)} quality checks, {len(judge_held)} judge, {_run.get('held_date', 0)} source date), "
+          f"{_run.get('regenerated', 0)} regenerated once")
     _judge.clear(); _judge.update(judge_stats)
     state = {**state, "classified_news": kept}
     _run["written"] = len(kept)

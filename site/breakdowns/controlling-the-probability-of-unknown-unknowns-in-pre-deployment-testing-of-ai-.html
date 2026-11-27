@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by Li, Hays, Ramdas, and Raghavan introduces an anytime‑valid confidence sequence for estimating the probability of unseen failures in AI systems during pre‑deployment testing. Traditional fixed‑sample methods require a predetermined number of test runs and can either over‑test (wasting resources) or under‑test (missing rare failures). The authors construct a sequential bound that tightens as more test data accumulate, allowing engineers to stop testing once the upper bound on the failure probability falls below a pre‑set risk tolerance. They validate the approach on a real coding‑agent dataset, demonstrating that the confidence sequence achieves tighter bounds than conventional bootstrapping or Bayesian credible intervals, and that it can reduce the number of required test runs by up to 30% while maintaining a 95% confidence that the true failure rate is below the threshold.</p><p>For enterprise IT, this method directly addresses the challenge of scaling AI testing in regulated environments where the cost of a post‑deployment failure can be high. By providing a statistically rigorous stopping rule, teams can allocate testing resources more efficiently, reduce time‑to‑market, and maintain compliance with internal risk frameworks. The tighter bounds also mean fewer false positives in safety assessments, which can otherwise lead to unnecessary remediation cycles.</p><p>Real‑world implications include the ability to integrate the confidence sequence into continuous integration pipelines, enabling automated decision points for test completion. Organizations can set enterprise‑wide risk thresholds (e.g., 1% failure probability) and let the algorithm determine when sufficient evidence has been gathered. This reduces manual oversight, aligns testing effort with actual risk exposure, and provides auditable evidence for regulators. The approach is also adaptable to multi‑model or ensemble deployments, where unseen interactions can cause failures that are difficult to capture with static test suites.</p><p>Overall, the paper offers a practical, statistically sound tool that can be embedded in existing test harnesses, providing measurable savings in testing time and cost while preserving or improving safety guarantees for AI systems deployed at scale.</p></div>
+      <div class="summary-body"><p>The paper presents a method that lets you decide when enough AI testing is done by giving a running upper limit on the chance of unseen failures. They built an anytime‑valid confidence sequence that can be checked after each test run and found tighter bounds than existing techniques on a real coding‑agent dataset. This helps you stop testing sooner while keeping a statistical safety margin.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Audit current test coverage metrics: number of test runs, failure rates, and variance across runs.  
-   • Identify the risk tolerance threshold that aligns with business impact (e.g., 0.5% acceptable failure probability).  
-   • Map existing test pipelines to determine where sequential stopping can be inserted (CI, staging, or production preview).  
-   • Verify that data used for testing meets GDPR requirements: ensure no personally identifiable information is included in test inputs or logs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a cost‑benefit model: estimate current testing hours, compute potential reduction (30% as shown in the study), and translate into labor cost savings.  
-   • Include risk reduction metrics: show how tighter bounds lower the probability of post‑deployment incidents.  
-   • Benchmark against current fixed‑sample approach: present comparative tables of test runs, confidence intervals, and stopping times.  
-   • Present a pilot scope: 3–5 AI services, 30‑day trial, with defined success criteria (e.g., achieve 95% confidence with ≤10% fewer runs).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• Open‑source: Python libraries such as `statsmodels`, `scipy`, or custom implementations of sequential confidence sequences.  
-   • Vendor: Databricks MLflow for experiment tracking with custom metrics; Azure DevOps or GitHub Actions for pipeline integration.  
-   • Monitoring: Prometheus + Grafana to visualize confidence bounds in real time.  
-   • Compliance: OneTrust or TrustArc for GDPR impact assessments.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Technical: Mis‑specification of the confidence sequence (e.g., incorrect alpha level) can lead to under‑estimation of risk.  
-   • Compliance: If test data contains user data, GDPR requires data minimization; ensure anonymization before analysis.  
-   • Operational: Over‑reliance on statistical bounds may mask systematic failures that never surface in random tests.  
-   • Integration: Existing CI tools may not support dynamic stopping; custom scripts may be needed.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Implement a proof‑of‑concept script that computes the anytime‑valid bound on a subset of existing test logs.  
-   • Run the script on the last 200 test cases and compare the bound to the fixed‑sample 95% CI.  
-   • Document the difference and present findings to stakeholders within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">• Deploy the confidence sequence as a reusable library in the AI testing framework.  
-   • Automate the stopping rule in the CI pipeline, triggering deployment approval once the bound falls below the risk threshold.  
-   • Extend the approach to multi‑model ensembles and integrate with model monitoring for post‑deployment drift detection.  
-   • Conduct quarterly reviews to recalibrate risk thresholds and update the statistical model as new data arrives.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 13 Nov 2026, 16:57</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

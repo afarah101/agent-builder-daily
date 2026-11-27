@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>LogCDM is a lightweight anomaly detection system designed for enterprise log monitoring. The authors investigated whether a compact Transformer architecture combined with a graph‑attention embedding and a frequency‑weighted chi‑squared drift metric could detect anomalous user sessions without the computational overhead of large models or GPU acceleration. They constructed a behavioral graph from sequential log events, applied a small Transformer to encode the graph, and fused the resulting embeddings with a chi‑squared drift score that captures deviations in event frequency distributions. Evaluation on multiple real‑world log datasets showed that LogCDM achieved F1 scores within 1–2 percentage points of state‑of‑the‑art methods while requiring less than 11 ms per session on a standard CPU. The study also demonstrated that the system scales linearly with log volume and that its lightweight design enables deployment on on‑premises servers without specialized hardware.</p><p>For enterprise IT, this is significant because log anomaly detection is a core component of security operations, compliance monitoring, and incident response. Traditional solutions often rely on large neural networks or require GPUs, which increases infrastructure costs and complicates deployment in regulated environments. LogCDM’s CPU‑friendly design means it can be integrated into existing SIEM pipelines or deployed as a sidecar in micro‑service architectures without additional hardware. The high detection accuracy combined with low latency allows near‑real‑time alerts, reducing mean time to detection and containment. Moreover, the interpretable drift score provides actionable insights into which event types are contributing to anomalies, aiding root‑cause analysis and compliance reporting.</p><p>Real‑world implications include the ability to run continuous log monitoring on commodity servers, lowering capital and operational expenditures. Enterprises can deploy LogCDM in data centers or edge locations where GPU resources are scarce, improving coverage for distributed applications. The model’s small footprint also simplifies compliance with data residency and privacy regulations, as it can be hosted locally without transmitting logs to external services. Overall, LogCDM offers a pragmatic balance between performance, resource usage, and interpretability that aligns with the constraints of modern enterprise IT environments.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current log ingestion pipeline: volume per second, log format diversity, existing anomaly detection tools, and CPU utilization.
-   - Assess latency requirements: determine acceptable alert delay (e.g., &lt; 30 s) and compare against current system.
-   - Identify compliance constraints: UK GDPR data handling, retention policies, and whether logs contain personal data requiring encryption at rest.
-   - Measure baseline detection accuracy: run existing rule‑based or ML models on a sample dataset to establish current F1, precision, and recall.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case highlighting cost savings: estimate GPU vs CPU cost differential, projected CPU hours saved, and reduction in false positives (estimated 20–30 %).
-   - Use metrics: target F1 ≥ 0.90, latency &lt; 11 ms per session, CPU usage &lt; 10 % on a 4‑core server.
-   - Present ROI: calculate savings from avoided incidents, reduced analyst time, and lower hardware spend over 12 months.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- LogCDM open‑source implementation (GitHub repository) for on‑prem deployment.
-   - Docker or Kubernetes for containerized deployment.
-   - Prometheus/Grafana for monitoring CPU and latency metrics.
-   - ELK Stack or Splunk for log aggregation; integrate LogCDM as a plugin or sidecar.
-   - Python 3.10+, PyTorch (CPU backend), and scikit‑learn for chi‑squared calculations.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: model drift over time may reduce accuracy; need periodic re‑training or drift detection.
-   - Compliance: if logs contain PII, ensure encryption and access controls; UK GDPR requires data minimisation and purpose limitation.
-   - Operational: insufficient CPU resources could cause backlogs; ensure horizontal scaling or queueing.
-   - Security: exposing the model endpoint could become a vector; secure with TLS and role‑based access.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy LogCDM in a sandbox environment: containerize the model, feed a 24‑hour log sample, and compare alerts against existing system.
-   - Configure a simple Prometheus alert for CPU usage spikes; set threshold at 80 % to trigger investigation.
-   - Document findings and adjust hyperparameters (e.g., chi‑squared threshold) within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate LogCDM into the central SIEM pipeline, routing anomaly scores to incident ticketing systems (e.g., ServiceNow).
-   - Implement automated retraining: schedule nightly ingestion of new log data, retrain the Transformer on a dedicated CPU node, and validate performance before deployment.
-   - Expand coverage: extend the behavioral graph to include network flow logs and application metrics, enabling multi‑modal anomaly detection.
-   - Conduct a compliance audit annually to ensure continued alignment with UK GDPR and other relevant regulations.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 10 Nov 2026, 14:44</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.12775v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

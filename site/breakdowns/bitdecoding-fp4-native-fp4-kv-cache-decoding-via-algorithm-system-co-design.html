@@ -322,37 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>BitDecoding‑FP4 is a research effort that addresses the accuracy‑bandwidth trade‑off inherent in 4‑bit quantisation of key‑value (KV) caches used in large language models (LLMs). The authors introduce two complementary innovations: a set of quantisation tricks that preserve the statistical distribution of BF16 activations, and a hardware‑level softmax optimisation that reduces the computational overhead of the softmax operation when operating on 4‑bit data. The study was conducted on NVIDIA GPUs, specifically the A100 and H100 series, and demonstrates that the combined approach yields a mean absolute error within 0.5% of full BF16 precision while delivering a 2.4–3× increase in serving throughput. The throughput gains are realised without a proportional increase in GPU memory footprint; the 4‑bit KV cache reduces memory usage by roughly 75% compared to BF16, allowing larger context windows or more concurrent inference requests.</p><p>For enterprise IT, this work is significant because it directly tackles two critical constraints in cloud‑hosted LLM services: memory capacity and inference latency. By enabling near‑BF16 accuracy at a fraction of the memory cost, data centres can host larger models or increase request concurrency without scaling GPU fleets. The throughput improvement translates to lower operational cost per token and higher revenue potential for SaaS providers. Additionally, the algorithm‑system co‑design approach demonstrates that software quantisation techniques can be tightly coupled with GPU kernel optimisations, a pattern that can be replicated for other model components.</p><p>Real‑world implications include the ability to upgrade existing GPU clusters to support 4‑bit KV caching with minimal software changes, the potential to reduce the number of GPUs required for a given throughput target, and the opportunity to offer higher‑context LLM services to customers without additional hardware investment. The approach also aligns with sustainability goals by lowering energy consumption per inference. Enterprises that adopt BitDecoding‑FP4 can expect measurable reductions in GPU utilisation, improved service level agreements (SLAs), and a competitive edge in offering cost‑effective, high‑performance LLM deployments.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Benchmark current KV cache usage: measure memory consumption and latency for BF16 versus 4‑bit quantised models on your GPU fleet.  
-   • Profile softmax execution time and GPU utilisation with existing inference pipelines.  
-   • Verify that your LLM framework (e.g., PyTorch, TensorRT) supports custom quantisation kernels and that the GPU drivers are at least 470.57 or newer for optimal softmax support.  
-   • Assess data‑flow paths to ensure that the 4‑bit cache can be integrated without breaking existing model loading or tokenisation stages.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a cost‑benefit model: compute the reduction in GPU memory (≈75%) and the projected throughput increase (2.4–3×).  
-   • Translate these figures into financial metrics: estimate the number of additional inference requests per GPU, the expected revenue uplift, and the payback period for GPU upgrades.  
-   • Include a risk mitigation plan that addresses potential accuracy regressions and compliance checks.  
-   • Present a phased rollout schedule with clear KPIs (latency, error rate, GPU utilisation).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• NVIDIA TensorRT with FP4 support for deployment.  
-   • PyTorch 2.0 with custom quantisation modules or ONNX Runtime with FP4 extensions.  
-   • NVIDIA GPU Cloud (NGC) containers that include the BitDecoding‑FP4 kernels.  
-   • Grafana + Prometheus for real‑time monitoring of KV cache metrics.  
-   • GitHub Actions or Jenkins for automated CI/CD of quantised model artifacts.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Accuracy drift: validate that the 4‑bit quantisation does not exceed acceptable error thresholds for your use cases.  
-   • Compliance: ensure that any data stored in the KV cache complies with UK GDPR, particularly if the cache holds user‑specific context that could be considered personal data.  
-   • Vendor lock‑in: reliance on NVIDIA-specific kernels may limit portability to other GPU vendors.  
-   • Operational complexity: adding a new quantisation layer increases deployment complexity; require training for ops staff.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Deploy the BitDecoding‑FP4 kernels on a single test GPU cluster using the provided NGC container.  
-   • Run a benchmark suite comparing BF16 and 4‑bit KV cache on a representative inference workload.  
-   • Document the memory savings and latency improvements; share results with stakeholders within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">• Integrate 4‑bit KV caching into the production inference pipeline across all GPU nodes.  
-   • Automate model conversion to 4‑bit quantised format as part of the CI/CD pipeline.  
-   • Expand the optimisation to other model components (e.g., attention weights) to further reduce memory usage.  
-   • Conduct a periodic audit every 6 months to reassess accuracy, performance, and compliance, adjusting the quantisation strategy as newer GPU architectures and software releases become available.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 09 Nov 2026, 15:51</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.09825v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>MCP‑Eco addresses the lack of a unified view of Model Context Protocol (MCP) deployments across an organization. The study collected configuration files, server project metadata, and version‑control history from 1,200 MCP servers and 3,400 consumer projects. By normalizing these data into 19 relational tables and exporting them as a 16.9 million‑record Parquet dataset, the authors enabled cross‑project correlation of MCP interface definitions, dependency graphs, and pull‑request activity. Analysis revealed that 68 % of consumer projects rely on a single MCP server, while 22 % use multiple servers for redundancy or feature segregation. Interface churn was highest in the “data‑pipeline” category, with an average of 4.3 interface changes per year, correlating with higher defect rates in downstream consumers. The dataset also exposed a 15 % gap between declared dependencies in configuration files and actual repository references, indicating potential drift and risk of runtime failures.</p><p>For enterprise IT, this work provides a concrete method to audit MCP usage, detect misconfigurations, and quantify integration risk. By mapping consumer–server relationships, teams can identify single points of failure, enforce consistent interface contracts, and prioritize refactoring efforts. The public dataset also serves as a benchmark; organizations can compare their MCP churn rates, dependency alignment, and PR velocity against the community baseline, informing capacity planning and governance. Real‑world implications include improved reliability of data‑centric services, reduced incident response time due to clearer dependency mapping, and a data‑driven foundation for policy enforcement around MCP interface evolution. The study demonstrates that a structured, linked dataset can transform fragmented operational knowledge into actionable insights, enabling proactive maintenance rather than reactive troubleshooting.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Extract current MCP configuration files (YAML/JSON) and import into a lightweight relational store (e.g., SQLite).  
-   • Run a dependency graph generator (e.g., Graphviz or custom Python script) to map consumer‑server relationships.  
-   • Compare declared dependencies against repository manifests (pom.xml, package.json) to quantify drift.  
-   • Measure interface churn: count unique interface definitions per year and correlate with incident tickets.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a business case around reducing MTTR for MCP‑dependent services.  
-   • Use metrics: current MTTR (days), interface churn rate (changes/year), and dependency drift percentage.  
-   • Benchmark against MCP‑Eco data: target a 20 % reduction in churn and a 30 % alignment improvement.  
-   • Estimate cost savings: fewer incidents × average cost per incident.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• Data ingestion: Apache NiFi or AWS Glue for automated extraction of config files.  
-   • Storage: Amazon S3 (Parquet) or Azure Data Lake for scalable, query‑able storage.  
-   • Analysis: Apache Spark or Presto for large‑scale joins; Grafana for dashboards.  
-   • Dependency scanning: SonarQube or Snyk to detect drift.  
-   • CI integration: GitHub Actions or GitLab CI to trigger churn metrics on PRs.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Technical: Mis‑parsing of legacy configuration formats leading to false positives.  
-   • Compliance: Exporting sensitive server metadata may breach UK GDPR; ensure data anonymization before public sharing.  
-   • Operational: Over‑loading CI pipelines with churn analysis could increase build times.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Deploy a single‑script audit that runs nightly, outputs a CSV of drift percentage per consumer, and emails the result to the ops team.  
-   • This takes &lt;30 days and provides immediate visibility into configuration alignment.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">• Implement a continuous governance framework:  
-     – Automate data ingestion into a central Parquet lake.  
-     – Build a scheduled Spark job that updates churn and drift metrics weekly.  
-     – Integrate metrics into a ServiceNow CMDB for impact analysis.  
-   • Over 6–12 months, this will enable predictive risk scoring for MCP deployments and support a formal change‑management policy.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 05 Nov 2026, 14:31</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.06897v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

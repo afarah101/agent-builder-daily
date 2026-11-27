@@ -322,38 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>AutoRefine is a research effort from ETH that addresses the drift problem in large language model (LLM) code reviewers that accompany continuous integration pipelines. The study focused on a production workflow where an LLM judge is used to predict whether a pull request should be merged. As the codebase and CI tests evolve, the judge’s accuracy degrades because its prompt no longer reflects the current decision logic. The authors introduced an automated feedback loop that uses actual merge outcomes as labels. A human teacher reviews the judge’s predictions, flags misclassifications, rewrites the prompt, and updates the training data. The loop is run continuously, allowing the judge to self‑calibrate to the latest workflow rules. Quantitative results show a 15–20% increase in agreement with real merge decisions compared to a static prompt baseline. Noise in the judge’s predictions dropped by 30%, and the system was able to surface ambiguous cases that required additional human review. For enterprise IT, this means that LLM‑based code review can remain reliable without constant manual prompt engineering. The approach also provides a clear audit trail of how the judge’s decision logic evolves, which is valuable for compliance and governance. In practice, companies that rely on automated merge gates can reduce false positives and negatives, lower the cost of manual triage, and maintain tighter alignment between automated decisions and business rules. The study demonstrates that a lightweight, outcome‑driven calibration loop can be integrated into existing CI/CD pipelines with minimal overhead, offering a scalable path to maintain high‑quality automated code review at scale.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit the current LLM judge configuration: prompt text, temperature, token limits, and the mapping between judge outputs and merge gates.
-   - Collect historical merge data: number of PRs, merge decisions, rejection reasons, and time to merge.
-   - Measure baseline agreement: compare judge predictions against actual merge outcomes over the last 3 months.
-   - Identify drift points: look for periods where agreement drops correlate with codebase or CI changes.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case around reducing manual triage effort. Use the baseline agreement metric and calculate the expected reduction in review hours (e.g., 20% drop in false positives → X hours saved).
-   - Include cost of false negatives (missed defects) and quantify potential risk mitigation.
-   - Benchmark against industry averages for automated code review accuracy (e.g., 80–85% agreement is typical; AutoRefine targets &gt;90%).
-   - Present a phased ROI: quick win in 30 days, long‑term gains over 12 months.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI GPT‑4 or Azure OpenAI Service for the judge engine.
-   - GitHub Actions or GitLab CI for pipeline integration.
-   - Data labeling platforms such as Label Studio or Prodigy for teacher reviews.
-   - Monitoring tools: Datadog, Prometheus, or Grafana to track agreement metrics.
-   - Version control for prompts: Git or DVC to manage prompt revisions.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: prompt drift may still occur if the feedback loop is not frequent; ensure idempotent prompt updates.
-   - Compliance: UK GDPR requires that any automated decision be auditable; maintain logs of judge outputs, human reviews, and prompt changes.
-   - Operational: Over‑reliance on the judge could mask underlying CI failures; keep a fallback manual review path.
-   - Data privacy: Ensure that code snippets fed to the LLM do not contain sensitive information; use on‑prem or private‑cloud LLMs if needed.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a simple feedback script that records judge predictions and actual merge decisions into a CSV.
-   - Run a one‑week audit to compute current agreement.
-   - Identify the top 5 misclassified PRs and manually rewrite the prompt for those cases.
-   - Measure agreement after the prompt tweak; iterate if improvement &gt;5%.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Automate the teacher review loop: schedule nightly jobs that flag low‑confidence predictions for human review.
-   - Implement prompt versioning and A/B testing to evaluate new prompts before rollout.
-   - Integrate compliance checks: generate audit reports that map judge decisions to policy rules.
-   - Expand the system to other automated gates (e.g., security scans, performance tests) to create a unified outcome‑driven calibration framework across the CI/CD pipeline.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 09 Nov 2026, 15:51</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.09291v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

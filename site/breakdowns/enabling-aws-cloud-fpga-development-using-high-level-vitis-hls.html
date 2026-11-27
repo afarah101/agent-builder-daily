@@ -322,31 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by David Rostcheck demonstrates a complete end‑to‑end pipeline that enables developers to write machine‑learning models in PyTorch, automatically translate them into Vitis High‑Level Synthesis (HLS) C code, compile that into an Amazon EC2 F2 FPGA image, and execute the resulting design on AWS cloud FPGAs. The authors validate the workflow by deploying a TinyBERT encoder layer on an F2 instance, measuring inference latency and throughput. While the prototype confirms that the conversion chain is functional, the observed performance on the FPGA is currently inferior to equivalent CPU or GPU executions, highlighting the need for further optimisation of the HLS generation and resource utilisation. For enterprise IT, this research is significant because it removes a major barrier to adopting FPGA acceleration in the cloud: the lack of a seamless, high‑level development workflow. By leveraging familiar Python/ML frameworks and AWS infrastructure, organisations can prototype and evaluate FPGA‑based acceleration without deep hardware expertise. The real‑world implications include the potential to offload inference workloads to FPGAs for cost‑effective, low‑latency processing, particularly in data‑center environments where power and thermal budgets are critical. However, the current performance gap indicates that enterprises must invest in optimisation, profiling, and possibly custom kernel development to realise tangible benefits. The case study also underscores the importance of integrating FPGA workloads into existing DevOps pipelines, monitoring, and governance frameworks, setting the stage for future work that could bring competitive performance parity with GPUs while maintaining the flexibility of cloud‑based FPGA resources.</p></div>
+      <div class="summary-body"><p>This research builds a full toolchain that lets developers write high‑level ML code in PyTorch, convert it to Vitis HLS C, then to an AWS EC2 F2 FPGA image, and run it on cloud FPGAs. It solves the gap of a complete workflow from code to FPGA on AWS, demonstrating a TinyBERT encoder layer running on a cloud FPGA. The result shows the pipeline works but current performance is worse than CPUs/GPU, indicating room for optimisation.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory existing ML inference workloads: batch size, latency requirements, and current CPU/GPU utilisation.
-   - Profile current PyTorch models for compute‑heavy kernels that could benefit from hardware acceleration.
-   - Assess AWS account capacity for EC2 F2 instances, including cost, region availability, and network bandwidth to data sources.
-   - Verify compliance requirements (e.g., UK GDPR) for data residency on AWS F2 instances.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: compare current CPU/GPU inference cost per inference against projected FPGA cost (instance hourly rate, data transfer, and potential optimisation savings).
-   - Include performance metrics: target latency reduction (e.g., 30% lower than GPU), throughput increase, and power consumption per inference.
-   - Highlight risk mitigation: demonstrate that the pipeline can be rolled back to CPU/GPU if FPGA optimisation stalls.
-   - Present a phased pilot: 3‑month proof of concept with measurable KPIs.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Xilinx Vitis HLS for C/C++ synthesis.
-   - Xilinx SDAccel or Vitis AI for model conversion.
-   - AWS F2 EC2 instances (e.g., f2.2xlarge) and associated AMIs.
-   - AWS CloudFormation or Terraform for infrastructure as code.
-   - NVIDIA TensorRT or Intel OpenVINO for baseline GPU/CPU comparison.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: limited optimisation of HLS-generated kernels leading to sub‑optimal performance; potential resource fragmentation on F2 instances.
-   - Compliance: ensuring that model weights and training data remain within UK GDPR‑approved regions; encryption of data at rest and in transit.
-   - Operational: lack of mature monitoring for FPGA utilisation; potential vendor lock‑in to Xilinx tooling.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a simple PyTorch model (e.g., ResNet‑18) through the existing conversion pipeline to an F2 instance and benchmark inference latency versus a GPU baseline. This can be completed in &lt;30 days and provides immediate visibility into the current performance gap.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, establish a dedicated FPGA optimisation team to refine HLS code, explore custom kernel libraries, and integrate profiling tools (e.g., Xilinx SDx Analyzer). Parallelly, implement continuous integration pipelines that automatically trigger FPGA builds on code commits, ensuring rapid iteration. The goal is to achieve performance parity with GPUs while reducing inference cost and power consumption, thereby enabling large‑scale deployment of ML inference workloads on AWS F2 FPGAs.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 05 Nov 2026, 14:31</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.06829v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

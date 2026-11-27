@@ -322,35 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Shifter Quantization (SQ) and its SHI variant were evaluated as a method for reducing the bit‑width of integer matrix multiplication in large language model (LLM) inference. The study focused on replacing full‑width INT8 or INT16 operands with low‑bit representations (as low as INT2) while maintaining acceptable accuracy. The key technique involves reconstructing the full‑width operands by appending a shared high‑order bit or a small set of shared bits to the low‑bit values. This approach preserves the dynamic range of the original tensors without the need for full‑precision scaling factors.</p><p>Experimental results show that for prefill workloads, a 2‑bit SQ implementation can achieve up to 3.8× higher throughput compared to standard INT8 kernels, with a modest increase in KL divergence that remains below the threshold for most downstream tasks. For batch inference, the 8‑bit SHI variant delivers a 27% speed improvement while reducing KL divergence by up to 15% relative to baseline INT8 quantization. The gains are most pronounced on GPUs with high memory bandwidth, where the reduced data movement translates directly into lower latency and higher utilization.</p><p>For enterprise IT, these findings imply that LLM inference can be scaled more cost‑effectively. By shifting to SQ/SHI, data centers can run more inference requests per GPU, lower power consumption, and reduce the need for expensive high‑bandwidth memory upgrades. The technique also aligns with current trends toward model compression and edge deployment, as the low‑bit kernels are compatible with existing CUDA and cuBLAS libraries with minimal code changes.</p><p>Real‑world implications include the ability to offer higher throughput for chat or recommendation services without increasing GPU headcount, a measurable reduction in inference cost per token, and improved compliance with data residency requirements by enabling more efficient on‑prem deployment. The method also supports rapid prototyping of new LLM variants, as the quantization process is lightweight and can be integrated into existing training pipelines with minimal overhead.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current LLM inference workloads to identify prefill versus decode ratios.
-   - Measure GPU memory bandwidth, compute utilization, and latency for INT8 kernels.
-   - Benchmark KL divergence and perplexity on a representative validation set.
-   - Identify GPU models that support low‑bit integer operations (e.g., NVIDIA Ampere and newer).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: calculate current per‑token inference cost, projected savings from 3.8× prefill throughput, and 27% batch speedup.
-   - Include metrics: GPU utilization increase, power draw reduction, and potential headcount savings.
-   - Present a phased rollout plan with ROI timelines (e.g., 6–12 months).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA CUDA Toolkit with cuBLAS and cuDNN libraries that support INT4/INT2 kernels.
-   - NVIDIA TensorRT for deployment optimization.
-   - Open-source frameworks: Hugging Face Transformers with quantization support, ONNX Runtime with low‑bit kernels.
-   - Vendor-specific solutions: NVIDIA DGX systems, AMD ROCm if applicable.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Accuracy drift: monitor KL divergence and downstream task performance; set thresholds for rollback.
-   - Compliance: ensure that quantization does not alter data handling in a way that violates UK GDPR (e.g., inadvertent data leakage through shared bits).
-   - Operational: increased debugging complexity for low‑bit kernels; need for specialized profiling tools.
-   - Vendor lock‑in: reliance on specific GPU architectures may limit future hardware choices.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Implement a pilot on a single GPU: replace INT8 kernels with INT4 SQ for prefill in a controlled environment.
-   - Validate throughput gains and accuracy on a small test set within 2–3 weeks.
-   - Document performance metrics and share with stakeholders.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate SQ/SHI into the CI/CD pipeline for model training and inference deployment.
-   - Expand to edge devices by porting low‑bit kernels to ARM or NVIDIA Jetson platforms.
-   - Conduct a comprehensive audit of all LLM services, migrating eligible workloads to SQ/SHI over 6–12 months.
-   - Establish governance for continuous monitoring of accuracy and compliance, with automated alerts for drift.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 26 Nov 2026, 01:45</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.33080v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

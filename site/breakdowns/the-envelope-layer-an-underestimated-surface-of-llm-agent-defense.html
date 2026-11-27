@@ -322,38 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study investigates the “envelope layer,” the mechanism by which inputs to a large language model (LLM) agent are labeled and authenticated before processing. Researchers varied label strength (e.g., simple tags versus multi‑layered contextual markers), authenticity of the envelope (verified versus spoofed), and the agent’s memory state (recent conversation context versus reset). They measured the frequency of policy violations or unwanted behavior, defined as the agent generating disallowed content or deviating from a predefined task. Results show that strong labeling alone does not reduce risk unless the envelope is authenticated; an unauthenticated but strong label can still be bypassed. Moreover, the agent’s memory has a larger impact on risk than any label adjustment: a memory state that includes prior disallowed content can trigger policy violations even with perfect labeling. The envelope is therefore a dynamic surface that shifts with context, not a static defense.</p><p>For enterprise IT, this finding is critical because many organizations rely on LLM agents for customer support, code generation, or data analysis. If the envelope layer is misconfigured, the agent can inadvertently produce sensitive data leaks, policy violations, or compliance breaches. The study underscores the need to treat envelope management as a first‑line security control, integrating it with authentication, monitoring, and memory management. Real‑world implications include the necessity to audit envelope integrity, enforce strict authentication protocols, and design memory‑reset policies that prevent context leakage. Enterprises must also consider how envelope changes affect audit logs and compliance reporting, particularly under UK GDPR where data minimization and purpose limitation are required. The work suggests that a one‑size‑fits‑all envelope policy is insufficient; instead, dynamic, context‑aware envelope controls should be implemented to mitigate the risk of LLM agents slipping into unwanted behavior.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all LLM agents in production and test environments.
-   - Audit current envelope labeling schemes: tag types, metadata, and authentication mechanisms.
-   - Review memory management: how long context is retained, what is stored, and how it is purged.
-   - Map existing policy violation incidents to envelope configurations.
-   - Assess compliance posture: does the envelope meet UK GDPR requirements for data minimization and purpose limitation?</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit analysis: quantify reduction in policy violations (e.g., X% decrease) versus investment in envelope tooling.
-   - Benchmark against industry metrics: target a 90% reduction in unwanted behavior incidents within 6 months.
-   - Include ROI: fewer compliance fines, reduced incident response time, and lower support ticket volume.
-   - Present a phased rollout plan with clear KPIs: envelope integrity score, authentication success rate, and memory‑reset compliance.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- OpenAI’s “Prompt Guard” or similar prompt‑validation APIs for label enforcement.
-   - Microsoft Azure Confidential Computing for secure memory handling.
-   - AWS Secrets Manager or HashiCorp Vault for authenticating envelope tokens.
-   - Elastic Stack (ELK) or Splunk for logging envelope metadata and monitoring anomalies.
-   - Data loss prevention (DLP) solutions that can flag LLM outputs against corporate policy.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Weak authentication can be spoofed, leading to policy violations; memory leakage can expose PII.
-   - Compliance: Failure to enforce envelope authenticity may violate UK GDPR data minimization and purpose limitation clauses.
-   - Operational: Overly aggressive memory resets can degrade user experience; misconfigured labels can cause false positives.
-   - Vendor lock‑in: Relying on proprietary envelope tooling may limit future migration.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a simple authentication token for all envelope inputs using AWS Secrets Manager.
-   - Implement a mandatory memory purge after each user session (≤30 days).
-   - Configure Elastic Stack to alert on any envelope that lacks authentication or contains disallowed content.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Develop a dynamic envelope policy engine that adjusts label strength and authentication based on context (e.g., user role, data sensitivity).
-   - Integrate machine‑learning models to predict high‑risk memory states and trigger proactive resets.
-   - Conduct regular penetration testing focused on envelope bypass scenarios.
-   - Establish a governance board to review envelope policies quarterly, ensuring alignment with evolving compliance regulations and threat landscapes.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage cloud‑hosted LLM services, first audit the input‑validation pipeline to ensure each request carries an authentic, strong label; second, monitor the agent’s memory logs for recent successful or failed interactions and adjust the refusal thresholds accordingly; third, implement a separate context‑assembly layer that re‑evaluates content based on both label strength and memory state before it reaches the model.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 29 Oct 2026, 12:41</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2610.37415v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

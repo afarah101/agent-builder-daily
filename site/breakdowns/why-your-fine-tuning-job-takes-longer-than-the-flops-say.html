@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Research</p>
     <h1 class="page-title">Why your fine-tuning job takes longer than the FLOPs say</h1>
-    <p class="meta-line">Hugging Face</p>
+    <p class="meta-line">Hugging Face · AI Lab · 18 Nov 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,33 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Hugging Face has released a preview of a research paper that demonstrates how a CatBoost machine‑learning model can predict the duration of fine‑tuning jobs on shared GPU clusters with sub‑hour accuracy, outperforming the traditional FLOP‑based estimate. The study collected runtime data from thousands of fine‑tuning runs across multiple GPU types and trained a regression model that incorporates features such as batch size, learning rate, model architecture, and GPU utilization patterns. The resulting predictor can be exposed via an API, allowing users to submit job metadata and receive a runtime forecast in seconds.</p><p>For enterprise IT teams, this capability directly addresses the pain point of idle GPU time in multi‑tenant environments. By integrating the predictor into the scheduler, clusters can be provisioned more accurately, reducing over‑provisioning and lowering cloud spend. The paper also includes a proof‑of‑concept integration with Kubernetes and Slurm, showing how predicted runtimes can inform pod placement and job prioritization.</p><p>The vendors involved are primarily Hugging Face (model and API), cloud providers (AWS, Azure, GCP) for GPU resources, and cluster orchestration platforms (Kubernetes, Slurm). The broader industry implication is a shift from static, FLOP‑based scheduling heuristics to data‑driven, predictive models. This trend will likely influence how AI‑as‑a‑service platforms price GPU usage, how internal data‑science teams plan experiments, and how compliance teams monitor resource usage for audit purposes.</p><p>If left unaddressed, organizations risk continued inefficiencies: higher cloud bills, delayed model releases, and suboptimal utilization of expensive GPU assets. By adopting a predictive scheduler, enterprises can achieve measurable cost savings, faster time‑to‑market, and better alignment with regulatory reporting on compute usage.</p></div>
+      <div class="summary-body"><p>Hugging Face has published a preview of a paper on predicting fine‑tuning duration on shared GPU clusters, showing that a CatBoost model can forecast run times with sub‑hour accuracy compared to the naive FLOP‑based estimate. The research offers a data‑driven method to improve GPU scheduling and reduce idle time in AI workloads.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current GPU utilization metrics: average idle time, queue length, job failure rates.  
-   - Collect historical fine‑tuning logs: job parameters, runtime, GPU type, batch size.  
-   - Verify that your cluster management system (K8s, Slurm, AWS Batch) can expose job metadata to an external API.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: estimate current monthly GPU spend, projected savings from reduced idle time (e.g., 15–25% based on pilot data).  
-   - Include metrics: average runtime prediction error, queue wait time reduction, number of jobs scheduled per GPU hour.  
-   - Present a phased rollout: pilot on a single namespace, then enterprise‑wide.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Hugging Face Predictor API (CatBoost model).  
-   - Kubernetes Custom Scheduler or Slurm Scheduler plugin.  
-   - Cloud provider native tools: AWS Batch Scheduler, Azure Batch, GCP AI Platform Pipelines.  
-   - Monitoring: Prometheus + Grafana for GPU metrics, CloudWatch or Azure Monitor for cost tracking.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: API latency, model drift if training data changes, integration complexity with existing schedulers.  
-   - Compliance: Ensure that any data sent to Hugging Face does not contain PII; under UK GDPR, anonymize job metadata.  
-   - Operational: Over‑reliance on predictions may lead to under‑provisioning; implement fallback to conservative estimates.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy the Hugging Face predictor as a sidecar service in a test namespace.  
-   - Run a 2‑week pilot comparing current queue times vs. predicted scheduling.  
-   - Document savings and publish a report to stakeholders.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate the predictor into the cluster’s core scheduler, enabling dynamic GPU allocation.  
-   - Continuously retrain the CatBoost model with new job data to maintain accuracy.  
-   - Expand to other workloads (e.g., inference, data preprocessing) and evaluate cross‑cluster scheduling.  
-   - Align with cloud cost optimization programs and incorporate predictive scheduling into SLAs for AI teams.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Evaluate Hugging Face’s predictor API or model and test it against your own GPU scheduling pipeline this week.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Inaction risks continued inefficient GPU utilization, leading to higher cloud costs and delayed model deliveries.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">This directly impacts your use of shared GPU clusters in AWS or Azure for AI experiments.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 19 Nov 2026, 15:38</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://huggingface.co/blog/Dharma-AI/predicting-fine-tuning-time" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

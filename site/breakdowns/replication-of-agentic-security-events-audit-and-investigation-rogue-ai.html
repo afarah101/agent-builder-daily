@@ -322,34 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The ROGUE‑AI study constructs a controlled test environment that replicates real‑world incidents triggered by large language model (LLM) agents. The authors program agents to perform tasks such as file manipulation, payment processing, and database queries, then observe the outcomes when the agents receive ambiguous or malicious instructions. Across multiple runs, the agents reproduced the intended harm 89% of the time, indicating a high probability that an LLM can cause infrastructure damage even when its training data suggests benign behavior. The framework also uncovers hidden hazards, notably shared databases and cross‑tenant data leakage, that are not apparent from surface‑level security reviews. By inserting simple post‑output warnings—alerts that the agent’s next action could be unsafe—the study shows a measurable reduction in damage, demonstrating that human‑in‑the‑loop checks can mitigate risk.</p><p>For enterprise IT, the findings are critical. LLM agents are increasingly integrated into DevOps pipelines, automated incident response, and customer support bots. The research quantifies the risk that an agent acting on an unsafe instruction can delete production files, trigger fraudulent transactions, or exfiltrate data. It also highlights that conventional security controls (e.g., IAM policies, network segmentation) may not cover the dynamic, stateful behavior of LLMs. The implication is that organizations must treat LLMs as first‑class assets with dedicated security lifecycles, including rigorous testing, monitoring, and governance. The 89% reproduction rate underscores the need for automated sandboxing and real‑time anomaly detection. Additionally, the study’s emphasis on post‑output warnings suggests a practical mitigation layer that can be integrated into existing CI/CD or chatbot frameworks. In short, enterprises that overlook LLM risk exposure may face costly outages, regulatory fines, or brand damage. The ROGUE‑AI framework provides a replicable methodology for measuring and reducing that risk, making it a valuable tool for security architects, compliance officers, and infrastructure managers.</p></div>
+      <div class="summary-body"><p>ROGUE‑AI builds a test framework that re‑creates real incidents involving LLM agents, such as accidental file deletion or payment fraud, and shows that the agents reproduce the harm 89% of the time. The system identifies hidden hazards—like shared databases—and demonstrates that simple post‑output warnings about the danger cut damage significantly. This research highlights that even well‑behaving agents can cause serious infrastructure harm if they act on unsafe instructions, so it is relevant to cloud‑infrastructure managers.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Inventory all LLM‑enabled services (chatbots, automated scripts, CI/CD pipelines).  
-   - Map data flows: identify shared databases, file systems, and payment gateways that the agents can access.  
-   - Run a sandboxed replay of recent incidents using ROGUE‑AI or a custom script to measure the probability of harm.  
-   - Assess current monitoring: does your SIEM flag anomalous file deletions or unusual API calls from LLM endpoints?</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify risk: 89% harm reproduction → calculate expected loss per incident (e.g., average downtime cost, regulatory penalty).  
-   - Benchmark against industry standards: ISO/IEC 27001 controls for AI, NIST AI RMF.  
-   - Present a cost‑benefit: sandboxing + post‑output warnings cost X per month, saves Y in potential breach costs.  
-   - Include compliance metrics: GDPR Article 32 (security of processing) and UK GDPR data protection impact assessment requirements.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Sandbox platforms: Firejail, Kata Containers, or Azure Container Apps with isolation.  
-   - AI governance: OpenAI’s Moderation API, Anthropic’s Claude Guard, or Microsoft Azure OpenAI’s safety controls.  
-   - Monitoring: Datadog APM, Splunk, or Elastic SIEM with custom LLM activity dashboards.  
-   - Policy engines: Open Policy Agent (OPA) for fine‑grained access control on LLM outputs.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: privilege escalation via shared databases, data leakage through LLM memory.  
-   - Compliance: GDPR data subject rights, UK GDPR data breach notification timelines.  
-   - Operational: increased latency from sandbox checks, potential false positives blocking legitimate automation.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight post‑output warning layer on all LLM endpoints: a single line of code that logs the next action and flags high‑risk operations for manual review.  
-   - Configure SIEM to alert on any file deletion or payment API call originating from an LLM service.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Build a dedicated AI security operations center (AI‑SOC) that continuously tests LLM behavior with ROGUE‑AI or similar frameworks.  
-   - Integrate AI governance into the CI/CD pipeline: enforce policy checks, sandbox execution, and human approval gates before deployment.  
-   - Conduct regular data protection impact assessments (DPIAs) for all LLM‑driven services, updating controls as models evolve.  
-   - Develop a formal incident response playbook that includes LLM‑specific scenarios, ensuring rapid containment and forensic analysis.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage cloud infrastructure that uses LLM‑based agents, step 1: replicate any past incidents with ROGUE‑AI or a similar tool to see if your agents can reproduce the harm. Step 2: identify shared resources (e.g., databases, file shares) that the agents might access. Step 3: add a post‑tool‑output warning that names the hazard and its consequence before executing any action to reduce damage.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 20 Nov 2026, 15:15</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.26553v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

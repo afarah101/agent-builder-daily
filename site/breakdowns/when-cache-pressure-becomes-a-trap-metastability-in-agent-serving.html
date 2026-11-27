@@ -322,32 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Large‑language‑model (LLM) servers are increasingly deployed to power conversational agents in enterprise settings. Chengzhi Lu, Boxi Zhou, Yanying Lin, and Dmitrii Ustiugov from MIT investigated a phenomenon they termed “cache pressure trap” that occurs when a sudden traffic spike forces the cache used for re‑using conversation prefixes to collapse. The collapse leads to the system repeatedly re‑processing stale requests, causing a long‑lasting slowdown that can persist for minutes or even hours after the spike subsides. The authors quantified the impact by measuring goodput—throughput of useful responses—on real hardware. They found that traditional cache‑first approaches could see goodput drop to less than 30 % of peak during recovery, whereas their new tool, Basin, restored high throughput within seconds.</p><p>Basin implements a three‑pronged strategy: (1) it prioritises sessions based on predicted future load, (2) it pre‑allocates cache space for expected peak conversation lengths, and (3) it drops or throttles excess load when the cache is saturated. The authors validated Basin on a production‑grade LLM deployment and reported a 3.6× improvement in goodput compared to baseline cache‑first policies. The study demonstrates that cache management is not a static configuration but a dynamic, workload‑aware problem that can dominate latency and resource utilisation in LLM‑driven services.</p><p>For enterprise IT, this case study highlights that LLM workloads can create hidden performance bottlenecks that are not apparent under normal load. The real‑world implication is that organisations must monitor cache utilisation, session characteristics, and traffic patterns in real time, and be prepared to adjust cache allocation or throttle traffic before a collapse occurs. Failure to do so can result in prolonged service degradation, increased compute costs, and a poor user experience. The Basin approach offers a concrete, actionable methodology that can be integrated into existing orchestration pipelines, providing a measurable lift in throughput and a more predictable cost profile for LLM‑based services.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">• Audit current LLM deployment for cache size, eviction policy, and session length distribution.  
-   • Measure goodput, latency, and cache hit ratio under peak and off‑peak traffic.  
-   • Identify the point at which cache collapse occurs (e.g., threshold of concurrent sessions or total token count).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">• Build a business case around the 3.6× goodput improvement reported by Basin.  
-   • Quantify expected cost savings: reduced GPU hours, lower network egress, and higher SLA compliance.  
-   • Present a risk‑benefit matrix: compare the cost of implementing Basin versus the cost of prolonged downtime or degraded user experience.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">• Basin (open‑source implementation available on GitHub).  
-   • Kubernetes with custom resource definitions for session priority.  
-   • Prometheus + Grafana for real‑time cache metrics.  
-   • NVIDIA Triton Inference Server for LLM inference with cache‑aware scheduling.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">• Technical: improper cache sizing may lead to under‑utilisation or over‑commitment of GPU memory.  
-   • Compliance: dropping or throttling traffic must respect UK GDPR data‑processing principles; ensure that user data is not inadvertently discarded.  
-   • Operational: sudden load shedding could affect SLAs; implement graceful degradation and clear communication to stakeholders.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">• Deploy Basin in a staging environment and run a controlled traffic spike test.  
-   • Adjust cache pre‑allocation thresholds based on observed peak session lengths.  
-   • Configure alerting for cache hit ratio falling below 70 %.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">• Integrate Basin’s priority and pre‑allocation logic into the production inference pipeline.  
-   • Automate cache sizing using machine‑learning models that predict peak load from historical telemetry.  
-   • Conduct quarterly reviews of goodput and cost metrics to refine cache policies and ensure alignment with business objectives.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 03 Nov 2026, 16:48</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.02543v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

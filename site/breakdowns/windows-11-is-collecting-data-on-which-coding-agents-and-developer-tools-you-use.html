@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Security</p>
     <h1 class="page-title">Windows 11 Is Collecting Data on Which Coding Agents and Developer Tools You Use</h1>
-    <p class="meta-line">Hacker News</p>
+    <p class="meta-line">Hacker News · Press · 16 Nov 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,35 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Windows 11 has introduced a new telemetry component, MissionControlAggregator.dll, that silently records which coding agents and developer tools are active on a machine. The data is automatically forwarded to Microsoft Diagnostics unless the user explicitly disables optional diagnostics. This telemetry is not disclosed in the standard privacy notices and operates without user interaction, effectively turning every developer workstation into a passive data source for Microsoft. For enterprise IT teams, this raises immediate concerns about the confidentiality of tool usage patterns, vendor preferences, and potentially proprietary workflows. The telemetry can be aggregated across devices that sync diagnostics with Azure or Microsoft Endpoint Manager, meaning that a single configuration change in the cloud can expose all managed Windows 11 endpoints. The vendors involved are Microsoft (Windows 11, Diagnostics &amp; Feedback, Azure, Endpoint Manager) and any third‑party coding agents or IDEs that are detected by MissionControlAggregator.dll. The broader industry implication is a shift toward more pervasive, covert telemetry in operating systems, which could erode trust and force organizations to re‑evaluate their endpoint security and compliance posture. Enterprises must now consider whether the data collected could violate data protection regulations such as UK GDPR, especially if the telemetry includes personal data or sensitive business information. Failure to address this issue could result in unintentional data leakage, increased risk of insider threats, and a breach of contractual obligations with clients that require strict data handling controls. The incident also signals that future OS updates may include additional hidden telemetry, so continuous monitoring and policy enforcement are essential.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Run a script to list all instances of MissionControlAggregator.dll across managed devices.
-   - Verify the current diagnostic data setting in Settings → Privacy &amp; security → Diagnostics &amp; feedback on a sample of endpoints.
-   - Audit the data flow from Windows 11 to Azure/Endpoint Manager to confirm whether telemetry is being transmitted.
-   - Map out which coding agents and IDEs are in use across the organization and correlate with telemetry logs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Quantify the number of developer machines affected and the volume of telemetry data (e.g., MB per device per month).
-   - Highlight the risk of exposing vendor preferences and potential competitive intelligence leakage.
-   - Present a cost-benefit analysis: the cost of disabling telemetry (minimal) versus the potential regulatory fines or loss of client trust.
-   - Use metrics such as the percentage of devices in Basic vs. Full diagnostic mode and the number of incidents of data leakage in the past year.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Microsoft Endpoint Manager (Intune) – to enforce diagnostic data settings centrally.
-   - Windows Configuration Manager (WCM) – for granular policy deployment.
-   - PowerShell DSC or Desired State Configuration – to automate the setting change.
-   - Azure Policy – to monitor compliance with telemetry restrictions.
-   - Third‑party endpoint monitoring tools (e.g., SentinelOne, CrowdStrike) – to detect anomalous data exfiltration.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Misconfiguration could leave some devices in Full diagnostic mode, creating a data leak vector.
-   - Compliance: UK GDPR may classify telemetry as personal data if it can be linked to individuals; failure to obtain consent could trigger fines.
-   - Operational: Disabling diagnostics might affect legitimate troubleshooting and support capabilities.
-   - Vendor lock‑in: Over‑restricting telemetry could limit Microsoft’s ability to provide security updates or diagnostics.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a Group Policy or Intune policy to set Diagnostic data to Basic or Turn off entirely on all Windows 11 endpoints within 30 days.
-   - Validate the change by running a quick audit script on a subset of devices.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Develop a comprehensive telemetry governance framework that includes regular audits, consent management, and data minimization principles.
-   - Integrate telemetry controls into the enterprise security architecture, ensuring that any future OS updates are automatically reviewed for new telemetry components.
-   - Establish a cross‑functional task force (security, compliance, legal, development) to monitor emerging telemetry practices and update policies accordingly over the next 6–12 months.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Go to Settings → Privacy &amp; security → Diagnostics &amp; feedback and set Diagnostic data to Basic or turn it off entirely this week.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Inaction means your development environment’s tool usage is silently reported to Microsoft, potentially leaking sensitive project workflows and vendor preferences.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">This affects Windows 11 machines you manage and any devices that sync diagnostics with Azure or Microsoft Endpoint Manager, impacting your overall endpoint security posture.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 17 Nov 2026, 15:51</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://xusheng.dev/posts/windows-coding-agent-telemetry/" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

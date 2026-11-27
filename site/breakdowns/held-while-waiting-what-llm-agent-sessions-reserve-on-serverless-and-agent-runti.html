@@ -322,39 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study by Mekhala Hithyshini Sreenivasa investigates the resource consumption patterns of large language model (LLM) agents deployed on serverless and agent runtimes, specifically Amazon Bedrock AgentCore. The authors built a simulation that mimics real-world usage of LLM agents, where each user conversation is mapped to a distinct virtual environment (VE). They measured the number of VEs that remain active while the agent is idle, waiting for model inference or user input. The key finding is that each conversation reserves a full VE for the entire duration of the session, even when the agent is not actively processing. In a benchmark with 1,000 concurrent chats, the system reserved 1,000 VEs, exhausting the pool of available environments and forcing new sessions to wait or fail. This behavior leads to significant resource waste, higher costs, and reduced scalability. The authors recommend two mitigations: (1) closing or recycling VEs immediately after a conversation ends, and (2) allowing multiple concurrent conversations to share a single VE, thereby reducing the number of active environments. For enterprise IT, this study highlights a hidden cost vector in LLM agent deployments that can erode the expected elasticity of serverless platforms. It also underscores the need for fine-grained resource management policies and monitoring. Real-world implications include higher cloud spend, potential SLA violations due to environment exhaustion, and a need to redesign agent lifecycle management. Enterprises that rely on LLM agents for customer support, internal tooling, or automation should audit their current agent runtime configurations, implement environment recycling, and consider multi-session sharing to achieve cost savings and improved scalability.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory all LLM agent deployments across serverless platforms (AWS Lambda, Bedrock AgentCore, Azure Functions, GCP Cloud Functions).</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure average session duration, idle time, and number of active VEs per session using CloudWatch or equivalent logs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Identify the maximum concurrent sessions supported before environment exhaustion occurs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Assess cost per VE per hour and compare against actual usage patterns.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">5 Verify compliance with UK GDPR: ensure that session data is not retained longer than necessary and that environment cleanup aligns with data minimization principles.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a business case showing cost savings from VE recycling: e.g., if average idle time is 30 minutes and each VE costs $0.05/hr, 1,000 sessions could save $1,500/month.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Benchmark a pilot where multiple conversations share a VE: record throughput, latency, and cost per request.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">Present metrics: VE utilization %, cost per session, average idle time, and projected savings.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">Align with enterprise cost optimization goals and cloud cost governance frameworks.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- AWS Lambda with custom runtime hooks for environment teardown.
-   - Bedrock AgentCore configuration for session pooling.
-   - Terraform or AWS CloudFormation for declarative lifecycle management.
-   - Datadog or New Relic for real-time VE utilization monitoring.
-   - AWS Cost Explorer for detailed cost attribution per VE.
-   - Azure Durable Functions for session orchestration (if using Azure).</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: premature environment teardown may interrupt in-flight requests; ensure graceful shutdown logic.
-   - Compliance: improper data retention in VEs could violate UK GDPR; implement data purge on teardown.
-   - Operational: increased complexity in session routing may lead to higher latency; monitor for SLA impact.
-   - Vendor lock‑in: custom lifecycle logic may tie you to a specific cloud provider’s tooling.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Add a Lambda layer that triggers a cleanup script at the end of each session.
-   - Configure CloudWatch alarms to alert when VE count exceeds a threshold.
-   - Run a 2‑week pilot with 10% of traffic to validate the cleanup logic and measure cost impact.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Design a multi‑session VE sharing architecture: implement a session queue that assigns idle VEs to new conversations.
-   - Integrate with an orchestrator (e.g., AWS Step Functions) to manage session lifecycle and resource allocation.
-   - Conduct a 6‑month cost‑benefit analysis, iterating on VE sizing and pooling strategies.
-   - Expand to other cloud providers, ensuring cross‑platform consistency and compliance alignment.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 20 Nov 2026, 15:15</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.26480v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

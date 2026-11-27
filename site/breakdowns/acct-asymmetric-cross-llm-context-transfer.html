@@ -322,32 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The ACCT study investigates a method to transfer the key‑value cache—essentially the context—between language models of different sizes. The authors built three lightweight components: a token selector that filters useful tokens from the source model’s cache, a retention controller that decides how many tokens to keep, and a cache converter that re‑formats the retained cache into a format ingestible by the target larger model. In controlled experiments, the larger model, when supplied with the transferred cache, achieved inference speeds up to 20 times faster and used 75 % less memory than when it processed the original prompt from scratch. Accuracy and downstream task performance were maintained or improved compared to the baseline. For enterprise IT, this means that large, expensive models can be run more efficiently on existing hardware, reducing GPU utilization, power consumption, and operational costs. The approach also shortens response times for latency‑sensitive applications such as real‑time analytics, chatbots, and compliance monitoring. By decoupling the prompt from the inference step, organizations can pre‑compute context for high‑frequency queries, enabling batch processing and better resource scheduling. The study demonstrates that cache transfer is a viable optimization that can be integrated into existing LLM pipelines without requiring architectural overhauls. Real‑world implications include lower cloud spend, faster deployment of new models, and the ability to run state‑of‑the‑art LLMs on edge devices or on-premises servers that would otherwise be unable to handle the full model size. The technique also opens opportunities for hybrid deployments where a small model handles initial filtering and a larger model performs final inference, improving overall system throughput.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current LLM workloads: measure prompt length, cache size, GPU memory usage, and inference latency.
-   - Identify high‑frequency prompts that could benefit from pre‑cached context.
-   - Assess existing infrastructure for compatibility with key‑value cache extraction and injection (e.g., support for model internals, API hooks).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: calculate current GPU hours, memory costs, and compare with projected savings from a 20× speedup and 75 % memory reduction.
-   - Include KPIs such as average inference latency, throughput (inferences per second), and total cost of ownership over 12 months.
-   - Highlight risk mitigation: reduced need for large GPU clusters, lower power consumption, and faster time‑to‑market for new model releases.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Hugging Face Transformers for cache extraction utilities.
-   - NVIDIA Triton Inference Server for model deployment with custom cache handling.
-   - OpenAI API (if using GPT‑4) for cache export/import via the new context transfer endpoints.
-   - Kubernetes with GPU node pools for scaling and scheduling.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: cache format incompatibilities between model versions; potential degradation of model accuracy if token selection is suboptimal.
-   - Compliance: ensure that transferred cache does not contain personally identifiable data that violates UK GDPR; implement data sanitization before cache export.
-   - Operational: increased complexity in pipeline; need for monitoring to detect cache corruption or mismatches.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Implement a prototype cache extractor for a single high‑usage prompt on a small test cluster.
-   - Measure latency and memory savings; document results for stakeholders.
-   - Deploy the prototype in a staging environment within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate ACCT components into the production inference pipeline across all LLM services.
-   - Automate cache lifecycle management: schedule periodic cache refreshes, monitor drift, and enforce data retention policies.
-   - Expand to multi‑model orchestration: use small models for preliminary filtering and large models for final inference, leveraging cache transfer to keep overall latency low while maximizing accuracy.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage multi‑model LLM deployments, step 1: identify which models in your stack can be paired for cross‑cache transfer; step 2: apply a KV selector to keep only the most relevant context tokens within your budget; step 3: convert and load the sparse KV into the target model before inference. This can cut inference time and memory in your cloud infra.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 02 Nov 2026, 15:20</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2610.42116v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

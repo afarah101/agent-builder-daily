@@ -322,35 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>The study investigates speculative decoding, a technique that accelerates large language model (LLM) inference by using a lightweight draft model to generate candidate tokens that are then verified by a heavier target model. The authors identified a critical bottleneck: when the draft model’s probability distribution diverges from the target model’s, the acceptance rate of proposed tokens drops, limiting speed gains. To address this, they applied a simple temperature scaling calibration to the draft model’s output distribution. Empirically, this adjustment increased the token acceptance rate by roughly 10% and yielded a measurable throughput improvement across several benchmark workloads. For enterprise IT, this finding is significant because speculative decoding can reduce inference latency and CPU/GPU utilization, directly impacting cost per inference and user experience. The real‑world implications include the ability to deploy larger, more capable LLMs on existing hardware without proportional scaling of compute resources, and the potential to reallocate GPU cycles to other workloads. Additionally, the calibration technique is lightweight and can be integrated into existing inference pipelines with minimal engineering effort, making it an attractive optimization for teams managing LLM services at scale.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1. Measure current token acceptance rates in your inference pipeline (e.g., percentage of draft tokens that pass the target model check).</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2. Profile CPU/GPU utilization and latency per request for both draft and target models.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3. Verify the distribution mismatch by comparing log‑probabilities of draft vs. target for a representative sample of prompts.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4. Assess the current model architecture: is the draft model significantly smaller (e.g., 1/5th the parameters) than the target?</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1. Build a cost‑benefit analysis:
-        - Baseline: current inference cost per token (e.g., $0.0001) and latency (e.g., 200 ms).  
-        - Post‑calibration: projected 10% higher acceptance → 10% reduction in target model invocations, translating to ~10% cost savings and ~20 ms latency drop.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2. Include key performance indicators: throughput (tokens/s), average latency, and GPU utilization.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3. Present a pilot plan: 30‑day test on a subset of traffic with monitoring dashboards.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA Triton Inference Server (supports multi‑model pipelines and temperature scaling).  
-   - Hugging Face Optimum for model deployment and scaling.  
-   - Prometheus + Grafana for real‑time monitoring of acceptance rates and latency.  
-   - AWS SageMaker Pipelines or Azure ML for managed inference endpoints.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Over‑temperature scaling may degrade model quality; monitor BLEU/ROUGE scores.  
-   - Compliance: Ensure that any changes to model outputs do not violate UK GDPR “right to explanation” requirements; maintain audit logs of token acceptance decisions.  
-   - Operational: Increased complexity in the inference pipeline could raise failure modes; implement fallback to pure target decoding if acceptance falls below a threshold.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a temperature‑scaled draft model in a side‑by‑side mode for 10% of traffic.  
-   - Use a simple script to adjust the draft model’s temperature from 1.0 to 0.8 and measure acceptance rate changes.  
-   - If acceptance improves, roll out the change to the full traffic within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Over 6–12 months, integrate automated calibration: periodically compute the KL divergence between draft and target distributions and adjust temperature dynamically.  
-   - Explore training a joint draft–target model with shared embeddings to further reduce distribution mismatch.  
-   - Evaluate hardware acceleration options (e.g., TensorRT or Habana Gaudi) for the draft model to push throughput gains further while keeping the target model on high‑performance GPUs.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 25 Nov 2026, 17:06</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.33111v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

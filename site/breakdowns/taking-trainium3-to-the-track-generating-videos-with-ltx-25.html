@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Tools</p>
     <h1 class="page-title">Taking Trainium3 to the Track: Generating Videos with LTX-2.5</h1>
-    <p class="meta-line">Hugging Face · 27 Nov 2026</p>
+    <p class="meta-line">Hugging Face · AI Lab · 27 Nov 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,32 +322,14 @@
     <figure class="article-figure"><img src="../images/taking-trainium3-to-the-track-generating-videos-with-ltx-25.webp" width="1200" height="675" alt="A glowing LED strip beside a twisted copper wire coil" fetchpriority="high" decoding="async"><figcaption>AI illustration</figcaption></figure>
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>Hugging Face recently benchmarked its LTX‑2.5 diffusion model on an AWS Trainium3 instance, a purpose‑built inference accelerator that runs Neuron SDK. The team generated a 10‑second video clip in 22–23 seconds, matching or slightly outperforming the same model run on Hugging Face’s own LTX API, which is hosted on GPU‑based infrastructure. The test demonstrates that training‑optimized hardware can deliver competitive inference performance for media‑generation workloads that traditionally rely on GPUs.</p><p>For enterprise IT teams, this result is significant because it provides a concrete performance comparison between GPU‑centric and ASIC‑based inference platforms. The Trainium3 instance achieved a 10‑second clip in roughly the same wall‑clock time as the GPU‑based LTX API, but with a different cost structure: AWS Neuron instances are priced per second of compute, whereas GPU VMs often incur higher hourly rates and may require over‑provisioning to meet peak workloads. The benchmark also shows that the Neuron SDK can support complex diffusion pipelines, which were previously considered GPU‑only due to memory bandwidth and floating‑point throughput requirements.</p><p>Key vendors and technologies involved include AWS (Trainium3, Neuron SDK), Hugging Face (LTX‑2.5 model, LTX API), and the broader ecosystem of diffusion models such as Stable Diffusion and DALL‑E. The broader industry implication is that specialized inference chips are closing the performance gap with GPUs for high‑end generative AI tasks, potentially reshaping the cost‑efficiency calculus for enterprises that need to run large‑scale media generation, video editing, or content creation pipelines.</p><p>The benchmark also highlights the importance of evaluating software stack compatibility. The Neuron SDK requires model conversion and specific runtime libraries, which can add engineering overhead. However, the performance parity suggests that enterprises can consider shifting from CUDA‑based VMs to Neuron‑powered instances for workloads that fit the diffusion model profile, especially when scaling to hundreds of concurrent inference requests.</p><p>Overall, the news signals a maturation of ASIC inference platforms for media workloads, encouraging IT leaders to reassess their compute strategy and explore hybrid GPU/ASIC architectures for cost‑effective, high‑throughput video generation.</p></div>
+      <div class="summary-body"><p>Hugging Face tested video generation on an AWS Trainium3 instance using LTX‑2.5, achieving a 10‑second clip in 22‑23 seconds, matching or slightly beating LTX’s own API. This showcases the performance potential of training‑optimized hardware for diffusion‑based media pipelines.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Inventory current inference workloads: identify which models are GPU‑heavy and how many concurrent requests they handle.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure baseline performance: record latency, throughput, and cost per inference on existing GPU VMs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Assess data residency and compliance: ensure that moving data to AWS Neuron instances does not violate UK GDPR or other regulations.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Verify software stack compatibility: check if your diffusion models can be converted to Neuron format and whether required libraries are available.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a cost‑benefit analysis: compare current GPU hourly rates with AWS Neuron instance pricing, including data transfer costs.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Use benchmark data: reference the 22‑23 second inference time for a 10‑second clip as a performance target.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Include scalability metrics: estimate how many Neuron instances would be needed to match current GPU capacity.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">4 Present ROI: calculate expected savings over 12 months, factoring in potential reduction in over‑provisioning and power consumption.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- AWS Trainium3 (Neuron SDK, Neuron runtime)
-   - Hugging Face LTX‑2.5 model (or other diffusion models)
-   - AWS SageMaker Neuron inference endpoints
-   - NVIDIA CUDA Toolkit (for baseline comparison)
-   - AWS Cost Explorer and Trusted Advisor for cost monitoring</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: Model conversion failures, limited Neuron support for certain operations, potential need for custom kernel development.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: Data leaving UK data centers may trigger GDPR transfer concerns; ensure proper data residency and encryption.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: Dependency on a single vendor (AWS) for inference; potential lock‑in and lack of multi‑cloud flexibility.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">4 Performance: Benchmarks may not reflect production traffic patterns; need to validate under real‑world load.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">Deploy a single Trainium3 instance in a test region, convert a small diffusion model, and run a 10‑second video generation test. Measure latency, cost, and compare to a GPU VM. Document results within 30 days to validate feasibility.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">Over 6–12 months, architect a hybrid inference platform: keep GPU VMs for workloads that require high floating‑point throughput or have legacy CUDA dependencies, while migrating diffusion‑based media pipelines to Neuron‑powered instances. Implement automated model conversion pipelines, continuous performance monitoring, and cost‑optimization scripts. Explore multi‑region deployment to meet data residency requirements and reduce latency for global users.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Review the Trainium3 performance data when planning future GPU‑heavy inference workloads in the next 30 days. Understanding the speed and cost trade‑offs can inform decisions on whether to shift from CUDA‑based VMs to AWS Neuron‑powered instances for AI video generation or similar tasks.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 16:27</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://huggingface.co/blog/video-trainium3" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

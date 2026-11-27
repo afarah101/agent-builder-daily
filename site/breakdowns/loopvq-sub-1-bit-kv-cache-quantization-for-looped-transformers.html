@@ -322,34 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>LoopVQ is a quantisation technique designed to shrink the key‑value (KV) cache used by looped transformer models. The authors built a 0.5‑bit quantiser that groups multiple loop steps together, allowing the KV cache to be compressed by more than 50% while preserving accuracy on long‑context tasks such as code completion, summarisation, and question answering. In their experiments, they integrated LoopVQ into the SGLang inference framework and measured a throughput increase of up to 6× on a 2.6 B‑parameter model. The memory savings mean that a single GPU can handle longer contexts or larger batch sizes without additional hardware. For enterprise IT, this translates into lower inference costs, higher service availability, and the ability to deploy larger language models on existing GPU fleets. The approach also reduces cold‑start latency because the compressed KV cache can be pre‑loaded more quickly. Real‑world implications include the ability to offer more sophisticated conversational AI or code‑generation services without scaling GPU infrastructure, and the potential to meet regulatory constraints by keeping sensitive data in memory for shorter periods. The study demonstrates that aggressive quantisation of internal transformer states is feasible and that the gains are not limited to a specific model architecture, making it a compelling optimisation for any organisation that relies on large‑scale language models for production workloads.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">1 Audit current transformer inference pipelines for KV cache size, memory utilisation, and throughput bottlenecks.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">2 Measure the average context length and batch size that your workloads require.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">3 Profile GPU memory usage per inference step to identify the proportion attributable to KV cache.</div></div>
-<div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">4 Verify that your current models support looped inference (e.g., SGLang or similar frameworks).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">1 Build a cost‑benefit analysis: baseline GPU hours per month vs. projected savings after LoopVQ (e.g., 6× throughput → 83% reduction in GPU hours).</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">2 Include accuracy impact: report that LoopVQ maintains &lt;1% loss on long‑context benchmarks; quantify business impact of any accuracy drift.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">3 Present a phased rollout: pilot on a single model, then scale to production, with clear KPIs (latency, cost per request, GPU utilisation).</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">1 SGLang – the open‑source framework that already integrates LoopVQ.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">2 NVIDIA TensorRT – for deploying quantised models with GPU acceleration.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">3 Hugging Face Transformers – for model conversion and compatibility checks.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">4 Prometheus + Grafana – for monitoring memory and latency metrics post‑deployment.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">1 Technical: potential numerical instability when quantising very large models; ensure validation on all target workloads.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">2 Compliance: UK GDPR requires that personal data not be stored longer than necessary; compressed KV cache may reduce retention time but still requires secure handling.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">3 Operational: need for retraining or fine‑tuning models to adapt to quantised KV states; risk of degraded performance on edge cases.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">1 Deploy LoopVQ on a single 2.6 B model in a staging environment and measure throughput and memory usage.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">2 Compare results against the current baseline; document the 6× speedup and 50% memory reduction.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">3 Use the data to update the business case and secure approval for broader rollout.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">1 Expand LoopVQ integration across the model portfolio, prioritising models with the highest inference cost.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">2 Automate the quantisation pipeline in CI/CD to ensure new model releases are automatically optimised.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">3 Explore hardware‑specific optimisations (e.g., NVIDIA Ampere or Hopper GPUs) to further leverage the reduced KV cache.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">4 Conduct a periodic audit every 6 months to reassess memory savings and adjust GPU allocation accordingly.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 04 Nov 2026, 14:10</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.05304v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

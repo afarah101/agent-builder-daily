@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Product Launch</p>
     <h1 class="page-title">Scaling Git at OpenAI</h1>
-    <p class="meta-line">OpenAI</p>
+    <p class="meta-line">OpenAI · AI Lab · 2 Nov 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,38 +322,16 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>OpenAI has introduced Pando, a new backend designed to scale Git for its massive monorepo while preserving compatibility with existing Git workflows. Pando achieves a five‑fold reduction in push latency and supports petabyte‑scale data transfer, directly addressing the bottlenecks that arise when millions of developers push changes to a single repository. For enterprise IT teams, this development highlights the feasibility of scaling Git beyond the traditional 10‑sized repository model that most Git hosting services assume. The announcement also underscores the importance of efficient large‑file handling and high‑throughput CI/CD pipelines, which are critical for organizations that rely on continuous delivery and rapid iteration.</p><p>Vendors such as GitLab, GitHub Enterprise, and self‑hosted Git solutions (e.g., Gitea, Gogs, or custom Git servers) can learn from Pando’s architecture. The underlying techniques—distributed storage layers, optimized network protocols, and parallel transfer mechanisms—could be integrated into existing services or used as a blueprint for building new, high‑performance Git backends. The broader industry implication is a shift toward hybrid models that combine Git’s lightweight semantics with the scalability of object‑store or distributed file‑system backends. This trend may accelerate the adoption of Git LFS, Git Large File Storage, and other extensions that offload heavy assets, but now with a more robust foundation that can handle petabyte‑scale workloads.</p><p>Enterprise IT teams should consider how Pando’s approach can reduce CI/CD pipeline times, lower merge conflict rates, and improve developer productivity. The announcement also signals that vendors may soon offer “Git‑as‑a‑service” solutions that natively support massive monorepos, potentially changing the competitive landscape for source‑control platforms. Organizations that fail to evaluate their current source‑control strategy risk slower build times and increased merge conflicts as team sizes grow. By proactively exploring scalable Git architectures, enterprises can future‑proof their development workflows and maintain a competitive edge.</p></div>
+      <div class="summary-body"><p>OpenAI has released Pando, a new backend that scales Git for its massive monorepo while remaining compatible with existing Git workflows. Pando reduces push latency by about five‑fold and supports petabyte‑scale data transfer, promising faster CI/CD and developer productivity.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current Git repository size, commit frequency, and push latency metrics.
-   - Measure bandwidth consumption during peak CI/CD runs and identify bottlenecks.
-   - Inventory large binary assets and assess Git LFS usage patterns.
-   - Review CI/CD pipeline throughput and build failure rates linked to source‑control delays.
-   - Verify compliance with data residency and transfer regulations (e.g., UK GDPR) for large‑file storage.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case that quantifies current push latency (e.g., 30 s per push) versus projected latency after adopting a Pando‑style backend (≈6 s).
-   - Estimate cost savings from reduced CI/CD run times (e.g., 20% faster builds → lower compute hours).
-   - Include metrics such as merge conflict reduction, developer velocity, and mean time to recover (MTTR) for failed pipelines.
-   - Highlight risk mitigation: fewer merge conflicts, lower storage costs through efficient object storage, and improved compliance audit trails.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- GitLab Enterprise Edition with Git LFS and custom storage adapters.
-   - GitHub Enterprise Server with advanced LFS support and GitHub Actions scaling options.
-   - Self‑hosted Git solutions: Gitea, Gogs, or GitBucket with external object‑store backends (S3, MinIO).
-   - Distributed storage platforms: Ceph, GlusterFS, or cloud object stores (AWS S3, Azure Blob, GCP Cloud Storage).
-   - CI/CD orchestrators: GitLab CI, GitHub Actions, Jenkins X, or ArgoCD for pipeline integration.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Compatibility issues with existing Git hooks, CI/CD pipelines, or third‑party integrations.
-   - Compliance: Ensuring that large‑file storage complies with UK GDPR, especially regarding data transfer outside the UK.
-   - Operational: Increased complexity in managing a distributed storage layer, potential single points of failure if not properly replicated.
-   - Security: Exposing large binary assets may increase attack surface; enforce strict access controls and scanning.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Enable Git LFS for all large assets and configure a dedicated S3 bucket with lifecycle policies to archive or delete stale objects.
-   - Adjust CI/CD pipelines to cache dependencies locally, reducing repeated downloads.
-   - Deploy a lightweight Git proxy (e.g., git-lfs-proxy) to reduce push latency for a subset of critical teams.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Design and implement a Pando‑style distributed Git backend within 6–12 months, integrating an object‑store layer and parallel transfer protocol.
-   - Migrate the monorepo to the new backend gradually, starting with low‑risk modules.
-   - Conduct performance testing to validate latency reductions and scalability under peak load.
-   - Establish governance policies for large‑file handling, retention, and compliance monitoring across the organization.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Review your own source‑control strategy to see if a similar scaling solution could reduce bottlenecks in CI/CD or large‑file handling.</div></div>
+<div class="guide-block"><h3 class="guide-label">Risk if ignored</h3><div class="guide-text">Delaying such an evaluation risks slower build times and increased merge conflicts for teams growing in size.</div></div>
+<div class="guide-block"><h3 class="guide-label">Tools affected</h3><div class="guide-text">Tools like GitLab, GitHub Enterprise, or self‑hosted Git services could benefit from adopting or contributing to comparable scaling techniques.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 03 Nov 2026, 00:51</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://openai.com/index/scaling-git-at-openai" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

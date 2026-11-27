@@ -322,34 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>FOSCAR is a research effort that addresses the bottleneck of decoding large‑language models (LLMs) when operating with extremely low‑precision key‑value (KV) caches. The study focuses on 2‑bit and 4‑bit quantized KV caches, which are attractive for reducing memory footprint and bandwidth but suffer from expensive scale‑and‑offset operations during attention computation. The authors introduce an affine folding technique that eliminates these per‑token scaling steps by folding the affine transformation into the attention kernel itself. They also develop a packing strategy that aligns the quantized values with the native Tensor Core data layouts on NVIDIA Hopper (H100) and Blackwell (B200) GPUs. The resulting GPU pipelines achieve 2–3× throughput gains over conventional FP8 and BF16 decoding pipelines, translating into a 341% increase in long‑context serving capacity for enterprise workloads that require extended context windows (e.g., legal document analysis, code generation, or scientific literature summarization). For enterprise IT, this means that existing GPU clusters can handle larger batch sizes or higher request rates without additional hardware, directly impacting cost per inference and latency SLAs. The real‑world implications include the ability to deploy LLMs with 8k–32k token contexts on commodity GPU infrastructure, reducing the need for specialized hardware or custom ASICs. The approach also demonstrates that careful algorithm‑hardware co‑design can unlock significant performance from already‑available GPU generations, providing a clear path for IT teams to extend the life cycle of their current GPU investments. The study’s open‑source implementation and benchmark suite give practitioners a concrete starting point for evaluating the technique in their own environments.</p></div>
+      <div class="summary-body"><p>This breakdown was withdrawn. It was written without the source text, and it did not pass the source check. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Profile current decoding latency and GPU utilization for your LLM workloads, focusing on KV cache size and precision.
-   - Measure the proportion of time spent in scale‑and‑offset operations versus core matrix multiplication.
-   - Verify that your GPU fleet includes Hopper (H100) or Blackwell (B200) models; older GPUs may not support the required Tensor Core instructions.
-   - Check existing quantization pipelines: are you using FP8, BF16, or custom 2‑bit/4‑bit quantization? Identify gaps in current support for affine folding.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit analysis: baseline throughput (in tokens/sec) versus projected throughput with FOSCAR (2–3×). Translate into expected reduction in GPU hours or number of GPUs needed.
-   - Include latency reduction targets (e.g., 30% lower tail latency) and SLA improvements.
-   - Quantify potential savings: fewer GPU instances, lower power consumption, extended hardware lifespan.
-   - Present a phased rollout plan: pilot on a single inference cluster, then scale to production.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- NVIDIA CUDA Toolkit 12.x or later (required for Hopper/Blackwell Tensor Core support).
-   - NVIDIA cuBLAS and cuDNN libraries with custom kernels for 2‑bit/4‑bit attention.
-   - OpenAI’s Triton or NVIDIA’s TensorRT for deploying optimized kernels.
-   - GitHub repository of the FOSCAR implementation (if publicly released) for reference and integration.
-   - GPU monitoring tools: NVIDIA Nsight Systems, nvprof, or Prometheus exporters for GPU metrics.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Compatibility issues with existing model architectures; potential numerical instability when folding affine transforms.
-   - Compliance: Ensure that any data processed during inference remains within UK GDPR boundaries; verify that no additional data leakage occurs due to altered cache handling.
-   - Operational: Increased complexity in kernel development may require specialized GPU programming expertise; risk of regression in other parts of the inference pipeline.
-   - Vendor lock‑in: Heavy reliance on NVIDIA hardware may limit future portability.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy the open‑source FOSCAR kernel on a single H100 GPU for a short‑term test workload. Measure decoding latency and throughput against your current FP8 baseline. Document results and share with stakeholders to validate the performance claim.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Integrate FOSCAR into your continuous integration pipeline for new model releases, ensuring that the affine folding and packing steps are applied automatically.
-   - Expand the implementation to support mixed‑precision workloads (e.g., combining 2‑bit KV caches with higher‑precision query tensors) to maximize throughput across diverse inference scenarios.
-   - Collaborate with NVIDIA or the research community to contribute performance improvements and keep the implementation aligned with future GPU architectures beyond Hopper and Blackwell.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">No how-to notes are stored for this story. Read the original for the detail.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 09 Nov 2026, 15:51</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (withdrawn)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.09722v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

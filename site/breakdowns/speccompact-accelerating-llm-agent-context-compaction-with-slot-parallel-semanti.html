@@ -322,36 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>SpecCompact is a novel approach to reduce the latency of context compaction for large language model (LLM) agents. The authors investigated how to accelerate the summarisation of long interaction histories, a common bottleneck in LLM‑driven services such as virtual assistants, knowledge‑base bots, and automated support agents. Traditional summarisation pipelines rely on a single LLM pass that consumes the entire conversation history, which can take several seconds per request and scales poorly with high‑volume workloads. SpecCompact addresses this by first generating a set of “summary slots” in parallel using a lightweight draft model. These slots are short, structured fragments that capture key facts, user intents, and action items. The main LLM then performs a speculative verification step, confirming or correcting each slot in a single pass. The result is a compact, accurate summary that preserves the same information fidelity as the baseline but with up to a 5.6× reduction in compaction time. The study also demonstrated that the speculative verification step introduces negligible additional cost because it reuses the same model weights and requires only a few token predictions per slot.</p><p>For enterprise IT, the implications are significant. Lower compaction latency directly translates into faster response times for LLM‑powered applications, improving user experience and reducing compute costs. In high‑throughput environments, the time savings can be amortised across thousands of concurrent sessions, yielding measurable savings in GPU utilisation and power consumption. Moreover, the slot‑parallel architecture is inherently scalable: adding more GPUs or scaling to multi‑node clusters simply increases the number of slots processed in parallel without changing the verification logic. This makes SpecCompact a viable candidate for production deployments where latency budgets are tight and cost optimisation is critical.</p><p>Real‑world applications include customer support chatbots that need to summarise long ticket histories before generating a response, internal knowledge‑base assistants that pull from extensive corporate documentation, and compliance‑aware LLM agents that must maintain a concise audit trail. By integrating SpecCompact, organisations can meet stricter SLAs, reduce operational expenses, and maintain the same level of semantic accuracy required for regulated industries.</p></div>
+      <div class="summary-body"><p>No source-checked summary is stored for this story. Read the original for the detail.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Measure current LLM compaction latency and throughput on your production workloads.
-   - Identify the average length of interaction histories and the frequency of summarisation requests.
-   - Audit GPU/CPU utilisation during compaction to quantify resource bottlenecks.
-   - Review existing LLM deployment stack (e.g., OpenAI, Anthropic, Azure OpenAI) for compatibility with speculative verification pipelines.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a cost‑benefit model: baseline compaction cost vs. projected cost after a 5.6× speedup.
-   - Use metrics such as requests per second, average latency reduction, and GPU hours saved.
-   - Include a pilot KPI: achieve a 30 % reduction in LLM‑related compute spend within 90 days.
-   - Present a risk‑adjusted ROI that accounts for potential model accuracy drift and compliance overhead.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Vendor LLM platforms that support custom prompt pipelines: OpenAI GPT‑4 Turbo, Anthropic Claude 3, Azure OpenAI Service.
-   - Container orchestration: Kubernetes with GPU node pools, NVIDIA GPU Operator.
-   - Model serving frameworks: TorchServe, Triton Inference Server, or Hugging Face Inference API for custom models.
-   - Monitoring: Prometheus + Grafana for latency and resource metrics, OpenTelemetry for tracing speculative verification steps.</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: Potential degradation in summarisation quality if draft slots miss critical context; requires validation against ground‑truth summaries.
-   - Compliance: Under UK GDPR, ensure that speculative verification does not inadvertently expose personal data; implement data minimisation and audit trails.
-   - Operational: Increased complexity in pipeline orchestration; need for robust rollback mechanisms if verification fails.
-   - Vendor lock‑in: SpecCompact may rely on specific prompt engineering that is less portable across LLM providers.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Deploy a lightweight draft model (e.g., DistilBERT or a small LLM) to generate summary slots for a subset of low‑volume requests.
-   - Configure the main LLM to perform a single‑pass verification on these slots.
-   - Measure latency improvement and accuracy against a small test set within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Scale the slot‑parallel architecture across the full production fleet, integrating with existing CI/CD pipelines for model updates.
-   - Automate slot generation and verification logic using a custom inference service that exposes a REST API.
-   - Conduct a phased rollout, starting with non‑critical services, then expanding to high‑value customer touchpoints.
-   - Continuously monitor model drift, update the draft model periodically, and refine slot templates to adapt to evolving business contexts over 6–12 months.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">If you manage LLM‑based services, implement SpecCompact by (1) training a small draft model to produce slot summaries in parallel, (2) letting your main model validate and correct each slot, and (3) integrating the verified slots back into the conversation history. Monitor the trade‑off between speed and accuracy for your specific tasks.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 05 Nov 2026, 14:31</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://arxiv.org/abs/2611.06876v1" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>

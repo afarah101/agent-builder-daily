@@ -314,7 +314,7 @@
   <div class="article-head">
     <p class="tag-pill">Infrastructure</p>
     <h1 class="page-title">Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II)</h1>
-    <p class="meta-line">OpenAI</p>
+    <p class="meta-line">OpenAI · AI Lab · 23 Oct 2026</p>
   </div>
 </header>
 <main class="content">
@@ -322,37 +322,14 @@
     
     <section>
       <h2 class="section-title">Summary</h2>
-      <div class="summary-body"><p>OpenAI announced that its Habitat storage platform now supports over 1 billion ChatGPT users by re‑architecting Azure Cosmos DB for high‑density multi‑tenant workloads. The company moved from a traditional single‑tenant model to a co‑managed container approach, where tenant isolation is achieved through logical partitioning and container sharing, rather than isolated physical resources. This change reduced over‑provisioning, lowered operational overhead, and increased throughput by 30–40 % for the same capacity. The post also detailed how Cosmos DB’s built‑in primitives—such as change feed, stored procedures, and server‑side JavaScript—were leveraged to implement tenant‑specific throttling and noise‑dampening, mitigating the “noisy neighbor” effect that often plagues multi‑tenant NoSQL deployments.</p><p>For enterprise IT teams, the lesson is that large‑scale SaaS providers can achieve significant cost savings and performance gains by moving to a co‑managed, logically partitioned model rather than maintaining separate clusters per tenant. The architecture relies heavily on Azure Cosmos DB’s global distribution, multi‑model API support, and elastic scaling, but the principles apply to any NoSQL service that offers logical partitioning and server‑side processing. Vendors such as Azure Cosmos DB, Amazon DynamoDB, and Google Cloud Firestore can adopt similar patterns.</p><p>The broader industry implication is a shift toward more efficient multi‑tenant storage solutions. Cloud providers are likely to enhance their NoSQL offerings with better isolation primitives, automated noise‑dampening, and cost‑allocation features. Enterprises must evaluate whether their current tenancy model is causing hidden costs or performance bottlenecks, and consider adopting co‑managed containers or equivalent constructs to improve scalability and reduce noise.</p></div>
+      <div class="summary-body"><p>OpenAI has detailed how it scaled its Habitat storage platform to serve over 1 billion ChatGPT users by optimizing Azure Cosmos DB for massive multi‑tenant workloads. The post highlights the trade‑offs between single‑tenant and multi‑tenant architectures and the performance gains achieved with co‑managed containers.</p></div>
     </section>
     <div class="divider"></div>
     <section class="apply-panel">
       <h2 class="section-title">How to apply</h2>
-      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">Evaluate</h3><div class="guide-text">- Audit current NoSQL tenancy model: single‑tenant vs multi‑tenant, resource allocation per tenant, and over‑provisioning metrics.
-   - Measure current throughput, latency, and CPU/memory utilization per tenant.
-   - Identify noisy‑neighbor incidents and their impact on SLAs.
-   - Review cost allocation and billing granularity; assess whether current billing aligns with actual usage.</div></div>
-<div class="guide-block"><h3 class="guide-label">Propose</h3><div class="guide-text">- Build a business case showing potential cost savings: estimate reduction in capacity by 20–30 % using co‑managed containers.
-   - Benchmark performance improvements: target 30 % throughput increase and 10–15 % latency reduction.
-   - Include risk mitigation: demonstrate how logical isolation reduces cross‑tenant interference.
-   - Present ROI timeline: 6–12 months for full migration, with a 30‑day quick win for pilot tenants.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Tools to consider</h3><div class="guide-text">- Azure Cosmos DB (co‑managed containers, change feed, server‑side JavaScript)
-   - Amazon DynamoDB (global tables, partition key design, on‑demand capacity)
-   - Google Cloud Firestore (sharding, security rules, Cloud Functions)
-   - Kubernetes + Operator for NoSQL (e.g., Crossplane, KubeDB) to manage multi‑tenant deployments
-   - Monitoring tools: Azure Monitor, CloudWatch, Stackdriver, Prometheus + Grafana for tenant‑level metrics</div></div>
-<div class="guide-block red"><h3 class="guide-label">Risks to flag</h3><div class="guide-text">- Technical: risk of data leakage between tenants if logical isolation is misconfigured; potential performance regressions during migration.
-   - Compliance: ensure tenant isolation meets UK GDPR data residency and segregation requirements; audit logs must be tenant‑aware.
-   - Operational: increased complexity in capacity planning; need for new monitoring dashboards; potential vendor lock‑in if using proprietary primitives.</div></div>
-<div class="guide-block green"><h3 class="guide-label">Quick win</h3><div class="guide-text">- Select a low‑traffic tenant and migrate it to a co‑managed container within Cosmos DB or equivalent.
-   - Reconfigure partition keys to align with tenant ID; enable server‑side throttling.
-   - Deploy monitoring dashboards to track latency and throughput; validate noise‑dampening within 30 days.</div></div>
-<div class="guide-block amber"><h3 class="guide-label">Long-term play</h3><div class="guide-text">- Roll out co‑managed container strategy across all tenants over 6–12 months.
-   - Implement automated capacity scaling policies tied to tenant usage patterns.
-   - Integrate cost‑allocation tags and reporting for finance alignment.
-   - Conduct periodic security reviews and compliance audits to ensure GDPR alignment.
-   - Explore multi‑cloud or hybrid deployments to avoid single‑vendor dependency and improve resilience.</div></div></div>
+      <div class="guide-grid"><div class="guide-block"><h3 class="guide-label">How to apply</h3><div class="guide-text">Review how your Azure Cosmos DB or equivalent NoSQL services are configured for multi‑tenant workloads. Assess whether your current tenancy model could benefit from co‑managed containers or built‑in primitives to reduce over‑provisioning and noise. Update your capacity planning and monitoring dashboards to detect and mitigate noisy‑neighbor effects, ensuring reliable performance as user load grows.</div></div></div>
     </section>
-    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 24 Oct 2026, 09:08</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· 27 Nov 2026, 17:33 (short version)</p>
     <div class="article-actions">
       <a href="https://openai.com/index/scaling-storage-one-billion-users-part-two" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>
       <a class="back-link" href="../index.html">← Back to today</a>
