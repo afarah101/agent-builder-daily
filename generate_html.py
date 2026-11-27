@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from send_daily_email import signal_points  # the email's S1/S2/S3 parser, so site and email agree
-from generate_images import image_figure  # <figure> only when site/images/<slug>.webp exists
+from generate_images import image_figure  # the <figure> of every card: its AI image, else its cover
 
 CASE_STUDIES_DIR = "case_studies"
 NEWS_DIR = "data/news"

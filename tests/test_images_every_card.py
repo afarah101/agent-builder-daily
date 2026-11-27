@@ -1,5 +1,5 @@
 """AI image on every card: top_items matches the cards the page shows, existing images are kept, at most
-MAX_NEW_PER_RUN new images a run (newest cards first), a card with no file has no <img>, prune spares shown cards.
+MAX_NEW_PER_RUN new images a run (newest cards first), a card with no file shows its cover, prune spares shown cards.
 No network: Groq and Cloudflare are stubbed."""
 import json
 import re
@@ -111,10 +111,11 @@ def test_at_most_max_new_per_run_newest_first(site, monkeypatch, capsys):
     assert gi.run(today=NOW) == 15 and len(calls) == 15  # the next run draws the rest
 
 
-def test_card_with_no_file_renders_no_img(site):
+def test_card_with_no_file_renders_its_cover(site):
     html = gh.render_case_studies({"case_studies": [study("No picture")]}, {"case_studies": {}})
     html += gh.render_news({"news": [news("No picture either")]}, {"news": {}})
-    assert "<img" not in html and "<figure" not in html
+    assert html.count('<figure class="card-figure"><img src="') == 2 and "<figcaption" not in html
+    assert "images/no-picture.webp" not in html and "images/no-picture-either.webp" not in html
 
 
 def test_every_card_with_a_file_renders_its_figure(site):
@@ -122,7 +123,9 @@ def test_every_card_with_a_file_renders_its_figure(site):
         (site / "site" / "images" / f"{gi.slugify(t)}.webp").write_bytes(b"x")
     html = gh.render_news({"news": [news(t) for t in ("First", "Second", "Third", "Fourth")]}, {"news": {}})
     imgs = re.findall(r"<img [^>]*>", html)
-    assert len(imgs) == 3 and all('loading="lazy"' in i and 'width="1200"' in i and 'height="675"' in i for i in imgs)
+    assert len(imgs) == 4 and all('loading="lazy"' in i and 'width="1200"' in i and 'height="675"' in i for i in imgs)
+    assert [bool(re.search(r'src="images/[a-z]+\.webp"', i)) for i in imgs] == [True, True, True, False]  # 3 AI images, 1 cover
+    assert html.count("<figcaption>AI illustration</figcaption>") == 3
 
 
 def test_failed_image_call_stops_the_run_and_leaves_no_file(site, monkeypatch):
@@ -133,7 +136,8 @@ def test_failed_image_call_stops_the_run_and_leaves_no_file(site, monkeypatch):
     monkeypatch.setattr(gi, "generate_image", lambda scene, path: (_ for _ in ()).throw(RuntimeError("HTTP 500")))
     assert gi.run(today=NOW) == 0
     assert not (site / "site" / "images" / "broken.webp").exists()
-    assert "<img" not in gh.render_news({"news": [news("Broken")]}, {"news": {}})
+    html = gh.render_news({"news": [news("Broken")]}, {"news": {}})
+    assert html.count("<figure") == 1 and "images/broken.webp" not in html  # the card shows its cover
 
 
 def test_prune_never_deletes_an_image_a_shown_card_uses(site):

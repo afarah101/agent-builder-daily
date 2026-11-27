@@ -6,15 +6,22 @@ summary, and FLUX.1-schnell (Apache-2.0) on Cloudflare Workers AI draws it with 
 site/images/<slug>.webp; site/images/alt.json keeps the scene (the alt text), the date and the style it was made in.
 
 No fake writing: FLUX ignores "no text", so the scene may not name a thing that carries writing (BANNED), and OCR reads every
-new image. An image that shows text is drawn once more from a new scene; if that one shows text too, the card keeps no image.
+new image. An image that shows text is drawn once more from a new scene; if that one shows text too, the card keeps its cover.
 A card keeps a good image until prune; a run makes at most MAX_NEW_PER_RUN drawings, cards the page shows first, newest first.
-Never fails the pipeline: the first API error is logged, the run stops (no more API calls) and that card keeps no image.
+
+Never blank: a card with no AI image shows a cover, site/images/covers/<slug>.webp, drawn here with Pillow from the slug
+(abstract shapes, no text, 0 API calls). Every run makes the missing covers, also when IMAGE_GEN_ENABLED is off.
+image_figure gives every card a figure: the AI image, else the cover, else (no cover file yet) the same idea as inline SVG.
+
+Never over the free limit: site/images/budget.json keeps the neurons used on each UTC day, across all runs. No drawing starts
+when it would take the day above DAILY_NEURON_BUDGET. A Cloudflare 429 marks the day as used up: no more drawings that day.
+Never fails the pipeline: the first API error is logged, the run stops (no more API calls) and that card keeps its cover.
 """
 import json
 import os
 import re
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 IMAGES_DIR = "site/images"
@@ -28,6 +35,7 @@ HOUSE_STYLE = ("minimal still life, soft studio light, matte materials, shallow 
 STYLE_ID = "still-life-1"  # stored in alt.json; an image made in another style is redrawn, so the cards look like one series
 
 # Things that carry writing in real life, and people. FLUX draws fake letters on them, so a scene may not name one.
+# Plain objects are not here (paper, an envelope, a folder, a phone lying face-down, a cup): OCR checks every drawing.
 # Whole words, plural included; "_" stands for a space.
 BANNED = {
     "landmarks": "landmark monument tower bridge skyline cathedral temple castle palace lighthouse statue eiffel colosseum "
@@ -36,11 +44,11 @@ BANNED = {
                  "libraries shop store storefront hospital school church station airport datacenter data_center city "
                  "cities town village architecture facade",
     "streets": "street road highway avenue alley sidewalk pavement intersection crosswalk traffic plaza",
-    "screens": "screen monitor display laptop computer desktop phone smartphone tablet tv television terminal dashboard "
-               "interface ui hologram projector keyboard cursor icon browser app website",
+    "screens": "screen monitor display laptop computer desktop tablet tv television terminal dashboard "
+               "interface ui keyboard cursor icon browser app website",
     "signs": "sign signage signpost billboard poster banner placard neon plaque nameplate marquee license_plate",
-    "documents": "document paper page note letter envelope ledger handbook contract certificate receipt invoice newspaper "
-                 "magazine scroll manuscript notebook notepad folder whiteboard blackboard chalkboard postcard ticket card "
+    "documents": "document page note letter ledger handbook contract certificate receipt invoice newspaper "
+                 "magazine scroll manuscript notebook notepad whiteboard blackboard chalkboard postcard ticket card "
                  "passport handwritten handwriting writing written text word equation formula glyph font typography code "
                  "digit numeral numbered symbol signature inscription engraved question_mark",
     "books": "book bookshelf bookcase textbook diary journal",
@@ -72,9 +80,22 @@ OCR_MIN_SCORE = 0.5  # RapidOCR confidence below this is noise, not writing
 WIDTH, HEIGHT = 1200, 675
 STEPS = 4  # flux-1-schnell default; the model returns a square image, fitted to 1200x675
 QUALITY = 70
-MAX_NEW_PER_RUN = 25  # 2 runs a day x 25 x ~173 neurons stays under Cloudflare's free 10,000 neurons a day
+MAX_NEW_PER_RUN = 25  # drawings in one run; the day's limit is DAILY_NEURON_BUDGET
 MAX_AGE_DAYS = 120  # 4 months, the site's window
 FALLBACK_ALT = "Abstract editorial illustration"
+
+# The day's neuron budget, in site/images/budget.json as {UTC date: neurons used}. All runs of a day share it.
+BUDGET_FILE = "budget.json"
+DAILY_NEURON_BUDGET = 9000  # no drawing starts when it would take the day's total above this
+FREE_DAILY_NEURONS = 10000  # Cloudflare's free allocation for one UTC day; a 429 says all of it is used
+NEURONS_PER_DRAWING = 175  # counted for a drawing when Cloudflare reports no number (a drawing uses about 173)
+BUDGET_KEEP_DAYS = 30  # older days leave budget.json
+
+# The cover of a card with no AI image: site/images/covers/<slug>.webp, drawn with Pillow. No text, no API call.
+COVERS_DIR = "covers"
+COVER_BG = "#0a0a0a"
+COVER_EMERALD = "#10b981"
+COVER_GREYS = ("#262626", "#525252")
 
 api_calls = 0  # every Groq or Cloudflare request adds 1
 _ocr = None  # the RapidOCR engine, loaded once
@@ -102,15 +123,183 @@ def load_alts(images_dir=IMAGES_DIR):
         return {}
 
 
+def cover_slug(title):
+    """The file name of a card's cover: the card's slug, or a hash when the title has no letter a slug keeps."""
+    import hashlib
+    return slugify(title) or "untitled-" + hashlib.sha256(str(title or "").encode("utf-8")).hexdigest()[:10]
+
+
+def _rect(cx, cy, w, h, deg):
+    """Corner points of a w x h rectangle centred on (cx, cy), turned by deg degrees."""
+    import math
+    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+    return [(cx + x * c - y * s, cy + x * s + y * c) for x, y in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
+
+
+def cover_image(slug):
+    """The cover of a slug, always the same picture for the same slug: on near-black, one large dark-grey form, one
+    mid-grey band or corner, one emerald accent. Every form leaves the frame, so OCR reads no letter in it
+    (a closed form that stands alone reads as "O")."""
+    import hashlib, random
+    from PIL import Image, ImageDraw
+    rng = random.Random(int(hashlib.sha256(str(slug).encode("utf-8")).hexdigest(), 16))
+    k = 2  # drawn at twice the size, then scaled down: smooth edges
+    w, h = WIDTH * k, HEIGHT * k
+    image = Image.new("RGB", (w, h), COVER_BG)
+    draw = ImageDraw.Draw(image)
+    dark, mid = COVER_GREYS
+    # 1. one large dark-grey form, on the left or the right
+    side = rng.choice(("left", "right"))
+    cx = rng.uniform(0.0, 0.3) * w if side == "left" else rng.uniform(0.7, 1.0) * w
+    cy = rng.uniform(0.15, 0.85) * h
+    r = rng.uniform(0.42, 0.62) * h
+    if rng.random() < 0.6:
+        draw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=dark)
+    else:
+        draw.polygon(_rect(cx, cy, r * 2.2, r * 1.5, rng.uniform(-35, 35)), fill=dark)
+    # 2. one mid-grey band from edge to edge, or a mid-grey triangle in a far corner
+    if rng.random() < 0.5:
+        draw.polygon(_rect(rng.uniform(0.3, 0.7) * w, rng.uniform(0.3, 0.7) * h, w * 1.6, rng.uniform(0.06, 0.16) * h,
+                           rng.choice((-1, 1)) * rng.uniform(12, 40)), fill=mid)
+    else:
+        x0, y0 = (w if side == "left" else 0), rng.choice((0, h))
+        draw.polygon([(x0, y0), (x0 + (-1 if x0 else 1) * rng.uniform(0.3, 0.55) * w, y0),
+                      (x0, y0 + (-1 if y0 else 1) * rng.uniform(0.5, 0.9) * h)], fill=mid)
+    # 3. one emerald accent on the far side, cut by the frame edge
+    far = (rng.uniform(0.55, 0.85) if side == "left" else rng.uniform(0.15, 0.45)) * w
+    kind = rng.choice(("half-disc", "band", "corner"))
+    if kind == "half-disc":  # a disc cut in half by the top or bottom edge
+        ar, ay = rng.uniform(0.12, 0.2) * h, rng.choice((0, h))
+        draw.ellipse((far - ar, ay - ar, far + ar, ay + ar), fill=COVER_EMERALD)
+    elif kind == "band":  # a thin band from edge to edge
+        draw.polygon(_rect(far, rng.uniform(0.3, 0.7) * h, w * 1.6, rng.uniform(0.012, 0.024) * h,
+                           rng.choice((-1, 1)) * rng.uniform(50, 75)), fill=COVER_EMERALD)
+    else:  # a triangle in a far corner
+        x0, y0 = (w if side == "left" else 0), rng.choice((0, h))
+        draw.polygon([(x0, y0), (x0 + (-1 if x0 else 1) * rng.uniform(0.1, 0.18) * w, y0),
+                      (x0, y0 + (-1 if y0 else 1) * rng.uniform(0.18, 0.32) * h)], fill=COVER_EMERALD)
+    return image.resize((WIDTH, HEIGHT), Image.LANCZOS)
+
+
+def make_cover(slug, images_dir=IMAGES_DIR):
+    """Draw and save site/images/covers/<slug>.webp when it is not there. Returns its path. No API call."""
+    path = Path(images_dir) / COVERS_DIR / f"{slug}.webp"
+    if not path.is_file():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix(".tmp.webp")
+        cover_image(slug).save(tmp, "WEBP", quality=QUALITY, method=6)
+        tmp.replace(path)
+    return path
+
+
+def inline_cover(slug):
+    """A cover as a data: URI of a small SVG, for a card whose cover file is not made yet. No file, no API call."""
+    from urllib.parse import quote
+    x = 200 + int.from_bytes(str(slug).encode("utf-8")[:2] or b"a", "big") % 800
+    svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {WIDTH} {HEIGHT}"><rect width="{WIDTH}" height="{HEIGHT}" '
+           f'fill="{COVER_BG}"/><circle cx="{WIDTH - x}" cy="{HEIGHT}" r="420" fill="{COVER_GREYS[0]}"/>'
+           f'<path d="M0 0h420L0 480z" fill="{COVER_GREYS[1]}"/><circle cx="{x}" cy="0" r="110" fill="{COVER_EMERALD}"/></svg>')
+    return "data:image/svg+xml," + quote(svg)
+
+
 def image_figure(title, images_dir=IMAGES_DIR):
-    """The card's <figure> when site/images/<slug>.webp exists, else "". The alt is the scene description."""
+    """The card's <figure>, on every card. The AI image when site/images/<slug>.webp exists (alt: the scene, caption
+    "AI illustration"); else the card's cover, site/images/covers/<slug>.webp; else an inline cover.
+    A cover is decoration: alt="" and no caption. Reads only: sync_covers makes the cover files."""
     import html as html_lib
-    slug = slugify(title)
-    if not slug or not (Path(images_dir) / f"{slug}.webp").is_file():
-        return ""
-    alt = str((load_alts(images_dir).get(slug) or {}).get("alt") or "").strip() or FALLBACK_ALT
-    return (f'<figure class="card-figure"><img src="images/{slug}.webp" loading="lazy" width="{WIDTH}" '
-            f'height="{HEIGHT}" alt="{html_lib.escape(alt)}"><figcaption>AI illustration</figcaption></figure>')
+    slug, out = slugify(title), Path(images_dir)
+    if slug and (out / f"{slug}.webp").is_file():
+        alt = str((load_alts(images_dir).get(slug) or {}).get("alt") or "").strip() or FALLBACK_ALT
+        return (f'<figure class="card-figure"><img src="images/{slug}.webp" loading="lazy" width="{WIDTH}" '
+                f'height="{HEIGHT}" alt="{html_lib.escape(alt)}"><figcaption>AI illustration</figcaption></figure>')
+    slug = cover_slug(title)
+    src = f"images/{COVERS_DIR}/{slug}.webp" if (out / COVERS_DIR / f"{slug}.webp").is_file() else inline_cover(slug)
+    return (f'<figure class="card-figure"><img src="{src}" loading="lazy" width="{WIDTH}" '
+            f'height="{HEIGHT}" alt=""></figure>')
+
+
+def sync_covers(items, images_dir=IMAGES_DIR):
+    """Make the cover of every shown card that has no AI image, and delete the covers no shown card uses.
+    Returns how many covers were made. No API call."""
+    out, made, shown = Path(images_dir), 0, set()
+    for item in items:
+        title = item.get("title", "")
+        shown.add(cover_slug(title))
+        slug = slugify(title)
+        if slug and (out / f"{slug}.webp").is_file():
+            continue  # the AI image is the figure
+        if not (out / COVERS_DIR / f"{cover_slug(title)}.webp").is_file():
+            make_cover(cover_slug(title), images_dir)
+            made += 1
+    gone = prune_covers(images_dir, shown)
+    log(f"covers: {made} made, {gone} deleted, {len(list((out / COVERS_DIR).glob('*.webp')))} in use, 0 API calls")
+    return made
+
+
+def prune_covers(images_dir, shown):
+    """Delete the covers no shown card uses: the card left the page, or it has an AI image now. Returns how many."""
+    out, gone = Path(images_dir), 0
+    for path in (out / COVERS_DIR).glob("*.webp"):
+        if path.stem not in shown or (out / f"{path.stem}.webp").is_file():
+            path.unlink()
+            gone += 1
+    return gone
+
+
+class DailyLimit(RuntimeError):
+    """Cloudflare answered HTTP 429: the account's free neurons for this UTC day are used up."""
+
+
+class Budget:
+    """The neurons used on each UTC day, in site/images/budget.json as {"YYYY-MM-DD": neurons}. Saved after every
+    change, so every run of the day counts toward the same total, and a run that stops early loses no count."""
+
+    def __init__(self, images_dir, day):
+        self.path, self.day = Path(images_dir) / BUDGET_FILE, day
+        try:
+            data = json.loads(self.path.read_text())
+        except (OSError, ValueError):
+            data = {}
+        self.days = {str(k): float(v) for k, v in data.items() if isinstance(v, (int, float))} if isinstance(data, dict) else {}
+
+    @property
+    def used(self):
+        return self.days.get(self.day, 0.0)
+
+    def can_draw(self):
+        """True while one more drawing keeps the day's total within DAILY_NEURON_BUDGET."""
+        return self.used + NEURONS_PER_DRAWING <= DAILY_NEURON_BUDGET
+
+    def add(self, usage=None):
+        """Count one drawing: the neurons Cloudflare reported, or NEURONS_PER_DRAWING when it reported none."""
+        self.days[self.day] = round(self.used + neurons_of(usage), 1)
+        self.save()
+
+    def exhaust(self):
+        """A 429 from Cloudflare: the day's free allocation is used up, whatever this file counted."""
+        self.days[self.day] = max(self.used, float(FREE_DAILY_NEURONS))
+        self.save()
+
+    def save(self):
+        first = (datetime.strptime(self.day, "%Y-%m-%d") - timedelta(days=BUDGET_KEEP_DAYS)).strftime("%Y-%m-%d")
+        self.days = {d: n for d, n in self.days.items() if d >= first}
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.path.write_text(json.dumps(self.days, indent=2, sort_keys=True) + "\n")
+        except OSError as e:
+            log(f"could not write {BUDGET_FILE}: {e}")
+
+
+def neurons_of(usage):
+    """The neurons of one drawing, from what generate_image returned. NEURONS_PER_DRAWING when no number is there."""
+    try:
+        data = json.loads(usage)
+        found = [float(v) for k, v in data.items() if "neuron" in k.lower()]
+        if isinstance(data.get("usage"), dict) and "neurons" in data["usage"]:
+            found.append(float(data["usage"]["neurons"]))
+    except (TypeError, ValueError, AttributeError):
+        found = []
+    return max(found) if found and max(found) > 0 else float(NEURONS_PER_DRAWING)
 
 
 def names_in(item):
@@ -129,8 +318,10 @@ def strip_names(text, names):
 
 
 def banned_words(scene):
-    """The banned things a scene names, lower case, in the order they appear. Empty: the scene may be drawn."""
-    return list(dict.fromkeys(m.group(0).lower() for m in _BANNED_RE.finditer(str(scene or ""))))
+    """The banned things a scene names, lower case, in the order they appear. Empty: the scene may be drawn.
+    "face-down" names no face: a phone lying face-down shows its blank back."""
+    scene = re.sub(r"\bface[- ]down\b", " ", str(scene or ""), flags=re.IGNORECASE)
+    return list(dict.fromkeys(m.group(0).lower() for m in _BANNED_RE.finditer(scene)))
 
 
 def safe_scene(item):
@@ -156,6 +347,7 @@ idea (for a story about a chip export ban: one bare silicon wafer behind a glass
 blocks pressed into one). Name only the objects and what they are made of. No setting, no room, no place.
 Nothing that carries writing in real life: no landmarks, buildings, streets, screens, monitors, signs, documents, books,
 labels, logos, flags, maps, charts, keyboards or packaging. No people, no faces, no hands.
+Plain objects with blank surfaces are fine: a sheet of blank paper, a phone lying face-down, a cup.
 No company, product or person names. No words, letters, numbers or symbols.{again}
 Answer with the sentence only."""
 
@@ -222,6 +414,8 @@ def generate_image(scene, out_path):
     resp = requests.post(CF_URL.format(account=account, model=MODEL), headers={"Authorization": f"Bearer {token}"},
                          json={"prompt": image_prompt(scene), "steps": STEPS}, timeout=120)
     body = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+    if resp.status_code == 429:
+        raise DailyLimit(f"Cloudflare HTTP 429: {body.get('errors') or resp.text[:200]}")
     if resp.status_code != 200 or not body.get("success"):
         raise RuntimeError(f"Cloudflare HTTP {resp.status_code}: {body.get('errors') or resp.text[:200]}")
     image = Image.open(io.BytesIO(base64.b64decode(body["result"]["image"])))
@@ -305,25 +499,34 @@ def is_good(slug, out, alts):
     return entry.get("style") == STYLE_ID and not banned_words(entry.get("alt"))
 
 
-def draw_clean(item, path, draws_left):
-    """Draw the card's image; if OCR reads text on it, draw it once more from a new scene.
+def draw_clean(item, path, draws_left, budget):
+    """Draw the card's image; if OCR reads text on it, draw it once more from a new scene. Every drawing is counted in
+    the day's budget, and none starts when the budget has no room for it.
     Returns (scene, neurons of each drawing). scene is None when no clean image was made: the file is then gone."""
     scene, used = None, []
     for attempt in (1, 2):
-        if len(used) >= draws_left:
+        if len(used) >= draws_left or not budget.can_draw():
             break
         scene = describe_scene(item) if attempt == 1 else describe_scene(item, avoid=scene)
-        used.append(generate_image(scene, path))
+        try:
+            usage = generate_image(scene, path)
+        except DailyLimit:
+            raise  # run() marks the day as used up
+        except Exception:
+            budget.add()  # the call can have used neurons before it failed: count one drawing
+            raise
+        budget.add(usage)
+        used.append(usage)
         found = text_found(path)
         if len(found) < TEXT_LIMIT:
             return scene, used
-        path.unlink(missing_ok=True)  # no image is better than one with fake writing
+        path.unlink(missing_ok=True)  # the cover is better than an image with fake writing
         log(f"text on {path.stem}, try {attempt} ({found[:40]!r}): {scene}")
     return None, used
 
 
 def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
-    today = today or datetime.now()
+    today = today or datetime.now(timezone.utc).replace(tzinfo=None)  # UTC: Cloudflare's free neurons reset at 00:00 UTC
     out = Path(images_dir)
     out.mkdir(parents=True, exist_ok=True)
     alts = load_alts(images_dir)
@@ -353,6 +556,12 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
             log(f"skip (good image): {slug}")
             continue
         todo.append((slug, item))
+    budget = Budget(images_dir, today.strftime("%Y-%m-%d"))
+    if todo and not budget.can_draw():
+        # checked before any Groq call: a day with no room left makes 0 API calls
+        log(f"daily neuron budget reached ({budget.used:g} of {DAILY_NEURON_BUDGET} used on {budget.day} UTC): "
+            f"{len(todo)} cards keep their cover, 0 API calls")
+        todo = []
     if len(todo) > MAX_NEW_PER_RUN:
         log(f"{len(todo)} cards need an image; this run draws {MAX_NEW_PER_RUN}, the next run the rest")
     if todo and not dry_run:
@@ -363,7 +572,11 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
                 "No images generated, 0 API calls")
             todo = []
     for slug, item in todo:
-        if len(used) >= MAX_NEW_PER_RUN:  # every drawing counts, a second try too: the neuron budget holds
+        if len(used) >= MAX_NEW_PER_RUN:  # every drawing counts, a second try too
+            break
+        if not dry_run and not budget.can_draw():
+            log(f"daily neuron budget reached ({budget.used:g} of {DAILY_NEURON_BUDGET} used on {budget.day} UTC): "
+                "no more drawings today, the other cards keep their cover")
             break
         path = out / f"{slug}.webp"
         if dry_run:
@@ -371,19 +584,24 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
             used.append(None)  # counts toward the run's limit, as a real drawing does
             continue
         try:
-            scene, neurons = draw_clean(item, path, MAX_NEW_PER_RUN - len(used))
+            scene, neurons = draw_clean(item, path, MAX_NEW_PER_RUN - len(used), budget)
             used += neurons
             if scene is None:
                 alts.pop(slug, None)
-                log(f"no clean image for {slug}: the card keeps no image this run")
+                log(f"no clean image for {slug}: the card keeps its cover this run")
                 continue
             alts[slug] = {"alt": scene, "created": today.strftime("%Y-%m-%d"), "model": MODEL,
                           "provider": "cloudflare-workers-ai", "neurons": neurons[-1], "style": STYLE_ID}
             made += 1
             log(f"generated {slug} ({path.stat().st_size / 1024:.1f} KB, neurons {neurons[-1]}): {scene}")
+        except DailyLimit as e:
+            budget.exhaust()  # no run draws again before the next UTC day
+            log(f"Cloudflare's free neurons are used up for {budget.day} UTC: no more drawings today, "
+                f"cards keep their cover: {e}")
+            break
         except Exception as e:
             # stop the whole run: no more Groq or Cloudflare calls after the first error
-            log(f"error for {slug}, stopping the run, cards keep no image: {type(e).__name__}: {e}")
+            log(f"error for {slug}, stopping the run, cards keep their cover: {type(e).__name__}: {e}")
             break
     if not dry_run:
         for slug in [k for k in alts if not (out / f"{k}.webp").exists()]:
@@ -393,20 +611,28 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
                 json.dump(alts, f, indent=2, sort_keys=True)
         except Exception as e:
             log(f"could not write {ALT_FILE}: {e}")
-    log(f"done: {made} generated, {api_calls} API calls, neurons {neuron_total(used)}")
+    log(f"done: {made} generated, {api_calls} API calls, neurons {neuron_total(used)}; "
+        f"day total {budget.used:g} of {DAILY_NEURON_BUDGET} ({budget.day} UTC)")
     return made
 
 
-def main(argv=None):
+def main(argv=None, images_dir=IMAGES_DIR):
     argv = sys.argv[1:] if argv is None else argv
     dry_run = "--dry-run" in argv
     if os.environ.get("IMAGE_GEN_ENABLED", "").strip().lower() != "true":
         log("IMAGE_GEN_ENABLED is not \"true\": no images generated, 0 API calls")
-        return 0
+    else:
+        try:
+            run(dry_run=dry_run, images_dir=images_dir)
+        except Exception as e:  # never fail the pipeline
+            log(f"unexpected error, continuing with no new images: {type(e).__name__}: {e}")
     try:
-        run(dry_run=dry_run)
-    except Exception as e:  # never fail the pipeline
-        log(f"unexpected error, continuing with no images: {type(e).__name__}: {e}")
+        # after the drawings, so a new AI image replaces its cover and a card with no AI image has one. Always runs.
+        items = [] if dry_run else top_items()  # a dry run writes no file
+        if items:  # no card at all is a load problem, not a reason to delete every cover
+            sync_covers(items, images_dir)
+    except Exception as e:
+        log(f"covers not updated, cards show an inline cover: {type(e).__name__}: {e}")
     return 0
 
 
