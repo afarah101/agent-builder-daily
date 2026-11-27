@@ -57,6 +57,22 @@ def safe_url(url):
 def item_key(item):
     return item.get("url") or item.get("title")
 
+MIN_PER_TAB = 8
+
+def top_up(active, archive, kind, minimum=MIN_PER_TAB):
+    """active plus items from the newest archive days until there are at least `minimum`, no repeats.
+    A run that finds few or no new items (e.g. an extra manual run) then still shows a full page."""
+    out, seen = list(active), {item_key(i) for i in active}
+    for day in archive:
+        if len(out) >= minimum:
+            break
+        for item in day.get(kind) or []:
+            if item_key(item) not in seen:
+                out.append(item); seen.add(item_key(item))
+    if len(out) > len(active):
+        print(f"Top-up: {kind} {len(active)} -> {len(out)} from archive.")
+    return out
+
 def archive_day(archive, kind, date_str, items):
     """Save items under date_str in archive (newest day first: the email reads archive[0]). A day that already exists
     keeps its items and gains the new ones, matched by url then title, so archiving a file never drops what it holds."""
@@ -416,10 +432,7 @@ def generate_html():
         os.remove(f)
         print(f"Archived and removed {f}")
 
-    # Fallback: If no active items (all archived), load latest from archive
-    if not active_cs and cs_archive:
-        active_cs = cs_archive[0].get("case_studies", [])
-        print(f"Fallback: Loaded {len(active_cs)} case studies from archive.")
+    active_cs = top_up(active_cs, cs_archive, "case_studies")  # a thin or empty run must not blank the page
     active_cs = [cs for cs in active_cs if in_window(cs, cutoff)]
     active_cs.sort(key=lambda x: by_score(x, "total_score"), reverse=True)
     changes = []  # what the honesty checks hid or changed, printed at the end
@@ -456,10 +469,7 @@ def generate_html():
 
     active_news.sort(key=lambda x: by_score(x, "relevance_score"), reverse=True)
 
-    # Fallback: If no active news (all archived), load latest from archive
-    if not active_news and news_archive:
-        active_news = news_archive[0].get("news", [])
-        print(f"Fallback: Loaded {len(active_news)} news items from archive.")
+    active_news = top_up(active_news, news_archive, "news")
     if not active_headlines and news_archive:
         active_headlines = news_archive[0].get("headlines", [])
     active_headlines.sort(key=lambda x: by_score(x, "relevance_score"), reverse=True)
