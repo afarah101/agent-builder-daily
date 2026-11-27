@@ -97,7 +97,7 @@ def test_existing_images_are_skipped(site, monkeypatch):
 
 
 def test_at_most_max_new_per_run_newest_first(site, monkeypatch, capsys):
-    assert gi.MAX_NEW_PER_RUN == 25
+    monkeypatch.setattr(gi, "MAX_NEW_PER_RUN", 25)  # the run's limit, set low for this test
     items = [news(f"Story {i:02d}", day=f"2026-10-{1 + i % 26:02d}") for i in range(40)]
     monkeypatch.setattr(gi, "top_items", lambda: items)
     calls = []

@@ -590,14 +590,17 @@ def restyle_existing_pages(directory=OUTPUT_DIR, tags=None):
 
 
 def sync_figures(directory=OUTPUT_DIR):
-    """Each page shows its image exactly when the image file exists: an image is made after its page, and
-    generate_images.py deletes it after 4 months. Returns the number of pages changed."""
+    """Each page shows its card's AI image, under the title, exactly when the image file exists, with the scene of that
+    image as the alt: an image is made after its page, a redrawn image has a new scene, and generate_images.py deletes
+    an image after 4 months. Returns the number of pages changed."""
     have = {p.stem for p in (Path(directory).parent / "images").glob("*.webp")}
     changed = 0
     for path in Path(directory).glob("*.html"):
         html = path.read_text(encoding="utf-8")
-        if ('<figure class="article-figure">' in html) != (path.stem in have):
-            new_html = restyle_page(html, figure=article_figure(path.stem, directory))
+        stored = FIGURE.search(html)
+        figure = article_figure(path.stem, directory) if path.stem in have else ""
+        if (stored[0] if stored else "") != figure:
+            new_html = restyle_page(html, figure=figure)
             if new_html:
                 path.write_text(new_html, encoding="utf-8")
                 changed += 1
