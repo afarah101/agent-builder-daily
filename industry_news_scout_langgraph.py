@@ -473,8 +473,9 @@ def classify_news(state):
     for i in range(limit):
         article = articles[i]
         print("[DEBUG] " + str(i+1) + "/" + str(limit) + ": " + article["title"][:60])
-        if article.get("scraped") and not is_recent(article.get("pub_date"), "8w"):
-            why = "is older than 8 weeks" if article.get("pub_date") else "has no publish date on its page"
+        published = quality_checks.parse_date(article.get("pub_date"))  # reads "06 Oct 2026", the form format_date writes
+        if article.get("scraped") and not (published and published >= EIGHT_WEEKS_AGO):
+            why = "is older than 8 weeks" if published else "has no publish date on its page"
             print("[QUALITY] HELD BACK " + article["title"][:70] + ": the source " + why)
             _run["held_date"] = _run.get("held_date", 0) + 1
             continue

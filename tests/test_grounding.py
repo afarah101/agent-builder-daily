@@ -4,7 +4,7 @@ No network: Groq and the URL check are stubbed."""
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -197,6 +197,20 @@ def test_news_scout_holds_a_scraped_story_with_no_source_date(monkeypatch, capsy
                                                  "source": "Anthropic", "tier": "ai_labs", "pub_date": "", "scraped": True,
                                                  "url": "https://www.anthropic.com/news/some-story"}], "output_file": "x"})
     assert out["classified_news"] == [] and "no publish date" in capsys.readouterr().out
+
+
+def test_news_scout_classifies_a_scraped_story_with_a_recent_source_date(monkeypatch, capsys):
+    import industry_news_scout_langgraph as scout
+    monkeypatch.setattr(scout, "groq_complete", lambda *a, **k: json.dumps(
+        {"summary": "Anthropic expanded its program.", "enterprise_use": "Nothing to do.", "relevance_score": 5,
+         "relevance_signal": "medium", "category": "Security"}))
+    story = {"id": "1", "title": "Expanding the Cyber Verification Program", "summary_raw": "", "source": "Anthropic", "tier": "ai_labs",
+             "scraped": True, "url": "https://www.anthropic.com/news/cyber-verification-program", "source_text": CVP_SOURCE}
+    recent = scout.format_date((datetime.now() - timedelta(days=10)).strftime("%Y-%m-%d"))  # "17 Nov 2026"
+    old = scout.format_date((datetime.now() - timedelta(days=90)).strftime("%Y-%m-%d"))
+    out = scout.classify_news({"raw_articles": [{**story, "pub_date": recent}, {**story, "id": "2", "pub_date": old}], "output_file": "x"})
+    assert [(a["id"], a["pub_date"]) for a in out["classified_news"]] == [("1", recent)]
+    assert "older than 8 weeks" in capsys.readouterr().out
 
 
 def test_page_facts_reads_the_sources_own_date_and_title():
