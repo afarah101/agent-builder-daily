@@ -88,7 +88,10 @@ GROUNDING_RULES = """GROUNDING RULES. A page that breaks one is not published.
 4. State no prediction as fact. A forward view (a prediction, an implication, why it matters) goes in a paragraph
    that starts with "Our take:".
 5. Never write a placeholder such as "xxxx", "TBD", "[insert" or "example.com".
-6. If the source is thin, write less. A short accurate page is right. A long invented page is wrong."""
+6. Keep who does what to whom. Do not make a claim stronger or wider than the source: if the source says a customer
+   is investigated, do not write that the vendor is investigated, and if it says a model matches models of a larger
+   size, do not write that it is faster or better by that factor. Every sentence must stand on a line of the source.
+7. If the source is thin, write less. A short accurate page is right. A long invented page is wrong."""
 
 PAGE_TASK = """Write two sections. Use plain text with no markdown formatting, no asterisks, no hash symbols. Use numbered lists where appropriate.
 
@@ -111,7 +114,8 @@ Separate the two sections with exactly this delimiter: ---SPLIT---"""
 REGENERATE_NOTE = """
 
 Your last answer broke the GROUNDING RULES: {problems}.
-Write both sections again. Remove every number, name and claim that is not in the SOURCE TEXT. Put a forward view in the "Our take:" paragraph."""
+Write both sections again. Remove every number, name and claim that is not in the SOURCE TEXT. Keep who does what to
+whom exactly as the source has it. Put a forward view in the "Our take:" paragraph."""
 
 
 def source_body(item):
@@ -163,6 +167,25 @@ def page_problems(summary, guide, item):
     return ((["not in source: " + ", ".join(missing[:10])] if missing else [])
             + (["placeholder text: " + ", ".join(found)] if found else [])
             + ([f'forward view without "{quality_checks.TAKE_LABEL}": ' + ", ".join(views)] if views else []))
+
+
+def meaning_check(pages):
+    """The meaning check on generated pages, all in one batch: one Gemini call for each 25 pages, after the number
+    check (page_problems) has passed. Each sentence of the summary and the how-to guide is read against the story's
+    stored source and labelled SUPPORTED, NOT IN SOURCE or CONTRADICTED.
+    pages: [(item, summary text, guide text)]. Returns one list of problems for each page; [] means every sentence
+    passed, and a page the check could not read (no key, model error) also gets [] (the number check has run)."""
+    import judge
+    batch = []
+    for n, (item, summary, guide) in enumerate(pages):
+        batch.append({"id": str(n), "title": item.get("title") or "", "source": quality_checks.source_text(item),
+                      "sentences": judge.sentences_of(summary) + judge.sentences_of(guide)})
+    try:
+        labels = judge.meaning_check(batch)
+    except Exception as e:  # the meaning check must never stop the pages
+        print(f"    [MEANING] check skipped: {type(e).__name__}: {str(e)[:120]}")
+        return [[] for _ in pages]
+    return [judge.meaning_problems(labels.get(it["id"]), it["sentences"]) for it in batch]
 
 
 PAGE_JUDGE_RULES = """
@@ -252,11 +275,12 @@ def summary_block_html(paras):
 
 def guide_block_html(label, color, text):
     """One guide block. Label, colour and text are all escaped; the colour only ever picks a CSS class.
-    "How to use", "Do this week" and "What to do" all show as "How to apply", the label the cards use."""
+    "How to use", "Do this week" and "What to do" are the panel's own heading ("How to apply"), so a block with one of
+    those labels carries no heading of its own: the page shows "How to apply" once."""
     color_class = f" {color}" if color in ("green", "amber", "red") else ""
-    label = HOW_LABEL if str(label).strip().rstrip(":").lower() in HOW_LABELS else label.capitalize()
-    return (f'<div class="guide-block{color_class}">'
-            f'<h3 class="guide-label">{escape(label)}</h3>'
+    own_heading = str(label).strip().rstrip(":").lower() not in HOW_LABELS
+    heading = f'<h3 class="guide-label">{escape(label.capitalize())}</h3>' if own_heading else ""
+    return (f'<div class="guide-block{color_class}">{heading}'
             f'<div class="guide-text">{escape(text)}</div>'
             f'</div>')
 
@@ -599,8 +623,8 @@ STORED = re.compile(
 SOURCE = re.compile(r'<a href="(?P<url>[^"]*)"[^>]*class="source-link">')
 TAG = re.compile(r'<p class="tag-pill">(?P<tag>.*?)</p>')
 FIGURE = re.compile(r'<figure class="article-figure">.*?</figure>', re.S)
-STORED_BLOCK = re.compile(
-    r'<div class="guide-block(?: (?P<color>\w+))?"><(?:div|h3) class="guide-label">(?P<label>.*?)</(?:div|h3)>'
+STORED_BLOCK = re.compile(  # the label is absent on a block whose heading is the panel's own ("How to apply")
+    r'<div class="guide-block(?: (?P<color>\w+))?">(?:<(?:div|h3) class="guide-label">(?P<label>.*?)</(?:div|h3)>)?'
     r'<div class="guide-text">(?P<text>.*?)</div></div>', re.S)
 
 
@@ -626,7 +650,8 @@ def restyle_page(old_html, tag="", figure=None, slug=""):
     source = SOURCE.search(old_html)  # one page in the archive has no source link
     stored_tag, stored_figure = TAG.search(old_html), FIGURE.search(old_html)
     summary = summary_block_html(stored_text(p) for p in re.findall(r"<p>(.*?)</p>", m["summary"], re.S))
-    guide = "\n".join(guide_block_html(stored_text(b["label"]), b["color"] or "", stored_text(b["text"])) for b in blocks)
+    guide = "\n".join(guide_block_html(stored_text(b["label"]) if b["label"] is not None else HOW_LABEL,
+                                       b["color"] or "", stored_text(b["text"])) for b in blocks)
     url = unescape(source["url"]) if source else ""
     if figure is None:
         figure = stored_figure[0] if stored_figure else ""
@@ -704,13 +729,27 @@ NO_SUMMARY = STOCK_NOTES[0]
 NO_HOW_TO = "No how-to notes are stored for this story. Read the original for the detail."
 
 
+def checked_summary(item):
+    """The story's own stored summary when it passes the source checks, else None. A listing page is not a source,
+    so none of its text is checked text."""
+    if quality_checks.is_listing_url(item.get("url")):
+        return None
+    summary = str(item.get("summary") or "").strip()
+    return None if not summary or page_problems(summary, "", item) else summary
+
+
+def publishable(item, kind="news"):
+    """True when the story has a source-checked summary. Only such a story gets a card, an archive row and a page:
+    a fallback ("No source-checked summary ...") is never published."""
+    return checked_summary(item) is not None
+
+
 def short_content(item, kind):
     """(summary_html, guide_html) from the text the scout already stored for the item. No AI call. Stored text that
-    fails the grounding checks against the item's own source is left out: a page never shows an unchecked claim."""
+    fails the grounding checks against the item's own source is left out: a page never shows an unchecked claim.
+    Only call this for a publishable item; without a checked summary the story is not published at all."""
     listing = quality_checks.is_listing_url(item.get("url"))  # a list of stories is not a source: none of its text is shown
-    summary = str(item.get("summary") or "").strip()
-    if not summary or listing or page_problems(summary, "", item):
-        summary = NO_SUMMARY
+    summary = checked_summary(item) or NO_SUMMARY
     summary_html = summary_block_html([p.strip() for p in summary.split("\n\n") if p.strip()])
     if kind == "case_studies":
         how = str(item.get("it_breakdown") or item.get("how_to_apply") or "").strip()
@@ -730,6 +769,25 @@ def is_short_page(path):
     meta line on a page of the old shape)."""
     return bool(re.search(r'class="(?:meta-line|generated-note)">[^<]*' + re.escape(escape(SHORT)) + "</(?:p|div)>",
                           Path(path).read_text(encoding="utf-8")))
+
+
+def page_is_fallback(path):
+    """True when a page stands in for a story with no source-checked summary (NO_SUMMARY). Such a page is never
+    written now: the story is not published at all. A withdrawn page (WITHDRAWN_NOTE) is not a fallback: its story is
+    in no data file, and it keeps its address for the links already out there."""
+    return escape(NO_SUMMARY) in Path(path).read_text(encoding="utf-8")
+
+
+def remove_fallback_pages(directory=OUTPUT_DIR):
+    """Delete every page that stands in for a story with no source-checked summary. Returns the file names.
+    Run at the end of a render: a fallback page is never published, whether the story left the page or never had
+    checked text. A withdrawn page keeps its address and is not touched."""
+    gone = []
+    for path in sorted(Path(directory).glob("*.html")):
+        if page_is_fallback(path):
+            path.unlink()
+            gone.append(path.name)
+    return gone
 
 
 HELD_BACK = []  # (title, reason) for every AI page held back in this process
@@ -760,9 +818,16 @@ def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
         title = item.get("title", "Untitled" if kind == "case_studies" else "")  # the key the card renderer looks up
         slug = page_slug(title)
         path = Path(directory) / f"{slug}.html"
-        slug_map[title] = slug
-        if path.exists() and not (use_ai and is_short_page(path)):
+        if not publishable(item, kind):
+            # No source-checked summary: no page, no card, no archive row. An old fallback page is removed.
+            if path.exists() and page_is_fallback(path):
+                path.unlink()
+                print(f"    Removed (no source-checked summary): {path}")
+            hold(title, "no source-checked summary")
             continue
+        slug_map[title] = slug
+        if path.exists() and not (use_ai and is_short_page(path)) and not page_is_fallback(path):
+            continue  # a fallback page is stale: the story has source-checked text now, so the page is written again
 
         held = ""
         if use_ai and quality_checks.is_listing_url(item.get("url")):
@@ -790,9 +855,40 @@ def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
                 held = "; ".join(problems)
         if held:
             hold(title, held)
-        if path.exists() and not held:
-            continue  # keep the short page that is already there
+        if path.exists() and not held and not page_is_fallback(path):
+            continue  # keep the short page that is already there; a fallback page is written again
         write(item, title, slug, path, *short_content(item, kind), generated_at + (HELD if held else SHORT))
+
+    # The meaning check: one batch for the whole run. A page that fails is written again once, checked again
+    # (numbers first, then meaning, in a second batch of only those pages), and held back if it still fails.
+    problems = meaning_check([(item, *split_sections(raw)) for item, _, _, _, raw in waiting])
+    again = []
+    for n, (page, found) in enumerate(zip(waiting, problems)):
+        if not found:
+            continue
+        item, title, slug, path, raw = page
+        print(f"    [MEANING] failed for {str(title)[:60]}: {'; '.join(found)[:200]}")
+        if not use_ai:
+            again.append((n, None, found))
+            continue
+        time.sleep(0.5)
+        new = generate(item, REGENERATE_NOTE.format(problems="; ".join(found)))
+        ok = new and new != "DAILY_LIMIT" and split_sections(new)[0] is not None and not page_problems(*split_sections(new), item)
+        again.append((n, new if ok else None, found))
+    retry = [(n, new) for n, new, _ in again if new]
+    retried = meaning_check([(waiting[n][0], *split_sections(new)) for n, new in retry])
+    still = {n: found for n, _, found in again}
+    for (n, new), found in zip(retry, retried):
+        if found:
+            still[n] = found
+        else:
+            waiting[n] = (*waiting[n][:4], new)  # the new text passed both checks: publish it
+            del still[n]
+    for n, found in still.items():
+        item, title, slug, path, _ = waiting[n]
+        hold(title, "meaning check: " + "; ".join(found)[:200])
+        write(item, title, slug, path, *short_content(item, kind), generated_at + HELD)
+    waiting = [page for n, page in enumerate(waiting) if n not in still]
 
     verdicts = judge_pages([(item, *split_sections(raw)) for item, _, _, _, raw in waiting])
     for (item, title, slug, path, raw), (verdict, why) in zip(waiting, verdicts):
@@ -926,8 +1022,8 @@ def fix_pages(failures, directory=OUTPUT_DIR, index=None, delete=False):
         html = path.read_text(encoding="utf-8")
         parts, (item, kind) = page_text(html), index.get(slug, (None, None))
         listing = quality_checks.is_listing_url(item.get("url") if item else parts[3] if parts else "")
-        if parts is None or listing or (delete and not item):
-            path.unlink()
+        if parts is None or listing or (delete and not item) or (item and not publishable(item, kind)):
+            path.unlink()  # no shape, a listing page, or no source-checked summary: nothing on it can be published
             removed.append(name)
         elif item:
             summary_html, guide_html = short_content(item, kind)

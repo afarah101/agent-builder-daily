@@ -343,7 +343,9 @@ def test_breakdown_page_uses_the_cards_tag_meta_and_label(tmp_path):
     assert f'<p class="meta-line">Ada Lovelace, Alan Turing et al.{NB}· 5{NB}Aug{NB}2026</p>' in paper
     assert f'<p class="meta-line">TechCrunch{NB}· Press{NB}· 26{NB}Nov{NB}2026</p>' in story
     assert '<h2 class="section-title">How to apply</h2>' in paper
-    assert '<h3 class="guide-label">How to apply</h3><div class="guide-text">Test it on one service.</div>' in story  # was "Do this week"
+    assert '<div class="guide-block"><div class="guide-text">Test it on one service.</div></div>' in story  # was "Do this week"
+    heading = lambda page: len(re.findall(r"<h[23][^>]*>How to apply</h[23]>", page))  # noqa: E731
+    assert heading(story) == 1 and heading(paper) == 1  # the panel heading, not repeated in the block
     assert not re.search(r"Do this week|What to do|How to use|Generated 27 Nov", paper + story)
     assert "Images are AI-generated." in paper and gb.is_short_page(out / "paper.html") and gb.restyle_page(paper) == paper
 

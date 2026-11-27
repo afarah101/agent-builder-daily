@@ -157,7 +157,7 @@ def test_built_page_links_every_card_top_up_cards_too(site):
 
 def test_shown_items_are_the_cards_on_the_page(site):
     write_data(site, [study("New study"), study("Too old", day=200)], [study(f"Old study {i}") for i in range(8)],
-               [story("News"), story("Future", day=-30)], [story(f"Old news {i}", day=3) for i in range(8)])
+               [story("Top story"), story("Future", day=-30)], [story(f"Old news {i}", day=3) for i in range(8)])
     studies, news = gb.shown_items()
     gh.generate_html()
     page = (site / "site" / "index.html").read_text()
@@ -174,7 +174,9 @@ def test_short_page_when_groq_gives_nothing(site):
     slugs.update(gb.process_items([story("Story")], "news", "27 Nov 2026, 09:00", out, use_ai=False))
     assert slugs == {"Paper": "paper", "No notes": "no-notes", "Story": "story"}
     paper, none, news = ((out / f"{s}.html").read_text() for s in ("paper", "no-notes", "story"))
-    assert "<p>Summary of Paper.</p>" in paper and '<h3 class="guide-label">How to apply</h3><div class="guide-text">Apply Paper.</div>' in paper
+    # the panel heading is "How to apply", so the block inside carries no heading of its own
+    assert "<p>Summary of Paper.</p>" in paper and '<div class="guide-block"><div class="guide-text">Apply Paper.</div></div>' in paper
+    assert len(re.findall(r"<h[23][^>]*>How to apply</h[23]>", paper)) == 1  # the panel heading, not repeated in the block
     assert 'href="https://arxiv.org/abs/paper" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>' in paper
     assert '<a class="back-link" href="../index.html">← Back to today</a>' in paper
     assert "Not directly applicable" not in none and "No how-to notes are stored" in none

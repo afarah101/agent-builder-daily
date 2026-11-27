@@ -11,6 +11,8 @@ CASE_STUDIES_DIR = "case_studies"
 NEWS_DIR = "data/news"
 OUTPUT_FILE = "site/index.html"
 ARCHIVE_PAGE = "site/archive.html"  # every past day; the home page links to it
+SITEMAP_FILE = "site/sitemap.xml"  # every live page, written again on each run
+ROBOTS_FILE = "site/robots.txt"
 ARCHIVE_CS_FILE = "case_studies/archive.json"
 ARCHIVE_NEWS_FILE = "data/news_archive.json"
 SLUG_MAP_FILE = "site/breakdowns/slug_map.json"
@@ -304,8 +306,11 @@ def parse_date(value):
 
 
 def honest(items, now, changes, kind):
-    """Items fit to show: no future date, no summary naming a later year; summaries end on a full sentence;
-    a news source that does not match its URL shows the domain. Every change is appended to changes."""
+    """Items fit to show: no future date, no summary naming a later year, a summary that passes the source checks;
+    summaries end on a full sentence; a news source that does not match its URL shows the domain. Every change is
+    appended to changes. A story with no source-checked summary is not shown anywhere: no card, no archive row, no
+    breakdown page (generate_breakdowns.publishable)."""
+    from generate_breakdowns import publishable  # imported here: generate_breakdowns imports this module
     today, year = now.strftime("%Y-%m-%d"), now.year
     kept = []
     for item in items:
@@ -328,6 +333,9 @@ def honest(items, now, changes, kind):
             if dom:
                 changes.append((kind, title, "source changed", f"{item['source']!r} does not match {dom}"))
                 item["source"] = dom
+        if not publishable(item, "news" if kind == "news" else "case_studies"):
+            changes.append((kind, title, "hidden", "no source-checked summary"))
+            continue
         kept.append(item)
     return kept
 
@@ -613,16 +621,21 @@ def render_archive(archive, kind="cs"):
         return "<div class='empty-state'><p>No archive yet.</p></div>"
     weeks = []  # [title, rows]
     key = "case_studies" if kind == "cs" else "news"
-    for entry in [e for e in archive if e.get("total", 0)][:30]:
+    from generate_breakdowns import publishable  # a story with no source-checked summary is on no archive row either
+    for entry in [e for e in archive if e.get(key)][:30]:
+        # Every story of the day is listed, and the count is the number of links listed: the two always agree.
+        links = [i for i in entry.get(key) or [] if str(i.get("title") or "").strip() and publishable(i, key)]
+        if not links:
+            continue
         preview_html = "".join(
             f'<a class="archive-title" href="{esc(safe_url(i.get("url")))}" target="_blank" rel="noopener noreferrer">{esc(i.get("title", ""))}</a>'
-            for i in entry.get(key, [])[:3])
+            for i in links)
         title = week_title(entry.get("date", ""))
         if not weeks or weeks[-1][0] != title or len(weeks[-1][1]) >= GROUP_MAX:
             weeks.append([title, []])
         weeks[-1][1].append(f"""<div class="archive-row">
   <div class="archive-date">{esc(show_date(entry.get("date", "")))}</div>
-  <div class="archive-count">{esc(entry.get("total", 0))} items</div>
+  <div class="archive-count">{len(links)} {"item" if len(links) == 1 else "items"}</div>
   <div class="archive-previews">{preview_html}</div>
 </div>""")
     return "\n".join(f'<section class="archive-week">\n<h2 class="group-title">{esc(title)}</h2>\n'
@@ -739,6 +752,39 @@ def archive_page(head, cs_archive, news_archive):
 
 # The words a subscriber agrees to. The Apps Script stores the same words with each email (apps-script/README.md).
 CONSENT_TEXT = "Send me the Daily Edge AI email. I can unsubscribe at any time."
+
+
+def sitemap_xml(pages):
+    """The sitemap of the site: one <url> for each page, each with the day its file was last written.
+    pages: [(path from the site root, last-changed date as YYYY-MM-DD)]."""
+    urls = "\n".join(f"  <url>\n    <loc>{esc(SITE_URL + '/' + path)}</loc>\n    <lastmod>{esc(day)}</lastmod>\n  </url>"
+                     for path, day in pages)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "\n</urlset>\n")
+
+
+def site_pages(site_dir="site"):
+    """Every live page of the site, newest breakdown first: the home page, the archive, the privacy notice and every
+    breakdown page on disk. A page with no source-checked summary was never written, so it is not here."""
+    site = Path(site_dir)
+    day = lambda path: datetime.utcfromtimestamp(path.stat().st_mtime).strftime("%Y-%m-%d")
+    pages = [(name, day(site / name)) for name in ("index.html", "archive.html", "privacy.html") if (site / name).is_file()]
+    pages[0] = ("", pages[0][1]) if pages and pages[0][0] == "index.html" else pages[0]  # the home page is the bare URL
+    from generate_breakdowns import STOCK_NOTES  # a page with no text of its own is not offered to a search engine
+    notes = tuple(html_lib.escape(note) for note in STOCK_NOTES)
+    breakdowns = sorted((p for p in (site / "breakdowns").glob("*.html")
+                         if not any(note in p.read_text(encoding="utf-8") for note in notes)),
+                        key=lambda p: (-p.stat().st_mtime, p.name))
+    return pages + [(f"breakdowns/{p.name}", day(p)) for p in breakdowns]
+
+
+def generate_seo_files(site_dir="site"):
+    """site/sitemap.xml and site/robots.txt, written again on every run so a new page is listed the same day."""
+    pages = site_pages(site_dir)
+    Path(site_dir, "sitemap.xml").write_text(sitemap_xml(pages), encoding="utf-8")
+    Path(site_dir, "robots.txt").write_text("User-agent: *\nAllow: /\n\n" f"Sitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
+    print(f"Sitemap written -> {site_dir}/sitemap.xml ({len(pages)} pages); robots.txt -> {SITE_URL}/sitemap.xml")
+    return pages
 
 
 def generate_email_capture(n=""):
@@ -1466,6 +1512,14 @@ def generate_html():
         f.write(html)
     with open(ARCHIVE_PAGE, "w") as f:  # the same head and style as the home page
         f.write(archive_page(html.split("<body>")[0], cs_archive, news_archive))
+    try:  # no page may stand in for a story with no source-checked summary, whatever left it behind
+        from generate_breakdowns import remove_fallback_pages
+        gone = remove_fallback_pages(os.path.dirname(SLUG_MAP_FILE))
+        if gone:
+            print(f"Removed {len(gone)} breakdown pages with no source-checked summary")
+    except Exception as e:
+        print(f"Fallback pages not checked ({e})")
+    generate_seo_files("site")  # after the pages are written: the sitemap lists what is on disk now
     generate_rss(cs_data, news_data)
     # Copy data files to site/ so Vercel can serve them for the dashboard
     for src, dst in ((ARCHIVE_CS_FILE, "site/case_studies_archive.json"), (ARCHIVE_NEWS_FILE, "site/news_archive.json")):

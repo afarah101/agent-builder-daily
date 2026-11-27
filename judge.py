@@ -444,3 +444,140 @@ def send_scores(client, stats, log=print):
         client.score_current_trace(name="judge_error", value=stats["errors"], metadata=meta)
     except Exception as e:
         log(f"[JUDGE] Langfuse score failed: {e}")
+
+
+# ---------- Meaning check: claim entailment, sentence by sentence ----------
+# The number check (quality_checks.ungrounded) compares numbers, dates and names as written. It cannot see a sentence
+# that uses the source's own words to say something the source does not say ("Nvidia is under investigation" where the
+# source says the investigation is into its customer). This check reads each sentence against the source text.
+LABELS = ("SUPPORTED", "NOT IN SOURCE", "CONTRADICTED")
+TAKE_LABEL = "Our take:"  # the one label that allows a sentence the source does not state
+
+MEANING_PROMPT = """You are a strict fact checker. For EACH item below, read the source, then label EVERY sentence of
+the item's claims.
+
+{data_rules}
+
+Label each sentence with exactly one of these:
+- "SUPPORTED": the source states this, or it plainly follows from what the source states. General IT practice addressed
+  to the reader (audit your stack, pilot it, monitor cost, train staff, review in 30 days) is advice, not a claim about
+  the source: label it SUPPORTED.
+- "NOT IN SOURCE": the sentence states something about the product, company, study or market that the source does not
+  state. Use this for an opinion, a forecast or a guess as well.
+- "CONTRADICTED": the source states something different. Use this when the sentence swaps who did what to whom, changes
+  a number or a name, or makes a weaker claim stronger (the source says a customer is investigated, the sentence says
+  the vendor is investigated).
+
+Read the whole source before you label. Judge each sentence on its own meaning, not on its words: a sentence that uses
+the source's words but changes who acts, who is affected or how much, is CONTRADICTED.
+
+ITEMS (JSON list; each has id, title, source, sentences):
+{items}
+
+Return JSON only, one entry per item id, one label per sentence, in the same order:
+{{"items": [{{"id": "<item id>", "labels": [{{"label": "SUPPORTED" or "NOT IN SOURCE" or "CONTRADICTED", "reason": "<short reason>"}}]}}]}}"""
+
+_SENTENCE_END = re.compile(r"(?<=[.!?])[\"'’”)\]]*\s+(?=[\"'“(\[]?[A-Z0-9])")
+# "Dr.", "e.g.", "U.S." and an initial ("A. Author") end no sentence
+_ABBREVIATION = re.compile(r"(?:\b(?:e\.g|i\.e|vs|etc|dr|mr|mrs|ms|prof|inc|ltd|fig|approx"
+                           r"|jan|feb|mar|apr|jun|jul|aug|sept?|oct|nov|dec)|\b[A-Za-z](?:\.[A-Za-z])*)\.?$", re.I)
+
+
+def sentences_of(text):
+    """The sentences of a block of text, for the meaning check. A bullet or a numbered step is its own sentence."""
+    out = []
+    for line in str(text or "").replace("\r", "").split("\n"):
+        line = re.sub(r"^\s*(?:\d+[.)]|[-•*])\s*", "", line).strip()
+        if not line:
+            continue
+        start, parts = 0, []
+        for m in _SENTENCE_END.finditer(line):
+            if _ABBREVIATION.search(line[start:m.start()].rstrip()):
+                continue  # the dot ends an abbreviation, not the sentence
+            parts.append(line[start:m.start()].strip())
+            start = m.end()
+        out += [s for s in [*parts, line[start:].strip()] if s]
+    return out
+
+
+def _meaning_chunk(chunk):
+    """One Gemini call for up to BATCH_SIZE items. Returns {id: [label, ...]} with one label for each sentence;
+    an item the model did not label gets [] (the caller treats that as "not checked")."""
+    open_, close = _markers()
+    wrap = lambda s: f"{open_}{json.dumps(str(s or ''), ensure_ascii=False)}{close}"
+    sent = [{"id": it["id"], "title": wrap(it.get("title")), "source": wrap(it.get("source")),
+             "sentences": [wrap(s) for s in it["sentences"]]} for it in chunk]
+    prompt = MEANING_PROMPT.format(data_rules=DATA_RULES.format(open=open_, close=close),
+                                   items=json.dumps(sent, ensure_ascii=False, indent=1))
+    answer, last = None, None
+    for candidate in JUDGE_MODELS:
+        for attempt in range(2):
+            try:
+                _pace()
+                raw = _ask(prompt, candidate)
+            except Exception as e:
+                last, code = e, _code(e)
+                if code == 429:
+                    print(f"[MEANING] {candidate} quota hit (429), trying next model")
+                    break
+                if code is not None and code < 500:
+                    return {}
+                if attempt == 0:
+                    print(f"[MEANING] {candidate} {code or type(e).__name__}, retrying in {RETRY_DELAY}s")
+                    sleep(RETRY_DELAY)
+                    continue
+                print(f"[MEANING] {candidate} {code or type(e).__name__} again, trying next model")
+                break
+            try:
+                answer = json.loads(raw)["items"]
+                if not isinstance(answer, list):
+                    raise ValueError("items is not a list")
+            except Exception as e:
+                last, answer = e, None
+                print(f"[MEANING] {candidate} unparseable reply ({type(e).__name__}), "
+                      + ("retrying" if attempt == 0 else "trying next model"))
+                continue
+            print(f"[MEANING] model used: {candidate}")
+            break
+        if answer is not None:
+            break
+    if answer is None:
+        print(f"[MEANING] all models failed; last: {type(last).__name__}: {str(last)[:160]}")
+        return {}
+    want = {it["id"]: len(it["sentences"]) for it in chunk}
+    counts = Counter(str(a.get("id")) for a in answer if isinstance(a, dict))
+    out = {}
+    for a in answer:
+        aid = str(a.get("id")) if isinstance(a, dict) else None
+        labels = a.get("labels") if isinstance(a, dict) else None
+        if aid not in want or counts[aid] != 1 or not isinstance(labels, list) or len(labels) != want[aid]:
+            continue  # a missing, duplicate or mis-sized answer is "not checked", never a pass
+        out[aid] = [{"label": str((lab or {}).get("label", "")).strip().upper().replace("_", " "),
+                     "reason": str((lab or {}).get("reason", ""))[:200]} for lab in labels]
+    return out
+
+
+def meaning_check(items):
+    """The meaning check, batched: one call for each BATCH_SIZE items, so a whole run costs a few calls.
+    items: [{"id", "title", "source", "sentences": [...]}]. Returns {id: [{"label", "reason"}, ...]}; an id that is
+    missing from the result was not checked. Without GEMINI_API_KEY nothing is checked and {} comes back."""
+    items = [it for it in items if it.get("sentences")]
+    if not items or not os.environ.get("GEMINI_API_KEY"):
+        return {}
+    out = {}
+    for start in range(0, len(items), BATCH_SIZE):
+        out.update(_meaning_chunk(items[start:start + BATCH_SIZE]))
+    return out
+
+
+def meaning_problems(labels, sentences, take_label=TAKE_LABEL):
+    """Why a page's sentences fail the meaning check, as short strings. [] means every sentence passed.
+    A CONTRADICTED sentence always fails. A NOT IN SOURCE sentence fails unless it is labelled "Our take:"."""
+    problems = []
+    for label, sentence in zip(labels or [], sentences or []):
+        name, why = label.get("label", ""), label.get("reason", "")
+        if name == "CONTRADICTED":
+            problems.append(f"contradicts the source: {sentence[:90]!r} ({why[:80]})")
+        elif name == "NOT IN SOURCE" and take_label.lower() not in sentence.lower():
+            problems.append(f'not in source and not labelled "{take_label}": {sentence[:90]!r} ({why[:80]})')
+    return problems

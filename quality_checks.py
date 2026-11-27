@@ -166,7 +166,9 @@ _MONEY = (
 _PCT = re.compile(rf"(?:(?P<lo>{_NUM}) ?(?:-|to) ?)?(?P<num>{_NUM}) ?(?:%|percent\b|per cent\b|percentage points?\b)", re.I)
 _DURATION = re.compile(rf"\b\d+(?:\.\d+)?(?: ?(?:-|to|/) ?\d+(?:\.\d+)?)*[ -]?{_TIME_UNIT}\b", re.I)
 # "1.", "2)", "(3)", "S1:", "step 2", and a line that starts "3 Identify ..." or "1.4 Assess ..."
-_LIST_MARK = re.compile(r"(?m)^[ \t]*(?:[-•*] ?)?\(?\d{1,2}(?:\.\d{1,2})?(?:[.)](?=\s)|(?= [A-Z][a-z]))|\(\d{1,2}\)|\bS[1-3]:|\b[Ss]tep \d{1,2}\b")
+_LIST_MARK = re.compile(r"(?m)^[ \t]*(?:[-•*] ?)?\(?\d{1,2}(?:\.\d{1,2})?(?:[.)](?=\s)|(?= [A-Z][a-z]))|\(\d{1,2}\)|\bS[1-3]:|\b[Ss]tep \d{1,2}\b"
+                        # a step number inside a line ("... controls. 2. Flag any contract"): a marker, not a claim
+                        r"|(?<=[.;:])\s\d{1,2}[.)](?=\s+[A-Z])")
 # A letter comes first: GPT-5.5, FP32, Llama-3, v2.1, gpt-oss-20b. Checked as a name, not as a number.
 _ALNUM_NAME = re.compile(r"\b[A-Za-z]+(?:[-./][A-Za-z]+)*[-.]?\d\w*(?:[-.]\d+\w*)*")
 _PLAIN = re.compile(rf"(?<![\w.])(?P<num>{_NUM})(?P<scale>k|m|bn|b)?(?![A-Za-z]*\d)", re.I)

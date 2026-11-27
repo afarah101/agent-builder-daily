@@ -175,7 +175,8 @@ def test_miller_empty_state_stays_in_one_grid():
 
 
 def test_miller_archive_days_are_grouped_by_week():
-    days = [{"date": f"2026-11-{d:02d}", "total": 1, "news": [{"title": f"T{d}", "url": "https://a.test"}]} for d in range(27, 0, -1)]
+    days = [{"date": f"2026-11-{d:02d}", "total": 1,
+             "news": [{"title": f"T{d}", "url": "https://a.test", "summary": "A thing shipped."}]} for d in range(27, 0, -1)]
     html = gh.render_archive(days, "news")
     weeks = html.split('<section class="archive-week">')[1:]
     assert [w.count('class="archive-row"') for w in weeks] == [5, 7, 7, 7, 1]

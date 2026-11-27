@@ -357,9 +357,11 @@ def test_the_audited_text_is_gone_from_the_site():
         assert '/news/announcements"' not in (ROOT / archive).read_text(encoding="utf-8")
 
 
-def test_a_listing_page_story_gets_no_text_and_no_link(tmp_path):
+def test_a_listing_page_story_is_not_published_at_all(tmp_path):
+    """A list of stories is not a source, so the story has no source-checked summary: no page, no slug, no card."""
     item = news(title="Announcements", url="https://www.anthropic.com/news/announcements")
+    gb.HELD_BACK.clear()
     slugs = gb.process_items([item], "news", "27 Nov 2026, 10:00", tmp_path, use_ai=False)
-    page = (tmp_path / f"{slugs['Announcements']}.html").read_text()
-    assert gb.NO_SUMMARY in page and "GTA VI made" not in page and "/news/announcements" not in page
-    assert gb.scan_pages(tmp_path, {"announcements": (item, "news")}) == (1, {})
+    assert slugs == {} and list(tmp_path.glob("*.html")) == []
+    assert gb.HELD_BACK == [("Announcements", "no source-checked summary")]
+    assert not gb.publishable(item, "news")
