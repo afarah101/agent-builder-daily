@@ -726,11 +726,11 @@ def test_tags_never_wrap_and_relevance_cannot_overflow(site):
     assert re.search(r"\.card-header \{[^}]*flex-wrap: wrap", page)  # the relevance wraps below, not out of the card
 
 
-def test_only_the_lead_card_gets_an_image(site):
+def test_every_card_with_an_image_shows_it(site):
     for t in ("Paper", "Second"):
         with_image(site, t)
     html = cards(study(title="Paper"), study(title="Second"))
-    assert html.count("<figure") == 1 and html.index("<figure") < html.index("Second")
+    assert html.count("<figure") == 2 and "images/paper.webp" in html and "images/second.webp" in html
 
 
 NOW = datetime(2026, 10, 27, 12, 0)
