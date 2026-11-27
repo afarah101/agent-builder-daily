@@ -42,6 +42,7 @@ BANNED_WORDS = {
     "logo", "brand", "barcode", "qr", "map", "calendar", "clock", "scroll", "note", "envelope", "stamp", "coin",
     "badge", "ticket", "receipt", "menu", "plaque", "certificate", "typewriter", "whiteboard", "blackboard",
     "chalkboard", "spreadsheet", "server", "hologram", "interface", "scale", "flag", "card", "packaging", "license",
+    "container", "warehouse", "crate", "shipping", "truck", "storefront", "shop", "jersey", "uniform",  # carry markings
 }
 FALLBACK_SCENES = (
     "smooth emerald glass spheres resting on dark stone steps under a single soft beam of light",

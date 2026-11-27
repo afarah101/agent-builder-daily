@@ -174,6 +174,7 @@ def test_banned_scene_word_then_clean_retry_keeps_the_retry(monkeypatch):
 def test_banned_in_finds_plurals_and_digits():
     assert gi.banned_in("Two signs, 3 labels and keyboards") == ["digits", "keyboard", "label", "sign"]
     assert gi.banned_in("Soft light on a curved stone arch over water") == []
+    assert gi.banned_in("A gate beside a busy warehouse of shipping containers") == ["container", "shipping", "warehouse"]
     assert all(gi.banned_in(s) == [] for s in gi.FALLBACK_SCENES)
 
 
