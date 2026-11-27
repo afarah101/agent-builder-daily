@@ -201,9 +201,9 @@ def test_lead_story_grid(site):
 @pytest.mark.parametrize("name", ["archive.html", "news.html"])
 def test_retired_pages_redirect(name):
     page = (ROOT / "site" / name).read_text()
-    assert '<meta http-equiv="refresh" content="0; url=/">' in page and '<a href="/">' in page
-    assert "background: #000000" in page and "Agent Builder Daily" not in page
-    assert len(page) < 2000
+    assert '<meta http-equiv="refresh" content="0; url=/">' in page and '<a class="cta" href="/">' in page
+    assert "background: var(--g-hero)" in page and "Agent Builder Daily" not in page
+    assert len(page.replace(gh.TOKENS_CSS, "")) < 2500  # a short page: the shared token block and little else
 
 
 # ---------- F2b: every breakdown field escaped, https-only source link, old pages restyled ----------
@@ -253,16 +253,17 @@ def test_https_source_link_is_noopener():
 def test_breakdown_page_uses_f2_tokens():
     page = breakdown()
     css = page.split("<style>")[1].split("</style>")[0]
-    assert "--c-text-muted:#a3a3a3" in css and "--c-accent:#10b981" in css and "#6366f1" not in css
-    assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 12]
-    assert ".brand-link,.back-link,.source-link,footer a{display:inline-flex;align-items:center;min-height:var(--tap)" in css
-    assert "--tap:44px" in css and "background-clip" not in css and not re.search(r"border-left:\s*[2-9]px", css)
+    assert gh.TOKENS_CSS in css and "--c-accent: #10b981" in css and "#6366f1" not in css
+    assert not [px for px in re.findall(r"font-size:\s*(\d+)px", css) if int(px) < 14]
+    for sel in (r"\.brand-link", r"\.source-link, \.cta", r"\.back-link, \.text-link, footer a"):
+        assert re.search(sel + r" \{[^}]*min-height: var\(--tap\)", css), sel
+    assert "--tap: 44px" in css and "background-clip" not in css and not re.search(r"border-left:\s*[2-9]px", css)
     assert "<main" in page and 'class="section-num"' not in page and 'class="badge"' not in page
 
 
 def test_old_page_restyled_keeps_its_text():
     new = gb.restyle_page(OLD_PAGE)
-    assert new and "--c-text-muted:#a3a3a3" in new and "#6366f1" not in new and 'class="badge"' not in new
+    assert new and gh.TOKENS_CSS in new and "#6366f1" not in new and 'class="badge"' not in new
     assert '<h1 class="page-title">Edge AI &amp; robots</h1>' in new
     assert '<p class="meta-line">Ars Technica · 2026-10-01 · Generated 01 Oct 2026, 09:00</p>' in new
     assert '<p>Latency (&lt;10 ms) and throughput (&gt;1 TB/day).</p><p>Second para.</p>' in new
@@ -282,7 +283,7 @@ def test_restyle_leaves_unknown_pages_alone(tmp_path):
 def test_every_committed_breakdown_page_has_the_new_style():
     pages = sorted((ROOT / "site" / "breakdowns").glob("*.html"))
     assert pages
-    stale = [p.name for p in pages if "--c-text-muted:#a3a3a3" not in p.read_text() or "#6366f1" in p.read_text()]
+    stale = [p.name for p in pages if gh.TOKENS_CSS not in p.read_text() or "#6366f1" in p.read_text()]
     assert stale == []
 
 
@@ -692,7 +693,7 @@ def test_tap_targets_are_44px_at_every_width(site):
 def test_privacy_page_uses_the_new_name():
     page = (ROOT / "site" / "privacy.html").read_text()
     assert "<title>Privacy: Daily Edge AI</title>" in page and not re.search(r"scout\s+daily", page, re.I)
-    assert '<link rel="icon" href="favicon.svg"' in page and "min-height: 44px" in page
+    assert '<link rel="icon" href="favicon.svg"' in page and "min-height: var(--tap)" in page and "--tap: 44px" in page
 
 
 def test_fewer_choices_and_two_signups_with_privacy(site):

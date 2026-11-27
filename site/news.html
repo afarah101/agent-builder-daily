@@ -7,24 +7,104 @@
 <link rel="canonical" href="/">
 <title>Industry News — Daily Edge AI</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&display=swap">
-<style>
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #000000; color: #ffffff; font: 16px/1.625 "Geist", ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
-  main { max-width: 65ch; padding: 32px 16px; text-align: center; }
-  h1 { margin: 0 0 8px; font-size: 32px; font-weight: 700; letter-spacing: -0.02em; display: inline-flex; align-items: center; gap: 10px; }
-  h1 img { width: 28px; height: 22px; }
-  h1 span { color: #10b981; }
-  p { margin: 0 0 24px; color: #a3a3a3; }
-  a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 8px; background: #10b981; color: #0a0a0a; font-weight: 600; text-decoration: none; }
-  a:hover { background: #059669; }
-  a:focus-visible { outline: 2px solid #10b981; outline-offset: 2px; }
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap">
+  <style>
+    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
+      --font-head: "Satoshi", "Geist", ui-sans-serif, system-ui, sans-serif;  /* headings */
+      --font: "Geist", ui-sans-serif, system-ui, sans-serif;                  /* body */
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
+
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 56 on a phone, 72 on a desktop. Body: 17 at 1.6. */
+      --fs-label: 14px;
+      --fs-small: 14px;
+      --fs-ui: 16px;
+      --fs-body: 17px;
+      --fs-lead: 18px;
+      --fs-h4: 22px;
+      --fs-h3: 28px;
+      --fs-h2: 40px;
+      --fs-h1: 56px;
+      --fs-hero: 56px;
+      --lh-hero: 1.05;
+      --lh-head: 1.15;
+      --lh-snug: 1.3;
+      --lh-body: 1.6;
+      --lh-small: 1.5;
+      --ls-hero: -0.025em;  /* -1.8px at 72px */
+      --ls-head: -0.02em;
+      --ls-label: 0.04em;
+
+      /* Spacing: 4/8 scale */
+      --s-4: 4px;
+      --s-8: 8px;
+      --s-12: 12px;
+      --s-16: 16px;
+      --s-24: 24px;
+      --s-32: 32px;
+      --s-48: 48px;
+      --s-64: 64px;
+      --s-80: 80px;
+
+      --c-text: #171717;
+      --c-text-soft: #404040;      /* long-form body: 10.4:1 on white */
+      --c-text-muted: #737373;     /* 4.7:1 on white; never on --c-bg-alt */
+      --c-bg: #ffffff;
+      --c-bg-alt: #f5f5f5;
+      --c-surface-dark: #171717;
+      --c-surface-dark-2: #212121;
+      --c-border: #e5e5e5;
+      --c-border-dark: #333333;
+      --c-hero-bottom: #292929;
+      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
+      --c-accent: #10b981;         /* emerald: link underline, the one CTA, the accent word. Never text on white (2.5:1) */
+      --c-accent-hover: #059669;
+      --c-on-accent: #0a0a0a;      /* 7.8:1 on emerald */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;
+      --c-warn: #b45309;
+      --c-bad: #b91c1c;
+
+      --radius-sm: 4px;
+      --radius: 8px;
+      --radius-card: 12px;
+      --radius-lg: 16px;
+      --radius-panel: 28.8px;
+      --radius-pill: 9999px;
+
+      --content-max: 1152px;
+      --reading-max: 680px;  /* article column */
+      --measure: 68ch;       /* longest line of body text */
+      --tap: 44px;           /* smallest tap target */
+    }
+
+    @media (min-width: 1024px) {
+      :root { --fs-hero: 72px; }
+    }
+
+    /* Retired page: one line and one button, on the hero background */
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--g-hero); color: var(--c-bg); font-family: var(--font); font-size: var(--fs-body); line-height: var(--lh-body); overflow-wrap: anywhere; }
+    main { max-width: var(--measure); padding: var(--s-32) var(--s-16); text-align: center; }
+    h1 { margin: 0 0 var(--s-8); font-size: var(--fs-h3); line-height: var(--lh-head); }
+    .brand-link { display: inline-flex; align-items: center; gap: var(--s-8); min-height: var(--tap); font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); color: var(--c-bg); text-decoration: none; }
+    .brand-logo { width: 28px; height: 22px; }
+    .accent-word { color: var(--c-accent); }
+    p { margin: 0 0 var(--s-24); color: var(--c-on-dark-muted); }
+    .cta { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 var(--s-24); border-radius: var(--radius); background: var(--c-accent); color: var(--c-on-accent); font-size: var(--fs-ui); font-weight: 700; text-decoration: none; }
+    .cta:hover { background: var(--c-accent-hover); }
+    :focus-visible { outline: 2px solid var(--c-bg); outline-offset: 2px; }
+  </style>
 </head>
 <body>
 <main>
-  <h1><img src="logo.svg" width="28" height="22" alt="">Daily Edge <span>AI</span></h1>
+  <h1><a class="brand-link" href="/"><img class="brand-logo" src="logo.svg" width="28" height="22" alt="">Daily Edge <span class="accent-word">AI</span></a></h1>
   <p>Industry news now lives on the home page, under the Industry News tab.</p>
-  <a href="/">← Back to today</a>
+  <a class="cta" href="/">← Back to today</a>
 </main>
 </body>
 </html>

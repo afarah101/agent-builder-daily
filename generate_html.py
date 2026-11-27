@@ -14,6 +14,100 @@ ARCHIVE_CS_FILE = "case_studies/archive.json"
 ARCHIVE_NEWS_FILE = "data/news_archive.json"
 SLUG_MAP_FILE = "site/breakdowns/slug_map.json"
 
+# ---------- One font set and one token block, the same on every page ----------
+# Benchmark: therundown.ai (Satoshi headings, 72px hero at -1.8px, 28.8px panel, #000 to #292929 hero).
+# Satoshi is the Fontshare file, served from site/fonts (the site's CSP allows fonts from 'self' only).
+GEIST_CSS = "https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap"
+
+
+def font_links(prefix=""):
+    """<link> tags of the font set. prefix is the path to the site root: "" or "../"."""
+    return f"""<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="{prefix}fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{GEIST_CSS}">"""
+
+
+def font_faces(prefix=""):
+    """The Satoshi @font-face, first rule of the page's <style>. font-display: swap, so text shows at once."""
+    return (f'@font-face {{ font-family: "Satoshi"; src: url("{prefix}fonts/satoshi-700.woff2") format("woff2"); '
+            f'font-weight: 700; font-style: normal; font-display: swap; }}')
+
+
+TOKENS_CSS = """:root {
+      /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
+      --font-head: "Satoshi", "Geist", ui-sans-serif, system-ui, sans-serif;  /* headings */
+      --font: "Geist", ui-sans-serif, system-ui, sans-serif;                  /* body */
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
+
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 56 on a phone, 72 on a desktop. Body: 17 at 1.6. */
+      --fs-label: 14px;
+      --fs-small: 14px;
+      --fs-ui: 16px;
+      --fs-body: 17px;
+      --fs-lead: 18px;
+      --fs-h4: 22px;
+      --fs-h3: 28px;
+      --fs-h2: 40px;
+      --fs-h1: 56px;
+      --fs-hero: 56px;
+      --lh-hero: 1.05;
+      --lh-head: 1.15;
+      --lh-snug: 1.3;
+      --lh-body: 1.6;
+      --lh-small: 1.5;
+      --ls-hero: -0.025em;  /* -1.8px at 72px */
+      --ls-head: -0.02em;
+      --ls-label: 0.04em;
+
+      /* Spacing: 4/8 scale */
+      --s-4: 4px;
+      --s-8: 8px;
+      --s-12: 12px;
+      --s-16: 16px;
+      --s-24: 24px;
+      --s-32: 32px;
+      --s-48: 48px;
+      --s-64: 64px;
+      --s-80: 80px;
+
+      --c-text: #171717;
+      --c-text-soft: #404040;      /* long-form body: 10.4:1 on white */
+      --c-text-muted: #737373;     /* 4.7:1 on white; never on --c-bg-alt */
+      --c-bg: #ffffff;
+      --c-bg-alt: #f5f5f5;
+      --c-surface-dark: #171717;
+      --c-surface-dark-2: #212121;
+      --c-border: #e5e5e5;
+      --c-border-dark: #333333;
+      --c-hero-bottom: #292929;
+      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
+      --c-accent: #10b981;         /* emerald: link underline, the one CTA, the accent word. Never text on white (2.5:1) */
+      --c-accent-hover: #059669;
+      --c-on-accent: #0a0a0a;      /* 7.8:1 on emerald */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;
+      --c-warn: #b45309;
+      --c-bad: #b91c1c;
+
+      --radius-sm: 4px;
+      --radius: 8px;
+      --radius-card: 12px;
+      --radius-lg: 16px;
+      --radius-panel: 28.8px;
+      --radius-pill: 9999px;
+
+      --content-max: 1152px;
+      --reading-max: 680px;  /* article column */
+      --measure: 68ch;       /* longest line of body text */
+      --tap: 44px;           /* smallest tap target */
+    }
+
+    @media (min-width: 1024px) {
+      :root { --fs-hero: 72px; }
+    }"""
+
+
 def load_latest_json(directory, prefix=""):
     path = Path(directory)
     pattern = f"{prefix}*.json" if prefix else "*.json"
@@ -307,21 +401,47 @@ def render_headlines(items):
         for i in items[:3])
     return f'<section class="signal">\n        <h2 class="signal-title">From McKinsey</h2>\n        {rows}\n    </section>'
 
+GROUP_MAX = 7  # Miller's law: at most 7 items in one group
+
+
+def card_grids(cards_html, more_title):
+    """The cards in grids of at most GROUP_MAX, in equal parts (10 cards: 5 + 5). Each grid after the first has a heading."""
+    cards = re.split(r'\n(?=<article class="card )', cards_html)
+    size = -(-len(cards) // -(-len(cards) // GROUP_MAX))
+    grids = ['<div class="cards-grid">' + "\n".join(cards[n:n + size]) + "</div>" for n in range(0, len(cards), size)]
+    return f'\n    <h2 class="group-title">{esc(more_title)}</h2>\n    '.join(grids)
+
+
+def week_title(date_str):
+    """"Week of 23 Nov 2026" (the Monday) for a YYYY-MM-DD date; "Other dates" when the date does not parse."""
+    try:
+        day = datetime.strptime(str(date_str)[:10], "%Y-%m-%d")
+    except ValueError:
+        return "Other dates"
+    return "Week of " + (day - timedelta(days=day.weekday())).strftime("%d %b %Y")
+
+
 def render_archive(archive, kind="cs"):
+    """Archive days, newest first, in one group for each week: a week has at most 7 days (GROUP_MAX)."""
     if not archive:
         return "<div class='empty-state'><p>No archive yet.</p></div>"
-    rows = []
+    weeks = []  # [title, rows]
     key = "case_studies" if kind == "cs" else "news"
     for entry in [e for e in archive if e.get("total", 0)][:30]:
         preview_html = "".join(
             f'<a class="archive-title" href="{esc(safe_url(i.get("url")))}" target="_blank" rel="noopener noreferrer">{esc(i.get("title", ""))}</a>'
             for i in entry.get(key, [])[:3])
-        rows.append(f"""<div class="archive-row">
+        title = week_title(entry.get("date", ""))
+        if not weeks or weeks[-1][0] != title or len(weeks[-1][1]) >= GROUP_MAX:
+            weeks.append([title, []])
+        weeks[-1][1].append(f"""<div class="archive-row">
   <div class="archive-date">{esc(entry.get("date", ""))}</div>
   <div class="archive-count">{esc(entry.get("total", 0))} items</div>
   <div class="archive-previews">{preview_html}</div>
 </div>""")
-    return "\n".join(rows) or "<div class='empty-state'><p>No archive yet.</p></div>"
+    return "\n".join(f'<section class="archive-week">\n<h2 class="group-title">{esc(title)}</h2>\n'
+                     f'<div class="archive-list">{chr(10).join(rows)}</div>\n</section>' for title, rows in weeks) \
+        or "<div class='empty-state'><p>No archive yet.</p></div>"
 
 def rss_links(url):
     """<link> and <guid> for an https URL, escaped for XML; nothing for any other URL."""
@@ -511,58 +631,11 @@ def generate_html():
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://agent-builder-daily.vercel.app/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap">
+  """ + font_links() + """
   <style>
-    :root {
-      /* Tokens from scout-daily-tokens.css (24 Nov 2026) */
-      --font: "Geist", ui-sans-serif, system-ui, sans-serif;
-      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-      --ls-head: -0.02em;
+    """ + font_faces() + """
 
-      --fs-hero: 72px;  --lh-hero: 1.08;  --ls-hero: -1.8px;
-      --fs-h2: 48px;    --lh-h2: 1;       --ls-h2: -1.2px;
-      --fs-h3: 30px;    --lh-h3: 1.375;
-      --fs-lead: 21px;  --lh-lead: 1.625;
-      --fs-body: 16px;  --lh-body: 24px;
-      --fs-small: 14px; --lh-small: 20px;
-      --fs-label: 12px; --lh-label: 16px; --ls-label: 0.6px;
-
-      --c-text: #171717;
-      --c-text-muted: #737373;
-      --c-bg: #ffffff;
-      --c-bg-alt: #f5f5f5;
-      --c-surface-dark: #171717;
-      --c-surface-dark-2: #212121;
-      --c-border: #e5e5e5;
-      --c-border-dark: #333333;
-      --c-hero-bottom: #292929;
-      --g-hero: linear-gradient(#000, var(--c-hero-bottom));
-      --c-accent: #10b981;        /* emerald: 7.8:1 with #0a0a0a text; text use only on dark */
-      --c-accent-hover: #059669;
-      --c-on-accent: #0a0a0a;
-
-      --radius-sm: 6px;
-      --radius: 8px;
-      --radius-card: 12px;
-      --radius-lg: 16px;
-      --radius-panel: 28.8px;
-      --radius-pill: 9999px;
-
-      --content-max: 1152px;
-      --reading-max: 672px;
-      --gap: 8px;
-      --section-pad: 80px;
-
-      /* Added for Scout, not in the token file */
-      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
-      --c-good: #15803d;           /* pass / high score: 5.0:1 on white */
-      --c-warn: #b45309;           /* pending / mid score: 5.0:1 on white */
-      --c-bad: #b91c1c;            /* fail / low score: 6.5:1 on white */
-      --fs-hero-mobile: 44px;
-      --tap: 44px;
-    }
+    """ + TOKENS_CSS + """
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -593,7 +666,7 @@ def generate_html():
     .hero {
       background: var(--g-hero);
       color: var(--c-bg);
-      padding: 24px 0 calc(64px + var(--section-pad));
+      padding: 24px 0 calc(64px + var(--s-80));
     }
 
     .header-inner {
@@ -610,16 +683,17 @@ def generate_html():
       gap: 16px;
     }
 
-    .brand { font-size: var(--fs-lead); line-height: 1; }
+    .brand { font-size: var(--fs-h4); line-height: 1; }
 
     /* Logo top-left, links home */
     .brand-link {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       min-height: var(--tap);
       color: var(--c-bg);
       text-decoration: none;
+      font-family: var(--font-head);
       font-weight: 600;
       letter-spacing: var(--ls-head);
     }
@@ -627,8 +701,8 @@ def generate_html():
     .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
     .brand-name { white-space: nowrap; }
 
-    /* Headlines: Geist 700, tight tracking */
-    .hero-title, .card-title, .email-title { font-weight: 700; letter-spacing: var(--ls-head); }
+    /* Headings: Satoshi 700, tight tracking */
+    .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
 
     /* Tags and dates: Geist Mono */
     .tag-pill, .tier-label, .pub-date, .archive-date, .archive-count, .updated,
@@ -638,7 +712,7 @@ def generate_html():
 
     .tag-pill, .signal-title {
       font-size: var(--fs-label);
-      line-height: var(--lh-label);
+      line-height: var(--lh-small);
       letter-spacing: var(--ls-label);
       font-weight: 700;
       text-transform: uppercase;
@@ -646,9 +720,10 @@ def generate_html():
 
     .hero-title {
       max-width: 900px;
-      margin: var(--section-pad) 0 16px;
+      margin: var(--s-80) 0 16px;
       font-size: var(--fs-hero);
       line-height: var(--lh-hero);
+      letter-spacing: var(--ls-hero);
       font-weight: 700;
       text-wrap: balance;
     }
@@ -675,9 +750,9 @@ def generate_html():
 
     .email-inner { display: flex; flex-direction: column; gap: 12px; }
 
-    .email-title { font-size: var(--fs-body); font-weight: 700; }
+    .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
 
-    .email-form { display: flex; gap: var(--gap); }
+    .email-form { display: flex; gap: var(--s-8); }
 
     .email-input {
       flex: 1;
@@ -686,8 +761,9 @@ def generate_html():
       border: 1px solid var(--c-border-dark);
       border-radius: var(--radius);
       min-height: var(--tap);
-      padding: 10px 14px;
+      padding: 8px 16px;
       font: inherit;
+      font-size: var(--fs-ui);
       color: var(--c-bg);
       transition: border-color 0.15s;
     }
@@ -714,10 +790,10 @@ def generate_html():
     }
 
     /* The one emerald CTA on each screen */
-    .email-btn { min-height: var(--tap); padding: 0 20px; font-size: var(--fs-body); background: var(--c-accent); color: var(--c-on-accent); }
+    .email-btn { min-height: var(--tap); padding: 0 24px; font-size: var(--fs-ui); background: var(--c-accent); color: var(--c-on-accent); }
     .email-btn:hover { background: var(--c-accent-hover); }
 
-    /* Text links, never filled */
+    /* Text links, never filled: the text keeps its colour, the underline is emerald */
     .breakdown-link, .privacy-link {
       display: inline-flex;
       align-items: center;
@@ -727,9 +803,10 @@ def generate_html():
       color: var(--c-text);
       text-decoration: underline;
       text-underline-offset: 4px;
-      text-decoration-color: var(--c-text-muted);
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
     }
-    .breakdown-link:hover { text-decoration-color: var(--c-text); }
+    .breakdown-link:hover, .privacy-link:hover { text-decoration-color: var(--c-accent-hover); }
     .privacy-link { align-self: flex-start; font-weight: 400; color: var(--c-on-dark-muted); }
     .email-banner-end { margin: 48px auto 0; }
 
@@ -795,10 +872,10 @@ def generate_html():
       border: 1px solid var(--c-border);
       border-radius: var(--radius);
       min-height: var(--tap);
-      padding: 8px 14px;
+      padding: 8px 16px;
       margin-bottom: 8px;
       font: inherit;
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
       color: var(--c-text);
       width: 240px;
       transition: border-color 0.15s;
@@ -856,7 +933,7 @@ def generate_html():
 
     .card-figure { margin: 0 0 16px; }
     .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
-    .card-figure figcaption { margin-top: 4px; font-size: var(--fs-label); line-height: var(--lh-label); color: var(--c-text-muted); }
+    .card-figure figcaption { margin-top: 4px; font-family: var(--font-mono); font-size: var(--fs-label); line-height: var(--lh-small); color: var(--c-text-muted); }
 
     .card-header {
       display: flex;
@@ -864,41 +941,42 @@ def generate_html():
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 8px 12px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
+    .card-tags { display: flex; align-items: center; gap: var(--s-8); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
     .tag-pill, .tier-label { white-space: nowrap; flex-shrink: 0; }
+    .tag-pill { flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }  /* a long tag is cut inside its card */
 
     .tag-pill { padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
 
     .tier-label, .source-name {
       font-size: var(--fs-label);
-      line-height: var(--lh-label);
-      font-weight: 700;
+      line-height: var(--lh-small);
+      font-weight: 400;
       color: var(--c-text-muted);
     }
 
     /* Card content */
     .card-title {
-      font-size: var(--fs-lead);
+      font-size: var(--fs-h4);
       font-weight: 700;
       letter-spacing: var(--ls-head);
-      line-height: var(--lh-h3);
+      line-height: var(--lh-snug);
       margin-bottom: 12px;
       overflow-wrap: anywhere;
       text-wrap: balance;
     }
 
     .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
-    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--c-text-muted); }
+    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     .card-meta {
       display: flex;
       align-items: center;
-      gap: var(--gap);
+      gap: var(--s-8);
       flex-wrap: wrap;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       font-size: var(--fs-small);
       line-height: var(--lh-small);
       color: var(--c-text-muted);
@@ -909,14 +987,14 @@ def generate_html():
     .sep { color: var(--c-text-muted); }
 
     .card-summary {
-      font-size: var(--fs-body);
+      font-size: var(--fs-ui);
       line-height: var(--lh-body);
       color: var(--c-text-muted);
       margin-bottom: 16px;
     }
 
     .insight, .signal-points {
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
       line-height: var(--lh-body);
       color: var(--c-text);
       margin-bottom: 16px;
@@ -935,16 +1013,16 @@ def generate_html():
     }
 
     .signal-points { padding-left: 20px; }
-    .signal-points li { margin-bottom: 6px; }
+    .signal-points li { margin-bottom: 8px; }
 
     /* Card footer */
     .card-footer {
       display: flex;
       align-items: center;
       margin-top: 16px;
-      padding-top: 14px;
+      padding-top: 12px;
       border-top: 1px solid var(--c-border);
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -957,24 +1035,28 @@ def generate_html():
       margin-bottom: 24px;
     }
 
-    .signal-title { color: var(--c-text); margin-bottom: var(--gap); }
-    .signal p { font-size: var(--fs-body); color: var(--c-text); }
+    .signal-title { font-family: var(--font-mono); color: var(--c-text); margin-bottom: var(--s-8); }
+    .signal p { font-size: var(--fs-body); max-width: var(--measure); color: var(--c-text); }
 
     /* Archive */
-    .archive-list { display: flex; flex-direction: column; gap: var(--gap); }
+    /* Groups: at most 7 cards in a grid and 7 days in an archive week */
+    .group-title { font-size: var(--fs-h3); line-height: var(--lh-head); margin: var(--s-48) 0 var(--s-24); }
+    .archive-week:first-child .group-title { margin-top: 0; }
+
+    .archive-list { display: flex; flex-direction: column; gap: var(--s-8); }
 
     .archive-row {
       background: var(--c-bg);
       border: 1px solid var(--c-border);
       border-radius: var(--radius-card);
-      padding: 14px 20px;
+      padding: 12px 20px;
       display: grid;
-      grid-template-columns: 110px 80px minmax(0, 1fr);
+      grid-template-columns: 112px 88px minmax(0, 1fr);
       gap: 20px;
       align-items: start;
     }
 
-    .archive-date, .archive-count { font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+    .archive-date, .archive-count { font-size: var(--fs-label); line-height: var(--tap); font-variant-numeric: tabular-nums; }
     .archive-date { color: var(--c-text); font-weight: 700; }
     .archive-count { color: var(--c-text-muted); }
 
@@ -984,19 +1066,20 @@ def generate_html():
       display: flex;
       align-items: center;
       min-height: var(--tap);
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
+      line-height: var(--lh-snug);
       color: var(--c-text);
       text-decoration: none;
       overflow-wrap: anywhere;
     }
 
-    .archive-title:hover { text-decoration: underline; }
+    .archive-title:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     .empty-state {
       text-align: center;
       padding: 64px 32px;
       color: var(--c-text-muted);
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
     }
 
     footer {
@@ -1008,32 +1091,34 @@ def generate_html():
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: var(--gap);
+      gap: var(--s-8);
     }
 
-    footer span { font-size: var(--fs-label); color: var(--c-text-muted); }
-    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); }
+    footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     @media (max-width: 700px) {
       .hero { padding: 12px 0 calc(32px + 12px); }
       .header-inner { padding: 0 16px; }
-      .hero-title { margin: 16px 0 8px; }
+      .hero-title { margin: 24px 0 16px; }
       .updated { margin-bottom: 16px; }
       .email-banner { padding: 16px; }
       .email-inner { gap: 8px; }
       .content { margin-top: -32px; }
-      .email-btn { padding: 0 18px; }
+      .email-btn { padding: 0 16px; }
       .content { width: 100%; padding: 24px 16px 48px; }
-      .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); position: static; }
-      .tab { flex: 0 0 auto; padding: 10px 12px; }
-      .search { width: 100%; font-size: var(--fs-body); }
-      .card { padding: 18px; }
-      .card-title { font-size: var(--fs-lead); }
-      .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--s-8); position: static; }
+      .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }  /* all 4 tabs in view */
+      .tab { padding: 8px 12px; }
+      .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
+      .search { width: 100%; }
+      .card { padding: 16px; }
+      .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
+      .archive-date, .archive-count { line-height: var(--lh-small); }
+      .group-title { margin: var(--s-32) 0 var(--s-16); }
     }
 
     @media (max-width: 640px) {
-      .hero-title { font-size: 30px; line-height: 1.15; }
       /* Phone cards: tag, title, source • date, 2-line summary, one link. Desktop keeps the full text. */
       .card .insight, .card .signal-points, .card .tier-label { display: none; }
       .cards-grid > .card .card-summary {
@@ -1079,7 +1164,7 @@ def generate_html():
       <input type="search" id="scout-search" class="search" placeholder="Search stories" />
   </div>
   <div id="case-studies" class="panel active" role="tabpanel" aria-labelledby="tab-case-studies">
-    <div class="cards-grid">""" + render_case_studies(cs_data, slug_map) + """</div>
+    """ + card_grids(render_case_studies(cs_data, slug_map), "More case studies") + """
   </div>
 
   <div id="industry-news" class="panel" role="tabpanel" aria-labelledby="tab-industry-news">
@@ -1089,15 +1174,15 @@ def generate_html():
         <p>{esc(daily_hook)}</p>
     </section>
     ''' if daily_hook else "") + render_headlines(active_headlines) + """
-    <div class="cards-grid">""" + render_news(news_data, slug_map) + """</div>
+    """ + card_grids(render_news(news_data, slug_map), "More industry news") + """
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
-    <div class="archive-list">""" + render_archive(cs_archive, 'cs') + """</div>
+    """ + render_archive(cs_archive, 'cs') + """
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
-    <div class="archive-list">""" + render_archive(news_archive, 'news') + """</div>
+    """ + render_archive(news_archive, 'news') + """
   </div>
 """ + generate_email_capture("-2") + """
 </main>

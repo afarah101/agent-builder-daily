@@ -13,24 +13,51 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="fonts/satoshi-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap">
   <style>
-    :root {
-      /* Tokens from scout-daily-tokens.css (24 Nov 2026) */
-      --font: "Geist", ui-sans-serif, system-ui, sans-serif;
-      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-      --ls-head: -0.02em;
+    @font-face { font-family: "Satoshi"; src: url("fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 
-      --fs-hero: 72px;  --lh-hero: 1.08;  --ls-hero: -1.8px;
-      --fs-h2: 48px;    --lh-h2: 1;       --ls-h2: -1.2px;
-      --fs-h3: 30px;    --lh-h3: 1.375;
-      --fs-lead: 21px;  --lh-lead: 1.625;
-      --fs-body: 16px;  --lh-body: 24px;
-      --fs-small: 14px; --lh-small: 20px;
-      --fs-label: 12px; --lh-label: 16px; --ls-label: 0.6px;
+    :root {
+      /* Daily Edge AI tokens (27 Nov 2026). This block is the same on every page. */
+      --font-head: "Satoshi", "Geist", ui-sans-serif, system-ui, sans-serif;  /* headings */
+      --font: "Geist", ui-sans-serif, system-ui, sans-serif;                  /* body */
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;  /* tags and dates */
+
+      /* Type scale 14 / 16 / 18 / 22 / 28 / 40 / 56. Hero: 56 on a phone, 72 on a desktop. Body: 17 at 1.6. */
+      --fs-label: 14px;
+      --fs-small: 14px;
+      --fs-ui: 16px;
+      --fs-body: 17px;
+      --fs-lead: 18px;
+      --fs-h4: 22px;
+      --fs-h3: 28px;
+      --fs-h2: 40px;
+      --fs-h1: 56px;
+      --fs-hero: 56px;
+      --lh-hero: 1.05;
+      --lh-head: 1.15;
+      --lh-snug: 1.3;
+      --lh-body: 1.6;
+      --lh-small: 1.5;
+      --ls-hero: -0.025em;  /* -1.8px at 72px */
+      --ls-head: -0.02em;
+      --ls-label: 0.04em;
+
+      /* Spacing: 4/8 scale */
+      --s-4: 4px;
+      --s-8: 8px;
+      --s-12: 12px;
+      --s-16: 16px;
+      --s-24: 24px;
+      --s-32: 32px;
+      --s-48: 48px;
+      --s-64: 64px;
+      --s-80: 80px;
 
       --c-text: #171717;
-      --c-text-muted: #737373;
+      --c-text-soft: #404040;      /* long-form body: 10.4:1 on white */
+      --c-text-muted: #737373;     /* 4.7:1 on white; never on --c-bg-alt */
       --c-bg: #ffffff;
       --c-bg-alt: #f5f5f5;
       --c-surface-dark: #171717;
@@ -39,11 +66,15 @@
       --c-border-dark: #333333;
       --c-hero-bottom: #292929;
       --g-hero: linear-gradient(#000, var(--c-hero-bottom));
-      --c-accent: #10b981;        /* emerald: 7.8:1 with #0a0a0a text; text use only on dark */
+      --c-accent: #10b981;         /* emerald: link underline, the one CTA, the accent word. Never text on white (2.5:1) */
       --c-accent-hover: #059669;
-      --c-on-accent: #0a0a0a;
+      --c-on-accent: #0a0a0a;      /* 7.8:1 on emerald */
+      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
+      --c-good: #15803d;
+      --c-warn: #b45309;
+      --c-bad: #b91c1c;
 
-      --radius-sm: 6px;
+      --radius-sm: 4px;
       --radius: 8px;
       --radius-card: 12px;
       --radius-lg: 16px;
@@ -51,17 +82,13 @@
       --radius-pill: 9999px;
 
       --content-max: 1152px;
-      --reading-max: 672px;
-      --gap: 8px;
-      --section-pad: 80px;
+      --reading-max: 680px;  /* article column */
+      --measure: 68ch;       /* longest line of body text */
+      --tap: 44px;           /* smallest tap target */
+    }
 
-      /* Added for Scout, not in the token file */
-      --c-on-dark-muted: #a3a3a3;  /* muted text on the hero: 5.8:1 on #292929 */
-      --c-good: #15803d;           /* pass / high score: 5.0:1 on white */
-      --c-warn: #b45309;           /* pending / mid score: 5.0:1 on white */
-      --c-bad: #b91c1c;            /* fail / low score: 6.5:1 on white */
-      --fs-hero-mobile: 44px;
-      --tap: 44px;
+    @media (min-width: 1024px) {
+      :root { --fs-hero: 72px; }
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -93,7 +120,7 @@
     .hero {
       background: var(--g-hero);
       color: var(--c-bg);
-      padding: 24px 0 calc(64px + var(--section-pad));
+      padding: 24px 0 calc(64px + var(--s-80));
     }
 
     .header-inner {
@@ -110,16 +137,17 @@
       gap: 16px;
     }
 
-    .brand { font-size: var(--fs-lead); line-height: 1; }
+    .brand { font-size: var(--fs-h4); line-height: 1; }
 
     /* Logo top-left, links home */
     .brand-link {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       min-height: var(--tap);
       color: var(--c-bg);
       text-decoration: none;
+      font-family: var(--font-head);
       font-weight: 600;
       letter-spacing: var(--ls-head);
     }
@@ -127,8 +155,8 @@
     .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
     .brand-name { white-space: nowrap; }
 
-    /* Headlines: Geist 700, tight tracking */
-    .hero-title, .card-title, .email-title { font-weight: 700; letter-spacing: var(--ls-head); }
+    /* Headings: Satoshi 700, tight tracking */
+    .hero-title, .card-title, .email-title, .group-title { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--ls-head); }
 
     /* Tags and dates: Geist Mono */
     .tag-pill, .tier-label, .pub-date, .archive-date, .archive-count, .updated,
@@ -138,7 +166,7 @@
 
     .tag-pill, .signal-title {
       font-size: var(--fs-label);
-      line-height: var(--lh-label);
+      line-height: var(--lh-small);
       letter-spacing: var(--ls-label);
       font-weight: 700;
       text-transform: uppercase;
@@ -146,9 +174,10 @@
 
     .hero-title {
       max-width: 900px;
-      margin: var(--section-pad) 0 16px;
+      margin: var(--s-80) 0 16px;
       font-size: var(--fs-hero);
       line-height: var(--lh-hero);
+      letter-spacing: var(--ls-hero);
       font-weight: 700;
       text-wrap: balance;
     }
@@ -175,9 +204,9 @@
 
     .email-inner { display: flex; flex-direction: column; gap: 12px; }
 
-    .email-title { font-size: var(--fs-body); font-weight: 700; }
+    .email-title { font-size: var(--fs-lead); line-height: var(--lh-snug); font-weight: 700; }
 
-    .email-form { display: flex; gap: var(--gap); }
+    .email-form { display: flex; gap: var(--s-8); }
 
     .email-input {
       flex: 1;
@@ -186,8 +215,9 @@
       border: 1px solid var(--c-border-dark);
       border-radius: var(--radius);
       min-height: var(--tap);
-      padding: 10px 14px;
+      padding: 8px 16px;
       font: inherit;
+      font-size: var(--fs-ui);
       color: var(--c-bg);
       transition: border-color 0.15s;
     }
@@ -214,10 +244,10 @@
     }
 
     /* The one emerald CTA on each screen */
-    .email-btn { min-height: var(--tap); padding: 0 20px; font-size: var(--fs-body); background: var(--c-accent); color: var(--c-on-accent); }
+    .email-btn { min-height: var(--tap); padding: 0 24px; font-size: var(--fs-ui); background: var(--c-accent); color: var(--c-on-accent); }
     .email-btn:hover { background: var(--c-accent-hover); }
 
-    /* Text links, never filled */
+    /* Text links, never filled: the text keeps its colour, the underline is emerald */
     .breakdown-link, .privacy-link {
       display: inline-flex;
       align-items: center;
@@ -227,9 +257,10 @@
       color: var(--c-text);
       text-decoration: underline;
       text-underline-offset: 4px;
-      text-decoration-color: var(--c-text-muted);
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
     }
-    .breakdown-link:hover { text-decoration-color: var(--c-text); }
+    .breakdown-link:hover, .privacy-link:hover { text-decoration-color: var(--c-accent-hover); }
     .privacy-link { align-self: flex-start; font-weight: 400; color: var(--c-on-dark-muted); }
     .email-banner-end { margin: 48px auto 0; }
 
@@ -295,10 +326,10 @@
       border: 1px solid var(--c-border);
       border-radius: var(--radius);
       min-height: var(--tap);
-      padding: 8px 14px;
+      padding: 8px 16px;
       margin-bottom: 8px;
       font: inherit;
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
       color: var(--c-text);
       width: 240px;
       transition: border-color 0.15s;
@@ -356,7 +387,7 @@
 
     .card-figure { margin: 0 0 16px; }
     .card-figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-card); }
-    .card-figure figcaption { margin-top: 4px; font-size: var(--fs-label); line-height: var(--lh-label); color: var(--c-text-muted); }
+    .card-figure figcaption { margin-top: 4px; font-family: var(--font-mono); font-size: var(--fs-label); line-height: var(--lh-small); color: var(--c-text-muted); }
 
     .card-header {
       display: flex;
@@ -364,41 +395,42 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 8px 12px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
-    .card-tags { display: flex; align-items: center; gap: var(--gap); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
+    .card-tags { display: flex; align-items: center; gap: var(--s-8); flex-wrap: nowrap; min-width: 0; overflow: hidden; }
     .tag-pill, .tier-label { white-space: nowrap; flex-shrink: 0; }
+    .tag-pill { flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }  /* a long tag is cut inside its card */
 
     .tag-pill { padding: 4px 8px; border-radius: var(--radius-sm); color: var(--c-text); background: var(--c-bg-alt); }
 
     .tier-label, .source-name {
       font-size: var(--fs-label);
-      line-height: var(--lh-label);
-      font-weight: 700;
+      line-height: var(--lh-small);
+      font-weight: 400;
       color: var(--c-text-muted);
     }
 
     /* Card content */
     .card-title {
-      font-size: var(--fs-lead);
+      font-size: var(--fs-h4);
       font-weight: 700;
       letter-spacing: var(--ls-head);
-      line-height: var(--lh-h3);
+      line-height: var(--lh-snug);
       margin-bottom: 12px;
       overflow-wrap: anywhere;
       text-wrap: balance;
     }
 
     .card-title a { display: block; min-height: var(--tap); color: var(--c-text); text-decoration: none; }
-    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--c-text-muted); }
+    .card-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     .card-meta {
       display: flex;
       align-items: center;
-      gap: var(--gap);
+      gap: var(--s-8);
       flex-wrap: wrap;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       font-size: var(--fs-small);
       line-height: var(--lh-small);
       color: var(--c-text-muted);
@@ -409,14 +441,14 @@
     .sep { color: var(--c-text-muted); }
 
     .card-summary {
-      font-size: var(--fs-body);
+      font-size: var(--fs-ui);
       line-height: var(--lh-body);
       color: var(--c-text-muted);
       margin-bottom: 16px;
     }
 
     .insight, .signal-points {
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
       line-height: var(--lh-body);
       color: var(--c-text);
       margin-bottom: 16px;
@@ -435,16 +467,16 @@
     }
 
     .signal-points { padding-left: 20px; }
-    .signal-points li { margin-bottom: 6px; }
+    .signal-points li { margin-bottom: 8px; }
 
     /* Card footer */
     .card-footer {
       display: flex;
       align-items: center;
       margin-top: 16px;
-      padding-top: 14px;
+      padding-top: 12px;
       border-top: 1px solid var(--c-border);
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -457,24 +489,28 @@
       margin-bottom: 24px;
     }
 
-    .signal-title { color: var(--c-text); margin-bottom: var(--gap); }
-    .signal p { font-size: var(--fs-body); color: var(--c-text); }
+    .signal-title { font-family: var(--font-mono); color: var(--c-text); margin-bottom: var(--s-8); }
+    .signal p { font-size: var(--fs-body); max-width: var(--measure); color: var(--c-text); }
 
     /* Archive */
-    .archive-list { display: flex; flex-direction: column; gap: var(--gap); }
+    /* Groups: at most 7 cards in a grid and 7 days in an archive week */
+    .group-title { font-size: var(--fs-h3); line-height: var(--lh-head); margin: var(--s-48) 0 var(--s-24); }
+    .archive-week:first-child .group-title { margin-top: 0; }
+
+    .archive-list { display: flex; flex-direction: column; gap: var(--s-8); }
 
     .archive-row {
       background: var(--c-bg);
       border: 1px solid var(--c-border);
       border-radius: var(--radius-card);
-      padding: 14px 20px;
+      padding: 12px 20px;
       display: grid;
-      grid-template-columns: 110px 80px minmax(0, 1fr);
+      grid-template-columns: 112px 88px minmax(0, 1fr);
       gap: 20px;
       align-items: start;
     }
 
-    .archive-date, .archive-count { font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+    .archive-date, .archive-count { font-size: var(--fs-label); line-height: var(--tap); font-variant-numeric: tabular-nums; }
     .archive-date { color: var(--c-text); font-weight: 700; }
     .archive-count { color: var(--c-text-muted); }
 
@@ -484,19 +520,20 @@
       display: flex;
       align-items: center;
       min-height: var(--tap);
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
+      line-height: var(--lh-snug);
       color: var(--c-text);
       text-decoration: none;
       overflow-wrap: anywhere;
     }
 
-    .archive-title:hover { text-decoration: underline; }
+    .archive-title:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     .empty-state {
       text-align: center;
       padding: 64px 32px;
       color: var(--c-text-muted);
-      font-size: var(--fs-small);
+      font-size: var(--fs-ui);
     }
 
     footer {
@@ -508,32 +545,34 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: var(--gap);
+      gap: var(--s-8);
     }
 
-    footer span { font-size: var(--fs-label); color: var(--c-text-muted); }
-    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); }
+    footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    footer a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; color: var(--c-text); text-underline-offset: 4px; text-decoration-thickness: 2px; text-decoration-color: var(--c-accent); }
 
     @media (max-width: 700px) {
       .hero { padding: 12px 0 calc(32px + 12px); }
       .header-inner { padding: 0 16px; }
-      .hero-title { margin: 16px 0 8px; }
+      .hero-title { margin: 24px 0 16px; }
       .updated { margin-bottom: 16px; }
       .email-banner { padding: 16px; }
       .email-inner { gap: 8px; }
       .content { margin-top: -32px; }
-      .email-btn { padding: 0 18px; }
+      .email-btn { padding: 0 16px; }
       .content { width: 100%; padding: 24px 16px 48px; }
-      .toolbar { flex-direction: column; align-items: stretch; gap: var(--gap); position: static; }
-      .tab { flex: 0 0 auto; padding: 10px 12px; }
-      .search { width: 100%; font-size: var(--fs-body); }
-      .card { padding: 18px; }
-      .card-title { font-size: var(--fs-lead); }
-      .archive-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 16px; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--s-8); position: static; }
+      .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }  /* all 4 tabs in view */
+      .tab { padding: 8px 12px; }
+      .tab.active { box-shadow: inset 0 -2px 0 var(--c-text); }
+      .search { width: 100%; }
+      .card { padding: 16px; }
+      .archive-row { grid-template-columns: 1fr; gap: 0; padding: 12px 16px; }
+      .archive-date, .archive-count { line-height: var(--lh-small); }
+      .group-title { margin: var(--s-32) 0 var(--s-16); }
     }
 
     @media (max-width: 640px) {
-      .hero-title { font-size: 30px; line-height: 1.15; }
       /* Phone cards: tag, title, source • date, 2-line summary, one link. Desktop keeps the full text. */
       .card .insight, .card .signal-points, .card .tier-label { display: none; }
       .cards-grid > .card .card-summary {
@@ -562,7 +601,7 @@
       </h1>
     </div>
     <p class="hero-title">AI news and real case studies, every day.</p>
-    <p class="updated">Updated 27 Nov 2026, 11:07 UTC</p>
+    <p class="updated">Updated 27 Nov 2026, 11:35 UTC</p>
 
   <div class="email-banner">
     <div class="email-inner">
@@ -619,7 +658,7 @@
   <p class="insight"><strong>How to apply:</strong> If you manage BI dashboards in Power BI or Tableau on the cloud, adopt a tool‑augmented agent approach: 1) integrate an LLM with data‑search, join, and transform tools; 2) train it on your own BI project logs using supervised fine‑tuning or reinforcement learning; 3) deploy the trained agent to automatically process user questions and return answers, cutting manual prep time by up to 40%.</p>
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/decoupling-solving-from-abstention-single-rollout-conformal-risk-control-for-har.webp" loading="lazy" width="1200" height="675" alt="A battered ledger page, its ink faded, lists a strict token quota, while a lone pencil hovers above, poised to decide whether to write the next answer"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags"><span class="tag-pill">LLM deployment / API optimisation</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/decoupling-solving-from-abstention-single-rollout-conformal-risk-control-for-har.html">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a></h2>
@@ -628,16 +667,17 @@
   <p class="insight"><strong>How to apply:</strong> If you manage LLM inference with token budgets, use Tail‑CRC: 1) fine‑tune your model to stop at the budget with a binary reward; 2) freeze the model and add a conformal risk‑control layer that checks token‑log‑probability surprise; 3) deploy the single‑rollout pipeline and tune the risk target to keep wrong‑submission rates below your desired threshold.</p>
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/tidesand-performance-accurate-sandbox-multiplexing-for-llm-agents.webp" loading="lazy" width="1200" height="675" alt="A gleaming server rack rests beside a towering sand dune, its CPU cores shimmering like grains, illustrating TideSand&#x27;s dynamic allocation of processing power across models"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags"><span class="tag-pill">LLM resource management</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/tidesand-performance-accurate-sandbox-multiplexing-for-llm-agents.html">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></h2>
   <div class="card-meta"><span>Shulu Li, Hanchen Li, Xiaokun Chen, Qiuyang Mang</span><span class="sep" aria-hidden="true">·</span><span><span class="pub-date">23 Nov 2026</span></span></div>
   <p class="card-summary">TideSand is a sandbox system that smartly shares CPU and memory across multiple large‑language‑model agents. It schedules tool calls, swaps out idle memory, and rolls back only when needed, giving up to 10× more throughput and up to 44% better call accuracy compared with simple reservation or overcommit approaches.</p>
   <p class="insight"><strong>How to apply:</strong> If you manage cloud infrastructure, here is what to do: 1) evaluate whether your LLM workloads hit CPU or memory contention; 2) if so, test TideSand’s agent‑aware scheduling and speculative swapping on a small set of models; 3) integrate the sandbox layer before deploying agents to improve throughput and reliability.</p>
-</article>
-<article class="card cs-card">
-  <figure class="card-figure"><img src="images/make-the-adversary-spend-more-stateful-deception-as-a-cost-exchange-primitive-fo.webp" loading="lazy" width="1200" height="675" alt="A lone, humming server rack glows under a single SSH terminal screen, its flickering cursor echoing the steady pulse of a persistent, language‑driven honeypot"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+</article></div>
+    <h2 class="group-title">More case studies</h2>
+    <div class="cards-grid"><article class="card cs-card">
+  <div class="card-header">
     <div class="card-tags"><span class="tag-pill">Cyber deception</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/make-the-adversary-spend-more-stateful-deception-as-a-cost-exchange-primitive-fo.html">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a></h2>
@@ -647,7 +687,7 @@
   <p class="insight"><strong>How to apply:</strong> If you manage SSH or similar services, integrate a persistent state honeypot: 1) set up Cowrie with a local LLM; 2) configure the LLM to only render state, not store it; 3) monitor and adjust Deception Exchange Rate to keep defender costs under 63 % of a basic decoy.</p>
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/llm-assisted-software-migration-from-module-level-transformation-to-repository-l.webp" loading="lazy" width="1200" height="675" alt="A weather‑worn bridge of tangled vines spans two cliffs of code, each vine labeled with a different programming language, while a lone, glowing lantern flickers at its center"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags"><span class="tag-pill">Software migration</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/llm-assisted-software-migration-from-module-level-transformation-to-repository-l.html">LLM-Assisted Software Migration: from Module-Level Transformation to Repository-Level Integration</a></h2>
@@ -665,7 +705,7 @@
   
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/personafactory-stylistic-user-prompt-augmentation-with-synthetic-persona-bank.webp" loading="lazy" width="1200" height="675" alt="A colossal steel loom in a humming factory spins endless threads of dialogue, each thread shimmering with multilingual nuance, weaving a tapestry of style and intent for language models"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags"><span class="tag-pill">NLP training data augmentation</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/personafactory-stylistic-user-prompt-augmentation-with-synthetic-persona-bank.html">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></h2>
@@ -674,7 +714,7 @@
   
 </article>
 <article class="card cs-card">
-  <figure class="card-figure"><img src="images/towerbridge-bridging-the-dual-encoder-modality-gap-via-weight-space-programming.webp" loading="lazy" width="1200" height="675" alt="A London Tower Bridge glows faintly as a translucent ribbon of words weaves across its arches, symbolizing the model&#x27;s weight adjustments"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags"><span class="tag-pill">Other</span></div>
   </div>
   <h2 class="card-title"><a class="card-link" href="breakdowns/towerbridge-bridging-the-dual-encoder-modality-gap-via-weight-space-programming.html">TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming</a></h2>
@@ -707,7 +747,7 @@
   <p class="insight"><strong>How to use:</strong> 1. Check your organization’s GPU procurement policies and verify that all hardware vendors are compliant with U.S. export controls, especially if you source from Nvidia or similar manufacturers. 2. Flag any existing contracts or supply chain arrangements that involve high‑performance GPUs and assess whether they meet current export‑control requirements. 3. Update your IT asset inventory and audit logs to include vendor compliance status, as this incident highlights the legal risk of non‑compliant hardware in AI workloads.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack.webp" loading="lazy" width="1200" height="675" alt="A humming server rack, its LED strip pulsing, sits beside a crystal‑clear glass pipe that streams data directly into a bustling control room"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="tag-pill">Product Launch</span>
@@ -753,8 +793,9 @@
   <div class="card-meta"><span>VentureBeat</span><span class="sep" aria-hidden="true">•</span><span>24 Nov 2026</span></div>
   <p class="card-summary">Z.ai introduces its flagship GLM-5.4, a Loop Transformer model that achieves deeper processing by reusing layers instead of adding new ones. The architecture promises up to four times the performance of comparable models without increasing parameter count, positioning Z.ai as a contender in large‑scale language model development.</p>
   <p class="insight"><strong>How to use:</strong> Watch Z.ai’s GLM-5.4 as it could influence future AI‑powered analytics and automation tools that your IT team may adopt. While it doesn’t directly impact your current Google Workspace or JumpCloud configuration, understanding its architecture could inform evaluations of next‑generation AI services that integrate with your SSO or endpoint security solutions. Keep an eye on Z.ai’s roadmap for potential integrations with your existing MDM and access‑management platforms within the next 90 days.</p>
-</article>
-<article class="card news-card">
+</article></div>
+    <h2 class="group-title">More industry news</h2>
+    <div class="cards-grid"><article class="card news-card">
   <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
@@ -767,7 +808,7 @@
   <p class="insight"><strong>How to use:</strong> Monitor your team’s code review practices and consider integrating automated static analysis tools that flag AI-generated sections. Ensuring clear documentation and review protocols can mitigate the risk of subtle bugs slipping through, directly impacting the reliability of your production systems.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/nvidia-hits-pause-on-chip-shipments-to-southeast-asia.webp" loading="lazy" width="1200" height="675" alt="A lone, gleaming processor rests on a customs scale, its polished surface reflecting the dim warehouse lights as a pause in shipments hangs in the air"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="tag-pill">Regulation</span>
@@ -779,7 +820,7 @@
   <p class="insight"><strong>How to use:</strong> Review whether your cloud or on‑prem AI workloads rely on Nvidia GPUs that might be sourced from these regions. If so, consider diversifying your hardware suppliers or negotiating with local partners to ensure compliance with U.S. export rules, otherwise you risk sudden supply disruptions.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/grand-theft-auto-vi-proves-why-efficiency-isnt-a-virtue.webp" loading="lazy" width="1200" height="675" alt="A solitary, gleaming vault door ajar, revealing a single, unmarked envelope of paper"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="tag-pill">Other</span>
@@ -791,7 +832,7 @@
   <p class="insight"><strong>How to use:</strong> Keep an eye on Anthropic’s public offering for potential downstream impacts on AI services and pricing. Monitoring their API offerings over the next 30 days could reveal new integration opportunities that align with existing Google Workspace or JumpCloud workflows.</p>
 </article>
 <article class="card news-card">
-  <figure class="card-figure"><img src="images/amazon-and-meta-reportedly-in-talks-to-lift-blockade-on-ai-agent-muse.webp" loading="lazy" width="1200" height="675" alt="A rusted chn‑bound gate beside a bustling warehouse, a single silver key hovering above the lock, hinting at a new connection"><figcaption>AI illustration</figcaption></figure><div class="card-header">
+  <div class="card-header">
     <div class="card-tags">
       <span class="tier-label">Press</span>
       <span class="tag-pill">Other</span>
@@ -805,7 +846,9 @@
   </div>
 
   <div id="archive-cs" class="panel" role="tabpanel" aria-labelledby="tab-archive-cs">
-    <div class="archive-list"><div class="archive-row">
+    <section class="archive-week">
+<h2 class="group-title">Week of 23 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-26</div>
   <div class="archive-count">2 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.34770v1" target="_blank" rel="noopener noreferrer">Make the Adversary Spend More: Stateful Deception as a Cost-Exchange Primitive for AI-Era Cyber Defense</a><a class="archive-title" href="https://arxiv.org/abs/2611.34785v1" target="_blank" rel="noopener noreferrer">PersonaFactory: Stylistic User Prompt Augmentation with Synthetic Persona Bank</a></div>
@@ -819,8 +862,11 @@
   <div class="archive-date">2026-11-24</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.31105v1" target="_blank" rel="noopener noreferrer">LiveLoRA: Exact KV Cache Migration Across LoRA Updates for LLM Agents</a><a class="archive-title" href="https://arxiv.org/abs/2611.31065v1" target="_blank" rel="noopener noreferrer">Decoupling Solving from Abstention: Single-Rollout Conformal Risk Control for Hard-Budget LLM Reasoning</a><a class="archive-title" href="https://arxiv.org/abs/2611.31118v1" target="_blank" rel="noopener noreferrer">TideSand: Performance-Accurate Sandbox Multiplexing for LLM Agents</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 16 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-22</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2608.25793v1" target="_blank" rel="noopener noreferrer">Closing the Gap: Automated Discovery of Secure Dockerfile Reference Standards via Semantic Clustering in Enterprise Inner Source</a><a class="archive-title" href="https://arxiv.org/abs/2609.20886v1" target="_blank" rel="noopener noreferrer">BI-Agent and BI-Bench: Towards Automating End-to-End Business Intelligence</a><a class="archive-title" href="https://arxiv.org/abs/2609.12171v1" target="_blank" rel="noopener noreferrer">WinSyn: An Automated Pipeline for Realistic Enterprise Question-Answering Evaluation</a></div>
@@ -849,8 +895,11 @@
   <div class="archive-date">2026-11-16</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.18392v1" target="_blank" rel="noopener noreferrer">VelServe: Taming Decode Jitters in LLM Inference with Tail-Calibrated Scheduling</a><a class="archive-title" href="https://arxiv.org/abs/2611.18453v1" target="_blank" rel="noopener noreferrer">Black-Box Uncertainty Quantification for Large Language Models via Ensemble-of-Ensembles</a><a class="archive-title" href="https://arxiv.org/abs/2611.18553v1" target="_blank" rel="noopener noreferrer">WeightBench: Evaluating Language Models as Weight-Space Programmers</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 09 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-15</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.15835v1" target="_blank" rel="noopener noreferrer">Controlling the Probability of Unknown Unknowns in Pre-Deployment Testing of AI Systems</a><a class="archive-title" href="https://arxiv.org/abs/2611.15700v1" target="_blank" rel="noopener noreferrer">AskALCF: A Self-Improving Agentic System for Intelligent HPC User Support</a><a class="archive-title" href="https://arxiv.org/abs/2611.17097v1" target="_blank" rel="noopener noreferrer">Broadcast, Don&#x27;t Replicate: Eliminating Weight HBM in Datacenter LLM Serving</a></div>
@@ -879,8 +928,11 @@
   <div class="archive-date">2026-11-09</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.09891v1" target="_blank" rel="noopener noreferrer">CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse</a><a class="archive-title" href="https://arxiv.org/abs/2611.08781v1" target="_blank" rel="noopener noreferrer">Aligning, Fast and Slow: A Control-Theoretic Oversight Framework for Long-Horizon Trajectories and Maintained Deployments</a><a class="archive-title" href="https://arxiv.org/abs/2611.09734v1" target="_blank" rel="noopener noreferrer">GuardrailAgent: An Agentic Framework for Jailbreak Defense</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 02 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-07</div>
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2611.08116v1" target="_blank" rel="noopener noreferrer">Create Your Own Work Stack: Deploying Self-hosted AI and Tooling in a Tech Startup</a><a class="archive-title" href="https://arxiv.org/abs/2611.07558v1" target="_blank" rel="noopener noreferrer">SKIM: Pruning Large Language Model Agents via Selective Knowledge Informed Masking</a><a class="archive-title" href="https://arxiv.org/abs/2611.08325v1" target="_blank" rel="noopener noreferrer">Decision Models as Retrieval Gates Against Injection and Pollution</a></div>
@@ -909,8 +961,11 @@
   <div class="archive-date">2026-11-02</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.41968v1" target="_blank" rel="noopener noreferrer">Prune Gradually, Adapt Sparsely: Efficient Pruning of Large Language Models at Extreme Sparsity</a><a class="archive-title" href="https://arxiv.org/abs/2610.41172v1" target="_blank" rel="noopener noreferrer">Context as Infrastructure: Knowledge Compilation for Retrieval in Agentic Systems with Harnesses</a><a class="archive-title" href="https://arxiv.org/abs/2610.41998v1" target="_blank" rel="noopener noreferrer">SecPO: Principled Adversarial Training for Prompt Injection Security</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 26 Oct 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-01</div>
   <div class="archive-count">1 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.40483v1" target="_blank" rel="noopener noreferrer">Preserving Utility in Continual LLM Unlearning via Orthogonal Projections</a></div>
@@ -939,8 +994,11 @@
   <div class="archive-date">2026-10-26</div>
   <div class="archive-count">3 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.32131v1" target="_blank" rel="noopener noreferrer">Pairing Matters: Performance, Failures, and Efficiency in Lightweight Coding Agents</a><a class="archive-title" href="https://arxiv.org/abs/2610.32851v1" target="_blank" rel="noopener noreferrer">Reimagining Enterprise RAG for Multi-Agent Systems: A Knowledge Layer That Organizes Before It Retrieves</a><a class="archive-title" href="https://arxiv.org/abs/2610.32752v1" target="_blank" rel="noopener noreferrer">ActionRAG: Evidence-Refining Graph Diffusion for Long-Term Memory in LLM Agents</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 19 Oct 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-10-23</div>
   <div class="archive-count">5 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.31657v1" target="_blank" rel="noopener noreferrer">Cost-Aware Abstention for LLM-Based IT Ticket Classification</a><a class="archive-title" href="https://arxiv.org/abs/2610.31573v1" target="_blank" rel="noopener noreferrer">Social-HUMINT: An LLM-Augmented Unified Framework for Measuring Social Media Exposure</a><a class="archive-title" href="https://arxiv.org/abs/2610.31552v1" target="_blank" rel="noopener noreferrer">CAMGen: A Core Change-Aware Multi-View Framework for Commit Message Generation</a></div>
@@ -955,10 +1013,13 @@
   <div class="archive-count">4 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://arxiv.org/abs/2610.26664v1" target="_blank" rel="noopener noreferrer">Honeypots for AI Agent Insider Threats</a><a class="archive-title" href="https://arxiv.org/abs/2610.28612v1" target="_blank" rel="noopener noreferrer">TraceLite: Efficient Trace Reduction for SWE Agents via Optical Compression and Redundancy Removal</a><a class="archive-title" href="https://arxiv.org/abs/2610.28611v1" target="_blank" rel="noopener noreferrer">Semantic Observability for Autonomous Systems Diagnostics</a></div>
 </div></div>
+</section>
   </div>
 
   <div id="archive-news" class="panel" role="tabpanel" aria-labelledby="tab-archive-news">
-    <div class="archive-list"><div class="archive-row">
+    <section class="archive-week">
+<h2 class="group-title">Week of 23 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-27</div>
   <div class="archive-count">9 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/data/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack" target="_blank" rel="noopener noreferrer">Can you give AI agents live data without rebuilding your data stack?</a><a class="archive-title" href="https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia/" target="_blank" rel="noopener noreferrer">Nvidia hits pause on chip shipments to Southeast Asia</a><a class="archive-title" href="https://venturebeat.com/technology/z-ais-glm-5-4-aims-to-match-models-up-to-four-times-its-size-by-running-28-layers-twice" target="_blank" rel="noopener noreferrer">Z.ai&#x27;s GLM-5.4 aims to match models up to four times its size by running 28 layers twice</a></div>
@@ -982,8 +1043,11 @@
   <div class="archive-date">2026-11-23</div>
   <div class="archive-count">23 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips/" target="_blank" rel="noopener noreferrer">Amazon snaps up Decart’s AI optimization tech for $7.5B as it prepares to sell Trainium chips</a><a class="archive-title" href="https://ladybird.org/posts/alpha/" target="_blank" rel="noopener noreferrer">Ladybird Is Now in Alpha</a><a class="archive-title" href="https://techcrunch.com/2026/11/23/jensen-huang-isnt-out-of-the-woods-yet/" target="_blank" rel="noopener noreferrer">Jensen Huang isn’t out of the woods yet</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 16 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-22</div>
   <div class="archive-count">11 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://venturebeat.com/orchestration/even-the-fastest-ai-clusters-can-be-held-back-by-their-release-pipelines" target="_blank" rel="noopener noreferrer">Even the fastest AI clusters can be held back by their release pipelines</a><a class="archive-title" href="https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/" target="_blank" rel="noopener noreferrer">Banks Have Had It Up to Here With Your AI Agent</a><a class="archive-title" href="https://techcrunch.com/2026/11/19/anthropics-ipo-could-deliver-156-billion-to-charity/" target="_blank" rel="noopener noreferrer">Anthropic’s IPO could deliver $156B to charity</a></div>
@@ -1017,8 +1081,11 @@
   <div class="archive-date">2026-11-16</div>
   <div class="archive-count">7 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://openai.com/index/advancing-computer-use-for-healthcare-teams" target="_blank" rel="noopener noreferrer">Advancing computer-use agents for healthcare teams</a><a class="archive-title" href="https://openai.com/index/lvmh-media-division-partnership" target="_blank" rel="noopener noreferrer">LVMH’s Media Division announces strategic partnership with OpenAI</a><a class="archive-title" href="https://www.technologyreview.com/2026/11/16/1146070/building-ai-that-can-work-across-the-enterprise/" target="_blank" rel="noopener noreferrer">Building AI that can work across the enterprise</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 09 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-15</div>
   <div class="archive-count">14 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/" target="_blank" rel="noopener noreferrer">Where was Nvidia’s security team?</a><a class="archive-title" href="https://www.wired.com/story/this-ai-tamagotchi-oats-turns-everyday-objects-into-needy-virtual-pets/" target="_blank" rel="noopener noreferrer">This AI Tamagotchi Turns Everyday Objects Into Needy Virtual Pets</a><a class="archive-title" href="https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches" target="_blank" rel="noopener noreferrer">We&#x27;re Asking an Appeals Court to Require a Warrant for ALPR Searches</a></div>
@@ -1052,8 +1119,11 @@
   <div class="archive-date">2026-11-09</div>
   <div class="archive-count">16 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/" target="_blank" rel="noopener noreferrer">Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50”</a><a class="archive-title" href="https://techcrunch.com/2026/11/09/automattic-debuts-a-platform-to-deploy-vibe-coding-apps-amid-a-changing-internet/" target="_blank" rel="noopener noreferrer">Automattic debuts a platform to deploy vibe coding apps amid a changing internet</a><a class="archive-title" href="https://news.ycombinator.com/item?id=50422628" target="_blank" rel="noopener noreferrer">ChatGPT Desktop forwards your SSH agent to remote machines</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 02 Nov 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-08</div>
   <div class="archive-count">6 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/" target="_blank" rel="noopener noreferrer">After the midterms, things are looking rocky for Elon Musk and data centers</a><a class="archive-title" href="https://github.blog/changelog/2026-11-05-new-pull-request-overview-page-in-public-preview/" target="_blank" rel="noopener noreferrer">GitHub New pull request overview page in public preview</a><a class="archive-title" href="https://techcrunch.com/2026/11/06/physicl-raises-10m-to-make-the-digital-world-real-enough-for-robots/" target="_blank" rel="noopener noreferrer">Physicl raises $10M to make the digital world real enough for robots</a></div>
@@ -1087,8 +1157,11 @@
   <div class="archive-date">2026-11-02</div>
   <div class="archive-count">12 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack" target="_blank" rel="noopener noreferrer">Supermarket freezers across Europe hit by second suspected cyber-attack</a><a class="archive-title" href="https://techcrunch.com/2026/11/02/omen-ai-adds-liquid-know-how-in-16-million-aquatic-labs-acquisition/" target="_blank" rel="noopener noreferrer">Omen AI adds liquid know-how in $16 million Aquatic Labs acquisition</a><a class="archive-title" href="https://www.wired.com/story/hundreds-of-mundane-ai-apps-are-hiding-abusive-deepfake-features/" target="_blank" rel="noopener noreferrer">Hundreds of Mundane AI Apps Are Hiding Sexually Abusive Deepfake Features</a></div>
-</div>
-<div class="archive-row">
+</div></div>
+</section>
+<section class="archive-week">
+<h2 class="group-title">Week of 26 Oct 2026</h2>
+<div class="archive-list"><div class="archive-row">
   <div class="archive-date">2026-11-01</div>
   <div class="archive-count">9 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/" target="_blank" rel="noopener noreferrer">Apple CEO says the company doesn’t ‘want to ship AI for AI’s sake’</a><a class="archive-title" href="https://techcrunch.com/2026/10/31/judge-allows-naacp-lawsuit-over-xai-data-center-pollution-to-move-forward/" target="_blank" rel="noopener noreferrer">Judge allows NAACP lawsuit over xAI data center pollution to move forward</a><a class="archive-title" href="https://www.visitnorway.com/plan-your-trip/travel-tips-a-z/norwegian-scenic-routes/worlds-best-toilets/" target="_blank" rel="noopener noreferrer">Norway makes shithouses great again</a></div>
@@ -1108,6 +1181,7 @@
   <div class="archive-count">32 items</div>
   <div class="archive-previews"><a class="archive-title" href="https://smsofdeath.com/" target="_blank" rel="noopener noreferrer">Zero click, silent, remote Android DoS</a><a class="archive-title" href="https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/" target="_blank" rel="noopener noreferrer">Forging a Microsoft Edge Full Chain with Logic Bugs Only</a><a class="archive-title" href="https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/" target="_blank" rel="noopener noreferrer">Gemini 4 Carbon: Our next frontier model</a></div>
 </div></div>
+</section>
   </div>
 
   <div class="email-banner email-banner-end">

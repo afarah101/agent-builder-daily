@@ -12,6 +12,8 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from groq import Groq
 
+from generate_html import TOKENS_CSS, font_faces, font_links, topic_tag  # the one font set and token block
+
 OUTPUT_DIR = "site/breakdowns"
 SHORT = " (short version)"  # ends the "Generated" stamp of a page made without Groq; a later run replaces that page
 
@@ -217,10 +219,249 @@ def source_link_html(url):
     return f'<a href="{escape(url)}" target="_blank" rel="noopener noreferrer" class="source-link">Read the original →</a>'
 
 
-def render_breakdown_page(title, slug, url, source_label, summary_html, guide_html, meta_line, generated_at):
-    """The page frame. title, url, meta_line and generated_at are raw text and are escaped here; summary_html and
-    guide_html come from summary_block_html / guide_block_html, which escape their text."""
+# The article shell: dark hero (logo, tag, H1, meta), then a white panel with a 680px reading column.
+# site/privacy.html carries the same rules, so both pages have one layout. Every value is a token.
+ARTICLE_CSS = """*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      min-height: 100vh;
+      overflow-wrap: anywhere;  /* long words and URLs wrap at 360px */
+    }
+
+    ::selection { background: var(--c-text); color: var(--c-bg); }
+    :focus-visible { outline: 2px solid var(--c-text); outline-offset: 2px; }
+    .hero :focus-visible { outline-color: var(--c-bg); }
+
+    /* Hero: logo (links home), tag, H1, meta */
+    .hero { background: var(--g-hero); color: var(--c-bg); padding: var(--s-24) 0 calc(var(--s-64) + var(--s-48)); }
+    .header-inner { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--s-32); }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-8);
+      min-height: var(--tap);
+      font-family: var(--font-head);
+      font-size: var(--fs-h4);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      color: var(--c-bg);
+      text-decoration: none;
+    }
+
+    .brand-logo { display: block; width: 28px; height: 22px; flex-shrink: 0; }
+    .brand-name { white-space: nowrap; }
+    .accent-word { color: var(--c-accent); }
+
+    .article-head {
+      max-width: calc(var(--reading-max) + 2 * var(--s-64));
+      margin: var(--s-64) auto 0;
+      padding: 0 var(--s-64);
+    }
+
+    .tag-pill {
+      display: inline-block;
+      margin-bottom: var(--s-16);
+      padding: var(--s-4) var(--s-8);
+      border: 1px solid var(--c-border-dark);
+      border-radius: var(--radius-sm);
+      background: var(--c-surface-dark-2);
+      color: var(--c-bg);
+      font-family: var(--font-mono);
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      letter-spacing: var(--ls-label);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .page-title {
+      margin-bottom: var(--s-16);
+      font-family: var(--font-head);
+      font-size: var(--fs-h3);
+      line-height: var(--lh-head);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      text-wrap: balance;
+    }
+
+    .meta-line {
+      font-family: var(--font-mono);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      color: var(--c-on-dark-muted);
+    }
+
+    /* White panel: overlaps the hero bottom, as on the home page */
+    .content {
+      position: relative;
+      width: min(calc(var(--reading-max) + 2 * var(--s-64)), calc(100% - var(--s-32)));
+      margin: calc(-1 * var(--s-64)) auto 0;
+      padding: var(--s-48) var(--s-64) var(--s-64);
+      background: var(--c-bg);
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    }
+
+    .article { max-width: var(--reading-max); margin: 0 auto; }
+
+    .article-figure { margin: 0 0 var(--s-32); }
+    .article-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;  /* with width and height on the tag: the space is kept before the file loads */
+      object-fit: cover;
+      border-radius: var(--radius-card);
+      background: var(--c-bg-alt);
+    }
+    .article-figure figcaption {
+      margin-top: var(--s-8);
+      font-family: var(--font-mono);
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
+    }
+
+    .section-title {
+      margin-bottom: var(--s-16);
+      font-family: var(--font-head);
+      font-size: var(--fs-h4);
+      line-height: var(--lh-snug);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+    }
+
+    .summary-body { max-width: var(--measure); color: var(--c-text-soft); }
+    .summary-body p { margin-bottom: var(--s-16); }
+    .summary-body p:last-child { margin-bottom: 0; }
+    .divider { height: var(--s-48); }
+
+    /* "How to apply" panel */
+    .apply-panel { padding: var(--s-32); border-radius: var(--radius-panel); background: var(--c-bg-alt); }
+    .guide-grid { display: flex; flex-direction: column; gap: var(--s-12); }
+    .guide-block {
+      padding: var(--s-16) var(--s-24);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-card);
+      background: var(--c-bg);
+    }
+    .guide-label {
+      margin-bottom: var(--s-8);
+      font-family: var(--font-head);
+      font-size: var(--fs-lead);
+      line-height: var(--lh-snug);
+      font-weight: 700;
+      letter-spacing: var(--ls-head);
+      color: var(--c-text);
+    }
+    .guide-text { color: var(--c-text-soft); white-space: pre-wrap; }
+
+    .generated-note {
+      margin-top: var(--s-16);
+      font-family: var(--font-mono);
+      font-size: var(--fs-label);
+      line-height: var(--lh-small);
+      color: var(--c-text-muted);
+    }
+
+    /* Actions: the one emerald button, then the back link */
+    .article-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-8) var(--s-24); margin-top: var(--s-32); }
+
+    .source-link, .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--tap);
+      padding: 0 var(--s-24);
+      border-radius: var(--radius);
+      background: var(--c-accent);
+      color: var(--c-on-accent);
+      font-size: var(--fs-ui);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .source-link:hover, .cta:hover { background: var(--c-accent-hover); }
+
+    /* Text links: the text keeps its colour, the underline is emerald */
+    .back-link, .text-link, footer a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      color: var(--c-text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--c-accent);
+    }
+    .back-link, .text-link { font-size: var(--fs-ui); font-weight: 600; }
+    .back-link:hover, .text-link:hover, footer a:hover { text-decoration-color: var(--c-accent-hover); }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--s-8);
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: var(--s-16) var(--s-32);
+      border-top: 1px solid var(--c-border);
+    }
+    footer span { font-size: var(--fs-small); color: var(--c-text-muted); }
+    footer a { padding: 0 var(--s-4); }
+
+    @media (min-width: 701px) {
+      .page-title { font-size: var(--fs-h2); }
+    }
+
+    @media (max-width: 700px) {
+      .hero { padding: var(--s-12) 0 var(--s-64); }
+      .header-inner, .article-head { padding: 0 var(--s-16); }
+      .article-head { margin-top: var(--s-32); }
+      .content { width: 100%; margin-top: calc(-1 * var(--s-32)); padding: var(--s-24) var(--s-16) var(--s-48); }
+      .article-figure { margin-bottom: var(--s-24); }
+      .divider { height: var(--s-32); }
+      .apply-panel { padding: var(--s-16); border-radius: var(--radius-lg); }
+      .guide-block { padding: var(--s-16); }
+      .source-link, .cta { width: 100%; }
+      footer { padding: var(--s-16); }
+    }"""
+
+DEFAULT_TAG = "Breakdown"  # a page whose story is in no data file
+KIND_TAG = {"case_studies": "Case study", "news": "News"}
+
+
+def tag_for(item, kind):
+    """The page's tag: the topic on the story's card, or the kind of story when the topic is "Other"."""
+    topic = topic_tag(item.get("relevance_tag" if kind == "case_studies" else "category"))
+    return KIND_TAG[kind] if topic == "Other" else topic
+
+
+def article_figure(slug, directory=OUTPUT_DIR):
+    """The page's <figure> when site/images/<slug>.webp exists, else "". width and height keep the space (no layout
+    shift); the alt is the scene text generate_images.py stored."""
+    from generate_images import FALLBACK_ALT, HEIGHT, WIDTH, load_alts
+    images = Path(directory).parent / "images"
+    if not slug or not (images / f"{slug}.webp").is_file():
+        return ""
+    alt = str((load_alts(images).get(slug) or {}).get("alt") or "").strip() or FALLBACK_ALT
+    return (f'<figure class="article-figure"><img src="../images/{escape(slug)}.webp" width="{WIDTH}" height="{HEIGHT}" '
+            f'alt="{escape(alt)}" fetchpriority="high" decoding="async"><figcaption>AI illustration</figcaption></figure>')
+
+
+def render_breakdown_page(title, slug, url, source_label, summary_html, guide_html, meta_line, generated_at,
+                          tag="", figure=""):
+    """The page frame, in magazine order: tag, H1, meta, image, summary, "How to apply" panel, source button, back link.
+    title, url, meta_line, generated_at and tag are raw text and are escaped here; summary_html and guide_html come
+    from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure."""
     title, meta_line, generated_at = escape(str(title)), escape(str(meta_line)), escape(str(generated_at))
+    tag = escape(str(tag or DEFAULT_TAG))
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -228,71 +469,46 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} — IT Breakdown — Daily Edge AI</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;700&display=swap">
+  {font_links("../")}
   <style>
-    *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
-    :root{{--font:"Geist",ui-sans-serif,system-ui,sans-serif;--font-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--ls-head:-0.02em;--c-bg:#000000;--c-surface:#171717;--c-border:#333333;--c-text:#ffffff;--c-text-2:#d4d4d4;--c-text-muted:#a3a3a3;--c-accent:#10b981;--c-accent-hover:#059669;--c-on-accent:#0a0a0a;--c-warn:#fbbf24;--c-bad:#f87171;--fs-body:16px;--lh-body:1.625;--fs-small:14px;--fs-label:12px;--radius:8px;--radius-card:12px;--tap:44px;--reading:65ch;--content-max:1152px}}
-    body{{background:var(--c-bg);color:var(--c-text);font-family:var(--font);font-size:var(--fs-body);line-height:var(--lh-body);min-height:100vh;overflow-wrap:anywhere}}
-    ::selection{{background:var(--c-accent);color:var(--c-on-accent)}}
-    :focus-visible{{outline:2px solid var(--c-accent);outline-offset:2px}}
-    a{{color:inherit}}
-    .site-header{{border-bottom:1px solid var(--c-border)}}
-    .header-inner,.page-wrap,footer{{max-width:var(--content-max);margin:0 auto;padding-left:32px;padding-right:32px}}
-    .header-inner{{display:flex;align-items:center;padding-top:12px;padding-bottom:12px}}
-    .brand-link,.back-link,.source-link,footer a{{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none}}
-    .brand-link{{gap:10px;font-size:21px;line-height:1;font-weight:600;letter-spacing:var(--ls-head);color:var(--c-text)}}
-    .brand-logo{{display:block;width:28px;height:22px;flex-shrink:0;background:url(../logo.svg) center/contain no-repeat}}
-    .brand-name{{white-space:nowrap}}
-    .accent-word{{color:var(--c-accent)}}
-    .page-wrap{{padding-top:24px;padding-bottom:80px}}
-    .back-link{{gap:8px;padding-right:8px;font-size:var(--fs-body);font-weight:600;color:var(--c-accent);margin-bottom:24px}}
-    .back-link:hover{{color:var(--c-accent-hover)}}
-    .page-title{{max-width:var(--reading);font-size:clamp(28px,22px + 1.6vw,40px);line-height:1.15;font-weight:700;letter-spacing:var(--ls-head);text-wrap:balance;margin-bottom:12px}}
-    .meta-line{{font-family:var(--font-mono);font-size:var(--fs-small);line-height:20px;color:var(--c-text-muted);margin-bottom:24px}}
-    .source-link{{padding:0 20px;border-radius:var(--radius);background:var(--c-accent);color:var(--c-on-accent);font-weight:600;margin-bottom:48px}}
-    .source-link:hover{{background:var(--c-accent-hover)}}
-    .section-title{{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:var(--ls-head);margin-bottom:16px}}
-    .summary-body{{max-width:var(--reading);color:var(--c-text-2)}}
-    .summary-body p{{margin-bottom:16px}}
-    .divider{{height:1px;background:var(--c-border);margin:48px 0}}
-    .guide-grid{{display:flex;flex-direction:column;gap:16px}}
-    .guide-block{{max-width:calc(var(--reading) + 48px);background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-card);padding:20px 24px}}
-    .guide-label{{font-size:var(--fs-body);font-weight:700;margin-bottom:8px;color:var(--c-text)}}
-    .guide-block.green .guide-label{{color:var(--c-accent)}}
-    .guide-block.amber .guide-label{{color:var(--c-warn)}}
-    .guide-block.red .guide-label{{color:var(--c-bad)}}
-    .guide-text{{color:var(--c-text-2);white-space:pre-wrap}}
-    .generated-note{{margin-top:48px;font-family:var(--font-mono);font-size:var(--fs-label);color:var(--c-text-muted)}}
-    footer{{border-top:1px solid var(--c-border);padding-top:20px;padding-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}}
-    footer span{{font-size:var(--fs-label);color:var(--c-text-muted)}}
-    footer a{{padding:0 4px;color:var(--c-text);text-decoration:underline}}
-    footer a:hover{{color:var(--c-accent)}}
-    @media(max-width:700px){{.header-inner,.page-wrap,footer{{padding-left:16px;padding-right:16px}}.page-wrap{{padding-top:16px;padding-bottom:48px}}.guide-block{{padding:16px}}.divider{{margin:32px 0}}.source-link{{margin-bottom:32px}}}}
+    {font_faces("../")}
+
+    {TOKENS_CSS}
+
+    {ARTICLE_CSS}
+
+    .brand-logo {{ background: url(../logo.svg) center/contain no-repeat; }}
   </style>
 </head>
 <body>
-<header class="site-header">
+<header class="hero">
   <div class="header-inner">
     <a class="brand-link" href="../index.html"><span class="brand-logo" aria-hidden="true"></span><span class="brand-name">Daily Edge <span class="accent-word">AI</span></span></a>
   </div>
+  <div class="article-head">
+    <p class="tag-pill">{tag}</p>
+    <h1 class="page-title">{title}</h1>
+    <p class="meta-line">{meta_line} · Generated {generated_at}</p>
+  </div>
 </header>
-<main class="page-wrap">
-  <a class="back-link" href="../index.html">← Back to today</a>
-  <h1 class="page-title">{title}</h1>
-  <p class="meta-line">{meta_line} · Generated {generated_at}</p>
-  {source_link_html(url)}
-  <section>
-    <h2 class="section-title">Summary</h2>
-    <div class="summary-body">{summary_html}</div>
-  </section>
-  <div class="divider"></div>
-  <section>
-    <h2 class="section-title">How to apply</h2>
-    <div class="guide-grid">{guide_html}</div>
-  </section>
-  <p class="generated-note">AI-generated breakdown · Daily Edge AI · {generated_at}</p>
+<main class="content">
+  <article class="article">
+    {figure}
+    <section>
+      <h2 class="section-title">Summary</h2>
+      <div class="summary-body">{summary_html}</div>
+    </section>
+    <div class="divider"></div>
+    <section class="apply-panel">
+      <h2 class="section-title">How to apply</h2>
+      <div class="guide-grid">{guide_html}</div>
+    </section>
+    <p class="generated-note">AI-generated breakdown · Daily Edge AI · {generated_at}</p>
+    <div class="article-actions">
+      {source_link_html(url)}
+      <a class="back-link" href="../index.html">← Back to today</a>
+    </div>
+  </article>
 </main>
 <footer>
   <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="../privacy.html">Privacy</a></span>
@@ -309,6 +525,8 @@ STORED = re.compile(
     r'<div class="summary-body">(?P<summary>.*?)</div>\s*(?:</section>\s*)?<div class="divider">.*?'
     r'<div class="guide-grid">(?P<guide>.*?)</div>\s*(?:</section>\s*)?<(?:div|p) class="generated-note">', re.S)
 SOURCE = re.compile(r'<a href="(?P<url>[^"]*)"[^>]*class="source-link">')
+TAG = re.compile(r'<p class="tag-pill">(?P<tag>.*?)</p>')
+FIGURE = re.compile(r'<figure class="article-figure">.*?</figure>', re.S)
 STORED_BLOCK = re.compile(
     r'<div class="guide-block(?: (?P<color>\w+))?"><(?:div|h3) class="guide-label">(?P<label>.*?)</(?:div|h3)>'
     r'<div class="guide-text">(?P<text>.*?)</div></div>', re.S)
@@ -319,9 +537,10 @@ def stored_text(fragment):
     return unescape(re.sub(r"</?[a-zA-Z][^<>]*>", "", fragment))  # a tag starts with a letter: "<10 ms" is text
 
 
-def restyle_page(old_html):
+def restyle_page(old_html, tag="", figure=None):
     """New frame and style around an old page's stored text, with no AI call. None when the page has a shape this
-    does not recognise, so the caller leaves it as it is."""
+    does not recognise, so the caller leaves it as it is. tag: the story's tag when the caller knows it, else the
+    page keeps the tag it has. figure: the <figure> to show ("" for none); None keeps the one the page has."""
     m = STORED.search(old_html)
     if not m:
         return None
@@ -329,24 +548,60 @@ def restyle_page(old_html):
     blocks = list(STORED_BLOCK.finditer(m["guide"]))
     if not sep or len(blocks) != m["guide"].count('class="guide-block'):
         return None
-    source = SOURCE.search(m["between"])  # one page in the archive has no source link
+    source = SOURCE.search(old_html)  # one page in the archive has no source link
+    stored_tag, stored_figure = TAG.search(old_html), FIGURE.search(old_html)
     summary = summary_block_html(stored_text(p) for p in re.findall(r"<p>(.*?)</p>", m["summary"], re.S))
     guide = "\n".join(guide_block_html(stored_text(b["label"]), b["color"] or "", stored_text(b["text"])) for b in blocks)
     url = unescape(source["url"]) if source else ""
-    return render_breakdown_page(stored_text(m["title"]), "", url, "", summary, guide, meta, generated_at)
+    if figure is None:
+        figure = stored_figure[0] if stored_figure else ""
+    return render_breakdown_page(stored_text(m["title"]), "", url, "", summary, guide, meta, generated_at,
+                                 tag=tag or (stored_text(stored_tag["tag"]) if stored_tag else ""), figure=figure)
 
 
-def restyle_existing_pages(directory=OUTPUT_DIR):
-    """Rewrite every existing breakdown page in the current frame. Returns (restyled, skipped file names)."""
+def known_tags():
+    """{slug: tag} for every story the data files still hold (active days and both archives). Reads only."""
+    import generate_html as gh
+    tags = {}
+    files = [(f, "case_studies") for f in sorted(Path(gh.CASE_STUDIES_DIR).glob("*.json"))]
+    files += [(f, "news") for f in [*sorted(Path(gh.NEWS_DIR).glob("*.json")), Path(gh.ARCHIVE_NEWS_FILE)]]
+    for path, kind in files:
+        data = gh.load_json(str(path))
+        for day in data if isinstance(data, list) else [data]:
+            for item in (day.get(kind) or []) if isinstance(day, dict) else []:
+                tags.setdefault(page_slug(item.get("title")), tag_for(item, kind))
+    return tags
+
+
+def restyle_existing_pages(directory=OUTPUT_DIR, tags=None):
+    """Rewrite every existing breakdown page in the current frame, each with its tag and its image when the file is
+    there. Returns (restyled, skipped file names)."""
     restyled, skipped = 0, []
+    tags = tags or {}
     for path in sorted(Path(directory).glob("*.html")):
-        new_html = restyle_page(path.read_text(encoding="utf-8"))
+        new_html = restyle_page(path.read_text(encoding="utf-8"), tags.get(path.stem, ""),
+                                article_figure(path.stem, directory))
         if new_html is None:
             skipped.append(path.name)
             continue
         path.write_text(new_html, encoding="utf-8")
         restyled += 1
     return restyled, skipped
+
+
+def sync_figures(directory=OUTPUT_DIR):
+    """Each page shows its image exactly when the image file exists: an image is made after its page, and
+    generate_images.py deletes it after 4 months. Returns the number of pages changed."""
+    have = {p.stem for p in (Path(directory).parent / "images").glob("*.webp")}
+    changed = 0
+    for path in Path(directory).glob("*.html"):
+        html = path.read_text(encoding="utf-8")
+        if ('<figure class="article-figure">' in html) != (path.stem in have):
+            new_html = restyle_page(html, figure=article_figure(path.stem, directory))
+            if new_html:
+                path.write_text(new_html, encoding="utf-8")
+                changed += 1
+    return changed
 
 
 NOT_APPLICABLE = ("not applicable", "not directly applicable")
@@ -416,7 +671,8 @@ def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
             summary_html, guide_html = short_content(item, kind)
             stamp += SHORT
         path.write_text(render_breakdown_page(title or "Untitled", slug, item.get("url", ""), "", summary_html,
-                                              guide_html, meta_line_for(item, kind), stamp), encoding="utf-8")
+                                              guide_html, meta_line_for(item, kind), stamp, tag=tag_for(item, kind),
+                                              figure=article_figure(slug, directory)), encoding="utf-8")
         print(f"    Saved: {path}")
     return slug_map
 
@@ -435,8 +691,10 @@ def ensure_pages(studies, news, directory=OUTPUT_DIR):
     generate_html calls this with the cards it is about to render, so a card cannot link to a missing page."""
     os.makedirs(directory, exist_ok=True)
     generated_at = datetime.now().strftime("%d %b %Y, %H:%M")
-    return save_slug_map(process_items(studies, "case_studies", generated_at, directory, use_ai=False),
-                         process_items(news, "news", generated_at, directory, use_ai=False), directory)
+    slug_map = save_slug_map(process_items(studies, "case_studies", generated_at, directory, use_ai=False),
+                             process_items(news, "news", generated_at, directory, use_ai=False), directory)
+    sync_figures(directory)
+    return slug_map
 
 
 def shown_items(now=None):
@@ -478,7 +736,7 @@ def main():
 
 if __name__ == "__main__":
     if "--restyle" in sys.argv:  # re-frame existing pages only: no Groq call
-        done, skipped = restyle_existing_pages()
+        done, skipped = restyle_existing_pages(tags=known_tags())
         print(f"Restyled {done} pages; skipped {len(skipped)} with an unknown shape: {skipped}")
     else:
         main()
