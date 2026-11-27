@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-27T18:36:16.552641",
+  "timestamp": "2026-11-27T19:14:12.906442",
   "filter": "last_4_to_8_weeks",
-  "total_fetched": 20,
-  "total_classified": 28,
+  "total_fetched": 14,
+  "total_classified": 31,
   "news": [
     {
       "id": "https://venturebeat.com/data/can-you-give-ai-agents-live-data-without-rebuilding-your-data-stack",
@@ -421,6 +421,51 @@
       "summary": "The MIT Tech Review article discusses how AI technologies are putting pressure on America’s open records systems, using the example of a small-town clerk in Vermont handling multiple roles.",
       "enterprise_use": "",
       "relevance_score": 1,
+      "relevance_signal": "low",
+      "category": "Other"
+    },
+    {
+      "id": "https://www.infohawk.com/news/2026-11-27-black-friday-webrtc-skimmer",
+      "title": "Credit card skimming scripts using WebRTC found on popular shopping sites",
+      "summary_raw": "Article URL: https://www.infohawk.com/news/2026-11-27-black-friday-webrtc-skimmer\nComments URL: https://news.ycombinator.com/item?id=50668145\nPoints: 185\n# Comments: 112",
+      "source": "Hacker News",
+      "tier": "news",
+      "pub_date": "27 Nov 2026",
+      "url": "https://www.infohawk.com/news/2026-11-27-black-friday-webrtc-skimmer",
+      "source_text": "Credit card skimming scripts using WebRTC found on popular shopping sites\nAll the sites we contacted took action; but the larger consumer web ecosystem should be prepared to mitigate these attack vectors\nA card-skimming script was planted on the online stores of Lascana, Samsonite, American Tourister, Revolve and FWRD in the week before Black Friday. After our reports to affected companies, all have had the script removed (on November 24th or 25th) ahead of Black Friday. We observed it in action on one of the five websites: Lascana, where it sent our test card's details to a 3rd party. We believe the script was built to take a card number, expiry and security code, along with a user's name, address, phone and email, and send them to malefactors as a user entered their payment credentials. It did this before the store checked the payment, so a card could be taken even if the order was declined or cancelled, and nothing would look wrong to the shopper. Across all of these sites, we do not know how many, if any, shopper details or payment credentials may have been captured.\nWhich sites were affected\nOn November 24, we notified all of the named parties in this article and others, including: Amazon Web Services about the storage buckets serving the script, Cloudflare about the services the malefactor used, the domain registrars, the pixel vendor, the consent-banner provider and the affected retailers and platforms. Lascana replied to us and removed the Quorum pixel from their site by November 24th at 15:48 UTC. Quorum confirmed the identified malicious code was removed from their pixel tracker, and they restored the clean marketing pixel as of November 24th at 21:09 UTC.\nRevolve provided this statement on behalf of REVOLVE and FWRD: “On November 25, InfoHawk notified our team of a potential security issue impacting mobile and tablet versions of our websites which we resolved the same day. We appreciate the outreach, and are actively investigating the issue to determine any potential impact.”\n* Quorum is an ad-attribution platform that links ad views to store visits and online sales (quorum.inc).\n† Seers is a cookie consent management platform and data privacy compliance company (seers.ai).\nHow the attack works\nThis attack uses WebRTC, the technology that allows you to make video calls in your web browser. WebRTC lets a web page open its own channel to another party and pass data (e.g. audio/video packets) over it. It has likely been used (both to load the skimmer and to send the stolen card details out) because security rules and monitoring tools often do not watch this communications channel as closely. For example, Meta briefly used WebRTC in a creative way in 2025, according to researchers looking at the technology as a compromise vector. This form of attack appears to target mobile devices, and we only saw the server enable the skimmer on checkout pages, so desktop checks and homepage scans would likely not see it. The skimmer's traffic appeared t",
+      "summary": "Credit card skimming scripts exploiting WebRTC were discovered on several popular online stores before Black Friday. All affected retailers removed the malicious code after alerts from security researchers.",
+      "enterprise_use": "Review your Cloudflare and AWS configurations for any WebRTC traffic that is not explicitly required by your services. Missing such scrutiny could allow stealth data exfiltration via unmonitored browser channels. The Cloudflare CDN settings are the most directly impacted.",
+      "relevance_score": 4,
+      "relevance_signal": "medium",
+      "category": "Security"
+    },
+    {
+      "id": "https://cr.yp.to/proofs/falseccp.html",
+      "title": "False computer-checked proofs",
+      "summary_raw": "Article URL: https://cr.yp.to/proofs/falseccp.html\nComments URL: https://news.ycombinator.com/item?id=50667989\nPoints: 106\n# Comments: 45",
+      "source": "Hacker News",
+      "tier": "news",
+      "pub_date": "27 Nov 2026",
+      "url": "https://cr.yp.to/proofs/falseccp.html",
+      "source_text": "There are some computer programs that claim to check every step in a proof. However, various \"soundness bugs\" have been reported that at least potentially allowed false statements to slip past these programs. In many cases, these bugs have been demonstrated to be exploitable.\nThe list at the bottom of this page links to what appear to be reports of soundness bugs for various important proof-checking programs, sorted in increasing order of the number of reports. This list includes many more soundness bugs for these programs than the bugs mentioned in 2026 Paulson and 2026 Stérin, and I don't think the list is missing any of the bugs mentioned there, but I've probably missed some reports. Please let me know about any corrections or additions.\nBeware that this list doesn't include user-interface vulnerabilities. Those can have the same important effect of misleading a user as to what has been proven. See, e.g., 2016 Adams.\nOne standard path towards security is to minimize the complexity of the trusted computing base, which by definition is the part of the system that security reviewers need to check. From this perspective, HOL Light's proof-checking kernel is attractive because of its stability and simplicity, only 400 lines of code. But this size measurement doesn't say how carefully the HOL Light code has been reviewed, and doesn't say anything about the possibility of bugs in the underlying programming language.\nExtra code can be good when it's test code. A battery of tests tends to catch more bugs than a single test. Running a proof through multiple proof-checking programs (preferably each in its own isolated environment) can save the day when there's a bug in one program, and is particularly easy if the checkers take the same input language for writing proofs. But it's not clear how effective this is at stopping attacks: for example, sometimes bugs are shared by multiple checkers.\nThe question \"Who watches the provers?\" is better answered by a proof saying that a checker works correctly. A close translation of the inference rules in the HOL Light kernel, except for the rules to introduce new definitions, was already proven in 2006 to generate only correct theorems. That proof was also checked by HOL Light. (For readers familiar with logic: of course this assumes a large cardinal; Vω+ω is enough for HOL Light. The same paper also has a variant of the proof that skips the large-cardinal assumption, at the expense of omitting the axiom of infinity from the logic being proven.)\nAfter more work, a clone of HOL Light called Candle was proven in 2022 to allow only proofs of correct theorems, as long as the CPU implements the instructions used in the Candle binary in the expected way. This proof is again computer-checked, this time in another proof-checking system, HOL4. There was also a computer-checked proof in 2022 of the correctness of a standalone proof checker for HOL proofs in OpenTheory format.\nFrom a security perspective, it's still concerning",
+      "summary": "A list of soundness bugs in various proof‑checking programs has been compiled, showing that false theorems can slip past these verifiers. The bugs are potentially exploitable, raising concerns about the reliability of formal verification tools.",
+      "enterprise_use": "Check your proof‑checking workflows for known soundness bugs and consider running proofs through multiple isolated checkers to mitigate risk.",
+      "relevance_score": 3,
+      "relevance_signal": "low",
+      "category": "Security"
+    },
+    {
+      "id": "https://thesoapbox.email/archive/3",
+      "title": "I'm Scared of AI",
+      "summary_raw": "Article URL: https://thesoapbox.email/archive/3\nComments URL: https://news.ycombinator.com/item?id=50669561\nPoints: 146\n# Comments: 150",
+      "source": "Hacker News",
+      "tier": "news",
+      "pub_date": "27 Nov 2026",
+      "url": "https://thesoapbox.email/archive/3",
+      "source_text": "I'm scared of AI...\nDear Soapboxers, AI is scaring me, and not for the reason you think. Yes, the threat of increasing hacks that could melt down the global economy or trigger nuclear Armageddon is terrifying...but I can't do sh*t about that. What scares me is what AI is doing to my brain. I think I'm getting dumber every time I outsource my thinking to AI. Everything now takes less effort which sounds great, but there's no sense of achievement from it. I haven't taxed myself and I don't deserve the nice chemicals my brain would normally make if I completed some hard work, so it doesn't give me them. It feels like a use it or lose it situation where I'm losing my ability to brain. I read this last week: https://poeticoutlaws.substack.com/p/the-comfortable-life-is-killing-you which explains what I mean far better than I can (because I'm stupider now). Can anyone out there in the Soapbox hivemind share some advice on how to fix this? Or your own thoughts on it? I can't be the only one...\nWritten by a randomly drawn subscriber, read by a human, then sent to the whole list. Its writer chose to share it here.",
+      "summary": "The post expresses personal concerns about AI reducing cognitive effort. It shares a link to a Substack article but offers no technical details.",
+      "enterprise_use": "",
+      "relevance_score": 0,
       "relevance_signal": "low",
       "category": "Other"
     }
