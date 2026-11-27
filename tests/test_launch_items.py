@@ -251,3 +251,43 @@ def test_phone_layout_rules():
     assert re.search(r"\.consent \{[^}]*min-height: var\(--tap\)", home)
     slug_map = json.loads((SITE / "breakdowns" / "slug_map.json").read_text())
     assert slug_map and all((SITE / "breakdowns" / f"{slug}.html").is_file() for group in slug_map.values() for slug in group.values())
+
+
+# ---------- 9. The page judge: one call for all the pages of a run ----------
+
+RAW = ("The game made $3 billion.\n\nOur take: it could change little.\n---SPLIT---\n"
+       "1. EVALUATE - List your suppliers.\n5. QUICK WIN - Review contracts in under 30 days.")
+
+
+def story(title):
+    return {"title": title, "source": "Press", "pub_date": "26 Nov 2026", "url": f"https://a.test/{title}", "relevance_score": 5,
+            "source_text": "The game made $3 billion on release day.", "summary": "The game made $3 billion.", "enterprise_use": "Nothing to do."}
+
+
+def test_all_pages_of_a_run_go_to_the_judge_in_one_call(tmp_path, monkeypatch):
+    import judge
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(gb.time, "sleep", lambda s: None)
+    monkeypatch.setattr(gb, "HELD_BACK", [])
+    monkeypatch.setattr(gb, "generate_content_for_news", lambda item, feedback="": RAW)
+    calls = []
+
+    def fake(items):  # verdict by title: "pass", "fail", and no verdict for the third
+        calls.append([it["title"] for it in items])
+        answers = {"good": {"verdict": "pass", "score": 0.9, "reason": "ok"}, "bad": {"verdict": "fail", "score": 0.1, "reason": "invented"},
+                   "lost": {"verdict": "error", "score": 0.0, "reason": "quota"}}
+        return {it["id"]: answers[it["title"]] for it in items}
+    monkeypatch.setattr(judge, "judge_batch", fake)
+    gb.process_items([story(t) for t in ("good", "bad", "lost")], "news", "27 Nov 2026, 10:00", tmp_path)
+    assert calls == [["good", "bad", "lost"]]  # one batch, not one call for each page
+    good, bad, lost = ((tmp_path / f"{t}.html").read_text() for t in ("good", "bad", "lost"))
+    assert "List your suppliers." in good and not gb.is_short_page(tmp_path / "good.html")
+    assert "List your suppliers." not in bad and gb.HELD.strip() in bad      # failed: held back, not tried again
+    assert "List your suppliers." not in lost and gb.is_short_page(tmp_path / "lost.html")  # no verdict: tried again later
+    assert [t for t, _ in gb.HELD_BACK] == ["bad"]
+
+
+def test_no_gemini_key_skips_the_judge(monkeypatch):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    assert gb.judge_pages([(story("a"), "S.", "G."), (story("b"), "S.", "G.")]) == [("pass", "judge skipped: no GEMINI_API_KEY")] * 2
+    assert gb.judge_pages([]) == []

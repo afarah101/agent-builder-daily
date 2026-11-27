@@ -171,22 +171,29 @@ pilot, monitor, roll back, train staff) is advice, not a claim about the source,
 guide states a fact about the product, company or study in the source that the source does not state."""
 
 
-def judge_page(item, summary, guide):
-    """The Gemini judge on one generated page: "pass", "fail" or "error", with the reason. Without GEMINI_API_KEY the
-    judge is skipped ("pass"): the deterministic checks in page_problems have already run."""
+def judge_pages(pages):
+    """The Gemini judge on generated pages, all in one batch: one call for each 25 pages, so a run with many pages
+    does not use up the judge's daily quota. pages: [(item, summary text, guide text)]. Returns one (verdict, reason)
+    for each page, verdict "pass", "fail" or "error". Without GEMINI_API_KEY the judge is skipped ("pass"): the
+    checks in page_problems have already run."""
+    if not pages:
+        return []
     if not os.environ.get("GEMINI_API_KEY"):
-        return "pass", "judge skipped: no GEMINI_API_KEY"
+        return [("pass", "judge skipped: no GEMINI_API_KEY")] * len(pages)
     try:
         import judge
-        page = {"title": item.get("title") or "", "source_text": quality_checks.source_text(item), "source": item.get("source"),
-                "source_type": item.get("source_type"), "pub_date": item.get("pub_date"), "page_summary": summary, "page_guide": guide}
+        batch = [{"n": n, "title": item.get("title") or "", "source_text": quality_checks.source_text(item),
+                  "source": item.get("source"), "source_type": item.get("source_type"), "pub_date": item.get("pub_date"),
+                  "page_summary": summary, "page_guide": guide} for n, (item, summary, guide) in enumerate(pages)]
         logs = []
-        kept, _, stats = judge.gate([page], "title", "source_text", "page_summary", "page_guide", log=logs.append,
-                                    extra_rules=judge.GROUNDING_RULES + PAGE_JUDGE_RULES)
-        reason = next((m for m in logs if "HELD BACK" in m), "")
-        return ("pass" if kept else "error" if stats.get("errors") else "fail"), reason
+        kept, held, _ = judge.gate(batch, "title", "source_text", "page_summary", "page_guide", log=logs.append,
+                                   extra_rules=judge.GROUNDING_RULES + PAGE_JUDGE_RULES)
+        out = {page["n"]: ("pass", "") for page in kept}
+        for page, line in zip(held, (m for m in logs if "HELD BACK" in m)):  # gate logs one line for each held item, in order
+            out[page["n"]] = ("error" if ": error " in line else "fail", line)
+        return [out.get(n, ("error", "no verdict")) for n in range(len(pages))]
     except Exception as e:  # the judge must never stop the pages
-        return "error", f"{type(e).__name__}: {str(e)[:120]}"
+        return [("error", f"{type(e).__name__}: {str(e)[:120]}")] * len(pages)
 
 
 def parse_groq_response(raw):
@@ -731,12 +738,24 @@ HELD_BACK = []  # (title, reason) for every AI page held back in this process
 def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
     """A page on disk and a slug_map entry for EVERY item; returns {raw title: slug}.
     Groq writes the full page from the story's stored source text. The page is published only when page_problems finds
-    nothing (one regenerate is allowed) and the judge passes it; otherwise the AI page is held back and the item's own
+    nothing (one regenerate is allowed) and the judge passes it (one judge call for all the pages of the run); otherwise the AI page is held back and the item's own
     source-checked summary and how-to text make a short page (stamp HELD: never replaced). When Groq gives nothing (no
     key, error, daily limit, bad shape, or use_ai off) the same short page is made with stamp SHORT, so no card is left
     without one; a later run with Groq replaces that page. A full page is never rewritten."""
-    slug_map = {}
+    slug_map, waiting = {}, []  # waiting: AI pages that passed the checks and wait for the one judge call
     generate = generate_content_for_case_study if kind == "case_studies" else generate_content_for_news
+
+    def write(item, title, slug, path, summary_html, guide_html, stamp):
+        url = "" if quality_checks.is_listing_url(item.get("url")) else item.get("url", "")  # no link to a listing page
+        path.write_text(render_breakdown_page(title or "Untitled", slug, url, "", summary_html,
+                                              guide_html, meta_line_for(item, kind), stamp, tag=tag_for(item, kind),
+                                              figure=article_figure(slug, directory)), encoding="utf-8")
+        print(f"    Saved: {path}")
+
+    def hold(title, why):
+        HELD_BACK.append((str(title), why))
+        print(f"    [GROUNDING] HELD BACK AI page for {str(title)[:60]}: {why}")
+
     for i, item in enumerate(items or []):
         title = item.get("title", "Untitled" if kind == "case_studies" else "")  # the key the card renderer looks up
         slug = page_slug(title)
@@ -745,7 +764,6 @@ def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
         if path.exists() and not (use_ai and is_short_page(path)):
             continue
 
-        summary_html = guide_html = None
         held = ""
         if use_ai and quality_checks.is_listing_url(item.get("url")):
             held = "the source URL is a listing page, not an article"
@@ -762,35 +780,31 @@ def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):
                 if attempt == 1:
                     time.sleep(0.5)
                     raw = generate(item, REGENERATE_NOTE.format(problems="; ".join(problems)))
+            time.sleep(0.5)
             if raw == "DAILY_LIMIT":
                 use_ai = False  # no more Groq calls this run; the items left still get a page below
             elif raw and split_sections(raw)[0] is not None:
-                if problems:
-                    held = "; ".join(problems)
-                else:
-                    verdict, why = judge_page(item, *split_sections(raw))
-                    if verdict == "pass":
-                        summary_html, guide_html = parse_groq_response(raw)
-                    elif verdict == "fail":
-                        held = f"judge: {why}"
-                    else:  # the judge gave no verdict: keep the short page, a later run tries again
-                        print(f"    [GROUNDING] judge error, AI page not published this run: {why}")
-            time.sleep(0.5)
+                if not problems:
+                    waiting.append((item, title, slug, path, raw))
+                    continue
+                held = "; ".join(problems)
         if held:
-            HELD_BACK.append((str(title), held))
-            print(f"    [GROUNDING] HELD BACK AI page for {str(title)[:60]}: {held}")
+            hold(title, held)
+        if path.exists() and not held:
+            continue  # keep the short page that is already there
+        write(item, title, slug, path, *short_content(item, kind), generated_at + (HELD if held else SHORT))
 
-        stamp = generated_at
-        if not summary_html:
-            if path.exists() and not held:
-                continue  # keep the short page that is already there
-            summary_html, guide_html = short_content(item, kind)
-            stamp += HELD if held else SHORT
-        url = "" if quality_checks.is_listing_url(item.get("url")) else item.get("url", "")  # no link to a listing page
-        path.write_text(render_breakdown_page(title or "Untitled", slug, url, "", summary_html,
-                                              guide_html, meta_line_for(item, kind), stamp, tag=tag_for(item, kind),
-                                              figure=article_figure(slug, directory)), encoding="utf-8")
-        print(f"    Saved: {path}")
+    verdicts = judge_pages([(item, *split_sections(raw)) for item, _, _, _, raw in waiting])
+    for (item, title, slug, path, raw), (verdict, why) in zip(waiting, verdicts):
+        if verdict == "pass":
+            write(item, title, slug, path, *parse_groq_response(raw), generated_at)
+        elif verdict == "fail":
+            hold(title, f"judge: {why}")
+            write(item, title, slug, path, *short_content(item, kind), generated_at + HELD)
+        else:  # the judge gave no verdict: the short page stays, and a later run tries again
+            print(f"    [GROUNDING] judge error, AI page not published this run: {why}")
+            if not path.exists():
+                write(item, title, slug, path, *short_content(item, kind), generated_at + SHORT)
     return slug_map
 
 
