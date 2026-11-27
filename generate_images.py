@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""AI editorial images for the top Daily Edge AI cards. Off unless IMAGE_GEN_ENABLED is "true".
+"""AI editorial images for every Daily Edge AI card. Off unless IMAGE_GEN_ENABLED is "true".
 
-For the lead case study and the lead news item (one per tab), Groq writes a scene description from the title and summary,
+For every card on the Case Studies and Industry News tabs (archive tabs get none), Groq writes a scene description from the title and summary,
 and FLUX.1-schnell (Apache-2.0) on Cloudflare Workers AI draws it in one house style. Each image is saved as site/images/<slug>.webp;
 site/images/alt.json keeps the scene description (the alt text) and the date it was made.
+A card keeps its image until prune; a run draws at most MAX_NEW_PER_RUN new ones, newest cards first.
 Never fails the pipeline: the first error is logged, the run stops (no more API calls) and cards keep no image.
 """
 import json
@@ -18,13 +19,13 @@ ALT_FILE = "alt.json"
 MODEL = "@cf/black-forest-labs/flux-1-schnell"  # Apache-2.0, on Cloudflare Workers AI. Never FLUX.1-dev.
 CF_URL = "https://api.cloudflare.com/client/v4/accounts/{account}/ai/run/{model}"
 CF_SECRETS = ("CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID")
-HOUSE_STYLE = "clean editorial 3D illustration, soft studio light, near-black and indigo #4f46e5 accents, minimal, no text"
+HOUSE_STYLE = "clean editorial 3D illustration, soft studio light, near-black and emerald #10b981 accents, minimal, no text"
 RULES = ("no text, no letters, no numbers, no digits, no logos, no people, no faces, no hands, no brands, "
          "no watermark, not a photograph")  # the model takes no negative prompt
 WIDTH, HEIGHT = 1200, 675
 STEPS = 4  # flux-1-schnell default; the model returns a square image, fitted to 1200x675
 QUALITY = 70
-TOP_N = 1  # lead story of each tab only: the page shows an image on the first card alone
+MAX_NEW_PER_RUN = 25  # 2 runs a day x 25 x ~173 neurons stays under Cloudflare's free 10,000 neurons a day
 MAX_AGE_DAYS = 120  # 4 months, the site's window
 FALLBACK_ALT = "Abstract editorial illustration"
 
@@ -133,10 +134,12 @@ def generate_image(scene, out_path):
     return json.dumps(usage) if usage else "not reported"
 
 
-def top_items():
-    """The lead case study and the lead news item by the scores the page sorts by. Reads only: archives nothing."""
+def top_items(now=None):
+    """Every card the Case Studies and Industry News tabs show, built as generate_html builds them
+    (top_up, 4-month window, score order, honesty checks). Reads only: archives nothing."""
     import generate_html as gh
-    cutoff = (datetime.now() - timedelta(days=gh.CASE_STUDY_WINDOW_DAYS)).strftime("%Y-%m-%d")
+    now = now or datetime.now()
+    cutoff = (now - timedelta(days=gh.CASE_STUDY_WINDOW_DAYS)).strftime("%Y-%m-%d")
     studies = []
     for f in sorted(Path(gh.CASE_STUDIES_DIR).glob("*.json")):
         if "archive" in f.name:
@@ -149,14 +152,38 @@ def top_items():
     news_data = gh.load_json(str(news_files[-1])) if news_files else {}
     news = sorted((news_data or {}).get("news") or [], key=lambda x: gh.by_score(x, "relevance_score"), reverse=True)
     news = gh.top_up(news, gh.load_json(gh.ARCHIVE_NEWS_FILE), "news")
-    return studies[:TOP_N] + news[:TOP_N]
+    changes = []  # read only: what honest() hides is not shown, so it gets no image
+    return gh.honest(studies, now, changes, "case study") + gh.honest(news, now, changes, "news")
 
 
-def prune(images_dir, alts, today):
-    """Delete images made more than 4 months ago (date from alt.json; file age only when no date is stored)."""
+def newest_first(items):
+    """Cards to draw, newest pub_date first, so today's cards get images before the backlog."""
+    import generate_html as gh
+    return sorted(items, key=lambda x: gh.parse_date(x.get("pub_date")) or "", reverse=True)
+
+
+def neuron_total(used):
+    """Sum of the neurons Cloudflare reported for this run's images, or "not reported"."""
+    total, found = 0.0, False
+    for u in used:
+        try:
+            for k, v in json.loads(u).items():
+                if "neuron" in k.lower():
+                    total += float(v); found = True
+        except (TypeError, ValueError, AttributeError):
+            continue
+    return round(total, 1) if found else "not reported"
+
+
+def prune(images_dir, alts, today, keep=()):
+    """Delete images made more than 4 months ago (date from alt.json; file age only when no date is stored).
+    An image a shown card uses (its slug in keep) is never deleted."""
     cutoff = today - timedelta(days=MAX_AGE_DAYS)
+    keep = set(keep)
     for path in Path(images_dir).glob("*.webp"):
         slug = path.stem
+        if slug in keep:
+            continue
         try:
             made = datetime.strptime((alts.get(slug) or {}).get("created", ""), "%Y-%m-%d")
         except ValueError:
@@ -173,29 +200,35 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
     out.mkdir(parents=True, exist_ok=True)
     alts = load_alts(images_dir)
     try:
-        prune(images_dir, alts, today)
-    except Exception as e:
-        log(f"prune error: {e}")
-    try:
         items = top_items()
     except Exception as e:
         log(f"could not load stories: {e}")
         items = []
+    try:
+        prune(images_dir, alts, today, keep={slugify(i.get("title", "")) for i in items})
+    except Exception as e:
+        log(f"prune error: {e}")
     missing = [k for k in CF_SECRETS if not os.environ.get(k)]
     if not dry_run and missing:
         # checked once, before any Groq call, so a missing secret wastes no API calls
         log(f"{', '.join(missing)} not set: add under Settings > Secrets and variables > Actions. "
             "No images generated, 0 API calls")
         return 0
-    made = 0
-    for item in items:
+    made, used = 0, []
+    todo, seen = [], set()
+    for item in newest_first(items):
         slug = slugify(item.get("title", ""))
-        if not slug:
+        if not slug or slug in seen:
             continue
-        path = out / f"{slug}.webp"
-        if path.exists():
+        seen.add(slug)
+        if (out / f"{slug}.webp").exists():
             log(f"skip (exists): {slug}")
             continue
+        todo.append((slug, item))
+    if len(todo) > MAX_NEW_PER_RUN:
+        log(f"{len(todo)} cards need an image; this run draws {MAX_NEW_PER_RUN}, the next run the rest")
+    for slug, item in todo[:MAX_NEW_PER_RUN]:
+        path = out / f"{slug}.webp"
         if dry_run:
             log(f"dry run, would generate: {slug}")
             continue
@@ -205,6 +238,7 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
             alts[slug] = {"alt": scene, "created": today.strftime("%Y-%m-%d"), "model": MODEL,
                           "provider": "cloudflare-workers-ai", "neurons": neurons}
             made += 1
+            used.append(neurons)
             log(f"generated {slug} ({path.stat().st_size / 1024:.1f} KB, neurons {neurons}): {scene}")
         except Exception as e:
             # stop the whole run: no more Groq or Cloudflare calls after the first error
@@ -216,7 +250,7 @@ def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
                 json.dump(alts, f, indent=2, sort_keys=True)
         except Exception as e:
             log(f"could not write {ALT_FILE}: {e}")
-    log(f"done: {made} generated, {api_calls} API calls")
+    log(f"done: {made} generated, {api_calls} API calls, neurons {neuron_total(used)}")
     return made
 
 
