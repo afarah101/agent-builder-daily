@@ -125,7 +125,7 @@ def test_every_card_with_a_file_renders_its_figure(site):
     imgs = re.findall(r"<img [^>]*>", html)
     assert len(imgs) == 4 and all('loading="lazy"' in i and 'width="1200"' in i and 'height="675"' in i for i in imgs)
     assert [bool(re.search(r'src="images/[a-z]+\.webp"', i)) for i in imgs] == [True, True, True, False]  # 3 AI images, 1 cover
-    assert html.count("<figcaption>AI illustration</figcaption>") == 3
+    assert "<figcaption" not in html  # no caption on a card: the page footer says the images are AI-generated
 
 
 def test_failed_image_call_stops_the_run_and_leaves_no_file(site, monkeypatch):

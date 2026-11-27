@@ -12,10 +12,12 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from groq import Groq
 
-from generate_html import TOKENS_CSS, font_faces, font_links, topic_tag  # the one font set and token block
+# the one font set and token block, and the tag, meta and label rules the cards use
+from generate_html import (DEFAULT_TAG, HOW_LABEL, HOW_LABELS, KIND_TAG, TOKENS_CSS, canonical_tag, clean_meta, font_faces,
+                           font_links, meta_text)
 
 OUTPUT_DIR = "site/breakdowns"
-SHORT = " (short version)"  # ends the "Generated" stamp of a page made without Groq; a later run replaces that page
+SHORT = " (short version)"  # ends the "generated" note of a page made without Groq; a later run replaces that page
 
 # Dual API key setup — falls back to key 2 if key 1 hits daily limit
 API_KEY_1 = os.environ.get("GROQ_API_KEY")
@@ -203,10 +205,12 @@ def summary_block_html(paras):
 
 
 def guide_block_html(label, color, text):
-    """One guide block. Label, colour and text are all escaped; the colour only ever picks a CSS class."""
+    """One guide block. Label, colour and text are all escaped; the colour only ever picks a CSS class.
+    "How to use", "Do this week" and "What to do" all show as "How to apply", the label the cards use."""
     color_class = f" {color}" if color in ("green", "amber", "red") else ""
+    label = HOW_LABEL if str(label).strip().rstrip(":").lower() in HOW_LABELS else label.capitalize()
     return (f'<div class="guide-block{color_class}">'
-            f'<h3 class="guide-label">{escape(label.capitalize())}</h3>'
+            f'<h3 class="guide-label">{escape(label)}</h3>'
             f'<div class="guide-text">{escape(text)}</div>'
             f'</div>')
 
@@ -433,14 +437,9 @@ ARTICLE_CSS = """*, *::before, *::after { box-sizing: border-box; margin: 0; pad
       footer { padding: var(--s-16); }
     }"""
 
-DEFAULT_TAG = "Breakdown"  # a page whose story is in no data file
-KIND_TAG = {"case_studies": "Case study", "news": "News"}
-
-
 def tag_for(item, kind):
-    """The page's tag: the topic on the story's card, or the kind of story when the topic is "Other"."""
-    topic = topic_tag(item.get("relevance_tag" if kind == "case_studies" else "category"))
-    return KIND_TAG[kind] if topic == "Other" else topic
+    """The page's tag: the canonical tag on the story's card (the kind of story when it has no known topic)."""
+    return canonical_tag(item.get("relevance_tag" if kind == "case_studies" else "category"), kind)
 
 
 def article_figure(slug, directory=OUTPUT_DIR):
@@ -459,9 +458,10 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
                           tag="", figure=""):
     """The page frame, in magazine order: tag, H1, meta, image, summary, "How to apply" panel, source button, back link.
     title, url, meta_line, generated_at and tag are raw text and are escaped here; summary_html and guide_html come
-    from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure."""
-    title, meta_line, generated_at = escape(str(title)), escape(str(meta_line)), escape(str(generated_at))
-    tag = escape(str(tag or DEFAULT_TAG))
+    from summary_block_html / guide_block_html, which escape their text; figure comes from article_figure.
+    The tag is one of the canonical tags and the meta line is "who · source type · date", as on the story's card."""
+    title, meta_line, generated_at = escape(str(title)), escape(clean_meta(meta_line)), escape(str(generated_at))
+    tag = escape(canonical_tag(tag))
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -488,7 +488,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   <div class="article-head">
     <p class="tag-pill">{tag}</p>
     <h1 class="page-title">{title}</h1>
-    <p class="meta-line">{meta_line} · Generated {generated_at}</p>
+    <p class="meta-line">{meta_line}</p>
   </div>
 </header>
 <main class="content">
@@ -503,7 +503,7 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
       <h2 class="section-title">How to apply</h2>
       <div class="guide-grid">{guide_html}</div>
     </section>
-    <p class="generated-note">AI-generated breakdown · Daily Edge AI · {generated_at}</p>
+    <p class="generated-note">AI-generated breakdown&nbsp;· Daily Edge AI&nbsp;· {generated_at}</p>
     <div class="article-actions">
       {source_link_html(url)}
       <a class="back-link" href="../index.html">← Back to today</a>
@@ -511,19 +511,21 @@ def render_breakdown_page(title, slug, url, source_label, summary_html, guide_ht
   </article>
 </main>
 <footer>
-  <span>Daily Edge AI · LangGraph + Groq + arXiv · <a href="../privacy.html">Privacy</a></span>
-  <span>Case Studies: last 4 months · News: last 4–8 weeks</span>
+  <span>Daily Edge AI&nbsp;· LangGraph + Groq + arXiv&nbsp;· <a href="../privacy.html">Privacy</a></span>
+  <span>Case Studies: last 4 months&nbsp;· News: last 4–8 weeks&nbsp;· Images are AI-generated.</span>
 </footer>
 </body>
 </html>"""
 
 
-# Old and current page shapes: meta line and generated note as <div> or <p>, guide labels as <div> or <h3>.
+# Old and current page shapes: meta line and generated note as <div> or <p>, guide labels as <div> or <h3>; the
+# "Generated" stamp at the end of the meta line (old) or only in the generated note (current).
 STORED = re.compile(
     r'<h1 class="page-title">(?P<title>.*?)</h1>.*?'
     r'<(?:div|p) class="meta-line">(?P<meta>.*?)</(?:div|p)>(?P<between>.*?)'
     r'<div class="summary-body">(?P<summary>.*?)</div>\s*(?:</section>\s*)?<div class="divider">.*?'
-    r'<div class="guide-grid">(?P<guide>.*?)</div>\s*(?:</section>\s*)?<(?:div|p) class="generated-note">', re.S)
+    r'<div class="guide-grid">(?P<guide>.*?)</div>\s*(?:</section>\s*)?<(?:div|p) class="generated-note">'
+    r'(?P<note>.*?)</(?:div|p)>', re.S)
 SOURCE = re.compile(r'<a href="(?P<url>[^"]*)"[^>]*class="source-link">')
 TAG = re.compile(r'<p class="tag-pill">(?P<tag>.*?)</p>')
 FIGURE = re.compile(r'<figure class="article-figure">.*?</figure>', re.S)
@@ -545,6 +547,8 @@ def restyle_page(old_html, tag="", figure=None):
     if not m:
         return None
     meta, sep, generated_at = stored_text(m["meta"]).rpartition(" · Generated ")
+    if not sep:  # the current shape: the stamp is in the generated note only
+        meta, (_, sep, generated_at) = stored_text(m["meta"]), stored_text(m["note"]).replace("\u00a0", " ").rpartition(" · ")
     blocks = list(STORED_BLOCK.finditer(m["guide"]))
     if not sep or len(blocks) != m["guide"].count('class="guide-block'):
         return None
@@ -611,14 +615,8 @@ NOT_APPLICABLE = ("not applicable", "not directly applicable")
 
 
 def meta_line_for(item, kind):
-    """Authors · institution · date for a case study; source · date for news."""
-    pub = str(item.get("pub_date") or "")
-    pub = pub[:10] if re.match(r"\d{4}-\d\d-\d\d", pub) else pub.strip()  # news dates ("26 Nov 2026") stay whole
-    if kind == "case_studies":
-        parts = [", ".join(item.get("authors") or []) or "Unknown", item.get("institution", ""), pub]
-    else:
-        parts = [item.get("source", ""), pub]
-    return " · ".join(str(p) for p in parts if p)
+    """The card's meta line: the first 2 authors + "et al." or the source, the source type, the date."""
+    return meta_text(item, kind)
 
 
 def short_content(item, kind):
@@ -638,8 +636,10 @@ def short_content(item, kind):
 
 
 def is_short_page(path):
-    """True for a page made by short_content: its "Generated" stamp ends with SHORT."""
-    return bool(re.search(r'class="meta-line">[^<]*' + re.escape(escape(SHORT)) + "</p>", Path(path).read_text(encoding="utf-8")))
+    """True for a page made by short_content: its "generated" stamp ends with SHORT (in the generated note; in the
+    meta line on a page of the old shape)."""
+    return bool(re.search(r'class="(?:meta-line|generated-note)">[^<]*' + re.escape(escape(SHORT)) + "</(?:p|div)>",
+                          Path(path).read_text(encoding="utf-8")))
 
 
 def process_items(items, kind, generated_at, directory=OUTPUT_DIR, use_ai=True):

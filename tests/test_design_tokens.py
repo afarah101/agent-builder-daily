@@ -121,6 +121,7 @@ def test_spacing_is_on_the_4px_grid():
 # ---------- emerald: links, the one button, the accent word ----------
 
 BUTTONS = {".email-btn", ".source-link, .cta", ".cta"}
+LEAD_TAG = ".lead-grid > .card:first-child .tag-pill"  # the lead story's tag: emerald behind dark text (7.8:1)
 
 
 def test_emerald_is_only_a_link_underline_the_button_and_the_accent_word():
@@ -133,38 +134,44 @@ def test_emerald_is_only_a_link_underline_the_button_and_the_accent_word():
                 if prop == "color":
                     assert sel == ".accent-word", (name, sel)  # emerald text is 2.5:1 on white: the dark hero only
                 if prop == "background":
-                    assert sel in BUTTONS, (name, sel)
+                    assert sel in BUTTONS | {LEAD_TAG}, (name, sel)
 
 
 def test_one_emerald_button_in_each_view():
     home = (SITE / "index.html").read_text()
     assert home.count('class="email-btn"') == 2  # the hero and the page end: never in one view
     assert breakdown().count('class="source-link"') == 1 and 'class="cta"' not in breakdown()
-    for name in ("privacy.html", "news.html", "archive.html"):
+    for name in ("privacy.html", "news.html"):
         assert (SITE / name).read_text().count('class="cta"') == 1, name
+    archive = (SITE / "archive.html").read_text()
+    assert 'class="cta"' not in archive and 'class="email-btn"' not in archive  # a page of links: no button
 
 
 # ---------- UX laws ----------
 
-def test_hick_four_tabs_at_most():
-    assert (SITE / "index.html").read_text().count('role="tab"') == 4
+def test_hick_two_tabs_and_one_archive_link():
+    home = (SITE / "index.html").read_text()
+    assert home.count('role="tab"') == 2
+    row = home.split('<div class="tab-row">')[1].split('<label')[0]
+    assert row.count("<button") == 2 and row.count('<a class="archive-link" href="archive.html#case-studies">Archive</a>') == 1
 
 
 def cards(n):
     return "\n".join(f'<article class="card cs-card">card {i}</article>' for i in range(n))
 
 
-@pytest.mark.parametrize("n, groups", [(1, [1]), (7, [7]), (8, [4, 4]), (10, [5, 5]), (15, [5, 5, 5])])
-def test_miller_cards_come_in_grids_of_seven_at_most(n, groups):
-    html = gh.card_grids(cards(n), "More case studies")
-    grids = html.split('<div class="cards-grid">')[1:]
-    assert [g.count("<article") for g in grids] == groups and sum(groups) == n
-    assert html.count('<h2 class="group-title">More case studies</h2>') == len(groups) - 1
+@pytest.mark.parametrize("n, groups", [(1, [1]), (3, [3]), (7, [7]), (8, [7, 1]), (10, [7, 3]), (15, [7, 4, 4]), (19, [7, 6, 6]), (26, [7, 7, 7, 5])])
+def test_miller_cards_come_in_groups_of_seven_at_most(n, groups):
+    html = gh.card_grids(cards(n))
+    parts = html.split('<h2 class="group-title">More stories</h2>')  # each group ends at a "More stories" divider
+    assert [g.count("<article") for g in parts] == groups and sum(groups) == n and max(groups) <= gh.GROUP_MAX == 7
+    assert parts[0].startswith('<div class="cards-grid lead-grid"><article class="card cs-card">card 0</article>')  # the lead story is first
+    assert parts[0].split("</div>")[0].count("<article") == min(n, 3)  # the lead row: the lead and 2 cards
 
 
 def test_miller_empty_state_stays_in_one_grid():
     empty = "<div class='empty-state'><p>No case studies available yet.</p></div>"
-    assert gh.card_grids(empty, "More") == f'<div class="cards-grid">{empty}</div>'
+    assert gh.card_grids(empty) == f'<div class="cards-grid">{empty}</div>'
 
 
 def test_miller_archive_days_are_grouped_by_week():
@@ -186,8 +193,8 @@ def test_miller_committed_home_page_has_no_group_above_seven():
 def test_jakob_the_logo_links_home_on_every_page():
     assert re.search(r'<a class="brand-link" href="\./"><img class="brand-logo" src="logo\.svg"', (SITE / "index.html").read_text())
     assert re.search(r'<a class="brand-link" href="\./"><img class="brand-logo" src="logo\.svg"', (SITE / "privacy.html").read_text())
-    for name in ("news.html", "archive.html"):
-        assert '<a class="brand-link" href="/"><img class="brand-logo" src="logo.svg"' in (SITE / name).read_text(), name
+    assert re.search(r'<a class="brand-link" href="\./"><img class="brand-logo" src="logo\.svg"', (SITE / "archive.html").read_text())
+    assert '<a class="brand-link" href="/"><img class="brand-logo" src="logo.svg"' in (SITE / "news.html").read_text()
     assert '<a class="brand-link" href="../index.html"><span class="brand-logo" aria-hidden="true"></span>' in breakdown()
 
 
@@ -196,9 +203,10 @@ def test_fitts_every_link_and_button_rule_has_the_44px_target():
     privacy = (SITE / "privacy.html").read_text()
     assert gb.ARTICLE_CSS in privacy  # the breakdown page's shell: its targets are checked in test_breakdown_pages.py
     assert set(re.findall(r'<a class="([\w-]+)"', privacy)) == {"brand-link", "text-link", "cta"} and "<a href" not in privacy
-    for name in ("news.html", "archive.html"):
+    for name, sels in (("news.html", (".brand-link", ".cta")), ("archive.html", (".brand-link", ".archive-link", ".archive-title")),
+                       ("index.html", (".brand-link", ".tab", ".archive-link", ".card-title a", ".email-btn", ".search"))):
         css = css_of((SITE / name).read_text())
-        for sel in (".brand-link", ".cta"):
+        for sel in sels:
             assert re.search(re.escape(sel) + r" \{[^}]*min-height: var\(--tap\)", css), (name, sel)
 
 
@@ -244,10 +252,10 @@ def test_breakdown_page_order_with_an_image(tmp_path):
 def test_breakdown_tag_is_the_topic_or_the_kind_of_story():
     assert gb.tag_for({"category": "Security"}, "news") == "Security"
     assert gb.tag_for({"category": "Low relevance"}, "news") == "News"  # a grade is never a tag
-    assert gb.tag_for({"relevance_tag": "container_security"}, "case_studies") == "Container security"
-    assert gb.tag_for({}, "case_studies") == "Case study"
+    assert gb.tag_for({"relevance_tag": "container_security"}, "case_studies") == "Security"  # the canonical tag
+    assert gb.tag_for({}, "case_studies") == "Case Study"
     assert '<p class="tag-pill">Breakdown</p>' in breakdown()  # a page whose story is in no data file
-    assert '<p class="tag-pill">&lt;b&gt;</p>' in breakdown(tag="<b>")
+    assert '<p class="tag-pill">Breakdown</p>' in breakdown(tag="<b>") and "<b>" not in breakdown(tag="<b>")  # never raw text
 
 
 def test_restyle_takes_the_known_tag_and_the_image(tmp_path):
@@ -296,5 +304,5 @@ def test_cards_have_no_box_as_on_the_benchmark():
     assert re.search(r"\.cards-grid \{[^}]*gap: 32px 24px;", css)  # the gap separates the cards
     # titles: 18px in the grid (benchmark 17px), 22px for the lead from 641px, 28px from 1025px (benchmark 30px)
     assert re.search(r"\.card-title \{[^}]*font-size: var\(--fs-lead\)", css)
-    assert re.search(r"\.cards-grid > \.card:first-child \.card-title \{ font-size: var\(--fs-h4\); \}", css)
-    assert re.search(r"\.cards-grid > \.card:first-child \.card-title \{ font-size: var\(--fs-h3\); \}", css)
+    assert re.search(r"\.lead-grid > \.card:first-child \.card-title \{ font-size: var\(--fs-h4\); \}", css)
+    assert re.search(r"\.lead-grid > \.card:first-child \.card-title \{ font-size: var\(--fs-h3\); \}", css)
