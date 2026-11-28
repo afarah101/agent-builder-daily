@@ -65,16 +65,32 @@ BANNED = {
 _BANNED_RE = re.compile(r"\b(?:" + "|".join(re.escape(w.replace("_", " ")) for words in BANNED.values() for w in words.split())
                         + r")(?:s|es)?\b", re.IGNORECASE)
 
-# Scenes that are safe by construction. A card gets one (picked by its title) when Groq names a banned thing twice.
+# Warm materials and colours. The house style has one accent, emerald, and FLUX ignores "no orange" as it ignores
+# "no text": a scene that names copper or wood is drawn orange. So a NEW scene may not name one. Checked in describe_scene
+# only, never in is_good: an image that is already stored is kept.
+WARM = ("copper brass bronze gold golden rust rusted rusty terracotta clay orange amber brown wood wooden oak walnut "
+        "mahogany bamboo cork leather flame fire candle oil honey sand")
+_WARM_RE = re.compile(r"\b(?:" + "|".join(WARM.split()) + r")(?:s|es)?\b", re.IGNORECASE)
+
+# Scenes that are safe by construction: cool, neutral materials, nothing that carries writing. A card gets one (picked
+# by its title) when Groq names a banned or warm thing twice, or when Groq gives nothing (error or daily token limit).
 SAFE_SCENES = (
-    "Three matte ceramic spheres of different sizes resting on a smooth stone slab",
+    "Three matte white ceramic spheres of different sizes resting on a smooth grey stone slab",
     "A stack of rough concrete cubes with one cube slightly out of line",
-    "A coil of brushed steel wire resting beside a smooth river stone",
-    "Two interlocking glass rings standing on a slate tile",
-    "A row of plain wooden blocks rising in height like steps",
-    "A cracked clay bowl with one smooth glass marble inside",
-    "A bundle of copper rods tied with plain cord",
-    "A smooth cone and a rough cube of pale stone side by side",
+    "A coil of brushed steel wire resting beside a smooth grey river stone",
+    "Two interlocking clear glass rings standing on a slate tile",
+    "A row of pale stone blocks rising in height like steps",
+    "A cracked white ceramic bowl with one smooth clear glass marble inside",
+    "A bundle of brushed steel rods tied with plain grey cord",
+    "A smooth cone and a rough cube of pale grey stone side by side",
+    "A clear glass prism standing on a slab of white marble",
+    "A polished steel disc leaning against a block of grey concrete",
+    "A sphere of frosted glass balanced on two crossed steel rods",
+    "A folded square of grey felt beside a cube of clear ice",
+    "Three aluminium cylinders of different heights on a sheet of blank white paper",
+    "A white marble cube and a translucent glass sphere side by side",
+    "A length of steel chain coiled around a smooth grey pebble",
+    "A stack of clear glass panes with one pane slightly turned",
 )
 
 TEXT_LIMIT = 3  # an image where OCR reads this many letters or digits shows text
@@ -104,6 +120,7 @@ COVER_GREYS = ("#262626", "#525252")
 
 api_calls = 0  # every Groq or Cloudflare request adds 1
 _ocr = None  # the RapidOCR engine, loaded once
+_groq_off = False  # True after Groq gave nothing in this run: the cards left get safe scenes, with no Groq call
 
 
 def log(msg):
@@ -334,9 +351,14 @@ def banned_words(scene):
     return list(dict.fromkeys(m.group(0).lower() for m in _BANNED_RE.finditer(scene)))
 
 
-def safe_scene(item):
-    """One of SAFE_SCENES, always the same one for the same title."""
-    return SAFE_SCENES[sum(str(item.get("title", "")).encode("utf-8")) % len(SAFE_SCENES)]
+def warm_words(scene):
+    """The warm materials and colours a scene names, lower case, in the order they appear."""
+    return list(dict.fromkeys(m.group(0).lower() for m in _WARM_RE.finditer(str(scene or ""))))
+
+
+def safe_scene(item, step=0):
+    """One of SAFE_SCENES, always the same one for the same title. step moves on to the next one (a second try)."""
+    return SAFE_SCENES[(sum(str(item.get("title", "")).encode("utf-8")) + step) % len(SAFE_SCENES)]
 
 
 def image_prompt(scene):
@@ -353,8 +375,10 @@ def scene_prompt(item, avoid=""):
 Topic: {title}
 Summary: {summary}
 Rules: choose one to three plain physical objects, raw materials or abstract geometric forms that stand for the story's
-idea (for a story about a chip export ban: one bare silicon wafer behind a glass pane; about merging two models: two clay
-blocks pressed into one). Name only the objects and what they are made of. No setting, no room, no place.
+idea (for a story about a chip export ban: one bare silicon wafer behind a glass pane; about merging two models: two
+blocks of grey stone pressed into one). Name only the objects and what they are made of. No setting, no room, no place.
+Cool, neutral materials only: glass, steel, aluminium, stone, concrete, marble, white ceramic, felt, ice, blank white
+paper. No copper, brass, gold, rust, wood, clay or leather, and nothing orange or brown.
 Nothing that carries writing in real life: no landmarks, buildings, streets, screens, monitors, signs, documents, books,
 labels, logos, flags, maps, charts, keyboards or packaging. No people, no faces, no hands.
 Plain objects with blank surfaces are fine: a sheet of blank paper, a phone lying face-down, a cup.
@@ -363,24 +387,31 @@ Answer with the sentence only."""
 
 
 def describe_scene(item, avoid=""):
-    """A still-life scene for the item, from Groq. A scene that names a banned thing gets one more Groq call with those
-    words listed; after that the card gets its safe scene. So no banned word ever reaches the image model.
+    """A still-life scene for the item, from Groq. A scene that names a banned or warm thing gets one more Groq call with
+    those words listed; after that the card gets a safe scene. So no such word ever reaches the image model.
+    When Groq gives nothing (an error, or its daily token limit), the card gets a safe scene too and this run makes no
+    more Groq calls: a card is never left without an AI image because Groq is out of tokens.
     avoid: what the new scene must not repeat (the scene whose image showed text)."""
-    global api_calls
+    global api_calls, _groq_off
     from generate_breakdowns import call_groq  # the existing Groq client, with its key fallback
     names = names_in(item)
+    step = 1 if avoid else 0  # a second try must not get the same safe scene as the first
     for _ in range(2):
+        if _groq_off:
+            break
         api_calls += 1
         raw = call_groq(scene_prompt(item, avoid))
         if not raw or raw == "DAILY_LIMIT":
-            raise RuntimeError(f"Groq returned {raw!r}")
+            _groq_off = True
+            log(f"Groq returned {raw!r}: safe scenes for the cards left in this run, no more Groq calls")
+            break
         scene = strip_names(raw.strip().strip('"').splitlines()[0], names)[:300]
-        hits = banned_words(scene)
+        hits = banned_words(scene) + warm_words(scene)
         if scene and not hits:
             return scene
         log(f"scene rejected, names {hits or 'nothing'}: {scene}")
         avoid = ", ".join(filter(None, [avoid, *hits]))
-    return safe_scene(item)
+    return safe_scene(item, step)
 
 
 def ocr_engine():
@@ -536,6 +567,8 @@ def draw_clean(item, path, draws_left, budget):
 
 
 def run(dry_run=False, images_dir=IMAGES_DIR, today=None):
+    global _groq_off
+    _groq_off = False  # every run asks Groq again
     today = today or datetime.now(timezone.utc).replace(tzinfo=None)  # UTC: Cloudflare's free neurons reset at 00:00 UTC
     out = Path(images_dir)
     out.mkdir(parents=True, exist_ok=True)

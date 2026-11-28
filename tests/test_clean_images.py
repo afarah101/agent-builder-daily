@@ -50,6 +50,7 @@ def images(tmp_path, monkeypatch):
     monkeypatch.setenv("CLOUDFLARE_API_TOKEN", "test")
     monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "test")
     monkeypatch.setattr(gi, "api_calls", 0)
+    monkeypatch.setattr(gi, "_groq_off", False)
     return out
 
 
@@ -149,14 +150,106 @@ def test_scene_prompt_asks_for_objects_only_and_names_the_bans():
 
 def test_describe_scene_retries_once_then_uses_a_safe_scene(monkeypatch):
     prompts = []
-    answers = iter(["Tower Bridge at night", "A brass key on a slab of slate", "A neon sign", "An old book"])
+    answers = iter(["Tower Bridge at night", "A steel key on a slab of slate", "A neon sign", "An old book"])
     monkeypatch.setattr(gb, "call_groq", lambda prompt: prompts.append(prompt) or next(answers))
     monkeypatch.setattr(gi, "api_calls", 0)
-    assert gi.describe_scene(news("Faster cache")) == "A brass key on a slab of slate"
+    monkeypatch.setattr(gi, "_groq_off", False)
+    assert gi.describe_scene(news("Faster cache")) == "A steel key on a slab of slate"
     assert len(prompts) == 2 and "Do not use: tower, bridge." in prompts[1]
     scene = gi.describe_scene(news("Faster cache"))  # banned twice: no third call
     assert scene in gi.SAFE_SCENES and scene == gi.safe_scene(news("Faster cache")) and len(prompts) == 4
     assert gi.api_calls == 4
+
+
+# ---------- one accent: a new scene may not name a warm material or colour ----------
+
+@pytest.mark.parametrize("scene, words", [
+    ("A tangled copper wire and a polished steel screwdriver", ["copper"]),
+    ("A stack of blank white sheets, a wooden box, and a glass bottle of oil", ["wooden", "oil"]),
+    ("A cracked ceramic mug, a rusted steel gear, and a wilted fern", ["rusted"]),
+    ("Two clay blocks pressed together, both made of unglazed terracotta", ["clay", "terracotta"]),
+    ("A brass key on a slab of slate", ["brass"]), ("A steel pipe, a glowing coil, and a single flame", ["flame"])])
+def test_warm_materials_are_found(scene, words):
+    assert gi.warm_words(scene) == words
+
+
+@pytest.mark.parametrize("scene", ["A sandglass on a block of sandstone", "A bare silicon wafer behind a clear glass pane",
+                                   "A polished marble cube and a translucent glass sphere", *gi.SAFE_SCENES])
+def test_cool_scenes_name_no_warm_material(scene):
+    assert gi.warm_words(scene) == []
+
+
+def test_safe_scenes_are_many_and_a_second_try_gets_another_one():
+    assert len(set(gi.SAFE_SCENES)) == len(gi.SAFE_SCENES) >= 16
+    item = news("Faster cache")
+    assert gi.safe_scene(item) == gi.safe_scene(item) != gi.safe_scene(item, 1)
+
+
+def test_scene_prompt_asks_for_cool_neutral_materials():
+    prompt = gi.scene_prompt(news("Faster cache"))
+    assert "Cool, neutral materials only" in prompt and "nothing orange or brown" in prompt
+    assert "No copper, brass, gold, rust, wood, clay or leather" in prompt and "two clay" not in prompt
+
+
+def test_describe_scene_rejects_a_warm_scene_and_asks_again(monkeypatch):
+    prompts = []
+    answers = iter(["A tangled copper wire and a wooden box", "A coil of steel wire and a glass box"])
+    monkeypatch.setattr(gb, "call_groq", lambda prompt: prompts.append(prompt) or next(answers))
+    monkeypatch.setattr(gi, "_groq_off", False)
+    assert gi.describe_scene(news("Faster cache")) == "A coil of steel wire and a glass box"
+    assert len(prompts) == 2 and "Do not use: copper, wooden." in prompts[1]
+
+
+def test_a_stored_image_with_a_warm_scene_is_kept(images, monkeypatch):
+    """The warm rule is for new scenes only: an image that is already stored is never redrawn for it."""
+    (images / "kept.webp").write_bytes(b"old")
+    (images / "alt.json").write_text(json.dumps({"kept": {"alt": "A tangled copper wire and a wooden box", "style": gi.STYLE_ID}}))
+    assert gi.is_good("kept", images, gi.load_alts(str(images)))
+    calls = stub(monkeypatch, [news("Kept")])
+    assert gi.run(today=NOW, images_dir=str(images)) == 0 and calls["draws"] == []
+    assert (images / "kept.webp").read_bytes() == b"old"
+
+
+# ---------- Groq out of tokens: every card still gets its image ----------
+
+@pytest.mark.parametrize("answer", ["DAILY_LIMIT", None, ""])
+def test_groq_with_nothing_gives_a_safe_scene_and_no_more_calls(monkeypatch, capsys, answer):
+    prompts = []
+    monkeypatch.setattr(gb, "call_groq", lambda prompt: prompts.append(prompt) or answer)
+    monkeypatch.setattr(gi, "_groq_off", False)
+    monkeypatch.setattr(gi, "api_calls", 0)
+    first, second = gi.describe_scene(news("Story A")), gi.describe_scene(news("Story B"))
+    assert first == gi.safe_scene(news("Story A")) and second == gi.safe_scene(news("Story B"))
+    assert len(prompts) == 1 and gi.api_calls == 1  # one call found Groq empty; the next card made none
+    assert "no more Groq calls" in capsys.readouterr().out
+    again = gi.describe_scene(news("Story A"), avoid=first)  # the second try after text: another safe scene
+    assert again in gi.SAFE_SCENES and again != first and len(prompts) == 1
+
+
+def test_groq_daily_limit_does_not_stop_the_run(images, monkeypatch, capsys):
+    """The cause of the 4 cards left on covers on 28 Nov 2026: Groq hit its daily token limit and the run stopped."""
+    items = [news(f"Story {i}", f"2026-11-{26 - i:02d}") for i in range(4)]
+    monkeypatch.setattr(gi, "top_items", lambda: items)
+    answers = iter(["A steel key on a slab of slate", "DAILY_LIMIT"])
+    groq = []
+    monkeypatch.setattr(gb, "call_groq", lambda prompt: groq.append(prompt) or next(answers))
+    draws = []
+
+    def draw(scene, path):
+        draws.append((path.stem, scene))
+        picture(path)
+        return json.dumps({"neurons": 173})
+    monkeypatch.setattr(gi, "generate_image", draw)
+    assert gi.run(today=NOW, images_dir=str(images)) == 4 and len(groq) == 2
+    assert [d[0] for d in draws] == ["story-0", "story-1", "story-2", "story-3"]
+    assert draws[0][1] == "A steel key on a slab of slate" and all(d[1] in gi.SAFE_SCENES for d in draws[1:])
+    alts = json.loads((images / "alt.json").read_text())
+    assert len(alts) == 4 and all(e["style"] == gi.STYLE_ID for e in alts.values())
+    assert "error for" not in capsys.readouterr().out
+    # the next run asks Groq again
+    monkeypatch.setattr(gi, "top_items", lambda: [news("Later", "2026-11-27")])
+    monkeypatch.setattr(gb, "call_groq", lambda prompt: groq.append(prompt) or "A glass cube on white marble")
+    assert gi.run(today=NOW, images_dir=str(images)) == 1 and draws[-1] == ("later", "A glass cube on white marble")
 
 
 # ---------- text guard: OCR reads every drawing ----------
