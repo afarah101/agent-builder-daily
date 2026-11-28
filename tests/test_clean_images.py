@@ -200,14 +200,20 @@ def test_describe_scene_rejects_a_warm_scene_and_asks_again(monkeypatch):
     assert len(prompts) == 2 and "Do not use: copper, wooden." in prompts[1]
 
 
-def test_a_stored_image_with_a_warm_scene_is_kept(images, monkeypatch):
-    """The warm rule is for new scenes only: an image that is already stored is never redrawn for it."""
-    (images / "kept.webp").write_bytes(b"old")
-    (images / "alt.json").write_text(json.dumps({"kept": {"alt": "A tangled copper wire and a wooden box", "style": gi.STYLE_ID}}))
-    assert gi.is_good("kept", images, gi.load_alts(str(images)))
-    calls = stub(monkeypatch, [news("Kept")])
-    assert gi.run(today=NOW, images_dir=str(images)) == 0 and calls["draws"] == []
-    assert (images / "kept.webp").read_bytes() == b"old"
+def test_a_stored_image_with_a_warm_scene_is_drawn_again_once(images, monkeypatch):
+    """One series: a shown card whose stored image came from a warm scene (a rusted gear) gets a new drawing."""
+    for slug in ("warm", "cool"):
+        (images / f"{slug}.webp").write_bytes(b"old")
+    (images / "alt.json").write_text(json.dumps({
+        "warm": {"alt": "A cracked ceramic mug, a rusted steel gear, and a wilted fern", "style": gi.STYLE_ID},
+        "cool": {"alt": "A polished marble cube and a translucent glass sphere", "style": gi.STYLE_ID}}))
+    alts = gi.load_alts(str(images))
+    assert not gi.is_good("warm", images, alts) and gi.is_good("cool", images, alts)
+    calls = stub(monkeypatch, [news("Warm"), news("Cool", "2026-11-25")])
+    assert gi.run(today=NOW, images_dir=str(images)) == 1 and [d[0] for d in calls["draws"]] == ["warm"]
+    assert (images / "cool.webp").read_bytes() == b"old" and (images / "warm.webp").read_bytes() != b"old"
+    assert json.loads((images / "alt.json").read_text())["warm"]["alt"] == "A glass cube for Warm"
+    assert gi.run(today=NOW, images_dir=str(images)) == 0 and len(calls["draws"]) == 1  # drawn once, then it stays
 
 
 # ---------- Groq out of tokens: every card still gets its image ----------
@@ -313,9 +319,9 @@ def test_good_image_is_kept_and_bad_or_old_style_images_are_redrawn(images, monk
     for slug in ("good", "banned", "old-style", "unknown"):
         (images / f"{slug}.webp").write_bytes(b"old")
     (images / "alt.json").write_text(json.dumps({
-        "good": {"alt": "A brass key on slate", "style": gi.STYLE_ID},
+        "good": {"alt": "A steel key on slate", "style": gi.STYLE_ID},
         "banned": {"alt": "Tower Bridge at night", "style": gi.STYLE_ID},
-        "old-style": {"alt": "A brass key on slate"},
+        "old-style": {"alt": "A steel key on slate"},
         "gone": {"alt": "A file that was deleted", "style": gi.STYLE_ID}}))
     calls = stub(monkeypatch, items)
     assert gi.run(today=NOW) == 3

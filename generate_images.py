@@ -66,8 +66,8 @@ _BANNED_RE = re.compile(r"\b(?:" + "|".join(re.escape(w.replace("_", " ")) for w
                         + r")(?:s|es)?\b", re.IGNORECASE)
 
 # Warm materials and colours. The house style has one accent, emerald, and FLUX ignores "no orange" as it ignores
-# "no text": a scene that names copper or wood is drawn orange. So a NEW scene may not name one. Checked in describe_scene
-# only, never in is_good: an image that is already stored is kept.
+# "no text": a scene that names copper or wood is drawn orange. So a scene may not name one. describe_scene rejects it,
+# and is_good sends a stored image with such a scene back to be drawn again, so the cards look like one series.
 WARM = ("copper brass bronze gold golden rust rusted rusty terracotta clay orange amber brown wood wooden oak walnut "
         "mahogany bamboo cork leather flame fire candle oil honey sand")
 _WARM_RE = re.compile(r"\b(?:" + "|".join(WARM.split()) + r")(?:s|es)?\b", re.IGNORECASE)
@@ -531,13 +531,15 @@ def prune(images_dir, alts, today, keep=()):
 
 def is_good(slug, out, alts):
     """True when the card's image stays: the file exists and alt.json says it was made in the current house style from
-    a scene with no banned word (such an image also passed the text check). A file alt.json does not know is kept."""
+    a scene with no banned word and no warm material (such an image also passed the text check).
+    A file alt.json does not know is kept."""
     if not (out / f"{slug}.webp").exists():
         return False
     entry = alts.get(slug)
     if not isinstance(entry, dict):
         return True
-    return entry.get("style") == STYLE_ID and not banned_words(entry.get("alt"))
+    scene = entry.get("alt")
+    return entry.get("style") == STYLE_ID and not banned_words(scene) and not warm_words(scene)
 
 
 def draw_clean(item, path, draws_left, budget):
